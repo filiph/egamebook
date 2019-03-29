@@ -12,11 +12,6 @@ part 'anatomy.g.dart';
 ///
 /// This is a tree of [BodyPart]s. What [Anatomy] provides
 /// is convenience methods ([pickRandomBodyPartFromLeft], etc.).
-///
-/// TODO: performance improvements (*O(1)* access to major body parts etc.).
-///       use a `Map<int, List<int>> attachments` to build the tree of parts,
-///       and a `List` of body parts for faster access.
-///       (or just use Memoized with a 'get' method)
 abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   static Serializer<Anatomy> get serializer => _$anatomySerializer;
 

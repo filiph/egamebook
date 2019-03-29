@@ -112,10 +112,6 @@ abstract class Situation {
   /// Note that this is not the only way for situations to end. They can
   /// be popped manually from the stack.
   bool shouldContinue(Simulation sim, WorldState world);
-
-  // TODO: toMap (save [time] as well as currentActor (because we want to make
-  //       sure that we load with the same actor although some actors may have
-  //       been removed from play))
 }
 
 /// Provides some sane defaults to [Situation] subclasses.

@@ -57,10 +57,16 @@ class WeaponType extends EnumClass {
     return 0;
   }
 
+  /// The length of the weapon.
+  ///
+  /// Right now, there are only three lengths:
+  ///
+  /// * `0` for being bare handed
+  /// * `1` for a dagger
+  /// * `2` for everything else
   int get defaultLength {
     if (this == none) return 0;
     if (this == dagger) return 1;
-    // TODO: implement lengths
     return 2;
   }
 

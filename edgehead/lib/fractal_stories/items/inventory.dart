@@ -142,6 +142,9 @@ abstract class InventoryBuilder
     if (!anatomy.anyWeaponAppendageAvailable) {
       // Crippled actor can't equip.
       currentWeapon = _noWeapon;
+      // TODO: Throw instead, and provide `canEquip`.
+      //       Otherwise this goes unnoticed.
+      //       Remove WeaponEquipResult altogether.
       return WeaponEquipResult.noAvailableAppendage;
     }
     if (!build().weapons.any((item) => item.id == weapon.id)) {
@@ -191,7 +194,6 @@ abstract class InventoryBuilder
         "Currently, we assume createBodyPartWeapon will "
         "always return something.");
     currentWeapon = bodyPartWeapon;
-    // TODO: figure out if this is off-hand or main hand or whatever
     return WeaponEquipResult.equipped;
   }
 
@@ -235,6 +237,4 @@ enum WeaponEquipResult {
   /// The was no appendage to equip _with_. For example, both hands are
   /// chopped off.
   noAvailableAppendage,
-
-  // TODO: equippedWithOffHand
 }

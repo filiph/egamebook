@@ -298,11 +298,6 @@ abstract class Action<T> {
 ///
 ///     static ApproachAction builder(Approach enemy) => new Example(exit);
 abstract class ApproachAction extends Action<Approach> {
-  // TODO: override command with this
-  // @override
-  // String get command =>
-  //     approach.command.isNotEmpty ? approach.command : "IMPLICIT EXIT";
-
   @override
   Iterable<Approach> generateObjects(ApplicabilityContext context) {
     final situation = context.world.currentSituation as RoomRoamingSituation;
@@ -360,11 +355,9 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
         .getActors(context.simulation, context.world);
     return actors.where((other) {
       if (other == context.actor || !other.isAliveAndActive) return false;
+      // Currently, we are only generating enemy-target actions for actors
+      // towards which the actor feels hate.
       return context.actor.hates(other, context.world);
-      // TODO: figure out if we need the following instead.
-      // Only provide true enemies if action is aggressive.
-      // if (this.isAggressive && !actor.hates(other, world)) return false;
-      // return true;
     });
   }
 
@@ -586,6 +579,8 @@ class ReasonedSuccessChance<R> {
 
 /// This enum defines all the different resources (Stats) that player can use
 /// to reroll action throws.
+///
+/// Ideas: weaponGrip (throw sword), shield (let the shield break).
 enum Resource {
   /// Using stamina means exerting extra physical energy. Useful for power
   /// moves, running away unscathed, etc.
@@ -594,6 +589,4 @@ enum Resource {
   /// Some moves can be rerolled by 'spending' balance. A kick will land,
   /// but the player will go off-balance or even fall down.
   balance,
-
-  // TODO: Ideas: weaponGrip (throw sword), shield (let the shield break)
 }

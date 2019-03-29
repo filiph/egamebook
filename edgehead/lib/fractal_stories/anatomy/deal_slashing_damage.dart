@@ -187,7 +187,6 @@ WeaponAssaultResult _disableBySlash(
     Actor target, BodyPart bodyPart, Item weapon) {
   final ActorBuilder victim = target.toBuilder();
   if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
-    // TODO: move from hitpoints to something else
     victim.hitpoints = 0;
   }
 

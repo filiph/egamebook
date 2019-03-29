@@ -92,10 +92,6 @@ class Report {
   String toString() => "Report"
       "<${string.substring(0, min(string.length, 20))}...,"
       "thread=$actionThread${isSupportiveActionInThread ? '(sup)' : ''}>";
-
-// TODO: startOfAction - if there is no report before startOfAction and
-// endOfAction, don't report startOfAction.
-// Prevents: "You set up the laser. The laser is now set up to fire at target."
 }
 
 /// Class for reporting a sequence of events in 'natural' language.
@@ -248,9 +244,8 @@ class Storyline {
 
     String removeAlso(String s) =>
         s.replaceAll("<also> ", "").replaceAll("  ", " ").trim();
-    // TODO: less hacky
 
-    buf.write(removeAlso(start)); // TODO: less hacky
+    buf.write(removeAlso(start));
     buf.write(" ");
     int i = 0;
     int sentenceCount = 0;

@@ -86,7 +86,6 @@ abstract class ActionHistory
       Actor sufferer,
       bool wasSuccess,
       bool wasAggressive}) {
-    // TODO: consider speeding up by walking with for-loop
     return query(
             actionName: actionName,
             actor: actor,

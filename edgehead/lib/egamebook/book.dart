@@ -24,9 +24,6 @@ abstract class Book {
   /// the Book's state while it's working. For example, drinking a potion
   /// from the inventory should not be allowed _while_ a combat simulation
   /// is taking place. It should only be available when it's the player's turn.
-  ///
-  /// TODO: Instead of throwing, buffer the input and send it after we are
-  /// waiting for input again.
   @protected
   bool isWaitingForInput = true;
 

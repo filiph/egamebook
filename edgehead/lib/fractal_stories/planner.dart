@@ -60,9 +60,6 @@ class ActorPlanner {
   }
 
   /// Computes the combined score for a bunch of consequences.
-  ///
-  /// TODO: allow to personalize this (for example, optimistic characters
-  /// only take `isSuccess == true` consequences into account).
   ActorScoreChange combineScores(
       Iterable<ConsequenceStats> stats, ActorScore initialScore, int maxOrder) {
     log.finest("...");

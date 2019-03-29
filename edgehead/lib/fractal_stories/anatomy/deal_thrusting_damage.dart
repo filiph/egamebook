@@ -58,7 +58,7 @@ WeaponAssaultResult _addMajorThrustingWound(
   return WeaponAssaultResult(victim.build(), designated);
 }
 
-/// TODO: Unify with _disableBySlash
+/// A copy of `_disableBySlash`.
 WeaponAssaultResult _disableByThrust(
     Actor target, BodyPart bodyPart, Item weapon) {
   final ActorBuilder victim = target.toBuilder();

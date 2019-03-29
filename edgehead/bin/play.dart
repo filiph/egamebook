@@ -286,7 +286,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
     } else {
       // Failure of initial roll.
       if (_silent) {
-        // We're in silent mode. TODO: figure out if we want to reroll
+        // We're in silent mode. We never reroll in silent mode.
         return initialResult;
       }
       print("Initial roll failure.");

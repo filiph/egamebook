@@ -197,7 +197,6 @@ class Simulation {
         "Rooms: ${rooms.map((r) => r.name).join(', ')}.\n"
         "Current world: $this.");
 
-    /// TODO: make this O(1) by having a helper Map<String,Room>
     return rooms.singleWhere((room) => room.name == roomName);
   }
 
