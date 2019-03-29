@@ -60,4 +60,39 @@ void main() {
 
     expect(chance.value, closeTo(0.75, 0.02));
   });
+
+  group('.inverted()', () {
+    test('simple inversion with modifier', () {
+      final chance = getCombatMoveChance(aren, goblin, 0.8, [
+        const Modifier(95, CombatReason.dexterity),
+      ]);
+
+      var value = chance.value;
+      expect(chance.inverted().value, closeTo(1 - value, 0.02));
+    });
+
+    test('inversion with two modifiers', () {
+      var offBalanceGoblin = goblin.rebuild((b) => b..pose = Pose.offBalance);
+
+      final chance = getCombatMoveChance(aren, offBalanceGoblin, 0.8, [
+        const Modifier(50, CombatReason.dexterity),
+        const Modifier(50, CombatReason.balance),
+      ]);
+
+      var value = chance.value;
+      expect(chance.inverted().value, closeTo(1 - value, 0.02));
+    });
+
+    test('inversion with modifier and bonus', () {
+      final chance = getCombatMoveChance(aren, goblin, 0.8, [
+        const Modifier(50, CombatReason.dexterity),
+        const Bonus(50, CombatReason.performerIsPlayer),
+      ]);
+
+      var value = chance.value;
+      expect(chance.inverted().value, closeTo(1 - value, 0.02));
+    });
+  });
+
+  // TODO: test bonus vs modifier vs penalty
 }
