@@ -6,7 +6,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_feint_slash.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/feint/feint_situation.dart';
 
 class WithstandFeint extends OtherActorAction {
@@ -16,8 +15,8 @@ class WithstandFeint extends OtherActorAction {
 
   @override
   final String helpMessage = "The weak attack is clearly meant to throw you "
-      "off balance, and isn't actually a threat. The question is if you can "
-      "deflecting without exposing yourself to a follow-up attack.";
+      "off balance, and isn't actually a threat. By playing along the bluff "
+      "it's easier to keep your stance.";
 
   @override
   final bool isAggressive = false;
@@ -31,8 +30,9 @@ class WithstandFeint extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
+  /// "Let him".
   @override
-  String get commandTemplate => "withstand";
+  String get commandTemplate => "let <objectPronounAccusative>";
 
   @override
   String get name => className;
@@ -45,15 +45,6 @@ class WithstandFeint extends OtherActorAction {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, feintSituationName);
-    a.report(
-        s,
-        "<subject> fail<s> to {retain|keep} "
-        "<subject's> {stance|footing}",
-        negative: true,
-        actionThread: thread);
-
     w.popSituation(sim);
     return "${a.name} fails to withstands a feint from ${enemy.name}";
   }
@@ -73,12 +64,6 @@ class WithstandFeint extends OtherActorAction {
         positive: true,
         actionThread: thread);
     w.popSituationsUntil("FightSituation", sim);
-    if (a.isPlayer) {
-      s.add("this opens an opportunity for a counter attack");
-    }
-    var counterAttackSituation =
-        CounterAttackSituation.initialized(w.randomInt(), a, enemy);
-    w.pushSituation(counterAttackSituation);
     return "${a.name} withstands a feint from ${enemy.name}";
   }
 

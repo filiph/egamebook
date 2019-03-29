@@ -15,6 +15,8 @@ class FinishFeint extends OtherActorAction {
 
   static const String className = "FinishFeint";
 
+  static final Entity _feint = Entity(name: "feint");
+
   @override
   final String helpMessage = null;
 
@@ -69,11 +71,11 @@ class FinishFeint extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
+    Simulation sim = context.simulation;
 
-    enemy.report(s, "<subject> scramble<s> to defend <subjectPronounSelf>",
-        negative: true);
-    enemy.report(s, "<subject> expose<s> <subject's> arm in the process",
-        negative: true);
+    final thread = getThreadId(sim, w, feintSituationName);
+    _feint.report(s, "<subject> is successful", actionThread: thread);
+    enemy.report(s, "<subject> expose<s> <subject's> arm", negative: true);
 
     w.updateActorById(enemy.id, (b) => b..pose = Pose.extended);
     w.recordCustom(lostStanceCustomEvent, actor: enemy);

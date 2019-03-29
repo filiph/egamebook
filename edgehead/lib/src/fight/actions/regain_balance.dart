@@ -6,7 +6,6 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/start_clash.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
 class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {

@@ -67,6 +67,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrust.singleton': DodgeThrust.singleton,
   // From lib/src/fight/thrust/actions/finish_thrust.dart:
   'FinishThrust.singleton': FinishThrust.singleton,
+  // From lib/src/fight/feint/feint_defense/actions/counter_attack.dart:
+  'CounterAttackFeint.singleton': CounterAttackFeint.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,
