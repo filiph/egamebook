@@ -11,4 +11,4 @@ import 'package:edgehead/fractal_stories/actor.dart';
 /// by another actor is silent, so with a small number we would still get
 /// 'you sweep his legs, he stands up'.
 Duration getRecently(Actor a) =>
-    a.isPlayer ? const Duration(milliseconds: 100) : const Duration(seconds: 2);
+    a.isPlayer ? const Duration(milliseconds: 100) : const Duration(seconds: 1);
