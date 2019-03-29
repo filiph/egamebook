@@ -28,9 +28,6 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       'customHistory',
       serializers.serialize(object.customHistory,
           specifiedType: const FullType(CustomEventHistory)),
-      'global',
-      serializers.serialize(object.global,
-          specifiedType: const FullType(Object)),
       'ruleHistory',
       serializers.serialize(object.ruleHistory,
           specifiedType: const FullType(RuleHistory)),
@@ -48,6 +45,12 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       serializers.serialize(object.visitHistory,
           specifiedType: const FullType(VisitHistory)),
     ];
+    if (object.global != null) {
+      result
+        ..add('global')
+        ..add(serializers.serialize(object.global,
+            specifiedType: const FullType(WorldStateFlags)));
+    }
 
     return result;
   }
@@ -80,7 +83,8 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           break;
         case 'global':
           result.global = serializers.deserialize(value,
-              specifiedType: const FullType(Object));
+                  specifiedType: const FullType(WorldStateFlags))
+              as WorldStateFlags;
           break;
         case 'ruleHistory':
           result.ruleHistory.replace(serializers.deserialize(value,
@@ -118,7 +122,7 @@ class _$WorldState extends WorldState {
   @override
   final CustomEventHistory customHistory;
   @override
-  final Object global;
+  final WorldStateFlags global;
   @override
   final RuleHistory ruleHistory;
   @override
@@ -152,9 +156,6 @@ class _$WorldState extends WorldState {
     }
     if (customHistory == null) {
       throw new BuiltValueNullFieldError('WorldState', 'customHistory');
-    }
-    if (global == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'global');
     }
     if (ruleHistory == null) {
       throw new BuiltValueNullFieldError('WorldState', 'ruleHistory');
@@ -256,13 +257,13 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
-  Object get global {
+  WorldStateFlags get global {
     _$this;
     return super.global;
   }
 
   @override
-  set global(Object global) {
+  set global(WorldStateFlags global) {
     _$this;
     super.global = global;
   }

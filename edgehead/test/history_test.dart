@@ -21,7 +21,6 @@ void main() {
       final WorldState world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(<Actor>[aren])
         ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
-        ..global = ["bogus"]
         ..statefulRandomState = 1337
         ..time = DateTime.utc(1000));
       expect(world.visitHistory.query(aren, outside).hasHappened, isFalse);

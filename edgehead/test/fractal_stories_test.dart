@@ -51,7 +51,6 @@ void main() {
       final world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(<Actor>[])
         ..situations = ListBuilder<Situation>(<Situation>[])
-        ..global = <String>[]
         ..statefulRandomState = 1337
         ..time = DateTime.utc(1000)).toBuilder();
 
@@ -174,7 +173,6 @@ void main() {
         final world = WorldState((b) => b
           ..actors = SetBuilder<Actor>(<Actor>[aren])
           ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
-          ..global = ["bogus"]
           ..statefulRandomState = 1337
           ..time = DateTime.utc(1000));
 

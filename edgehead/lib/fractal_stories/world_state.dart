@@ -52,7 +52,8 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   ///
   /// This object must have a hash code that is value-based so that globals
   /// with the same state have the same [Object.hashCode].
-  Object get global;
+  @nullable
+  WorldStateFlags get global;
 
   /// The history of rules as they were triggered through different rulesets.
   RuleHistory get ruleHistory;
@@ -197,7 +198,7 @@ abstract class WorldStateBuilder
 
   int statefulRandomState;
 
-  Object global;
+  WorldStateFlags global;
 
   ListBuilder<Situation> situations;
 
