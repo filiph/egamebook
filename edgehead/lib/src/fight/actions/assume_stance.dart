@@ -4,14 +4,17 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/clash.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
 class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
   static final AssumeStance singleton = AssumeStance();
 
   static const String className = "AssumeStance";
+
+  static final Entity _balance =
+      Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
 
   @override
   final String helpMessage = "When in proper combat stance, the enemy has "
@@ -49,7 +52,7 @@ class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> assume<s> better stance",
-        object: balance, positive: true);
+        object: _balance, positive: true);
     w.updateActorById(a.id, (b) => b.pose = a.poseMax);
     return "${a.name} assumes better stance";
   }

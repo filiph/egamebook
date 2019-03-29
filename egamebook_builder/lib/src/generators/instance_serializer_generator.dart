@@ -100,7 +100,7 @@ class InstanceSerializerGenerator extends Generator {
                 continue;
               }
 
-              _writeElement(result, topLevelElement, gatherLibrary,
+              _writeElement(id, result, topLevelElement, gatherLibrary,
                   '${topLevelElement.name}');
               count++;
               continue;
@@ -112,7 +112,7 @@ class InstanceSerializerGenerator extends Generator {
             final elements = classEl.fields.where(
                 (el) => el.isStatic && el.type.isAssignableTo(instanceType));
             for (final element in elements) {
-              _writeElement(result, element, gatherLibrary,
+              _writeElement(id, result, element, gatherLibrary,
                   '${classEl.name}.${element.name}');
               count++;
             }
@@ -156,8 +156,9 @@ class InstanceSerializerGenerator extends Generator {
     }
   }
 
-  void _writeElement(StringBuffer result, VariableElement element,
+  void _writeElement(AssetId id, StringBuffer result, VariableElement element,
       LibraryReader gatherLibrary, String name) {
+    result.writeln("  // From ${id.path}:");
     result.writeln("'$name': $name,");
 
     if (!element.isAccessibleIn(gatherLibrary.element)) {

@@ -21,7 +21,7 @@ import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/start_feint_jab.dart';
 import 'package:edgehead/src/fight/actions/start_feint_slash.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
-import 'package:edgehead/src/fight/actions/clash.dart';
+import 'package:edgehead/src/fight/actions/start_clash.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
@@ -84,7 +84,7 @@ abstract class FightSituation extends Object
 
   @override
   List<Action<dynamic>> get actions => <Action<dynamic>>[
-        Clash.singleton,
+        StartClash.singleton,
         Confuse.singleton,
         DisarmKick.singleton,
         FeintJab.singleton,

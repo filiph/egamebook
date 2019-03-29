@@ -3,6 +3,8 @@ library edgehead.action_builders;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/src/fight/break_neck/actions/finish_break_neck.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/actions/evade_neck_breaking.dart';
+import 'package:edgehead/src/fight/clash/actions/finish_clash.dart';
+import 'package:edgehead/src/fight/clash/clash_defense/actions/withstand_clash.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 import 'package:edgehead/src/fight/feint/actions/finish_feint.dart';
 import 'package:edgehead/src/fight/feint/feint_defense/actions/withstand_feint.dart';
