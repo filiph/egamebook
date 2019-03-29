@@ -330,9 +330,16 @@ abstract class Actor extends Object
 
   /// Creates an [Item] from a [BodyPart] in [anatomy] that acts as a weapon.
   static Item createBodyPartWeapon(Anatomy anatomy) {
-    // TODO: get the best one, not just the first one
-    final part = _getDamageDealingBodyParts(anatomy.torso).first;
-    return createFist(part);
+    int scoreBodyPart(BodyPart part) =>
+        part.damageCapability.bluntDamage +
+        part.damageCapability.slashingDamage +
+        part.damageCapability.thrustingDamage +
+        part.damageCapability.length;
+
+    final parts = _getDamageDealingBodyParts(anatomy.torso)
+        .toList(growable: false)
+          ..sort((a, b) => -scoreBodyPart(a).compareTo(scoreBodyPart(b)));
+    return createFist(parts.first);
   }
 
   /// Walks [part]  and returns all body parts that can be used as a weapon.
