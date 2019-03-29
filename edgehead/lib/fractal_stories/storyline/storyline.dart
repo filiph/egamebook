@@ -354,6 +354,24 @@ class Storyline {
         _reports[i].object.id == _reports[j].subject.id;
   }
 
+  /// First report is like "A punches B", second is like
+  /// "B falls to the ground". We can still tie these sentences together
+  /// (like with [exchangedSubjectObject]) if the pronouns aren't confusing.
+  bool exchangedSubjectObjectImperfect(int i, int j) {
+    if (!valid(i) || !valid(j)) return false;
+    if (_reports[i].subject == null || _reports[j].subject == null) {
+      return false;
+    }
+    if (_reports[i].object == null) return false;
+    if (_reports[i].subject.pronoun == _reports[j].subject.pronoun) {
+      return false;
+    }
+    if (_reports[i].subject.pronoun == _reports[j]?.object?.pronoun) {
+      return false;
+    }
+    return _reports[i].object.id == _reports[j].subject.id;
+  }
+
   /// If storyline already has something to show (at least one full
   /// paragraph), this will output it and remove it.
   ///
@@ -593,6 +611,8 @@ class Storyline {
       if (i != 0) {
         // solve flow with previous sentence
         bool objectSubjectSwitch = exchangedSubjectObject(i - 1, i);
+        bool objectSubjectSwitchImperfect =
+            exchangedSubjectObjectImperfect(i - 1, i);
         but = (_reports[i].but ||
                 (oppositeSentiment(i, i - 1) && someActorsSame(i, i - 1))) &&
             !_reports[i - 1].but;
@@ -602,10 +622,9 @@ class Storyline {
             _reports[i].startSentence ||
             _reports[i - 1].endSentence ||
             _reports[i].wholeSentence ||
-            // TODO: add possibility to continue sentence even when
-            //       object-subject switch is partial (but the second object
-            //       must be something like an item)
-            !(_sameSubject(i, i - 1) || objectSubjectSwitch) ||
+            !(_sameSubject(i, i - 1) ||
+                objectSubjectSwitch ||
+                objectSubjectSwitchImperfect) ||
             (but && (i - lastEndSentence > 1)) ||
             (but && _reports[i - 1].but) ||
             (timeSincePrevious(i) > SHORT_TIME);
