@@ -479,8 +479,9 @@ class Storyline {
       } else {
         result = addParticleToFirstOccurence(
             result, OBJECT, object, objectOwner, report.time);
-        result = result.replaceAll(OBJECT, object.name);
-        // TODO: change first to name, next to pronoun?
+        result = result.replaceFirst(OBJECT, object.name);
+        // Replace the rest with pronouns.
+        result = result.replaceAll(OBJECT, object.pronoun.accusative);
       }
 
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
