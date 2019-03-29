@@ -260,17 +260,14 @@ abstract class Actor extends Object
   /// Returns the intensity of hate towards the actor. Very high when
   /// this actor is rabid. About `1.0` for actors of enemy team. `0.0` for
   /// neutrals or friends.
-  ///
-  /// TODO: Optimize. This function takes ~4% of CPU.
-  ///       Actors could keep track of "aggro" themselves, instead of querying
-  ///       action history.
+  @memoized
   double hateTowards(Actor other, WorldState w) {
     if (isConfused && team.isFriendWith(other.team)) {
       return 1000.0;
     }
 
     if (_hasBeenAttackedBy(other, w, 10)) {
-      return 1.0;
+      return 2.0;
     }
 
     return team.isEnemyWith(other.team) ? 1.0 : 0.0;
