@@ -110,16 +110,6 @@ abstract class Actor extends Object
   /// 5 seconds in the future. Until that time, they cannot do another move.
   DateTime get recoveringUntil;
 
-  /// Same as [canUseWeapon] but for shields.
-  bool get canUseShield => true /* TODO */;
-
-  /// When this is `false`, the actor cannot use the weapon,
-  /// for whatever reason.
-  ///
-  /// This could mean that the weapon is broken, or that the arm holding it
-  /// is disabled.
-  bool get canUseWeapon => true /* TODO */;
-
   /// Actor can generally wield weapons other than [Fist].
   ///
   /// This is `true` for most humanoids and `false` for most non-humanoids.
