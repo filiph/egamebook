@@ -29,7 +29,7 @@ class PlannerRecommendation {
 
   PlannerRecommendation(Map<Performance, ActorScoreChange> scores)
       : scores = UnmodifiableMapView(scores),
-        _performances = _getAttainablePerformances(scores) {
+        _performances = scores.keys.toList(growable: false) {
     if (scores.isEmpty) {
       log.warning("Created with no recommendations.");
     }
@@ -162,20 +162,6 @@ class PlannerRecommendation {
       }
     }
     return best;
-  }
-
-  /// Remove impossible performances.
-  /// TODO: make sure we don't duplicate effort here
-  static List<Performance> _getAttainablePerformances(
-      Map<Performance, ActorScoreChange> scores) {
-    List<Performance> result = scores.keys
-        .where((a) => !scores[a].isUndefined)
-        .toList(growable: false);
-    if (result.isEmpty) {
-      log.warning("After removing performances scored by undefined, "
-          "there are no recommendations.");
-    }
-    return result;
   }
 
   static num _sum(num a, num b) => a + b;
