@@ -27,9 +27,15 @@ void inflictPain(ActionContext context, Actor actor, int damage) {
   actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
 
   if (!actor.isPlayer) {
-    // Non-player characters should immediately act after such pain.
+    // Non-player characters shouldn't immediately act after such pain.
     context.outputWorld.updateActorById(actor.id,
         (b) => b..recoveringUntil = context.world.time.add(painShockDuration));
+  }
+
+  if (!actor.isPlayer && actor.pose > Pose.offBalance) {
+    // Non-player actors lose balance after major pain.
+    context.outputWorld
+        .updateActorById(actor.id, (b) => b.pose = b.pose.changeBy(-1));
   }
 }
 
