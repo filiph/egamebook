@@ -7,7 +7,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_clash.dart';
 import 'package:edgehead/src/fight/clash/clash_situation.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
 class WithstandClash extends OtherActorAction {
   static final WithstandClash singleton = WithstandClash();
@@ -17,7 +16,7 @@ class WithstandClash extends OtherActorAction {
   @override
   final String helpMessage = "The attack is targetted at your weapon, "
       "not your body. The strong slash is intended to force you off balance. "
-      "You can withstand it.";
+      "By playing along with the bluff, it's easier to keep your stance.";
 
   @override
   final bool isAggressive = false;
@@ -31,8 +30,9 @@ class WithstandClash extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
+  /// "Let him".
   @override
-  String get commandTemplate => "withstand";
+  String get commandTemplate => "let <objectPronounAccusative>";
 
   @override
   String get name => className;
@@ -45,14 +45,6 @@ class WithstandClash extends OtherActorAction {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, clashSituationName);
-    a.report(
-        s,
-        "<subject> fail<s> to {retain|keep} "
-        "<subject's> {stance|footing}",
-        negative: true,
-        actionThread: thread);
 
     w.popSituation(sim);
     return "${a.name} fails to withstands a clash from ${enemy.name}";
@@ -73,12 +65,6 @@ class WithstandClash extends OtherActorAction {
         actionThread: thread);
 
     w.popSituationsUntil("FightSituation", sim);
-    if (a.isPlayer) {
-      s.add("this opens an opportunity for a counter attack");
-    }
-    var counterAttackSituation =
-        CounterAttackSituation.initialized(w.randomInt(), a, enemy);
-    w.pushSituation(counterAttackSituation);
     return "${a.name} withstands a clash from ${enemy.name}";
   }
 

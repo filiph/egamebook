@@ -15,8 +15,8 @@ class WithstandFeint extends OtherActorAction {
 
   @override
   final String helpMessage = "The weak attack is clearly meant to throw you "
-      "off balance, and isn't actually a threat. By playing along the bluff "
-      "it's easier to keep your stance.";
+      "off balance, and isn't actually a threat. By playing along with "
+      "the bluff, it's easier to keep your stance.";
 
   @override
   final bool isAggressive = false;

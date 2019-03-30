@@ -568,8 +568,6 @@ class ReasonedSuccessChance<R> {
   ///
   /// This not only inverts [value], but also switches [successReasons]
   /// with [failureReasons].
-  ///
-  /// TODO: test this
   ReasonedSuccessChance<R> inverted() => ReasonedSuccessChance(1 - value,
       successReasons: failureReasons, failureReasons: successReasons);
 

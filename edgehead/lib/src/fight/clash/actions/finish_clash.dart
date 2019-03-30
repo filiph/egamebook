@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/clash/clash_situation.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
@@ -61,16 +62,17 @@ class FinishClash extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
+    Simulation sim = context.simulation;
+    final thread = getThreadId(sim, w, clashSituationName);
 
     final newStance = enemy.pose.changeBy(-2);
     w.recordCustom(lostStanceCustomEvent, actor: enemy);
 
     if (newStance == Pose.extended) {
-      enemy.report(s, "<subject> almost lose<s> balance",
-          object: _balance, negative: true);
-      enemy.report(s, "<subject> manage<s> to keep <subject's> stance");
+      enemy.report(s, "<subject> manage<s> to keep <subject's> balance",
+          object: _balance, actionThread: thread);
       enemy.report(s, "<subject> {overextend<s>|expose<s>} <subject's> hand",
-          but: true, negative: true);
+          but: true, negative: true, actionThread: thread);
 
       w.updateActorById(enemy.id, (b) => b..pose = newStance);
 
@@ -83,7 +85,7 @@ class FinishClash extends OtherActorAction {
 
     if (newStance == Pose.offBalance) {
       enemy.report(s, "<subject> lose<s> <object>",
-          object: _balance, negative: true);
+          object: _balance, negative: true, actionThread: thread);
       w.updateActorById(enemy.id, (b) => b..pose = newStance);
 
       var situation = OffBalanceOpportunitySituation.initialized(
@@ -95,13 +97,14 @@ class FinishClash extends OtherActorAction {
 
     // Enemy goes on the ground.
     assert(newStance == Pose.onGround);
-    enemy.report(s, "<subject> <is> already off balance");
+    enemy.report(s, "<subject> <is> already off balance", actionThread: thread);
     var groundMaterial = getGroundMaterial(w);
     s.add(
         "<subject> make<s> <object> fall "
         "to the $groundMaterial",
         subject: _pounding,
-        object: enemy);
+        object: enemy,
+        actionThread: thread);
     w.recordCustom(fellToGroundCustomEventName, actor: enemy);
     w.updateActorById(enemy.id, (b) => b..pose = newStance);
 
