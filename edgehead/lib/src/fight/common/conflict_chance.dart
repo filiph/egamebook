@@ -44,15 +44,15 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
         "There is no reason to have modifiers with maxAdjustment "
         "of 0 or below.");
     assert(
-        !_reasonsRequiringModifiers.contains(modifier.reason) ||
+        !reasonsRequiringModifiers.contains(modifier.reason) ||
             modifier is Modifier,
         "$modifier should be a Modifier");
     assert(
-        !_reasonsRequiringBonuses.contains(modifier.reason) ||
+        !reasonsRequiringBonuses.contains(modifier.reason) ||
             modifier is Bonus,
         "$modifier should be a Bonus");
     assert(
-        !_reasonsRequiringPenalties.contains(modifier.reason) ||
+        !reasonsRequiringPenalties.contains(modifier.reason) ||
             modifier is Penalty,
         "$modifier should be a Penalty");
     final scale = _getAdjustmentScale(performer, target, modifier.reason);
@@ -308,13 +308,16 @@ enum CombatReason {
   // TODO: strength /// Brute force (e.g. withstanding a kick, still standing)
 }
 
-const List<CombatReason> _reasonsRequiringModifiers = [
+@visibleForTesting
+const List<CombatReason> reasonsRequiringModifiers = [
   CombatReason.dexterity,
   CombatReason.balance,
   CombatReason.height
 ];
 
-const List<CombatReason> _reasonsRequiringBonuses = [
+@visibleForTesting
+const List<CombatReason> reasonsRequiringBonuses = [
+  CombatReason.performerIsPlayer,
   CombatReason.targetHasAllEyesDisabled,
   CombatReason.targetHasOneEyeDisabled,
   CombatReason.targetHasAllLegsDisabled,
@@ -323,6 +326,7 @@ const List<CombatReason> _reasonsRequiringBonuses = [
   CombatReason.targetHasSecondaryArmDisabled,
 ];
 
-const List<CombatReason> _reasonsRequiringPenalties = [
+@visibleForTesting
+const List<CombatReason> reasonsRequiringPenalties = [
   CombatReason.targetHasShield,
 ];

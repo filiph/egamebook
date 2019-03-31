@@ -94,5 +94,19 @@ void main() {
     });
   });
 
-  // TODO: test bonus vs modifier vs penalty
+  test('all combat reasons are either Modifier, Bonus or Penalty', () {
+    // Sorting because that gives a much more actionable failure (it lists
+    // the missing combat reasons).
+    int sorter(CombatReason a, CombatReason b) => a.index.compareTo(b.index);
+
+    var categorized = reasonsRequiringModifiers
+        .followedBy(reasonsRequiringBonuses)
+        .followedBy(reasonsRequiringPenalties)
+        .toList()
+          ..sort(sorter);
+
+    var all = CombatReason.values.toList()..sort(sorter);
+
+    expect(categorized, orderedEquals(all));
+  });
 }
