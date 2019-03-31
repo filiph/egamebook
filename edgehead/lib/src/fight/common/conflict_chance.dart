@@ -48,8 +48,7 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
             modifier is Modifier,
         "$modifier should be a Modifier");
     assert(
-        !reasonsRequiringBonuses.contains(modifier.reason) ||
-            modifier is Bonus,
+        !reasonsRequiringBonuses.contains(modifier.reason) || modifier is Bonus,
         "$modifier should be a Bonus");
     assert(
         !reasonsRequiringPenalties.contains(modifier.reason) ||
