@@ -17,7 +17,7 @@ final Entity swing =
 
 ReasonedSuccessChance computeParrySlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.4, [
+  return getCombatMoveChance(a, enemy, 0.6, [
     const Modifier(50, CombatReason.dexterity),
     const Modifier(70, CombatReason.balance),
     const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),

@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart'
 
 ReasonedSuccessChance computeDodgeSlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.6, [
+  return getCombatMoveChance(a, enemy, 0.4, [
     const Modifier(60, CombatReason.dexterity),
     const Modifier(50, CombatReason.balance),
     const Bonus(50, CombatReason.targetHasOneLegDisabled),
@@ -82,7 +82,7 @@ class DodgeSlash extends OtherActorAction {
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
         object: enemy, positive: true);
-    if (enemy.pose >= Pose.standing) {
+    if (enemy.pose > Pose.offBalance) {
       enemy.report(s, "<subject> lose<s> balance because of that",
           endSentence: true, negative: true);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
