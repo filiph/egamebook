@@ -20,6 +20,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
       FinishThrustSpearAtGroundedEnemy.singleton,
   // From lib/src/fight/feint/actions/finish_feint.dart:
   'FinishFeint.singleton': FinishFeint.singleton,
+  // From lib/src/fight/feint/feint_defense/actions/counter_feint.dart:
+  'CounterAttackFeint.singleton': CounterAttackFeint.singleton,
   // From lib/src/fight/feint/feint_defense/actions/withstand_feint.dart:
   'WithstandFeint.singleton': WithstandFeint.singleton,
   // From lib/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart:
@@ -55,6 +57,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgePunch.singleton': DodgePunch.singleton,
   // From lib/src/fight/punch/actions/finish_punch.dart:
   'FinishPunch.singleton': FinishPunch.singleton,
+  // From lib/src/fight/clash/clash_defense/actions/counter_clash.dart:
+  'CounterAttackClash.singleton': CounterAttackClash.singleton,
   // From lib/src/fight/clash/clash_defense/actions/withstand_clash.dart:
   'WithstandClash.singleton': WithstandClash.singleton,
   // From lib/src/fight/clash/actions/finish_clash.dart:
@@ -67,10 +71,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrust.singleton': DodgeThrust.singleton,
   // From lib/src/fight/thrust/actions/finish_thrust.dart:
   'FinishThrust.singleton': FinishThrust.singleton,
-  // From lib/src/fight/feint/feint_defense/actions/counter_feint.dart:
-  'CounterAttackFeint.singleton': CounterAttackFeint.singleton,
-  // From lib/src/fight/clash/clash_defense/actions/counter_clash.dart:
-  'CounterAttackClash.singleton': CounterAttackClash.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

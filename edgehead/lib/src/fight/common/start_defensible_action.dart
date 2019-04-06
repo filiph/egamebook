@@ -212,7 +212,10 @@ abstract class StartDefensibleActionBase extends EnemyTargetAction
   /// This function should use [storyline] to report that the defensible action
   /// couldn't even start. It can modify [world].
   ///
-  /// For example, "Orc tries to swing at you but completely misses."
+  /// For example, "Orc tries to swing at you but completely misses." In this
+  /// scenario, there is no need to create the defensible situation, since
+  /// there is no action to defend from. It failed too hard. Therefore,
+  /// the action short-circuits.
   ///
   /// When this function is non-null, and the action fails, [applyStart] won't
   /// be called. Nor will the action generate any situations (using

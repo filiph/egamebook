@@ -103,14 +103,12 @@ PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
 
 bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     BodyPartDesignation designation) {
+  assert(!designation.isLeg, "Use SlashAtLeg instead.");
+  assert(!designation.isArm, "Use SlashAtArm instead.");
   if (a.isOnGround) return false;
   if (enemy.isOnGround) return false;
   if (a.anatomy.isBlind) return false;
   if (!a.currentWeapon.damageCapability.isSlashing) return false;
-  // Only allow leg attacks when enemy has worse than combat stance.
-  if (designation.isLeg && enemy.pose >= Pose.combat) return false;
-  // Only allow arm attacks when enemy is at least extended.
-  if (designation.isArm && enemy.pose > Pose.extended) return false;
   // Only allow torso slashes when enemy is (at least) extended.
   if (designation == BodyPartDesignation.torso && enemy.pose > Pose.extended) {
     return false;
