@@ -75,7 +75,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
 
   @override
   List<String> getCommandPath(Actor target) {
-    final livingArms = _getAllArms(target).length;
+    final livingArms = _getAllHands(target).length;
     assert(livingArms > 0,
         "Trying to apply $className when there is no leg left.");
     final isLast = livingArms == 1;
@@ -121,14 +121,18 @@ class StartSlashAtArm extends StartDefensibleActionBase {
     return computeStartSlashAtBodyPartGenerator(leg, a, sim, w, enemy);
   }
 
-  static Iterable<BodyPart> _getAllArms(Actor target) {
+  /// The wielding body parts are actually hands, not arms. Here, we figure out
+  /// which hands are alive. Remember that disability / limpness of a parent
+  /// body part (such as what arm is to a hand) automatically trickles down
+  /// to the child. So a disabled arm means the hand is also disabled.
+  static Iterable<BodyPart> _getAllHands(Actor target) {
     assert(
         target.anatomy.isHumanoid,
         "This function currently assumes that legs are the only "
         "body parts providing mobility.");
 
-    return target.anatomy.allParts
-        .where((part) => part.function == BodyPartFunction.wielding);
+    return target.anatomy.allParts.where((part) =>
+        part.function == BodyPartFunction.wielding && part.isAliveAndActive);
   }
 
   static BodyPart _getTargetArm(Actor enemy) {
