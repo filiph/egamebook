@@ -81,8 +81,13 @@ class FeintSlash extends StartDefensibleActionBase {
   @override
   void applyStart(Actor actor, Simulation sim, WorldStateBuilder world,
       Storyline storyline, Actor enemy, Situation mainSituation) {
-    actor.report(storyline, "<subject> feint<s> a $attackVerb",
-        actionThread: mainSituation.id, isSupportiveActionInThread: true);
+    actor.report(
+        storyline,
+        "<subject> tr<ies> to ruin <object's> stance "
+        "with a $attackVerb",
+        object: enemy,
+        actionThread: mainSituation.id,
+        isSupportiveActionInThread: true);
   }
 
   @override
