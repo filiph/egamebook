@@ -1,17 +1,20 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/randomly.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
+import 'package:edgehead/src/fight/common/start_defensible_action.dart';
+import 'package:edgehead/src/fight/sweep_feet/sweep_feet_defense/sweep_feet_defense_situation.dart';
+import 'package:edgehead/src/fight/sweep_feet/sweep_feet_situation.dart';
+import 'package:edgehead/src/predetermined_result.dart';
 
-ReasonedSuccessChance computeSweepFeet(
+ReasonedSuccessChance computeStartSweepFeet(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
+  assert(a.isPlayer);
   return getCombatMoveChance(a, enemy, 0.6, [
     const Modifier(70, CombatReason.dexterity),
     const Modifier(70, CombatReason.balance),
@@ -21,7 +24,7 @@ ReasonedSuccessChance computeSweepFeet(
   ]);
 }
 
-class SweepFeet extends EnemyTargetAction with ComplexCommandPath<Actor> {
+class SweepFeet extends StartDefensibleActionBase {
   static const String className = "SweepFeet";
 
   static final SweepFeet singleton = SweepFeet();
@@ -58,50 +61,48 @@ class SweepFeet extends EnemyTargetAction with ComplexCommandPath<Actor> {
       "<object> up?";
 
   @override
-  String applyFailure(ActionContext context, Actor enemy) {
-    Actor a = context.actor;
-    Storyline s = context.outputStoryline;
-    Randomly.run(() {
-      a.report(s, "<subject> kick<s> {at|towards} <object's> feet",
-          object: enemy);
-      a.report(s, "<subject> mi<sses>", but: true);
-    }, () {
-      a.report(s, "<subject> kick<s> <object's> shin", object: enemy);
-      enemy.report(s, "<subject> <does>n't budge", but: true);
-    });
-    return "${a.name} fails to sweep ${enemy.name}'s feet away";
+  bool get shouldShortCircuitWhenFailed => false;
+
+  @override
+  void applyShortCircuit(Actor actor, Simulation sim, WorldStateBuilder world,
+      Storyline storyline, Actor enemy, Situation mainSituation) {
+    throw StateError("This action doesn't short-circuit on failure.");
   }
 
   @override
-  String applySuccess(ActionContext context, Actor enemy) {
-    Actor a = context.actor;
-    WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
-
-    Randomly.run(() {
-      a.report(s, "<subject> sweep<s> <object's> feet away",
-          object: enemy, positive: true, endSentence: true);
-    }, () {
-      a.report(s, "<subject> kick<s> <object's> {right|left} shin",
-          object: enemy, positive: true);
-      enemy.report(s, "<subject> {grunt|shriek}<s>");
-    });
-    final groundMaterial = getGroundMaterial(w);
-    enemy.report(s, "<subject> fall<s> to the $groundMaterial", negative: true);
-    w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
-    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
-    return "${a.name} sweeps ${enemy.name} off feet";
+  void applyStart(Actor actor, Simulation sim, WorldStateBuilder world,
+      Storyline storyline, Actor enemy, Situation mainSituation) {
+    actor.report(storyline,
+        "<subject> tr<ies> to kick <object's> feet from under <object>",
+        object: enemy,
+        actionThread: mainSituation.id,
+        isSupportiveActionInThread: true);
   }
 
   @override
-  ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState world, Actor enemy) =>
-      computeSweepFeet(a, sim, world, enemy);
+  DefenseSituation defenseSituationBuilder(Actor actor, Simulation sim,
+      WorldStateBuilder world, Actor enemy, Predetermination predetermination) {
+    return createSweepFeetDefenseSituation(
+        world.randomInt(), actor, enemy, predetermination);
+  }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.pose >= Pose.offBalance &&
+      a.anatomy.hasCrippledLegs &&
       !enemy.isOnGround &&
       !a.anatomy.isBlind &&
       enemy.pose <= Pose.extended;
+
+  @override
+  Situation mainSituationBuilder(
+      Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy) {
+    return createSweepFeetSituation(world.randomInt(), actor, enemy);
+  }
+
+  @override
+  ReasonedSuccessChance successChanceGetter(
+      Actor a, Simulation sim, WorldState w, Actor enemy) {
+    return computeStartSweepFeet(a, sim, w, enemy);
+  }
 }

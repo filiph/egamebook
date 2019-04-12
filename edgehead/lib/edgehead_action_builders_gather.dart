@@ -28,6 +28,9 @@ import 'package:edgehead/src/fight/strike_down/actions/finish_thrust_spear_down.
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/on_ground_parry.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/on_ground_shield_block.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/roll_out_of_way.dart';
+import 'package:edgehead/src/fight/sweep_feet/actions/finish_sweep_feet.dart';
+import 'package:edgehead/src/fight/sweep_feet/sweep_feet_defense/actions/avoid_sweep_feet.dart';
+import 'package:edgehead/src/fight/sweep_feet/sweep_feet_defense/actions/counter_sweep_feet.dart';
 import 'package:edgehead/src/fight/thrust/actions/finish_thrust.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/actions/dodge_thrust.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/actions/jump_back.dart';

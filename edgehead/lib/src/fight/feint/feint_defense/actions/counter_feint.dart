@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
+import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/feint/feint_situation.dart';
 
@@ -96,7 +97,9 @@ class CounterAttackFeint extends OtherActorAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    return computeCounterFeint(a, sim, w, enemy);
+    final situation = w.currentSituation as DefenseSituation;
+    return situation.predeterminedChance
+        .or(computeCounterFeint(a, sim, w, enemy));
   }
 
   @override

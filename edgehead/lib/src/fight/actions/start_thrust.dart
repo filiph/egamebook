@@ -21,6 +21,7 @@ ReasonedSuccessChance computeThrustAtBodyPartChance(
     Simulation sim,
     WorldState w,
     Actor enemy) {
+  assert(a.isPlayer);
   final bodyPart = enemy.anatomy.findByDesignation(designation);
 
   const minBase = 0.01;

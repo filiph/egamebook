@@ -24,6 +24,7 @@ const String startStrikeDownHelpMessage =
 /// the various defense moves.
 ReasonedSuccessChance computeStartStrikeDownPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
+  assert(a.isPlayer);
   // Major bonus when the actor just rolled out of the way.
   final didRecentlyRoll = recentlyRolledOutOfWay(w, enemy);
   final base = didRecentlyRoll ? 0.8 : 0.4;

@@ -26,6 +26,8 @@ const String startSlashHelpMessage =
 /// the various defense moves.
 ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
     BodyPart bodyPart, Actor a, Simulation sim, WorldState w, Actor enemy) {
+  assert(a.isPlayer);
+
   const minBase = 0.01;
   const maxBase = 0.5;
   final relativeSlashSurface = math.min(

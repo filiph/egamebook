@@ -7,7 +7,7 @@ import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
-import 'package:edgehead/src/fight/actions/sweep_feet.dart';
+import 'package:edgehead/src/fight/actions/start_sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/throw_spear.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
@@ -51,7 +51,7 @@ void main() {
     "counter slash": computeCounterSlash,
     "counter tackle": computeCounterTackle,
     "off-balance opportunity thrust": computeOpportunityThrust,
-    "sweep feet": computeSweepFeet,
+    "sweep feet": computeStartSweepFeet,
   };
 
   for (final computationName in getters.keys) {
