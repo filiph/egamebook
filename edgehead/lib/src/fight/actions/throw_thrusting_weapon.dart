@@ -167,7 +167,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
       a.inventory.currentWeapon.damageCapability.isThrusting &&
       !a.anatomy.isBlind &&
       !a.hasCrippledArms &&
-      recentlyForcedToGround(a, world);
+      !recentlyForcedToGround(a, world);
 
   Entity _createBodyPartEntity(Actor a, String name) {
     return Entity(name: Randomly.parse(name), team: a.team);
