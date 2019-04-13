@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -70,7 +71,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   }
 
   @override
-  List<String> getCommandPath(Actor target) {
+  List<String> getCommandPath(ApplicabilityContext context, Actor target) {
     final livingEyes = _getAllEyes(target).length;
     assert(livingEyes > 0,
         "Trying to apply $className when there is no eye left.");

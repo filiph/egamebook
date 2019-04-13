@@ -51,7 +51,16 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ["attack <object>", "kill", "throw current weapon"];
+      throw UnimplementedError('getCommandPath is overridden');
+
+  @override
+  List<String> getCommandPath(ApplicabilityContext context, Actor target) {
+    return [
+      "attack ${target.name}",
+      "kill",
+      "throw ${context.actor.currentWeapon.name}"
+    ];
+  }
 
   @override
   String get name => className;

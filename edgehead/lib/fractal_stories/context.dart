@@ -47,9 +47,8 @@ class ActionContext extends ApplicabilityContext {
       this.pubSub,
       this.outputWorld,
       this.outputStoryline,
-      this.successChance,
-      {Object target})
-      : super(actor, simulation, world, target: target);
+      this.successChance)
+      : super(actor, simulation, world);
 }
 
 /// This is all the context an action (or rule) needs to see if it's applicable.
@@ -64,8 +63,5 @@ class ApplicabilityContext {
 
   final WorldState world;
 
-  final Object target;
-
-  const ApplicabilityContext(this.actor, this.simulation, this.world,
-      {this.target});
+  const ApplicabilityContext(this.actor, this.simulation, this.world);
 }

@@ -99,7 +99,7 @@ class Simulation {
 
   /// Generates all applicable actions for [actor] given a [world]. This goes
   /// through all [Situation.actions] as well as [Situation.actionGenerators].
-  Iterable<Performance<dynamic>> generateAllPerformances(
+  Iterable<Performance<Object>> generateAllPerformances(
       ApplicabilityContext context) sync* {
     assert(context.world.currentSituation.actions.isNotEmpty,
         "There are no actions defined for ${context.world.currentSituation}");
@@ -113,7 +113,7 @@ class Simulation {
         }
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, null);
-        yield Performance<Null>(action, null, successChance.value);
+        yield Performance<Null>(action, context, null, successChance.value);
         continue;
       }
 
@@ -127,7 +127,7 @@ class Simulation {
         }
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, target);
-        yield Performance<dynamic>(action, target, successChance.value);
+        yield Performance<Object>(action, context, target, successChance.value);
       }
     }
   }

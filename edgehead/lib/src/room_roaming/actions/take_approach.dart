@@ -60,7 +60,8 @@ class TakeApproachAction extends ApproachAction {
   ///
   /// For example, "Enter >> upper door".
   @override
-  List<String> getCommandPath(Approach approach) =>
+  List<String> getCommandPath(
+          ApplicabilityContext context, Approach approach) =>
       approach.command.split(' >> ');
 
   @override

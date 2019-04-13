@@ -42,6 +42,19 @@ abstract class Action<T> {
 
   String _description;
 
+  /// [OtherActorActionBase] should include the [target] in the result of
+  /// [getCommand]. To make it easier to implement, this class will
+  /// automatically construct the name given a [Storyline] template.
+  ///
+  /// For example, `["attack <object>", "kill", "decapitate"]` is a valid
+  /// template that might realize to a sequence of actions such as
+  /// "Attack the orc >> Kill >> Decapitate".
+  ///
+  /// For actions that are [isImplicit], this should return `const []` (an
+  /// empty list). For actions that override [getCommandPath()], this should
+  /// throw.
+  List<String> get commandPathTemplate;
+
   /// Optional message to be shown when player presses a help button
   /// next to the action. The message should explain what the action does
   /// and, if appropriate, why and when it should be used.
@@ -106,7 +119,12 @@ abstract class Action<T> {
     assert(successChance.value >= 0.0);
     assert(successChance.value <= 1.0);
 
-    final performance = Performance<T>(this, object, successChance.value);
+    final performance = Performance<T>(
+      this,
+      ApplicabilityContext(turn.actor, sim, world),
+      object,
+      successChance.value,
+    );
 
     if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
@@ -150,26 +168,13 @@ abstract class Action<T> {
         'called in the first place.');
   }
 
-  /// [OtherActorActionBase] should include the [target] in the result of
-  /// [getCommand]. To make it easier to implement, this class will
-  /// automatically construct the name given a [Storyline] template.
-  ///
-  /// For example, `["attack <object>", "kill", "decapitate"]` is a valid
-  /// template that might realize to a sequence of actions such as
-  /// "Attack the orc >> Kill >> Decapitate".
-  ///
-  /// For actions that are [isImplicit], this should return `const []` (an
-  /// empty list). For actions that override [getCommandPath()], this should
-  /// throw.
-  List<String> get commandPathTemplate;
-
   /// The path of sub-commands to be used for the action menu.
   ///
   /// For example, an actions such as "kick <subject> to ground" could have
   /// a [getCommandPath] of `[attack <subject>, stance, kick in chest]`. The
   /// [getCommandPath] is what the player chooses, the [getCommand()] is
   /// what is shown afterwards.
-  List<String> getCommandPath(T object) {
+  List<String> getCommandPath(ApplicabilityContext context, T object) {
     if (isImplicit) {
       return const [];
     }
@@ -455,16 +460,22 @@ class Performance<T> {
   /// the object is an enemy actor) or take (if the object is an item).
   final Action<T> action;
 
-  /// The object the [action] is performed on.
-  final T object;
+  /// The context in which the action is performed.
+  final ApplicabilityContext context;
 
   /// The chance that the action will
   final num successChance;
 
   /// Creates a performance object.
-  const Performance(this.action, this.object, this.successChance);
+  const Performance(this.action, this.context, this.object, this.successChance);
 
-  List<String> get commandPath => action.getCommandPath(object);
+  /// The performer of the action.
+  Actor get actor => context.actor;
+
+  List<String> get commandPath => action.getCommandPath(context, object);
+
+  /// The object the [action] is performed on.
+  final T object;
 }
 
 /// This class encapsulates a singular reason why an action might have
