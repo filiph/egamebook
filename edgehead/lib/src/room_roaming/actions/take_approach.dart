@@ -52,7 +52,8 @@ class TakeApproachAction extends ApproachAction {
   }
 
   @override
-  String getCommand(Approach approach) => approach.command;
+  List<String> get commandPathTemplate =>
+      throw UnimplementedError('This action overrides getCommandPath().');
 
   /// When the writer specifies a command with " >> " in it, this will
   /// automatically create a command path.

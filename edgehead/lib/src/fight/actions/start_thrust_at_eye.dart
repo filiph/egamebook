@@ -25,9 +25,6 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   }
 
   @override
-  String get commandTemplate => "thrust >> <object's> >> eye";
-
-  @override
   String get helpMessage => "Eyes are hard to hit but if this move is "
       "successful, opponents lose much of their fighting ability.";
 

@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
-class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
+class RegainBalance extends Action<Null> {
   static final RegainBalance singleton = RegainBalance();
 
   static const String className = "RegainBalance";
@@ -64,9 +64,6 @@ class RegainBalance extends Action<Null> with ComplexCommandPath<Null> {
     }
     return "${a.name} regains balance";
   }
-
-  @override
-  String getCommand(Null _) => "Regain balance.";
 
   @override
   Duration getRecoveryDuration(ApplicabilityContext context, Null object) {

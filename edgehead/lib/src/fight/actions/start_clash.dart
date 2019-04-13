@@ -34,10 +34,6 @@ class StartClash extends StartDefensibleActionBase {
       ["attack <object>", "stance", "clash"];
 
   @override
-  String get commandTemplate =>
-      "clash with <object's> weapon to force <objectPronoun> off balance";
-
-  @override
   String get helpMessage =>
       "This is a powerful slash directed at the enemy's weapon"
       "in order to force them off balance. "

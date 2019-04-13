@@ -349,8 +349,8 @@ class EdgeheadGame extends Book {
         // auto-selected).
         for (final performance in recs.performances) {
           assert(
-              performance.command.isNotEmpty,
-              "Action can have an empty ('') command "
+              performance.commandPath.isNotEmpty,
+              "Action can have an empty ([]) commandPath "
               "only if it is the only action presented. But now we have "
               "these commands: ${recs.performances}. One of these actions "
               "should probably have a stricter PREREQUISITE (isApplicable).");
@@ -366,7 +366,8 @@ class EdgeheadGame extends Book {
           .pickMax(situation.maxActionsToShow, normalCombineFunction)
           .toList(growable: false);
 
-      if (performances.isNotEmpty && performances.any((a) => a.command != "")) {
+      if (performances.isNotEmpty &&
+          performances.any((a) => a.commandPath.isNotEmpty)) {
         /// Only realize storyline when there is an actual choice to show.
         storyline.generateOutput().forEach(elementsSink.add);
       }
@@ -374,10 +375,11 @@ class EdgeheadGame extends Book {
       // Creates a string just for sorting. Actions with same enemy are
       // sorted next to each other.
       String sortingName(Performance a) {
+        var commandForSorting = a.commandPath.join('-->');
         if (a.action is EnemyTargetAction) {
-          return "${a.object} ${a.command}";
+          return "${a.object} $commandForSorting";
         }
-        return "ZZZZZZ ${a.command}";
+        return "ZZZZZZ $commandForSorting";
       }
 
       performances.sort((a, b) => sortingName(a).compareTo(sortingName(b)));
@@ -392,12 +394,10 @@ class EdgeheadGame extends Book {
       final callbacks = <Choice, Future<Null> Function()>{};
       for (final performance in performances) {
         final choice = Choice((b) => b
-          ..command = performance.command
           ..commandPath = ListBuilder<String>(performance.commandPath)
           ..helpMessage = performance.action.helpMessage
           ..successChance = performance.successChance.toDouble()
-          ..isImplicit = performance.action.isImplicit ||
-              performance.command == '<implicit>');
+          ..isImplicit = performance.action.isImplicit);
         callbacks[choice] = () async {
           await _applySelected(performance, actorTurn, storyline);
         };

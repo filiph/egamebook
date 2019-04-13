@@ -35,7 +35,7 @@ class ImpaleLeaper extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "impale";
+  List<String> get commandPathTemplate => ["impale"];
 
   @override
   String get name => className;

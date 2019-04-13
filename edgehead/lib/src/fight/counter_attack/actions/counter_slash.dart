@@ -43,7 +43,6 @@ ReasonedSuccessChance computeCounterSlash(
 /// this is what's happening.
 EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
       name: "CounterSlash",
-      commandTemplate: counterSlashCommandTemplate,
       commandPathTemplate: const [counterSlashCommandTemplate],
       helpMessage: counterSlashHelpMessage,
       applyStart: counterSlashReportStart,

@@ -25,7 +25,6 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
 
 EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
       name: "StartBreakNeckOnGround",
-      commandTemplate: "break <object's> neck",
       commandPathTemplate: const ["attack <object>", "kill", "break neck"],
       helpMessage: startBreakNeckOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>

@@ -48,7 +48,7 @@ class PassWhileBlind extends Action<Null> {
   }
 
   @override
-  String getCommand(Null _) => "Stand there.";
+  List<String> get commandPathTemplate => ["Stand there"];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

@@ -53,7 +53,6 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     BodyPartDesignation designation) {
   return StartDefensibleAction(
     name: "StartSlashAt$designation",
-    commandTemplate: startSlashCommandTemplate(designation),
     commandPathTemplate: startSlashCommandPathTemplate(designation),
     helpMessage: startSlashHelpMessage,
     applyStart: startSlashReportStart(designation),
@@ -83,10 +82,6 @@ List<String> startSlashCommandPathTemplate(BodyPartDesignation designation) {
     kill ? "kill" : "maim",
     "slash <objectPronoun's> ${designation.toHumanString()}"
   ];
-}
-
-String startSlashCommandTemplate(BodyPartDesignation designation) {
-  return "slash <object's> ${designation.toHumanString()}";
 }
 
 /// Creates the [StartDefensibleAction.applyStart] function for given

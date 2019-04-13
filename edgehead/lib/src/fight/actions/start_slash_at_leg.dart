@@ -25,9 +25,6 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   }
 
   @override
-  String get commandTemplate => "slash >> <object's> >> leg";
-
-  @override
   String get helpMessage => "Legs provide mobility. A downed opponent is much "
       "easier to deal with.";
 

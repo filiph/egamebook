@@ -30,7 +30,7 @@ class FinishPunch extends OtherActorAction {
   final bool rerollable = false;
 
   @override
-  String get commandTemplate => null;
+  List<String> get commandPathTemplate => const [];
 
   @override
   String get name => className;

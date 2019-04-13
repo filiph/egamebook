@@ -40,7 +40,7 @@ class OnGroundParry extends OtherActorAction {
   final String helpMessage = "Why would you move? Just put your weapon up.";
 
   @override
-  String get commandTemplate => "parry it";
+  List<String> get commandPathTemplate => ["parry it"];
 
   @override
   String get name => className;

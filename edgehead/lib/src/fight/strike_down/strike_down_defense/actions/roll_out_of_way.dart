@@ -52,7 +52,7 @@ class RollOutOfWay extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "roll out of way";
+  List<String> get commandPathTemplate => const ["roll out of way"];
 
   @override
   String get name => className;

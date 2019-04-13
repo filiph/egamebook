@@ -46,7 +46,7 @@ class DodgeThrust extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "dodge and counter";
+  List<String> get commandPathTemplate => const ["dodge and counter"];
 
   @override
   String get name => className;

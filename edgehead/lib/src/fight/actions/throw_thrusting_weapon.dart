@@ -28,8 +28,7 @@ ReasonedSuccessChance computeThrowSword(
   ]);
 }
 
-class ThrowThrustingWeapon extends EnemyTargetAction
-    with ComplexCommandPath<Actor> {
+class ThrowThrustingWeapon extends EnemyTargetAction {
   static const String className = "ThrowThrustingWeapon";
 
   static final ThrowThrustingWeapon singleton = ThrowThrustingWeapon();
@@ -53,9 +52,6 @@ class ThrowThrustingWeapon extends EnemyTargetAction
   @override
   List<String> get commandPathTemplate =>
       ["attack <object>", "kill", "throw current weapon"];
-
-  @override
-  String get commandTemplate => "throw >> your weapon >> at <object>";
 
   @override
   String get name => className;

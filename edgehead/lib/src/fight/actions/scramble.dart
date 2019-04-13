@@ -49,7 +49,7 @@ class Scramble extends Action<Null> {
   }
 
   @override
-  String getCommand(Null _) => "Scramble.";
+  List<String> get commandPathTemplate => ["Scramble"];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

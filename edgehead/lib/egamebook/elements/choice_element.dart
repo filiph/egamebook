@@ -16,8 +16,6 @@ abstract class Choice extends ElementBase
 
   Choice._();
 
-  String get command;
-
   /// The chance of success, from `0` to `1`.
   double get successChance;
 

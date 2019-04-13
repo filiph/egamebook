@@ -38,7 +38,6 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
 
 EnemyTargetAction startStrikeDownBuilder() => StartDefensibleAction(
       name: "StartStrikeDown",
-      commandTemplate: "slash <object> by striking down",
       commandPathTemplate: const [
         "attack <object>",
         "kill",

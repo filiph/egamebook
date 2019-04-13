@@ -43,7 +43,7 @@ class CounterTackle extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "tackle <object>";
+  List<String> get commandPathTemplate => ["tackle <object>"];
 
   @override
   String get name => className;

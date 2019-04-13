@@ -46,10 +46,23 @@ class GeneratedAction extends GeneratedGameObject {
 
     var classType = TypeReference((b) => b..symbol = className);
 
-    final getCommandBuilder = createNullObjectMethod('getCommand', stringType)
-      ..block.addExpression(literal(_map['COMMAND']).returned);
+    String command = _map['COMMAND'];
+    var isImplicit = command == '<implicit>';
+    var commandPathTemplate = isImplicit ? const [] : [command];
+    final getCommandPathBuilder = Method((b) => b
+      ..type = MethodType.getter
+      ..name = 'commandPathTemplate'
+      ..returns = listOfString
+      ..annotations.add(overrideAnnotation)
+      ..body = literalList(commandPathTemplate).code);
 
-    classBuilder.methods.add(getCommandBuilder.bake());
+    classBuilder.methods.add(getCommandPathBuilder);
+
+    if (isImplicit) {
+      final isImplicitGetter = _createGetter('isImplicit', boolType, true);
+
+      classBuilder.methods.add(isImplicitGetter);
+    }
 
     final nameField = Field((b) => b
       ..name = 'name'

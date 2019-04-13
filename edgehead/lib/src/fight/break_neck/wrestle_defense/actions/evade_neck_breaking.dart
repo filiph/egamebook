@@ -30,7 +30,7 @@ class EvadeNeckBreaking extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "evade";
+  List<String> get commandPathTemplate => ["evade"];
 
   @override
   String get name => className;

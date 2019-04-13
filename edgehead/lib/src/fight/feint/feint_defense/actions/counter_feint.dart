@@ -43,7 +43,7 @@ class CounterAttackFeint extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "counter-attack";
+  List<String> get commandPathTemplate => ["counter-attack"];
 
   @override
   String get name => className;

@@ -29,7 +29,7 @@ ReasonedSuccessChance computeThrowSpear(
   ]);
 }
 
-class ThrowSpear extends EnemyTargetAction with ComplexCommandPath<Actor> {
+class ThrowSpear extends EnemyTargetAction {
   static const String className = "ThrowSpear";
 
   static final ThrowSpear singleton = ThrowSpear();
@@ -53,9 +53,6 @@ class ThrowSpear extends EnemyTargetAction with ComplexCommandPath<Actor> {
   @override
   List<String> get commandPathTemplate =>
       ["attack <object>", "kill", "throw spear"];
-
-  @override
-  String get commandTemplate => "throw >> spear >> at <object>";
 
   @override
   String get name => className;

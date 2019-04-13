@@ -30,7 +30,6 @@ ReasonedSuccessChance computeStartPunch(
 
 EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
       name: "StartPunch",
-      commandTemplate: "punch <object>",
       commandPathTemplate: const ["attack <object>", "stance", "punch"],
       helpMessage: startPunchHelpMessage,
       applyStart: startPunchReportStart,

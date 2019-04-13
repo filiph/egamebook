@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class TakeDroppedShield extends ItemAction with ComplexCommandPath<Item> {
+class TakeDroppedShield extends ItemAction {
   static const String className = "TakeDroppedShield";
 
   static final TakeDroppedShield singleton = TakeDroppedShield();
@@ -18,9 +18,6 @@ class TakeDroppedShield extends ItemAction with ComplexCommandPath<Item> {
   @override
   List<String> get commandPathTemplate =>
       const ["environment", "pick up <object>"];
-
-  @override
-  String get commandTemplate => "pick up <object>";
 
   @override
   String get helpMessage => "A shield makes a huge difference in battle.";

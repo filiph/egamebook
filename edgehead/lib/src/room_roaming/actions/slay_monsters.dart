@@ -12,6 +12,9 @@ class SlayMonstersAction extends Action<Null> {
   static const String className = "SlayMonstersAction";
 
   @override
+  List<String> get commandPathTemplate => const [];
+
+  @override
   final bool isAggressive = false;
 
   @override
@@ -66,9 +69,6 @@ class SlayMonstersAction extends Action<Null> {
 
     return "${a.name} initiated combat with monsters in $room";
   }
-
-  @override
-  String getCommand(Null _) => "";
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

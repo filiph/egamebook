@@ -32,7 +32,7 @@ class WithstandClash extends OtherActorAction {
 
   /// "Let him".
   @override
-  String get commandTemplate => "let <objectPronounAccusative>";
+  List<String> get commandPathTemplate => ["let <objectPronounAccusative>"];
 
   @override
   String get name => className;

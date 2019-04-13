@@ -53,7 +53,7 @@ class ParrySlash extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "parry and counter";
+  List<String> get commandPathTemplate => ["parry and counter"];
 
   @override
   String get name => className;

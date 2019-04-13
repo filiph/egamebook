@@ -98,5 +98,5 @@ class SimpleAction extends RoamingAction {
   }
 
   @override
-  String getCommand(Null _) => simpleActionCommand;
+  List<String> get commandPathTemplate => [simpleActionCommand];
 }

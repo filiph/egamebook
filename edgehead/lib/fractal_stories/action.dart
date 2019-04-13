@@ -42,9 +42,6 @@ abstract class Action<T> {
 
   String _description;
 
-  @Deprecated('use getCommand')
-  String get command => getCommand(null);
-
   /// Optional message to be shown when player presses a help button
   /// next to the action. The message should explain what the action does
   /// and, if appropriate, why and when it should be used.
@@ -153,10 +150,18 @@ abstract class Action<T> {
         'called in the first place.');
   }
 
-  /// The command that describes this action.
+  /// [OtherActorActionBase] should include the [target] in the result of
+  /// [getCommand]. To make it easier to implement, this class will
+  /// automatically construct the name given a [Storyline] template.
   ///
-  /// For example: "open the door" or "swing at the orc".
-  String getCommand(T object);
+  /// For example, `["attack <object>", "kill", "decapitate"]` is a valid
+  /// template that might realize to a sequence of actions such as
+  /// "Attack the orc >> Kill >> Decapitate".
+  ///
+  /// For actions that are [isImplicit], this should return `const []` (an
+  /// empty list). For actions that override [getCommandPath()], this should
+  /// throw.
+  List<String> get commandPathTemplate;
 
   /// The path of sub-commands to be used for the action menu.
   ///
@@ -164,7 +169,30 @@ abstract class Action<T> {
   /// a [getCommandPath] of `[attack <subject>, stance, kick in chest]`. The
   /// [getCommandPath] is what the player chooses, the [getCommand()] is
   /// what is shown afterwards.
-  List<String> getCommandPath(T object) => [getCommand(object)];
+  List<String> getCommandPath(T object) {
+    if (isImplicit) {
+      return const [];
+    }
+
+    assert(
+        commandPathTemplate != null && commandPathTemplate.isNotEmpty,
+        "Actions with empty commandPathTemplate must override getCommandPath "
+        "or must be isImplicit. Culprit: $this.");
+
+    if (object is Entity) {
+      // Realize the "<object>" parts of the template.
+      return (Storyline()..add(commandPathTemplate.join('>>'), object: object))
+          .realizeAsString()
+          // Then split again into a list.
+          .split('>>');
+    } else {
+      assert(
+          !commandPathTemplate
+              .any((string) => string.contains(RegExp(r'<[\w]>'))),
+          "Action is of type Action<$T> yet it expect Storyline to work.");
+      return commandPathTemplate;
+    }
+  }
 
   /// The time it takes the actor to be available again after performing
   /// the action.
@@ -310,39 +338,6 @@ abstract class ApproachAction extends Action<Approach> {
   String toString() => "ApproachAction";
 }
 
-/// Mixin that adds the functionality for actions that will have
-/// a command path longer than 1.
-///
-/// Overrides the default functionality in [Action] and requires
-/// the [commandPathTemplate] field to be non-null and non-empty.
-mixin ComplexCommandPath<T extends Entity> on Action<T> {
-  /// This is to [getCommandPath] what [commandTemplate] is
-  /// to [getCommandTemplate].
-  ///
-  /// For example, `["attack <object>", "kill", "decapitate"]` is a valid
-  /// template that might realize to a sequence of actions such as
-  /// "Attack the orc >> Kill >> Decapitate".
-  List<String> get commandPathTemplate;
-
-  @override
-  List<String> getCommandPath(T target) {
-    if (isImplicit) {
-      throw StateError('ComplexCommandPath actions cannot be implicit. '
-          '$this is.');
-    }
-    assert(
-        commandPathTemplate != null && commandPathTemplate.isNotEmpty,
-        "Never create actions with empty commandPathTemplate. "
-        "Use isImplicit instead. Culprit: $this");
-
-    // Realize the "<object>" parts of the template.
-    return (Storyline()..add(commandPathTemplate.join('>>'), object: target))
-        .realizeAsString()
-        // Then split again into a list.
-        .split('>>');
-  }
-}
-
 /// This [Action] requires an [enemy].
 ///
 /// Every [EnemyTargetAction] should contain a static builder like this:
@@ -362,7 +357,7 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
   }
 
   @override
-  String toString() => "EnemyTargetAction<$commandTemplate>";
+  String toString() => "EnemyTargetAction<$commandPathTemplate>";
 }
 
 /// This [Action] requires an [item].
@@ -374,11 +369,6 @@ abstract class ItemAction extends Action<Item> {
   @override
   final bool isImplicit = false;
 
-  /// ItemAction should include the [item] in the result of [getCommand].
-  /// To make it easier to implement, this class will automatically construct
-  /// the command string given a [Storyline] template.
-  String get commandTemplate;
-
   @override
   Iterable<Item> generateObjects(ApplicabilityContext context) {
     final situation = context.world.currentSituation as FightSituation;
@@ -386,11 +376,7 @@ abstract class ItemAction extends Action<Item> {
   }
 
   @override
-  String getCommand(Item item) =>
-      (Storyline()..add(commandTemplate, object: item)).realizeAsString();
-
-  @override
-  String toString() => "ItemAction<$commandTemplate>";
+  String toString() => "ItemAction<$commandPathTemplate>";
 }
 
 /// This [Action] requires a another [Actor], a target. The target
@@ -414,7 +400,7 @@ abstract class OtherActorAction extends OtherActorActionBase {
   }
 
   @override
-  String toString() => "OtherActorAction<$commandTemplate>";
+  String toString() => "OtherActorAction<$commandPathTemplate>";
 }
 
 /// A base class for [OtherActorAction] and [EnemyTargetAction].
@@ -423,14 +409,6 @@ abstract class OtherActorAction extends OtherActorActionBase {
 /// because then our `if (builder is EnemyTargetActionBuilder)` logic
 /// would have false positives (at least in Dart 1).
 abstract class OtherActorActionBase extends Action<Actor> {
-  /// [OtherActorActionBase] should include the [target] in the result of
-  /// [getCommand]. To make it easier to implement, this class will
-  /// automatically construct the name given a [Storyline] template.
-  ///
-  /// For example, "kill <object>" is a valid name template that might realize
-  /// into something like "Kill the orc."
-  String get commandTemplate;
-
   /// By default, [OtherActorActionBase] is not implicit. But it can be.
   @override
   bool get isImplicit => false;
@@ -442,23 +420,6 @@ abstract class OtherActorActionBase extends Action<Actor> {
   /// For example "will <subject> hit <objectPronoun>?" is a valid roll reason
   /// template that might realize into something like "Will you hit him?"
   String get rollReasonTemplate;
-
-  @override
-  String getCommand(Actor target) {
-    if (isImplicit) {
-      assert(
-          commandTemplate == null,
-          "When action is implicit, commandTemplate should be null. "
-          "Found '$commandTemplate' instead in $this.");
-      return "";
-    }
-    assert(
-        commandTemplate != "",
-        "Never create actions with empty commandTemplate. "
-        "Use isImplicit instead. Culprit: $this");
-    return (Storyline()..add(commandTemplate, object: target))
-        .realizeAsString();
-  }
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Actor target) =>
@@ -479,7 +440,7 @@ abstract class OtherActorActionBase extends Action<Actor> {
       w.getSituationByName<Situation>(mainSituationName).id;
 
   @override
-  String toString() => "_OtherActorActionBase<$commandTemplate>";
+  String toString() => "_OtherActorActionBase<$commandPathTemplate>";
 }
 
 /// The [action] to use and the [object] to use it on. The _performing_
@@ -502,8 +463,6 @@ class Performance<T> {
 
   /// Creates a performance object.
   const Performance(this.action, this.object, this.successChance);
-
-  String get command => action.getCommand(object);
 
   List<String> get commandPath => action.getCommandPath(object);
 }

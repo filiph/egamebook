@@ -43,7 +43,7 @@ class OnGroundShieldBlock extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "block with shield";
+  List<String> get commandPathTemplate => const ["block with shield"];
 
   @override
   String get name => className;

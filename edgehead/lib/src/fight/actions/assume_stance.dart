@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
-class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
+class AssumeStance extends Action<Null> {
   static final AssumeStance singleton = AssumeStance();
 
   static const String className = "AssumeStance";
@@ -56,9 +56,6 @@ class AssumeStance extends Action<Null> with ComplexCommandPath<Null> {
     w.updateActorById(a.id, (b) => b.pose = a.poseMax);
     return "${a.name} assumes better stance";
   }
-
-  @override
-  String getCommand(Null _) => "Assume better stance.";
 
   @override
   Duration getRecoveryDuration(ApplicabilityContext context, Null object) {

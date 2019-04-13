@@ -33,7 +33,7 @@ class FinishLeap extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => null;
+  List<String> get commandPathTemplate => const [];
 
   @override
   String get name => className;

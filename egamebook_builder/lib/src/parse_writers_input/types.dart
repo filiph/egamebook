@@ -78,6 +78,10 @@ final listOfRoomsType = TypeReference((b) => b
   ..symbol = 'List'
   ..types = ListBuilder<Reference>([roomType]));
 
+final listOfString = TypeReference((b) => b
+  ..symbol = 'List'
+  ..types.add(stringType));
+
 final nullType = TypeReference((b) => b..symbol = 'Null');
 
 final numType = TypeReference((b) => b..symbol = 'num');

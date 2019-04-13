@@ -136,10 +136,7 @@ class ExamineUndergroundChurch extends RoamingAction {
   static final ExamineUndergroundChurch singleton = ExamineUndergroundChurch();
 
   @override
-  String getCommand(Null _) {
-    return 'Look around';
-  }
-
+  List<String> get commandPathTemplate => ['Look around'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -245,10 +242,7 @@ class TalkToBriana1 extends RoamingAction {
   static final TalkToBriana1 singleton = TalkToBriana1();
 
   @override
-  String getCommand(Null _) {
-    return 'Talk to Briana';
-  }
-
+  List<String> get commandPathTemplate => ['Talk to Briana'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if (!(w.actionNeverUsed(name) && isRoamingInBloodrock(w))) {
@@ -308,10 +302,7 @@ class TalkToBriana2 extends RoamingAction {
   static final TalkToBriana2 singleton = TalkToBriana2();
 
   @override
-  String getCommand(Null _) {
-    return 'Ask Briana about her capture';
-  }
-
+  List<String> get commandPathTemplate => ['Ask Briana about her capture'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if (!(w.actionHasBeenPerformed("talk_to_briana_1") &&
@@ -373,10 +364,7 @@ class TalkToBriana3 extends RoamingAction {
   static final TalkToBriana3 singleton = TalkToBriana3();
 
   @override
-  String getCommand(Null _) {
-    return 'Ask Briana about Orcthorn';
-  }
-
+  List<String> get commandPathTemplate => ['Ask Briana about Orcthorn'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if (!(w.actionHasBeenPerformed("talk_to_briana_2") &&
@@ -618,10 +606,7 @@ class SlaveQuartersContinue extends RoamingAction {
   static final SlaveQuartersContinue singleton = SlaveQuartersContinue();
 
   @override
-  String getCommand(Null _) {
-    return 'Continue';
-  }
-
+  List<String> get commandPathTemplate => ['Continue'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -708,10 +693,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
       NameAgruthSwordOpportunity();
 
   @override
-  String getCommand(Null _) {
-    return '"Luck Bringer"';
-  }
-
+  List<String> get commandPathTemplate => ['"Luck Bringer"'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -775,10 +757,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
       NameAgruthSwordRedemption();
 
   @override
-  String getCommand(Null _) {
-    return '"Savior"';
-  }
-
+  List<String> get commandPathTemplate => ['"Savior"'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -841,10 +820,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   static final NameAgruthSwordNothing singleton = NameAgruthSwordNothing();
 
   @override
-  String getCommand(Null _) {
-    return 'No name';
-  }
-
+  List<String> get commandPathTemplate => ['No name'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1022,10 +998,7 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
       GuardpostAboveChurchEnterTunnelWithCancel();
 
   @override
-  String getCommand(Null _) {
-    return 'Go to the Upper Door';
-  }
-
+  List<String> get commandPathTemplate => ['Go to the Upper Door'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1086,10 +1059,7 @@ class TakeOrcthorn extends RoamingAction {
   static final TakeOrcthorn singleton = TakeOrcthorn();
 
   @override
-  String getCommand(Null _) {
-    return 'Search for Orcthorn';
-  }
-
+  List<String> get commandPathTemplate => ['Search for Orcthorn'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1157,10 +1127,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
       GuardpostAboveChurchTakeShield();
 
   @override
-  String getCommand(Null _) {
-    return 'Cautiously take the shield';
-  }
-
+  List<String> get commandPathTemplate => ['Cautiously take the shield'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1418,10 +1385,7 @@ class SmelterLookAround extends RoamingAction {
   static final SmelterLookAround singleton = SmelterLookAround();
 
   @override
-  String getCommand(Null _) {
-    return 'Look around';
-  }
-
+  List<String> get commandPathTemplate => ['Look around'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1540,10 +1504,7 @@ class SearchAgruth extends RoamingAction {
   static final SearchAgruth singleton = SearchAgruth();
 
   @override
-  String getCommand(Null _) {
-    return 'Search Agruth';
-  }
-
+  List<String> get commandPathTemplate => ['Search Agruth'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1673,10 +1634,7 @@ class WaitForRitual extends RoamingAction {
   static final WaitForRitual singleton = WaitForRitual();
 
   @override
-  String getCommand(Null _) {
-    return 'Wait';
-  }
-
+  List<String> get commandPathTemplate => ['Wait'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1742,10 +1700,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
       TakeSpearInUndergroundChurch();
 
   @override
-  String getCommand(Null _) {
-    return 'Take the spear';
-  }
-
+  List<String> get commandPathTemplate => ['Take the spear'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -1810,10 +1765,7 @@ class SmelterThrowSpear extends RoamingAction {
   static final SmelterThrowSpear singleton = SmelterThrowSpear();
 
   @override
-  String getCommand(Null _) {
-    return 'Throw spear at the ogre';
-  }
-
+  List<String> get commandPathTemplate => ['Throw spear at the ogre'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -2000,10 +1952,7 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
       SlaveQuartersPassageExamineDoor();
 
   @override
-  String getCommand(Null _) {
-    return 'Examine the door';
-  }
-
+  List<String> get commandPathTemplate => ['Examine the door'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -2215,10 +2164,7 @@ class WarForgeLookAround extends RoamingAction {
   static final WarForgeLookAround singleton = WarForgeLookAround();
 
   @override
-  String getCommand(Null _) {
-    return 'Look around';
-  }
-
+  List<String> get commandPathTemplate => ['Look around'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
@@ -2282,10 +2228,7 @@ class WarForgeWatchWorkers extends RoamingAction {
   static final WarForgeWatchWorkers singleton = WarForgeWatchWorkers();
 
   @override
-  String getCommand(Null _) {
-    return 'Watch the workers';
-  }
-
+  List<String> get commandPathTemplate => ['Watch the workers'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=

@@ -51,9 +51,6 @@ class SweepFeet extends StartDefensibleActionBase {
       ["attack <object>", "stance", "sweep feet"];
 
   @override
-  String get commandTemplate => "sweep <object's> feet away";
-
-  @override
   String get name => className;
 
   @override

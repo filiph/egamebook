@@ -117,7 +117,7 @@ class AutoLoot extends Action<Null> {
   }
 
   @override
-  String getCommand(Null _) => "";
+  List<String> get commandPathTemplate => const [];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

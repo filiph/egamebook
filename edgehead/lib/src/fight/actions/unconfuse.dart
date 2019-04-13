@@ -53,7 +53,7 @@ class Unconfuse extends Action<Null> {
   }
 
   @override
-  String getCommand(Null _) => "Regain clarity.";
+  List<String> get commandPathTemplate => ["Regain clarity"];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

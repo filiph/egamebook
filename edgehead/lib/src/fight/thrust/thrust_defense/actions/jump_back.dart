@@ -40,7 +40,7 @@ class JumpBackFromThrust extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "jump back";
+  List<String> get commandPathTemplate => const ["jump back"];
 
   @override
   String get name => className;

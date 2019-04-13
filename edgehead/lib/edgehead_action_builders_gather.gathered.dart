@@ -24,6 +24,12 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'CounterAttackFeint.singleton': CounterAttackFeint.singleton,
   // From lib/src/fight/feint/feint_defense/actions/withstand_feint.dart:
   'WithstandFeint.singleton': WithstandFeint.singleton,
+  // From lib/src/fight/sweep_feet/sweep_feet_defense/actions/counter_sweep_feet.dart:
+  'CounterSweepFeet.singleton': CounterSweepFeet.singleton,
+  // From lib/src/fight/sweep_feet/sweep_feet_defense/actions/avoid_sweep_feet.dart:
+  'AvoidSweepFeet.singleton': AvoidSweepFeet.singleton,
+  // From lib/src/fight/sweep_feet/actions/finish_sweep_feet.dart:
+  'FinishSweepFeet.singleton': FinishSweepFeet.singleton,
   // From lib/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart:
   'OffBalanceOpportunityThrust.singleton':
       OffBalanceOpportunityThrust.singleton,
@@ -71,12 +77,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrust.singleton': DodgeThrust.singleton,
   // From lib/src/fight/thrust/actions/finish_thrust.dart:
   'FinishThrust.singleton': FinishThrust.singleton,
-  // From lib/src/fight/sweep_feet/actions/finish_sweep_feet.dart:
-  'FinishSweepFeet.singleton': FinishSweepFeet.singleton,
-  // From lib/src/fight/sweep_feet/sweep_feet_defense/actions/counter_sweep_feet.dart:
-  'CounterSweepFeet.singleton': CounterSweepFeet.singleton,
-  // From lib/src/fight/sweep_feet/sweep_feet_defense/actions/avoid_sweep_feet.dart:
-  'AvoidSweepFeet.singleton': AvoidSweepFeet.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

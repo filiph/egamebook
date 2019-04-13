@@ -15,10 +15,6 @@ class FeintJab extends FeintSlash {
   String get attackVerb => 'jab';
 
   @override
-  String get commandTemplate =>
-      "feint jab at <object> to spoil <objectPronoun's> stance";
-
-  @override
   FeintType get feintType => FeintType.slash;
 
   @override

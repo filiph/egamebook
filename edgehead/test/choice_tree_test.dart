@@ -7,7 +7,6 @@ import 'package:test/test.dart';
 
 Choice _buildChoice(String commandWithCarets, {bool isImplicit = false}) {
   return Choice((b) => b
-    ..command = commandWithCarets
     ..commandPath = ListBuilder<String>(commandWithCarets.split('>>'))
     ..isImplicit = isImplicit
     ..successChance = 100);

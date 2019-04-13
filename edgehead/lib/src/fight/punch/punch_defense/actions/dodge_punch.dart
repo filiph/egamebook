@@ -31,7 +31,7 @@ class DodgePunch extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "dodge";
+  List<String> get commandPathTemplate => ["dodge"];
 
   @override
   String get name => className;

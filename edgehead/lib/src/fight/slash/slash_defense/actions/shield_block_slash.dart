@@ -51,7 +51,7 @@ class ShieldBlockSlash extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "block with shield and counter";
+  List<String> get commandPathTemplate => ["block with shield and counter"];
 
   @override
   String get name => className;

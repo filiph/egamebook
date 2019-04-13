@@ -52,7 +52,7 @@ class Pass extends Action<Null> {
   }
 
   @override
-  String getCommand(Null _) => "Stand off.";
+  List<String> get commandPathTemplate => ["Stand off"];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

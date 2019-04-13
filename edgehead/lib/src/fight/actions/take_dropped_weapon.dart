@@ -9,7 +9,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_disarmed.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class TakeDroppedWeapon extends ItemAction with ComplexCommandPath<Item> {
+class TakeDroppedWeapon extends ItemAction {
   static const String className = "TakeDroppedWeapon";
 
   static final TakeDroppedWeapon singleton = TakeDroppedWeapon();
@@ -20,9 +20,6 @@ class TakeDroppedWeapon extends ItemAction with ComplexCommandPath<Item> {
   @override
   List<String> get commandPathTemplate =>
       const ["environment", "pick up <object>"];
-
-  @override
-  String get commandTemplate => "pick up <object>";
 
   @override
   String get helpMessage => "A different weapon might change the battle.";

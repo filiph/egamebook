@@ -83,9 +83,6 @@ class StartDefensibleAction extends StartDefensibleActionBase {
   final Resource rerollResource;
 
   @override
-  final String commandTemplate;
-
-  @override
   final String rollReasonTemplate;
 
   @override
@@ -96,7 +93,6 @@ class StartDefensibleAction extends StartDefensibleActionBase {
 
   StartDefensibleAction({
     @required this.name,
-    @required this.commandTemplate,
     @required this.commandPathTemplate,
     @required this.helpMessage,
     @required OtherActorApplicabilityFunction isApplicable,
@@ -168,8 +164,7 @@ class StartDefensibleAction extends StartDefensibleActionBase {
 ///
 /// [StartDefensibleAction] is a subclass that extends this class and can
 /// be immediately instantiated. In contrast, this class is abstract.
-abstract class StartDefensibleActionBase extends EnemyTargetAction
-    with ComplexCommandPath<Actor> {
+abstract class StartDefensibleActionBase extends EnemyTargetAction {
   @override
   bool get isAggressive => true;
 

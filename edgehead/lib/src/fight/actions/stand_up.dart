@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class StandUp extends Action<Null> with ComplexCommandPath<Null> {
+class StandUp extends Action<Null> {
   static final StandUp singleton = StandUp();
 
   static const String className = "StandUp";
@@ -63,9 +63,6 @@ class StandUp extends Action<Null> with ComplexCommandPath<Null> {
     }
     return "${a.name} stands up";
   }
-
-  @override
-  String getCommand(Null _) => "Stand up.";
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

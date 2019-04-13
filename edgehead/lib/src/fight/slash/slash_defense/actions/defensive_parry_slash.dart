@@ -45,7 +45,7 @@ class DefensiveParrySlash extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "step back and parry";
+  List<String> get commandPathTemplate => ["step back and parry"];
 
   @override
   String get name => className;

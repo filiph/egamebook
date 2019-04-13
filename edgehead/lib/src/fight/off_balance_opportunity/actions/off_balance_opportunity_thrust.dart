@@ -48,7 +48,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "stab <object>";
+  List<String> get commandPathTemplate => ["stab <object>"];
 
   @override
   String get name => className;

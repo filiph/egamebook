@@ -48,7 +48,7 @@ class Cower extends Action<Null> {
   }
 
   @override
-  String getCommand(Null _) => "Cower.";
+  List<String> get commandPathTemplate => ["Cower"];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>

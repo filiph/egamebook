@@ -55,10 +55,6 @@ class FeintSlash extends StartDefensibleActionBase {
   List<String> get commandPathTemplate =>
       ["attack <object>", "stance", "feint"];
 
-  @override
-  String get commandTemplate =>
-      "feint slash at <object> to spoil <objectPronoun's> stance";
-
   @protected
   FeintType get feintType => FeintType.slash;
 

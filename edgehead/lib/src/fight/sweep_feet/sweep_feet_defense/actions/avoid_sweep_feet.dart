@@ -40,7 +40,7 @@ class AvoidSweepFeet extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "avoid";
+  List<String> get commandPathTemplate => const ["avoid"];
 
   @override
   String get name => className;

@@ -17,7 +17,6 @@ const String startThrustSpearDownHelpMessage =
 
 EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
       name: "StartThrustSpearDown",
-      commandTemplate: "thrust at <object>",
       commandPathTemplate: const [
         "attack <object>",
         "kill",

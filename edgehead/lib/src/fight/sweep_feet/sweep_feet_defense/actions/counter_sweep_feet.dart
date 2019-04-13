@@ -47,7 +47,7 @@ class CounterSweepFeet extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  String get commandTemplate => "slash the leg";
+  List<String> get commandPathTemplate => const ["slash the leg"];
 
   @override
   String get name => className;

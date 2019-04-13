@@ -115,7 +115,7 @@ class ActorPlanner {
   Iterable<String> generateTable() sync* {
     int i = 1;
     for (final key in firstActionScores.keys) {
-      yield "$i) ${key.command}\t${firstActionScores[key]}";
+      yield "$i) ${key.commandPath.join(' -> ')}\t${firstActionScores[key]}";
       i += 1;
     }
   }
@@ -149,10 +149,10 @@ class ActorPlanner {
       assert(
           performance.action.isApplicable(
               currentActor, simulation, _initial.world, performance.object),
-          "We got an unapplicable action '${performance.command}' from "
+          "We got an unapplicable action '${performance.commandPath}' from "
           "Simulation.generateAllPerformances.");
 
-      log.finer(() => "Evaluating action '${performance.command}' "
+      log.finer(() => "Evaluating action '${performance.commandPath}' "
           "for ${currentActor.name}");
 
       var consequenceStats = await _getConsequenceStats(
@@ -160,8 +160,8 @@ class ActorPlanner {
           .toList();
 
       if (consequenceStats.isEmpty) {
-        log.finer(() => "- action '${performance.command}' is possible but we "
-            "couldn't get to any outcomes while planning. "
+        log.finer(() => "- action '${performance.commandPath}' is possible "
+            "but we couldn't get to any outcomes while planning. "
             "Scoring with negative infinity.");
         // For example, at the very end of a book, it is possible to have
         // 'no future'.
@@ -169,14 +169,15 @@ class ActorPlanner {
         continue;
       }
 
-      log.finer(() => "- action '${performance.command}' leads "
+      log.finer(() => "- action '${performance.commandPath}' leads "
           "to ${consequenceStats.length} "
           "different ConsequenceStats, initialScore=$initialScore");
       var score = combineScores(consequenceStats, initialScore, maxOrder);
 
       firstActionScores[performance] = score;
 
-      log.finer(() => "- action '${performance.command}' was scored $score");
+      log.finer(() => "- action '${performance.commandPath}' "
+          "was scored $score");
     }
 
     _resultsReady = true;
@@ -200,7 +201,7 @@ class ActorPlanner {
 
     log.finer("=====");
     log.finer(() => "_getConsequenceStats for firstAction "
-        "'${firstPerformance.command}' of ${mainActor.name}");
+        "'${firstPerformance.commandPath}' of ${mainActor.name}");
     log.finer(() => "- firstAction == $firstPerformance");
 
     if (!firstPerformance.action.isApplicable(
@@ -246,7 +247,7 @@ class ActorPlanner {
 
       log.finest("----");
       log.finest(() => "evaluating a PlanConsequence "
-          "of '${current.performance.command}'");
+          "of '${current.performance.commandPath}'");
       log.finest(() => "- situation: "
           "${current.world.currentSituation.runtimeType}");
 
