@@ -38,7 +38,7 @@ mixin CombatCommandPath on EnemyTargetAction {
       commandPathTemplate = [command];
     } else {
       commandPathTemplate = [
-        "<object>",
+        target.name,
         _getSecondCommand(context, target),
         command,
       ];
