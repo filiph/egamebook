@@ -12,8 +12,12 @@ String shieldAsObject2(Actor a) => a.currentShield.nameIsProperNoun
     : "<subject's> ${a.currentShield.name}";
 
 /// This is a work-around to the issue that Storyline reports can only have
-/// one object. So if you want to say "A uses B to hit C", you can't use
-/// Storyline to solve NLG for one of B or C.
+/// one object. So if you want to say "A uses B to hit C", you can only use
+/// Storyline to solve NLG for one of B or C, not both.
+///
+/// Example usage:
+///
+///     a.report(s, "<subject> tr<ies> to parry it with ${weaponAsObject2(a)}");
 String weaponAsObject2(Actor a) => a.currentWeapon.nameIsProperNoun
     ? a.currentWeapon.name
     : "<subject's> ${a.currentWeapon.name}";

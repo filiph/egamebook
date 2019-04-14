@@ -5,8 +5,9 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 
-class Confuse extends EnemyTargetAction {
+class Confuse extends EnemyTargetAction with CombatCommandPath {
   static const int minimalEffectLength = 8;
 
   static const String className = "Confuse";
@@ -31,8 +32,7 @@ class Confuse extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  List<String> get commandPathTemplate =>
-      ["attack <object>", "mental", "confuse"];
+  CombatCommandType get combatCommandType => CombatCommandType.mental;
 
   @override
   String get name => className;
@@ -70,6 +70,10 @@ class Confuse extends EnemyTargetAction {
     w.updateActorById(enemy.id, (b) => b..isConfused = true);
     return "${a.name} confuses ${enemy.name}";
   }
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
+      "confuse";
 
   @override
   ReasonedSuccessChance getSuccessChance(

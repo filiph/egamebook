@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -21,9 +22,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   static const String className = "StartSlashAtLeg";
 
   @override
-  List<String> get commandPathTemplate {
-    throw StateError('$className has its own getCommandPath');
-  }
+  CombatCommandType get combatCommandType => CombatCommandType.limbs;
 
   @override
   String get helpMessage => "Legs provide mobility. A downed opponent is much "
@@ -71,23 +70,14 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   }
 
   @override
-  List<String> getCommandPath(ApplicabilityContext context, Actor target) {
+  String getCommandPathTail(ApplicabilityContext context, Actor target) {
     final livingLegs = _getAllLegs(target).length;
     assert(livingLegs > 0,
         "Trying to apply $className when there is no leg left.");
     final isLast = livingLegs == 1;
 
-    final commandPathTemplate = [
-      "attack <object>",
-      "maim",
-      "slash at <objectPronoun's> ${isLast ? 'remaining ' : ''}leg",
-    ];
-
-    // Realize the "<object>" parts of the template.
-    return (Storyline()..add(commandPathTemplate.join('>>'), object: target))
-        .realizeAsString()
-        // Then split again into a list.
-        .split('>>');
+    // TODO: bug - this could be ".. again" when switching from one leg to other
+    return "slash at <objectPronoun's> ${isLast ? 'remaining ' : ''}leg";
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 import 'package:meta/meta.dart';
@@ -88,12 +89,15 @@ class StartDefensibleAction extends StartDefensibleActionBase {
   @override
   final String name;
 
+  final String commandPathTail;
+
   @override
-  final List<String> commandPathTemplate;
+  final CombatCommandType combatCommandType;
 
   StartDefensibleAction({
     @required this.name,
-    @required this.commandPathTemplate,
+    @required this.combatCommandType,
+    @required this.commandPathTail,
     @required this.helpMessage,
     @required OtherActorApplicabilityFunction isApplicable,
     @required PartialApplyFunction applyStart,
@@ -137,6 +141,10 @@ class StartDefensibleAction extends StartDefensibleActionBase {
       _defenseSituationBuilder(actor, sim, world, enemy, predetermination);
 
   @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
+      commandPathTail;
+
+  @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       _isApplicable(a, sim, w, enemy);
 
@@ -164,7 +172,8 @@ class StartDefensibleAction extends StartDefensibleActionBase {
 ///
 /// [StartDefensibleAction] is a subclass that extends this class and can
 /// be immediately instantiated. In contrast, this class is abstract.
-abstract class StartDefensibleActionBase extends EnemyTargetAction {
+abstract class StartDefensibleActionBase extends EnemyTargetAction
+    with CombatCommandPath {
   @override
   bool get isAggressive => true;
 

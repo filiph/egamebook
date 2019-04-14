@@ -1,10 +1,12 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
@@ -52,8 +54,7 @@ class FeintSlash extends StartDefensibleActionBase {
   String get attackVerb => 'slash';
 
   @override
-  List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "feint"];
+  CombatCommandType get combatCommandType => CombatCommandType.stance;
 
   @protected
   FeintType get feintType => FeintType.slash;
@@ -92,6 +93,10 @@ class FeintSlash extends StartDefensibleActionBase {
     return createFeintDefenseSituation(
         world.randomInt(), actor, enemy, predetermination);
   }
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
+      'feint';
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>

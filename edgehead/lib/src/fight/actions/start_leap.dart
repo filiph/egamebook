@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
@@ -30,7 +31,8 @@ ReasonedSuccessChance computeStartLeap(
 
 EnemyTargetAction startLeapBuilder() => StartDefensibleAction(
     name: "StartLeap",
-    commandPathTemplate: const ["attack <object>", "stance", "leap"],
+    combatCommandType: CombatCommandType.stance,
+    commandPathTail: "leap",
     helpMessage: startLeapHelpMessage,
     applyStart: startLeapReportStart,
     isApplicable: (a, sim, w, enemy) =>

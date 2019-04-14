@@ -1,10 +1,12 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
@@ -47,15 +49,13 @@ class SweepFeet extends StartDefensibleActionBase {
       "and your allies.";
 
   @override
-  List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "sweep feet"];
+  CombatCommandType get combatCommandType => CombatCommandType.stance;
 
   @override
   String get name => className;
 
   @override
-  String get rollReasonTemplate => "will <subject> trip "
-      "<object> up?";
+  String get rollReasonTemplate => "will <subject> trip <object> up?";
 
   @override
   bool get shouldShortCircuitWhenFailed => false;
@@ -82,6 +82,10 @@ class SweepFeet extends StartDefensibleActionBase {
     return createSweepFeetDefenseSituation(
         world.randomInt(), actor, enemy, predetermination);
   }
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
+      "sweep feet";
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>

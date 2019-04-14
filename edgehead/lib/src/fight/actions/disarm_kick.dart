@@ -6,10 +6,11 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 
-class DisarmKick extends EnemyTargetAction {
+class DisarmKick extends EnemyTargetAction with CombatCommandPath {
   static const String className = "DisarmKick";
 
   static final EnemyTargetAction singleton = DisarmKick();
@@ -31,8 +32,7 @@ class DisarmKick extends EnemyTargetAction {
       "kick their weapon off to disarm them.";
 
   @override
-  List<String> get commandPathTemplate =>
-      ["attack <object>", "disarm", "kick at weapon"];
+  CombatCommandType get combatCommandType => CombatCommandType.gear;
 
   @override
   String get name => className;
@@ -79,6 +79,10 @@ class DisarmKick extends EnemyTargetAction {
     dropCurrentWeapon(w, enemy);
     return "${a.name} kicks ${enemy.name}'s weapon off";
   }
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
+      "kick at weapon";
 
   @override
   ReasonedSuccessChance getSuccessChance(

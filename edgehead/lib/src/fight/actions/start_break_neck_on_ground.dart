@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/break_neck/wrestle_defense/wrestle_defense_situation.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 
@@ -25,7 +26,8 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
 
 EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
       name: "StartBreakNeckOnGround",
-      commandPathTemplate: const ["attack <object>", "kill", "break neck"],
+      combatCommandType: CombatCommandType.core,
+      commandPathTail: "break neck",
       helpMessage: startBreakNeckOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>
           a.isBarehanded &&

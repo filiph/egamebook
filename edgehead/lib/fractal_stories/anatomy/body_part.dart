@@ -266,12 +266,18 @@ class BodyPartDesignation extends EnumClass {
 
   const BodyPartDesignation._(String name) : super(name);
 
+  /// This is `false` for [primaryHand] and [secondaryHand]. Just the arm
+  /// counts.
   bool get isArm => this == primaryArm || this == secondaryArm;
+
+  bool get isHand => this == primaryHand || this == secondaryHand;
 
   bool get isLeg => this == leftLeg || this == rightLeg;
 
-  /// True if this is any limb (arm or leg).
-  bool get isLimb => isArm || isLeg;
+  /// This is `true` for any part of a limb.
+  ///
+  /// Assumes humanoid anatomy (e.g. will not be `true` for tentacles).
+  bool get isHumanoidLimb => isArm || isHand || isLeg;
 
   String toHumanString() {
     switch (this) {

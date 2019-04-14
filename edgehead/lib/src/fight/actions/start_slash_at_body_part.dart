@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -53,7 +54,8 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     BodyPartDesignation designation) {
   return StartDefensibleAction(
     name: "StartSlashAt$designation",
-    commandPathTemplate: startSlashCommandPathTemplate(designation),
+    combatCommandType: _startSlashCombatCommandType(designation),
+    commandPathTail: _startSlashCommandPathTail(designation),
     helpMessage: startSlashHelpMessage,
     applyStart: startSlashReportStart(designation),
     isApplicable: (Actor a, Simulation sim, WorldState w, Actor enemy) =>
@@ -73,15 +75,16 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
   );
 }
 
-List<String> startSlashCommandPathTemplate(BodyPartDesignation designation) {
-  bool kill = designation == BodyPartDesignation.head ||
+String _startSlashCommandPathTail(BodyPartDesignation designation) {
+  return "slash <objectPronoun's> ${designation.toHumanString()}";
+}
+
+CombatCommandType _startSlashCombatCommandType(
+    BodyPartDesignation designation) {
+  bool core = designation == BodyPartDesignation.head ||
       designation == BodyPartDesignation.neck ||
       designation == BodyPartDesignation.torso;
-  return [
-    "attack <object>",
-    kill ? "kill" : "maim",
-    "slash <objectPronoun's> ${designation.toHumanString()}"
-  ];
+  return core ? CombatCommandType.core : CombatCommandType.limbs;
 }
 
 /// Creates the [StartDefensibleAction.applyStart] function for given

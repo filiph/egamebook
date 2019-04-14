@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -28,7 +29,7 @@ ReasonedSuccessChance computeThrowSword(
   ]);
 }
 
-class ThrowThrustingWeapon extends EnemyTargetAction {
+class ThrowThrustingWeapon extends EnemyTargetAction with CombatCommandPath {
   static const String className = "ThrowThrustingWeapon";
 
   static final ThrowThrustingWeapon singleton = ThrowThrustingWeapon();
@@ -50,21 +51,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  List<String> get commandPathTemplate =>
-      throw UnimplementedError('getCommandPath is overridden');
-
-  @override
-  List<String> getCommandPath(ApplicabilityContext context, Actor target) {
-    var template = [
-      "attack <object>",
-      "kill",
-      "throw ${context.actor.currentWeapon.name} at <object>"
-    ];
-    return (Storyline()..add(template.join('>>'), object: target))
-        .realizeAsString()
-        // Then split again into a list.
-        .split('>>');
-  }
+  CombatCommandType get combatCommandType => CombatCommandType.core;
 
   @override
   String get name => className;
@@ -157,6 +144,11 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
     sword.report(s, "<subject> fall<s> to the ground");
     _moveSwordToGround(w, a, sword, false);
     return "${a.name} hits ${enemy.name} with sword";
+  }
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) {
+    return "throw ${weaponAsObject2(context.actor)} at <object>";
   }
 
   @override

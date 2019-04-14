@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -29,7 +30,7 @@ ReasonedSuccessChance computeThrowSpear(
   ]);
 }
 
-class ThrowSpear extends EnemyTargetAction {
+class ThrowSpear extends EnemyTargetAction with CombatCommandPath {
   static const String className = "ThrowSpear";
 
   static final ThrowSpear singleton = ThrowSpear();
@@ -51,8 +52,7 @@ class ThrowSpear extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  List<String> get commandPathTemplate =>
-      ["attack <object>", "kill", "throw spear"];
+  CombatCommandType get combatCommandType => CombatCommandType.core;
 
   @override
   String get name => className;
@@ -136,6 +136,10 @@ class ThrowSpear extends EnemyTargetAction {
     _moveSpearToGround(w, a, spear, false);
     return "${a.name} hits ${enemy.name} with spear";
   }
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
+      "throw spear";
 
   @override
   ReasonedSuccessChance getSuccessChance(

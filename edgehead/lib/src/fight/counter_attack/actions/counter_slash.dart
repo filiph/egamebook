@@ -6,12 +6,11 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
-
-const String counterSlashCommandTemplate = "swing back at <object>";
 
 const String counterSlashHelpMessage =
     "You can deal serious damage when countering "
@@ -43,7 +42,8 @@ ReasonedSuccessChance computeCounterSlash(
 /// this is what's happening.
 EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
       name: "CounterSlash",
-      commandPathTemplate: const [counterSlashCommandTemplate],
+      combatCommandType: CombatCommandType.core,
+      commandPathTail: "swing back at <object>",
       helpMessage: counterSlashHelpMessage,
       applyStart: counterSlashReportStart,
       applyShortCircuit: counterSlashShortCircuitFailure,

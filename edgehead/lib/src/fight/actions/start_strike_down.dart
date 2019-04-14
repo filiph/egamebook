@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -38,11 +39,8 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
 
 EnemyTargetAction startStrikeDownBuilder() => StartDefensibleAction(
       name: "StartStrikeDown",
-      commandPathTemplate: const [
-        "attack <object>",
-        "kill",
-        "slash <objectPronoun> from above"
-      ],
+      combatCommandType: CombatCommandType.core,
+      commandPathTail: "slash <objectPronoun> from above",
       helpMessage: startStrikeDownHelpMessage,
       applyStart: startStrikeDownReportStart,
       isApplicable: (a, sim, w, enemy) =>

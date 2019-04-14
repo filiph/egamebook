@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
@@ -21,9 +22,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   static const String className = "StartThrustAtEye";
 
   @override
-  List<String> get commandPathTemplate {
-    throw StateError('$className has its own getCommandPath');
-  }
+  CombatCommandType get combatCommandType => CombatCommandType.core;
 
   @override
   String get helpMessage => "Eyes are hard to hit but if this move is "
@@ -71,23 +70,14 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   }
 
   @override
-  List<String> getCommandPath(ApplicabilityContext context, Actor target) {
+  String getCommandPathTail(ApplicabilityContext context, Actor target) {
     final livingEyes = _getAllEyes(target).length;
     assert(livingEyes > 0,
         "Trying to apply $className when there is no eye left.");
     final isLast = livingEyes == 1;
 
-    final commandPathTemplate = [
-      "attack <object>",
-      "maim",
-      "stab <objectPronoun's> ${isLast ? 'remaining ' : ''}eye",
-    ];
-
-    // Realize the "<object>" parts of the template.
-    return (Storyline()..add(commandPathTemplate.join('>>'), object: target))
-        .realizeAsString()
-        // Then split again into a list.
-        .split('>>');
+    // TODO: bug - could say ".. again" when switching eye
+    return "stab <objectPronoun's> ${isLast ? 'remaining ' : ''}eye";
   }
 
   @override

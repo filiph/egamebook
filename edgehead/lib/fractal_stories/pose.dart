@@ -88,5 +88,22 @@ class Pose extends EnumClass implements Comparable<Pose> {
     return _sequence.indexOf(this) - _sequence.indexOf(other);
   }
 
+  String toHumanString() {
+    switch (this) {
+      case onGround:
+        return 'on ground';
+      case offBalance:
+        return 'off balance';
+      case extended:
+        return 'extended';
+      case standing:
+        return 'solid';
+      case combat:
+        return 'combat pose';
+    }
+    assert(false, 'No human string for $this');
+    return name;
+  }
+
   static Pose valueOf(String name) => _$valueOf(name);
 }

@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -7,6 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/clash/clash_defense/clash_defense_situation.dart';
 import 'package:edgehead/src/fight/clash/clash_situation.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
@@ -30,8 +32,7 @@ class StartClash extends StartDefensibleActionBase {
   static final StartClash singleton = StartClash();
 
   @override
-  List<String> get commandPathTemplate =>
-      ["attack <object>", "stance", "clash"];
+  CombatCommandType get combatCommandType => CombatCommandType.stance;
 
   @override
   String get helpMessage =>
@@ -81,6 +82,10 @@ class StartClash extends StartDefensibleActionBase {
     return createClashDefenseSituation(
         world.randomInt(), actor, enemy, predetermination);
   }
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
+      "clash";
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>

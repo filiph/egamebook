@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/lerp.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
@@ -45,7 +46,8 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
     BodyPartDesignation designation) {
   return StartDefensibleAction(
     name: "StartThrust",
-    commandPathTemplate: startThrustCommandPathTemplate(designation),
+    combatCommandType: _startThrustCombatCommandType(designation),
+    commandPathTail: _startThrustCommandPathTail(designation),
     helpMessage: startThrustHelpMessage,
     applyStart: startThrustReportStart(designation),
     isApplicable: (a, sim, w, enemy) =>
@@ -69,15 +71,17 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
   );
 }
 
-List<String> startThrustCommandPathTemplate(BodyPartDesignation designation) {
-  bool kill = designation == BodyPartDesignation.head ||
+
+String _startThrustCommandPathTail(BodyPartDesignation designation) {
+  return "stab <objectPronoun's> ${designation.toHumanString()}";
+}
+
+CombatCommandType _startThrustCombatCommandType(
+    BodyPartDesignation designation) {
+  bool core = designation == BodyPartDesignation.head ||
       designation == BodyPartDesignation.neck ||
       designation == BodyPartDesignation.torso;
-  return [
-    "attack <object>",
-    kill ? "kill" : "maim",
-    "stab <objectPronoun's> ${designation.toHumanString()}"
-  ];
+  return core ? CombatCommandType.core : CombatCommandType.limbs;
 }
 
 PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>

@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
+import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
@@ -17,11 +18,8 @@ const String startThrustSpearDownHelpMessage =
 
 EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
       name: "StartThrustSpearDown",
-      commandPathTemplate: const [
-        "attack <object>",
-        "kill",
-        "thrust at <objectPronoun> from above"
-      ],
+      combatCommandType: CombatCommandType.core,
+      commandPathTail: "thrust at <objectPronoun> from above",
       helpMessage: startThrustSpearDownHelpMessage,
       applyStart: startThrustSpearDownReportStart,
       isApplicable: (a, sim, w, enemy) =>
