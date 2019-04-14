@@ -60,7 +60,6 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
   final secondaryArm = BodyPart(random.next(), "shield arm",
       randomDesignation: "{left arm|left shoulder}",
       designation: BodyPartDesignation.secondaryArm,
-      function: BodyPartFunction.wielding,
       isSeverable: true,
       swingSurfaceRight: 7,
       swingSurfaceLeft: 0,
