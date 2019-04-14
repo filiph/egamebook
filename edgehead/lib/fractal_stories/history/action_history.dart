@@ -31,9 +31,8 @@ abstract class ActionHistory
   /// by their [Actor.id].
   BuiltMap<int, DateTime> get latestProactiveByActorId;
 
-  /// A list of [ActionRecord]s in chronological order.
-  ///
-  /// The records are grouped for faster access.
+  /// A list of [ActionRecord]s in chronological order (last record is most
+  /// recent).
   BuiltList<ActionRecord> get records;
 
   /// Builds a string describing the history so far.

@@ -17,12 +17,21 @@ class ActorScore {
   /// the worse this is for the Actor.
   final num enemy;
 
-  const ActorScore(this.selfPreservation, this.teamPreservation, this.enemy);
+  /// How interesting the happenings have been lately. This is not subjective
+  /// to the actor, but a more objective score.
+  ///
+  /// This goes up when there had been a lot of _different_ and _aggressive_
+  /// actions.
+  final num varietyOfAction;
+
+  const ActorScore(this.selfPreservation, this.teamPreservation, this.enemy,
+      this.varietyOfAction);
 
   ActorScoreChange operator -(ActorScore other) => ActorScoreChange(
       selfPreservation - other.selfPreservation,
       teamPreservation - other.teamPreservation,
-      enemy - other.enemy);
+      enemy - other.enemy,
+      varietyOfAction - other.varietyOfAction);
 
   @override
   String toString() => "ActorScore<"
@@ -43,33 +52,40 @@ class ActorScoreChange {
   /// How better-off the enemy is relative to another outcome.
   final num enemy;
 
-  const ActorScoreChange(
-      this.selfPreservation, this.teamPreservation, this.enemy);
+  /// How much more interesting the history of this world is relative
+  /// to another outcome.
+  final num varietyOfAction;
+
+  const ActorScoreChange(this.selfPreservation, this.teamPreservation,
+      this.enemy, this.varietyOfAction);
 
   factory ActorScoreChange.average(Iterable<ActorScoreChange> changes) {
     int count = 0;
     num self = 0;
     num team = 0;
     num enemy = 0;
+    num varietyOfAction = 0;
     for (final change in changes) {
       count += 1;
       self += change.selfPreservation;
       team += change.teamPreservation;
       enemy += change.enemy;
+      varietyOfAction += change.varietyOfAction;
     }
     if (count == 0) {
       throw ArgumentError("Cannot average empty iterable");
     }
-    return ActorScoreChange(self / count, team / count, enemy / count);
+    return ActorScoreChange(
+        self / count, team / count, enemy / count, varietyOfAction / count);
   }
 
   /// Action outcome cannot be computed at all.
   const ActorScoreChange.undefined()
       : this(double.negativeInfinity, double.negativeInfinity,
-            double.negativeInfinity);
+            double.negativeInfinity, double.negativeInfinity);
 
   /// Outcome has zero effect on the world from the scoring actor's perspective.
-  const ActorScoreChange.zero() : this(0, 0, 0);
+  const ActorScoreChange.zero() : this(0, 0, 0, 0);
 
   /// Action outcome could not be computed at all.
   bool get isUndefined =>
@@ -82,21 +98,29 @@ class ActorScoreChange {
 
   /// Returns a score change multiplied by a scalar value.
   ActorScoreChange operator *(num value) => ActorScoreChange(
-      selfPreservation * value, teamPreservation * value, enemy * value);
+      selfPreservation * value,
+      teamPreservation * value,
+      enemy * value,
+      varietyOfAction * value);
 
   /// Returns the addition of two actor score changes.
   ActorScoreChange operator +(ActorScoreChange other) => ActorScoreChange(
       selfPreservation + other.selfPreservation,
       teamPreservation + other.teamPreservation,
-      enemy + other.enemy);
+      enemy + other.enemy,
+      varietyOfAction + other.varietyOfAction);
 
   /// Returns a score change divided by a scalar value.
   ActorScoreChange operator /(num value) => ActorScoreChange(
-      selfPreservation / value, teamPreservation / value, enemy / value);
+      selfPreservation / value,
+      teamPreservation / value,
+      enemy / value,
+      varietyOfAction / value);
 
   @override
   String toString() => "ActorScoreChange<"
       "self=${selfPreservation.toStringAsFixed(2)},"
       "team=${teamPreservation.toStringAsFixed(2)},"
-      "enemy=${enemy.toStringAsFixed(2)}>";
+      "enemy=${enemy.toStringAsFixed(2)},"
+      "varietyOfAction=${varietyOfAction.toStringAsFixed(2)}>";
 }

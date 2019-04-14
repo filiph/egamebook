@@ -35,7 +35,7 @@ abstract class Actor extends Object
   /// For example, after a `FightSituation` ends, all dead actors are deleted,
   /// which means there is nobody to score the situation. In that case, we
   /// provide this default score.
-  static const ActorScore defaultScoreWhenDead = ActorScore(-10, 0, 100);
+  static const ActorScore defaultScoreWhenDead = ActorScore(-10, 0, 100, 0);
 
   static Serializer<Actor> get serializer => _$actorSerializer;
 
@@ -269,6 +269,11 @@ abstract class Actor extends Object
   /// differently, and of course the same world will be scored differently
   /// depending on who scores it (if Bob has all the bananas and Alice is
   /// starving, then Bob's score will be higher than Alice's).
+  ///
+  /// That's why this method returns [ActorScore], which includes many
+  /// dimensions. Later, actor combines these functions into a single
+  /// dimension using [combineFunctionHandle] (which is used to get
+  /// a globally provided [CombineFunction] in [Simulation.combineFunctions]).
   ActorScore scoreWorld(WorldState world) {
     var actor = world.getActorById(id);
     num selfPreservation = 2 * actor.hitpoints;
@@ -305,7 +310,16 @@ abstract class Actor extends Object
       return sum + weightedScore;
     });
 
-    return ActorScore(selfPreservation, teamPreservation, enemy);
+    // Add points for interesting happenings.
+    var seenActions = <String>{};
+    var varietyOfAction = 0.0;
+    for (final action in world.actionHistory.records.reversed.take(10)) {
+      if (seenActions.contains(action.actionName)) continue;
+      varietyOfAction += action.wasAggressive ? 1 : 0.5;
+    }
+
+    return ActorScore(
+        selfPreservation, teamPreservation, enemy, varietyOfAction);
   }
 
   /// Returns true if this actor was attacked by [actor] in the past

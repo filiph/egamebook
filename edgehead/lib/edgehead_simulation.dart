@@ -60,7 +60,9 @@ final List<Room> _rooms = List<Room>.from(allRooms)
 /// Lesser self-worth than normal combine function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
 num carelessMonsterCombineFunction(ActorScoreChange scoreChange) =>
-    scoreChange.selfPreservation - 5 * scoreChange.enemy;
+    scoreChange.selfPreservation +
+    scoreChange.varietyOfAction -
+    5 * scoreChange.enemy;
 
 num normalCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.selfPreservation +
