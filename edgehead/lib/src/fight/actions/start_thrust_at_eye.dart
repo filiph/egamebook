@@ -22,7 +22,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   static const String className = "StartThrustAtEye";
 
   @override
-  CombatCommandType get combatCommandType => CombatCommandType.core;
+  CombatCommandType get combatCommandType => CombatCommandType.body;
 
   @override
   String get helpMessage => "Eyes are hard to hit but if this move is "

@@ -77,10 +77,10 @@ String _startThrustCommandPathTail(BodyPartDesignation designation) {
 
 CombatCommandType _startThrustCombatCommandType(
     BodyPartDesignation designation) {
-  bool core = designation == BodyPartDesignation.head ||
+  bool body = designation == BodyPartDesignation.head ||
       designation == BodyPartDesignation.neck ||
       designation == BodyPartDesignation.torso;
-  return core ? CombatCommandType.core : CombatCommandType.limbs;
+  return body ? CombatCommandType.body : CombatCommandType.limbs;
 }
 
 PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>

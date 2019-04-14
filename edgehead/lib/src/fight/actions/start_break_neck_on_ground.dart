@@ -26,7 +26,7 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
 
 EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
       name: "StartBreakNeckOnGround",
-      combatCommandType: CombatCommandType.core,
+      combatCommandType: CombatCommandType.body,
       commandPathTail: "break neck",
       helpMessage: startBreakNeckOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>

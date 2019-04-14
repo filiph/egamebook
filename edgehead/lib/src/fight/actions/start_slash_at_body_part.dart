@@ -81,10 +81,10 @@ String _startSlashCommandPathTail(BodyPartDesignation designation) {
 
 CombatCommandType _startSlashCombatCommandType(
     BodyPartDesignation designation) {
-  bool core = designation == BodyPartDesignation.head ||
+  bool body = designation == BodyPartDesignation.head ||
       designation == BodyPartDesignation.neck ||
       designation == BodyPartDesignation.torso;
-  return core ? CombatCommandType.core : CombatCommandType.limbs;
+  return body ? CombatCommandType.body : CombatCommandType.limbs;
 }
 
 /// Creates the [StartDefensibleAction.applyStart] function for given

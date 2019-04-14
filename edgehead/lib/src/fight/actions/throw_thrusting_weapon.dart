@@ -51,7 +51,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction with CombatCommandPath {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  CombatCommandType get combatCommandType => CombatCommandType.core;
+  CombatCommandType get combatCommandType => CombatCommandType.body;
 
   @override
   String get name => className;

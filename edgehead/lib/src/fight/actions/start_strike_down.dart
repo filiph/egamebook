@@ -39,7 +39,7 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
 
 EnemyTargetAction startStrikeDownBuilder() => StartDefensibleAction(
       name: "StartStrikeDown",
-      combatCommandType: CombatCommandType.core,
+      combatCommandType: CombatCommandType.body,
       commandPathTail: "slash <objectPronoun> from above",
       helpMessage: startStrikeDownHelpMessage,
       applyStart: startStrikeDownReportStart,

@@ -59,15 +59,15 @@ mixin CombatCommandPath on EnemyTargetAction {
   /// For example, for "Goblin >> Maim >> Cut off arm", it is "Cut off arm".
   String getCommandPathTail(ApplicabilityContext context, Actor object);
 
-  String _getCoreCommand(Actor target) {
-    var coreParts = target.anatomy.allParts
+  String _getBodyCommand(Actor target) {
+    var nonLimbParts = target.anatomy.allParts
         .where((part) => !part.designation.isHumanoidLimb);
 
     var blindPrefix = target.anatomy.isBlind ? "blind & " : "";
 
-    String status = _getStatusString(coreParts);
+    String status = _getStatusString(nonLimbParts);
 
-    return "core ($blindPrefix$status)";
+    return "body ($blindPrefix$status)";
   }
 
   String _getLimbsCommand(Actor target) {
@@ -110,8 +110,8 @@ mixin CombatCommandPath on EnemyTargetAction {
 
   String _getSecondCommand(ApplicabilityContext context, Actor target) {
     switch (combatCommandType) {
-      case CombatCommandType.core:
-        return _getCoreCommand(target);
+      case CombatCommandType.body:
+        return _getBodyCommand(target);
       case CombatCommandType.limbs:
         return _getLimbsCommand(target);
       case CombatCommandType.stance:
@@ -161,7 +161,7 @@ enum CombatCommandType {
   gear,
   mental,
   limbs,
-  core,
+  body,
   /// A combat action that should have a command path of just the tail.
   ///
   /// For example, when an enemy slashes at you, the counter command should

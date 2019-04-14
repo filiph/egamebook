@@ -18,7 +18,7 @@ const String startThrustSpearDownHelpMessage =
 
 EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
       name: "StartThrustSpearDown",
-      combatCommandType: CombatCommandType.core,
+      combatCommandType: CombatCommandType.body,
       commandPathTail: "thrust at <objectPronoun> from above",
       helpMessage: startThrustSpearDownHelpMessage,
       applyStart: startThrustSpearDownReportStart,
