@@ -33,11 +33,17 @@ mixin CombatCommandPath on EnemyTargetAction {
     var again = previous != null && previous.actionName == name;
     var command = "$commandPathTail${again ? ' again' : ''}";
 
-    final commandPathTemplate = [
-      "<object>",
-      _getSecondCommand(context, target),
-      command,
-    ];
+
+    List<String> commandPathTemplate;
+    if (combatCommandType == CombatCommandType.reaction) {
+      commandPathTemplate = [command];
+    } else {
+      commandPathTemplate = [
+        "<object>",
+        _getSecondCommand(context, target),
+        command,
+      ];
+    }
 
     // Realize the "<object>" parts of the template.
     return (Storyline()
@@ -114,6 +120,8 @@ mixin CombatCommandPath on EnemyTargetAction {
         return 'gear';
       case CombatCommandType.mental:
         return 'mental';
+      case CombatCommandType.reaction:
+        throw StateError('_getSecondCommand called with $combatCommandType');
     }
     throw UnimplementedError('$combatCommandType not implemented');
   }
@@ -154,4 +162,9 @@ enum CombatCommandType {
   mental,
   limbs,
   core,
+  /// A combat action that should have a command path of just the tail.
+  ///
+  /// For example, when an enemy slashes at you, the counter command should
+  /// be "Slash back", not "Goblin >> Body >> Slash back".
+  reaction,
 }

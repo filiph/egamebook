@@ -42,7 +42,7 @@ ReasonedSuccessChance computeCounterSlash(
 /// this is what's happening.
 EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
       name: "CounterSlash",
-      combatCommandType: CombatCommandType.core,
+      combatCommandType: CombatCommandType.reaction,
       commandPathTail: "swing back at <object>",
       helpMessage: counterSlashHelpMessage,
       applyStart: counterSlashReportStart,
