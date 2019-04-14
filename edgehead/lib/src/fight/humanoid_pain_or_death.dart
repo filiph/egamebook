@@ -12,7 +12,8 @@ const Duration painShockDuration = Duration(seconds: 1);
 
 final Random _random = Random();
 
-void inflictPain(ActionContext context, Actor actor, int damage) {
+void inflictPain(ActionContext context, Actor actor, int damage,
+    {bool extremePain = false}) {
   final s = context.outputStoryline;
   context.pubSub.publishActorLostHitpoints(
       ActorLostHitpointsEvent(context, actor, damage));
@@ -24,7 +25,18 @@ void inflictPain(ActionContext context, Actor actor, int damage) {
       actor.isAlive,
       "All actors except Briana should call killHumanoid (not reportPain) "
       "when they lose all hitpoints. This actor didn't: $actor");
+  assert(actor.anatomy.isHumanoid,
+      "Pain is currently described in humanoid terms (yell, cover with hand).");
+
   actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
+  if (extremePain && !actor.hasCrippledArms) {
+    actor.report(
+        s,
+        "<subject> briefly {hold<s> <subject's> hand over the wound"
+        "|cover<s> the wound with <subject's> hand}",
+        negative: true);
+    actor.report(s, "<subject> growl<s>", negative: true);
+  }
 
   if (!actor.isPlayer) {
     // Non-player characters shouldn't immediately act after such pain.
@@ -32,10 +44,12 @@ void inflictPain(ActionContext context, Actor actor, int damage) {
         (b) => b..recoveringUntil = context.world.time.add(painShockDuration));
   }
 
+  // Non-player actors lose balance after major pain.
   if (!actor.isPlayer && actor.pose > Pose.offBalance) {
-    // Non-player actors lose balance after major pain.
-    context.outputWorld
-        .updateActorById(actor.id, (b) => b.pose = b.pose.changeBy(-1));
+    // When they receive major pain (like with a stab in the eye) they
+    // immediately fall to "off balance".
+    var newPose = extremePain ? Pose.offBalance : actor.pose.changeBy(-1);
+    context.outputWorld.updateActorById(actor.id, (b) => b.pose = newPose);
   }
 }
 

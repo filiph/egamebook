@@ -270,14 +270,17 @@ class BodyPartDesignation extends EnumClass {
   /// counts.
   bool get isArm => this == primaryArm || this == secondaryArm;
 
-  bool get isHand => this == primaryHand || this == secondaryHand;
+  /// Assumes humanoid anatomy (2 eyes).
+  bool get isHumanoidEye => this == leftEye || this == rightEye;
 
-  bool get isLeg => this == leftLeg || this == rightLeg;
+  bool get isHand => this == primaryHand || this == secondaryHand;
 
   /// This is `true` for any part of a limb.
   ///
   /// Assumes humanoid anatomy (e.g. will not be `true` for tentacles).
   bool get isHumanoidLimb => isArm || isHand || isLeg;
+
+  bool get isLeg => this == leftLeg || this == rightLeg;
 
   String toHumanString() {
     switch (this) {
