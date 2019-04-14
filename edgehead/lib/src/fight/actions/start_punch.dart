@@ -53,7 +53,11 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
 
 void startPunchReportStart(Actor a, Simulation sim, WorldStateBuilder w,
     Storyline s, Actor enemy, Situation mainSituation) {
-  s.add("<subject> {thrust<s>|swing<s>} <subject's> fist at <object>",
+  assert(a.anatomy.anyWeaponAppendageAvailable);
+  var offHand = a.anatomy.primaryWeaponAppendageAvailable ? "" : "off hand ";
+  s.add(
+      "<subject> {thrust<s>|swing<s>} "
+      "<subject's> ${offHand}fist at <object>",
       subject: a,
       object: enemy,
       actionThread: mainSituation.id,

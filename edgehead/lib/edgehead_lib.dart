@@ -190,7 +190,7 @@ class EdgeheadGame extends Book {
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
 
-    var actor = turn.actor;
+    var actor = world.getActorById(turn.actor.id);
     log.fine(() => "${actor.name} selected ${performance.action.name}");
     log.fine(() => "- ${actor.name} is recovering "
         "until ${actor.recoveringUntil}");
@@ -340,6 +340,9 @@ class EdgeheadGame extends Book {
       }
     }
 
+    log.fine("planner.generateTable for ${actor.name}");
+    planner.generateTable().forEach(log.fine);
+
     Performance<dynamic> selected;
     if (actor.isPlayer) {
       // Player
@@ -356,9 +359,6 @@ class EdgeheadGame extends Book {
               "should probably have a stricter PREREQUISITE (isApplicable).");
         }
       }
-
-      log.fine("planner.generateTable for ${actor.name}");
-      planner.generateTable().forEach(log.fine);
 
       // Take only the first few best actions.
       // TODO: remove - we are taking all actions now

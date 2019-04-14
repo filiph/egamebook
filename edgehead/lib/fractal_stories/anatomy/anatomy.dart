@@ -77,7 +77,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   }
 
   bool get primaryWeaponAppendageAvailable =>
-      primaryWeaponAppendage?.isAlive ?? false;
+      primaryWeaponAppendage?.isAliveAndActive ?? false;
 
   /// The appendage that is used as the secondary weapon-wielding one. Returns
   /// `null` when there is no such body part (i.e. it was severed).
@@ -95,7 +95,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   }
 
   bool get secondaryWeaponAppendageAvailable =>
-      secondaryWeaponAppendage?.isAlive ?? false;
+      secondaryWeaponAppendage?.isAliveAndActive ?? false;
 
   /// The root of the anatomy tree. Often the part of the anatomy with
   /// a heart or a similarly 'core' organ.
