@@ -33,7 +33,6 @@ mixin CombatCommandPath on EnemyTargetAction {
     var again = previous != null && previous.actionName == name;
     var command = "$commandPathTail${again ? ' again' : ''}";
 
-
     List<String> commandPathTemplate;
     if (combatCommandType == CombatCommandType.reaction) {
       commandPathTemplate = [command];
@@ -162,6 +161,7 @@ enum CombatCommandType {
   mental,
   limbs,
   body,
+
   /// A combat action that should have a command path of just the tail.
   ///
   /// For example, when an enemy slashes at you, the counter command should
