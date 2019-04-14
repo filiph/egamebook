@@ -70,27 +70,14 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   }
 
   @override
-  String getCommandPathTail(ApplicabilityContext context, Actor target) {
-    final livingEyes = _getAllEyes(target).length;
-    assert(livingEyes > 0,
-        "Trying to apply $className when there is no eye left.");
-    final isLast = livingEyes == 1;
-
-    // TODO: bug - could say ".. again" when switching eye
-    return "stab <objectPronoun's> ${isLast ? 'remaining ' : ''}eye";
-  }
+  String getCommandPathTail(ApplicabilityContext context, Actor target) =>
+      "stab <objectPronoun's> eye";
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      !a.isOnGround &&
-      // This is here because we currently don't have a way to dodge
-      // a thrust while on ground. TODO: fix and remove
-      !enemy.isOnGround &&
-      !a.anatomy.isBlind &&
-      !enemy.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isThrusting &&
-      // Only allow thrusting when stance is worse than combat stance.
-      enemy.pose < Pose.combat;
+      _isApplicableBase(a, sim, w, enemy) &&
+      // This action assumes we're targeting just one of (several?) eyes.
+      _getAllEyes(enemy).length >= 2;
 
   @override
   Situation mainSituationBuilder(
@@ -119,4 +106,37 @@ class StartThrustAtEye extends StartDefensibleActionBase {
     // Must be consistent, so no random (not even stateful random)
     return eyes[(time ~/ 1300) % eyes.length];
   }
+
+  /// Requirements shared between [StartThrustAtEye]
+  /// and [StartThrustAtRemainingEye]
+  static bool _isApplicableBase(
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      !a.isOnGround &&
+      // This is here because we currently don't have a way to dodge
+      // a thrust while on ground. TODO: fix and remove
+      !enemy.isOnGround &&
+      !a.anatomy.isBlind &&
+      a.currentWeapon.damageCapability.isThrusting &&
+      // Only allow thrusting when stance is worse than combat stance.
+      enemy.pose < Pose.combat;
+}
+
+class StartThrustAtRemainingEye extends StartThrustAtEye {
+  static const String className = "StartThrustAtRemainingEye";
+
+  static final StartThrustAtRemainingEye singleton =
+      StartThrustAtRemainingEye();
+
+  @override
+  String get name => className;
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor target) =>
+      "stab <objectPronoun's> remaining eye";
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      StartThrustAtEye._isApplicableBase(a, sim, w, enemy) &&
+      // This action assumes we're targeting just one of (several?) eyes.
+      StartThrustAtEye._getAllEyes(enemy).length == 1;
 }

@@ -70,27 +70,12 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   }
 
   @override
-  String getCommandPathTail(ApplicabilityContext context, Actor target) {
-    final livingLegs = _getAllLegs(target).length;
-    assert(livingLegs > 0,
-        "Trying to apply $className when there is no leg left.");
-    final isLast = livingLegs == 1;
-
-    // TODO: bug - this could be ".. again" when switching from one leg to other
-    return "slash at <objectPronoun's> ${isLast ? 'remaining ' : ''}leg";
-  }
+  String getCommandPathTail(ApplicabilityContext context, Actor target) =>
+      "slash at <objectPronoun's> leg";
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      !a.isOnGround &&
-      // This is here because we currently don't have a way to dodge
-      // a thrust while on ground. TODO: fix and remove
-      !enemy.isOnGround &&
-      !a.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isSlashing &&
-      // Only allow leg attacks when enemy has worse than combat stance.
-      enemy.pose < Pose.combat &&
-      !enemy.anatomy.hasCrippledLegs;
+      _isApplicableBase(a, sim, w, enemy) && _getAllLegs(enemy).length >= 2;
 
   @override
   Situation mainSituationBuilder(
@@ -125,4 +110,35 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
     // Must be consistent, so no random (not even stateful random)
     return legs[(time ~/ 1300) % legs.length];
   }
+
+  static bool _isApplicableBase(
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      !a.isOnGround &&
+      // This is here because we currently don't have a way to dodge
+      // a thrust while on ground. TODO: fix and remove
+      !enemy.isOnGround &&
+      !a.anatomy.isBlind &&
+      a.currentWeapon.damageCapability.isSlashing &&
+      // Only allow leg attacks when enemy has worse than combat stance.
+      enemy.pose < Pose.combat &&
+      !enemy.anatomy.hasCrippledLegs;
+}
+
+class StartSlashAtRemainingLeg extends StartSlashAtLeg {
+  static const String className = "StartSlashAtRemainingLeg";
+
+  static final StartSlashAtRemainingLeg singleton = StartSlashAtRemainingLeg();
+
+  @override
+  String get name => className;
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor target) =>
+      "slash at <objectPronoun's> remaining leg";
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      StartSlashAtLeg._isApplicableBase(a, sim, w, enemy) &&
+      // This action assumes we're targeting just one of (several?) arms.
+      StartSlashAtLeg._getAllLegs(enemy).length == 1;
 }

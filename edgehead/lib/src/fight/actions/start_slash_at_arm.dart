@@ -71,19 +71,15 @@ class StartSlashAtArm extends StartDefensibleActionBase {
   }
 
   @override
-  String getCommandPathTail(ApplicabilityContext context, Actor target) {
-    final livingArms = _getAllHands(target).length;
-    assert(livingArms > 0,
-        "Trying to apply $className when there is no leg left.");
-    final isLast = livingArms == 1;
-
-    // TODO: there is a bug here - "again" could appear when switching from
-    //       one arm to the other
-    return "slash at <objectPronoun's> ${isLast ? 'remaining ' : ''}arm";
-  }
+  String getCommandPathTail(ApplicabilityContext context, Actor target) =>
+      "slash at <objectPronoun's> arm";
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      _isApplicableBase(a, sim, w, enemy) && _getAllHands(enemy).length >= 2;
+
+  static bool _isApplicableBase(
+          Actor a, Simulation sim, WorldState w, Actor enemy) =>
       !a.isOnGround &&
       // This is here because we currently don't have a way to dodge
       // a thrust while on ground. TODO: fix and remove
@@ -136,4 +132,23 @@ class StartSlashAtArm extends StartDefensibleActionBase {
     }
     throw StateError('_getTargetArm was called when no arm is available');
   }
+}
+
+class StartSlashAtRemainingArm extends StartSlashAtArm {
+  static const String className = "StartSlashAtRemainingArm";
+
+  static final StartSlashAtRemainingArm singleton = StartSlashAtRemainingArm();
+
+  @override
+  String get name => className;
+
+  @override
+  String getCommandPathTail(ApplicabilityContext context, Actor target) =>
+      "slash at <objectPronoun's> remaining arm";
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+      StartSlashAtArm._isApplicableBase(a, sim, w, enemy) &&
+      // This action assumes we're targeting just one of (several?) arms.
+      StartSlashAtArm._getAllHands(enemy).length == 1;
 }
