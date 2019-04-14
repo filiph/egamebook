@@ -10,7 +10,7 @@ environment:
 dependencies:
   built_collection: ^4.1.0
   built_value: ^6.2.0
-  cli_menu: ^0.2.1
+  cli_menu: ^0.2.2
   egamebook_builder:
     path: ../egamebook_builder
   meta: ^1.1.6
