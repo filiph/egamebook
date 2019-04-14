@@ -55,11 +55,15 @@ class ThrowThrustingWeapon extends EnemyTargetAction {
 
   @override
   List<String> getCommandPath(ApplicabilityContext context, Actor target) {
-    return [
-      "attack ${target.name}",
+    var template = [
+      "attack <object>",
       "kill",
-      "throw ${context.actor.currentWeapon.name}"
+      "throw ${context.actor.currentWeapon.name} at <object>"
     ];
+    return (Storyline()..add(template.join('>>'), object: target))
+        .realizeAsString()
+        // Then split again into a list.
+        .split('>>');
   }
 
   @override
