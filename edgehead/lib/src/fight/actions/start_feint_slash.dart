@@ -81,7 +81,7 @@ class FeintSlash extends StartDefensibleActionBase {
     actor.report(
         storyline,
         "<subject> tr<ies> to ruin <object's> stance "
-        "with a $attackVerb",
+        "with a feinted $attackVerb",
         object: enemy,
         actionThread: mainSituation.id,
         isSupportiveActionInThread: true);
