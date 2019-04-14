@@ -110,17 +110,6 @@ abstract class Actor extends Object
   /// 5 seconds in the future. Until that time, they cannot do another move.
   DateTime get recoveringUntil;
 
-  /// Actor can generally wield weapons other than [Fist].
-  ///
-  /// This is `true` for most humanoids and `false` for most non-humanoids.
-  /// Humans, goblins and octopus-kings can wield. Wolves, bats and zombies
-  /// cannot wield.
-  ///
-  /// This is just a general ability. It says nothing about the current
-  /// situation (in which the actor can be sleeping, dead, or have both
-  /// hands chopped off).
-  bool get canWield => true;
-
   /// The string handle to the combine function that this actor should use.
   String get combineFunctionHandle;
 

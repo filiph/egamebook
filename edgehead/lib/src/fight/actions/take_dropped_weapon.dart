@@ -55,7 +55,11 @@ class TakeDroppedWeapon extends ItemAction {
     w.updateActorById(a.id, (b) {
       b.inventory.equip(item, a.anatomy);
     });
-    a.report(s, "<subject> pick<s> <object> up", object: item);
+    assert(a.anatomy.anyWeaponAppendageAvailable);
+    var offHand = a.anatomy.primaryWeaponAppendageAvailable
+        ? ""
+        : " with <subject's> off hand";
+    a.report(s, "<subject> pick<s> <object> up$offHand", object: item);
     return "${a.name} picks up ${item.name}";
   }
 
@@ -71,7 +75,7 @@ class TakeDroppedWeapon extends ItemAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
     if (!item.isWeapon) return false;
-    if (!a.canWield) return false;
+    if (!a.anatomy.anyWeaponAppendageAvailable) return false;
     final isSwordForSpear =
         a.currentWeapon.damageCapability.type == WeaponType.spear &&
             item.damageCapability.type == WeaponType.sword;
