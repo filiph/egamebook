@@ -39,6 +39,7 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
           !a.anatomy.isBlind &&
           (a.pose >= Pose.offBalance) &&
           !enemy.isOnGround &&
+          a.anatomy.anyWeaponAppendageAvailable &&
           a.isBarehanded,
       mainSituationBuilder: (a, sim, w, enemy) =>
           createPunchSituation(w.randomInt(), a, enemy),
@@ -53,7 +54,6 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
 
 void startPunchReportStart(Actor a, Simulation sim, WorldStateBuilder w,
     Storyline s, Actor enemy, Situation mainSituation) {
-  assert(a.anatomy.anyWeaponAppendageAvailable);
   var offHand = a.anatomy.primaryWeaponAppendageAvailable ? "" : "off hand ";
   s.add(
       "<subject> {thrust<s>|swing<s>} "
