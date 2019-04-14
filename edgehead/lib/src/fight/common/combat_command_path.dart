@@ -57,12 +57,43 @@ mixin CombatCommandPath on EnemyTargetAction {
     var coreParts = target.anatomy.allParts
         .where((part) => !part.designation.isHumanoidLimb);
 
+    var blindPrefix = target.anatomy.isBlind ? "blind & " : "";
+
     String status = _getStatusString(coreParts);
 
-    return "core ($status)";
+    return "core ($blindPrefix$status)";
   }
 
   String _getLimbsCommand(Actor target) {
+    String armStatus;
+    if (!target.anatomy.primaryWeaponAppendageAvailable &&
+        !target.anatomy.secondaryWeaponAppendageAvailable) {
+      armStatus = "both arms";
+    } else if (!target.anatomy.primaryWeaponAppendageAvailable ||
+        !target.anatomy.secondaryWeaponAppendageAvailable) {
+      armStatus = "arm";
+    }
+    String legStatus;
+    var leftLegAvailable = target.anatomy
+        .findByDesignation(BodyPartDesignation.leftLeg)
+        .isAliveAndActive;
+    var rightLegAvailable = target.anatomy
+        .findByDesignation(BodyPartDesignation.rightLeg)
+        .isAliveAndActive;
+    if (!leftLegAvailable && !rightLegAvailable) {
+      legStatus = "both legs";
+    } else if (!leftLegAvailable || !rightLegAvailable) {
+      legStatus = "leg";
+    }
+
+    if (armStatus != null && legStatus != null) {
+      return "limbs ($armStatus & $legStatus maimed)";
+    } else if (armStatus != null) {
+      return "limbs ($armStatus maimed)";
+    } else if (legStatus != null) {
+      return "limbs ($legStatus maimed)";
+    }
+
     var limbParts = target.anatomy.allParts
         .where((part) => part.designation.isHumanoidLimb);
 

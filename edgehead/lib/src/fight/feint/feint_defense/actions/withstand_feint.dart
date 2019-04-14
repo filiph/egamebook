@@ -30,9 +30,8 @@ class WithstandFeint extends OtherActorAction {
   @override
   final Resource rerollResource = Resource.stamina;
 
-  /// "Let him".
   @override
-  List<String> get commandPathTemplate => ["let <objectPronounAccusative>"];
+  List<String> get commandPathTemplate => ["stand ground"];
 
   @override
   String get name => className;
