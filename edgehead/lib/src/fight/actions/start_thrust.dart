@@ -71,7 +71,6 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
   );
 }
 
-
 String _startThrustCommandPathTail(BodyPartDesignation designation) {
   return "stab <objectPronoun's> ${designation.toHumanString()}";
 }
