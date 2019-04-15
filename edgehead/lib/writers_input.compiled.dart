@@ -540,16 +540,6 @@ final Room startAdventure = Room('start_adventure', (ActionContext c) {
       'The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming.\n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves.\n\n\n![Agruth whips Briana](https://egamebook.com/vermin/v/latest/img/agruth-attack.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.\n\n\nNobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.\n',
       wholeSentence: true);
 }, null, generateAgruthFight, null);
-Approach startAdventureFromPreStartBook = Approach(
-    'pre_start_book', 'start_adventure', 'DEBUG >> Smoke test \'Vermin\'',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
 final Room undergroundChurchAltarAfterCeremony = Room(
     'underground_church_altar_after_ceremony', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2342,7 +2332,6 @@ final allApproaches = <Approach>[
   tunnelFromTunnelCancelChance,
   testFightGoblinFromPreStartBook,
   endOfRoamFromTestFightGoblin,
-  startAdventureFromPreStartBook,
   slaveQuartersFromSlaveQuartersPassage,
   justAfterAgruthFightFromStartAdventure,
   guardpostAboveChurchFromUndergroundChurch,
