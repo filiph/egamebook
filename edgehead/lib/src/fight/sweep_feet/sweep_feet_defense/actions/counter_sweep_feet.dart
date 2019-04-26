@@ -9,8 +9,8 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
-import 'package:edgehead/src/fight/feint/feint_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
+import 'package:edgehead/src/fight/sweep_feet/sweep_feet_situation.dart';
 
 ReasonedSuccessChance computeCounterSweepFeet(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -62,7 +62,7 @@ class CounterSweepFeet extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, feintSituationName);
+    final thread = getThreadId(sim, w, sweepFeetSituationName);
     a.report(s, "<subject> attempt to counter <object's> sweep",
         object: enemy, actionThread: thread);
     a.report(s, "<subject> fail<s> to slash <object's> leg",
@@ -77,7 +77,7 @@ class CounterSweepFeet extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, feintSituationName);
+    final thread = getThreadId(sim, w, sweepFeetSituationName);
     a.report(s, "<subject> step<s> around the sweep", actionThread: thread);
 
     assert(
