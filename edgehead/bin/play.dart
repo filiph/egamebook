@@ -149,13 +149,22 @@ class CliRunner extends Presenter<EdgeheadGame> {
     latestSaveGame = saveGameJson;
     _log.info("savegame = $saveGameJson");
 
+    if (element.choices.length == 1 && element.choices.single.isImplicit) {
+      // Implicit choice.
+      final selectedChoice = element.choices.single;
+      book.accept(PickChoice((b) => b..choice = selectedChoice.toBuilder()));
+      return;
+    }
+
     int option;
+
+    // Exercise ChoiceTree parsing of ChoiceBlock, to catch bugs.
+    ChoiceTree tree = ChoiceTree(element);
+    _log.fine("ChoiceTree root choices: ${tree.root.choices}");
+    _log.fine("ChoiceTree root groups: ${tree.root.groups}");
 
     if (automated && !book.actionPatternWasHit) {
       option = _random.nextInt(element.choices.length);
-    } else if (element.choices.length == 1 &&
-        element.choices.single.isImplicit) {
-      option = 0;
     } else {
       assert(
           !element.choices.any((ch) => ch.isImplicit),
