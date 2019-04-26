@@ -31,37 +31,33 @@ Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T key(S element)) {
 /// Recursively creates a tree from given [choices]. The node given
 /// by this function will be [order] deep, with [prefix].
 ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
+  final list = choices.toList(growable: false);
+
+  // A list of choices that are at the current order and shouldn't be made
+  // into a group.
+  final singles =
+      list.where((choice) => choice.order == order - 1).toList(growable: false);
+
   // A closure that gets the current prefix of a choice. For example, in
   // order 0, the prefix will be always "", for level 1 it could be "Attack",
-  // and for level 2 it could be "Attack >> goblin".
+  // and for level 2 it could be "goblin".
   String _getPrefix(_Choice choice) {
     if (order == 0) return '';
     assert(
-        order - 1 < choice.subCommands.length,
-        "Trying to get prefix of $choice at order $order, "
-        "which is out of bounds of ${choice.subCommands}");
-    return choice.subCommands[order - 1];
+    order - 1 < choice.commandPath.length,
+    "Trying to get prefix of $choice at order $order, "
+        "which is out of bounds of ${choice.commandPath}");
+    return choice.commandPath[order - 1];
   }
 
-  // Group all choices by current prefix.
-  final groups = _groupBy(choices, _getPrefix);
-
-  // Get all the groups that have only one value. These are leaf choices.
-  final singleGroups = groups.entries
-      .where((entry) =>
-          // Only one entry in this 'group'.
-          entry.value.length == 1 &&
-          // And we're in the right depth of the tree.
-          entry.value.single.order == order - 1)
-      .toList();
-
-  // Remove the simple groups from the rest.
-  groups.removeWhere((key, _) => singleGroups.any((leaf) => leaf.key == key));
+  // Group all non-single choices by current prefix.
+  final nonSingles = list.where((choice) => !singles.contains(choice));
+  final groups = _groupBy(nonSingles, _getPrefix);
 
   return ChoiceTreeNode(
       order,
       prefix,
-      singleGroups.map((entry) => entry.value.single.choice).toList(),
+      singles.map((choice) => choice.choice).toList(growable: false),
       groups.entries
           .map((entry) => _makeNode(order + 1, entry.key, entry.value))
           .toList(growable: false));
@@ -133,5 +129,5 @@ class _Choice {
             "Command path must have at least one member: $choice"),
         order = choice.commandPath.length - 1;
 
-  BuiltList<String> get subCommands => choice.commandPath;
+  BuiltList<String> get commandPath => choice.commandPath;
 }
