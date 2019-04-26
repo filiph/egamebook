@@ -44,8 +44,8 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
   String _getPrefix(_Choice choice) {
     if (order == 0) return '';
     assert(
-    order - 1 < choice.commandPath.length,
-    "Trying to get prefix of $choice at order $order, "
+        order - 1 < choice.commandPath.length,
+        "Trying to get prefix of $choice at order $order, "
         "which is out of bounds of ${choice.commandPath}");
     return choice.commandPath[order - 1];
   }
