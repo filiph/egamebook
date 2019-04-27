@@ -62,7 +62,10 @@ abstract class Item extends Object
   bool get isShield =>
       damageCapability != null && damageCapability.type == WeaponType.shield;
 
-  bool get isWeapon => damageCapability != null;
+  bool get isWeapon =>
+      damageCapability != null &&
+      !damageCapability.isNone &&
+      damageCapability.type != WeaponType.shield;
 
   @override
   String get name;
