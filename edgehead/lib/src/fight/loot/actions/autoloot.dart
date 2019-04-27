@@ -137,27 +137,33 @@ class AutoLoot extends Action<Null> {
   /// Give shields to unshielded teammates.
   void _distributeShields(
       List<Item> takenItems,
-      Actor actor,
+      Actor player,
       LootSituation situation,
       Simulation sim,
       WorldStateBuilder world,
       Storyline s) {
     var shields = List<Item>.from(takenItems.where((item) => item.isShield));
-    actor.inventory.shields.forEach(shields.add);
+    for (final shield in player.inventory.shields) {
+      if (player.currentShield == shield) {
+        // Player doesn't share the shield in his hand.
+        continue;
+      }
+      shields.add(shield);
+    }
     if (shields.isEmpty) return;
     shields.sort((a, b) => a.value.compareTo(b.value));
-    assert(actor.isPlayer, "Following line assumes only player does this.");
+    assert(player.isPlayer, "Following line assumes only player does this.");
     var unshielded = situation.playerTeamIds
         .map((id) => world.getActorById(id))
         .where((a) =>
-            a.isAliveAndActive && a.currentShield == null && a.id != actor.id);
+            a.isAliveAndActive && a.currentShield == null && a.id != player.id);
     for (final friend in unshielded) {
       if (shields.isEmpty) break;
       var shield = shields.removeLast();
       world.updateActorById(friend.id, (b) => b.inventory.equipShield(shield));
       takenItems.remove(shield);
-      world.updateActorById(actor.id, (b) => b.inventory.items.remove(shield));
-      actor.report(s, "<subject> give<s> the ${shield.name} to <object>",
+      world.updateActorById(player.id, (b) => b.inventory.items.remove(shield));
+      player.report(s, "<subject> give<s> the ${shield.name} to <object>",
           object: friend);
     }
   }
@@ -171,7 +177,13 @@ class AutoLoot extends Action<Null> {
       WorldStateBuilder world,
       Storyline s) {
     var weapons = List<Item>.from(takenItems.where((item) => item.isWeapon));
-    player.inventory.weapons.forEach(weapons.add);
+    for (final weapon in player.inventory.weapons) {
+      if (player.currentWeapon == weapon) {
+        // Player doesn't share the weapon in his hand.
+        continue;
+      }
+      weapons.add(weapon);
+    }
     if (weapons.isEmpty) return;
     weapons.sort((a, b) => a.value.compareTo(b.value));
     assert(player.isPlayer, "Following line assumes only player does this.");
