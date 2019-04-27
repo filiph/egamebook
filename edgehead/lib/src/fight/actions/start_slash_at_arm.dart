@@ -85,7 +85,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
       // a thrust while on ground. TODO: fix and remove
       !enemy.isOnGround &&
       !a.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isSlashing &&
+      a.currentDamageCapability.isSlashing &&
       // Only allow arm attacks when enemy is at least extended.
       enemy.pose <= Pose.extended &&
       enemy.anatomy.anyWeaponAppendageAvailable;

@@ -10,6 +10,7 @@ WeaponAssaultResult executeThrustingHit(
     Actor target, Item weapon, BodyPartDesignation designation) {
   assert(target.hitpoints > 0);
   assert(weapon.isWeapon);
+  assert(weapon.damageCapability.isThrusting);
   assert(designation != null);
 
   final part = target.anatomy.findByDesignation(designation);

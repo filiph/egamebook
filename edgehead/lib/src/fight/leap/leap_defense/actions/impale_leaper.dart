@@ -105,7 +105,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
     if (!killed) {
-      a.currentWeapon.report(
+      a.currentWeaponOrBodyPart.report(
           s,
           "<subject> {cut<s> into|pierce<s>|go<es> into} "
           "<object's> flesh",
@@ -113,7 +113,7 @@ class ImpaleLeaper extends EnemyTargetAction {
       updatedEnemy.report(s, "<subject> fall<s> to the ground");
       inflictPain(context, updatedEnemy, damage);
     } else {
-      a.currentWeapon.report(
+      a.currentWeaponOrBodyPart.report(
           s,
           "<subject> {go<es> right through|completely impale<s>|"
           "bore<s> through} <object's> {body|chest|stomach|neck}",
@@ -145,5 +145,5 @@ class ImpaleLeaper extends EnemyTargetAction {
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       !a.isOnGround &&
       !a.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isThrusting;
+      a.currentDamageCapability.isThrusting;
 }

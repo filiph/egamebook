@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
@@ -29,7 +28,9 @@ void inflictPain(ActionContext context, Actor actor, int damage,
       "Pain is currently described in humanoid terms (yell, cover with hand).");
 
   actor.report(s, "<subject> {scream|yell|grunt}<s> in pain", negative: true);
-  if (extremePain && !actor.hasCrippledArms) {
+  if (extremePain &&
+      actor.anatomy.isHumanoid &&
+      actor.anatomy.anyWeaponAppendageAvailable) {
     actor.report(
         s,
         "<subject> briefly {hold<s> <subject's> hand over the wound"
@@ -72,8 +73,7 @@ void killHumanoid(ActionContext context, Actor actor) {
   w.recordDeath(actor);
 
   w.replaceSituationById(fight.id, fight.rebuild((b) {
-    if (!actor.isBarehanded &&
-        actor.currentWeapon.damageCapability.type != WeaponType.none) {
+    if (actor.currentWeapon != null) {
       // Drop weapon.
       b.droppedItems.add(actor.currentWeapon);
     }
@@ -83,6 +83,15 @@ void killHumanoid(ActionContext context, Actor actor) {
     }
     return b;
   }));
+  w.updateActorById(actor.id, (a) {
+    if (actor.currentWeapon != null) {
+      a.inventory.remove(actor.currentWeapon);
+    }
+    if (actor.currentShield != null) {
+      a.inventory.remove(actor.currentShield);
+    }
+  });
+
   if (actor.pose == Pose.onGround) {
     actor.report(s, "<subject> stop<s> moving", negative: true);
     s.addParagraph();

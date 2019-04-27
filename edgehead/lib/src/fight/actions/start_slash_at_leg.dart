@@ -118,7 +118,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
       // a thrust while on ground. TODO: fix and remove
       !enemy.isOnGround &&
       !a.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isSlashing &&
+      a.currentDamageCapability.isSlashing &&
       // Only allow leg attacks when enemy has worse than combat stance.
       enemy.pose < Pose.combat &&
       !enemy.anatomy.hasCrippledLegs;

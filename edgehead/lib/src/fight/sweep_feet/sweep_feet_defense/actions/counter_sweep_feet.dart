@@ -89,9 +89,9 @@ class CounterSweepFeet extends OtherActorAction {
             part.function == BodyPartFunction.mobile && part.isAliveAndActive)
         .first;
 
-    final damage = a.currentWeapon.damageCapability.slashingDamage;
+    final damage = a.currentDamageCapability.slashingDamage;
     var result = executeSlashingHit(
-        enemy, a.currentWeapon, SlashSuccessLevel.majorCut,
+        enemy, a.currentWeaponOrBodyPart, SlashSuccessLevel.majorCut,
         bodyPart: leg);
 
     w.actors.removeWhere((actor) => actor.id == enemy.id);
@@ -141,7 +141,7 @@ class CounterSweepFeet extends OtherActorAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       !a.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isSlashing &&
+      a.currentDamageCapability.isSlashing &&
       // Never do this to the player, that would just suck.
       !enemy.isPlayer;
 }

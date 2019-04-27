@@ -73,7 +73,7 @@ class StartClash extends StartDefensibleActionBase {
         "on <objectOwner's> "
         "<object>",
         objectOwner: enemy,
-        object: enemy.currentWeapon);
+        object: enemy.currentWeaponOrBodyPart);
   }
 
   @override
@@ -91,10 +91,10 @@ class StartClash extends StartDefensibleActionBase {
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       !a.isOnGround &&
       !a.anatomy.isBlind &&
-      (a.currentWeapon.damageCapability.isSlashing ||
-          a.currentWeapon.damageCapability.isBlunt) &&
-      (enemy.currentWeapon.damageCapability.type.canParrySlash ||
-          enemy.currentWeapon.damageCapability.type.canParryBlunt) &&
+      (a.currentDamageCapability.isSlashing ||
+          a.currentDamageCapability.isBlunt) &&
+      (enemy.currentDamageCapability.type.canParrySlash ||
+          enemy.currentDamageCapability.type.canParryBlunt) &&
       // So that you can either feint or clash, but not both.
       enemy.pose <= Pose.extended &&
       !enemy.isOnGround;

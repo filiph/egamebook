@@ -8,13 +8,6 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 
 part 'inventory.g.dart';
 
-/// A special weapon of type [WeaponType.none]. This stands in for no weapon
-/// at all, to be used as [Inventory.currentWeapon] when the actor
-/// cannot even use their bodyparts as weapons.
-///
-/// For example, this happens when a human gets both his arms cut off.
-final Item _noWeapon = Item.weapon(54321, WeaponType.none);
-
 /// The current state of an [Actor]'s inventory.
 ///
 /// This is manually updated by actions. Helper functions such as
@@ -36,6 +29,7 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   /// The weapon currently wielded by the actor.
   ///
   /// Do not assign to this directly. Use [InventoryBuilder.equip] instead.
+  @nullable
   Item get currentWeapon;
 
   /// Inventory of items possessed by the actor.
@@ -53,11 +47,8 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   /// When this is `false`, the weapon is being held in the secondary
   /// appendage (e.g. off-hand for humanoids).
   ///
-  /// When [currentWeapon] is of type [WeaponType.none], this field should be
-  /// ignored.
-  ///
-  /// The field is not just for held weapons (like a sword) but also for
-  /// body-part weapons (like a claw).
+  /// When [currentWeapon] is `null`, ignore this field. It's state
+  /// is undefined.
   bool get weaponInPrimaryAppendage;
 
   /// A list of all weapons possessed by the actor. Can be in hand or
@@ -94,7 +85,7 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   }
 
   bool hasWeapon(WeaponType type) =>
-      currentWeapon.damageCapability.type == type ||
+      currentWeapon != null && currentWeapon.damageCapability.type == type ||
       weapons.any((w) => w.damageCapability.type == type);
 }
 
@@ -141,12 +132,16 @@ abstract class InventoryBuilder
         "Tried to equip a body part. Use goBarehanded instead.");
     if (!anatomy.anyWeaponAppendageAvailable) {
       // Crippled actor can't equip.
-      currentWeapon = _noWeapon;
+      currentWeapon = null;
       // TODO: Throw instead, and provide `canEquip`.
       //       Otherwise this goes unnoticed.
       //       Remove WeaponEquipResult altogether.
       return WeaponEquipResult.noAvailableAppendage;
     }
+
+    // Update where the weapon ends up.
+    weaponInPrimaryAppendage = anatomy.primaryWeaponAppendageAvailable;
+
     if (!build().weapons.any((item) => item.id == weapon.id)) {
       // Weapon not in inventory.
       weapons.add(weapon);
@@ -182,18 +177,11 @@ abstract class InventoryBuilder
   /// This is useful for times when the actor forcefully loses [currentWeapon]
   /// and doesn't have time to [equipBestAvailable].
   WeaponEquipResult goBarehanded(Anatomy anatomy) {
-    if (!anatomy.anyWeaponAppendageAvailable) {
-      // Crippled actors cannot equip anything, not even fists.
-      currentWeapon = _noWeapon;
+    currentWeapon = null;
+
+    if (anatomy.bodyPartWeapon == null) {
       return WeaponEquipResult.noAvailableAppendage;
     }
-
-    final Item bodyPartWeapon = Actor.createBodyPartWeapon(anatomy);
-    assert(
-        bodyPartWeapon != null,
-        "Currently, we assume createBodyPartWeapon will "
-        "always return something.");
-    currentWeapon = bodyPartWeapon;
     return WeaponEquipResult.equipped;
   }
 
@@ -204,14 +192,14 @@ abstract class InventoryBuilder
   void remove(Item item) {
     if (item.isWeapon) {
       _assertItemInList(item, weapons);
-      if (currentWeapon.id == item.id) currentWeapon = _noWeapon;
+      if (currentWeapon?.id == item.id) currentWeapon = null;
       weapons.remove(item);
       return;
     }
 
     if (item.isShield) {
       _assertItemInList(item, shields);
-      if (currentShield.id == item.id) currentShield = _noWeapon;
+      if (currentShield?.id == item.id) currentShield = null;
       shields.remove(item);
       return;
     }

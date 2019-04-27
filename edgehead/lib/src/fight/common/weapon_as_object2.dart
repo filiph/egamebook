@@ -18,6 +18,6 @@ String shieldAsObject2(Actor a) => a.currentShield.nameIsProperNoun
 /// Example usage:
 ///
 ///     a.report(s, "<subject> tr<ies> to parry it with ${weaponAsObject2(a)}");
-String weaponAsObject2(Actor a) => a.currentWeapon.nameIsProperNoun
-    ? a.currentWeapon.name
-    : "<subject's> ${a.currentWeapon.name}";
+String weaponAsObject2(Actor a) => a.currentWeaponOrBodyPart.nameIsProperNoun
+    ? a.currentWeaponOrBodyPart.name
+    : "<subject's> ${a.currentWeaponOrBodyPart.name}";

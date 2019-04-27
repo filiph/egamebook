@@ -15,9 +15,11 @@ part 'weapon_type.g.dart';
 ///
 /// Note that [fist] and [claw] are also weapons.
 class WeaponType extends EnumClass {
-  /// A special weapon type that signifies absence of a weapon.
+  /// This is only used in [DamageCapability.none].
   static const WeaponType none = _$none;
   static const WeaponType claw = _$claw;
+
+  /// A humanoid fist.
   static const WeaponType fist = _$fist;
   static const WeaponType spear = _$spear;
   static const WeaponType sword = _$sword;

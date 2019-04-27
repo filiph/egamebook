@@ -63,7 +63,7 @@ class FinishSlash extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = a.currentWeapon.damageCapability.slashingDamage;
+    final damage = a.currentDamageCapability.slashingDamage;
     final situation = context.world.currentSituation as AttackerSituation;
     assert(situation.name == slashSituationName);
 
@@ -116,7 +116,7 @@ class FinishSlash extends OtherActorAction {
           object: result.actor,
           positive: true,
           actionThread: thread);
-      if (a.currentWeapon.name == orcthorn.name && enemy.name.contains('orc')) {
+      if (a.currentWeapon?.id == orcthorn.id && enemy.name.contains('orc')) {
         a.currentWeapon.report(
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
@@ -133,7 +133,7 @@ class FinishSlash extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      a.currentWeapon.damageCapability.isSlashing;
+      a.currentDamageCapability.isSlashing;
 
   WeaponAssaultResult _executeAtDesignation(
       AttackerSituation situation,
@@ -142,8 +142,9 @@ class FinishSlash extends OtherActorAction {
       Actor enemy,
       RandomIntGetter randomGetter) {
     final designation = direction.toBodyPartDesignation();
+    assert(attacker.currentWeaponOrBodyPart != null);
     return executeSlashingHit(
-        enemy, attacker.currentWeapon, _defaultSlashSuccessLevel,
+        enemy, attacker.currentWeaponOrBodyPart, _defaultSlashSuccessLevel,
         designation: designation);
   }
 
@@ -156,7 +157,12 @@ class FinishSlash extends OtherActorAction {
     final slashDirection = situation.attackDirection == AttackDirection.fromLeft
         ? SlashDirection.left
         : SlashDirection.right;
-    return executeSlashingHitFromDirection(enemy, slashDirection,
-        attacker.currentWeapon, _defaultSlashSuccessLevel, randomGetter);
+    assert(attacker.currentWeaponOrBodyPart != null);
+    return executeSlashingHitFromDirection(
+        enemy,
+        slashDirection,
+        attacker.currentWeaponOrBodyPart,
+        _defaultSlashSuccessLevel,
+        randomGetter);
   }
 }

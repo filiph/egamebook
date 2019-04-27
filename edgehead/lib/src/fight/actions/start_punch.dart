@@ -39,7 +39,6 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
           !a.anatomy.isBlind &&
           (a.pose >= Pose.offBalance) &&
           !enemy.isOnGround &&
-          a.anatomy.anyWeaponAppendageAvailable &&
           a.isBarehanded,
       mainSituationBuilder: (a, sim, w, enemy) =>
           createPunchSituation(w.randomInt(), a, enemy),

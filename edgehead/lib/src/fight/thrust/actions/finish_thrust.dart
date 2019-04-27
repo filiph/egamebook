@@ -57,7 +57,7 @@ class FinishThrust extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = a.currentWeapon.damageCapability.slashingDamage;
+    final damage = a.currentDamageCapability.thrustingDamage;
     final situation = context.world.currentSituation as AttackerSituation;
     assert(situation.name == thrustSituationName);
     assert(situation.attackDirection != AttackDirection.fromLeft ||
@@ -100,7 +100,7 @@ class FinishThrust extends OtherActorAction {
           object: result.actor,
           positive: true,
           actionThread: thread);
-      if (a.currentWeapon.name == orcthorn.name && enemy.name.contains('orc')) {
+      if (a.currentWeapon?.id == orcthorn.id && enemy.name.contains('orc')) {
         a.currentWeapon.report(
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
@@ -117,10 +117,12 @@ class FinishThrust extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      a.currentWeapon.damageCapability.isThrusting;
+      a.currentDamageCapability.isThrusting;
 
   WeaponAssaultResult _executeAtDesignation(
       Actor attacker, Actor enemy, BodyPartDesignation designation) {
-    return executeThrustingHit(enemy, attacker.currentWeapon, designation);
+    assert(attacker.currentWeaponOrBodyPart != null);
+    return executeThrustingHit(
+        enemy, attacker.currentWeaponOrBodyPart, designation);
   }
 }

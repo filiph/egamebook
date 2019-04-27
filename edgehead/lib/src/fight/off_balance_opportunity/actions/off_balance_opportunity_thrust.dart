@@ -70,7 +70,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = a.currentWeapon.damageCapability.thrustingDamage;
+    final damage = a.currentDamageCapability.thrustingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
@@ -103,8 +103,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       !a.anatomy.isBlind &&
-      !a.hasCrippledArms &&
+      a.currentDamageCapability.isThrusting &&
       a.pose >= Pose.standing &&
-      enemy.pose <= Pose.extended &&
-      a.currentWeapon.damageCapability.isThrusting;
+      enemy.pose <= Pose.extended;
 }

@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/inventory.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -53,13 +54,13 @@ class TakeDroppedWeapon extends ItemAction {
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
     w.updateActorById(a.id, (b) {
-      b.inventory.equip(item, a.anatomy);
+      var result = b.inventory.equip(item, a.anatomy);
+      assert(result == WeaponEquipResult.equipped);
     });
     assert(a.anatomy.anyWeaponAppendageAvailable);
-    var offHand = a.anatomy.primaryWeaponAppendageAvailable
-        ? ""
-        : " with <subject's> off hand";
-    a.report(s, "<subject> pick<s> <object> up$offHand", object: item);
+    bool intoPrimaryHand = a.anatomy.primaryWeaponAppendageAvailable;
+    var offHandString = intoPrimaryHand ? "" : " with <subject's> off hand";
+    a.report(s, "<subject> pick<s> <object> up$offHandString", object: item);
     return "${a.name} picks up ${item.name}";
   }
 
@@ -77,11 +78,12 @@ class TakeDroppedWeapon extends ItemAction {
     if (!item.isWeapon) return false;
     if (!a.anatomy.anyWeaponAppendageAvailable) return false;
     final isSwordForSpear =
-        a.currentWeapon.damageCapability.type == WeaponType.spear &&
+        a.currentWeapon?.damageCapability?.type == WeaponType.spear &&
             item.damageCapability.type == WeaponType.sword;
-    if (item.value <= a.currentWeapon.value && !isSwordForSpear) return false;
+    if (item.value <= (a.currentWeapon?.value ?? 0) && !isSwordForSpear) {
+      return false;
+    }
     if (recentlyDisarmed(a, w)) return false;
-    if (a.hasCrippledArms) return false;
     if (a.anatomy.isBlind) return false;
     return true;
   }

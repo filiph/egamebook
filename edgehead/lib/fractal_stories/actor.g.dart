@@ -21,9 +21,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'anatomy',
       serializers.serialize(object.anatomy,
           specifiedType: const FullType(Anatomy)),
-      'recoveringUntil',
-      serializers.serialize(object.recoveringUntil,
-          specifiedType: const FullType(DateTime)),
       'combineFunctionHandle',
       serializers.serialize(object.combineFunctionHandle,
           specifiedType: const FullType(String)),
@@ -74,6 +71,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'pronoun',
       serializers.serialize(object.pronoun,
           specifiedType: const FullType(Pronoun)),
+      'recoveringUntil',
+      serializers.serialize(object.recoveringUntil,
+          specifiedType: const FullType(DateTime)),
       'stamina',
       serializers.serialize(object.stamina, specifiedType: const FullType(int)),
       'team',
@@ -109,10 +109,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         case 'anatomy':
           result.anatomy.replace(serializers.deserialize(value,
               specifiedType: const FullType(Anatomy)) as Anatomy);
-          break;
-        case 'recoveringUntil':
-          result.recoveringUntil = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
           break;
         case 'combineFunctionHandle':
           result.combineFunctionHandle = serializers.deserialize(value,
@@ -194,6 +190,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.pronoun.replace(serializers.deserialize(value,
               specifiedType: const FullType(Pronoun)) as Pronoun);
           break;
+        case 'recoveringUntil':
+          result.recoveringUntil = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime;
+          break;
         case 'stamina':
           result.stamina = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -212,8 +212,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
 class _$Actor extends Actor {
   @override
   final Anatomy anatomy;
-  @override
-  final DateTime recoveringUntil;
   @override
   final String combineFunctionHandle;
   @override
@@ -255,6 +253,8 @@ class _$Actor extends Actor {
   @override
   final Pronoun pronoun;
   @override
+  final DateTime recoveringUntil;
+  @override
   final int stamina;
   @override
   final Team team;
@@ -264,7 +264,6 @@ class _$Actor extends Actor {
 
   _$Actor._(
       {this.anatomy,
-      this.recoveringUntil,
       this.combineFunctionHandle,
       this.constitution,
       this.currentRoomName,
@@ -285,14 +284,12 @@ class _$Actor extends Actor {
       this.pose,
       this.poseMax,
       this.pronoun,
+      this.recoveringUntil,
       this.stamina,
       this.team})
       : super._() {
     if (anatomy == null) {
       throw new BuiltValueNullFieldError('Actor', 'anatomy');
-    }
-    if (recoveringUntil == null) {
-      throw new BuiltValueNullFieldError('Actor', 'recoveringUntil');
     }
     if (combineFunctionHandle == null) {
       throw new BuiltValueNullFieldError('Actor', 'combineFunctionHandle');
@@ -348,6 +345,9 @@ class _$Actor extends Actor {
     if (pronoun == null) {
       throw new BuiltValueNullFieldError('Actor', 'pronoun');
     }
+    if (recoveringUntil == null) {
+      throw new BuiltValueNullFieldError('Actor', 'recoveringUntil');
+    }
     if (stamina == null) {
       throw new BuiltValueNullFieldError('Actor', 'stamina');
     }
@@ -368,7 +368,6 @@ class _$Actor extends Actor {
     if (identical(other, this)) return true;
     return other is Actor &&
         anatomy == other.anatomy &&
-        recoveringUntil == other.recoveringUntil &&
         combineFunctionHandle == other.combineFunctionHandle &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
@@ -389,6 +388,7 @@ class _$Actor extends Actor {
         pose == other.pose &&
         poseMax == other.poseMax &&
         pronoun == other.pronoun &&
+        recoveringUntil == other.recoveringUntil &&
         stamina == other.stamina &&
         team == other.team;
   }
@@ -413,24 +413,24 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), recoveringUntil.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode),
-                                                                                dexterity.hashCode),
-                                                                            followingActorId.hashCode),
-                                                                        gold.hashCode),
-                                                                    hitpoints.hashCode),
-                                                                id.hashCode),
-                                                            initiative.hashCode),
-                                                        inventory.hashCode),
-                                                    isActive.hashCode),
-                                                isConfused.hashCode),
-                                            isPlayer.hashCode),
-                                        isSurvivor.hashCode),
-                                    maxHitpoints.hashCode),
-                                name.hashCode),
-                            nameIsProperNoun.hashCode),
-                        pose.hashCode),
-                    poseMax.hashCode),
-                pronoun.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode),
+                                                                                followingActorId.hashCode),
+                                                                            gold.hashCode),
+                                                                        hitpoints.hashCode),
+                                                                    id.hashCode),
+                                                                initiative.hashCode),
+                                                            inventory.hashCode),
+                                                        isActive.hashCode),
+                                                    isConfused.hashCode),
+                                                isPlayer.hashCode),
+                                            isSurvivor.hashCode),
+                                        maxHitpoints.hashCode),
+                                    name.hashCode),
+                                nameIsProperNoun.hashCode),
+                            pose.hashCode),
+                        poseMax.hashCode),
+                    pronoun.hashCode),
+                recoveringUntil.hashCode),
             stamina.hashCode),
         team.hashCode));
   }
@@ -439,7 +439,6 @@ class _$Actor extends Actor {
   String toString() {
     return (newBuiltValueToStringHelper('Actor')
           ..add('anatomy', anatomy)
-          ..add('recoveringUntil', recoveringUntil)
           ..add('combineFunctionHandle', combineFunctionHandle)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
@@ -460,6 +459,7 @@ class _$Actor extends Actor {
           ..add('pose', pose)
           ..add('poseMax', poseMax)
           ..add('pronoun', pronoun)
+          ..add('recoveringUntil', recoveringUntil)
           ..add('stamina', stamina)
           ..add('team', team))
         .toString();
@@ -472,11 +472,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   AnatomyBuilder _anatomy;
   AnatomyBuilder get anatomy => _$this._anatomy ??= new AnatomyBuilder();
   set anatomy(AnatomyBuilder anatomy) => _$this._anatomy = anatomy;
-
-  DateTime _recoveringUntil;
-  DateTime get recoveringUntil => _$this._recoveringUntil;
-  set recoveringUntil(DateTime recoveringUntil) =>
-      _$this._recoveringUntil = recoveringUntil;
 
   String _combineFunctionHandle;
   String get combineFunctionHandle => _$this._combineFunctionHandle;
@@ -563,6 +558,11 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   PronounBuilder get pronoun => _$this._pronoun ??= new PronounBuilder();
   set pronoun(PronounBuilder pronoun) => _$this._pronoun = pronoun;
 
+  DateTime _recoveringUntil;
+  DateTime get recoveringUntil => _$this._recoveringUntil;
+  set recoveringUntil(DateTime recoveringUntil) =>
+      _$this._recoveringUntil = recoveringUntil;
+
   int _stamina;
   int get stamina => _$this._stamina;
   set stamina(int stamina) => _$this._stamina = stamina;
@@ -576,7 +576,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   ActorBuilder get _$this {
     if (_$v != null) {
       _anatomy = _$v.anatomy?.toBuilder();
-      _recoveringUntil = _$v.recoveringUntil;
       _combineFunctionHandle = _$v.combineFunctionHandle;
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
@@ -597,6 +596,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _pose = _$v.pose;
       _poseMax = _$v.poseMax;
       _pronoun = _$v.pronoun?.toBuilder();
+      _recoveringUntil = _$v.recoveringUntil;
       _stamina = _$v.stamina;
       _team = _$v.team?.toBuilder();
       _$v = null;
@@ -624,7 +624,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _$result = _$v ??
           new _$Actor._(
               anatomy: anatomy.build(),
-              recoveringUntil: recoveringUntil,
               combineFunctionHandle: combineFunctionHandle,
               constitution: constitution,
               currentRoomName: currentRoomName,
@@ -645,6 +644,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               pose: pose,
               poseMax: poseMax,
               pronoun: pronoun.build(),
+              recoveringUntil: recoveringUntil,
               stamina: stamina,
               team: team.build());
     } catch (_) {

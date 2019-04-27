@@ -3,6 +3,8 @@ library fractal_stories.anatomy;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/fist.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
 
@@ -30,6 +32,36 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// and not disabled.
   bool get anyWeaponAppendageAvailable =>
       primaryWeaponAppendageAvailable || secondaryWeaponAppendageAvailable;
+
+  /// Returns the best body-part weapon currently available. This could
+  /// be a fist for a humanoid, a claw for a monster, a stinger for
+  /// a wasp.
+  ///
+  /// Returns `null` if there are no body parts that are alive and could
+  /// be used as a weapon.
+  @memoized
+  Item get bodyPartWeapon {
+    int scoreBodyPart(BodyPart part) =>
+        part.damageCapability.bluntDamage +
+        part.damageCapability.slashingDamage +
+        part.damageCapability.thrustingDamage +
+        part.damageCapability.length;
+
+    final candidates = torso
+        .getDescendantParts()
+        .where((p) => p.isAliveAndActive && p.damageCapability != null)
+        .toList(growable: false);
+
+    if (candidates.isEmpty) return null;
+
+    candidates.sort((a, b) => -scoreBodyPart(a).compareTo(scoreBodyPart(b)));
+
+    assert(
+        isHumanoid,
+        "Assumes the damage dealing body part is a fist. "
+        "Should be easy to extend to claws etc.");
+    return createFist(candidates.first);
+  }
 
   /// Returns `true` if both legs are crippled or missing.
   @memoized

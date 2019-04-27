@@ -88,7 +88,6 @@ abstract class Item extends Object
     if (nameIsProperNoun) score += 1;
     if (isShield) score += 1;
     if (damageCapability != null) {
-      if (damageCapability.type == WeaponType.none) return 0;
       score += 1;
       if (!damageCapability.type.isBodyPart) {
         // Actual hold-able weapon.

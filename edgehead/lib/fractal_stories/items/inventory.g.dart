@@ -18,9 +18,6 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
   Iterable serialize(Serializers serializers, Inventory object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'currentWeapon',
-      serializers.serialize(object.currentWeapon,
-          specifiedType: const FullType(Item)),
       'items',
       serializers.serialize(object.items,
           specifiedType:
@@ -41,6 +38,12 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
       result
         ..add('currentShield')
         ..add(serializers.serialize(object.currentShield,
+            specifiedType: const FullType(Item)));
+    }
+    if (object.currentWeapon != null) {
+      result
+        ..add('currentWeapon')
+        ..add(serializers.serialize(object.currentWeapon,
             specifiedType: const FullType(Item)));
     }
 
@@ -120,9 +123,6 @@ class _$Inventory extends Inventory {
       this.weaponInPrimaryAppendage,
       this.weapons})
       : super._() {
-    if (currentWeapon == null) {
-      throw new BuiltValueNullFieldError('Inventory', 'currentWeapon');
-    }
     if (items == null) {
       throw new BuiltValueNullFieldError('Inventory', 'items');
     }

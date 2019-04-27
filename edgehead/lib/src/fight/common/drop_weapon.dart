@@ -17,6 +17,7 @@ Item dropCurrentWeapon(WorldStateBuilder w, Actor actor) {
   final situation =
       w.getSituationByName<FightSituation>(FightSituation.className);
   final weapon = actor.currentWeapon;
+  assert(weapon != null);
   w.replaceSituationById(
       situation.id,
       situation

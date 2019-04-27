@@ -98,6 +98,5 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
       (a.pose >= Pose.offBalance) &&
       !a.anatomy.isBlind &&
       enemy.pose <= Pose.onGround &&
-      !enemy.isBarehanded &&
-      !enemy.hasCrippledArms;
+      enemy.currentWeapon != null;
 }

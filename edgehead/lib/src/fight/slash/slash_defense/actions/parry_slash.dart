@@ -136,5 +136,5 @@ class ParrySlash extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      !a.anatomy.isBlind && a.currentWeapon.damageCapability.type.canParrySlash;
+      !a.anatomy.isBlind && a.currentDamageCapability.type.canParrySlash;
 }

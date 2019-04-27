@@ -77,8 +77,8 @@ final escape_tunnel_insignificant = EventCallback((sim, w, s) {
   final player = getPlayer(built);
   assert(actor.isAliveAndActive);
   assert(player.isAliveAndActive);
-  final kicking = actor.isBarehanded ||
-      (player.isBarehanded && player.currentShield == null);
+  final kicking = actor.currentWeapon == null ||
+      (player.currentWeapon == null && player.currentShield == null);
   var assaultVerbing = kicking ? 'kicking' : 'slashing';
   var sounds =
       kicking ? ['Whoosh!', 'Swah!', 'Slam!'] : ['Swish!', 'Whoosh!', 'Thunk!'];
@@ -119,7 +119,7 @@ final escape_tunnel_look = EventCallback((sim, w, s) {
         "they're mighty slayers.\"",
         wholeSentence: true);
     otherActor.report(s, "<subject> laugh<s>");
-    if (player.currentWeapon.name == orcthorn.name) {
+    if (player.currentWeapon?.id == orcthorn.id) {
       otherActor.report(s, "<subject> stop<s> almost instantly", but: true);
       otherActor.report(s, "<subject> see<s> <object> in your hand.",
           object: player.currentWeapon, wholeSentence: true);
@@ -133,7 +133,7 @@ final escape_tunnel_look = EventCallback((sim, w, s) {
         "\"Give a puny slave some steel and suddenly you think "
         "you're mighty slayers.\"",
         wholeSentence: true);
-    if (player.currentWeapon.name == orcthorn.name) {
+    if (player.currentWeapon?.id == orcthorn.id) {
       actor.report(
           s,
           "But then <subject> see<s> <object> in your hand "

@@ -1,12 +1,11 @@
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 
 /// Figures out whether [weapon] is being held by [rootPart] and its descendant
 /// parts.
 bool isWeaponHeld(Item weapon, BodyPart rootPart, Inventory inventory) {
-  if (weapon.damageCapability.type == WeaponType.none) {
+  if (weapon == null) {
     // Actor is not holding any weapon.
     return false;
   }

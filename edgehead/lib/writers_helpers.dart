@@ -376,9 +376,9 @@ void movePlayer(ActionContext context, String locationName,
 
 void nameAgruthSword(WorldStateBuilder w, String name) {
   final built = w.build();
-  // Assume only one sword wielded by either Aren or Briana.
+  var n = 0;
   for (final actor in built.actors.where((a) => a.team == playerTeam)) {
-    if (!actor.isBarehanded) {
+    if (actor.currentWeapon != null) {
       var sword = actor.currentWeapon;
       var named = sword.toBuilder()
         ..name = name
@@ -388,9 +388,11 @@ void nameAgruthSword(WorldStateBuilder w, String name) {
           (b) => b
             ..inventory.remove(sword)
             ..inventory.equip(named.build(), actor.anatomy));
-      break;
+      n += 1;
     }
   }
+  assert(n == 1,
+      "This assumes exactly one sword wielded by either Aren or Briana.");
 }
 
 bool playerHasVisited(Simulation sim, WorldState built, String roomName) {

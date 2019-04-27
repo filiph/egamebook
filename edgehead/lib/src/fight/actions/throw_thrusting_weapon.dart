@@ -160,9 +160,8 @@ class ThrowThrustingWeapon extends EnemyTargetAction with CombatCommandPath {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
       a.isPlayer /* TODO: turn into a defensible action and lose this */ &&
-      a.inventory.currentWeapon.damageCapability.isThrusting &&
+      (a.currentWeapon?.damageCapability?.isThrusting ?? false) &&
       !a.anatomy.isBlind &&
-      !a.hasCrippledArms &&
       !recentlyForcedToGround(a, world);
 
   Entity _createBodyPartEntity(Actor a, String name) {

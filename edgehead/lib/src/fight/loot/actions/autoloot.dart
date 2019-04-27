@@ -72,13 +72,14 @@ class AutoLoot extends Action<Null> {
       // TODO: generalize sword for spear for other weapons
       final currentActor = world.getActorById(a.id);
       final isSwordForSpear =
-          currentActor.currentWeapon.damageCapability.type ==
+          currentActor.currentWeapon?.damageCapability?.type ==
                   WeaponType.spear &&
               item.isWeapon &&
               item.damageCapability.type == WeaponType.sword;
       if (item.isWeapon &&
           !item.isShield &&
-          (item.value > currentActor.currentWeapon.value || isSwordForSpear)) {
+          (item.value > (currentActor.currentWeapon?.value ?? 0) ||
+              isSwordForSpear)) {
         // Arm player with the best weapon available.
         world.updateActorById(a.id, (b) {
           // Wield the new weapon.
@@ -145,6 +146,7 @@ class AutoLoot extends Action<Null> {
     actor.inventory.shields.forEach(shields.add);
     if (shields.isEmpty) return;
     shields.sort((a, b) => a.value.compareTo(b.value));
+    assert(actor.isPlayer, "Following line assumes only player does this.");
     var unshielded = situation.playerTeamIds
         .map((id) => world.getActorById(id))
         .where((a) =>
@@ -160,29 +162,34 @@ class AutoLoot extends Action<Null> {
     }
   }
 
-  /// Give weapons to unarmed teammates.
+  /// Give weapons to unarmed teammates of player.
   void _distributeWeapons(
       List<Item> takenItems,
-      Actor actor,
+      Actor player,
       LootSituation situation,
       Simulation sim,
       WorldStateBuilder world,
       Storyline s) {
     var weapons = List<Item>.from(takenItems.where((item) => item.isWeapon));
-    actor.inventory.weapons.forEach(weapons.add);
+    player.inventory.weapons.forEach(weapons.add);
     if (weapons.isEmpty) return;
     weapons.sort((a, b) => a.value.compareTo(b.value));
-    var barehanded = situation.playerTeamIds
+    assert(player.isPlayer, "Following line assumes only player does this.");
+    var couldUseWeapon = situation.playerTeamIds
         .map((id) => world.getActorById(id))
-        .where((a) => a.isAliveAndActive && a.isBarehanded && a.id != actor.id);
-    for (final friend in barehanded) {
+        .where((a) =>
+            a.isAliveAndActive &&
+            a.currentWeapon == null &&
+            a.anatomy.anyWeaponAppendageAvailable &&
+            a.id != player.id);
+    for (final friend in couldUseWeapon) {
       if (weapons.isEmpty) break;
       var weapon = weapons.removeLast();
       world.updateActorById(
           friend.id, (b) => b.inventory.equip(weapon, friend.anatomy));
       takenItems.remove(weapon);
-      world.updateActorById(actor.id, (b) => b.inventory.items.remove(weapon));
-      actor.report(s, "<subject> give<s> the ${weapon.name} to <object>",
+      world.updateActorById(player.id, (b) => b.inventory.items.remove(weapon));
+      player.report(s, "<subject> give<s> the ${weapon.name} to <object>",
           object: friend);
     }
   }

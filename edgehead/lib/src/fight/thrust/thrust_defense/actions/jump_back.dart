@@ -72,7 +72,7 @@ class JumpBackFromThrust extends OtherActorAction {
     a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
         positive: true);
     s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",
-        subject: enemy.currentWeapon, owner: enemy);
+        subject: enemy.currentWeaponOrBodyPart, owner: enemy);
     w.popSituationsUntil("FightSituation", sim);
     return "${a.name} jumps back from ${enemy.name}'s attack";
   }

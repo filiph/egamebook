@@ -116,7 +116,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
       // a thrust while on ground. TODO: fix and remove
       !enemy.isOnGround &&
       !a.anatomy.isBlind &&
-      a.currentWeapon.damageCapability.isThrusting &&
+      a.currentDamageCapability.isThrusting &&
       // Only allow thrusting when stance is worse than combat stance.
       enemy.pose < Pose.combat;
 }

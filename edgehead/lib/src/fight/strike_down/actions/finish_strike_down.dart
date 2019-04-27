@@ -55,7 +55,7 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
     final isBriana = updatedEnemy.id == brianaId;
     var bodyPart = isBriana ? 'side' : '{throat|neck|side}';
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
-        subject: a.currentWeapon, object: updatedEnemy);
+        subject: a.currentWeaponOrBodyPart, object: updatedEnemy);
     if (isBriana) {
       inflictPain(context, updatedEnemy, damage);
     } else {
@@ -72,5 +72,5 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
-      enemy.isOnGround && a.currentWeapon.damageCapability.isSlashing;
+      enemy.isOnGround && a.currentDamageCapability.isSlashing;
 }

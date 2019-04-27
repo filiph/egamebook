@@ -5,10 +5,9 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
-import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/fist.dart';
+import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
@@ -65,7 +64,6 @@ abstract class Actor extends Object
     Anatomy currentAnatomy =
         anatomy ?? buildHumanoid(id, constitution: constitution);
     Item weapon = currentWeapon;
-    weapon ??= createBodyPartWeapon(currentAnatomy);
 
     return _$Actor((b) => b
       ..id = id
@@ -103,13 +101,6 @@ abstract class Actor extends Object
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
 
-  /// The point in time after which this actor can act again.
-  ///
-  /// For example, if an actor just started performing an action that will take
-  /// 5 seconds to complete, their [recoveringUntil] will become at least
-  /// 5 seconds in the future. Until that time, they cannot do another move.
-  DateTime get recoveringUntil;
-
   /// The string handle to the combine function that this actor should use.
   String get combineFunctionHandle;
 
@@ -119,17 +110,41 @@ abstract class Actor extends Object
   /// By default, this is the same as [maxHitpoints].
   int get constitution;
 
+  /// Returns the damage capability that the actor currently possesses.
+  ///
+  /// If the actor is holding a weapon, then [currentWeapon]'s damage
+  /// capability is returned. Failing that, any [Anatomy.bodyPartWeapon]'s
+  /// capability is returned.
+  ///
+  /// When the actor can deal no damage at all, [DamageCapability.none]
+  /// is returned. This getter never returns `null` (as opposed
+  /// to [currentWeaponOrBodyPart].
+  DamageCapability get currentDamageCapability {
+    final weapon = currentWeaponOrBodyPart;
+    if (weapon == null) return DamageCapability.none;
+    return weapon.damageCapability;
+  }
+
   @nullable
   String get currentRoomName;
 
   /// The shield that the actor is currently wielding. This can be `null`
-  /// of there is no shield.
+  /// if there is no shield.
   Item get currentShield => inventory.currentShield;
 
   /// The weapon this actor is wielding at the moment.
   ///
-  /// Changing a weapon should ordinarily take a turn.
+  /// This must be an item that the actor can wield, such as a dagger
+  /// or a sword. Claws and other things are [Anatomy.bodyPartWeapon].
   Item get currentWeapon => inventory.currentWeapon;
+
+  /// Returns either the [currentWeapon] (if held), or the best available
+  /// [anatomy.bodyPartWeapon] (e.g. fist), or `null` if neither is available.
+  Item get currentWeaponOrBodyPart {
+    if (currentWeapon != null) return currentWeapon;
+    if (anatomy.bodyPartWeapon != null) return anatomy.bodyPartWeapon;
+    return null;
+  }
 
   /// The general ability to move: swiftly, precisely, with agility.
   /// Useful in combat and most other physical action.
@@ -142,16 +157,6 @@ abstract class Actor extends Object
   int get followingActorId;
 
   int get gold;
-
-  /// Returns `true` if the arms of the actor are crippled.
-  ///
-  /// This means the actor doesn't hold any weapons, nor can he attack
-  /// with his fist or claws.
-  ///
-  /// We're using "arms" broadly here. These can be tentacles, front paws,
-  /// or anything else that is normally the main fighting appendage.
-  bool get hasCrippledArms =>
-      currentWeapon.damageCapability.type == WeaponType.none;
 
   int get hitpoints;
 
@@ -180,10 +185,11 @@ abstract class Actor extends Object
   /// This is `true` if the actor is barehanded. This means that the actor
   /// _is_ ready to fight, but only with their bare hands.
   ///
-  /// This is `false` if the actor holds a weapon, has claws, or
-  /// is crippled ([hasCrippledArms]).
+  /// This is `false` if the actor holds a weapon, or has all her fists
+  /// crippled. It is also `false` for creatures without fists.
   bool get isBarehanded =>
-      currentWeapon.damageCapability.type == WeaponType.fist;
+      currentWeapon == null &&
+      anatomy.bodyPartWeapon?.damageCapability?.type == WeaponType.fist;
 
   bool get isConfused;
 
@@ -222,6 +228,13 @@ abstract class Actor extends Object
 
   @override
   Pronoun get pronoun;
+
+  /// The point in time after which this actor can act again.
+  ///
+  /// For example, if an actor just started performing an action that will take
+  /// 5 seconds to complete, their [recoveringUntil] will become at least
+  /// 5 seconds in the future. Until that time, they cannot do another move.
+  DateTime get recoveringUntil;
 
   int get stamina;
 
@@ -280,9 +293,9 @@ abstract class Actor extends Object
     // Extra painful if actor dies in this world.
     if (!actor.isAlive) selfPreservation -= 10;
     // Add bonus point for weapon.
-    if (!actor.isBarehanded) selfPreservation += 4;
+    if (actor.currentWeapon != null) selfPreservation += 4;
     // Add points for weapon value.
-    selfPreservation += actor.currentWeapon.value / 2;
+    selfPreservation += (actor.currentWeapon?.value ?? 0) / 2;
     // Add points for weapon/shield/item values.
     for (final weapon in actor.inventory.weapons) {
       selfPreservation += weapon.value / 10;
@@ -297,7 +310,7 @@ abstract class Actor extends Object
     for (final friend in friends) {
       teamPreservation += friend.isAliveAndActive ? 2 : 0;
       teamPreservation += 2 * friend.hitpoints;
-      teamPreservation += friend.currentWeapon.value / 2;
+      teamPreservation += (friend.currentWeapon?.value ?? 0) / 2;
       for (final item in friend.inventory.weapons) {
         teamPreservation += item.value / 10;
       }
@@ -329,31 +342,5 @@ abstract class Actor extends Object
         protagonist: other, sufferer: this, wasAggressive: true);
     if (recency == null) return false;
     return recency <= time;
-  }
-
-  /// Creates an [Item] from a [BodyPart] in [anatomy] that acts as a weapon.
-  static Item createBodyPartWeapon(Anatomy anatomy) {
-    int scoreBodyPart(BodyPart part) =>
-        part.damageCapability.bluntDamage +
-        part.damageCapability.slashingDamage +
-        part.damageCapability.thrustingDamage +
-        part.damageCapability.length;
-
-    final parts = _getDamageDealingBodyParts(anatomy.torso)
-        .toList(growable: false)
-          ..sort((a, b) => -scoreBodyPart(a).compareTo(scoreBodyPart(b)));
-    return createFist(parts.first);
-  }
-
-  /// Walks [part]  and returns all body parts that can be used as a weapon.
-  static Iterable<BodyPart> _getDamageDealingBodyParts([BodyPart part]) =>
-      _walkBodyPartTree(part).where((p) => p.damageCapability != null);
-
-  /// Returns an iterable of all body parts that are descendants of [part].
-  static Iterable<BodyPart> _walkBodyPartTree(BodyPart part) sync* {
-    yield part;
-    for (final child in part.children) {
-      yield* _walkBodyPartTree(child);
-    }
   }
 }
