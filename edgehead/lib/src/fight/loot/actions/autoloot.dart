@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/inventory.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -31,6 +32,9 @@ class AutoLoot extends Action<Null> {
   final Resource rerollResource = null;
 
   @override
+  List<String> get commandPathTemplate => const [];
+
+  @override
   String get helpMessage => null;
 
   @override
@@ -47,6 +51,8 @@ class AutoLoot extends Action<Null> {
     Simulation sim = context.simulation;
     WorldStateBuilder world = context.outputWorld;
     Storyline s = context.outputStoryline;
+    assert(_noDuplicateItems(world));
+
     var situation =
         world.getSituationByName<LootSituation>(LootSituation.className);
 
@@ -83,11 +89,13 @@ class AutoLoot extends Action<Null> {
         // Arm player with the best weapon available.
         world.updateActorById(a.id, (b) {
           // Wield the new weapon.
-          b.inventory.equip(item, currentActor.anatomy);
+          var result = b.inventory.equip(item, currentActor.anatomy);
+          assert(result == WeaponEquipResult.equipped);
         });
         takenWeapon = item;
       } else if (item.isShield && currentActor.currentShield == null) {
-        world.updateActorById(a.id, (b) => b.inventory.equipShield(item));
+        world.updateActorById(
+            a.id, (b) => b.inventory.equipShield(item, a.anatomy));
         takenShield = item;
       } else {
         // Put the rest to inventory.
@@ -114,11 +122,10 @@ class AutoLoot extends Action<Null> {
           subject: a);
     }
 
+    assert(_noDuplicateItems(world));
+
     return "${a.name} auto-loots";
   }
-
-  @override
-  List<String> get commandPathTemplate => const [];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
@@ -160,9 +167,11 @@ class AutoLoot extends Action<Null> {
     for (final friend in unshielded) {
       if (shields.isEmpty) break;
       var shield = shields.removeLast();
-      world.updateActorById(friend.id, (b) => b.inventory.equipShield(shield));
+      world.updateActorById(
+          friend.id, (b) => b.inventory.equipShield(shield, friend.anatomy));
       takenItems.remove(shield);
-      world.updateActorById(player.id, (b) => b.inventory.items.remove(shield));
+      world.updateActorById(
+          player.id, (b) => b.inventory.shields.remove(shield));
       player.report(s, "<subject> give<s> the ${shield.name} to <object>",
           object: friend);
     }
@@ -200,9 +209,33 @@ class AutoLoot extends Action<Null> {
       world.updateActorById(
           friend.id, (b) => b.inventory.equip(weapon, friend.anatomy));
       takenItems.remove(weapon);
-      world.updateActorById(player.id, (b) => b.inventory.items.remove(weapon));
+      world.updateActorById(
+          player.id, (b) => b.inventory.weapons.remove(weapon));
       player.report(s, "<subject> give<s> the ${weapon.name} to <object>",
           object: friend);
     }
+  }
+
+  /// Returns `false` if any item in the inventory of any actor is a duplicate
+  /// of any other item.
+  bool _noDuplicateItems(WorldStateBuilder world) {
+    final ids = <int>{};
+
+    for (final actor in world.build().actors) {
+      for (final item in actor.inventory.items
+          .followedBy(actor.inventory.weapons)
+          .followedBy(actor.inventory.shields)) {
+        if (ids.contains(item.id)) {
+          log.severe("Duplicate item: $item was previously seen");
+          assert(
+              false,
+              "Item $item held by ${actor.name} was seen before "
+              "in ${world.build()}");
+          return false;
+        }
+        ids.add(item.id);
+      }
+    }
+    return true;
   }
 }

@@ -412,8 +412,8 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
     bool wasSuccess) {
   w.updateActorById(
       a.id,
-      (b) => b.inventory
-          .equipShield(Item.weapon(w.randomInt(), WeaponType.shield)));
+      (b) => b.inventory.equipShield(
+          Item.weapon(w.randomInt(), WeaponType.shield), a.anatomy));
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);

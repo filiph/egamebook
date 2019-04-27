@@ -50,7 +50,7 @@ class TakeDroppedShield extends ItemAction {
         situation.id,
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
-    w.updateActorById(a.id, (b) => b..inventory.equipShield(item));
+    w.updateActorById(a.id, (b) => b..inventory.equipShield(item, a.anatomy));
     a.report(s, "<subject> pick<s> <object> up", object: item);
     return "${a.name} picks up ${item.name}";
   }

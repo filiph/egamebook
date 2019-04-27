@@ -162,10 +162,16 @@ abstract class InventoryBuilder
     return goBarehanded(anatomy);
   }
 
-  void equipShield(Item shield) {
+  void equipShield(Item shield, Anatomy anatomy) {
     assert(shield.isShield);
+    if (!anatomy.secondaryWeaponAppendageAvailable) {
+      // Crippled actor can't equip.
+      currentShield = null;
+      throw StateError('Cannot equip shield.');
+    }
+
     if (!build().shields.any((item) => item.id == shield.id)) {
-      // Shield not in inventory.
+      // Weapon not in inventory.
       shields.add(shield);
     }
     currentShield = shield;
