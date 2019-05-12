@@ -70,8 +70,8 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
   final int turn;
 
   factory _$GuardpostAboveChurchTakeShieldRescueSituation(
-          [void updates(
-              GuardpostAboveChurchTakeShieldRescueSituationBuilder b)]) =>
+          [void Function(GuardpostAboveChurchTakeShieldRescueSituationBuilder)
+              updates]) =>
       (new GuardpostAboveChurchTakeShieldRescueSituationBuilder()
             ..update(updates))
           .build();
@@ -90,8 +90,8 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
 
   @override
   GuardpostAboveChurchTakeShieldRescueSituation rebuild(
-          void updates(
-              GuardpostAboveChurchTakeShieldRescueSituationBuilder b)) =>
+          void Function(GuardpostAboveChurchTakeShieldRescueSituationBuilder)
+              updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -156,7 +156,8 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
 
   @override
   void update(
-      void updates(GuardpostAboveChurchTakeShieldRescueSituationBuilder b)) {
+      void Function(GuardpostAboveChurchTakeShieldRescueSituationBuilder)
+          updates) {
     if (updates != null) updates(this);
   }
 

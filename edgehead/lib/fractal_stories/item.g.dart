@@ -81,7 +81,7 @@ class _$Item extends Item {
   @override
   final bool nameIsProperNoun;
 
-  factory _$Item([void updates(ItemBuilder b)]) =>
+  factory _$Item([void Function(ItemBuilder) updates]) =>
       (new ItemBuilder()..update(updates)).build();
 
   _$Item._({this.damageCapability, this.id, this.name, this.nameIsProperNoun})
@@ -98,7 +98,7 @@ class _$Item extends Item {
   }
 
   @override
-  Item rebuild(void updates(ItemBuilder b)) =>
+  Item rebuild(void Function(ItemBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -176,7 +176,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   }
 
   @override
-  void update(void updates(ItemBuilder b)) {
+  void update(void Function(ItemBuilder) updates) {
     if (updates != null) updates(this);
   }
 

@@ -85,7 +85,7 @@ class _$Choice extends Choice {
   @override
   final bool isImplicit;
 
-  factory _$Choice([void updates(ChoiceBuilder b)]) =>
+  factory _$Choice([void Function(ChoiceBuilder) updates]) =>
       (new ChoiceBuilder()..update(updates)).build();
 
   _$Choice._(
@@ -103,7 +103,7 @@ class _$Choice extends Choice {
   }
 
   @override
-  Choice rebuild(void updates(ChoiceBuilder b)) =>
+  Choice rebuild(void Function(ChoiceBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -182,7 +182,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   }
 
   @override
-  void update(void updates(ChoiceBuilder b)) {
+  void update(void Function(ChoiceBuilder) updates) {
     if (updates != null) updates(this);
   }
 

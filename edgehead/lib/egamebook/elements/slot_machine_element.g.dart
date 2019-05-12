@@ -82,7 +82,7 @@ class _$SlotMachine extends SlotMachine {
   @override
   final String rollReason;
 
-  factory _$SlotMachine([void updates(SlotMachineBuilder b)]) =>
+  factory _$SlotMachine([void Function(SlotMachineBuilder) updates]) =>
       (new SlotMachineBuilder()..update(updates)).build();
 
   _$SlotMachine._(
@@ -103,7 +103,7 @@ class _$SlotMachine extends SlotMachine {
   }
 
   @override
-  SlotMachine rebuild(void updates(SlotMachineBuilder b)) =>
+  SlotMachine rebuild(void Function(SlotMachineBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -180,7 +180,7 @@ class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
   }
 
   @override
-  void update(void updates(SlotMachineBuilder b)) {
+  void update(void Function(SlotMachineBuilder) updates) {
     if (updates != null) updates(this);
   }
 

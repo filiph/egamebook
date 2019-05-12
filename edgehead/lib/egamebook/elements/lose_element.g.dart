@@ -52,7 +52,7 @@ class _$LoseGame extends LoseGame {
   @override
   final String markdownText;
 
-  factory _$LoseGame([void updates(LoseGameBuilder b)]) =>
+  factory _$LoseGame([void Function(LoseGameBuilder) updates]) =>
       (new LoseGameBuilder()..update(updates)).build();
 
   _$LoseGame._({this.markdownText}) : super._() {
@@ -62,7 +62,7 @@ class _$LoseGame extends LoseGame {
   }
 
   @override
-  LoseGame rebuild(void updates(LoseGameBuilder b)) =>
+  LoseGame rebuild(void Function(LoseGameBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -113,7 +113,7 @@ class LoseGameBuilder implements Builder<LoseGame, LoseGameBuilder> {
   }
 
   @override
-  void update(void updates(LoseGameBuilder b)) {
+  void update(void Function(LoseGameBuilder) updates) {
     if (updates != null) updates(this);
   }
 

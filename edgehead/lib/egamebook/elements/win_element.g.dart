@@ -52,7 +52,7 @@ class _$WinGame extends WinGame {
   @override
   final String markdownText;
 
-  factory _$WinGame([void updates(WinGameBuilder b)]) =>
+  factory _$WinGame([void Function(WinGameBuilder) updates]) =>
       (new WinGameBuilder()..update(updates)).build();
 
   _$WinGame._({this.markdownText}) : super._() {
@@ -62,7 +62,7 @@ class _$WinGame extends WinGame {
   }
 
   @override
-  WinGame rebuild(void updates(WinGameBuilder b)) =>
+  WinGame rebuild(void Function(WinGameBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -113,7 +113,7 @@ class WinGameBuilder implements Builder<WinGame, WinGameBuilder> {
   }
 
   @override
-  void update(void updates(WinGameBuilder b)) {
+  void update(void Function(WinGameBuilder) updates) {
     if (updates != null) updates(this);
   }
 

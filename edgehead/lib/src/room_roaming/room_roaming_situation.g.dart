@@ -83,7 +83,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   final int turn;
 
   factory _$RoomRoamingSituation(
-          [void updates(RoomRoamingSituationBuilder b)]) =>
+          [void Function(RoomRoamingSituationBuilder) updates]) =>
       (new RoomRoamingSituationBuilder()..update(updates)).build();
 
   _$RoomRoamingSituation._(
@@ -106,7 +106,8 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   }
 
   @override
-  RoomRoamingSituation rebuild(void updates(RoomRoamingSituationBuilder b)) =>
+  RoomRoamingSituation rebuild(
+          void Function(RoomRoamingSituationBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -186,7 +187,7 @@ class RoomRoamingSituationBuilder
   }
 
   @override
-  void update(void updates(RoomRoamingSituationBuilder b)) {
+  void update(void Function(RoomRoamingSituationBuilder) updates) {
     if (updates != null) updates(this);
   }
 

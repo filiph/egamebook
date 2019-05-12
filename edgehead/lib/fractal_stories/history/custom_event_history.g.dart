@@ -131,7 +131,7 @@ class _$CustomEvent extends CustomEvent {
   @override
   final DateTime time;
 
-  factory _$CustomEvent([void updates(CustomEventBuilder b)]) =>
+  factory _$CustomEvent([void Function(CustomEventBuilder) updates]) =>
       (new CustomEventBuilder()..update(updates)).build();
 
   _$CustomEvent._({this.actorId, this.data, this.name, this.time}) : super._() {
@@ -144,7 +144,7 @@ class _$CustomEvent extends CustomEvent {
   }
 
   @override
-  CustomEvent rebuild(void updates(CustomEventBuilder b)) =>
+  CustomEvent rebuild(void Function(CustomEventBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -219,7 +219,7 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
   }
 
   @override
-  void update(void updates(CustomEventBuilder b)) {
+  void update(void Function(CustomEventBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -237,7 +237,8 @@ class _$CustomEventHistory extends CustomEventHistory {
   @override
   final BuiltListMultimap<String, CustomEvent> records;
 
-  factory _$CustomEventHistory([void updates(CustomEventHistoryBuilder b)]) =>
+  factory _$CustomEventHistory(
+          [void Function(CustomEventHistoryBuilder) updates]) =>
       (new CustomEventHistoryBuilder()..update(updates)).build();
 
   _$CustomEventHistory._({this.records}) : super._() {
@@ -247,7 +248,8 @@ class _$CustomEventHistory extends CustomEventHistory {
   }
 
   @override
-  CustomEventHistory rebuild(void updates(CustomEventHistoryBuilder b)) =>
+  CustomEventHistory rebuild(
+          void Function(CustomEventHistoryBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -302,7 +304,7 @@ class CustomEventHistoryBuilder
   }
 
   @override
-  void update(void updates(CustomEventHistoryBuilder b)) {
+  void update(void Function(CustomEventHistoryBuilder) updates) {
     if (updates != null) updates(this);
   }
 

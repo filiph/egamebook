@@ -63,7 +63,8 @@ class _$ResolveSlotMachine extends ResolveSlotMachine {
   @override
   final bool wasRerolled;
 
-  factory _$ResolveSlotMachine([void updates(ResolveSlotMachineBuilder b)]) =>
+  factory _$ResolveSlotMachine(
+          [void Function(ResolveSlotMachineBuilder) updates]) =>
       (new ResolveSlotMachineBuilder()..update(updates)).build();
 
   _$ResolveSlotMachine._({this.result, this.wasRerolled}) : super._() {
@@ -76,7 +77,8 @@ class _$ResolveSlotMachine extends ResolveSlotMachine {
   }
 
   @override
-  ResolveSlotMachine rebuild(void updates(ResolveSlotMachineBuilder b)) =>
+  ResolveSlotMachine rebuild(
+          void Function(ResolveSlotMachineBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -137,7 +139,7 @@ class ResolveSlotMachineBuilder
   }
 
   @override
-  void update(void updates(ResolveSlotMachineBuilder b)) {
+  void update(void Function(ResolveSlotMachineBuilder) updates) {
     if (updates != null) updates(this);
   }
 

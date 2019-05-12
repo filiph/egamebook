@@ -52,7 +52,7 @@ class _$TextOutput extends TextOutput {
   @override
   final String markdownText;
 
-  factory _$TextOutput([void updates(TextOutputBuilder b)]) =>
+  factory _$TextOutput([void Function(TextOutputBuilder) updates]) =>
       (new TextOutputBuilder()..update(updates)).build();
 
   _$TextOutput._({this.markdownText}) : super._() {
@@ -62,7 +62,7 @@ class _$TextOutput extends TextOutput {
   }
 
   @override
-  TextOutput rebuild(void updates(TextOutputBuilder b)) =>
+  TextOutput rebuild(void Function(TextOutputBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -113,7 +113,7 @@ class TextOutputBuilder implements Builder<TextOutput, TextOutputBuilder> {
   }
 
   @override
-  void update(void updates(TextOutputBuilder b)) {
+  void update(void Function(TextOutputBuilder) updates) {
     if (updates != null) updates(this);
   }
 

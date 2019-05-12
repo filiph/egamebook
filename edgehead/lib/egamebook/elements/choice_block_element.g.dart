@@ -64,7 +64,7 @@ class _$ChoiceBlock extends ChoiceBlock {
   @override
   final BuiltList<Choice> choices;
 
-  factory _$ChoiceBlock([void updates(ChoiceBlockBuilder b)]) =>
+  factory _$ChoiceBlock([void Function(ChoiceBlockBuilder) updates]) =>
       (new ChoiceBlockBuilder()..update(updates)).build();
 
   _$ChoiceBlock._({this.saveGame, this.choices}) : super._() {
@@ -77,7 +77,7 @@ class _$ChoiceBlock extends ChoiceBlock {
   }
 
   @override
-  ChoiceBlock rebuild(void updates(ChoiceBlockBuilder b)) =>
+  ChoiceBlock rebuild(void Function(ChoiceBlockBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -137,7 +137,7 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
   }
 
   @override
-  void update(void updates(ChoiceBlockBuilder b)) {
+  void update(void Function(ChoiceBlockBuilder) updates) {
     if (updates != null) updates(this);
   }
 

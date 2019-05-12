@@ -349,7 +349,7 @@ class _$BodyPart extends BodyPart {
   @override
   final int thrustSurface;
 
-  factory _$BodyPart([void updates(BodyPartBuilder b)]) =>
+  factory _$BodyPart([void Function(BodyPartBuilder) updates]) =>
       (new BodyPartBuilder()..update(updates)).build();
 
   _$BodyPart._(
@@ -426,7 +426,7 @@ class _$BodyPart extends BodyPart {
   }
 
   @override
-  BodyPart rebuild(void updates(BodyPartBuilder b)) =>
+  BodyPart rebuild(void Function(BodyPartBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -647,7 +647,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   }
 
   @override
-  void update(void updates(BodyPartBuilder b)) {
+  void update(void Function(BodyPartBuilder) updates) {
     if (updates != null) updates(this);
   }
 

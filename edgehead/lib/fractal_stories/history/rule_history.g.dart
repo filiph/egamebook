@@ -103,7 +103,7 @@ class _$RuleHistory extends RuleHistory {
   @override
   final BuiltMap<int, RuleRecord> records;
 
-  factory _$RuleHistory([void updates(RuleHistoryBuilder b)]) =>
+  factory _$RuleHistory([void Function(RuleHistoryBuilder) updates]) =>
       (new RuleHistoryBuilder()..update(updates)).build();
 
   _$RuleHistory._({this.records}) : super._() {
@@ -113,7 +113,7 @@ class _$RuleHistory extends RuleHistory {
   }
 
   @override
-  RuleHistory rebuild(void updates(RuleHistoryBuilder b)) =>
+  RuleHistory rebuild(void Function(RuleHistoryBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -164,7 +164,7 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
   }
 
   @override
-  void update(void updates(RuleHistoryBuilder b)) {
+  void update(void Function(RuleHistoryBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -195,7 +195,7 @@ class _$RuleRecord extends RuleRecord {
   @override
   final DateTime time;
 
-  factory _$RuleRecord([void updates(RuleRecordBuilder b)]) =>
+  factory _$RuleRecord([void Function(RuleRecordBuilder) updates]) =>
       (new RuleRecordBuilder()..update(updates)).build();
 
   _$RuleRecord._({this.ruleId, this.time}) : super._() {
@@ -208,7 +208,7 @@ class _$RuleRecord extends RuleRecord {
   }
 
   @override
-  RuleRecord rebuild(void updates(RuleRecordBuilder b)) =>
+  RuleRecord rebuild(void Function(RuleRecordBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -265,7 +265,7 @@ class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
   }
 
   @override
-  void update(void updates(RuleRecordBuilder b)) {
+  void update(void Function(RuleRecordBuilder) updates) {
     if (updates != null) updates(this);
   }
 

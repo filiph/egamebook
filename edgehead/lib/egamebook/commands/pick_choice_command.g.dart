@@ -52,7 +52,7 @@ class _$PickChoice extends PickChoice {
   @override
   final Choice choice;
 
-  factory _$PickChoice([void updates(PickChoiceBuilder b)]) =>
+  factory _$PickChoice([void Function(PickChoiceBuilder) updates]) =>
       (new PickChoiceBuilder()..update(updates)).build();
 
   _$PickChoice._({this.choice}) : super._() {
@@ -62,7 +62,7 @@ class _$PickChoice extends PickChoice {
   }
 
   @override
-  PickChoice rebuild(void updates(PickChoiceBuilder b)) =>
+  PickChoice rebuild(void Function(PickChoiceBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -112,7 +112,7 @@ class PickChoiceBuilder implements Builder<PickChoice, PickChoiceBuilder> {
   }
 
   @override
-  void update(void updates(PickChoiceBuilder b)) {
+  void update(void Function(PickChoiceBuilder) updates) {
     if (updates != null) updates(this);
   }
 

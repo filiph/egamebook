@@ -33,13 +33,15 @@ class _$EdgeheadGlobalStateSerializer
 }
 
 class _$EdgeheadGlobalState extends EdgeheadGlobalState {
-  factory _$EdgeheadGlobalState([void updates(EdgeheadGlobalStateBuilder b)]) =>
+  factory _$EdgeheadGlobalState(
+          [void Function(EdgeheadGlobalStateBuilder) updates]) =>
       (new EdgeheadGlobalStateBuilder()..update(updates)).build();
 
   _$EdgeheadGlobalState._() : super._();
 
   @override
-  EdgeheadGlobalState rebuild(void updates(EdgeheadGlobalStateBuilder b)) =>
+  EdgeheadGlobalState rebuild(
+          void Function(EdgeheadGlobalStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -78,7 +80,7 @@ class EdgeheadGlobalStateBuilder
   }
 
   @override
-  void update(void updates(EdgeheadGlobalStateBuilder b)) {
+  void update(void Function(EdgeheadGlobalStateBuilder) updates) {
     if (updates != null) updates(this);
   }
 

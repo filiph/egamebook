@@ -61,7 +61,7 @@ class _$LogElement extends LogElement {
   @override
   final String message;
 
-  factory _$LogElement([void updates(LogElementBuilder b)]) =>
+  factory _$LogElement([void Function(LogElementBuilder) updates]) =>
       (new LogElementBuilder()..update(updates)).build();
 
   _$LogElement._({this.level, this.message}) : super._() {
@@ -74,7 +74,7 @@ class _$LogElement extends LogElement {
   }
 
   @override
-  LogElement rebuild(void updates(LogElementBuilder b)) =>
+  LogElement rebuild(void Function(LogElementBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -133,7 +133,7 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
   }
 
   @override
-  void update(void updates(LogElementBuilder b)) {
+  void update(void Function(LogElementBuilder) updates) {
     if (updates != null) updates(this);
   }
 

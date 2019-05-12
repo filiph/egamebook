@@ -134,7 +134,7 @@ class _$WorldState extends WorldState {
   @override
   final VisitHistory visitHistory;
 
-  factory _$WorldState([void updates(WorldStateBuilder b)]) =>
+  factory _$WorldState([void Function(WorldStateBuilder) updates]) =>
       (new WorldStateBuilder()..update(updates)).build() as _$WorldState;
 
   _$WorldState._(
@@ -175,7 +175,7 @@ class _$WorldState extends WorldState {
   }
 
   @override
-  WorldState rebuild(void updates(WorldStateBuilder b)) =>
+  WorldState rebuild(void Function(WorldStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -355,7 +355,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
-  void update(void updates(WorldStateBuilder b)) {
+  void update(void Function(WorldStateBuilder) updates) {
     if (updates != null) updates(this);
   }
 

@@ -51,7 +51,7 @@ class _$Team extends Team {
   @override
   final int id;
 
-  factory _$Team([void updates(TeamBuilder b)]) =>
+  factory _$Team([void Function(TeamBuilder) updates]) =>
       (new TeamBuilder()..update(updates)).build();
 
   _$Team._({this.id}) : super._() {
@@ -61,7 +61,7 @@ class _$Team extends Team {
   }
 
   @override
-  Team rebuild(void updates(TeamBuilder b)) =>
+  Team rebuild(void Function(TeamBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -110,7 +110,7 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
   }
 
   @override
-  void update(void updates(TeamBuilder b)) {
+  void update(void Function(TeamBuilder) updates) {
     if (updates != null) updates(this);
   }
 

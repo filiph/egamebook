@@ -112,7 +112,7 @@ class _$Inventory extends Inventory {
   @override
   final BuiltList<Item> weapons;
 
-  factory _$Inventory([void updates(InventoryBuilder b)]) =>
+  factory _$Inventory([void Function(InventoryBuilder) updates]) =>
       (new InventoryBuilder()..update(updates)).build() as _$Inventory;
 
   _$Inventory._(
@@ -139,7 +139,7 @@ class _$Inventory extends Inventory {
   }
 
   @override
-  Inventory rebuild(void updates(InventoryBuilder b)) =>
+  Inventory rebuild(void Function(InventoryBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -281,7 +281,7 @@ class _$InventoryBuilder extends InventoryBuilder {
   }
 
   @override
-  void update(void updates(InventoryBuilder b)) {
+  void update(void Function(InventoryBuilder) updates) {
     if (updates != null) updates(this);
   }
 

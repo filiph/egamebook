@@ -140,7 +140,7 @@ class _$FightSituation extends FightSituation {
   @override
   final int turn;
 
-  factory _$FightSituation([void updates(FightSituationBuilder b)]) =>
+  factory _$FightSituation([void Function(FightSituationBuilder) updates]) =>
       (new FightSituationBuilder()..update(updates)).build();
 
   _$FightSituation._(
@@ -186,7 +186,7 @@ class _$FightSituation extends FightSituation {
   }
 
   @override
-  FightSituation rebuild(void updates(FightSituationBuilder b)) =>
+  FightSituation rebuild(void Function(FightSituationBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -322,7 +322,7 @@ class FightSituationBuilder
   }
 
   @override
-  void update(void updates(FightSituationBuilder b)) {
+  void update(void Function(FightSituationBuilder) updates) {
     if (updates != null) updates(this);
   }
 

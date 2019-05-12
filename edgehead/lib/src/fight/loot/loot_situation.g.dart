@@ -93,7 +93,7 @@ class _$LootSituation extends LootSituation {
   @override
   final int turn;
 
-  factory _$LootSituation([void updates(LootSituationBuilder b)]) =>
+  factory _$LootSituation([void Function(LootSituationBuilder) updates]) =>
       (new LootSituationBuilder()..update(updates)).build();
 
   _$LootSituation._(
@@ -121,7 +121,7 @@ class _$LootSituation extends LootSituation {
   }
 
   @override
-  LootSituation rebuild(void updates(LootSituationBuilder b)) =>
+  LootSituation rebuild(void Function(LootSituationBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -212,7 +212,7 @@ class LootSituationBuilder
   }
 
   @override
-  void update(void updates(LootSituationBuilder b)) {
+  void update(void Function(LootSituationBuilder) updates) {
     if (updates != null) updates(this);
   }
 

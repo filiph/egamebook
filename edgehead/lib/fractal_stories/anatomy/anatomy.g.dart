@@ -58,7 +58,7 @@ class _$Anatomy extends Anatomy {
   BodyPart __primaryWeaponAppendage;
   BodyPart __secondaryWeaponAppendage;
 
-  factory _$Anatomy([void updates(AnatomyBuilder b)]) =>
+  factory _$Anatomy([void Function(AnatomyBuilder) updates]) =>
       (new AnatomyBuilder()..update(updates)).build();
 
   _$Anatomy._({this.torso}) : super._() {
@@ -88,7 +88,7 @@ class _$Anatomy extends Anatomy {
       __secondaryWeaponAppendage ??= super.secondaryWeaponAppendage;
 
   @override
-  Anatomy rebuild(void updates(AnatomyBuilder b)) =>
+  Anatomy rebuild(void Function(AnatomyBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -138,7 +138,7 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   }
 
   @override
-  void update(void updates(AnatomyBuilder b)) {
+  void update(void Function(AnatomyBuilder) updates) {
     if (updates != null) updates(this);
   }
 

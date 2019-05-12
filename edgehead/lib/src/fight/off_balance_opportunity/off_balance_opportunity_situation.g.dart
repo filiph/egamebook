@@ -88,7 +88,7 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   final int turn;
 
   factory _$OffBalanceOpportunitySituation(
-          [void updates(OffBalanceOpportunitySituationBuilder b)]) =>
+          [void Function(OffBalanceOpportunitySituationBuilder) updates]) =>
       (new OffBalanceOpportunitySituationBuilder()..update(updates)).build();
 
   _$OffBalanceOpportunitySituation._(
@@ -110,7 +110,7 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
 
   @override
   OffBalanceOpportunitySituation rebuild(
-          void updates(OffBalanceOpportunitySituationBuilder b)) =>
+          void Function(OffBalanceOpportunitySituationBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -189,7 +189,7 @@ class OffBalanceOpportunitySituationBuilder
   }
 
   @override
-  void update(void updates(OffBalanceOpportunitySituationBuilder b)) {
+  void update(void Function(OffBalanceOpportunitySituationBuilder) updates) {
     if (updates != null) updates(this);
   }
 

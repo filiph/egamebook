@@ -121,7 +121,7 @@ class _$VisitHistory extends VisitHistory {
   @override
   final BuiltListMultimap<String, VisitRecord> records;
 
-  factory _$VisitHistory([void updates(VisitHistoryBuilder b)]) =>
+  factory _$VisitHistory([void Function(VisitHistoryBuilder) updates]) =>
       (new VisitHistoryBuilder()..update(updates)).build();
 
   _$VisitHistory._({this.records}) : super._() {
@@ -131,7 +131,7 @@ class _$VisitHistory extends VisitHistory {
   }
 
   @override
-  VisitHistory rebuild(void updates(VisitHistoryBuilder b)) =>
+  VisitHistory rebuild(void Function(VisitHistoryBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -185,7 +185,7 @@ class VisitHistoryBuilder
   }
 
   @override
-  void update(void updates(VisitHistoryBuilder b)) {
+  void update(void Function(VisitHistoryBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -220,7 +220,7 @@ class _$VisitRecord extends VisitRecord {
   @override
   final DateTime time;
 
-  factory _$VisitRecord([void updates(VisitRecordBuilder b)]) =>
+  factory _$VisitRecord([void Function(VisitRecordBuilder) updates]) =>
       (new VisitRecordBuilder()..update(updates)).build();
 
   _$VisitRecord._({this.actorId, this.parentRoomName, this.roomName, this.time})
@@ -237,7 +237,7 @@ class _$VisitRecord extends VisitRecord {
   }
 
   @override
-  VisitRecord rebuild(void updates(VisitRecordBuilder b)) =>
+  VisitRecord rebuild(void Function(VisitRecordBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -314,7 +314,7 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
   }
 
   @override
-  void update(void updates(VisitRecordBuilder b)) {
+  void update(void Function(VisitRecordBuilder) updates) {
     if (updates != null) updates(this);
   }
 

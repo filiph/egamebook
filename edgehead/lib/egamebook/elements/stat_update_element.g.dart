@@ -73,7 +73,7 @@ class _$StatUpdate<T> extends StatUpdate<T> {
   @override
   final T newValue;
 
-  factory _$StatUpdate([void updates(StatUpdateBuilder<T> b)]) =>
+  factory _$StatUpdate([void Function(StatUpdateBuilder<T>) updates]) =>
       (new StatUpdateBuilder<T>()..update(updates)).build();
 
   _$StatUpdate._({this.name, this.newValue}) : super._() {
@@ -89,7 +89,7 @@ class _$StatUpdate<T> extends StatUpdate<T> {
   }
 
   @override
-  StatUpdate<T> rebuild(void updates(StatUpdateBuilder<T> b)) =>
+  StatUpdate<T> rebuild(void Function(StatUpdateBuilder<T>) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -149,7 +149,7 @@ class StatUpdateBuilder<T>
   }
 
   @override
-  void update(void updates(StatUpdateBuilder<T> b)) {
+  void update(void Function(StatUpdateBuilder<T>) updates) {
     if (updates != null) updates(this);
   }
 

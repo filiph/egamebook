@@ -52,7 +52,7 @@ class _$SaveGame extends SaveGame {
   @override
   final String saveGameSerialized;
 
-  factory _$SaveGame([void updates(SaveGameBuilder b)]) =>
+  factory _$SaveGame([void Function(SaveGameBuilder) updates]) =>
       (new SaveGameBuilder()..update(updates)).build();
 
   _$SaveGame._({this.saveGameSerialized}) : super._() {
@@ -62,7 +62,7 @@ class _$SaveGame extends SaveGame {
   }
 
   @override
-  SaveGame rebuild(void updates(SaveGameBuilder b)) =>
+  SaveGame rebuild(void Function(SaveGameBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -114,7 +114,7 @@ class SaveGameBuilder implements Builder<SaveGame, SaveGameBuilder> {
   }
 
   @override
-  void update(void updates(SaveGameBuilder b)) {
+  void update(void Function(SaveGameBuilder) updates) {
     if (updates != null) updates(this);
   }
 

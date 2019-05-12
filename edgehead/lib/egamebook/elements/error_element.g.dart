@@ -62,7 +62,7 @@ class _$ErrorElement extends ErrorElement {
   @override
   final String stackTrace;
 
-  factory _$ErrorElement([void updates(ErrorElementBuilder b)]) =>
+  factory _$ErrorElement([void Function(ErrorElementBuilder) updates]) =>
       (new ErrorElementBuilder()..update(updates)).build();
 
   _$ErrorElement._({this.message, this.stackTrace}) : super._() {
@@ -75,7 +75,7 @@ class _$ErrorElement extends ErrorElement {
   }
 
   @override
-  ErrorElement rebuild(void updates(ErrorElementBuilder b)) =>
+  ErrorElement rebuild(void Function(ErrorElementBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -135,7 +135,7 @@ class ErrorElementBuilder
   }
 
   @override
-  void update(void updates(ErrorElementBuilder b)) {
+  void update(void Function(ErrorElementBuilder) updates) {
     if (updates != null) updates(this);
   }
 

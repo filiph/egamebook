@@ -97,7 +97,8 @@ class _$DamageCapability extends DamageCapability {
   @override
   final WeaponType type;
 
-  factory _$DamageCapability([void updates(DamageCapabilityBuilder b)]) =>
+  factory _$DamageCapability(
+          [void Function(DamageCapabilityBuilder) updates]) =>
       (new DamageCapabilityBuilder()..update(updates)).build();
 
   _$DamageCapability._(
@@ -129,7 +130,7 @@ class _$DamageCapability extends DamageCapability {
   }
 
   @override
-  DamageCapability rebuild(void updates(DamageCapabilityBuilder b)) =>
+  DamageCapability rebuild(void Function(DamageCapabilityBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -227,7 +228,7 @@ class DamageCapabilityBuilder
   }
 
   @override
-  void update(void updates(DamageCapabilityBuilder b)) {
+  void update(void Function(DamageCapabilityBuilder) updates) {
     if (updates != null) updates(this);
   }
 

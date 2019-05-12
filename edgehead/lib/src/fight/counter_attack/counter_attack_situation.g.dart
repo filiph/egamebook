@@ -83,7 +83,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
   final int turn;
 
   factory _$CounterAttackSituation(
-          [void updates(CounterAttackSituationBuilder b)]) =>
+          [void Function(CounterAttackSituationBuilder) updates]) =>
       (new CounterAttackSituationBuilder()..update(updates)).build();
 
   _$CounterAttackSituation._(
@@ -106,7 +106,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
 
   @override
   CounterAttackSituation rebuild(
-          void updates(CounterAttackSituationBuilder b)) =>
+          void Function(CounterAttackSituationBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -185,7 +185,7 @@ class CounterAttackSituationBuilder
   }
 
   @override
-  void update(void updates(CounterAttackSituationBuilder b)) {
+  void update(void Function(CounterAttackSituationBuilder) updates) {
     if (updates != null) updates(this);
   }
 

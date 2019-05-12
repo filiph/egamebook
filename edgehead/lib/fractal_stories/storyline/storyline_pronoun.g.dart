@@ -78,7 +78,7 @@ class _$Pronoun extends Pronoun {
   @override
   final String self;
 
-  factory _$Pronoun([void updates(PronounBuilder b)]) =>
+  factory _$Pronoun([void Function(PronounBuilder) updates]) =>
       (new PronounBuilder()..update(updates)).build();
 
   _$Pronoun._({this.accusative, this.genitive, this.nominative, this.self})
@@ -98,7 +98,7 @@ class _$Pronoun extends Pronoun {
   }
 
   @override
-  Pronoun rebuild(void updates(PronounBuilder b)) =>
+  Pronoun rebuild(void Function(PronounBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -164,7 +164,7 @@ class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
   }
 
   @override
-  void update(void updates(PronounBuilder b)) {
+  void update(void Function(PronounBuilder) updates) {
     if (updates != null) updates(this);
   }
 

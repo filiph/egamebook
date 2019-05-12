@@ -192,7 +192,7 @@ class _$ActionHistory extends ActionHistory {
   @override
   final BuiltList<ActionRecord> records;
 
-  factory _$ActionHistory([void updates(ActionHistoryBuilder b)]) =>
+  factory _$ActionHistory([void Function(ActionHistoryBuilder) updates]) =>
       (new ActionHistoryBuilder()..update(updates)).build();
 
   _$ActionHistory._(
@@ -211,7 +211,7 @@ class _$ActionHistory extends ActionHistory {
   }
 
   @override
-  ActionHistory rebuild(void updates(ActionHistoryBuilder b)) =>
+  ActionHistory rebuild(void Function(ActionHistoryBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -287,7 +287,7 @@ class ActionHistoryBuilder
   }
 
   @override
-  void update(void updates(ActionHistoryBuilder b)) {
+  void update(void Function(ActionHistoryBuilder) updates) {
     if (updates != null) updates(this);
   }
 
@@ -342,7 +342,7 @@ class _$ActionRecord extends ActionRecord {
   @override
   final bool wasSuccess;
 
-  factory _$ActionRecord([void updates(ActionRecordBuilder b)]) =>
+  factory _$ActionRecord([void Function(ActionRecordBuilder) updates]) =>
       (new ActionRecordBuilder()..update(updates)).build();
 
   _$ActionRecord._(
@@ -387,7 +387,7 @@ class _$ActionRecord extends ActionRecord {
   }
 
   @override
-  ActionRecord rebuild(void updates(ActionRecordBuilder b)) =>
+  ActionRecord rebuild(void Function(ActionRecordBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
@@ -505,7 +505,7 @@ class ActionRecordBuilder
   }
 
   @override
-  void update(void updates(ActionRecordBuilder b)) {
+  void update(void Function(ActionRecordBuilder) updates) {
     if (updates != null) updates(this);
   }
 
