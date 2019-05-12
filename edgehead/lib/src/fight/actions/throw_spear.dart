@@ -209,7 +209,7 @@ class ThrowSpear extends EnemyTargetAction with CombatCommandPath {
       a.report(
         s,
         "<subject> {throw<s>|hurl<s>|cast<s>} "
-            "${entityAsObject2(a, spear)} at <object>",
+        "${entityAsObject2(a, spear)} at <object>",
         object: enemy,
       );
 }

@@ -192,7 +192,7 @@ class ThrowThrustingWeapon extends EnemyTargetAction with CombatCommandPath {
       a.report(
         s,
         "<subject> {throw<s>|hurl<s>|cast<s>} "
-            "${entityAsObject2(a, sword)} at <object>",
+        "${entityAsObject2(a, sword)} at <object>",
         object: enemy,
       );
 }
