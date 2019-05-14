@@ -290,6 +290,7 @@ abstract class Actor extends Object
   ActorScore scoreWorld(WorldState world) {
     var actor = world.getActorById(id);
     num selfPreservation = 2 * actor.hitpoints;
+    selfPreservation += actor.pose.differenceFrom(Pose.onGround);
     // Extra painful if actor dies in this world.
     if (!actor.isAlive) selfPreservation -= 10;
     // Add bonus point for weapon.
@@ -318,7 +319,10 @@ abstract class Actor extends Object
 
     // Remove points for every enemy and their hitpoints.
     var enemy = world.actors.fold(0, (num sum, Actor a) {
-      final enemyScore = (a.isAliveAndActive ? 1 : 0) + a.hitpoints;
+      final aliveScore = a.isAliveAndActive ? 1 : 0;
+      final hitpointScore = a.hitpoints;
+      final stanceScore = a.pose.differenceFrom(Pose.onGround) / 2;
+      final enemyScore = aliveScore + hitpointScore + stanceScore;
       final weightedScore = enemyScore * hateTowards(a, world);
       return sum + weightedScore;
     });
