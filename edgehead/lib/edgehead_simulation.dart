@@ -61,7 +61,7 @@ final List<Room> _rooms = List<Room>.from(allRooms)
 /// kind of carelessly attack to make fights more action-packed.
 num carelessMonsterCombineFunction(ActorScoreChange scoreChange) =>
     scoreChange.selfPreservation +
-    scoreChange.varietyOfAction -
+    3 * scoreChange.varietyOfAction -
     5 * scoreChange.enemy;
 
 num normalCombineFunction(ActorScoreChange scoreChange) =>
