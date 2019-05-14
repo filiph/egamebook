@@ -297,7 +297,8 @@ class EdgeheadGame extends Book {
 
     var actor = actorTurn.actor;
     var planner = ActorPlanner(actor, simulation, world, _pubsub);
-    await planner.plan(maxOrder: actor.isPlayer ? 1 : 20, maxConsequences: 100);
+    await planner.plan(
+        maxOrder: actor.isPlayer ? 1 : 5, maxConsequences: 10000);
     var recs = planner.getRecommendations();
 
     // Fail fast for no recommendations.
