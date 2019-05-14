@@ -332,7 +332,10 @@ abstract class Actor extends Object
     var varietyOfAction = 0.0;
     for (final action in world.actionHistory.records.reversed.take(10)) {
       if (seenActions.contains(action.actionName)) continue;
-      varietyOfAction += action.wasAggressive ? 1 : 0.5;
+      varietyOfAction += 1;
+      if (action.wasAggressive) varietyOfAction += 0.5;
+      if (action.wasProactive) varietyOfAction += 0.5;
+      if (action.protagonist == id) varietyOfAction += 0.5;
     }
 
     return ActorScore(

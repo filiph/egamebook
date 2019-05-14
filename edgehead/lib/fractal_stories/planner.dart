@@ -70,7 +70,7 @@ class ActorPlanner {
     ConsequenceStats _bestCase;
 
     num combineForBestCase(ActorScore score) =>
-        score.teamPreservation - score.enemy;
+        score.selfPreservation - score.enemy + score.varietyOfAction;
 
     for (final consequence in stats) {
       log.finest(() => "  - consequence: $consequence");
