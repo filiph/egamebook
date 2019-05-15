@@ -12,6 +12,7 @@ import 'package:edgehead/fractal_stories/plan_consequence.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
+import 'package:edgehead/fractal_stories/util/ai_logger.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -28,6 +29,7 @@ class ActorPlanner {
   static DateTime _latestWait = DateTime.now();
 
   final Logger log = Logger('ActorPlanner');
+
   final int actorId;
 
   final PlanConsequence _initial;
@@ -282,6 +284,8 @@ class ActorPlanner {
             score, current.cumulativeProbability, current.order);
 
         log.finest(() => "- $stats");
+        log.finest(() => formatAiConsequence(
+            mainActor, initial, firstPerformance, current, score));
 
         yield stats;
         continue;
@@ -323,6 +327,8 @@ class ActorPlanner {
         String path = current.world.actionHistory.describe();
         return "- how we got here: $path";
       });
+      log.finest(() => formatAiConsequence(
+          mainActor, initial, firstPerformance, current, score));
 
       yield stats;
 

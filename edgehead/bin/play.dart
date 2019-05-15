@@ -72,7 +72,7 @@ Future<void> main(List<String> args) async {
     file = File("edgehead.log");
   }
   final runner = CliRunner(automated, automated, logged ? file : null,
-      actionPattern: actionPattern);
+      logLevel: Level.FINEST, actionPattern: actionPattern);
   await runner.initialize(EdgeheadGame(
     actionPattern: actionPattern,
     saveGameSerialized: savegame,
