@@ -22,6 +22,13 @@ class ActorScore {
   ///
   /// This goes up when there had been a lot of _different_ and _aggressive_
   /// actions.
+  ///
+  /// The variety is here to combat the
+  /// [horizon effect](https://en.wikipedia.org/wiki/Horizon_effect).
+  /// We can't solve this problem, but we can make it less significant
+  /// by weighing active actions higher than inactive ones. This doesn't make
+  /// the AI smarter, but it does make it less likely to "create diversions
+  /// which ineffectively delay an unavoidable consequence".
   final num varietyOfAction;
 
   const ActorScore(this.selfPreservation, this.teamPreservation, this.enemy,
@@ -37,7 +44,8 @@ class ActorScore {
   String toString() => "ActorScore<"
       "self=${selfPreservation.toStringAsFixed(2)},"
       "team=${teamPreservation.toStringAsFixed(2)},"
-      "enemy=${enemy.toStringAsFixed(2)}>";
+      "enemy=${enemy.toStringAsFixed(2)},"
+      "variety=${varietyOfAction.toStringAsFixed(2)}>";
 }
 
 @immutable
@@ -91,7 +99,8 @@ class ActorScoreChange {
   bool get isUndefined =>
       selfPreservation == double.negativeInfinity &&
       teamPreservation == double.negativeInfinity &&
-      enemy == double.negativeInfinity;
+      enemy == double.negativeInfinity &&
+      varietyOfAction == double.negativeInfinity;
 
   /// A simple combination of different scores, for AI.
   num get simpleCombination => selfPreservation + teamPreservation - enemy;
