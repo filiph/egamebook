@@ -35,7 +35,7 @@ COLUMNS=(
   initial_world
   initial_world_time
   first_action
-  order
+  depth
   last_action_actor
   last_action
   probability
