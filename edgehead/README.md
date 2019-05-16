@@ -208,7 +208,7 @@ following command to also log progress and catch more bugs through checked mode:
 
     dart -c bin/play.dart --log
 
-The log is in `edgehead.log`.
+The log is in `edgehead.log`. Remove `--log` for better performance.
 
 Use up and down arrows to choose options, enter to select.
 
@@ -236,3 +236,16 @@ towards that action manually, which takes much more time.
 TBD
 
 Don't forget to add your situation to `test/fractal_stories_test.dart`.
+
+### Tuning AI
+
+The NPC and enemy AI is a planner. If you run `bin/play.dart` with `--log`,
+it will generate logs of all considered moves. You can use the `extract.sh`
+tool to extract them and put them in a database:
+
+```sh
+./tool/ai/extract.sh edgehead.log
+```
+
+This will generate CSV and SQLite files in `tool/ai/`. You can open and
+inspect them.
