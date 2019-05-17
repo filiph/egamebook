@@ -17,7 +17,8 @@ String formatAiConsequence(
     PlanConsequence initial,
     Performance<dynamic> firstPerformance,
     PlanConsequence consequence,
-    ActorScore score) {
+    ActorScore score,
+    ActorScoreChange scoreChange) {
   var buf = StringBuffer();
   buf.write('AI_CONSEQUENCE:');
   // ID of decision.
@@ -73,6 +74,23 @@ String formatAiConsequence(
     buf.write(_separator);
     // Variety score.
     buf.write(score.varietyOfAction);
+    buf.write(_separator);
+  }
+  // Score change from initial world.
+  buf.write(scoreChange.toString());
+  buf.write(_separator);
+  {
+    // Self score change.
+    buf.write(scoreChange.selfPreservation);
+    buf.write(_separator);
+    // Team score change.
+    buf.write(scoreChange.teamPreservation);
+    buf.write(_separator);
+    // Enemy score change.
+    buf.write(scoreChange.enemy);
+    buf.write(_separator);
+    // Variety score change.
+    buf.write(scoreChange.varietyOfAction);
     buf.write(_separator);
   }
   // How we got here.

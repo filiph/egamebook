@@ -46,7 +46,11 @@ COLUMNS=(
   self_score
   team_score
   enemy_score
-  variety_score
+  score_change
+  self_score_change
+  team_score_change
+  enemy_score_change
+  variety_score_change
   history
   world_state
 )

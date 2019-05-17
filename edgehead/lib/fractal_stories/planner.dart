@@ -39,6 +39,7 @@ class ActorPlanner {
   final int actorId;
 
   final PlanConsequence _initial;
+
   int planConsequencesComputed = 0;
 
   bool _resultsReady = false;
@@ -163,8 +164,8 @@ class ActorPlanner {
       log.finer(() => "Evaluating action '${performance.commandPath}' "
           "for ${currentActor.name}");
 
-      var consequenceStats = await _getConsequenceStats(
-              _initial, performance, maxOrder, maxConsequences, waitFunction)
+      var consequenceStats = await _getConsequenceStats(_initial, initialScore,
+              performance, maxOrder, maxConsequences, waitFunction)
           .toList();
 
       if (consequenceStats.isEmpty) {
@@ -199,6 +200,7 @@ class ActorPlanner {
   /// after the main actor ([actorId]) chooses this path.
   Stream<ConsequenceStats> _getConsequenceStats(
       PlanConsequence initial,
+      ActorScore initialScore,
       Performance<dynamic> firstPerformance,
       int maxOrder,
       int maxConsequences,
@@ -290,8 +292,8 @@ class ActorPlanner {
             score, current.cumulativeProbability, current.order);
 
         log.finest(() => "- $stats");
-        log.finest(() => formatAiConsequence(
-            mainActor, initial, firstPerformance, current, score));
+        log.finest(() => formatAiConsequence(mainActor, initial,
+            firstPerformance, current, score, score - initialScore));
 
         yield stats;
         continue;
@@ -333,8 +335,8 @@ class ActorPlanner {
         String path = current.world.actionHistory.describe();
         return "- how we got here: $path";
       });
-      log.finest(() => formatAiConsequence(
-          mainActor, initial, firstPerformance, current, score));
+      log.finest(() => formatAiConsequence(mainActor, initial, firstPerformance,
+          current, score, score - initialScore));
 
       yield stats;
 
