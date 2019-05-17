@@ -44,7 +44,12 @@ class ActorPlanner {
 
   final Simulation simulation;
 
-  final Map<Performance, ActorScoreChange> firstActionScores = {};
+  /// Maps from each performance (that is to be chosen) to a score.
+  ///
+  /// This is called [_firstActionScores] because the performances are
+  /// the first actions that lead to a whole tree of possible other actions
+  /// by different players.
+  final Map<Performance, ActorScoreChange> _firstActionScores = {};
 
   ActorPlanner(
       Actor actor, this.simulation, WorldState initialWorld, this._pubsub)
@@ -93,27 +98,27 @@ class ActorPlanner {
 
   Iterable<String> generateTable() sync* {
     int i = 1;
-    for (final key in firstActionScores.keys) {
-      yield "$i) ${key.commandPath.join(' -> ')}\t${firstActionScores[key]}";
+    for (final key in _firstActionScores.keys) {
+      yield "$i) ${key.commandPath.join(' -> ')}\t${_firstActionScores[key]}";
       i += 1;
     }
   }
 
   PlannerRecommendation getRecommendations() {
     assert(_resultsReady);
-    if (firstActionScores.isEmpty) {
+    if (_firstActionScores.isEmpty) {
       log.warning("There are no actions available for "
           "actorId=$actorId.");
       log.fine("Actions not available for $actorId and $_initial.");
     }
-    return PlannerRecommendation(firstActionScores);
+    return PlannerRecommendation(_firstActionScores);
   }
 
   Future<void> plan(
       {@required int maxOrder,
       int maxConsequences = 50,
       Future<void> waitFunction()}) async {
-    firstActionScores.clear();
+    _firstActionScores.clear();
 
     var currentActor =
         _initial.world.actors.singleWhere((a) => a.id == actorId);
@@ -144,7 +149,7 @@ class ActorPlanner {
             "Scoring with negative infinity.");
         // For example, at the very end of a book, it is possible to have
         // 'no future'.
-        firstActionScores[performance] = const ActorScoreChange.undefined();
+        _firstActionScores[performance] = const ActorScoreChange.undefined();
         continue;
       }
 
@@ -153,7 +158,7 @@ class ActorPlanner {
           "different ConsequenceStats, initialScore=$initialScore");
       var score = combineScores(consequenceStats, initialScore, maxOrder);
 
-      firstActionScores[performance] = score;
+      _firstActionScores[performance] = score;
 
       log.finer(() => "- action '${performance.commandPath}' "
           "was scored $score");
