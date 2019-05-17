@@ -5,7 +5,7 @@ author: Filip Hracek <filip.hracek@gmail.com>
 homepage: https://www.egamebook.com
 
 environment:
-  sdk: '>=2.3.0 <3.0.0'
+  sdk: '>=2.2.0 <3.0.0'
 
 dependencies:
   built_collection: ^4.1.0
