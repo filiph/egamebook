@@ -65,6 +65,10 @@ grep -n "AI_CONSEQUENCE:" $1 | sed 's|.*AI_CONSEQUENCE:\(.*\)|\1|' \
 
 echo "CSV output: ${CSV_OUT}"
 
+# Since we have SQL schema, the header would be imported as data.
+CSV_WITHOUT_HEADER="${CSV_OUT}.no_header.csv"
+tail -n +2 ${CSV_OUT} > ${CSV_WITHOUT_HEADER}
+
 SQL_OUT="${CSV_OUT}.sql"
 echo "Building SQL file: ${SQL_OUT}"
 
@@ -73,9 +77,12 @@ cat "${SCRIPT_DIR}/consequences.sql" > ${SQL_OUT}
 
 # Add import commands (https://stackoverflow.com/a/6977523)
 echo ".separator ;" >> ${SQL_OUT}
-echo ".import ${CSV_OUT} consequences" >> ${SQL_OUT}
+echo ".import ${CSV_WITHOUT_HEADER} consequences" >> ${SQL_OUT}
 
 SQLITE_OUT="${CSV_OUT}.db"
 echo "Creating SQLite database: ${SQLITE_OUT}"
 
 sqlite3 ${SQLITE_OUT} < ${SQL_OUT}
+
+# No need to keep the CSV file without header. We do keep the original one.
+rm ${CSV_WITHOUT_HEADER}
