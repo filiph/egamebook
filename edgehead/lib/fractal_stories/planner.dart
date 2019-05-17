@@ -28,10 +28,6 @@ class ActorPlanner {
   /// because the planner assumes choices are picked randomly.
   static const num minimumCumulativeProbability = 0.0001;
 
-  /// Only consequences with cumulative probability over this threshold
-  /// will be considered for best cases.
-  static const num bestCaseProbabilityThreshold = 0.15;
-
   static DateTime _latestWait = DateTime.now();
 
   final Logger log = Logger('ActorPlanner');
@@ -74,51 +70,25 @@ class ActorPlanner {
     log.finest("...");
     log.finest("combining scores");
 
+    // This algorithm merely averages statistics. It was identified by data
+    // analysis (see `tool/ai/extract.sh`). The best SQL formula was merely:
+    //
+    //     avg(self_score_change * cumulative_probability)
+    //       - avg(enemy_score_change * cumulative_probability)
+    //
+    // The algorithm below computes the averages.
     var uplifts = <ActorScoreChange>[];
-
-    ConsequenceStats _bestCase;
-
-    num combineForBestCase(ActorScore score) =>
-        score.selfPreservation - score.enemy + score.varietyOfAction;
-
     for (final consequence in stats) {
       log.finest(() => "  - consequence: $consequence");
-      if (consequence.cumulativeProbability > bestCaseProbabilityThreshold) {
-        if (_bestCase == null) {
-          log.finest("    - first _bestCase");
-          _bestCase = consequence;
-        } else if (combineForBestCase(consequence.score) >
-            combineForBestCase(_bestCase.score)) {
-          _bestCase = consequence;
-          log.finest("    - new _bestCase");
-        }
-      }
-
       ActorScoreChange uplift = (consequence.score - initialScore) *
           consequence.cumulativeProbability;
       log.finest(() => "    - uplift = $uplift");
       uplifts.add(uplift);
     }
-
-    // Look at average to see what kind of effect, on average, this action
-    // will have.
     var average = ActorScoreChange.average(uplifts);
 
-    // Also look at the best possible outcome. If we only used the average,
-    // an action that leads to a lot of bad outcomes but one great one
-    // (presumably the one the actor has in mind) would receive a bad score.
-    var bestUpside = _bestCase == null
-        ? const ActorScoreChange.zero()
-        : (_bestCase.score - initialScore);
-    ActorScoreChange best = bestUpside / (_bestCase?.order ?? 1);
-
     log.finest("- uplifts average = $average");
-    log.finest("- best = $best");
-
-    var result = best + average;
-
-    log.finest("- result = $result");
-    return result;
+    return average;
   }
 
   Iterable<String> generateTable() sync* {
