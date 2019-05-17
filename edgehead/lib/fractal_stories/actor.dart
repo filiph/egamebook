@@ -60,7 +60,7 @@ abstract class Actor extends Object
       Team team,
       Pose poseMax = Pose.standing,
       bool isConfused = false,
-      String combineFunctionHandle = "normal"}) {
+      String foldFunctionHandle = "normal"}) {
     Anatomy currentAnatomy =
         anatomy ?? buildHumanoid(id, constitution: constitution);
     Item weapon = currentWeapon;
@@ -88,7 +88,7 @@ abstract class Actor extends Object
       ..currentRoomName = currentRoomName
       ..followingActorId = followingActorId
       ..isConfused = isConfused
-      ..combineFunctionHandle = combineFunctionHandle
+      ..foldFunctionHandle = foldFunctionHandle
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = poseMax
       ..poseMax = poseMax
@@ -101,8 +101,8 @@ abstract class Actor extends Object
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
 
-  /// The string handle to the combine function that this actor should use.
-  String get combineFunctionHandle;
+  /// The string handle to the fold function that this actor should use.
+  String get foldFunctionHandle;
 
   /// Similar to the idea of constitution in Dungeons and Dragons. The higher
   /// the constitution, the more the actor will withstand.
@@ -285,8 +285,8 @@ abstract class Actor extends Object
   ///
   /// That's why this method returns [ActorScore], which includes many
   /// dimensions. Later, actor combines these functions into a single
-  /// dimension using [combineFunctionHandle] (which is used to get
-  /// a globally provided [CombineFunction] in [Simulation.combineFunctions]).
+  /// dimension using [foldFunctionHandle] (which is used to get
+  /// a globally provided [FoldFunction] in [Simulation.foldFunctions]).
   ActorScore scoreWorld(WorldState world) {
     var actor = world.getActorById(id);
     num selfPreservation = 2 * actor.hitpoints;

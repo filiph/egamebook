@@ -448,7 +448,8 @@ Actor _generateAgruth() {
       pronoun: Pronoun.HE,
       constitution: 2,
       team: defaultEnemyTeam,
-      initiative: 100);
+      initiative: 100,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 }
 
 Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
@@ -459,7 +460,8 @@ Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
           Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
       constitution: 3,
       team: defaultEnemyTeam,
-      initiative: 100);
+      initiative: 100,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 }
 
 Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear = false}) =>
@@ -470,7 +472,7 @@ Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear = false}) =>
             ? Item.weapon(w.randomInt(), WeaponType.spear)
             : Item.weapon(w.randomInt(), WeaponType.sword, name: "scimitar"),
         team: defaultEnemyTeam,
-        combineFunctionHandle: carelessMonsterCombineFunctionHandle);
+        foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
 Actor _makeOrc(WorldStateBuilder w, {int id, int constitution = 2}) =>
     Actor.initialized(id ?? w.randomInt(), "orc",
@@ -479,4 +481,4 @@ Actor _makeOrc(WorldStateBuilder w, {int id, int constitution = 2}) =>
         currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword),
         constitution: constitution,
         team: defaultEnemyTeam,
-        combineFunctionHandle: carelessMonsterCombineFunctionHandle);
+        foldFunctionHandle: carelessMonsterFoldFunctionHandle);

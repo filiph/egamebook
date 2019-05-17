@@ -21,8 +21,8 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'anatomy',
       serializers.serialize(object.anatomy,
           specifiedType: const FullType(Anatomy)),
-      'combineFunctionHandle',
-      serializers.serialize(object.combineFunctionHandle,
+      'foldFunctionHandle',
+      serializers.serialize(object.foldFunctionHandle,
           specifiedType: const FullType(String)),
       'constitution',
       serializers.serialize(object.constitution,
@@ -110,8 +110,8 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.anatomy.replace(serializers.deserialize(value,
               specifiedType: const FullType(Anatomy)) as Anatomy);
           break;
-        case 'combineFunctionHandle':
-          result.combineFunctionHandle = serializers.deserialize(value,
+        case 'foldFunctionHandle':
+          result.foldFunctionHandle = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'constitution':
@@ -213,7 +213,7 @@ class _$Actor extends Actor {
   @override
   final Anatomy anatomy;
   @override
-  final String combineFunctionHandle;
+  final String foldFunctionHandle;
   @override
   final int constitution;
   @override
@@ -264,7 +264,7 @@ class _$Actor extends Actor {
 
   _$Actor._(
       {this.anatomy,
-      this.combineFunctionHandle,
+      this.foldFunctionHandle,
       this.constitution,
       this.currentRoomName,
       this.dexterity,
@@ -291,8 +291,8 @@ class _$Actor extends Actor {
     if (anatomy == null) {
       throw new BuiltValueNullFieldError('Actor', 'anatomy');
     }
-    if (combineFunctionHandle == null) {
-      throw new BuiltValueNullFieldError('Actor', 'combineFunctionHandle');
+    if (foldFunctionHandle == null) {
+      throw new BuiltValueNullFieldError('Actor', 'foldFunctionHandle');
     }
     if (constitution == null) {
       throw new BuiltValueNullFieldError('Actor', 'constitution');
@@ -368,7 +368,7 @@ class _$Actor extends Actor {
     if (identical(other, this)) return true;
     return other is Actor &&
         anatomy == other.anatomy &&
-        combineFunctionHandle == other.combineFunctionHandle &&
+        foldFunctionHandle == other.foldFunctionHandle &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
         dexterity == other.dexterity &&
@@ -413,7 +413,7 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), combineFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), foldFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode),
                                                                                 followingActorId.hashCode),
                                                                             gold.hashCode),
                                                                         hitpoints.hashCode),
@@ -439,7 +439,7 @@ class _$Actor extends Actor {
   String toString() {
     return (newBuiltValueToStringHelper('Actor')
           ..add('anatomy', anatomy)
-          ..add('combineFunctionHandle', combineFunctionHandle)
+          ..add('foldFunctionHandle', foldFunctionHandle)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
           ..add('dexterity', dexterity)
@@ -473,10 +473,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   AnatomyBuilder get anatomy => _$this._anatomy ??= new AnatomyBuilder();
   set anatomy(AnatomyBuilder anatomy) => _$this._anatomy = anatomy;
 
-  String _combineFunctionHandle;
-  String get combineFunctionHandle => _$this._combineFunctionHandle;
-  set combineFunctionHandle(String combineFunctionHandle) =>
-      _$this._combineFunctionHandle = combineFunctionHandle;
+  String _foldFunctionHandle;
+  String get foldFunctionHandle => _$this._foldFunctionHandle;
+  set foldFunctionHandle(String foldFunctionHandle) =>
+      _$this._foldFunctionHandle = foldFunctionHandle;
 
   int _constitution;
   int get constitution => _$this._constitution;
@@ -576,7 +576,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   ActorBuilder get _$this {
     if (_$v != null) {
       _anatomy = _$v.anatomy?.toBuilder();
-      _combineFunctionHandle = _$v.combineFunctionHandle;
+      _foldFunctionHandle = _$v.foldFunctionHandle;
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
       _dexterity = _$v.dexterity;
@@ -624,7 +624,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _$result = _$v ??
           new _$Actor._(
               anatomy: anatomy.build(),
-              combineFunctionHandle: combineFunctionHandle,
+              foldFunctionHandle: foldFunctionHandle,
               constitution: constitution,
               currentRoomName: currentRoomName,
               dexterity: dexterity,

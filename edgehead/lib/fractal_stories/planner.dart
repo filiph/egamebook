@@ -70,6 +70,8 @@ class ActorPlanner {
   }
 
   /// Computes the combined score for a bunch of consequences.
+  ///
+  /// This keeps the multi-dimensionality of [ActorScore].
   ActorScoreChange combineScores(
       Iterable<ConsequenceStats> stats, ActorScore initialScore, int maxOrder) {
     log.finest("...");

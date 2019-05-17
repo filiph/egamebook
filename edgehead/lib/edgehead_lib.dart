@@ -372,7 +372,7 @@ class EdgeheadGame extends Book {
       // Take only the first few best actions.
       // TODO: remove - we are taking all actions now
       List<Performance> performances = recs
-          .pickMax(situation.maxActionsToShow, normalCombineFunction)
+          .pickMax(situation.maxActionsToShow, normalFoldFunction)
           .toList(growable: false);
 
       if (performances.isNotEmpty &&
@@ -426,9 +426,8 @@ class EdgeheadGame extends Book {
     } else {
       // NPC
       // TODO - if more than one action, remove the one that was just made
-      final combineFunction =
-          simulation.combineFunctions[actor.combineFunctionHandle];
-      selected = recs.pickRandomly(combineFunction, world.statefulRandomState);
+      final foldFunction = simulation.foldFunctions[actor.foldFunctionHandle];
+      selected = recs.pickRandomly(foldFunction, world.statefulRandomState);
       await _applySelected(
           selected, actorTurn, recs.performances.length, storyline);
     }

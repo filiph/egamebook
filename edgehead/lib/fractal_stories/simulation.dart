@@ -60,13 +60,20 @@ class Simulation {
 
   final Logger log = Logger('Simulation');
 
-  /// Combine functions are the different ways an actor can score the world.
-  final Map<String, CombineFunction> combineFunctions;
+  /// Fold functions are the different ways an actor scores the world.
+  ///
+  /// Every actor gets the same [ActorScoreChange] from the planner. This is
+  /// a multi-dimensional description of what the world might look like
+  /// if the actor takes an action. The fold function differs between
+  /// different types of AI actors, though, and it is responsible for
+  /// folding the multidimensional [ActorScoreChange] into a simple scalar
+  /// that can be used for ranking actions.
+  final Map<String, FoldFunction> foldFunctions;
 
   Simulation(
     Iterable<Room> rooms,
     Iterable<Approach> approaches,
-    this.combineFunctions,
+    this.foldFunctions,
   )   : rooms = Set<Room>.from(rooms),
         approaches = Set<Approach>.from(approaches),
         assert(!hasDuplicities(rooms.map((r) => r.name))),

@@ -10,9 +10,9 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/writers_helpers.dart';
 import 'package:edgehead/writers_input.compiled.dart';
 
-const String carelessMonsterCombineFunctionHandle = "carelessMonster";
+const String carelessMonsterFoldFunctionHandle = "carelessMonster";
 
-const String normalCombineFunctionHandle = "normal";
+const String normalFoldFunctionHandle = "normal";
 
 /// [edgeheadPlayer]'s [Actor.id].
 const int playerId = 1;
@@ -39,11 +39,11 @@ final Actor edgeheadPlayer = Actor.initialized(playerId, "Aren",
     currentRoomName: _preStartBook.name);
 
 final Simulation edgeheadSimulation =
-    Simulation(_rooms, allApproaches, _combineFunctions);
+    Simulation(_rooms, allApproaches, _foldFunctions);
 
-final Map<String, CombineFunction> _combineFunctions = {
-  normalCombineFunctionHandle: normalCombineFunction,
-  carelessMonsterCombineFunctionHandle: carelessMonsterCombineFunction,
+final Map<String, FoldFunction> _foldFunctions = {
+  normalFoldFunctionHandle: normalFoldFunction,
+  carelessMonsterFoldFunctionHandle: carelessMonsterFoldFunction,
 };
 
 final _preStartBook = Room(
@@ -59,12 +59,10 @@ final List<Room> _rooms = List<Room>.from(allRooms)
 
 /// Lesser self-worth than normal combine function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
-num carelessMonsterCombineFunction(ActorScoreChange scoreChange) =>
-    scoreChange.selfPreservation +
-    3 * scoreChange.varietyOfAction -
-    5 * scoreChange.enemy;
+num carelessMonsterFoldFunction(ActorScoreChange scoreChange) =>
+    scoreChange.selfPreservation - scoreChange.enemy;
 
-num normalCombineFunction(ActorScoreChange scoreChange) =>
+num normalFoldFunction(ActorScoreChange scoreChange) =>
     scoreChange.selfPreservation +
     scoreChange.teamPreservation -
     scoreChange.enemy;

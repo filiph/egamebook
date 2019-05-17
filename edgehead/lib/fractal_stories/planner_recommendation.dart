@@ -10,7 +10,7 @@ import 'package:meta/meta.dart';
 
 /// A function that takes the multi-dimensional [ActorScoreChange] and outputs
 /// a single number.
-typedef num CombineFunction(ActorScoreChange change);
+typedef num FoldFunction(ActorScoreChange change);
 
 @immutable
 class PlannerRecommendation {
@@ -41,7 +41,7 @@ class PlannerRecommendation {
 
   /// Picks a maximum of [maximum] actions. The first three are going to be
   /// best for self-preservation, team-preservation, and enemy-damage. The rest
-  /// will be other actions ordered by [combineFunction].
+  /// will be other actions ordered by [foldFunction].
   ///
   /// The idea behind this is to always offer at least one option per
   /// strategy. For example, if there are several amazing (but dangerous)
@@ -49,8 +49,7 @@ class PlannerRecommendation {
   /// action that preserves player's health. Otherwise, we could force player
   /// to risk his life when a life-saving action would be a perfectly valid
   /// option.
-  Iterable<Performance> pickMax(
-      int maximum, CombineFunction combineFunction) sync* {
+  Iterable<Performance> pickMax(int maximum, FoldFunction foldFunction) sync* {
     if (_performances.length <= maximum) {
       yield* _performances;
       return;
@@ -81,8 +80,8 @@ class PlannerRecommendation {
     }
     if (count == maximum) return;
 
-    _performances.sort((a, b) =>
-        -combineFunction(scores[a]).compareTo(combineFunction(scores[b])));
+    _performances.sort(
+        (a, b) => -foldFunction(scores[a]).compareTo(foldFunction(scores[b])));
 
     for (final performance in _performances) {
       if (performance == bestSelfPreserving) continue;
@@ -95,21 +94,20 @@ class PlannerRecommendation {
   }
 
   /// Pick a performance randomly, but with more weight given to ones that
-  /// are scored more highly according to [combineFunction].
-  Performance pickRandomly(
-      CombineFunction combineFunction, int statefulRandomState) {
+  /// are scored more highly according to [foldFunction].
+  Performance pickRandomly(FoldFunction foldFunction, int statefulRandomState) {
     if (_performances.length == 1) {
       return _performances.single;
     }
 
     // Make the first performance be the best one.
-    _performances.sort((a, b) =>
-        -combineFunction(scores[a]).compareTo(combineFunction(scores[b])));
+    _performances.sort(
+        (a, b) => -foldFunction(scores[a]).compareTo(foldFunction(scores[b])));
 
     num minimum = scores.values.fold<num>(
-        double.infinity, (prev, el) => math.min(prev, combineFunction(el)));
+        double.infinity, (prev, el) => math.min(prev, foldFunction(el)));
     num maximum = scores.values.fold<num>(double.negativeInfinity,
-        (prev, el) => math.max(prev, combineFunction(el)));
+        (prev, el) => math.max(prev, foldFunction(el)));
     assert(!minimum.isNaN);
     assert(!maximum.isNaN);
     assert(minimum.isFinite);
@@ -125,7 +123,7 @@ class PlannerRecommendation {
 
     var fractionWeights = List<num>.generate(_performances.length, (int i) {
       var action = _performances[i];
-      var score = combineFunction(scores[action]);
+      var score = foldFunction(scores[action]);
       return (score - lowerBound) / totalLength;
     }, growable: false);
     num fractionTotal = fractionWeights.fold<num>(0, _sum);
@@ -149,15 +147,15 @@ class PlannerRecommendation {
 
   final StatefulRandom _reusableRandom = StatefulRandom(42);
 
-  Performance _findBest(CombineFunction combineFunction,
+  Performance _findBest(FoldFunction foldFunction,
       {List<Performance> skip = const []}) {
     Performance best;
     num bestScore;
     for (final performance in _performances) {
       if (skip.contains(performance)) continue;
-      if (best == null || combineFunction(scores[performance]) > bestScore) {
+      if (best == null || foldFunction(scores[performance]) > bestScore) {
         best = performance;
-        bestScore = combineFunction(scores[performance]);
+        bestScore = foldFunction(scores[performance]);
         continue;
       }
     }
