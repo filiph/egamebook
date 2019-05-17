@@ -116,10 +116,11 @@ class ActorPlanner {
     return PlannerRecommendation(_firstActionScores);
   }
 
-  Future<void> plan(
-      {@required int maxOrder,
-      int maxConsequences = 50,
-      Future<void> waitFunction()}) async {
+  Future<void> plan({
+    @required int maxOrder,
+    @required int maxConsequences,
+    Future<void> waitFunction(),
+  }) async {
     _firstActionScores.clear();
 
     var currentActor =
