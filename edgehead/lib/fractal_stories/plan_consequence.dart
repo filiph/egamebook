@@ -26,8 +26,37 @@ class PlanConsequence {
   final WorldState world;
   final Performance performance;
   final Storyline storyline;
-  final num probability;
-  final num cumulativeProbability;
+
+  /// Probability of [performance] leading to this [world].
+  ///
+  /// For example, an action that has a success chance of 30% will have
+  /// 2 plan consequences. One of them will have probability of `0.3` and
+  /// will contain the world if the action succeeds, and the other one
+  /// will have probability of `0.7` and will contain the consequence
+  /// of failing.
+  ///
+  /// Compare to [cumulativeProbability], which is all the probabilities
+  /// in a string of actions combined.
+  final double probability;
+
+  /// Probability of the previous [WorldState], just before the [performance].
+  final double previousCumulativeProbability;
+
+  /// Probability that this [world] will happen.
+  double get cumulativeProbability {
+    // This is a heuristic. It assumes that every choice except the first one
+    // (which we are planning) is taken randomly. In other words, when
+    // an enemy has 4 moves to pick from, we assume that they will pick
+    // each one with 25% probability.
+    double chanceOfPick = 1 / choiceCount;
+    return previousCumulativeProbability * chanceOfPick * probability;
+  }
+
+  /// How many [Performance] choices were given to the actor when they
+  /// selected this [performance] (which resulted in this [world].
+  ///
+  /// This is used to compute [cumulativeProbability].
+  final int choiceCount;
 
   final bool isInitial;
   final bool isFailure;
@@ -42,17 +71,23 @@ class PlanConsequence {
   /// the newly updated [world], the [action] that lead to this world,
   /// the associated [storyline], and the [probability] with which
   /// the previous world turns into this world.
-  PlanConsequence(WorldState world, PlanConsequence previous,
-      Performance<dynamic> action, Storyline storyline, num probability,
-      {bool isInitial = false, bool isFailure = false, bool isSuccess = false})
+  PlanConsequence(
+      WorldState world,
+      PlanConsequence previous,
+      Performance<dynamic> action,
+      Storyline storyline,
+      double probability,
+      int choiceCount,
+      {bool isInitial = false,
+      bool isFailure = false,
+      bool isSuccess = false})
       : this._(
             world,
             action,
             storyline,
             probability,
-            previous == null
-                ? probability
-                : probability * previous.cumulativeProbability,
+            previous == null ? 1 : previous.cumulativeProbability,
+            choiceCount,
             isInitial,
             isFailure,
             isSuccess,
@@ -61,7 +96,7 @@ class PlanConsequence {
   /// Create the first consequence (the start of planning). It's a consequence
   /// of nothing, with no previous state.
   PlanConsequence.initial(WorldState world)
-      : this(world, null, null, Storyline(), 1.0, isInitial: true);
+      : this(world, null, null, Storyline(), 1.0, 1, isInitial: true);
 
   /// Returns a copy of the [consequence] with updated [PlanConsequence.world].
   ///
@@ -74,7 +109,8 @@ class PlanConsequence {
         consequence.performance,
         Storyline()..concatenate(consequence.storyline),
         consequence.probability,
-        consequence.cumulativeProbability,
+        consequence.previousCumulativeProbability,
+        consequence.choiceCount,
         consequence.isInitial,
         consequence.isFailure,
         consequence.isSuccess,
@@ -86,24 +122,27 @@ class PlanConsequence {
       this.performance,
       this.storyline,
       this.probability,
-      this.cumulativeProbability,
+      this.previousCumulativeProbability,
+      this.choiceCount,
       this.isInitial,
       this.isFailure,
       this.isSuccess,
-      this.order) {
+      this.order)
+      : assert(choiceCount > 0) {
     storyline.time = world.time.millisecondsSinceEpoch ~/ 1000;
   }
 
   @override
   int get hashCode => hashObjects(<Object>[
         world,
-        cumulativeProbability,
         performance,
         probability,
-        order,
+        previousCumulativeProbability,
+        choiceCount,
         isInitial,
         isFailure,
-        isSuccess
+        isSuccess,
+        order,
       ]);
 
   String get successOrFailure => isSuccess
@@ -116,5 +155,5 @@ class PlanConsequence {
   @override
   String toString() =>
       "PlanConsequence<${world.hashCode}, $world, $performance, $probability, "
-      "$order, ${isSuccess ? 'isSuccess' : ''}>";
+      "$choiceCount, $order, ${isSuccess ? 'isSuccess' : ''}>";
 }

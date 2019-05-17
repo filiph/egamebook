@@ -156,7 +156,9 @@ class EdgeheadGame extends Book {
             "Action.rerollable is true but "
             "no Action.rerollResource is specified.");
         assert(performance.action.rerollResource == Resource.stamina,
-            "Only stamina is supported as reroll resource right now");
+            "Only stamina is supported as reroll resource right now.");
+        assert(consequence.world.getActorById(actor.id).stamina > 0,
+            "Tried using stamina when ${actor.name} had none left.");
         // TODO: find out if we can do away without modifying world outside
         //       planner
         final builder = consequence.world.toBuilder();
@@ -167,11 +169,11 @@ class EdgeheadGame extends Book {
     }
   }
 
-  Future<Null> _applySelected(
-      Performance performance, ActorTurn turn, Storyline storyline) async {
+  Future<Null> _applySelected(Performance performance, ActorTurn turn,
+      int choiceCount, Storyline storyline) async {
     var consequences = performance.action
-        .apply(
-            turn, consequence, simulation, world, _pubsub, performance.object)
+        .apply(turn, choiceCount, consequence, simulation, world, _pubsub,
+            performance.object)
         .toList();
 
     if (turn.actor.isPlayer) {
@@ -331,8 +333,14 @@ class EdgeheadGame extends Book {
 
         logAndPrint("===== ACTIONPATTERN WAS HIT =====");
         logAndPrint("Found action that matches '$actionPattern': $performance");
-        for (final consequence in performance.action.apply(actorTurn,
-            consequence, simulation, world, _pubsub, performance.object)) {
+        for (final consequence in performance.action.apply(
+            actorTurn,
+            recs.performances.length,
+            consequence,
+            simulation,
+            world,
+            _pubsub,
+            performance.object)) {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");
           logAndPrint("    ${consequence.successOrFailure.toUpperCase()}");
@@ -400,7 +408,8 @@ class EdgeheadGame extends Book {
           ..successChance = performance.successChance.toDouble()
           ..isImplicit = performance.action.isImplicit);
         callbacks[choice] = () async {
-          await _applySelected(performance, actorTurn, storyline);
+          await _applySelected(
+              performance, actorTurn, performances.length, storyline);
         };
         choices.add(choice);
       }
@@ -420,7 +429,8 @@ class EdgeheadGame extends Book {
       final combineFunction =
           simulation.combineFunctions[actor.combineFunctionHandle];
       selected = recs.pickRandomly(combineFunction, world.statefulRandomState);
-      await _applySelected(selected, actorTurn, storyline);
+      await _applySelected(
+          selected, actorTurn, recs.performances.length, storyline);
     }
 
     storyline.generateFinishedOutput().forEach(elementsSink.add);

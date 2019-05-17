@@ -10,6 +10,7 @@ class ActorTurn {
   /// For example, this can be returned by a FightSituation that has
   /// no surviving actors.
   static const ActorTurn never = ActorTurn._never();
+
   final Actor actor;
 
   final DateTime time;

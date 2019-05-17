@@ -20,7 +20,13 @@ import 'package:meta/meta.dart';
 class ActorPlanner {
   /// We will stop processing a plan path once its leaf node has lower
   /// cumulative probability than this.
-  static const num minimumCumulativeProbability = 0.05;
+  ///
+  /// This should be a very small number, like 0.01%, so that we don't
+  /// accidentally prevent actors from coming up with some improbable plan
+  /// with a huge reward. Note that the cumulative probability as seen
+  /// by the planner can be significantly less than the actual probability,
+  /// because the planner assumes choices are picked randomly.
+  static const num minimumCumulativeProbability = 0.0001;
 
   /// Only consequences with cumulative probability over this threshold
   /// will be considered for best cases.
@@ -225,7 +231,7 @@ class ActorPlanner {
     final Set<WorldState> closed = <WorldState>{};
 
     var initialWorldHash = initial.world.hashCode;
-    for (final firstConsequence in firstPerformance.action.apply(startTurn,
+    for (final firstConsequence in firstPerformance.action.apply(startTurn, 1,
         initial, simulation, initial.world, _pubsub, firstPerformance.object)) {
       if (initial.world.hashCode != initialWorldHash) {
         throw StateError("Action $firstPerformance modified world state when "
@@ -338,13 +344,21 @@ class ActorPlanner {
       final context =
           ApplicabilityContext(currentActor, simulation, current.world);
 
-      for (final performance in simulation.generateAllPerformances(context)) {
-        if (!performance.action.isApplicable(
-            currentActor, simulation, current.world, performance.object)) {
-          continue;
-        }
-        var consequences = performance.action.apply(currentActorTurn, current,
-            simulation, current.world, _pubsub, performance.object);
+      final performances =
+          simulation.generateAllPerformances(context).toList(growable: false);
+
+      for (final performance in performances) {
+        assert(performance.action.isApplicable(
+            currentActor, simulation, current.world, performance.object));
+
+        var consequences = performance.action.apply(
+            currentActorTurn,
+            performances.length,
+            current,
+            simulation,
+            current.world,
+            _pubsub,
+            performance.object);
 
         for (final next in consequences) {
           planConsequencesComputed++;

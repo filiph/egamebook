@@ -111,8 +111,19 @@ abstract class Action<T> {
   /// on it.
   Resource get rerollResource;
 
-  Iterable<PlanConsequence> apply(ActorTurn turn, PlanConsequence current,
-      Simulation sim, WorldState world, PubSub pubsub, T object) sync* {
+  /// Applies the action and returns the possible outcomes as an iterable
+  /// of [PlanConsequence].
+  ///
+  /// The [choiceCount] is the number of choices from which this action
+  /// was selected.
+  Iterable<PlanConsequence> apply(
+      ActorTurn turn,
+      int choiceCount,
+      PlanConsequence current,
+      Simulation sim,
+      WorldState world,
+      PubSub pubsub,
+      T object) sync* {
     var successChance =
         getSuccessChance(turn.actor, sim, current.world, object);
     assert(successChance != null);
@@ -133,7 +144,7 @@ abstract class Action<T> {
           isSuccess: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
-          storyline, successChance.value,
+          storyline, successChance.value, choiceCount,
           isSuccess: true);
     }
     if (successChance.value < 1) {
@@ -143,7 +154,7 @@ abstract class Action<T> {
           isFailure: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
-          storyline, 1 - successChance.value,
+          storyline, 1 - successChance.value, choiceCount,
           isFailure: true);
     }
   }
@@ -517,7 +528,7 @@ class ReasonedSuccessChance<R> {
       ReasonedSuccessChance<Object>(1.0);
 
   /// The probability of success, as a number between `0.0` and `1.0`.
-  final num value;
+  final double value;
 
   /// List of possible reasons for success.
   final List<Reason<R>> successReasons;
