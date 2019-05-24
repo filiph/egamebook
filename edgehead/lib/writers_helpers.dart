@@ -156,7 +156,7 @@ void executeSpearThrowAtOgre(ActionContext c) {
   assert(inventorySpears.isNotEmpty,
       "executeSpearThrowAtOgre called without any spear in inventory");
 
-  if (player.inventory.currentWeapon.damageCapability.type ==
+  if (player.currentDamageCapability.type ==
       WeaponType.spear) {
     // Spear is in the hand.
     c.outputWorld.updateActorById(
