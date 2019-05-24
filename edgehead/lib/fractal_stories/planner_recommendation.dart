@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
@@ -22,22 +20,24 @@ class PlannerRecommendation {
   /// avoid rounding errors (when all weights add up to 0.99 and a random
   /// function returns 0.995).
   static const int weightsResolution = 1000;
-  static const num _worstOptionWeight = 0.1;
 
-  final UnmodifiableMapView<Performance, ActorScoreChange> scores;
+  final UnmodifiableMapView<Performance, ActorScoreChange> _scores;
+
   final List<Performance> _performances;
 
+  final StatefulRandom _reusableRandom = StatefulRandom(42);
+
   PlannerRecommendation(Map<Performance, ActorScoreChange> scores)
-      : scores = UnmodifiableMapView(scores),
+      : _scores = UnmodifiableMapView(scores),
         _performances = scores.keys.toList(growable: false) {
     if (scores.isEmpty) {
       log.warning("Created with no recommendations.");
     }
   }
 
-  List<Performance> get performances => _performances;
-
   bool get isEmpty => _performances.isEmpty;
+
+  List<Performance> get performances => _performances;
 
   /// Picks a maximum of [maximum] actions. The first three are going to be
   /// best for self-preservation, team-preservation, and enemy-damage. The rest
@@ -80,8 +80,8 @@ class PlannerRecommendation {
     }
     if (count == maximum) return;
 
-    _performances.sort(
-        (a, b) => -foldFunction(scores[a]).compareTo(foldFunction(scores[b])));
+    _performances.sort((a, b) =>
+        -foldFunction(_scores[a]).compareTo(foldFunction(_scores[b])));
 
     for (final performance in _performances) {
       if (performance == bestSelfPreserving) continue;
@@ -95,38 +95,81 @@ class PlannerRecommendation {
 
   /// Pick a performance randomly, but with more weight given to ones that
   /// are scored more highly according to [foldFunction].
+  ///
+  /// The algorithm is an implementation of the spreadsheet here:
+  /// https://docs.google.com/spreadsheets/d/1VoPycySmsy1DucO6xihZuCrMw8rAxcBrI9CnzLhqYZQ/edit#gid=0
+  ///
+  /// The problem we're trying to solve here is that, while we know the scores
+  /// for each performance, we don't know how to assign the probability
+  /// of picking each performance. The scores can be any real number, so we
+  /// can't assume that score 10 is 10x better than score 1. There could be
+  /// a performance with score -100.
+  ///
+  /// The naive approach would be to assign the probability according
+  /// relative distance from the lowest point. So if the lowest score is 0,
+  /// then score 10 is picked twice as often as score 5. The problem is that
+  /// the lowest-scored performance will never be picked. This is not good,
+  /// especially when we have just two performances to pick from.
+  ///
+  /// Thus, the algorithm below.
   Performance pickRandomly(FoldFunction foldFunction, int statefulRandomState) {
     if (_performances.length == 1) {
       return _performances.single;
     }
 
-    // Make the first performance be the best one.
-    _performances.sort(
-        (a, b) => -foldFunction(scores[a]).compareTo(foldFunction(scores[b])));
+    // Fold the score and put each performance with its score in an iterable.
+    var folded = _performances
+        .map((p) => _FoldedPerformance(p, foldFunction(_scores[p])));
 
-    num minimum = scores.values.fold<num>(
-        double.infinity, (prev, el) => math.min(prev, foldFunction(el)));
-    num maximum = scores.values.fold<num>(double.negativeInfinity,
-        (prev, el) => math.max(prev, foldFunction(el)));
-    assert(!minimum.isNaN);
-    assert(!maximum.isNaN);
+    // Sort from best to worst.
+    var sorted = folded.toList(growable: false)
+      ..sort((a, b) => -a.score.compareTo(b.score));
+
+    var maximum = sorted.first.score;
+    var minimum = sorted.last.score;
     assert(minimum.isFinite);
     assert(maximum.isFinite);
 
-    // Make sure even the worst option has some weight.
-    num lowerBound = minimum - (maximum - minimum) * _worstOptionWeight;
-    if (minimum == maximum) {
-      // When all options are equal, make sure we don't divide by zero.
-      lowerBound -= 1;
+    // Get the gaps between scores.
+    num minGap = double.infinity;
+    num maxGap = double.negativeInfinity;
+    for (var i = 0; i < sorted.length - 1; i++) {
+      var gap = sorted[i].score - sorted[i + 1].score;
+      assert(gap >= 0);
+      if (gap < minGap) minGap = gap;
+      if (gap > maxGap) maxGap = gap;
     }
-    num totalLength = maximum - lowerBound;
+    assert(minGap.isFinite);
+    assert(maxGap.isFinite);
 
-    var fractionWeights = List<num>.generate(_performances.length, (int i) {
-      var action = _performances[i];
-      var score = foldFunction(scores[action]);
-      return (score - lowerBound) / totalLength;
-    }, growable: false);
+    // Compute the artificial gap from the worst score
+    // to the second-worst score.
+    var lowestGap = (minGap + maxGap) / sorted.length;
+
+    // Compute the placement of the worst element. This replaces the minimum.
+    var lowerBound = minimum - lowestGap;
+    assert(lowerBound.isFinite);
+
+    // Compute fractional weights.
+    var span = maximum - lowerBound;
+    assert(span.isFinite);
+    var fractionWeights = List<num>.generate(
+      sorted.length,
+      (int i) {
+        if (span == 0) {
+          // All performances have the exact same score.
+          return 1;
+        }
+        var distance = sorted[i].score - lowerBound;
+        return distance / span;
+      },
+      growable: false,
+    );
+
+    // Compute the weights as integers, to provide to chooseWeightedPrecise.
     num fractionTotal = fractionWeights.fold<num>(0, _sum);
+    assert(fractionTotal.isFinite, "$fractionTotal is not finite");
+    assert(fractionTotal > 0);
     List<int> weights = fractionWeights
         .map<int>((n) => (n / fractionTotal * weightsResolution).round())
         .toList(growable: false);
@@ -142,10 +185,8 @@ class PlannerRecommendation {
     int index = Randomly.chooseWeightedPrecise(weights,
         max: weightsResolution, random: _reusableRandom);
 
-    return _performances[index];
+    return sorted[index].performance;
   }
-
-  final StatefulRandom _reusableRandom = StatefulRandom(42);
 
   Performance _findBest(FoldFunction foldFunction,
       {List<Performance> skip = const []}) {
@@ -153,9 +194,9 @@ class PlannerRecommendation {
     num bestScore;
     for (final performance in _performances) {
       if (skip.contains(performance)) continue;
-      if (best == null || foldFunction(scores[performance]) > bestScore) {
+      if (best == null || foldFunction(_scores[performance]) > bestScore) {
         best = performance;
-        bestScore = foldFunction(scores[performance]);
+        bestScore = foldFunction(_scores[performance]);
         continue;
       }
     }
@@ -165,4 +206,15 @@ class PlannerRecommendation {
   static num _sum(num a, num b) => a + b;
 
   static int _sumInts(int a, int b) => a + b;
+}
+
+/// A tuple of [performance] with the folded [score] (not the multidimensional
+/// [ActorScore], but the single number that is provided by a [FoldFunction]).
+class _FoldedPerformance {
+  final Performance performance;
+  final num score;
+
+  const _FoldedPerformance(this.performance, this.score)
+      : assert(performance != null),
+        assert(score != null);
 }
