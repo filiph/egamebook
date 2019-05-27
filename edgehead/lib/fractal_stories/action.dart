@@ -347,7 +347,13 @@ abstract class ApproachAction extends Action<Approach> {
     final situation = context.world.currentSituation as RoomRoamingSituation;
     var room = context.simulation.getRoomByName(situation.currentRoomName);
 
-    return context.simulation.getAvailableApproaches(room, context);
+    var approaches = context.simulation
+        .getAvailableApproaches(room, context)
+        .toList(growable: false);
+
+    assert(approaches.every((a) => !a.isImplicit) || approaches.length == 1,
+        "You can have only one implicit approach: $approaches");
+    return approaches;
   }
 
   @override

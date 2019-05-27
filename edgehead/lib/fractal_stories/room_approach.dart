@@ -18,8 +18,13 @@ class Approach {
 
   final ApproachDescriber description;
 
+  /// Whether this approach is implicit -- that is, the player is not
+  /// supposed to see it. They will be automatically transported.
+  final bool isImplicit;
+
   const Approach(this.from, this.to, this.command, this.description)
-      : assert(from != null),
+      : isImplicit = command == '<implicit>',
+        assert(from != null),
         assert(to != null),
         assert(command != null),
         assert(description != null);

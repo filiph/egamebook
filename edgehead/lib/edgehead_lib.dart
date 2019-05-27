@@ -366,8 +366,9 @@ class EdgeheadGame extends Book {
               performance.commandPath.isNotEmpty,
               "Action can have an empty ([]) commandPath "
               "only if it is the only action presented. But now we have "
-              "these commands: ${recs.performances}. One of these actions "
-              "should probably have a stricter PREREQUISITE (isApplicable).");
+              "these commands: ${recs.performances.map((p) => p.commandPath)}. "
+              "One of these actions should probably have a stricter "
+              "PREREQUISITE (isApplicable).");
         }
       }
 

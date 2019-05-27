@@ -67,6 +67,9 @@ class Rule {
     this.applyCallback,
   ) : prerequisite =
             Prerequisite(hash, priority, onlyOnce, isApplicableCallback);
+
+  @override
+  String toString() => "Rule<hash=$hash>";
 }
 
 @immutable
@@ -155,6 +158,7 @@ class Ruleset {
     }
 
     throw StateError("No rule was applicable. "
-        "Action history: ${context.world?.actionHistory?.describe()}");
+        "Action history: ${context.world?.actionHistory?.describe()}, "
+        "Rules: $all");
   }
 }

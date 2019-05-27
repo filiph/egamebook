@@ -12,16 +12,16 @@ class TakeApproachAction extends ApproachAction {
   static final TakeApproachAction singleton = TakeApproachAction();
 
   @override
-  final bool isAggressive = false;
+  bool get isAggressive => false;
 
   @override
-  final bool isProactive = true;
+  bool get isProactive => true;
 
   @override
-  final bool rerollable = false;
+  bool get rerollable => false;
 
   @override
-  final Resource rerollResource = null;
+  Resource get rerollResource => null;
 
   @override
   String get helpMessage => null;
@@ -73,8 +73,14 @@ class TakeApproachAction extends ApproachAction {
   ReasonedSuccessChance getSuccessChance(
           Actor a, Simulation sim, WorldState w, Approach approach) =>
       ReasonedSuccessChance.sureSuccess;
+
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Approach approach) {
+    if (approach.isImplicit) {
+      // Implicit approaches are covered by TakeImplicitApproachAction.
+      return false;
+    }
+
     if ((w.currentSituation as RoomRoamingSituation).monstersAlive) {
       // Don't allow exit taking when monsters in this room are still alive.
       return false;
