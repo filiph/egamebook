@@ -21,7 +21,7 @@ ReasonedSuccessChance computeBreakNeckOnGroundChance(
       const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
       const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
       const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-      const Bonus(50, CombatReason.targetHasAllEyesDisabled),
+      const Bonus(100, CombatReason.targetHasAllEyesDisabled),
     ]);
 
 EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(

@@ -16,7 +16,7 @@ ReasonedSuccessChance computeCounterClash(
     Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
     Bonus(30, CombatReason.targetHasOneLegDisabled),
     Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    Bonus(50, CombatReason.targetHasAllEyesDisabled),
+    Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

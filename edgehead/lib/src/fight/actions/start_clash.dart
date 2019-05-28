@@ -22,7 +22,7 @@ ReasonedSuccessChance computeStartClash(
     const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(50, CombatReason.targetHasAllEyesDisabled),
+    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 

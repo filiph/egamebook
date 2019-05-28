@@ -90,6 +90,7 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
     return getCombatMoveChance(a, enemy, 0.6, [
       const Modifier(50, CombatReason.dexterity),
       const Modifier(30, CombatReason.balance),
+      const Bonus(90, CombatReason.targetHasAllEyesDisabled),
     ]);
   }
 

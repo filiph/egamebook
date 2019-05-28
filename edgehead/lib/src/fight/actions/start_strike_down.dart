@@ -34,6 +34,7 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
     const Modifier(50, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(30, CombatReason.balance),
+    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 
