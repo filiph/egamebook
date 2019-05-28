@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/fight/sweep_feet/sweep_feet_situation.dart';
 
 class FinishSweepFeet extends OtherActorAction {
   static final FinishSweepFeet singleton = FinishSweepFeet();
@@ -52,12 +53,17 @@ class FinishSweepFeet extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
 
+    var threadId = getThreadId(context.simulation, w, sweepFeetSituationName);
+
     Randomly.run(() {
       a.report(s, "<subject> sweep<s> <object's> feet away",
-          object: enemy, positive: true, endSentence: true);
+          object: enemy,
+          positive: true,
+          endSentence: true,
+          actionThread: threadId);
     }, () {
       a.report(s, "<subject> kick<s> <object's> {right|left} shin",
-          object: enemy, positive: true);
+          object: enemy, positive: true, actionThread: threadId);
       enemy.report(s, "<subject> {grunt|shriek}<s>");
     });
     final groundMaterial = getGroundMaterial(w);
