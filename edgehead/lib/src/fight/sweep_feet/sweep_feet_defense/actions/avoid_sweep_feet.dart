@@ -11,8 +11,8 @@ import 'package:edgehead/src/fight/sweep_feet/sweep_feet_situation.dart';
 ReasonedSuccessChance computeAvoidSweep(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.7, const [
-    Modifier(70, CombatReason.dexterity),
-    Modifier(70, CombatReason.balance),
+    Modifier(30, CombatReason.dexterity),
+    Modifier(20, CombatReason.balance),
     Bonus(30, CombatReason.targetHasOneLegDisabled),
     Bonus(50, CombatReason.targetHasOneEyeDisabled),
     Bonus(50, CombatReason.targetHasAllEyesDisabled),
@@ -65,7 +65,7 @@ class AvoidSweepFeet extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, sweepFeetSituationName);
     a.report(s, "<subject> avoid<s> the sweep", actionThread: thread);
-    a.report(s, "<subject> {keep<s>|stay<s>} standing",
+    a.report(s, "<subject> {keep<s> standing|stay<s> upright}",
         positive: true, actionThread: thread);
     w.popSituationsUntil("FightSituation", sim);
     return "${a.name} avoid a sweep from ${enemy.name}";
