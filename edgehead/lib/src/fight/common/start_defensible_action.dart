@@ -15,7 +15,7 @@ import 'package:meta/meta.dart';
 /// It is called 'partial' because, for example,
 /// [StartDefensibleAction.applyStart] is only the first part of the resulting
 /// [Action.applySuccess] (_and_ [Action.applyFailure]).
-typedef void PartialApplyFunction(
+typedef PartialApplyFunction = void Function(
     Actor actor,
     Simulation sim,
     WorldStateBuilder world,
@@ -23,13 +23,17 @@ typedef void PartialApplyFunction(
     Actor enemy,
     Situation mainSituation);
 
-typedef ReasonedSuccessChance SuccessChanceGetter(
+typedef SuccessChanceGetter = ReasonedSuccessChance Function(
     Actor a, Simulation sim, WorldState w, Actor enemy);
 
-typedef DefenseSituation _DefenseSituationBuilder(Actor actor, Simulation sim,
-    WorldStateBuilder world, Actor enemy, Predetermination predetermination);
+typedef _DefenseSituationBuilder = DefenseSituation Function(
+    Actor actor,
+    Simulation sim,
+    WorldStateBuilder world,
+    Actor enemy,
+    Predetermination predetermination);
 
-typedef Situation _SituationBuilder(
+typedef _SituationBuilder = Situation Function(
     Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy);
 
 /// This is a utility class that makes it easier to build actions that put

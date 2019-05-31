@@ -24,17 +24,21 @@ final Room endOfRoam =
 ///
 /// TODO: remove the dependency on [FightSituation] and [RoomRoamingSituation]
 ///       or pull out Room into RoomRoaming instead of having it here.
-typedef FightSituation FightGenerator(Simulation sim, WorldStateBuilder world,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party);
+typedef FightGenerator = FightSituation Function(
+    Simulation sim,
+    WorldStateBuilder world,
+    RoomRoamingSituation roomRoamingSituation,
+    Iterable<Actor> party);
 
-typedef Iterable<Item> ItemGenerator(Simulation sim, WorldState world);
+typedef ItemGenerator = Iterable<Item> Function(
+    Simulation sim, WorldState world);
 
 /// A function that should use [s] to report on what the player sees when
 /// entering the room.
 ///
 /// The function can modify the [WorldState] if need be (for example, for
 /// counting purposes - "how many times did we see that artifact?").
-typedef void RoomDescriber(ActionContext context);
+typedef RoomDescriber = void Function(ActionContext context);
 
 // TODO: add noItemsInRoom and noMonstersInRoom to be used instead of `null`
 //       similar to emptyRoomDescription

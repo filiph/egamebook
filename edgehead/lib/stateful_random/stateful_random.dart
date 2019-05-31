@@ -82,4 +82,4 @@ class StatefulRandom implements Random {
 /// Corresponds to the [StatefulRandom.nextInt()] function. This typedef is used
 /// for functions that wrap [StatefulRandom.nextInt()] with other logic, such
 /// as [WorldState.randomInt].
-typedef int RandomIntGetter(int max);
+typedef RandomIntGetter = int Function(int max);

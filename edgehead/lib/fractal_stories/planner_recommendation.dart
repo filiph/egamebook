@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 
 /// A function that takes the multi-dimensional [ActorScoreChange] and outputs
 /// a single number.
-typedef num FoldFunction(ActorScoreChange change);
+typedef FoldFunction = num Function(ActorScoreChange change);
 
 @immutable
 class PlannerRecommendation {

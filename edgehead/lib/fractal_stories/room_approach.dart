@@ -1,7 +1,7 @@
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:meta/meta.dart';
 
-typedef void ApproachDescriber(ActionContext context);
+typedef ApproachDescriber = void Function(ActionContext context);
 
 /// An approach to one location from another one. This is the equivalent
 /// of exits (like in ZIL) but taken from the other way.

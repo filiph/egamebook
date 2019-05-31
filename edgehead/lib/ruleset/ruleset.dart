@@ -5,9 +5,9 @@ import 'package:meta/meta.dart';
 
 bool _alwaysApplicableCallback(ApplicabilityContext _) => true;
 
-typedef void RuleApplyCallback(ActionContext context);
+typedef RuleApplyCallback = void Function(ActionContext context);
 
-typedef bool RuleIsApplicableCallback(ApplicabilityContext context);
+typedef RuleIsApplicableCallback = bool Function(ApplicabilityContext context);
 
 @immutable
 class Prerequisite implements Comparable<Prerequisite> {

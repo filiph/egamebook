@@ -18,13 +18,13 @@ import 'package:meta/meta.dart';
 
 /// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
 /// [Action.applyFailure].
-typedef String ApplyFunction<T>(ActionContext context, T object);
+typedef ApplyFunction<T> = String Function(ActionContext context, T object);
 
 /// A convenience typedef for actions whose applicability depends on another
 /// [Actor] as [target].
 ///
 /// This is useful for [OtherActorAction].
-typedef bool OtherActorApplicabilityFunction(
+typedef OtherActorApplicabilityFunction = bool Function(
     Actor a, Simulation sim, WorldState w, Actor target);
 
 /// An action. Will be performed by an [Actor] and will change [WorldState]

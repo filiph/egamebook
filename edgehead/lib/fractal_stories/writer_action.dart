@@ -11,7 +11,7 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 /// This is analogous to [SimpleActionApplyFunction], but for the
 /// [Action.isApplicable] closure.
-typedef bool SimpleActionApplicableFunction(
+typedef SimpleActionApplicableFunction = bool Function(
     Actor a, Simulation sim, WorldState w, SimpleAction self);
 
 /// This closure signature is here in order to allow [SimpleAction] to be
@@ -20,7 +20,7 @@ typedef bool SimpleActionApplicableFunction(
 /// For example, apply function needs access to the class's
 /// [SimpleAction.movePlayer] method, but a closure won't be able to access it
 /// without the [self] parameter.
-typedef String SimpleActionApplyFunction(Actor a, Simulation sim,
+typedef SimpleActionApplyFunction = String Function(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, SimpleAction self);
 
 /// An action that takes place in the context of a [RoomRoamingSituation]

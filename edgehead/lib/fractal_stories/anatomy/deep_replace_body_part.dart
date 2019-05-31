@@ -41,4 +41,5 @@ void _updateWalker(
 
 /// An update function that modifies [b]. It also takes [afflictedDescendant],
 /// which is `true` when the body part is a descendant of the target body part.
-typedef void BodyPartUpdater(BodyPartBuilder b, bool afflictedDescendant);
+typedef BodyPartUpdater = void Function(
+    BodyPartBuilder b, bool afflictedDescendant);
