@@ -261,6 +261,26 @@ FightSituation generateSlaveQuartersPassageFight(
 }
 
 /// Test fight. Do not use in production.
+FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final playersSword = Item.weapon(89892133, WeaponType.sword);
+  // TODO: add dagger to player's inventory (instead of on ground)
+  final goblin = _makeGoblin(w, spear: true);
+  w.actors.add(goblin);
+  w.updateActorById(playerId,
+      (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
+  return FightSituation.initialized(
+    w.randomInt(),
+    party.where((a) => a.isPlayer),
+    [goblin],
+    "{rock|cavern} floor",
+    roomRoamingSituation,
+    {},
+    items: [Item.weapon(89892141, WeaponType.dagger)],
+  );
+}
+
+/// Test fight. Do not use in production.
 FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final aguthsSword = Item.weapon(89892130, WeaponType.sword);
@@ -284,22 +304,34 @@ FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
 }
 
 /// Test fight. Do not use in production.
-FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final playersSword = Item.weapon(89892133, WeaponType.sword);
-  // TODO: add dagger to player's inventory (instead of on ground)
+FightSituation generateTestFightWithOrcAndGoblin(
+    Simulation sim,
+    WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation,
+    Iterable<Actor> party) {
+  final orcsSword = Item.weapon(898921730, WeaponType.sword);
+  final playersSword = Item.weapon(898921731, WeaponType.sword);
+  final orc = Actor.initialized(agruthId, "orc",
+      pronoun: Pronoun.HE,
+      constitution: 2,
+      team: defaultEnemyTeam,
+      initiative: 100,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  final equippedOrc =
+      orc.rebuild((b) => b.inventory.equip(orcsSword, orc.anatomy));
+  w.actors.add(equippedOrc);
   final goblin = _makeGoblin(w, spear: true);
   w.actors.add(goblin);
+
   w.updateActorById(playerId,
       (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
-    [goblin],
-    "{rock|cavern} floor",
+    [orc, goblin],
+    "{cold|gray} floor",
     roomRoamingSituation,
     {},
-    items: [Item.weapon(89892141, WeaponType.dagger)],
   );
 }
 

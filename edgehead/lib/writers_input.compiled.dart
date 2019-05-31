@@ -2315,6 +2315,40 @@ Approach orcthornRoomFromSlaveQuartersPassage =
   final Storyline s = c.outputStoryline;
   s.add('You open the door.\n', wholeSentence: true);
 });
+final Room testFightOrcAndGoblin =
+    Room('test_fight_orc_and_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAn orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
+      wholeSentence: true);
+}, null, generateTestFightWithOrcAndGoblin, null);
+Approach testFightOrcAndGoblinFromPreStartBook = Approach(
+    'pre_start_book',
+    'test_fight_orc_and_goblin',
+    'Playtest >> one-on-two test fight >> with an orc and goblin',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You get transported to the development testing arena.\n',
+      wholeSentence: true);
+});
+Approach endOfRoamFromTestFightOrcAndGoblin =
+    Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2333,7 +2367,8 @@ final allRooms = <Room>[
   slaveQuartersPassage,
   exitFromBloodrock,
   warForge,
-  orcthornRoom
+  orcthornRoom,
+  testFightOrcAndGoblin
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2363,7 +2398,9 @@ final allApproaches = <Approach>[
   endOfRoamFromExitFromBloodrock,
   warForgeFromSmelter,
   warForgeFromCaveWithAgruth,
-  orcthornRoomFromSlaveQuartersPassage
+  orcthornRoomFromSlaveQuartersPassage,
+  testFightOrcAndGoblinFromPreStartBook,
+  endOfRoamFromTestFightOrcAndGoblin
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,

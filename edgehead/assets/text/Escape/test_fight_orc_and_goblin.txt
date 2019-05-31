@@ -1,0 +1,26 @@
+ROOM: $test_fight_orc_and_goblin
+
+
+FIRST_DESCRIPTION:
+This is a development-only test fight. If you still see this in a production
+build, it's a bug.
+
+An orc and a goblin stand in front of you. The orc is wielding a sword,
+the goblin is holding a spear.
+
+You are wielding a short sword.
+
+FIGHT_SITUATION:
+generateTestFightWithOrcAndGoblin
+
+
+// ---
+APPROACH: $test_fight_orc_and_goblin FROM $pre_start_book
+COMMAND: Playtest >> one-on-two test fight >> with an orc and goblin
+DESCRIPTION: You get transported to the development testing arena.
+
+
+// ---
+APPROACH: $__END_OF_ROAM__ FROM $test_fight_orc_and_goblin
+COMMAND: End game
+DESCRIPTION: N/A
