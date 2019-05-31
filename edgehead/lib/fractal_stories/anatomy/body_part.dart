@@ -189,11 +189,11 @@ abstract class BodyPart extends Object
   /// See [swingSurfaceLeft] doc comment.
   int get thrustSurface;
 
-  /// Returns [startingPart] and all descendants of it.
+  /// Returns this part and all descendants of it.
   ///
   /// Use this to get everything that is attached to a body part. For example,
-  /// descendants of the left shoulder include the left arm, the left hand,
-  /// and all the fingers on the left hand.
+  /// descendants of the left shoulder include the left shoulder, the left arm,
+  /// the left hand, and all the fingers on the left hand.
   ///
   /// Because anatomies start with the torso (where the heart is), descendants
   /// of [torso] include every part of the anatomy. (Use [allParts] for that.)

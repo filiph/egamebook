@@ -56,7 +56,17 @@ WeaponAssaultResult _addMajorThrustingWound(
     },
   );
 
-  return WeaponAssaultResult(victim.build(), designated);
+  return WeaponAssaultResult(
+    victim.build(),
+    designated,
+    severedPart: null,
+    slashSuccessLevel: null,
+    // Disabling thrusts are covered by an if statement above.
+    disabled: false,
+    fell: false,
+    droppedCurrentWeapon: false,
+    wasBlinding: false,
+  );
 }
 
 /// A copy of `_disableBySlash`.
@@ -66,6 +76,8 @@ WeaponAssaultResult _disableByThrust(
   if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
     victim.hitpoints = 0;
   }
+
+  bool startedBlind = target.anatomy.isBlind;
 
   deepReplaceBodyPart(
     target,
@@ -80,11 +92,21 @@ WeaponAssaultResult _disableByThrust(
   );
 
   bool victimDidFall = false;
-  if (bodyPart.function == BodyPartFunction.mobile &&
-      target.pose != Pose.onGround) {
+  if (target.pose != Pose.onGround &&
+      // Disabling any body part to which a mobile body part is recursively
+      // attached makes the target fall down.
+      //
+      // The only realistic exception would be the torso (to which _everything_
+      // is recursively attached). But that doesn't matter because if we
+      // disable the torso, the target dies and falls anyway.
+      bodyPart
+          .getDescendantParts()
+          .any((part) => part.function == BodyPartFunction.mobile)) {
     victim.pose = Pose.onGround;
     victimDidFall = true;
   }
+
+  bool endedBlind = victim.anatomy.build().isBlind;
 
   return WeaponAssaultResult(
     victim.build(),
@@ -93,5 +115,8 @@ WeaponAssaultResult _disableByThrust(
     disabled: true,
     droppedCurrentWeapon:
         isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
+    severedPart: null,
+    slashSuccessLevel: null,
+    wasBlinding: !startedBlind && endedBlind,
   );
 }

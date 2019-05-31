@@ -113,8 +113,17 @@ WeaponAssaultResult _addMajorCut(
     },
   );
 
-  return WeaponAssaultResult(victim.build(), designated,
-      slashSuccessLevel: SlashSuccessLevel.majorCut);
+  return WeaponAssaultResult(
+    victim.build(),
+    designated,
+    slashSuccessLevel: SlashSuccessLevel.majorCut,
+    // Disabling is covered in an if statement above.
+    severedPart: null,
+    disabled: false,
+    fell: false,
+    droppedCurrentWeapon: false,
+    wasBlinding: false,
+  );
 }
 
 /// Minor cuts are merely recorded on the body part. They don't have any
@@ -140,17 +149,37 @@ WeaponAssaultResult _addMinorCut(
     },
   );
 
-  return WeaponAssaultResult(victim.build(), designated,
-      slashSuccessLevel: SlashSuccessLevel.minorCut);
+  return WeaponAssaultResult(
+    victim.build(),
+    designated,
+    slashSuccessLevel: SlashSuccessLevel.minorCut,
+    // Minor cuts do none of the below.
+    severedPart: null,
+    disabled: false,
+    fell: false,
+    droppedCurrentWeapon: false,
+    wasBlinding: false,
+  );
 }
 
 /// Cuts off the body part. The [bodyPart] must be severable.
 WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
   assert(bodyPart.isSeverable);
 
+  bool startedBlind = target.anatomy.isBlind;
+
   final ActorBuilder victim = target.toBuilder();
   if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
     victim.hitpoints = 0;
+  }
+
+  bool victimDidFall = false;
+  if (target.pose != Pose.onGround &&
+      bodyPart
+          .getDescendantParts()
+          .any((part) => part.function == BodyPartFunction.mobile)) {
+    victim.pose = Pose.onGround;
+    victimDidFall = true;
   }
 
   deepReplaceBodyPart(
@@ -173,6 +202,8 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
   severedPartBuilder.hitpoints = 0;
   final severedPart = severedPartBuilder.build();
 
+  bool endedBlind = victim.anatomy.build().isBlind;
+
   return WeaponAssaultResult(
     victim.build(),
     bodyPart,
@@ -180,6 +211,9 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
     severedPart: severedPart,
     droppedCurrentWeapon:
         isWeaponHeld(target.currentWeapon, severedPart, target.inventory),
+    disabled: false,
+    fell: victimDidFall,
+    wasBlinding: !startedBlind && endedBlind,
   );
 }
 
@@ -189,6 +223,8 @@ WeaponAssaultResult _disableBySlash(
   if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
     victim.hitpoints = 0;
   }
+
+  bool startedBlind = target.anatomy.isBlind;
 
   deepReplaceBodyPart(
     target,
@@ -203,11 +239,21 @@ WeaponAssaultResult _disableBySlash(
   );
 
   bool victimDidFall = false;
-  if (bodyPart.function == BodyPartFunction.mobile &&
-      target.pose != Pose.onGround) {
+  if (target.pose != Pose.onGround &&
+      // Disabling any body part to which a mobile body part is recursively
+      // attached makes the target fall down.
+      //
+      // The only realistic exception would be the torso (to which _everything_
+      // is recursively attached). But that doesn't matter because if we
+      // disable the torso, the target dies and falls anyway.
+      bodyPart
+          .getDescendantParts()
+          .any((part) => part.function == BodyPartFunction.mobile)) {
     victim.pose = Pose.onGround;
     victimDidFall = true;
   }
+
+  bool endedBlind = victim.anatomy.build().isBlind;
 
   return WeaponAssaultResult(
     victim.build(),
@@ -217,6 +263,8 @@ WeaponAssaultResult _disableBySlash(
     disabled: true,
     droppedCurrentWeapon:
         isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
+    severedPart: null,
+    wasBlinding: !startedBlind && endedBlind,
   );
 }
 

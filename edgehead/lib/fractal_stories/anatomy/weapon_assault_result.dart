@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:meta/meta.dart';
 
 /// Result of an assault by a weapon (sword, spear, claw).
 ///
@@ -21,8 +22,11 @@ class WeaponAssaultResult {
   /// The victim fell as a result of the slash.
   final bool fell;
 
-  /// The [touchedPart] was disabled in the hit.
+  /// The [touchedPart] was disabled in the hit (but not severed).
   final bool disabled;
+
+  /// After this assault, the target is blinded.
+  final bool wasBlinding;
 
   /// The success level of the slash.
   ///
@@ -46,10 +50,11 @@ class WeaponAssaultResult {
   const WeaponAssaultResult(
     this.actor,
     this.touchedPart, {
-    this.severedPart,
-    this.slashSuccessLevel,
-    this.fell = false,
-    this.disabled = false,
-    this.droppedCurrentWeapon = false,
+    @required this.severedPart,
+    @required this.slashSuccessLevel,
+    @required this.disabled,
+    @required this.fell,
+    @required this.droppedCurrentWeapon,
+    @required this.wasBlinding,
   });
 }

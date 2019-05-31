@@ -91,6 +91,9 @@ class FinishThrust extends OtherActorAction {
       }
       inflictPain(context, result.actor, damage,
           extremePain: result.touchedPart.designation.isHumanoidEye);
+      if (result.wasBlinding) {
+        result.actor.report(s, "<subject> <is> now blind", negative: true);
+      }
     } else {
       a.report(
           s,

@@ -107,6 +107,9 @@ class FinishSlash extends OtherActorAction {
         w.recordCustom(fellToGroundCustomEventName, actor: result.actor);
       }
       inflictPain(context, result.actor, damage);
+      if (result.wasBlinding) {
+        result.actor.report(s, "<subject> <is> now blind", negative: true);
+      }
     } else {
       a.report(
           s,
