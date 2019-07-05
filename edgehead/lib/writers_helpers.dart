@@ -276,7 +276,10 @@ FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
     "{rock|cavern} floor",
     roomRoamingSituation,
     {},
-    items: [Item.weapon(89892141, WeaponType.dagger)],
+    items: [
+      Item.weapon(89892141, WeaponType.dagger),
+      Item.weapon(89892142, WeaponType.rock),
+    ],
   );
 }
 

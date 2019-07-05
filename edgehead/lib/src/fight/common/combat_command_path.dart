@@ -11,6 +11,10 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 /// [getCommandPath()].
 mixin CombatCommandPath on EnemyTargetAction {
   /// What kind of attack is this?
+  ///
+  /// For example, it can be [CombatCommandType.body] (for body-harming
+  /// attacks), or [CombatCommandType.stance] (for attack that are trying
+  /// to put the enemy off-balance). See [CombatCommandType] for the full list.
   CombatCommandType get combatCommandType;
 
   @override

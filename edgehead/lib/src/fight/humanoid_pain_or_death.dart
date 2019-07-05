@@ -14,8 +14,10 @@ final Random _random = Random();
 void inflictPain(ActionContext context, Actor actor, int damage,
     {bool extremePain = false}) {
   final s = context.outputStoryline;
-  context.pubSub.publishActorLostHitpoints(
-      ActorLostHitpointsEvent(context, actor, damage));
+  if (damage > 0) {
+    context.pubSub.publishActorLostHitpoints(
+        ActorLostHitpointsEvent(context, actor, damage));
+  }
   if (actor.id == brianaId && !actor.isAlive) {
     _reportPainBriana(context, actor);
     return;
