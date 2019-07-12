@@ -506,7 +506,7 @@ final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
       wholeSentence: true);
 }, null, generateTestFightWithGoblin, null);
 Approach testFightGoblinFromPreStartBook = Approach(
@@ -2286,35 +2286,6 @@ class WarForgeWatchWorkers extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room orcthornRoom = Room('orcthorn_room', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. \n\n\nWhen your eyes adjust to the dark, you see a figure standing in front of you. You realize it\'s a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.\n',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.\n',
-      wholeSentence: true);
-}, generateMadGuardianFight, null);
-Approach orcthornRoomFromSlaveQuartersPassage =
-    Approach('slave_quarters_passage', 'orcthorn_room', 'Open the door',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You open the door.\n', wholeSentence: true);
-});
 final Room testFightOrcAndGoblin =
     Room('test_fight_orc_and_goblin', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2349,6 +2320,35 @@ Approach endOfRoamFromTestFightOrcAndGoblin =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Room orcthornRoom = Room('orcthorn_room', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'The room is dark and wet. As you enter, the growls stop suddenly. You smell rotting flesh, and the stench fills your nostrils, forcing you to fight against vomitting. \n\n\nWhen your eyes adjust to the dark, you see a figure standing in front of you. You realize it\'s a male orc, but an especially large one, with huge muscles and dozens of scars. His face is in constant motion, overwhelmed by tics and waves of hate. Next to him is a heap of dead bodies.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.\n',
+      wholeSentence: true);
+}, generateMadGuardianFight, null);
+Approach orcthornRoomFromSlaveQuartersPassage =
+    Approach('slave_quarters_passage', 'orcthorn_room', 'Open the door',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You open the door.\n', wholeSentence: true);
+});
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2367,8 +2367,8 @@ final allRooms = <Room>[
   slaveQuartersPassage,
   exitFromBloodrock,
   warForge,
-  orcthornRoom,
-  testFightOrcAndGoblin
+  testFightOrcAndGoblin,
+  orcthornRoom
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2398,9 +2398,9 @@ final allApproaches = <Approach>[
   endOfRoamFromExitFromBloodrock,
   warForgeFromSmelter,
   warForgeFromCaveWithAgruth,
-  orcthornRoomFromSlaveQuartersPassage,
   testFightOrcAndGoblinFromPreStartBook,
-  endOfRoamFromTestFightOrcAndGoblin
+  endOfRoamFromTestFightOrcAndGoblin,
+  orcthornRoomFromSlaveQuartersPassage
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
