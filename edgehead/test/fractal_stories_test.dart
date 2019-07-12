@@ -13,8 +13,8 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
-import 'package:edgehead/src/fight/break_neck/break_neck_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
+import 'package:edgehead/src/fight/fatality_on_ground/fatality_on_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
@@ -95,9 +95,9 @@ void main() {
         checkSituationBuild(() => createSlashSituation(1, a, b,
             designation: BodyPartDesignation.primaryArm));
       });
-      test("BreakNeckOnGroundSituation", () {
+      test("FatalityOnGroundSituation", () {
         checkSituationBuild(
-            () => createBreakNeckOnGroundSituation(a, sim, world, b));
+            () => createFatalityOnGroundSituation(a, sim, world, b));
       });
     });
 

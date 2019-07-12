@@ -79,8 +79,7 @@ class FinishSlash extends OtherActorAction {
           situation, situation.attackDirection, a, enemy, w.randomInt);
     }
 
-    w.actors.removeWhere((actor) => actor.id == enemy.id);
-    w.actors.add(result.actor);
+    w.updateActorById(enemy.id, (b) => b.replace(result.actor));
     final thread = getThreadId(sim, w, slashSituationName);
     // TODO: revert kill if it's briana.
     bool killed = !result.actor.isAlive && result.actor.id != brianaId;

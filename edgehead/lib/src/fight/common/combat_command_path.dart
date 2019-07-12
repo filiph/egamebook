@@ -159,6 +159,10 @@ mixin CombatCommandPath on EnemyTargetAction {
   }
 }
 
+/// This is used to construct the command path for the player.
+///
+/// For example, an action with [CombatCommandType.stance] will be categorized
+/// under "Some Enemy >> Stance >> ...".
 enum CombatCommandType {
   stance,
   gear,

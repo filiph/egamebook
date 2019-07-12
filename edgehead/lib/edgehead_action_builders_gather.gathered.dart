@@ -33,12 +33,16 @@ final _$actionSerializer = InstanceSerializer<Action>({
   // From lib/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart:
   'OffBalanceOpportunityThrust.singleton':
       OffBalanceOpportunityThrust.singleton,
-  // From lib/src/fight/break_neck/actions/finish_break_neck.dart:
-  'FinishBreakNeck.singleton': FinishBreakNeck.singleton,
-  // From lib/src/fight/break_neck/wrestle_defense/actions/evade_neck_breaking.dart:
-  'EvadeNeckBreaking.singleton': EvadeNeckBreaking.singleton,
   // From lib/src/fight/loot/actions/autoloot.dart:
   'AutoLoot.singleton': AutoLoot.singleton,
+  // From lib/src/fight/throw/actions/finish_throw_blunt.dart:
+  'FinishThrowBlunt.singleton': FinishThrowBlunt.singleton,
+  // From lib/src/fight/throw/throw_defense/actions/shield_block_throw.dart:
+  'ShieldBlockThrow.singleton': ShieldBlockThrow.singleton,
+  // From lib/src/fight/throw/throw_defense/actions/catch_projectile.dart:
+  'CatchProjectile.singleton': CatchProjectile.singleton,
+  // From lib/src/fight/throw/throw_defense/actions/dodge_throw.dart:
+  'DodgeThrow.singleton': DodgeThrow.singleton,
   // From lib/src/fight/leap/leap_defense/actions/impale_leaper.dart:
   'ImpaleLeaper.singleton': ImpaleLeaper.singleton,
   // From lib/src/fight/leap/leap_defense/actions/dodge_leap.dart:
@@ -77,6 +81,12 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrust.singleton': DodgeThrust.singleton,
   // From lib/src/fight/thrust/actions/finish_thrust.dart:
   'FinishThrust.singleton': FinishThrust.singleton,
+  // From lib/src/fight/fatality_on_ground/actions/finish_break_neck.dart:
+  'FinishBreakNeck.singleton': FinishBreakNeck.singleton,
+  // From lib/src/fight/fatality_on_ground/actions/finish_crack_skull.dart:
+  'FinishCrackSkull.singleton': FinishCrackSkull.singleton,
+  // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/evade_on_ground.dart:
+  'EvadeOnGround.singleton': EvadeOnGround.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

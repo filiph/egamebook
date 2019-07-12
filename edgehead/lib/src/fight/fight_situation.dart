@@ -18,6 +18,7 @@ import 'package:edgehead/src/fight/actions/assume_stance.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
+import 'package:edgehead/src/fight/actions/start_crack_skull_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_feint_jab.dart';
 import 'package:edgehead/src/fight/actions/start_feint_slash.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
@@ -32,13 +33,13 @@ import 'package:edgehead/src/fight/actions/start_slash_at_arm.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_leg.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
+import 'package:edgehead/src/fight/actions/start_throw_rock.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_at_eye.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_spear_down.dart';
 import 'package:edgehead/src/fight/actions/start_sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
-import 'package:edgehead/src/fight/actions/throw_rock.dart';
 import 'package:edgehead/src/fight/actions/throw_spear.dart';
 import 'package:edgehead/src/fight/actions/throw_thrusting_weapon.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
@@ -93,6 +94,7 @@ abstract class FightSituation extends Object
         FeintSlash.singleton,
         SweepFeet.singleton,
         startBreakNeckOnGroundBuilder(),
+        startCrackSkullOnGroundBuilder(),
         startLeapBuilder(),
         startPunchBuilder(),
         StartSlashAtArm.singleton,
@@ -101,13 +103,13 @@ abstract class FightSituation extends Object
         StartSlashAtLeg.singleton,
         StartSlashAtRemainingLeg.singleton,
         startStrikeDownBuilder(),
+        startThrowRock(),
         StartThrustAtEye.singleton,
         StartThrustAtRemainingEye.singleton,
         startThrustAtBodyPartGenerator(BodyPartDesignation.torso),
         startThrustSpearDownBuilder(),
         TakeDroppedShield.singleton,
         TakeDroppedWeapon.singleton,
-        ThrowRock.singleton,
         ThrowSpear.singleton,
         ThrowThrustingWeapon.singleton,
         // simple ones
@@ -120,8 +122,8 @@ abstract class FightSituation extends Object
         Unconfuse.singleton
       ];
 
-  /// The items dropped by dead combatants. The Map's `value` is a qualified
-  /// name, such as "goblin's scimitar". The `key` is the actual item.
+  /// The items dropped by combatants, or lying around from the beginning of
+  /// the fight.
   BuiltList<Item> get droppedItems;
 
   /// Items that cannot be used in the fight but can be picked up after it.

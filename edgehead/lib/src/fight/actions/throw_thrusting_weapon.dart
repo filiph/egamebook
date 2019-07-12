@@ -29,6 +29,7 @@ ReasonedSuccessChance computeThrowSword(
   ]);
 }
 
+// TODO: use ThrowSituation + defense
 class ThrowThrustingWeapon extends EnemyTargetAction with CombatCommandPath {
   static const String className = "ThrowThrustingWeapon";
 

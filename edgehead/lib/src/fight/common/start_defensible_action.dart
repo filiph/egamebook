@@ -10,6 +10,10 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 import 'package:meta/meta.dart';
 
+/// Function that is called to create the last part of the command path.
+typedef CommandPathTailGenerator = String Function(
+    ApplicabilityContext context, Actor attacker, Actor defender);
+
 /// Function that is called as part of a [StartDefensibleAction].
 ///
 /// It is called 'partial' because, for example,
@@ -95,13 +99,14 @@ class StartDefensibleAction extends StartDefensibleActionBase {
 
   final String commandPathTail;
 
+  final CommandPathTailGenerator commandPathTailGenerator;
+
   @override
   final CombatCommandType combatCommandType;
 
   StartDefensibleAction({
     @required this.name,
     @required this.combatCommandType,
-    @required this.commandPathTail,
     @required this.helpMessage,
     @required OtherActorApplicabilityFunction isApplicable,
     @required PartialApplyFunction applyStart,
@@ -109,6 +114,8 @@ class StartDefensibleAction extends StartDefensibleActionBase {
     @required _DefenseSituationBuilder defenseSituationBuilder,
     @required SuccessChanceGetter successChanceGetter,
     @required this.rerollable,
+    this.commandPathTail,
+    this.commandPathTailGenerator,
     this.rerollResource,
     this.rollReasonTemplate,
     PartialApplyFunction applyShortCircuit,
@@ -120,7 +127,8 @@ class StartDefensibleAction extends StartDefensibleActionBase {
         _isApplicable = isApplicable,
         _applyShortCircuit = applyShortCircuit,
         assert(!rerollable || rerollResource != null),
-        assert(!rerollable || rollReasonTemplate != null);
+        assert(!rerollable || rollReasonTemplate != null),
+        assert(commandPathTail != null || commandPathTailGenerator != null);
 
   @override
   bool get shouldShortCircuitWhenFailed => _applyShortCircuit != null;
@@ -145,8 +153,17 @@ class StartDefensibleAction extends StartDefensibleActionBase {
       _defenseSituationBuilder(actor, sim, world, enemy, predetermination);
 
   @override
-  String getCommandPathTail(ApplicabilityContext context, Actor object) =>
-      commandPathTail;
+  String getCommandPathTail(ApplicabilityContext context, Actor object) {
+    if (commandPathTailGenerator != null) {
+      assert(
+          commandPathTail == null,
+          "Supply either commandPathTailGenerator or commandPathTail, "
+          "not both.");
+      return commandPathTailGenerator(context, context.actor, object);
+    }
+    assert(commandPathTail != null);
+    return commandPathTail;
+  }
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>

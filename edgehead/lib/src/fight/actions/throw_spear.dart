@@ -30,6 +30,7 @@ ReasonedSuccessChance computeThrowSpear(
   ]);
 }
 
+// TODO: use ThrowSituation + defense
 class ThrowSpear extends EnemyTargetAction with CombatCommandPath {
   static const String className = "ThrowSpear";
 

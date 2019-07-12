@@ -25,7 +25,8 @@ class WeaponType extends EnumClass {
   static const WeaponType sword = _$sword;
   static const WeaponType dagger = _$dagger;
 
-  /// A throwable piece of something hard.
+  /// A throwable piece of something hard and small. A rock, a brick,
+  /// a golden nugget.
   static const WeaponType rock = _$rock;
 
   /// A shield.
@@ -60,7 +61,7 @@ class WeaponType extends EnumClass {
   }
 
   int get defaultBluntDamage {
-    // TODO: implement blunt weapons
+    if (this == rock) return 1;
     return 0;
   }
 

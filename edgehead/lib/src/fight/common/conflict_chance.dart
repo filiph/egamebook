@@ -3,6 +3,31 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:meta/meta.dart';
 
+@visibleForTesting
+const List<CombatReason> reasonsRequiringBonuses = [
+  CombatReason.performerIsPlayer,
+  CombatReason.targetHasAllEyesDisabled,
+  CombatReason.targetHasOneEyeDisabled,
+  CombatReason.targetHasAllLegsDisabled,
+  CombatReason.targetHasOneLegDisabled,
+  CombatReason.targetHasPrimaryArmDisabled,
+  CombatReason.targetHasSecondaryArmDisabled,
+];
+
+@visibleForTesting
+const List<CombatReason> reasonsRequiringModifiers = [
+  CombatReason.dexterity,
+  CombatReason.balance,
+  CombatReason.height
+];
+
+@visibleForTesting
+const List<CombatReason> reasonsRequiringPenalties = [
+  CombatReason.performerHasLimitedMobility,
+  CombatReason.performerHasLimitedVision,
+  CombatReason.targetHasShield,
+];
+
 /// This is a convenience method for constructing [ReasonedSuccessChance]
 /// for the combat in Edgehead.
 ///
@@ -118,9 +143,8 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
         return -1.0;
       } else if (!performer.isOnGround && target.isOnGround) {
         return 1.0;
-      } else {
-        return 0.0;
       }
+        return 0.0;
       throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.performerIsPlayer:
       if (performer.isPlayer) {
@@ -129,6 +153,12 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
         return 0.0;
       }
       throw StateError("Forgotten logic branch"); // ignore: dead_code
+    case CombatReason.performerHasLimitedMobility:
+      final percent = _fractionDisabled(target, BodyPartFunction.mobile);
+      return -percent;
+    case CombatReason.performerHasLimitedVision:
+      final percent = _fractionDisabled(target, BodyPartFunction.vision);
+      return -percent;
     case CombatReason.targetHasShield:
       if (target.currentShield != null) {
         return -1.0;
@@ -201,21 +231,6 @@ bool _partDisabled(Actor actor, BodyPartDesignation designation) {
   return !actor.anatomy.findByDesignation(designation).isAlive;
 }
 
-/// A modification to the success chance. Can be either positive or negative.
-///
-/// For example, [CombatReason.dexterity] is a modification because the attacker
-/// can be either more or less dexterous than the target.
-@immutable
-class Modifier<R> {
-  final int maxAdjustment;
-  final R reason;
-
-  const Modifier(this.maxAdjustment, this.reason);
-
-  @override
-  String toString() => "Modifier<$R:$reason:$maxAdjustment>";
-}
-
 /// A [Modifier] that is always positive for the actor (and always negative
 /// for the target).
 ///
@@ -226,18 +241,6 @@ class Modifier<R> {
 @immutable
 class Bonus<R> extends Modifier<R> {
   const Bonus(int maxAdjustment, R reason) : super(maxAdjustment, reason);
-}
-
-/// A [Modifier] that is always negative for the actor (and always positive
-/// for the target).
-///
-/// Having a [Penalty] that results in a positive adjustment to a success
-/// chance is a runtime error.
-///
-/// A [Penalty] can evaluate to `0` adjustment.
-@immutable
-class Penalty<R> extends Modifier<R> {
-  const Penalty(int maxAdjustment, R reason) : super(maxAdjustment, reason);
 }
 
 /// Reasons for the performer of a move (e.g. attacker) to be successful
@@ -272,6 +275,12 @@ enum CombatReason {
   /// that same test.
   performerIsPlayer,
 
+  /// The performer of the action doesn't see well.
+  performerHasLimitedVision,
+
+  /// The performer of this action cannot move well.
+  performerHasLimitedMobility,
+
   /// The fact that the target doesn't have (or can't use) a shield to deflect
   /// or foil the move.
   ///
@@ -302,30 +311,35 @@ enum CombatReason {
   /// Severely impacts the target's ability to defend themselves.
   targetHasAllEyesDisabled,
 
+
   // TODO: weaponDexterity /// Lightness of weapon
   // TODO: reach /// Advantage of longer limbs and longer weapons
   // TODO: strength /// Brute force (e.g. withstanding a kick, still standing)
 }
 
-@visibleForTesting
-const List<CombatReason> reasonsRequiringModifiers = [
-  CombatReason.dexterity,
-  CombatReason.balance,
-  CombatReason.height
-];
+/// A modification to the success chance. Can be either positive or negative.
+///
+/// For example, [CombatReason.dexterity] is a modification because the attacker
+/// can be either more or less dexterous than the target.
+@immutable
+class Modifier<R> {
+  final int maxAdjustment;
+  final R reason;
 
-@visibleForTesting
-const List<CombatReason> reasonsRequiringBonuses = [
-  CombatReason.performerIsPlayer,
-  CombatReason.targetHasAllEyesDisabled,
-  CombatReason.targetHasOneEyeDisabled,
-  CombatReason.targetHasAllLegsDisabled,
-  CombatReason.targetHasOneLegDisabled,
-  CombatReason.targetHasPrimaryArmDisabled,
-  CombatReason.targetHasSecondaryArmDisabled,
-];
+  const Modifier(this.maxAdjustment, this.reason);
 
-@visibleForTesting
-const List<CombatReason> reasonsRequiringPenalties = [
-  CombatReason.targetHasShield,
-];
+  @override
+  String toString() => "Modifier<$R:$reason:$maxAdjustment>";
+}
+
+/// A [Modifier] that is always negative for the actor (and always positive
+/// for the target).
+///
+/// Having a [Penalty] that results in a positive adjustment to a success
+/// chance is a runtime error.
+///
+/// A [Penalty] can evaluate to `0` adjustment.
+@immutable
+class Penalty<R> extends Modifier<R> {
+  const Penalty(int maxAdjustment, R reason) : super(maxAdjustment, reason);
+}
