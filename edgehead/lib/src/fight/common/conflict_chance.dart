@@ -144,7 +144,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       } else if (!performer.isOnGround && target.isOnGround) {
         return 1.0;
       }
-        return 0.0;
+      return 0.0;
       throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.performerIsPlayer:
       if (performer.isPlayer) {
@@ -310,7 +310,6 @@ enum CombatReason {
   /// All eyes (i.e. _both_ eyes, for most creatures) are non-functional.
   /// Severely impacts the target's ability to defend themselves.
   targetHasAllEyesDisabled,
-
 
   // TODO: weaponDexterity /// Lightness of weapon
   // TODO: reach /// Advantage of longer limbs and longer weapons
