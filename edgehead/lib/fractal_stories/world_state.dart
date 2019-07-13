@@ -347,6 +347,7 @@ abstract class WorldStateBuilder
   void updateActorById(int id, void updates(ActorBuilder b)) {
     var original = getActorById(id);
     var updated = original.rebuild(updates);
+    assert(original.id == updated.id);
     actors.remove(original);
     actors.add(updated);
   }
