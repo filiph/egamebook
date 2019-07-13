@@ -12,7 +12,6 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
 import 'package:edgehead/src/fight/throw/throw_situation.dart';
-import 'package:edgehead/writers_helpers.dart';
 
 class FinishThrowThrusting extends OtherActorAction {
   static final FinishThrowThrusting singleton = FinishThrowThrusting();
@@ -72,7 +71,7 @@ class FinishThrowThrusting extends OtherActorAction {
 
     w.updateActorById(enemy.id, (b) => b.replace(result.actor));
     final thread = getThreadId(sim, w, throwSituationName);
-    bool killed = !result.actor.isAlive && result.actor.id != brianaId;
+    bool killed = !result.actor.isAlive && !result.actor.isInvincible;
     if (!killed) {
       projectile.report(
           s,

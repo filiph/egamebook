@@ -5,7 +5,6 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
-import 'package:edgehead/writers_helpers.dart';
 
 class FinishBreakNeck extends OtherActorAction {
   static final FinishBreakNeck singleton = FinishBreakNeck();
@@ -52,8 +51,8 @@ class FinishBreakNeck extends OtherActorAction {
     final damage = enemy.hitpoints;
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final updatedEnemy = w.getActorById(enemy.id);
-    if (updatedEnemy.id == brianaId) {
-      // Special case for Briana who cannot die.
+    if (updatedEnemy.isInvincible) {
+      // Special case for actors who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: updatedEnemy, positive: true);
       inflictPain(context, updatedEnemy, damage);

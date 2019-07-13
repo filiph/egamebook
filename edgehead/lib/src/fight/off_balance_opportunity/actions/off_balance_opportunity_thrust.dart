@@ -8,7 +8,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
-import 'package:edgehead/writers_helpers.dart';
 
 ReasonedSuccessChance computeOpportunityThrust(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -73,7 +72,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     final damage = a.currentDamageCapability.thrustingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
-    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
+    bool killed = !updatedEnemy.isAlive && !enemy.isInvincible;
     if (!killed) {
       a.report(
           s,

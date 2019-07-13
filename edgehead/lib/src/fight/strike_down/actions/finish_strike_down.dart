@@ -5,7 +5,6 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
-import 'package:edgehead/writers_helpers.dart';
 
 class FinishSlashGroundedEnemy extends OtherActorAction {
   static final FinishSlashGroundedEnemy singleton = FinishSlashGroundedEnemy();
@@ -52,11 +51,10 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
     final damage = enemy.hitpoints;
     w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     final updatedEnemy = w.getActorById(enemy.id);
-    final isBriana = updatedEnemy.id == brianaId;
-    var bodyPart = isBriana ? 'side' : '{throat|neck|side}';
+    var bodyPart = enemy.isInvincible ? 'side' : '{throat|neck|side}';
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
         subject: a.currentWeaponOrBodyPart, object: updatedEnemy);
-    if (isBriana) {
+    if (enemy.isInvincible) {
       inflictPain(context, updatedEnemy, damage);
     } else {
       killHumanoid(context, updatedEnemy);

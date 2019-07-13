@@ -10,7 +10,6 @@ import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
-import 'package:edgehead/writers_helpers.dart';
 
 class ImpaleLeaper extends EnemyTargetAction {
   static final ImpaleLeaper singleton = ImpaleLeaper();
@@ -103,7 +102,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           ..hitpoints -= damage
           ..pose = Pose.onGround);
     final updatedEnemy = w.getActorById(enemy.id);
-    bool killed = !updatedEnemy.isAlive && updatedEnemy.id != brianaId;
+    bool killed = !updatedEnemy.isAlive && !enemy.isInvincible;
     if (!killed) {
       a.currentWeaponOrBodyPart.report(
           s,

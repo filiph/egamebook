@@ -11,7 +11,6 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
-import 'package:edgehead/writers_helpers.dart';
 
 class AutoLoot extends Action<Null> {
   static final AutoLoot singleton = AutoLoot();
@@ -51,6 +50,7 @@ class AutoLoot extends Action<Null> {
   String applySuccess(ActionContext context, Null _) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
+    WorldState initialWorld = context.world;
     WorldStateBuilder world = context.outputWorld;
     Storyline s = context.outputStoryline;
     assert(_noDuplicateItems(world));
@@ -59,34 +59,37 @@ class AutoLoot extends Action<Null> {
     var situation =
         world.getSituationByName<LootSituation>(LootSituation.className);
 
-    Actor briana = world.getActorById(brianaId);
-    if (briana.isActive && !briana.isAlive) {
-      // Briana cannot die.
-      a.report(s, "<subject> kneel<s> next to <object>", object: briana);
-      a.report(s, "<subject> help<s> <object> to <object's> feet",
-          object: briana);
-      briana.report(s, "\"I'll live,\" <subject> say<s>.", wholeSentence: true);
+    for (final actor in initialWorld.actors) {
+      if (actor.isInvincible && actor.isActive && !actor.isAlive) {
+        // Invincible actors cannot die.
+        a.report(s, "<subject> kneel<s> next to <object>", object: actor);
+        a.report(s, "<subject> help<s> <object> to <object's> feet",
+            object: actor);
+        actor.report(s, "\"I'll live,\" <subject> say<s>.",
+            wholeSentence: true);
 
-      world.updateActorById(
-          brianaId,
-          (b) => b
-            ..pose = Pose.offBalance
-            ..hitpoints = 1);
+        world.updateActorById(
+            actor.id,
+            (b) => b
+              ..pose = Pose.offBalance
+              ..hitpoints = 1);
 
-      // Revive each body part of Briana.
-      final brianaBuilder = briana.toBuilder();
-      deepReplaceBodyPart(
-        briana,
-        brianaBuilder,
-        (part) => part.designation == BodyPartDesignation.torso,
-        (b, isDescendant) {
-          if (b.hitpoints == 0) {
-            b.hitpoints = 1;
-          }
-        },
-      );
+        // Revive each body part of an invincible actor.
+        final actorBuilder = actor.toBuilder();
+        deepReplaceBodyPart(
+          actor,
+          actorBuilder,
+          (part) => part.designation == BodyPartDesignation.torso,
+          (b, isDescendant) {
+            if (b.hitpoints == 0) {
+              b.hitpoints = 1;
+            }
+          },
+        );
 
-      world.updateActorById(brianaId, (b) => b.replace(brianaBuilder.build()));
+        world.updateActorById(
+            actor.id, (b) => b.replace(actorBuilder.build()));
+      }
     }
 
     Item takenWeapon;

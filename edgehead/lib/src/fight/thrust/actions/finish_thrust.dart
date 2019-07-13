@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
-import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
+import 'package:edgehead/writers_helpers.dart' show orcthorn;
 
 class FinishThrust extends OtherActorAction {
   static final FinishThrust singleton = FinishThrust();
@@ -68,8 +68,7 @@ class FinishThrust extends OtherActorAction {
 
     w.updateActorById(enemy.id, (b) => b.replace(result.actor));
     final thread = getThreadId(sim, w, thrustSituationName);
-    // TODO: revert kill if it's briana.
-    bool killed = !result.actor.isAlive && result.actor.id != brianaId;
+    bool killed = !result.actor.isAlive && !result.actor.isInvincible;
     if (!killed) {
       a.report(
           s,

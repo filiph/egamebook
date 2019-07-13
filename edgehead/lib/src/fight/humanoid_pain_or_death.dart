@@ -5,7 +5,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/writers_helpers.dart';
 
 const Duration painShockDuration = Duration(seconds: 1);
 
@@ -18,14 +17,16 @@ void inflictPain(ActionContext context, Actor actor, int damage,
     context.pubSub.publishActorLostHitpoints(
         ActorLostHitpointsEvent(context, actor, damage));
   }
-  if (actor.id == brianaId && !actor.isAlive) {
-    _reportPainBriana(context, actor);
+  if (actor.isInvincible && !actor.isAlive) {
+    // Actor should be dead but is invincible, so inflictPain was called.
+    _reportPainForInvincibleActors(context, actor);
     return;
   }
   assert(
       actor.isAlive,
-      "All actors except Briana should call killHumanoid (not reportPain) "
-      "when they lose all hitpoints. This actor didn't: $actor");
+      "All actors except invincible ones should call killHumanoid "
+      "(not reportPain) when they lose all hitpoints. "
+      "This actor didn't: $actor");
   assert(actor.anatomy.isHumanoid,
       "Pain is currently described in humanoid terms (yell, cover with hand).");
 
@@ -58,16 +59,17 @@ void inflictPain(ActionContext context, Actor actor, int damage,
 
 /// Report's a humanoid's death and drops their items.
 ///
-/// Special case is for Briana, who will never die, only lose consciousness.
+/// Special case is for invincible actors, who will never die, only lose
+/// consciousness.
 void killHumanoid(ActionContext context, Actor actor) {
   final w = context.outputWorld;
   final s = context.outputStoryline;
   var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
   assert(
-      actor.id != brianaId,
-      "Briana cannot die. Never call killHumanoid "
-      "with Briana as actor.");
+      !actor.isInvincible,
+      "Invincible actors cannot die. Never call killHumanoid "
+      "with them as actor.");
 
   context.pubSub
       .publishActorKilled(ActorKilledEvent(context, actor, context.actor));
@@ -118,9 +120,11 @@ void killHumanoid(ActionContext context, Actor actor) {
   s.addParagraph();
 }
 
-void _reportPainBriana(ActionContext context, Actor actor) {
+/// This is called when an actor that is [Actor.isInvincible] should have
+/// been killed. For invincible characters, this is just "pain".
+void _reportPainForInvincibleActors(ActionContext context, Actor actor) {
   final s = context.outputStoryline;
-  assert(actor.id == brianaId);
+  assert(actor.isInvincible);
   if (actor.pose == Pose.onGround) {
     actor.report(s, "<subject> stop<s> moving", negative: true);
     s.addParagraph();

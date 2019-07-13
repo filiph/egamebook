@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
-import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
+import 'package:edgehead/writers_helpers.dart' show orcthorn;
 
 class FinishSlash extends OtherActorAction {
   static final FinishSlash singleton = FinishSlash();
@@ -81,8 +81,7 @@ class FinishSlash extends OtherActorAction {
 
     w.updateActorById(enemy.id, (b) => b.replace(result.actor));
     final thread = getThreadId(sim, w, slashSituationName);
-    // TODO: revert kill if it's briana.
-    bool killed = !result.actor.isAlive && result.actor.id != brianaId;
+    bool killed = !result.actor.isAlive && !result.actor.isInvincible;
     if (!killed) {
       a.report(
           s,
