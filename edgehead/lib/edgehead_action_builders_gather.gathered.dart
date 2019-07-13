@@ -87,6 +87,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'FinishCrackSkull.singleton': FinishCrackSkull.singleton,
   // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/evade_on_ground.dart:
   'EvadeOnGround.singleton': EvadeOnGround.singleton,
+  // From lib/src/fight/throw/actions/finish_throw_thrusting.dart:
+  'FinishThrowThrusting.singleton': FinishThrowThrusting.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

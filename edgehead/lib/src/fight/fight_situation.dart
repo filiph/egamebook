@@ -40,8 +40,7 @@ import 'package:edgehead/src/fight/actions/start_thrust_spear_down.dart';
 import 'package:edgehead/src/fight/actions/start_sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
-import 'package:edgehead/src/fight/actions/throw_spear.dart';
-import 'package:edgehead/src/fight/actions/throw_thrusting_weapon.dart';
+import 'package:edgehead/src/fight/actions/start_throw_thrusting_weapon.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
@@ -110,8 +109,7 @@ abstract class FightSituation extends Object
         startThrustSpearDownBuilder(),
         TakeDroppedShield.singleton,
         TakeDroppedWeapon.singleton,
-        ThrowSpear.singleton,
-        ThrowThrustingWeapon.singleton,
+        startThrowThrustingWeapon(),
         // simple ones
         AssumeStance.singleton,
         Cower.singleton,

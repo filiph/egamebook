@@ -70,12 +70,16 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
 
   /// Returns the best weapon (by [Item.value]) in [Actor.weapons].
   ///
+  /// The optional [type] argument makes this method only find weapons of the
+  /// given type.
+  ///
   /// Returns `null` when there are no weapons available.
-  Item findBestWeapon() {
+  Item findBestWeapon({WeaponType type}) {
     Item best;
     int value = -9999999;
     for (final weapon in weapons) {
       assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
+      if (type != null && weapon.damageCapability.type != type) continue;
       if (weapon.value > value) {
         best = weapon;
         value = weapon.value;
@@ -147,8 +151,8 @@ abstract class InventoryBuilder
     assert(
         currentWeapon == null ||
             currentInventory.weapons.contains(currentWeapon),
-        "Before equiping $weapon, actor was wielding a weapon ($currentWeapon)"
-        " that wasn't in their inventory");
+        "Before equiping $weapon, actor was wielding a weapon ($currentWeapon) "
+        "that wasn't in their inventory");
 
     if (!currentInventory.weapons.any((item) => item.id == weapon.id)) {
       // Weapon not in inventory.
@@ -191,6 +195,11 @@ abstract class InventoryBuilder
   /// This is useful for times when the actor forcefully loses [currentWeapon]
   /// and doesn't have time to [equipBestAvailable].
   WeaponEquipResult goBarehanded(Anatomy anatomy) {
+    assert(
+        currentWeapon == null || build().weapons.contains(currentWeapon),
+        "Before going barehanded, actor was wielding a weapon ($currentWeapon) "
+        "that wasn't in their inventory");
+
     currentWeapon = null;
 
     if (anatomy.bodyPartWeapon == null) {

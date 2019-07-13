@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 ReasonedSuccessChance computeCatchProjectile(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.05, [
-    const Modifier(50, CombatReason.dexterity),
+    const Modifier(30, CombatReason.dexterity),
     const Modifier(10, CombatReason.balance),
     const Penalty(30, CombatReason.performerHasLimitedVision),
   ]);
@@ -102,5 +102,8 @@ class CatchProjectile extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      !a.anatomy.isBlind && !a.anatomy.anyWeaponAppendageAvailable;
+      !a.anatomy.isBlind &&
+      a.anatomy.anyWeaponAppendageAvailable &&
+      // Only dexterous people can do this.
+      a.dexterity > 100;
 }

@@ -27,6 +27,7 @@ void moveProjectileToGround(
     w.replaceSituationById(fightSituation.id, fightSituation.rebuild((b) {
       b.droppedItemsOutOfReach.add(projectile);
     }));
+    return;
   }
 
   w.replaceSituationById(fightSituation.id, fightSituation.rebuild((b) {

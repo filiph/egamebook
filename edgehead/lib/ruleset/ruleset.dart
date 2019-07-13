@@ -127,27 +127,27 @@ class Ruleset {
     );
   }
 
+  /// An inefficient way of getting all rules as a list.
+  List<Rule> get _all => List<Rule>.unmodifiable(<Rule>[
+        rule1,
+        rule2,
+        rule3,
+        rule4,
+        rule5,
+        rule6,
+        rule7,
+        rule8,
+        rule9,
+        rule10
+      ]);
+
   /// Runs the ruleset, choosing the most specific rule and running its
   /// [Rule.applyCallback].
   ///
   /// This also record the used rule into [context.outputWorld]'s history.
   void apply(ActionContext context) {
-    // TODO: rewrite inline so that we don't need to create a new list
-    //       every time
-    final all = List<Rule>.unmodifiable(<Rule>[
-      rule1,
-      rule2,
-      rule3,
-      rule4,
-      rule5,
-      rule6,
-      rule7,
-      rule8,
-      rule9,
-      rule10
-    ]);
-
-    for (final rule in all) {
+    for (int i = 0; i < 10; i++) {
+      final rule = _getByIndex(i);
       if (rule == null) break;
       if (rule.prerequisite.isSatisfiedBy(context)) {
         rule.applyCallback(context);
@@ -159,6 +159,23 @@ class Ruleset {
 
     throw StateError("No rule was applicable. "
         "Action history: ${context.world?.actionHistory?.describe()}, "
-        "Rules: $all");
+        "Rules: $_all");
+  }
+
+  /// The rules are baked into the class as separate fields
+  /// ([rule1] .. [rule10]) for performance reasons. This method returns
+  /// the appropriate rule by its index.
+  Rule _getByIndex(int index) {
+    if (index == 0) return rule1;
+    if (index == 1) return rule2;
+    if (index == 2) return rule3;
+    if (index == 3) return rule4;
+    if (index == 4) return rule5;
+    if (index == 5) return rule6;
+    if (index == 6) return rule7;
+    if (index == 7) return rule8;
+    if (index == 8) return rule9;
+    if (index == 9) return rule10;
+    throw ArgumentError.value(index);
   }
 }

@@ -2,22 +2,22 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
-import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
-import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
-import 'package:edgehead/writers_helpers.dart' show brianaId, orcthorn;
+import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
+import 'package:edgehead/src/fight/throw/throw_situation.dart';
+import 'package:edgehead/writers_helpers.dart';
 
-class FinishThrust extends OtherActorAction {
-  static final FinishThrust singleton = FinishThrust();
+class FinishThrowThrusting extends OtherActorAction {
+  static final FinishThrowThrusting singleton = FinishThrowThrusting();
 
-  static const String className = "FinishThrust";
+  static const String className = "FinishThrowThrusting";
 
   @override
   final String helpMessage = null;
@@ -54,31 +54,43 @@ class FinishThrust extends OtherActorAction {
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = a.currentDamageCapability.thrustingDamage;
-    final situation = context.world.currentSituation as AttackerSituation;
-    assert(situation.name == thrustSituationName);
-    assert(situation.attackDirection != AttackDirection.fromLeft ||
-        situation.attackDirection != AttackDirection.fromRight);
+    Simulation sim = context.simulation;
+    final projectile = a.currentWeapon;
+    assert(projectile.isWeapon);
+    assert(projectile.damageCapability.isThrusting);
 
-    final result = _executeAtDesignation(
-        a, enemy, situation.attackDirection.toBodyPartDesignation());
+    final allLivingParts = enemy.anatomy.torso
+        .getDescendantParts()
+        .where((part) => part.isAlive)
+        .toList(growable: false);
+    final targetPart = w.randomChoose(allLivingParts);
+
+    final result =
+        executeThrustingHit(enemy, projectile, targetPart.designation);
 
     w.updateActorById(enemy.id, (b) => b.replace(result.actor));
-    final thread = getThreadId(sim, w, thrustSituationName);
-    // TODO: revert kill if it's briana.
+    final thread = getThreadId(sim, w, throwSituationName);
     bool killed = !result.actor.isAlive && result.actor.id != brianaId;
     if (!killed) {
-      a.report(
+      projectile.report(
           s,
-          "<subject> {pierce<s>|stab<s>|bore<s> through} <object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.actor,
-          positive: true,
-          actionThread: thread);
+          "<subject> {pierce<s>|ram<s> into|drill<s> into} "
+          "<objectOwner's> <object>",
+          owner: a,
+          objectOwner: result.actor,
+          object: result.touchedPart,
+          actionThread: thread,
+          positive: true);
+      if (result.disabled &&
+          // Eyes don't go "limp".
+          result.touchedPart.function != BodyPartFunction.vision) {
+        result.touchedPart.report(s, "<subject> go<es> limp",
+            negative: true, actionThread: thread);
+      }
       if (result.droppedCurrentWeapon) {
+
         final weapon = dropCurrentWeapon(w, result.actor);
         result.actor.report(s, "<subject> drop<s> <object>",
             object: weapon, negative: true, actionThread: thread);
@@ -88,28 +100,32 @@ class FinishThrust extends OtherActorAction {
             negative: true, actionThread: thread);
         w.recordCustom(fellToGroundCustomEventName, actor: result.actor);
       }
-      inflictPain(context, result.actor, damage,
-          extremePain: result.touchedPart.designation.isHumanoidEye);
+      inflictPain(
+          context, result.actor, projectile.damageCapability.thrustingDamage,
+          extremePain: result.disabled);
+
+      result.actor
+          .report(s, "<subject> pull<s> <object> out", object: projectile);
+      projectile.report(
+          s, "<subject> fall<s> onto the ${getGroundMaterial(w)}");
+
       if (result.wasBlinding) {
         result.actor.report(s, "<subject> <is> now blind", negative: true);
       }
     } else {
-      a.report(
+      projectile.report(
           s,
-          "<subject> {pierce<s>|stab<s>|bore<s> through|impale<s>} "
-          "<object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.actor,
+          "<subject> {pierce<s>|ram<s> into|drill<s> through} "
+          "<objectOwner's> <object>",
+          objectOwner: result.actor,
+          object: result.touchedPart,
           positive: true,
           actionThread: thread);
-      if (a.currentWeapon?.id == orcthorn.id && enemy.name.contains('orc')) {
-        a.currentWeapon.report(
-            s, "<subject> slit<s> through the flesh like it isn't there.",
-            wholeSentence: true);
-      }
       killHumanoid(context, result.actor);
     }
-    return "${a.name} thrusts${killed ? ' (and kills)' : ''} ${enemy.name}";
+
+    moveProjectileToGround(w, a, projectile, false);
+    return "${a.name} hits ${enemy.name} with thrown ${projectile.name}";
   }
 
   @override
@@ -119,12 +135,5 @@ class FinishThrust extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      a.currentDamageCapability.isThrusting;
-
-  WeaponAssaultResult _executeAtDesignation(
-      Actor attacker, Actor enemy, BodyPartDesignation designation) {
-    assert(attacker.currentWeaponOrBodyPart != null);
-    return executeThrustingHit(
-        enemy, attacker.currentWeaponOrBodyPart, designation);
-  }
+      a.currentWeapon.damageCapability.isThrusting;
 }

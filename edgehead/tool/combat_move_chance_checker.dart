@@ -8,7 +8,7 @@ import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
 import 'package:edgehead/src/fight/actions/start_sweep_feet.dart';
-import 'package:edgehead/src/fight/actions/throw_spear.dart';
+import 'package:edgehead/src/fight/actions/start_throw_thrusting_weapon.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
@@ -47,7 +47,7 @@ void main() {
     "on ground parry": computeOnGroundParry,
     "on ground shield block": computeOnGroundShieldBlock,
     "roll out of way": computeRollOutOfWay,
-    "throw spear": computeThrowSpear,
+    "throw spear": computeThrowSpearPlayer,
     "counter slash": computeCounterSlash,
     "counter tackle": computeCounterTackle,
     "off-balance opportunity thrust": computeOpportunityThrust,

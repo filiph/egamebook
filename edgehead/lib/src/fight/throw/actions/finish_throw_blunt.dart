@@ -1,7 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
@@ -54,7 +53,7 @@ class FinishThrowBlunt extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final projectile = a.currentWeapon;
     assert(projectile.isWeapon);
-    assert(projectile.damageCapability.type == WeaponType.rock);
+    assert(projectile.damageCapability.isBlunt);
 
     final bodyPart = _createBodyPartEntity(
         a, "{shoulder|{left|right} arm|{left|right} thigh|chest|stomach}");
@@ -83,7 +82,7 @@ class FinishThrowBlunt extends OtherActorAction {
     }
 
     moveProjectileToGround(w, a, projectile, false);
-    return "${a.name} hits ${enemy.name} with rock";
+    return "${a.name} hits ${enemy.name} with a blunt weapon";
   }
 
   Entity _createBodyPartEntity(Actor a, String name) {

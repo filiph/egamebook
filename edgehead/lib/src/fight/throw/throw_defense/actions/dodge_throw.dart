@@ -75,8 +75,12 @@ class DodgeThrow extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
-    a.report(s, "<subject> {dodge<s>|sidestep<s>|avoid<s>} <object>",
-        object: projectile, positive: true);
+    a.report(
+        s,
+        "<subject> "
+        "{{dodge<s>|avoid<s>} <object>|move<s> out of <object's> way}",
+        object: projectile,
+        positive: true);
     moveProjectileToGround(w, enemy, projectile, true);
     w.popSituationsUntil("FightSituation", sim);
     return "${a.name} dodges ${enemy.name}'s throw";
@@ -92,5 +96,5 @@ class DodgeThrow extends OtherActorAction {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
-      !a.anatomy.isBlind && !a.isOnGround;
+      !a.anatomy.isBlind;
 }
