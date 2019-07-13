@@ -443,10 +443,13 @@ void rollBrianaQuote(ActionContext context) {
 /// no fight, otherwise, there will be fight.
 void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
     bool wasSuccess) {
-  w.updateActorById(
-      a.id,
-      (b) => b.inventory.equipShield(
-          Item.weapon(w.randomInt(), WeaponType.shield), a.anatomy));
+  final shield = Item.weapon(w.randomInt(), WeaponType.shield);
+  if (a.anatomy.secondaryWeaponAppendageAvailable) {
+    w.updateActorById(a.id, (b) => b.inventory.equipShield(shield, a.anatomy));
+  } else {
+    // Cannot equip shield, so at least take it.
+    w.updateActorById(a.id, (b) => b.inventory.add(shield));
+  }
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);

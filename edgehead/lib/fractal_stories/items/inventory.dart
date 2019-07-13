@@ -178,7 +178,6 @@ abstract class InventoryBuilder
     assert(shield.isShield);
     if (!anatomy.secondaryWeaponAppendageAvailable) {
       // Crippled actor can't equip.
-      currentShield = null;
       throw StateError('Cannot equip shield.');
     }
 
