@@ -1,5 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
@@ -69,6 +71,21 @@ class AutoLoot extends Action<Null> {
           (b) => b
             ..pose = Pose.offBalance
             ..hitpoints = 1);
+
+      // Revive each body part of Briana.
+      final brianaBuilder = briana.toBuilder();
+      deepReplaceBodyPart(
+        briana,
+        brianaBuilder,
+        (part) => part.designation == BodyPartDesignation.torso,
+        (b, isDescendant) {
+          if (b.hitpoints == 0) {
+            b.hitpoints = 1;
+          }
+        },
+      );
+
+      world.updateActorById(brianaId, (b) => b.replace(brianaBuilder.build()));
     }
 
     Item takenWeapon;
