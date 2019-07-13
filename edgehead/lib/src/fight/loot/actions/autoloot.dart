@@ -54,6 +54,7 @@ class AutoLoot extends Action<Null> {
     WorldStateBuilder world = context.outputWorld;
     Storyline s = context.outputStoryline;
     assert(_noDuplicateItems(world));
+    assert(_noCurrentWeaponsMissingFromInventory(world));
 
     var situation =
         world.getSituationByName<LootSituation>(LootSituation.className);
@@ -92,14 +93,15 @@ class AutoLoot extends Action<Null> {
     Item takenShield;
     List<Item> takenItems = [];
     for (final item in situation.droppedItems) {
-      // TODO: generalize sword for spear for other weapons
       final currentActor = world.getActorById(a.id);
+      // TODO: generalize sword for spear for other weapons
       final isSwordForSpear =
           currentActor.currentWeapon?.damageCapability?.type ==
                   WeaponType.spear &&
               item.isWeapon &&
               item.damageCapability.type == WeaponType.sword;
-      if (item.isWeapon &&
+      if (currentActor.anatomy.anyWeaponAppendageAvailable &&
+          item.isWeapon &&
           !item.isShield &&
           (item.value > (currentActor.currentWeapon?.value ?? 0) ||
               isSwordForSpear)) {
@@ -110,7 +112,9 @@ class AutoLoot extends Action<Null> {
           assert(result == WeaponEquipResult.equipped);
         });
         takenWeapon = item;
-      } else if (item.isShield && currentActor.currentShield == null) {
+      } else if (currentActor.anatomy.secondaryWeaponAppendageAvailable &&
+          item.isShield &&
+          currentActor.currentShield == null) {
         world.updateActorById(
             a.id, (b) => b.inventory.equipShield(item, a.anatomy));
         takenShield = item;
@@ -140,6 +144,7 @@ class AutoLoot extends Action<Null> {
     }
 
     assert(_noDuplicateItems(world));
+    assert(_noCurrentWeaponsMissingFromInventory(world));
 
     return "${a.name} auto-loots";
   }
@@ -251,6 +256,28 @@ class AutoLoot extends Action<Null> {
           return false;
         }
         ids.add(item.id);
+      }
+    }
+    return true;
+  }
+
+  bool _noCurrentWeaponsMissingFromInventory(WorldStateBuilder world) {
+    for (final actor in world.build().actors) {
+      if (actor.currentWeapon != null &&
+          !actor.inventory.weapons.contains(actor.currentWeapon)) {
+        assert(
+            false,
+            "Weapon ${actor.currentWeapon.name} held by ${actor.name} "
+            "isn't in their inventory.");
+        return false;
+      }
+      if (actor.currentShield != null &&
+          !actor.inventory.shields.contains(actor.currentShield)) {
+        assert(
+            false,
+            "Shield ${actor.currentShield.name} held by ${actor.name} "
+            "isn't in their inventory.");
+        return false;
       }
     }
     return true;
