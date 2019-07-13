@@ -68,14 +68,13 @@ class AutoLoot extends Action<Null> {
         actor.report(s, "\"I'll live,\" <subject> say<s>.",
             wholeSentence: true);
 
-        world.updateActorById(
-            actor.id,
-            (b) => b
-              ..pose = Pose.offBalance
-              ..hitpoints = 1);
+        final actorBuilder = actor.toBuilder();
+
+        actorBuilder
+          ..pose = Pose.offBalance
+          ..hitpoints = 1;
 
         // Revive each body part of an invincible actor.
-        final actorBuilder = actor.toBuilder();
         deepReplaceBodyPart(
           actor,
           actorBuilder,
@@ -87,8 +86,9 @@ class AutoLoot extends Action<Null> {
           },
         );
 
-        world.updateActorById(
-            actor.id, (b) => b.replace(actorBuilder.build()));
+        world.updateActorById(actor.id, (b) => b.replace(actorBuilder.build()));
+
+        assert(world.getActorById(actor.id).isAlive);
       }
     }
 
