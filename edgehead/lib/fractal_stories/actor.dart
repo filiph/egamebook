@@ -42,6 +42,7 @@ abstract class Actor extends Object
 
   factory Actor.initialized(int id, String name,
       {bool isPlayer = false,
+      bool isInvincible = false,
       bool isSurvivor = false,
       bool nameIsProperNoun = false,
       Pronoun pronoun,
@@ -69,6 +70,7 @@ abstract class Actor extends Object
       ..id = id
       ..name = name
       ..isPlayer = isPlayer
+      ..isInvincible = isInvincible
       ..isSurvivor = isSurvivor
       ..nameIsProperNoun = nameIsProperNoun
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
@@ -100,9 +102,6 @@ abstract class Actor extends Object
 
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
-
-  /// The string handle to the fold function that this actor should use.
-  String get foldFunctionHandle;
 
   /// Similar to the idea of constitution in Dungeons and Dragons. The higher
   /// the constitution, the more the actor will withstand.
@@ -152,6 +151,9 @@ abstract class Actor extends Object
   /// Average human has [dexterity] of `100`.
   int get dexterity;
 
+  /// The string handle to the fold function that this actor should use.
+  String get foldFunctionHandle;
+
   /// The actor that [this] actor is following around.
   @nullable
   int get followingActorId;
@@ -193,6 +195,27 @@ abstract class Actor extends Object
 
   bool get isConfused;
 
+  /// The actor has "plot armor". They should never die. Actions should go
+  /// out of their way to prevent the actor from dying.
+  ///
+  /// For example, a spear throw that would normally go through an actor's
+  /// body will pierce the actor's shoulder instead if the target's
+  /// [isInvincible] flag is `true`.
+  ///
+  /// It is not necessarily a good idea to give plot armor to the player
+  /// character. In many gamebooks, it's okay to have a "game over". This flag
+  /// is meant for supporting characters whose death would make the rest
+  /// of a story meaningless.
+  ///
+  /// For more about "plot armor", read:
+  /// https://tvtropes.org/pmwiki/pmwiki.php/Main/PlotArmor
+  ///
+  /// By default, this is `false`.
+  ///
+  /// Contrast with [isSurvivor], which only means that the actor won't get
+  /// unlucky hits against himself.
+  bool get isInvincible;
+
   bool get isOnGround => pose == Pose.onGround;
 
   @override
@@ -209,6 +232,8 @@ abstract class Actor extends Object
   /// impact of random chance is minimized.
   ///
   /// By default, this is `false`.
+  ///
+  /// Contrast with [isInvincible], which is plot armor (actor cannot die).
   bool get isSurvivor;
 
   int get maxHitpoints;

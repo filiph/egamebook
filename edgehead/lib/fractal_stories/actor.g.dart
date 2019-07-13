@@ -21,15 +21,15 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'anatomy',
       serializers.serialize(object.anatomy,
           specifiedType: const FullType(Anatomy)),
-      'foldFunctionHandle',
-      serializers.serialize(object.foldFunctionHandle,
-          specifiedType: const FullType(String)),
       'constitution',
       serializers.serialize(object.constitution,
           specifiedType: const FullType(int)),
       'dexterity',
       serializers.serialize(object.dexterity,
           specifiedType: const FullType(int)),
+      'foldFunctionHandle',
+      serializers.serialize(object.foldFunctionHandle,
+          specifiedType: const FullType(String)),
       'gold',
       serializers.serialize(object.gold, specifiedType: const FullType(int)),
       'hitpoints',
@@ -48,6 +48,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           specifiedType: const FullType(bool)),
       'isConfused',
       serializers.serialize(object.isConfused,
+          specifiedType: const FullType(bool)),
+      'isInvincible',
+      serializers.serialize(object.isInvincible,
           specifiedType: const FullType(bool)),
       'isPlayer',
       serializers.serialize(object.isPlayer,
@@ -110,10 +113,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.anatomy.replace(serializers.deserialize(value,
               specifiedType: const FullType(Anatomy)) as Anatomy);
           break;
-        case 'foldFunctionHandle':
-          result.foldFunctionHandle = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
         case 'constitution':
           result.constitution = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -125,6 +124,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         case 'dexterity':
           result.dexterity = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'foldFunctionHandle':
+          result.foldFunctionHandle = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
         case 'followingActorId':
           result.followingActorId = serializers.deserialize(value,
@@ -156,6 +159,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'isConfused':
           result.isConfused = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'isInvincible':
+          result.isInvincible = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
         case 'isPlayer':
@@ -213,13 +220,13 @@ class _$Actor extends Actor {
   @override
   final Anatomy anatomy;
   @override
-  final String foldFunctionHandle;
-  @override
   final int constitution;
   @override
   final String currentRoomName;
   @override
   final int dexterity;
+  @override
+  final String foldFunctionHandle;
   @override
   final int followingActorId;
   @override
@@ -236,6 +243,8 @@ class _$Actor extends Actor {
   final bool isActive;
   @override
   final bool isConfused;
+  @override
+  final bool isInvincible;
   @override
   final bool isPlayer;
   @override
@@ -264,10 +273,10 @@ class _$Actor extends Actor {
 
   _$Actor._(
       {this.anatomy,
-      this.foldFunctionHandle,
       this.constitution,
       this.currentRoomName,
       this.dexterity,
+      this.foldFunctionHandle,
       this.followingActorId,
       this.gold,
       this.hitpoints,
@@ -276,6 +285,7 @@ class _$Actor extends Actor {
       this.inventory,
       this.isActive,
       this.isConfused,
+      this.isInvincible,
       this.isPlayer,
       this.isSurvivor,
       this.maxHitpoints,
@@ -291,14 +301,14 @@ class _$Actor extends Actor {
     if (anatomy == null) {
       throw new BuiltValueNullFieldError('Actor', 'anatomy');
     }
-    if (foldFunctionHandle == null) {
-      throw new BuiltValueNullFieldError('Actor', 'foldFunctionHandle');
-    }
     if (constitution == null) {
       throw new BuiltValueNullFieldError('Actor', 'constitution');
     }
     if (dexterity == null) {
       throw new BuiltValueNullFieldError('Actor', 'dexterity');
+    }
+    if (foldFunctionHandle == null) {
+      throw new BuiltValueNullFieldError('Actor', 'foldFunctionHandle');
     }
     if (gold == null) {
       throw new BuiltValueNullFieldError('Actor', 'gold');
@@ -320,6 +330,9 @@ class _$Actor extends Actor {
     }
     if (isConfused == null) {
       throw new BuiltValueNullFieldError('Actor', 'isConfused');
+    }
+    if (isInvincible == null) {
+      throw new BuiltValueNullFieldError('Actor', 'isInvincible');
     }
     if (isPlayer == null) {
       throw new BuiltValueNullFieldError('Actor', 'isPlayer');
@@ -368,10 +381,10 @@ class _$Actor extends Actor {
     if (identical(other, this)) return true;
     return other is Actor &&
         anatomy == other.anatomy &&
-        foldFunctionHandle == other.foldFunctionHandle &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
         dexterity == other.dexterity &&
+        foldFunctionHandle == other.foldFunctionHandle &&
         followingActorId == other.followingActorId &&
         gold == other.gold &&
         hitpoints == other.hitpoints &&
@@ -380,6 +393,7 @@ class _$Actor extends Actor {
         inventory == other.inventory &&
         isActive == other.isActive &&
         isConfused == other.isConfused &&
+        isInvincible == other.isInvincible &&
         isPlayer == other.isPlayer &&
         isSurvivor == other.isSurvivor &&
         maxHitpoints == other.maxHitpoints &&
@@ -413,15 +427,15 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), foldFunctionHandle.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode),
-                                                                                followingActorId.hashCode),
-                                                                            gold.hashCode),
-                                                                        hitpoints.hashCode),
-                                                                    id.hashCode),
-                                                                initiative.hashCode),
-                                                            inventory.hashCode),
-                                                        isActive.hashCode),
-                                                    isConfused.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), foldFunctionHandle.hashCode), followingActorId.hashCode),
+                                                                                gold.hashCode),
+                                                                            hitpoints.hashCode),
+                                                                        id.hashCode),
+                                                                    initiative.hashCode),
+                                                                inventory.hashCode),
+                                                            isActive.hashCode),
+                                                        isConfused.hashCode),
+                                                    isInvincible.hashCode),
                                                 isPlayer.hashCode),
                                             isSurvivor.hashCode),
                                         maxHitpoints.hashCode),
@@ -439,10 +453,10 @@ class _$Actor extends Actor {
   String toString() {
     return (newBuiltValueToStringHelper('Actor')
           ..add('anatomy', anatomy)
-          ..add('foldFunctionHandle', foldFunctionHandle)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
           ..add('dexterity', dexterity)
+          ..add('foldFunctionHandle', foldFunctionHandle)
           ..add('followingActorId', followingActorId)
           ..add('gold', gold)
           ..add('hitpoints', hitpoints)
@@ -451,6 +465,7 @@ class _$Actor extends Actor {
           ..add('inventory', inventory)
           ..add('isActive', isActive)
           ..add('isConfused', isConfused)
+          ..add('isInvincible', isInvincible)
           ..add('isPlayer', isPlayer)
           ..add('isSurvivor', isSurvivor)
           ..add('maxHitpoints', maxHitpoints)
@@ -473,11 +488,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   AnatomyBuilder get anatomy => _$this._anatomy ??= new AnatomyBuilder();
   set anatomy(AnatomyBuilder anatomy) => _$this._anatomy = anatomy;
 
-  String _foldFunctionHandle;
-  String get foldFunctionHandle => _$this._foldFunctionHandle;
-  set foldFunctionHandle(String foldFunctionHandle) =>
-      _$this._foldFunctionHandle = foldFunctionHandle;
-
   int _constitution;
   int get constitution => _$this._constitution;
   set constitution(int constitution) => _$this._constitution = constitution;
@@ -490,6 +500,11 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   int _dexterity;
   int get dexterity => _$this._dexterity;
   set dexterity(int dexterity) => _$this._dexterity = dexterity;
+
+  String _foldFunctionHandle;
+  String get foldFunctionHandle => _$this._foldFunctionHandle;
+  set foldFunctionHandle(String foldFunctionHandle) =>
+      _$this._foldFunctionHandle = foldFunctionHandle;
 
   int _followingActorId;
   int get followingActorId => _$this._followingActorId;
@@ -524,6 +539,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   bool _isConfused;
   bool get isConfused => _$this._isConfused;
   set isConfused(bool isConfused) => _$this._isConfused = isConfused;
+
+  bool _isInvincible;
+  bool get isInvincible => _$this._isInvincible;
+  set isInvincible(bool isInvincible) => _$this._isInvincible = isInvincible;
 
   bool _isPlayer;
   bool get isPlayer => _$this._isPlayer;
@@ -576,10 +595,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   ActorBuilder get _$this {
     if (_$v != null) {
       _anatomy = _$v.anatomy?.toBuilder();
-      _foldFunctionHandle = _$v.foldFunctionHandle;
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
       _dexterity = _$v.dexterity;
+      _foldFunctionHandle = _$v.foldFunctionHandle;
       _followingActorId = _$v.followingActorId;
       _gold = _$v.gold;
       _hitpoints = _$v.hitpoints;
@@ -588,6 +607,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _inventory = _$v.inventory?.toBuilder();
       _isActive = _$v.isActive;
       _isConfused = _$v.isConfused;
+      _isInvincible = _$v.isInvincible;
       _isPlayer = _$v.isPlayer;
       _isSurvivor = _$v.isSurvivor;
       _maxHitpoints = _$v.maxHitpoints;
@@ -624,10 +644,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _$result = _$v ??
           new _$Actor._(
               anatomy: anatomy.build(),
-              foldFunctionHandle: foldFunctionHandle,
               constitution: constitution,
               currentRoomName: currentRoomName,
               dexterity: dexterity,
+              foldFunctionHandle: foldFunctionHandle,
               followingActorId: followingActorId,
               gold: gold,
               hitpoints: hitpoints,
@@ -636,6 +656,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               inventory: inventory.build(),
               isActive: isActive,
               isConfused: isConfused,
+              isInvincible: isInvincible,
               isPlayer: isPlayer,
               isSurvivor: isSurvivor,
               maxHitpoints: maxHitpoints,

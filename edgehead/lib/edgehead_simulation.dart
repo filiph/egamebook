@@ -17,26 +17,35 @@ const String normalFoldFunctionHandle = "normal";
 /// [edgeheadPlayer]'s [Actor.id].
 const int playerId = 1;
 
-final Actor edgeheadBriana = Actor.initialized(brianaId, "Briana",
-    nameIsProperNoun: true,
-    pronoun: Pronoun.SHE,
-    constitution: 2,
-    currentRoomName: _preStartBook.name,
-    followingActorId: playerId);
+final Actor edgeheadBriana = Actor.initialized(
+  brianaId,
+  "Briana",
+  // Plot armor for Briana.
+  isInvincible: true,
+  nameIsProperNoun: true,
+  pronoun: Pronoun.SHE,
+  constitution: 2,
+  currentRoomName: _preStartBook.name,
+  followingActorId: playerId,
+);
 
 final Situation edgeheadInitialSituation =
     RoomRoamingSituation.initialized(100, _preStartBook, false);
 
-final Actor edgeheadPlayer = Actor.initialized(playerId, "Aren",
-    nameIsProperNoun: true,
-    isPlayer: true,
-    pronoun: Pronoun.YOU,
-    constitution: 2,
-    dexterity: 150,
-    stamina: 3,
-    initiative: 1000,
-    poseMax: Pose.combat,
-    currentRoomName: _preStartBook.name);
+final Actor edgeheadPlayer = Actor.initialized(
+  playerId,
+  "Aren",
+  isSurvivor: true,
+  nameIsProperNoun: true,
+  isPlayer: true,
+  pronoun: Pronoun.YOU,
+  constitution: 2,
+  dexterity: 150,
+  stamina: 3,
+  initiative: 1000,
+  poseMax: Pose.combat,
+  currentRoomName: _preStartBook.name,
+);
 
 final Simulation edgeheadSimulation =
     Simulation(_rooms, allApproaches, _foldFunctions);
