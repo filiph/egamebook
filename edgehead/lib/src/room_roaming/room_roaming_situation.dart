@@ -154,7 +154,9 @@ abstract class RoomRoamingSituation extends Object
   bool _assertInvincibleActorsAlive(WorldState world) {
     for (final actor in world.actors) {
       if (actor.isInvincible && !actor.isAlive) {
-        assert(false, "Actor ${actor.name} is invincible but not alive. "
+        assert(
+            false,
+            "Actor ${actor.name} is invincible but not alive. "
             "This happened: ${world.actionHistory.describe()}");
         return false;
       }
