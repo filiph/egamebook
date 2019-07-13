@@ -83,9 +83,12 @@ Future<void> testWithStopWords(
     await runner.initialize(EdgeheadGame(
       saveGameSerialized: savegame == null ? null : defaultSavegames[savegame],
     ));
-    runner.startBook();
-    await runner.bookEnd;
-    runner.close();
+    try {
+      runner.startBook();
+      await runner.bookEnd;
+    } finally {
+      runner.close();
+    }
     for (final line in logFile.readAsLinesSync()) {
       for (final word in stopWords) {
         if (line.contains(word)) {
