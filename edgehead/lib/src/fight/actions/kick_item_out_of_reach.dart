@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -69,6 +71,30 @@ class KickItemOutOfReach extends ItemAction {
   bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
     if (a.isOnGround) return false;
     if (a.anatomy.isBlind) return false;
-    return true;
+
+    // Monsters and NPCs have additional constraints. Without those, monsters
+    // are way too happy to kick weapons out of reach (because it's often
+    // the safer choice, or gives the opponent the "chance" to do something
+    // stupid). We're basically patching this A.I. planner deficiency via
+    // direct rules. It's a bit impure but it gets the job done.
+    if (!a.isPlayer) {
+      if (item.value > (a.currentWeapon?.value ?? 0)) {
+        // Never kick away weapons that are more valuable than what the actor
+        // has.
+        return false;
+      }
+
+      final enemies = w.actors.where((actor) => actor.team.isEnemyWith(a.team));
+      final weapons = enemies.map((actor) => actor.currentWeapon?.value ?? 0);
+      final worst = weapons.fold(0xffffffff, min);
+
+      // Only kick item out of reach if it's better than whatever the opponent
+      // is carrying. Otherwise, why bother kicking off a dagger when
+      // the opponent has a sword.
+      return item.value > worst;
+    } else {
+      // Player can kick any weapon at any time.
+      return true;
+    }
   }
 }
