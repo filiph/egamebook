@@ -77,14 +77,15 @@ class TakeDroppedWeapon extends ItemAction {
   bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
     if (!item.isWeapon) return false;
     if (!a.anatomy.anyWeaponAppendageAvailable) return false;
+    if (recentlyDisarmed(a, w)) return false;
+    if (a.anatomy.isBlind) return false;
+
+    if (a.isPlayer) return true;
+
+    // NPCs and monsters can't just pick up any weapon.
     final isSwordForSpear =
         a.currentWeapon?.damageCapability?.type == WeaponType.spear &&
             item.damageCapability.type == WeaponType.sword;
-    if (item.value <= (a.currentWeapon?.value ?? 0) && !isSwordForSpear) {
-      return false;
-    }
-    if (recentlyDisarmed(a, w)) return false;
-    if (a.anatomy.isBlind) return false;
-    return true;
+    return item.value > (a.currentWeapon?.value ?? 0) || isSwordForSpear;
   }
 }

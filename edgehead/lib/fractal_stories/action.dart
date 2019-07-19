@@ -382,11 +382,7 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
   String toString() => "EnemyTargetAction<$commandPathTemplate>";
 }
 
-/// This [Action] requires an [item].
-///
-/// Every [ItemAction] should contain a static builder like this:
-///
-///     static ItemAction builder(Item enemy) => new Example(item);
+/// This [Action] requires an [item] from the ground.
 abstract class ItemAction extends Action<Item> {
   @override
   final bool isImplicit = false;

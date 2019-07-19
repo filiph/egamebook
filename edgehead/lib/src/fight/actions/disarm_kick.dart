@@ -28,7 +28,7 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
   final bool isProactive = true;
 
   @override
-  String helpMessage = "When enemies are on the ground, you can try to "
+  final String helpMessage = "When enemies are on the ground, you can try to "
       "kick their weapon off to disarm them.";
 
   @override
