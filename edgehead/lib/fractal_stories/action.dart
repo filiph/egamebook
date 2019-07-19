@@ -405,7 +405,8 @@ abstract class ItemAction extends Action<Item> {
 ///
 /// An `Action<Nothing>` is an action that does not need an object to be
 /// performed.
-@sealed
+///
+/// TODO: annotate with @sealed once it's in flutter-compatible package:meta
 class Nothing {
   /// Removes the default constructor of [Nothing], making it impossible
   /// to ever instantiate. This is what we want, because [Nothing] is
