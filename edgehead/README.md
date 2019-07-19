@@ -195,6 +195,14 @@ while pub run test --run-skipped; do :; done
 
 The command will run forever unless a test fails or until you press `Ctrl-C`.
 
+For slightly less paranoid times, there's always the option to run the
+test suite several times in a row. Like this:
+
+```bash
+for n in {1..10}; do echo "=== Run number ${n} ==="; \
+  pub run test --run-skipped; done
+```
+
 ### Playing on the command line
 
 **Note:** As of August 2018, this is the only way to play the game. I have 
