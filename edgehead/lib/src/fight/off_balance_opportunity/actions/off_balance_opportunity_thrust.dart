@@ -6,7 +6,6 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 
 ReasonedSuccessChance computeOpportunityThrust(
@@ -76,17 +75,19 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     if (!killed) {
       a.report(
           s,
-          "<subject> thrust<s> {|${weaponAsObject2(a)}} "
+          "<subject> thrust<s> {|<object2>} "
           "deep into <object's> {shoulder|hip|thigh}",
           object: updatedEnemy,
+          object2: a.currentWeaponOrBodyPart,
           positive: true);
       inflictPain(context, updatedEnemy, damage);
     } else {
       a.report(
           s,
           "<subject> {stab<s>|"
-          "run<s> ${weaponAsObject2(a)} through} <object>",
+          "run<s> <object2> through} <object>",
           object: updatedEnemy,
+          object2: a.currentWeaponOrBodyPart,
           positive: true);
       killHumanoid(context, updatedEnemy);
     }

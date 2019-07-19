@@ -11,7 +11,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
@@ -94,10 +93,11 @@ PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
             Situation mainSituation) =>
         a.report(
             s,
-            "<subject> swing<s> {${weaponAsObject2(a)} |}at "
+            "<subject> swing<s> {<object2> |}at "
             "<objectOwner's> <object>",
             object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
+            object2: a.currentWeaponOrBodyPart,
             actionThread: mainSituation.id,
             isSupportiveActionInThread: true);
 

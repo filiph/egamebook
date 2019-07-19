@@ -11,7 +11,6 @@ import 'package:edgehead/src/fight/actions/start_thrust.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -54,10 +53,11 @@ class StartThrustAtEye extends StartDefensibleActionBase {
       Actor enemy, Situation mainSituation) {
     a.report(
         s,
-        "<subject> thrust<s> {${weaponAsObject2(a)} |}at "
+        "<subject> thrust<s> {<object2> |}at "
         "<objectOwner's> <object>",
         object: Entity(name: 'eye'),
         objectOwner: enemy,
+        object2: a.currentWeaponOrBodyPart,
         actionThread: mainSituation.id,
         isSupportiveActionInThread: true);
   }

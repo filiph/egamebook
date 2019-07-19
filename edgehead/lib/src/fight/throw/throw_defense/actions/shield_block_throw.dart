@@ -10,7 +10,6 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
 
 final Entity theThrow =
@@ -67,7 +66,8 @@ class ShieldBlockThrow extends OtherActorAction {
     a.report(
         s,
         "<subject> tr<ies> to {block|stop|deflect} the <object> "
-        "with ${shieldAsObject2(a)}",
+        "with <object2>",
+        object2: a.currentShield,
         object: projectile);
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
@@ -96,7 +96,8 @@ class ShieldBlockThrow extends OtherActorAction {
     a.report(
         s,
         "<subject> {block<s>|stop<s>|deflect<s>} the <object> "
-        "with ${shieldAsObject2(a)}",
+        "with <object2>",
+        object2: a.currentShield,
         object: projectile,
         positive: true);
     projectile.report(s, "<subject> bounce<s> off the shield");

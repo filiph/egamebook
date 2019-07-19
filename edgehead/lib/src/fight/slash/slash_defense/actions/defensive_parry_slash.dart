@@ -8,7 +8,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 
 ReasonedSuccessChance computeDefensiveParrySlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -60,10 +59,12 @@ class DefensiveParrySlash extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(
-        s,
-        "<subject> tr<ies> to {parry|deflect it|"
-        "meet it with ${weaponAsObject2(a)}|"
-        "fend it off}");
+      s,
+      "<subject> tr<ies> to {parry|deflect it|"
+      "meet it with <object2>|"
+      "fend it off}",
+      object2: a.currentWeaponOrBodyPart,
+    );
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
@@ -88,8 +89,9 @@ class DefensiveParrySlash extends OtherActorAction {
     a.report(
         s,
         "<subject> {parr<ies> it|deflect<s> it|"
-        "meet<s> it with ${weaponAsObject2(a)}|"
+        "meet<s> it with <object2>|"
         "fend<s> it off}",
+        object2: a.currentWeaponOrBodyPart,
         positive: true);
 
     if (a.pose < Pose.standing) {

@@ -389,8 +389,8 @@ void main() {
     }
 
     // 0
-    storyline.addEnumeration("you see", [], "here");
-    expect(storyline.realizeAsString(), "");
+    expect(() => storyline.addEnumeration("you see", [], "here"),
+        throwsArgumentError);
     storyline.clear();
     // 1
     resetAlreadyMentioned();
@@ -449,6 +449,12 @@ void main() {
   });
 
   group("actionThread", () {
+    Storyline storyline;
+
+    setUp(() {
+      storyline = Storyline();
+    });
+
     group("isSupportiveActionInThread", () {
       var threadA = 42;
 
@@ -462,7 +468,6 @@ void main() {
         storyline.add("you shoot a duck", actionThread: threadA);
         expect(storyline.realizeAsString(), contains("aim at the sky"));
         expect(storyline.realizeAsString(), contains("shoot a duck"));
-        storyline.clear();
       });
 
       test("not shown when next to another report of same actionThread", () {
@@ -471,12 +476,12 @@ void main() {
         storyline.add("you shoot a duck", actionThread: threadA);
         expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
         expect(storyline.realizeAsString(), contains("shoot a duck"));
-        storyline.clear();
       });
 
       test(
           "not shown supportive action doesn't influence making subjects "
           "into pronouns", () {
+        var storyline = Storyline();
         var player = _createPlayer("Filip");
         var enemy =
             Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
@@ -488,7 +493,6 @@ void main() {
         storyline.add("<subject> shoot<s> <object>",
             subject: player, object: enemy, actionThread: threadA);
         expect(storyline.realizeAsString(), "You shoot the orc.");
-        storyline.clear();
       });
 
       test("not shown when multiple supportive action reports together", () {
@@ -501,17 +505,91 @@ void main() {
         expect(storyline.realizeAsString(),
             isNot(contains("look through the scopes")));
         expect(storyline.realizeAsString(), contains("shoot a duck"));
-        storyline.clear();
       });
     });
   });
-}
 
-/// The 'global' instance of Storyline.
-///
-/// Since Storyline started as a singleton pattern, these tests are written
-/// with that in mind. TODO: pass storyline
-Storyline storyline = Storyline();
+  group('second object', () {
+    Storyline storyline;
+    Entity player;
+    Entity rock;
+    Entity goblin;
+
+    setUp(() {
+      storyline = Storyline();
+      player = _createPlayer('Filip');
+      rock = Entity(name: 'rock');
+      goblin =
+          Entity(name: 'goblin', pronoun: Pronoun.HE, team: defaultEnemyTeam);
+    });
+
+    test('is extracted', () {
+      storyline.add("<subject> hit<s> <object> with <object2>",
+          subject: player, object: goblin, object2: rock);
+      expect(storyline.realizeAsString(), "You hit the goblin with the rock.");
+    });
+
+    test('makes pronouns', () {
+      storyline.add("<subject> pick<s> up <object>",
+          subject: player, object: rock);
+      storyline.add("<subject> hit<s> <object> with <object2>",
+          subject: player, object: goblin, object2: rock);
+      var realized = storyline.realizeAsString();
+      expect(realized, contains("You pick up the rock"));
+      expect(realized, contains("hit the goblin with it"));
+    });
+
+    group('make pronouns even with to Pronoun.IT when not confusing', () {
+      test('object2 stays object2', () {
+        storyline.add(
+            "<subject> throw<s> <subjectPronounSelf> at <object> "
+            "with <object2>",
+            subject: player,
+            object: goblin,
+            object2: rock);
+        storyline.add("<subject> hit<s> <object> back with <object2>",
+            subject: goblin, object: player, object2: rock);
+        var realized = storyline.realizeAsString();
+        expect(realized,
+            contains("You throw yourself at the goblin with the rock"));
+        expect(realized, contains("hits you back with it"));
+      });
+
+      test('object becomes object2', () {
+        final Entity statue = Entity(name: 'statue');
+        storyline.add("<subject> pick<s> up <object>",
+            subject: player, object: rock);
+        storyline.add("<subject> hit<s> <object> with <object2>",
+            subject: player, object: statue, object2: rock);
+        var realized = storyline.realizeAsString();
+        expect(realized, contains("You pick up the rock"));
+        expect(realized, contains("hit the statue with it"));
+      });
+
+      test('object2 becomes object', () {
+        storyline.add("<subject> cast<s> <object2> at <object>",
+            subject: player, object: goblin, object2: rock);
+        storyline.add("<subject> move<s> out of <object's> way",
+            subject: goblin, object: rock);
+        var realized = storyline.realizeAsString();
+        expect(realized, contains("You cast the rock at the goblin"));
+        expect(realized, contains("moves out of its way"));
+      });
+    });
+
+    test('doesn\'t make pronouns when confusing', () {
+      var statue = Entity(name: 'statue');
+
+      storyline.add("<subject> examine<s> <object>",
+          subject: player, object: statue);
+      storyline.add("<subject> hit<s> <object> with <object2>",
+          subject: player, object: statue, object2: rock);
+      var realized = storyline.realizeAsString();
+      expect(realized, contains("You examine the statue"));
+      expect(realized, contains("hit it with the rock"));
+    });
+  });
+}
 
 Entity _createPlayer(String name) =>
     Entity(name: name, pronoun: Pronoun.YOU, team: playerTeam, isPlayer: true);

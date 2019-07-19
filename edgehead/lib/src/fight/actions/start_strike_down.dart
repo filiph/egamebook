@@ -7,7 +7,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/actions/roll_out_of_way.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
@@ -65,5 +64,6 @@ void startStrikeDownReportStart(Actor a, Simulation sim, WorldStateBuilder w,
     a.report(
         s,
         "<subject> strike<s> down "
-        "{with ${weaponAsObject2(a)} |}at <object>",
-        object: enemy);
+        "{with <object2> |}at <object>",
+        object: enemy,
+        object2: a.currentWeaponOrBodyPart);

@@ -9,7 +9,6 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
 final Entity swing =
@@ -70,8 +69,9 @@ class ParrySlash extends OtherActorAction {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
-        "meet it with ${weaponAsObject2(a)}|"
-        "fend it off}");
+        "meet it with <object2>|"
+        "fend it off}",
+        object2: a.currentWeaponOrBodyPart);
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
@@ -98,15 +98,17 @@ class ParrySlash extends OtherActorAction {
       a.report(
           s,
           "<subject> {parr<ies> it easily|"
-          "easily meet<s> it with ${weaponAsObject2(a)}|"
+          "easily meet<s> it with <object2>|"
           "fend<s> it off easily}",
+          object2: a.currentWeaponOrBodyPart,
           positive: true);
     } else {
       a.report(
           s,
           "<subject> {parr<ies> it|"
-          "meet<s> it with ${weaponAsObject2(a)}|"
+          "meet<s> it with <object2>|"
           "fend<s> it off}",
+          object2: a.currentWeaponOrBodyPart,
           positive: true);
     }
     w.popSituationsUntil("FightSituation", sim);

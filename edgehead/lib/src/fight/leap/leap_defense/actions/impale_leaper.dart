@@ -8,7 +8,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
 
 class ImpaleLeaper extends EnemyTargetAction {
@@ -52,9 +51,10 @@ class ImpaleLeaper extends EnemyTargetAction {
     a.report(
         s,
         "<subject> tr<ies> to {move|swing|shift} "
-        "${weaponAsObject2(a)} between <subjectPronounSelf> "
+        "<object2> between <subjectPronounSelf> "
         "and <object>",
         object: enemy,
+        object2: a.currentWeaponOrBodyPart,
         actionThread: thread,
         isSupportiveActionInThread: true);
     if (a.pose == Pose.offBalance) {
@@ -88,9 +88,10 @@ class ImpaleLeaper extends EnemyTargetAction {
     a.report(
         s,
         "<subject> {move<s>|swing<s>|shift<s>} "
-        "${weaponAsObject2(a)} between <subjectPronounSelf> "
+        "<object2> between <subjectPronounSelf> "
         "and <object>",
         object: enemy,
+        object2: a.currentWeaponOrBodyPart,
         positive: true,
         actionThread: thread);
     enemy.report(s, "<subject> {leap<s>|run<s>|lunge<s>} right into it",

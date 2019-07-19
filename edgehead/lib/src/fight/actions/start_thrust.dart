@@ -10,7 +10,6 @@ import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/lerp.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
@@ -88,9 +87,10 @@ PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
             Situation mainSituation) =>
         a.report(
             s,
-            "<subject> thrust<s> {${weaponAsObject2(a)} |}at "
+            "<subject> thrust<s> {<object2> |}at "
             "<objectOwner's> <object>",
             object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
+            object2: a.currentWeapon,
             actionThread: mainSituation.id,
             isSupportiveActionInThread: true);

@@ -10,7 +10,7 @@ import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
+import 'package:edgehead/src/fight/common/object2_in_command_path.dart';
 import 'package:edgehead/src/fight/throw/throw_defense/throw_defense_situation.dart';
 import 'package:edgehead/src/fight/throw/throw_situation.dart';
 
@@ -37,7 +37,7 @@ EnemyTargetAction startThrowRock() => StartDefensibleAction(
       name: "StartThrowRock",
       combatCommandType: CombatCommandType.stance,
       commandPathTailGenerator: (w, a, target) =>
-          "throw ${weaponAsObject2(a)} at <objectPronoun>",
+          "throw ${weaponAsObject2InCommandPath(a)} at <objectPronoun>",
       helpMessage: startThrowRockHelpMessage,
       applyStart: _startThrowRockReportStart,
       isApplicable: (a, sim, w, enemy) =>
@@ -63,6 +63,7 @@ void _startThrowRockReportStart(Actor a, Simulation sim, WorldStateBuilder w,
     a.report(
       s,
       "<subject> {throw<s>|hurl<s>|cast<s>} "
-      "${entityAsObject2(a, a.currentWeapon)} at <object>",
+      "<object2> at <object>",
       object: enemy,
+      object2: a.currentWeapon,
     );

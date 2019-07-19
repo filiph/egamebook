@@ -11,7 +11,6 @@ import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';
@@ -55,10 +54,11 @@ class StartSlashAtArm extends StartDefensibleActionBase {
       Actor enemy, Situation mainSituation) {
     a.report(
         s,
-        "<subject> swing<s> {${weaponAsObject2(a)} |}at "
+        "<subject> swing<s> {<object2> |}at "
         "<objectOwner's> <object>",
         object: Entity(name: 'arm'),
         objectOwner: enemy,
+        object2: a.currentWeaponOrBodyPart,
         actionThread: mainSituation.id,
         isSupportiveActionInThread: true);
   }

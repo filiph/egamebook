@@ -30,6 +30,7 @@ class Report {
   final Entity subject;
 
   final Entity object;
+  final Entity object2;
   final Entity owner;
   final Entity objectOwner;
   bool but;
@@ -59,6 +60,7 @@ class Report {
   Report(this.string,
       {this.subject,
       this.object,
+      this.object2,
       this.owner,
       this.objectOwner,
       this.but = false,
@@ -71,10 +73,12 @@ class Report {
       this.actionThread,
       this.isSupportiveActionInThread = false,
       this.time});
+
   Report.empty()
       : string = "",
         subject = null,
         object = null,
+        object2 = null,
         owner = null,
         objectOwner = null,
         but = false,
@@ -104,7 +108,7 @@ class Storyline {
   static const String OBJECT_OWNER = "<objectOwner>";
   static const String OBJECT_OWNER_POSSESIVE = "<objectOwner's>";
   static const String OBJECT = "<object>";
-  static const String OBJECT_POSSESIVE = "<object's>";
+  static const String OBJECT_POSSESSIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
   static const String SUBJECT_PRONOUN_ACCUSATIVE = "<subjectPronounAccusative>";
   static const String SUBJECT_PRONOUN_POSSESIVE = "<subjectPronoun's>";
@@ -113,11 +117,17 @@ class Storyline {
   static const String OBJECT_PRONOUN = "<objectPronoun>";
   static const String OBJECT_PRONOUN_NOMINATIVE = "<objectPronounNominative>";
   static const String OBJECT_PRONOUN_ACCUSATIVE = "<objectPronounAccusative>";
-  static const String OBJECT_PRONOUN_POSSESIVE = "<objectPronoun's>";
+  static const String OBJECT_PRONOUN_POSSESSIVE = "<objectPronoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
   static const String OWNER_PRONOUN_POSSESIVE = "<ownerPronoun's>";
   static const String OBJECT_OWNER_PRONOUN = "<objectOwnerPronoun>";
   static const String OBJECT_OWNER_PRONOUN_POSSESIVE = "<objectOwnerPronoun's>";
+  static const String OBJECT2 = "<object2>";
+  static const String OBJECT2_POSSESSIVE = "<object2's>";
+  static const String OBJECT2_PRONOUN = "<object2Pronoun>";
+  static const String OBJECT2_PRONOUN_NOMINATIVE = "<object2PronounNominative>";
+  static const String OBJECT2_PRONOUN_ACCUSATIVE = "<object2PronounAccusative>";
+  static const String OBJECT2_PRONOUN_POSSESSIVE = "<object2Pronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
   static const String VERB_ES = "<es>";
@@ -154,7 +164,7 @@ class Storyline {
 
   /// This map tracks the times when each entity (its [Entity.id]) was first
   /// mentioned. If this is lower than the current report's [time], the entity
-  /// can use a definitive artice (the book), otherwise it needs an indefinite
+  /// can use a definitive article (the book), otherwise it needs an indefinite
   /// article (a book).
   ///
   /// Why not just [bool] instead of [int]? Because we want to be able to
@@ -176,6 +186,7 @@ class Storyline {
   void add(String str,
       {Entity subject,
       Entity object,
+      Entity object2,
       Entity owner,
       Entity objectOwner,
       bool but = false,
@@ -196,6 +207,8 @@ class Storyline {
     assert(
         subject != null || !str.contains("<subject"), "'$str' lacks subject");
     assert(object != null || !str.contains("<object"), "'$str' lacks object");
+    assert(
+        object2 != null || !str.contains("<object2"), "'$str' lacks object2");
 
     bool wholeSentenceAutoDetected =
         (str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
@@ -204,6 +217,7 @@ class Storyline {
     final report = Report(str,
         subject: subject,
         object: object,
+        object2: object2,
         owner: owner,
         objectOwner: objectOwner,
         but: but,
@@ -231,14 +245,14 @@ class Storyline {
   void addEnumeration(String start, Iterable<Entity> articles, String end,
       {Entity subject,
       Entity object,
+      Entity object2,
       Entity owner,
       int maxPerSentence = 3,
-      String conjuction = "and"}) {
+      String conjunction = "and"}) {
     assert(start != null);
     assert(articles != null);
     if (articles.isEmpty) {
-      // Don't create any report.
-      return;
+      throw ArgumentError.value(articles);
     }
     StringBuffer buf = StringBuffer();
 
@@ -253,9 +267,9 @@ class Storyline {
       if (i > 0) {
         if (i == 1 && article == articles.last) {
           buf.write(" ");
-          buf.write(conjuction);
+          buf.write(conjunction);
         } else if (i == maxPerSentence - 1) {
-          buf.write(", $conjuction");
+          buf.write(", $conjunction");
         } else {
           buf.write(",");
         }
@@ -265,7 +279,7 @@ class Storyline {
       // Adds 'the', 'a', or nothing. TODO: instead of using the
       // addParticleToFirstOccurence method (designed for longer texts), use
       // something smaller.
-      String articleWithParticle = addParticleToFirstOccurence(
+      String articleWithParticle = addParticleToFirstOccurrence(
           article.name, article.name, article, null, time);
       buf.write(articleWithParticle);
       i++;
@@ -282,6 +296,7 @@ class Storyline {
         add(buf.toString(),
             subject: subject,
             object: object,
+            object2: object2,
             owner: owner,
             wholeSentence: true);
         sentenceCount++;
@@ -295,14 +310,14 @@ class Storyline {
 
   void addParagraph() => add(PARAGRAPH_NEWLINES, wholeSentence: true);
 
-  /// Adds [:the:] or [:a:] to first occurence of [SUB_STRING] (like
-  /// [:<subject>:]) in [string]. The next occurences will be automatically
+  /// Adds [:the:] or [:a:] to first occurrence of [SUB_STRING] (like
+  /// [:<subject>:]) in [string]. The next occurrences will be automatically
   /// converted to pronouns.
   ///
   /// The [reportTime] should correspond to the time this report is being said.
   /// Storyline tracks when different entities were first mentioned so it
   /// can apply either definitive (the) or indefinite (a) article.
-  String addParticleToFirstOccurence(String string, String SUB_STRING,
+  String addParticleToFirstOccurrence(String string, String SUB_STRING,
       Entity entity, Entity entityOwner, int reportTime) {
     // Make sure we don't add particles to "your car" etc.
     if (entityOwner != null &&
@@ -397,7 +412,10 @@ class Storyline {
   }
 
   /// Returns an iterable of all the entities present in given report.
-  Iterable<Entity> getAllEntities(int i) sync* {
+  ///
+  /// This does not include [Report.object2] since that is assumed to be
+  /// an item.
+  Iterable<Entity> getAllActiveEntities(int i) sync* {
     if (!valid(i)) return;
     var report = _reports[i];
     if (report.subject != null) yield report.subject;
@@ -410,6 +428,7 @@ class Storyline {
   String getString(String str, Report report) {
     Entity subject = report.subject;
     Entity object = report.object;
+    Entity object2 = report.object2;
     Entity owner = report.owner;
     Entity objectOwner = report.objectOwner;
 
@@ -446,7 +465,7 @@ class Storyline {
       result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
       result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
 
-      result = addParticleToFirstOccurence(
+      result = addParticleToFirstOccurrence(
           result, SUBJECT_NOUN, subject, owner, report.time);
       result = result.replaceFirst(SUBJECT_NOUN, subject.name);
 
@@ -455,7 +474,7 @@ class Storyline {
         // "actor takes his weapon"
         result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(
+      result = addParticleToFirstOccurrence(
           result, SUBJECT_POSSESIVE, subject, owner, report.time);
       result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
       result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
@@ -464,7 +483,14 @@ class Storyline {
       result = result.replaceAll(SUBJECT_PRONOUN_SELF, subject.pronoun.self);
     }
 
-    if (object != null) {
+    void substituteObject(
+        Entity object,
+        String OBJECT,
+        String OBJECT_POSSESSIVE,
+        String OBJECT_PRONOUN,
+        String OBJECT_PRONOUN_NOMINATIVE,
+        String OBJECT_PRONOUN_ACCUSATIVE,
+        String OBJECT_PRONOUN_POSSESIVE) {
       if (object.nameIsProperNoun) {
         // Disallow "you unleash your Buster".
         // We must do this before we auto-change <OBJECT> to object.name below.
@@ -475,9 +501,9 @@ class Storyline {
 
       if (object.isPlayer) {
         result = result.replaceAll(OBJECT, OBJECT_PRONOUN);
-        result = result.replaceAll(OBJECT_POSSESIVE, OBJECT_PRONOUN_POSSESIVE);
+        result = result.replaceAll(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESIVE);
       } else {
-        result = addParticleToFirstOccurence(
+        result = addParticleToFirstOccurrence(
             result, OBJECT, object, objectOwner, report.time);
         result = result.replaceFirst(OBJECT, object.name);
         // Replace the rest with pronouns.
@@ -485,20 +511,42 @@ class Storyline {
       }
 
       result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
-      if (str.contains(RegExp("$OBJECT.+$OBJECT_POSSESIVE"))) {
+      if (str.contains(RegExp("$OBJECT.+$OBJECT_POSSESSIVE"))) {
         // "actor takes his weapon"
-        result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+        result = result.replaceAll(OBJECT_POSSESSIVE, object.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(
-          result, OBJECT_POSSESIVE, object, objectOwner, report.time);
-      result = result.replaceFirst(OBJECT_POSSESIVE, "${object.name}'s");
-      result = result.replaceAll(OBJECT_POSSESIVE, object.pronoun.genitive);
+      result = addParticleToFirstOccurrence(
+          result, OBJECT_POSSESSIVE, object, objectOwner, report.time);
+      result = result.replaceFirst(OBJECT_POSSESSIVE, "${object.name}'s");
+      result = result.replaceAll(OBJECT_POSSESSIVE, object.pronoun.genitive);
       result =
           result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
       result = result.replaceAll(
           OBJECT_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
       result = result.replaceAll(
           OBJECT_PRONOUN_NOMINATIVE, object.pronoun.nominative);
+    }
+
+    if (object != null) {
+      substituteObject(
+          object,
+          OBJECT,
+          OBJECT_POSSESSIVE,
+          OBJECT_PRONOUN,
+          OBJECT_PRONOUN_NOMINATIVE,
+          OBJECT_PRONOUN_ACCUSATIVE,
+          OBJECT_PRONOUN_POSSESSIVE);
+    }
+
+    if (object2 != null) {
+      substituteObject(
+          object2,
+          OBJECT2,
+          OBJECT2_POSSESSIVE,
+          OBJECT2_PRONOUN,
+          OBJECT2_PRONOUN_NOMINATIVE,
+          OBJECT2_PRONOUN_ACCUSATIVE,
+          OBJECT2_PRONOUN_POSSESSIVE);
     }
 
     if (subject != null) {
@@ -545,6 +593,14 @@ class Storyline {
       return null;
     } else {
       return _reports[i].object;
+    }
+  }
+
+  Entity object2(int i) {
+    if (i < 0 || i >= _reports.length) {
+      return null;
+    } else {
+      return _reports[i].object2;
     }
   }
 
@@ -689,7 +745,10 @@ class Storyline {
 
     String s = strBuf.toString();
 
-    // Fix extra dots after quotes.
+    // Fix extra dots after quotes, like:
+    //
+    //     He said: "Don't go!".
+    //                         ^
     s = s.replaceAllMapped(QUOTE_INTERPUNCTION_DUPLICATION, (Match m) {
       return "${m[1]}${m[2]}${m[3]}";
     });
@@ -763,8 +822,8 @@ class Storyline {
   /// (subject, object, owner, ...).
   bool someActorsSame(int i, int j) {
     if (!valid(i) || !valid(j)) return false;
-    for (final a in getAllEntities(i)) {
-      for (final b in getAllEntities(j)) {
+    for (final a in getAllActiveEntities(i)) {
+      for (final b in getAllActiveEntities(j)) {
         if (a.id == b.id) return true;
       }
     }
@@ -789,15 +848,14 @@ class Storyline {
 
   /// makes sure the sentence flows well with the previous sentence(s), then
   /// calls getString to do in-sentence substitution
-  String substitute(int i, String str,
-      {bool useSubjectPronoun = false, bool useObjectPronoun = false}) {
+  String substitute(int i, String str) {
     String result = str.replaceAll(ACTION, string(i));
-    if ((useObjectPronoun || _sameObject(i, i - 1)) &&
+    if (_sameObject(i, i - 1) &&
         !(object(i).pronoun == Pronoun.IT &&
             subject(i).pronoun == Pronoun.IT)) {
       // if doing something to someone in succession, use pronoun
       // but not if the pronoun is "it" for both subject and object,
-      // that makes sentences like "it makes it"
+      // that makes sentences like "it makes it" (contrast with "he makes him")
 
       // Never show "the guard's it".
       result = result.replaceAll(
@@ -805,9 +863,9 @@ class Storyline {
       result = result.replaceAll(
           "$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", OBJECT_PRONOUN_ACCUSATIVE);
       result = result.replaceAll(OBJECT, OBJECT_PRONOUN_ACCUSATIVE);
-      result = result.replaceAll(OBJECT_POSSESIVE, OBJECT_PRONOUN_POSSESIVE);
+      result = result.replaceAll(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESSIVE);
     }
-    if (useSubjectPronoun || _sameSubject(i, i - 1)) {
+    if (_sameSubject(i, i - 1)) {
       // Never show "the guard's it".
       result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT", SUBJECT_PRONOUN);
       result = result.replaceAll(
@@ -840,8 +898,30 @@ class Storyline {
       result = result.replaceAll(
           "$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", OBJECT_PRONOUN);
       result = result.replaceAll(OBJECT, OBJECT_PRONOUN_ACCUSATIVE);
-      result = result.replaceAll(OBJECT_POSSESIVE, OBJECT_PRONOUN_POSSESIVE);
+      result = result.replaceAll(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESSIVE);
     }
+    // and now with object2, the "item"
+    // when a previous object2 becomes object
+    if (_object2BecomesObject(i - 1, i)) {
+      result = result.replaceAll(OBJECT, OBJECT_PRONOUN_ACCUSATIVE);
+      result = result.replaceAll(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESSIVE);
+    }
+    // when a previous object becomes object2
+    if (_objectBecomesObject2(i - 1, i)) {
+      result = result.replaceAll(OBJECT2, OBJECT2_PRONOUN_ACCUSATIVE);
+      result =
+          result.replaceAll(OBJECT2_POSSESSIVE, OBJECT2_PRONOUN_POSSESSIVE);
+    }
+    // same object2 in both sentences
+    if (object2(i - 1) != null &&
+        object2(i - 1).id == object2(i)?.id &&
+        subject(i)?.pronoun != object2(i).pronoun &&
+        object(i)?.pronoun != object2(i).pronoun) {
+      result = result.replaceAll(OBJECT2, OBJECT2_PRONOUN_ACCUSATIVE);
+      result =
+          result.replaceAll(OBJECT2_POSSESSIVE, OBJECT2_PRONOUN_POSSESSIVE);
+    }
+
     return getString(result, _reports[i]);
   }
 
@@ -890,7 +970,7 @@ class Storyline {
         result = result.replaceAll(
             OWNER_OR_OBJECT_OWNER_POSSESSIVE, Pronoun.YOU.genitive);
       } else {
-        result = addParticleToFirstOccurence(
+        result = addParticleToFirstOccurrence(
             result, OWNER_OR_OBJECT_OWNER, owner, null, reportTime);
         result = result.replaceAll(OWNER_OR_OBJECT_OWNER, owner.name);
       }
@@ -902,7 +982,7 @@ class Storyline {
         result = result.replaceAll(
             OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner.pronoun.genitive);
       }
-      result = addParticleToFirstOccurence(
+      result = addParticleToFirstOccurrence(
           result, OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner, null, reportTime);
       result = result.replaceFirst(
           OWNER_OR_OBJECT_OWNER_POSSESSIVE, "${owner.name}'s");
@@ -925,6 +1005,16 @@ class Storyline {
     if (!valid(i) || !valid(j)) return false;
     if (_reports[i].object == null || _reports[j].object == null) return false;
     return _reports[i].object.id == _reports[j].object.id;
+  }
+
+  bool _objectBecomesObject2(int i, int j) {
+    if (!valid(i) || !valid(j)) return false;
+    return object(i) != null && object(i) == object2(j);
+  }
+
+  bool _object2BecomesObject(int i, int j) {
+    if (!valid(i) || !valid(j)) return false;
+    return object2(i) != null && object2(i) == object(j);
   }
 
   /// Taking care of all the exceptions and rules when comparing

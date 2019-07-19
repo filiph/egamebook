@@ -9,7 +9,6 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 
 final Entity swing =
     Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
@@ -60,7 +59,8 @@ class OnGroundShieldBlock extends OtherActorAction {
     a.report(
         s,
         "<subject> tr<ies> to {block|stop|deflect} the {swing|attack|strike} "
-        "with ${shieldAsObject2(a)}");
+        "with <object2>",
+        object2: a.currentShield);
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => a.report(s, "<subject> <is> too slow", but: true),
@@ -85,13 +85,15 @@ class OnGroundShieldBlock extends OtherActorAction {
           s,
           "<subject> easily {block<s>|stop<s>|deflect<s>} "
           "the {swing|attack|strike} "
-          "with ${shieldAsObject2(a)}",
+          "with <object2>",
+          object2: a.currentShield,
           positive: true);
     } else {
       a.report(
           s,
           "<subject> {block<s>|stop<s>|deflect<s>} the {swing|attack|strike} "
-          "with ${shieldAsObject2(a)}",
+          "with <object2>",
+          object2: a.currentShield,
           positive: true);
     }
 

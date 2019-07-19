@@ -9,7 +9,6 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
 final Entity swing =
@@ -68,7 +67,8 @@ class ShieldBlockSlash extends OtherActorAction {
     a.report(
         s,
         "<subject> tr<ies> to {block|stop|deflect} the {swing|attack|strike} "
-        "with ${shieldAsObject2(a)}");
+        "with <object2>",
+        object2: a.currentShield);
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
@@ -97,13 +97,15 @@ class ShieldBlockSlash extends OtherActorAction {
           s,
           "<subject> easily {block<s>|stop<s>|deflect<s>} "
           "the {swing|attack|strike} "
-          "with ${shieldAsObject2(a)}",
+          "with <object2>",
+          object2: a.currentShield,
           positive: true);
     } else {
       a.report(
           s,
           "<subject> {block<s>|stop<s>|deflect<s>} the {swing|attack|strike} "
-          "with ${shieldAsObject2(a)}",
+          "with <object2>",
+          object2: a.currentShield,
           positive: true);
     }
     w.popSituationsUntil("FightSituation", sim);

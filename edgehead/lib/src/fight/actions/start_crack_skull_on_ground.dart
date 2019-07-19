@@ -8,7 +8,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/fatality_on_ground.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/wrestle_defense/wrestle_defense_situation.dart';
 
@@ -51,8 +50,9 @@ void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
   a.report(
       s,
       "<subject> throw<s> <subjectPronounSelf> {on|upon} <object> "
-      "with ${entityAsObject2(a, weapon)} held high",
+      "with <object2> held high",
       object: enemy,
+      object2: weapon,
       endSentence: true);
   w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
 }

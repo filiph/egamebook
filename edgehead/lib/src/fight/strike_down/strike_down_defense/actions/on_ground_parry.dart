@@ -7,7 +7,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/common/weapon_as_object2.dart';
 
 ReasonedSuccessChance computeOnGroundParry(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -57,7 +56,8 @@ class OnGroundParry extends OtherActorAction {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
-        "stop it{| with ${weaponAsObject2(a)}}}");
+        "stop it{| with <object2>}}",
+        object2: a.currentWeaponOrBodyPart);
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
@@ -75,7 +75,8 @@ class OnGroundParry extends OtherActorAction {
     a.report(
         s,
         "<subject> {parr<ies> it|"
-        "stop<s> it with ${weaponAsObject2(a)}}",
+        "stop<s> it with <object2>}",
+        object2: a.currentWeaponOrBodyPart,
         positive: true);
     w.popSituationsUntil("FightSituation", sim);
     return "${a.name} parries ${enemy.name}";
