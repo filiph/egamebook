@@ -63,7 +63,7 @@ class CounterSweepFeet extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, sweepFeetSituationName);
-    a.report(s, "<subject> attempt<s> to counter <object's> sweep",
+    a.report(s, "<subject> attempt<s> to counter <object's> foot sweep",
         object: enemy, actionThread: thread);
     a.report(s, "<subject> fail<s> to slash <object's> leg",
         object: enemy, but: true, negative: true, actionThread: thread);
@@ -78,7 +78,8 @@ class CounterSweepFeet extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, sweepFeetSituationName);
-    a.report(s, "<subject> step<s> around the sweep", actionThread: thread);
+    a.report(s, "<subject> step<s> around the foot sweep",
+        actionThread: thread);
 
     assert(
         enemy.anatomy.isHumanoid,

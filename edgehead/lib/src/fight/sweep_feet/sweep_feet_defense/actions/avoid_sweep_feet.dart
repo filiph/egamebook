@@ -64,7 +64,7 @@ class AvoidSweepFeet extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, sweepFeetSituationName);
-    a.report(s, "<subject> avoid<s> the sweep", actionThread: thread);
+    a.report(s, "<subject> avoid<s> the foot sweep", actionThread: thread);
     a.report(s, "<subject> {keep<s> standing|stay<s> upright}",
         positive: true, actionThread: thread);
     w.popSituationsUntil("FightSituation", sim);
