@@ -20,7 +20,8 @@ class _$RoomRoamingSituationSerializer
   final String wireName = 'RoomRoamingSituation';
 
   @override
-  Iterable serialize(Serializers serializers, RoomRoamingSituation object,
+  Iterable<Object> serialize(
+      Serializers serializers, RoomRoamingSituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'currentRoomName',
@@ -39,7 +40,8 @@ class _$RoomRoamingSituationSerializer
   }
 
   @override
-  RoomRoamingSituation deserialize(Serializers serializers, Iterable serialized,
+  RoomRoamingSituation deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RoomRoamingSituationBuilder();
 

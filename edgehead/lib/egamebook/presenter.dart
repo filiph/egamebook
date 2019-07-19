@@ -10,7 +10,7 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
   T book;
 
-  final Completer<Null> _bookEndCompleter = Completer<Null>();
+  final Completer<void> _bookEndCompleter = Completer<void>();
 
   StreamSubscription<ElementBase> _bookSubscription;
 
@@ -20,7 +20,7 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   /// After this future completes, the caller should call [close]. This will
   /// close both the [book] and this [Presenter]. Once this happens, there is
   /// no way to restart either. You have to create new ones.
-  Future<Null> get bookEnd => _bookEndCompleter.future;
+  Future<void> get bookEnd => _bookEndCompleter.future;
 
   @protected
   @override

@@ -12,7 +12,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 
-class AutoLoot extends Action<Null> {
+class AutoLoot extends Action<Nothing> {
   static final AutoLoot singleton = AutoLoot();
 
   static const String className = "AutoLoot";
@@ -47,7 +47,7 @@ class AutoLoot extends Action<Null> {
   }
 
   @override
-  String applySuccess(ActionContext context, Null _) {
+  String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldState initialWorld = context.world;
@@ -153,17 +153,17 @@ class AutoLoot extends Action<Null> {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
       "WARNING this shouldn't be "
       "user-visible";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w, Null _) =>
+          Actor a, Simulation sim, WorldState w, void _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, Null _) =>
+  bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) =>
       actor.isPlayer;
 
   /// Give shields to unshielded teammates.

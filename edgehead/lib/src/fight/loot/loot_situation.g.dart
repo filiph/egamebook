@@ -16,7 +16,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
   final String wireName = 'LootSituation';
 
   @override
-  Iterable serialize(Serializers serializers, LootSituation object,
+  Iterable<Object> serialize(Serializers serializers, LootSituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'droppedItems',
@@ -40,7 +40,8 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
   }
 
   @override
-  LootSituation deserialize(Serializers serializers, Iterable serialized,
+  LootSituation deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LootSituationBuilder();
 
@@ -54,7 +55,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -64,7 +65,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,

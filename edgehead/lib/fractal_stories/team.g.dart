@@ -15,7 +15,7 @@ class _$TeamSerializer implements StructuredSerializer<Team> {
   final String wireName = 'Team';
 
   @override
-  Iterable serialize(Serializers serializers, Team object,
+  Iterable<Object> serialize(Serializers serializers, Team object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'id',
@@ -26,7 +26,7 @@ class _$TeamSerializer implements StructuredSerializer<Team> {
   }
 
   @override
-  Team deserialize(Serializers serializers, Iterable serialized,
+  Team deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new TeamBuilder();
 

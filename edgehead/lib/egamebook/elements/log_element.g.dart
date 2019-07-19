@@ -15,7 +15,7 @@ class _$LogElementSerializer implements StructuredSerializer<LogElement> {
   final String wireName = 'LogElement';
 
   @override
-  Iterable serialize(Serializers serializers, LogElement object,
+  Iterable<Object> serialize(Serializers serializers, LogElement object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'level',
@@ -30,7 +30,7 @@ class _$LogElementSerializer implements StructuredSerializer<LogElement> {
   }
 
   @override
-  LogElement deserialize(Serializers serializers, Iterable serialized,
+  LogElement deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LogElementBuilder();
 

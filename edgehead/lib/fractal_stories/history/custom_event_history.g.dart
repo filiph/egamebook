@@ -17,7 +17,7 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
   final String wireName = 'CustomEvent';
 
   @override
-  Iterable serialize(Serializers serializers, CustomEvent object,
+  Iterable<Object> serialize(Serializers serializers, CustomEvent object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'name',
@@ -38,12 +38,11 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
         ..add(serializers.serialize(object.data,
             specifiedType: const FullType(Object)));
     }
-
     return result;
   }
 
   @override
-  CustomEvent deserialize(Serializers serializers, Iterable serialized,
+  CustomEvent deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new CustomEventBuilder();
 
@@ -84,7 +83,7 @@ class _$CustomEventHistorySerializer
   final String wireName = 'CustomEventHistory';
 
   @override
-  Iterable serialize(Serializers serializers, CustomEventHistory object,
+  Iterable<Object> serialize(Serializers serializers, CustomEventHistory object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'records',
@@ -97,7 +96,8 @@ class _$CustomEventHistorySerializer
   }
 
   @override
-  CustomEventHistory deserialize(Serializers serializers, Iterable serialized,
+  CustomEventHistory deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new CustomEventHistoryBuilder();
 
@@ -112,7 +112,7 @@ class _$CustomEventHistorySerializer
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(CustomEvent)
-              ])) as BuiltListMultimap);
+              ])) as BuiltListMultimap<dynamic, dynamic>);
           break;
       }
     }

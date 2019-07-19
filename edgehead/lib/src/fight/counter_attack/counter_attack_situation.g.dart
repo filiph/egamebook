@@ -20,7 +20,8 @@ class _$CounterAttackSituationSerializer
   final String wireName = 'CounterAttackSituation';
 
   @override
-  Iterable serialize(Serializers serializers, CounterAttackSituation object,
+  Iterable<Object> serialize(
+      Serializers serializers, CounterAttackSituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'counterAttacker',
@@ -39,7 +40,7 @@ class _$CounterAttackSituationSerializer
 
   @override
   CounterAttackSituation deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new CounterAttackSituationBuilder();
 

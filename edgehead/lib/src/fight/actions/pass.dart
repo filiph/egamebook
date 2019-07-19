@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class Pass extends Action<Null> {
+class Pass extends Action<Nothing> {
   static final Pass singleton = Pass();
 
   static const String className = "Pass";
@@ -42,7 +42,7 @@ class Pass extends Action<Null> {
   }
 
   @override
-  String applySuccess(ActionContext context, Null _) {
+  String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     if (a.isPlayer) {
@@ -55,17 +55,17 @@ class Pass extends Action<Null> {
   List<String> get commandPathTemplate => ["Stand off"];
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
       "WARNING this shouldn't be "
       "user-visible";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w, Null _) =>
+          Actor a, Simulation sim, WorldState w, void _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, Null _) =>
+  bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) =>
       // For blind actors, we have PassUnseeing.
       !actor.anatomy.isBlind;
 }

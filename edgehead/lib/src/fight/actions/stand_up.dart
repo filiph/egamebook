@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class StandUp extends Action<Null> {
+class StandUp extends Action<Nothing> {
   static final StandUp singleton = StandUp();
 
   static const String className = "StandUp";
@@ -43,7 +43,7 @@ class StandUp extends Action<Null> {
   }
 
   @override
-  String applySuccess(ActionContext context, Null _) {
+  String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -65,26 +65,26 @@ class StandUp extends Action<Null> {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
       "Will ${a.pronoun.nominative} stand up?";
 
   @override
-  Duration getRecoveryDuration(ApplicabilityContext context, Null object) {
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing _) {
     if (context.actor.isPlayer) {
       //  Standing up should be super fast for the player.
       return const Duration(milliseconds: 200);
     }
 
-    return super.getRecoveryDuration(context, object);
+    return super.getRecoveryDuration(context, null);
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w, Null _) =>
+          Actor a, Simulation sim, WorldState w, void _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, void _) =>
       a.isOnGround &&
       !a.anatomy.hasCrippledLegs &&
       // If this actor just fell, do not let him stand up.

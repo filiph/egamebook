@@ -26,8 +26,9 @@ final allNeededTypes = <TypeReference>[
   actorTurnType,
   approachType,
   applicabilityContextType,
+  nothingType,
   prerequisiteType,
-  reasonedSuccessChanceType,
+  reasonedSuccessChanceOfNothingType,
   resourceType,
   roomRoamingSituationType,
   roomType,
@@ -82,7 +83,9 @@ final listOfString = TypeReference((b) => b
   ..symbol = 'List'
   ..types.add(stringType));
 
-final nullType = TypeReference((b) => b..symbol = 'Null');
+final nothingType = TypeReference((b) => b
+  ..symbol = 'Nothing'
+  ..url = 'package:edgehead/fractal_stories/action.dart');
 
 final numType = TypeReference((b) => b..symbol = 'num');
 
@@ -90,9 +93,13 @@ final prerequisiteType = TypeReference((b) => b
   ..symbol = 'Prerequisite'
   ..url = 'package:edgehead/ruleset/ruleset.dart');
 
+final reasonedSuccessChanceOfNothingType = TypeReference((b) => b
+  ..symbol = 'ReasonedSuccessChance'
+  ..types = ListBuilder<Reference>([nothingType])
+  ..url = 'package:edgehead/fractal_stories/action.dart');
+
 final reasonedSuccessChanceType = TypeReference((b) => b
   ..symbol = 'ReasonedSuccessChance'
-  ..types = ListBuilder<Reference>([nullType])
   ..url = 'package:edgehead/fractal_stories/action.dart');
 
 final resourceType = TypeReference((b) => b
@@ -144,6 +151,8 @@ final storylineType = TypeReference((b) => b
   ..url = 'package:edgehead/fractal_stories/storyline/storyline.dart');
 
 final stringType = TypeReference((b) => b..symbol = 'String');
+
+final voidType = TypeReference((b) => b..symbol = 'void');
 
 final weaponTypeType = TypeReference((b) => b
   ..symbol = 'WeaponType'

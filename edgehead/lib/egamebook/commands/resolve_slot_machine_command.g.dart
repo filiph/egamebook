@@ -17,7 +17,7 @@ class _$ResolveSlotMachineSerializer
   final String wireName = 'ResolveSlotMachine';
 
   @override
-  Iterable serialize(Serializers serializers, ResolveSlotMachine object,
+  Iterable<Object> serialize(Serializers serializers, ResolveSlotMachine object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'result',
@@ -32,7 +32,8 @@ class _$ResolveSlotMachineSerializer
   }
 
   @override
-  ResolveSlotMachine deserialize(Serializers serializers, Iterable serialized,
+  ResolveSlotMachine deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ResolveSlotMachineBuilder();
 

@@ -17,6 +17,7 @@ import 'package:edgehead/fractal_stories/time/actor_turn.dart' show ActorTurn;
 import 'package:edgehead/fractal_stories/room_approach.dart' show Approach;
 import 'package:edgehead/fractal_stories/context.dart'
     show ApplicabilityContext;
+import 'package:edgehead/fractal_stories/action.dart' show Nothing;
 import 'package:edgehead/ruleset/ruleset.dart' show Prerequisite;
 import 'package:edgehead/fractal_stories/action.dart'
     show ReasonedSuccessChance;
@@ -138,7 +139,7 @@ class ExamineUndergroundChurch extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Look around'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'underground_church') {
       return false;
@@ -150,7 +151,7 @@ class ExamineUndergroundChurch extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -173,7 +174,7 @@ class ExamineUndergroundChurch extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -183,15 +184,15 @@ class ExamineUndergroundChurch extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -244,7 +245,7 @@ class TalkToBriana1 extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Talk to Briana'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionNeverUsed(name) && isRoamingInBloodrock(w))) {
       return false;
     }
@@ -252,7 +253,7 @@ class TalkToBriana1 extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -265,7 +266,7 @@ class TalkToBriana1 extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -275,15 +276,15 @@ class TalkToBriana1 extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -304,7 +305,7 @@ class TalkToBriana2 extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Ask Briana about her capture'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionHasBeenPerformed("talk_to_briana_1") &&
         w.actionNeverUsed(name) &&
         isRoamingInBloodrock(w))) {
@@ -314,7 +315,7 @@ class TalkToBriana2 extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -327,7 +328,7 @@ class TalkToBriana2 extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -337,15 +338,15 @@ class TalkToBriana2 extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -366,7 +367,7 @@ class TalkToBriana3 extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Ask Briana about Orcthorn'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionHasBeenPerformed("talk_to_briana_2") &&
         w.actionNeverUsed(name) &&
         isRoamingInBloodrock(w))) {
@@ -376,7 +377,7 @@ class TalkToBriana3 extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -469,7 +470,7 @@ class TalkToBriana3 extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -479,15 +480,15 @@ class TalkToBriana3 extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -608,7 +609,7 @@ class SlaveQuartersContinue extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Continue'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'slave_quarters') {
       return false;
@@ -617,7 +618,7 @@ class SlaveQuartersContinue extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -632,7 +633,7 @@ class SlaveQuartersContinue extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -642,15 +643,15 @@ class SlaveQuartersContinue extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -695,7 +696,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['"Luck Bringer"'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'just_after_agruth_fight') {
       return false;
@@ -704,7 +705,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -719,7 +720,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -729,15 +730,15 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -759,7 +760,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['"Savior"'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'just_after_agruth_fight') {
       return false;
@@ -768,7 +769,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -783,7 +784,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -793,15 +794,15 @@ class NameAgruthSwordRedemption extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -822,7 +823,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['No name'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'just_after_agruth_fight') {
       return false;
@@ -831,7 +832,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -845,7 +846,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -855,15 +856,15 @@ class NameAgruthSwordNothing extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1000,7 +1001,7 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Go to the Upper Door'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'guardpost_above_church') {
       return false;
@@ -1009,7 +1010,7 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1022,7 +1023,7 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1032,15 +1033,15 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1061,7 +1062,7 @@ class TakeOrcthorn extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Search for Orcthorn'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'orcthorn_room') {
       return false;
@@ -1075,7 +1076,7 @@ class TakeOrcthorn extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1089,7 +1090,7 @@ class TakeOrcthorn extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1099,15 +1100,15 @@ class TakeOrcthorn extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1129,7 +1130,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Cautiously take the shield'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'guardpost_above_church') {
       return false;
@@ -1141,7 +1142,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1155,7 +1156,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1170,15 +1171,15 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(0.3);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return const ReasonedSuccessChance<Nothing>(0.3);
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1387,7 +1388,7 @@ class SmelterLookAround extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Look around'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'smelter') {
       return false;
@@ -1399,7 +1400,7 @@ class SmelterLookAround extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1412,7 +1413,7 @@ class SmelterLookAround extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1422,15 +1423,15 @@ class SmelterLookAround extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1506,7 +1507,7 @@ class SearchAgruth extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Search Agruth'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'cave_with_agruth') {
       return false;
@@ -1518,7 +1519,7 @@ class SearchAgruth extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1532,7 +1533,7 @@ class SearchAgruth extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1542,15 +1543,15 @@ class SearchAgruth extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1636,7 +1637,7 @@ class WaitForRitual extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Wait'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'underground_church_altar') {
       return false;
@@ -1648,7 +1649,7 @@ class WaitForRitual extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1662,7 +1663,7 @@ class WaitForRitual extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1672,15 +1673,15 @@ class WaitForRitual extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1702,7 +1703,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Take the spear'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'underground_church_altar') {
       return false;
@@ -1714,7 +1715,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1728,7 +1729,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1738,15 +1739,15 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1767,7 +1768,7 @@ class SmelterThrowSpear extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Throw spear at the ogre'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'smelter') {
       return false;
@@ -1782,7 +1783,7 @@ class SmelterThrowSpear extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1796,7 +1797,7 @@ class SmelterThrowSpear extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1806,15 +1807,15 @@ class SmelterThrowSpear extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -1954,7 +1955,7 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Examine the door'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'slave_quarters_passage') {
       return false;
@@ -1968,7 +1969,7 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -1990,7 +1991,7 @@ _"The Mad Guardian."_
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -2000,15 +2001,15 @@ _"The Mad Guardian."_
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -2166,7 +2167,7 @@ class WarForgeLookAround extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Look around'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'war_forge') {
       return false;
@@ -2178,7 +2179,7 @@ class WarForgeLookAround extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -2191,7 +2192,7 @@ class WarForgeLookAround extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -2201,15 +2202,15 @@ class WarForgeLookAround extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 
@@ -2230,7 +2231,7 @@ class WarForgeWatchWorkers extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Watch the workers'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'war_forge') {
       return false;
@@ -2243,7 +2244,7 @@ class WarForgeWatchWorkers extends RoamingAction {
   }
 
   @override
-  String applySuccess(ActionContext c, Null _) {
+  String applySuccess(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -2256,7 +2257,7 @@ class WarForgeWatchWorkers extends RoamingAction {
   }
 
   @override
-  String applyFailure(ActionContext c, Null _) {
+  String applyFailure(ActionContext c, void _) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
@@ -2266,15 +2267,15 @@ class WarForgeWatchWorkers extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Null> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null _) {
-    return const ReasonedSuccessChance<Null>(1.0);
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool get rerollable => false;
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will you be successful?';
   }
 

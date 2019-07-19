@@ -15,7 +15,7 @@ class _$WinGameSerializer implements StructuredSerializer<WinGame> {
   final String wireName = 'WinGame';
 
   @override
-  Iterable serialize(Serializers serializers, WinGame object,
+  Iterable<Object> serialize(Serializers serializers, WinGame object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'markdownText',
@@ -27,7 +27,7 @@ class _$WinGameSerializer implements StructuredSerializer<WinGame> {
   }
 
   @override
-  WinGame deserialize(Serializers serializers, Iterable serialized,
+  WinGame deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WinGameBuilder();
 

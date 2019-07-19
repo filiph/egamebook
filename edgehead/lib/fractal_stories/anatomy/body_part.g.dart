@@ -117,7 +117,7 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
   final String wireName = 'BodyPart';
 
   @override
-  Iterable serialize(Serializers serializers, BodyPart object,
+  Iterable<Object> serialize(Serializers serializers, BodyPart object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'bluntHitsCount',
@@ -177,12 +177,11 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
         ..add(serializers.serialize(object.damageCapability,
             specifiedType: const FullType(DamageCapability)));
     }
-
     return result;
   }
 
   @override
-  BodyPart deserialize(Serializers serializers, Iterable serialized,
+  BodyPart deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new BodyPartBuilder();
 
@@ -198,8 +197,9 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           break;
         case 'children':
           result.children.replace(serializers.deserialize(value,
-              specifiedType: const FullType(
-                  BuiltList, const [const FullType(BodyPart)])) as BuiltList);
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(BodyPart)]))
+              as BuiltList<dynamic>);
           break;
         case 'damageCapability':
           result.damageCapability.replace(serializers.deserialize(value,

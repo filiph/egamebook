@@ -15,7 +15,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
   final String wireName = 'Anatomy';
 
   @override
-  Iterable serialize(Serializers serializers, Anatomy object,
+  Iterable<Object> serialize(Serializers serializers, Anatomy object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'torso',
@@ -27,7 +27,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
   }
 
   @override
-  Anatomy deserialize(Serializers serializers, Iterable serialized,
+  Anatomy deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AnatomyBuilder();
 

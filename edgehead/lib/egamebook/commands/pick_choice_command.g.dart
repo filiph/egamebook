@@ -15,7 +15,7 @@ class _$PickChoiceSerializer implements StructuredSerializer<PickChoice> {
   final String wireName = 'PickChoice';
 
   @override
-  Iterable serialize(Serializers serializers, PickChoice object,
+  Iterable<Object> serialize(Serializers serializers, PickChoice object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'choice',
@@ -27,7 +27,7 @@ class _$PickChoiceSerializer implements StructuredSerializer<PickChoice> {
   }
 
   @override
-  PickChoice deserialize(Serializers serializers, Iterable serialized,
+  PickChoice deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PickChoiceBuilder();
 

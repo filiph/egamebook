@@ -14,10 +14,6 @@ final Parameter applicabilityContextParameter = Parameter((b) => b
   ..name = 'c'
   ..type = applicabilityContextType);
 
-final Parameter nullParameter = Parameter((b) => b
-  ..name = '_'
-  ..type = nullType);
-
 final Parameter originalWorldParameter = Parameter((b) => b
   ..name = 'originalWorld'
   ..type = worldStateType);
@@ -33,6 +29,10 @@ final Parameter storylineParameter = Parameter((b) => b
 final Parameter timeParameter = Parameter((b) => b
   ..name = 'time'
   ..type = dateTimeType);
+
+final Parameter voidParameter = Parameter((b) => b
+  ..name = '_'
+  ..type = voidType);
 
 final Parameter worldParameter = Parameter((b) => b
   ..name = 'w'

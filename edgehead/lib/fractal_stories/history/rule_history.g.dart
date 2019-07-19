@@ -16,7 +16,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
   final String wireName = 'RuleHistory';
 
   @override
-  Iterable serialize(Serializers serializers, RuleHistory object,
+  Iterable<Object> serialize(Serializers serializers, RuleHistory object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'records',
@@ -29,7 +29,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
   }
 
   @override
-  RuleHistory deserialize(Serializers serializers, Iterable serialized,
+  RuleHistory deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RuleHistoryBuilder();
 
@@ -44,7 +44,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(RuleRecord)
-              ])) as BuiltMap);
+              ])) as BuiltMap<dynamic, dynamic>);
           break;
       }
     }
@@ -60,7 +60,7 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
   final String wireName = 'RuleRecord';
 
   @override
-  Iterable serialize(Serializers serializers, RuleRecord object,
+  Iterable<Object> serialize(Serializers serializers, RuleRecord object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'ruleId',
@@ -74,7 +74,7 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
   }
 
   @override
-  RuleRecord deserialize(Serializers serializers, Iterable serialized,
+  RuleRecord deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RuleRecordBuilder();
 

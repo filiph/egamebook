@@ -112,7 +112,8 @@ class Simulation {
         "There are no actions defined for ${context.world.currentSituation}");
 
     for (final action in context.world.currentSituation.actions) {
-      if (action is Action<Null>) {
+      if (action is Action<Nothing>) {
+        assert(action is! Action<Approach>);
         if (!action.isApplicable(
             context.actor, context.simulation, context.world, null)) {
           log.finer(() => "- action '${action.name}' isn't applicable");
@@ -120,7 +121,7 @@ class Simulation {
         }
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, null);
-        yield Performance<Null>(action, context, null, successChance.value);
+        yield Performance<Nothing>(action, context, null, successChance.value);
         continue;
       }
 

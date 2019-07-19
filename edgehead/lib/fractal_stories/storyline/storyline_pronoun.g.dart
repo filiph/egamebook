@@ -15,7 +15,7 @@ class _$PronounSerializer implements StructuredSerializer<Pronoun> {
   final String wireName = 'Pronoun';
 
   @override
-  Iterable serialize(Serializers serializers, Pronoun object,
+  Iterable<Object> serialize(Serializers serializers, Pronoun object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'accusative',
@@ -35,7 +35,7 @@ class _$PronounSerializer implements StructuredSerializer<Pronoun> {
   }
 
   @override
-  Pronoun deserialize(Serializers serializers, Iterable serialized,
+  Pronoun deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PronounBuilder();
 

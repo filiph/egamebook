@@ -20,13 +20,15 @@ class _$EdgeheadGlobalStateSerializer
   final String wireName = 'EdgeheadGlobalState';
 
   @override
-  Iterable serialize(Serializers serializers, EdgeheadGlobalState object,
+  Iterable<Object> serialize(
+      Serializers serializers, EdgeheadGlobalState object,
       {FullType specifiedType = FullType.unspecified}) {
     return <Object>[];
   }
 
   @override
-  EdgeheadGlobalState deserialize(Serializers serializers, Iterable serialized,
+  EdgeheadGlobalState deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     return new EdgeheadGlobalStateBuilder().build();
   }

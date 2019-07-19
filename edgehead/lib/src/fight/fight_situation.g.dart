@@ -17,7 +17,7 @@ class _$FightSituationSerializer
   final String wireName = 'FightSituation';
 
   @override
-  Iterable serialize(Serializers serializers, FightSituation object,
+  Iterable<Object> serialize(Serializers serializers, FightSituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'droppedItems',
@@ -56,7 +56,8 @@ class _$FightSituationSerializer
   }
 
   @override
-  FightSituation deserialize(Serializers serializers, Iterable serialized,
+  FightSituation deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new FightSituationBuilder();
 
@@ -70,26 +71,26 @@ class _$FightSituationSerializer
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'droppedItemsOutOfReach':
           result.droppedItemsOutOfReach.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'enemyTeamIds':
           result.enemyTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'events':
           result.events.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(EventCallback)
-              ])) as BuiltMap);
+              ])) as BuiltMap<dynamic, dynamic>);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -103,7 +104,7 @@ class _$FightSituationSerializer
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'roomRoamingSituationId':
           result.roomRoamingSituationId = serializers.deserialize(value,

@@ -25,7 +25,7 @@ typedef SimpleActionApplyFunction = String Function(Actor a, Simulation sim,
 
 /// An action that takes place in the context of a [RoomRoamingSituation]
 /// (either directly or as an indirect descendant of such situation).
-abstract class RoamingAction extends Action<Null> {
+abstract class RoamingAction extends Action<Nothing> {
   @override
   final bool isProactive = true;
 
@@ -65,36 +65,36 @@ class SimpleAction extends RoamingAction {
   Resource get rerollResource => throw StateError("Not rerollable");
 
   @override
-  String applyFailure(ActionContext context, Null object) {
+  String applyFailure(ActionContext context, void object) {
     throw StateError("SimpleAction always succeeds");
   }
 
   @override
-  String applySuccess(ActionContext context, Null object) {
+  String applySuccess(ActionContext context, void object) {
     return success(context.actor, context.simulation, context.outputWorld,
         context.outputStoryline, this);
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null object) {
+  String getRollReason(Actor a, Simulation sim, WorldState w, void object) {
     throw StateError("SimpleAction shouldn't have to provide roll reason");
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Null object) {
+      Actor a, Simulation sim, WorldState w, void object) {
     return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Null object) {
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void object) {
     if (isApplicableClosure == null) return true;
     return isApplicableClosure(a, sim, w, this);
   }
 
   @override
-  Iterable<Null> generateObjects(ApplicabilityContext context) {
-    throw AssertionError('generateObjects was called on Action<Null>');
+  Iterable<Nothing> generateObjects(ApplicabilityContext context) {
+    throw AssertionError('generateObjects was called on Action<Nothing>');
   }
 
   @override

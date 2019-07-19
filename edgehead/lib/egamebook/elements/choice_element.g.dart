@@ -15,7 +15,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
   final String wireName = 'Choice';
 
   @override
-  Iterable serialize(Serializers serializers, Choice object,
+  Iterable<Object> serialize(Serializers serializers, Choice object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'successChance',
@@ -35,12 +35,11 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
         ..add(serializers.serialize(object.helpMessage,
             specifiedType: const FullType(String)));
     }
-
     return result;
   }
 
   @override
-  Choice deserialize(Serializers serializers, Iterable serialized,
+  Choice deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ChoiceBuilder();
 
@@ -58,7 +57,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           result.commandPath.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(String)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'helpMessage':
           result.helpMessage = serializers.deserialize(value,

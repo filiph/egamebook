@@ -17,7 +17,7 @@ class _$DamageCapabilitySerializer
   final String wireName = 'DamageCapability';
 
   @override
-  Iterable serialize(Serializers serializers, DamageCapability object,
+  Iterable<Object> serialize(Serializers serializers, DamageCapability object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'bluntDamage',
@@ -42,7 +42,8 @@ class _$DamageCapabilitySerializer
   }
 
   @override
-  DamageCapability deserialize(Serializers serializers, Iterable serialized,
+  DamageCapability deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new DamageCapabilityBuilder();
 

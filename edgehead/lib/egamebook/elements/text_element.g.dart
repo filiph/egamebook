@@ -15,7 +15,7 @@ class _$TextOutputSerializer implements StructuredSerializer<TextOutput> {
   final String wireName = 'TextOutput';
 
   @override
-  Iterable serialize(Serializers serializers, TextOutput object,
+  Iterable<Object> serialize(Serializers serializers, TextOutput object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'markdownText',
@@ -27,7 +27,7 @@ class _$TextOutputSerializer implements StructuredSerializer<TextOutput> {
   }
 
   @override
-  TextOutput deserialize(Serializers serializers, Iterable serialized,
+  TextOutput deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new TextOutputBuilder();
 

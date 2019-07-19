@@ -15,7 +15,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
   final String wireName = 'Inventory';
 
   @override
-  Iterable serialize(Serializers serializers, Inventory object,
+  Iterable<Object> serialize(Serializers serializers, Inventory object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'items',
@@ -46,12 +46,11 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
         ..add(serializers.serialize(object.currentWeapon,
             specifiedType: const FullType(Item)));
     }
-
     return result;
   }
 
   @override
-  Inventory deserialize(Serializers serializers, Iterable serialized,
+  Inventory deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new InventoryBuilder();
 
@@ -73,13 +72,13 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
           result.items.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'shields':
           result.shields.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
         case 'weaponInPrimaryAppendage':
           result.weaponInPrimaryAppendage = serializers.deserialize(value,
@@ -89,7 +88,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
           result.weapons.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
       }
     }

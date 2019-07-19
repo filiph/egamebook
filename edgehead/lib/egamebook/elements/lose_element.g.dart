@@ -15,7 +15,7 @@ class _$LoseGameSerializer implements StructuredSerializer<LoseGame> {
   final String wireName = 'LoseGame';
 
   @override
-  Iterable serialize(Serializers serializers, LoseGame object,
+  Iterable<Object> serialize(Serializers serializers, LoseGame object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'markdownText',
@@ -27,7 +27,7 @@ class _$LoseGameSerializer implements StructuredSerializer<LoseGame> {
   }
 
   @override
-  LoseGame deserialize(Serializers serializers, Iterable serialized,
+  LoseGame deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LoseGameBuilder();
 

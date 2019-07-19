@@ -22,7 +22,7 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
   final String wireName = 'GuardpostAboveChurchTakeShieldRescueSituation';
 
   @override
-  Iterable serialize(Serializers serializers,
+  Iterable<Object> serialize(Serializers serializers,
       GuardpostAboveChurchTakeShieldRescueSituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
@@ -37,7 +37,7 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
 
   @override
   GuardpostAboveChurchTakeShieldRescueSituation deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new GuardpostAboveChurchTakeShieldRescueSituationBuilder();
 

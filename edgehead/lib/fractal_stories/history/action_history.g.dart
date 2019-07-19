@@ -18,7 +18,7 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
   final String wireName = 'ActionHistory';
 
   @override
-  Iterable serialize(Serializers serializers, ActionHistory object,
+  Iterable<Object> serialize(Serializers serializers, ActionHistory object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'latestByActorId',
@@ -39,7 +39,8 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
   }
 
   @override
-  ActionHistory deserialize(Serializers serializers, Iterable serialized,
+  ActionHistory deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActionHistoryBuilder();
 
@@ -54,20 +55,20 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(DateTime)
-              ])) as BuiltMap);
+              ])) as BuiltMap<dynamic, dynamic>);
           break;
         case 'latestProactiveByActorId':
           result.latestProactiveByActorId.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
                 const FullType(int),
                 const FullType(DateTime)
-              ])) as BuiltMap);
+              ])) as BuiltMap<dynamic, dynamic>);
           break;
         case 'records':
           result.records.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ActionRecord)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
       }
     }
@@ -83,7 +84,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
   final String wireName = 'ActionRecord';
 
   @override
-  Iterable serialize(Serializers serializers, ActionRecord object,
+  Iterable<Object> serialize(Serializers serializers, ActionRecord object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'actionName',
@@ -120,12 +121,11 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
         ..add(serializers.serialize(object.dataString,
             specifiedType: const FullType(String)));
     }
-
     return result;
   }
 
   @override
-  ActionRecord deserialize(Serializers serializers, Iterable serialized,
+  ActionRecord deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActionRecordBuilder();
 
@@ -155,7 +155,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           result.sufferers.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet);
+              as BuiltSet<dynamic>);
           break;
         case 'time':
           result.time = serializers.deserialize(value,

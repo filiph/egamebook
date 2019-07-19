@@ -17,7 +17,7 @@ class _$DefenseSituationSerializer
   final String wireName = 'DefenseSituation';
 
   @override
-  Iterable serialize(Serializers serializers, DefenseSituation object,
+  Iterable<Object> serialize(Serializers serializers, DefenseSituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'attacker',
@@ -48,7 +48,8 @@ class _$DefenseSituationSerializer
   }
 
   @override
-  DefenseSituation deserialize(Serializers serializers, Iterable serialized,
+  DefenseSituation deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new DefenseSituationBuilder();
 
@@ -67,14 +68,14 @@ class _$DefenseSituationSerializer
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(EnemyTargetAction)]))
-                  as BuiltList);
+                  as BuiltList<dynamic>);
           break;
         case 'builtOtherActorActionGenerators':
           result.builtOtherActorActionGenerators.replace(
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(OtherActorAction)]))
-                  as BuiltList);
+                  as BuiltList<dynamic>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,

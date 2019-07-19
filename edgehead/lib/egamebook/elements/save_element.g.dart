@@ -15,7 +15,7 @@ class _$SaveGameSerializer implements StructuredSerializer<SaveGame> {
   final String wireName = 'SaveGame';
 
   @override
-  Iterable serialize(Serializers serializers, SaveGame object,
+  Iterable<Object> serialize(Serializers serializers, SaveGame object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'saveGameSerialized',
@@ -27,7 +27,7 @@ class _$SaveGameSerializer implements StructuredSerializer<SaveGame> {
   }
 
   @override
-  SaveGame deserialize(Serializers serializers, Iterable serialized,
+  SaveGame deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new SaveGameBuilder();
 

@@ -62,7 +62,7 @@ MethodAndBlock createGetter(String name, TypeReference returnType,
   return MethodAndBlock(methodBuilder);
 }
 
-/// Same as [createActionContextNullMethod], but without the `Null _`
+/// Same as [createActionContextVoidMethod], but without the `Null _`
 /// parameter at the end.
 MethodAndBlock createActionContextMethod() {
   final method = MethodBuilder()
@@ -74,38 +74,38 @@ MethodAndBlock createActionContextMethod() {
 
 /// Creates a new [MethodAndBlock] with a skeleton of a method that takes
 /// 2 positional arguments: an [ActionContext] and an object (which is
-/// ignored, so here it's defined as `Null _`).
-MethodAndBlock createActionContextNullMethod(
+/// ignored, so here it's defined as `void _`).
+MethodAndBlock createActionContextVoidMethod(
     String methodName, TypeReference returnType) {
   final method = MethodBuilder()
     ..name = methodName
     ..returns = returnType
     ..requiredParameters =
-        ListBuilder<Parameter>([actionContextParameter, nullParameter])
+        ListBuilder<Parameter>([actionContextParameter, voidParameter])
     ..annotations = ListBuilder<Expression>([overrideAnnotation]);
   final result = MethodAndBlock(method);
   _addActionContextConvenienceAccessors(result);
   return result;
 }
 
-MethodAndBlock createActorSimWorldNullMethod(
+MethodAndBlock createActorSimWorldVoidMethod(
     String methodName, TypeReference returnType) {
   final method = MethodBuilder()
     ..name = methodName
     ..returns = returnType
     ..requiredParameters = ListBuilder<Parameter>(
-        [actorParameter, simulationParameter, worldParameter, nullParameter])
+        [actorParameter, simulationParameter, worldParameter, voidParameter])
     ..annotations = ListBuilder<Expression>([overrideAnnotation]);
   return MethodAndBlock(method);
 }
 
-/// Things like `Action.getCommand(Null _)`.
-MethodAndBlock createNullObjectMethod(
+/// Things like `Action.getCommand(void _)`.
+MethodAndBlock createVoidObjectMethod(
     String methodName, TypeReference returnType) {
   final method = MethodBuilder()
     ..name = methodName
     ..returns = returnType
-    ..requiredParameters = ListBuilder<Parameter>([nullParameter])
+    ..requiredParameters = ListBuilder<Parameter>([voidParameter])
     ..annotations = ListBuilder<Expression>([overrideAnnotation]);
   return MethodAndBlock(method);
 }

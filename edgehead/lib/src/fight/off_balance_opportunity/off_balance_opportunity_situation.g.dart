@@ -21,7 +21,7 @@ class _$OffBalanceOpportunitySituationSerializer
   final String wireName = 'OffBalanceOpportunitySituation';
 
   @override
-  Iterable serialize(
+  Iterable<Object> serialize(
       Serializers serializers, OffBalanceOpportunitySituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
@@ -38,13 +38,12 @@ class _$OffBalanceOpportunitySituationSerializer
         ..add(serializers.serialize(object.culpritId,
             specifiedType: const FullType(int)));
     }
-
     return result;
   }
 
   @override
   OffBalanceOpportunitySituation deserialize(
-      Serializers serializers, Iterable serialized,
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new OffBalanceOpportunitySituationBuilder();
 

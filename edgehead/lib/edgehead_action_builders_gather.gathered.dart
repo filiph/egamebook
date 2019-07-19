@@ -37,6 +37,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'AutoLoot.singleton': AutoLoot.singleton,
   // From lib/src/fight/throw/actions/finish_throw_blunt.dart:
   'FinishThrowBlunt.singleton': FinishThrowBlunt.singleton,
+  // From lib/src/fight/throw/actions/finish_throw_thrusting.dart:
+  'FinishThrowThrusting.singleton': FinishThrowThrusting.singleton,
   // From lib/src/fight/throw/throw_defense/actions/shield_block_throw.dart:
   'ShieldBlockThrow.singleton': ShieldBlockThrow.singleton,
   // From lib/src/fight/throw/throw_defense/actions/catch_projectile.dart:
@@ -73,6 +75,12 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'WithstandClash.singleton': WithstandClash.singleton,
   // From lib/src/fight/clash/actions/finish_clash.dart:
   'FinishClash.singleton': FinishClash.singleton,
+  // From lib/src/fight/fatality_on_ground/actions/finish_crack_skull.dart:
+  'FinishCrackSkull.singleton': FinishCrackSkull.singleton,
+  // From lib/src/fight/fatality_on_ground/actions/finish_break_neck.dart:
+  'FinishBreakNeck.singleton': FinishBreakNeck.singleton,
+  // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/evade_on_ground.dart:
+  'EvadeOnGround.singleton': EvadeOnGround.singleton,
   // From lib/src/fight/thrust/thrust_defense/actions/jump_back.dart:
   'JumpBackFromThrust.singleton': JumpBackFromThrust.singleton,
   // From lib/src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart:
@@ -81,14 +89,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrust.singleton': DodgeThrust.singleton,
   // From lib/src/fight/thrust/actions/finish_thrust.dart:
   'FinishThrust.singleton': FinishThrust.singleton,
-  // From lib/src/fight/fatality_on_ground/actions/finish_break_neck.dart:
-  'FinishBreakNeck.singleton': FinishBreakNeck.singleton,
-  // From lib/src/fight/fatality_on_ground/actions/finish_crack_skull.dart:
-  'FinishCrackSkull.singleton': FinishCrackSkull.singleton,
-  // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/evade_on_ground.dart:
-  'EvadeOnGround.singleton': EvadeOnGround.singleton,
-  // From lib/src/fight/throw/actions/finish_throw_thrusting.dart:
-  'FinishThrowThrusting.singleton': FinishThrowThrusting.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

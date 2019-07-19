@@ -15,7 +15,7 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
   final String wireName = 'StatUpdate';
 
   @override
-  Iterable serialize(Serializers serializers, StatUpdate object,
+  Iterable<Object> serialize(Serializers serializers, StatUpdate object,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
@@ -34,7 +34,7 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
   }
 
   @override
-  StatUpdate deserialize(Serializers serializers, Iterable serialized,
+  StatUpdate deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;

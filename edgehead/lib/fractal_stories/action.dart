@@ -172,10 +172,10 @@ abstract class Action<T> {
   ///
   /// If the action doesn't need an object (like "stand up") then this
   /// method will never be run. Such an action needs to be defined
-  /// as `Action<Null>`.
+  /// as `Action<Nothing>`.
   Iterable<T> generateObjects(ApplicabilityContext context) {
     throw UnimplementedError('generateObjects not implemented for $this. '
-        'If this is an Action<Null>, then this method shouldn\'t have been '
+        'If this is an Action<Nothing>, then this method shouldn\'t have been '
         'called in the first place.');
   }
 
@@ -401,6 +401,18 @@ abstract class ItemAction extends Action<Item> {
   String toString() => "ItemAction<$commandPathTemplate>";
 }
 
+/// This is a class you can use as a type argument for [Action].
+///
+/// An `Action<Nothing>` is an action that does not need an object to be
+/// performed.
+@sealed
+class Nothing {
+  /// Removes the default constructor of [Nothing], making it impossible
+  /// to ever instantiate. This is what we want, because [Nothing] is
+  /// the type expression of, literally, nothing.
+  Nothing._();
+}
+
 /// This [Action] requires a another [Actor], a target. The target
 /// doesn't need to be an enemy or a friend. Just any actor other than
 /// the one performing the action.
@@ -483,6 +495,9 @@ class Performance<T> {
   /// The chance that the action will
   final num successChance;
 
+  /// The object the [action] is performed on.
+  final T object;
+
   /// Creates a performance object.
   const Performance(this.action, this.context, this.object, this.successChance);
 
@@ -490,9 +505,6 @@ class Performance<T> {
   Actor get actor => context.actor;
 
   List<String> get commandPath => action.getCommandPath(context, object);
-
-  /// The object the [action] is performed on.
-  final T object;
 }
 
 /// This class encapsulates a singular reason why an action might have
@@ -526,12 +538,12 @@ class Reason<T> {
 @immutable
 class ReasonedSuccessChance<R> {
   /// Sure failure without any reason given.
-  static const ReasonedSuccessChance<Object> sureFailure =
-      ReasonedSuccessChance<Object>(0.0);
+  static const ReasonedSuccessChance<Nothing> sureFailure =
+      ReasonedSuccessChance<Nothing>(0.0);
 
   /// Sure success without any reason given.
-  static const ReasonedSuccessChance<Object> sureSuccess =
-      ReasonedSuccessChance<Object>(1.0);
+  static const ReasonedSuccessChance<Nothing> sureSuccess =
+      ReasonedSuccessChance<Nothing>(1.0);
 
   /// The probability of success, as a number between `0.0` and `1.0`.
   final double value;
@@ -544,7 +556,9 @@ class ReasonedSuccessChance<R> {
 
   const ReasonedSuccessChance(this.value,
       {List<Reason<R>> successReasons, List<Reason<R>> failureReasons})
+      // ignore: prefer_void_to_null
       : successReasons = successReasons ?? const <Reason<Null>>[],
+        // ignore: prefer_void_to_null
         failureReasons = failureReasons ?? const <Reason<Null>>[];
 
   /// Creates an inversion of this [ReasonedSuccessChance].

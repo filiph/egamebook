@@ -15,7 +15,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
   final String wireName = 'SlotMachine';
 
   @override
-  Iterable serialize(Serializers serializers, SlotMachine object,
+  Iterable<Object> serialize(Serializers serializers, SlotMachine object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'probability',
@@ -34,12 +34,11 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
         ..add(serializers.serialize(object.rerollEffectDescription,
             specifiedType: const FullType(String)));
     }
-
     return result;
   }
 
   @override
-  SlotMachine deserialize(Serializers serializers, Iterable serialized,
+  SlotMachine deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new SlotMachineBuilder();
 

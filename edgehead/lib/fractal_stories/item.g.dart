@@ -15,7 +15,7 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
   final String wireName = 'Item';
 
   @override
-  Iterable serialize(Serializers serializers, Item object,
+  Iterable<Object> serialize(Serializers serializers, Item object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'id',
@@ -32,12 +32,11 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
         ..add(serializers.serialize(object.damageCapability,
             specifiedType: const FullType(DamageCapability)));
     }
-
     return result;
   }
 
   @override
-  Item deserialize(Serializers serializers, Iterable serialized,
+  Item deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ItemBuilder();
 

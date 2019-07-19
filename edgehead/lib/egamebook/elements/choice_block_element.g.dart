@@ -15,7 +15,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
   final String wireName = 'ChoiceBlock';
 
   @override
-  Iterable serialize(Serializers serializers, ChoiceBlock object,
+  Iterable<Object> serialize(Serializers serializers, ChoiceBlock object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'saveGame',
@@ -31,7 +31,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
   }
 
   @override
-  ChoiceBlock deserialize(Serializers serializers, Iterable serialized,
+  ChoiceBlock deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ChoiceBlockBuilder();
 
@@ -49,7 +49,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
           result.choices.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Choice)]))
-              as BuiltList);
+              as BuiltList<dynamic>);
           break;
       }
     }

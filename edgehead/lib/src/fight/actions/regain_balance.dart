@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
-class RegainBalance extends Action<Null> {
+class RegainBalance extends Action<Nothing> {
   static final RegainBalance singleton = RegainBalance();
 
   static const String className = "RegainBalance";
@@ -47,7 +47,7 @@ class RegainBalance extends Action<Null> {
   }
 
   @override
-  String applySuccess(ActionContext context, Null _) {
+  String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
@@ -66,26 +66,26 @@ class RegainBalance extends Action<Null> {
   }
 
   @override
-  Duration getRecoveryDuration(ApplicabilityContext context, Null object) {
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing _) {
     if (context.actor.isPlayer) {
       //  This move should be super fast for the player.
       return const Duration(milliseconds: 200);
     }
 
-    return super.getRecoveryDuration(context, object);
+    return super.getRecoveryDuration(context, _);
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
       "Will ${a.pronoun.nominative} regain balance?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w, Null _) =>
+          Actor a, Simulation sim, WorldState w, void _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) =>
+  bool isApplicable(Actor a, Simulation sim, WorldState world, void _) =>
       // Only player is able to regain balance.
       // It's boring when others do it.
       a.isPlayer && a.pose == Pose.offBalance && !recentlyLostStance(a, world);

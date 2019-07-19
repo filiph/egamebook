@@ -15,7 +15,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
   final String wireName = 'WorldState';
 
   @override
-  Iterable serialize(Serializers serializers, WorldState object,
+  Iterable<Object> serialize(Serializers serializers, WorldState object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'actionHistory',
@@ -51,12 +51,11 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
         ..add(serializers.serialize(object.global,
             specifiedType: const FullType(WorldStateFlags)));
     }
-
     return result;
   }
 
   @override
-  WorldState deserialize(Serializers serializers, Iterable serialized,
+  WorldState deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WorldStateBuilder();
 
@@ -74,7 +73,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           result.actors.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(Actor)]))
-              as BuiltSet);
+              as BuiltSet<dynamic>);
           break;
         case 'customHistory':
           result.customHistory.replace(serializers.deserialize(value,
@@ -92,8 +91,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           break;
         case 'situations':
           result.situations.replace(serializers.deserialize(value,
-              specifiedType: const FullType(
-                  BuiltList, const [const FullType(Situation)])) as BuiltList);
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(Situation)]))
+              as BuiltList<dynamic>);
           break;
         case 'statefulRandomState':
           result.statefulRandomState = serializers.deserialize(value,

@@ -16,7 +16,7 @@ class _$ErrorElementSerializer implements StructuredSerializer<ErrorElement> {
   final String wireName = 'ErrorElement';
 
   @override
-  Iterable serialize(Serializers serializers, ErrorElement object,
+  Iterable<Object> serialize(Serializers serializers, ErrorElement object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'message',
@@ -31,7 +31,7 @@ class _$ErrorElementSerializer implements StructuredSerializer<ErrorElement> {
   }
 
   @override
-  ErrorElement deserialize(Serializers serializers, Iterable serialized,
+  ErrorElement deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ErrorElementBuilder();
 

@@ -17,7 +17,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
   final String wireName = 'VisitHistory';
 
   @override
-  Iterable serialize(Serializers serializers, VisitHistory object,
+  Iterable<Object> serialize(Serializers serializers, VisitHistory object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'records',
@@ -30,7 +30,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
   }
 
   @override
-  VisitHistory deserialize(Serializers serializers, Iterable serialized,
+  VisitHistory deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new VisitHistoryBuilder();
 
@@ -45,7 +45,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(VisitRecord)
-              ])) as BuiltListMultimap);
+              ])) as BuiltListMultimap<dynamic, dynamic>);
           break;
       }
     }
@@ -61,7 +61,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
   final String wireName = 'VisitRecord';
 
   @override
-  Iterable serialize(Serializers serializers, VisitRecord object,
+  Iterable<Object> serialize(Serializers serializers, VisitRecord object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'actorId',
@@ -79,12 +79,11 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
         ..add(serializers.serialize(object.parentRoomName,
             specifiedType: const FullType(String)));
     }
-
     return result;
   }
 
   @override
-  VisitRecord deserialize(Serializers serializers, Iterable serialized,
+  VisitRecord deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new VisitRecordBuilder();
 

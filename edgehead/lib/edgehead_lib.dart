@@ -102,7 +102,7 @@ class EdgeheadGame extends Book {
     update();
   }
 
-  Future<Null> update() async {
+  Future<void> update() async {
     try {
       await _update();
       // ignore: avoid_catches_without_on_clauses
@@ -169,7 +169,7 @@ class EdgeheadGame extends Book {
     }
   }
 
-  Future<Null> _applySelected(Performance performance, ActorTurn turn,
+  Future<void> _applySelected(Performance performance, ActorTurn turn,
       int choiceCount, Storyline storyline) async {
     var consequences = performance.action
         .apply(turn, choiceCount, consequence, simulation, world, _pubsub,
@@ -246,7 +246,7 @@ class EdgeheadGame extends Book {
     consequence = PlanConsequence.initial(world);
   }
 
-  Future<Null> _update() async {
+  Future<void> _update() async {
     final intermediateOutput =
         storyline.generateFinishedOutput().toList(growable: false);
     if (intermediateOutput.isNotEmpty) {
@@ -403,7 +403,7 @@ class EdgeheadGame extends Book {
           "than one presented.");
 
       final choices = ListBuilder<Choice>();
-      final callbacks = <Choice, Future<Null> Function()>{};
+      final callbacks = <Choice, Future<void> Function()>{};
       for (final performance in performances) {
         final choice = Choice((b) => b
           ..commandPath = ListBuilder<String>(performance.commandPath)

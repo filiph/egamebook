@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class Scramble extends Action<Null> {
+class Scramble extends Action<Nothing> {
   static final Scramble singleton = Scramble();
 
   static const String className = "Scramble";
@@ -38,7 +38,7 @@ class Scramble extends Action<Null> {
   }
 
   @override
-  String applySuccess(ActionContext context, Null _) {
+  String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
     a.report(
@@ -52,16 +52,16 @@ class Scramble extends Action<Null> {
   List<String> get commandPathTemplate => ["Scramble"];
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Null _) =>
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
       "Will ${a.pronoun.nominative} crawl out of harm's way?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w, Null _) =>
+          Actor a, Simulation sim, WorldState w, void _) =>
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Null _) {
+  bool isApplicable(Actor a, Simulation sim, WorldState world, void _) {
     if (!a.isOnGround) return false;
     // Actor must have just fallen.
     if (recentlyForcedToGround(a, world)) return true;

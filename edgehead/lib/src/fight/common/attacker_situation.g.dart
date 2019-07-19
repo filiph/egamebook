@@ -97,7 +97,7 @@ class _$AttackerSituationSerializer
   final String wireName = 'AttackerSituation';
 
   @override
-  Iterable serialize(Serializers serializers, AttackerSituation object,
+  Iterable<Object> serialize(Serializers serializers, AttackerSituation object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'attackDirection',
@@ -129,12 +129,12 @@ class _$AttackerSituationSerializer
         ..add(serializers.serialize(object.additionalData,
             specifiedType: const FullType(String)));
     }
-
     return result;
   }
 
   @override
-  AttackerSituation deserialize(Serializers serializers, Iterable serialized,
+  AttackerSituation deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AttackerSituationBuilder();
 
@@ -162,14 +162,14 @@ class _$AttackerSituationSerializer
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(EnemyTargetAction)]))
-                  as BuiltList);
+                  as BuiltList<dynamic>);
           break;
         case 'builtOtherActorActionGenerators':
           result.builtOtherActorActionGenerators.replace(
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(OtherActorAction)]))
-                  as BuiltList);
+                  as BuiltList<dynamic>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
