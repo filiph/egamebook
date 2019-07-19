@@ -130,17 +130,22 @@ class Storyline {
   static const String OBJECT2_PRONOUN_POSSESSIVE = "<object2Pronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
+
+  /// e.g. in "goes"
   static const String VERB_ES = "<es>";
   static const String VERB_SSES = "<sses>";
+
+  /// e.g. in "tries", "flies"
   static const String VERB_IES = "<ies>";
-  // e.g. in "goes"
   static const String VERB_DO = "<does>";
-  // e.g. in "tries", "flies"
   static const String VERB_BE = "<is>";
   static const String VERB_HAVE = "<has>";
   static final RegExp QUOTE_INTERPUNCTION_DUPLICATION =
       RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
   static const String PARAGRAPH_NEWLINES = "\n\n";
+
+  /// Matches occurrences of `<object` that aren't `<object2`.
+  static final RegExp OBJECT_NOT_OBJECT2_REGEXP = RegExp(r'''<object[^2]''');
 
   static const int SHORT_TIME = 4;
 
@@ -206,7 +211,8 @@ class Storyline {
 
     assert(
         subject != null || !str.contains("<subject"), "'$str' lacks subject");
-    assert(object != null || !str.contains("<object"), "'$str' lacks object");
+    assert(object != null || !str.contains(OBJECT_NOT_OBJECT2_REGEXP),
+        "'$str' lacks object");
     assert(
         object2 != null || !str.contains("<object2"), "'$str' lacks object2");
 
