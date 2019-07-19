@@ -84,7 +84,8 @@ class KickItemOutOfReach extends ItemAction {
         return false;
       }
 
-      final enemies = w.actors.where((actor) => actor.team.isEnemyWith(a.team));
+      final actors = w.currentSituation.getActors(sim, w);
+      final enemies = actors.where((actor) => actor.team.isEnemyWith(a.team));
       final weapons = enemies.map((actor) => actor.currentWeapon?.value ?? 0);
       final worst = weapons.fold(0xffffffff, min);
 
