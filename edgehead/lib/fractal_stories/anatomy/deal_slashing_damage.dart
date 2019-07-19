@@ -202,7 +202,7 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
   severedPartBuilder.hitpoints = 0;
   final severedPart = severedPartBuilder.build();
 
-  bool endedBlind = victim.anatomy.build().isBlind;
+  final builtVictim = victim.build();
 
   return WeaponAssaultResult(
     victim.build(),
@@ -213,7 +213,7 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
         isWeaponHeld(target.currentWeapon, severedPart, target.inventory),
     disabled: false,
     fell: victimDidFall,
-    wasBlinding: !startedBlind && endedBlind,
+    wasBlinding: !startedBlind && builtVictim.anatomy.isBlind,
   );
 }
 

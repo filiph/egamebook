@@ -106,10 +106,10 @@ WeaponAssaultResult _disableByThrust(
     victimDidFall = true;
   }
 
-  bool endedBlind = victim.anatomy.build().isBlind;
+  final builtVictim = victim.build();
 
   return WeaponAssaultResult(
-    victim.build(),
+    builtVictim,
     bodyPart,
     fell: victimDidFall,
     disabled: true,
@@ -117,6 +117,6 @@ WeaponAssaultResult _disableByThrust(
         isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
     severedPart: null,
     slashSuccessLevel: null,
-    wasBlinding: !startedBlind && endedBlind,
+    wasBlinding: !startedBlind && builtVictim.anatomy.isBlind,
   );
 }
