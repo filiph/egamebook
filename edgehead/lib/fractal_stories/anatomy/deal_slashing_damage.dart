@@ -120,8 +120,8 @@ WeaponAssaultResult _addMajorCut(
     // Disabling is covered in an if statement above.
     severedPart: null,
     disabled: false,
-    fell: false,
-    droppedCurrentWeapon: false,
+    willFall: false,
+    willDropCurrentWeapon: false,
     wasBlinding: false,
   );
 }
@@ -156,8 +156,8 @@ WeaponAssaultResult _addMinorCut(
     // Minor cuts do none of the below.
     severedPart: null,
     disabled: false,
-    fell: false,
-    droppedCurrentWeapon: false,
+    willFall: false,
+    willDropCurrentWeapon: false,
     wasBlinding: false,
   );
 }
@@ -173,13 +173,12 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
     victim.hitpoints = 0;
   }
 
-  bool victimDidFall = false;
+  bool victimWillFall = false;
   if (target.pose != Pose.onGround &&
       bodyPart
           .getDescendantParts()
           .any((part) => part.function == BodyPartFunction.mobile)) {
-    victim.pose = Pose.onGround;
-    victimDidFall = true;
+    victimWillFall = true;
   }
 
   deepReplaceBodyPart(
@@ -209,10 +208,10 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
     bodyPart,
     slashSuccessLevel: SlashSuccessLevel.cleave,
     severedPart: severedPart,
-    droppedCurrentWeapon:
+    willDropCurrentWeapon:
         isWeaponHeld(target.currentWeapon, severedPart, target.inventory),
     disabled: false,
-    fell: victimDidFall,
+    willFall: victimWillFall,
     wasBlinding: !startedBlind && builtVictim.anatomy.isBlind,
   );
 }
@@ -238,7 +237,7 @@ WeaponAssaultResult _disableBySlash(
     },
   );
 
-  bool victimDidFall = false;
+  bool victimWillFall = false;
   if (target.pose != Pose.onGround &&
       // Disabling any body part to which a mobile body part is recursively
       // attached makes the target fall down.
@@ -249,8 +248,7 @@ WeaponAssaultResult _disableBySlash(
       bodyPart
           .getDescendantParts()
           .any((part) => part.function == BodyPartFunction.mobile)) {
-    victim.pose = Pose.onGround;
-    victimDidFall = true;
+    victimWillFall = true;
   }
 
   bool endedBlind = victim.anatomy.build().isBlind;
@@ -259,9 +257,9 @@ WeaponAssaultResult _disableBySlash(
     victim.build(),
     bodyPart,
     slashSuccessLevel: SlashSuccessLevel.majorCut,
-    fell: victimDidFall,
+    willFall: victimWillFall,
     disabled: true,
-    droppedCurrentWeapon:
+    willDropCurrentWeapon:
         isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
     severedPart: null,
     wasBlinding: !startedBlind && endedBlind,

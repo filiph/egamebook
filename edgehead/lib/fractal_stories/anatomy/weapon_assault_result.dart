@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 ///
 /// The encapsulates things like "how did the assault leave the victim?"
 /// ([actor]), "did any part of the victim got severed?" ([severedPart]) or
-/// "did the victim fall as a result of the assault?" ([fell]).
+/// "will the victim fall as a result of the assault?" ([willFall]).
 class WeaponAssaultResult {
   /// The victim in their state after the slash (e.g. missing a limb).
   final Actor actor;
@@ -19,13 +19,19 @@ class WeaponAssaultResult {
   /// The body part that was hit (slashed, pierced, etc.).
   final BodyPart touchedPart;
 
-  /// The victim fell as a result of the slash.
-  final bool fell;
+  /// The victim will fall as a result of the slash.
+  ///
+  /// The fall itself didn't happen when the assault was executed but
+  /// the overarching action should make sure that by the end of it, the
+  /// victim is down (and that fact is explained in the storyline).
+  final bool willFall;
 
   /// The [touchedPart] was disabled in the hit (but not severed).
   final bool disabled;
 
   /// After this assault, the target is blinded.
+  ///
+  /// The overarching action should point that out in the storyline.
   final bool wasBlinding;
 
   /// The success level of the slash.
@@ -35,17 +41,21 @@ class WeaponAssaultResult {
   /// or downgraded.
   ///
   /// For example, if the provided success level is [SlashSuccessLevel.cleave]
-  /// but the body part is not severable, the final [slashSuccessLevel] will be
+  /// but the body part is not sever-able, the final [slashSuccessLevel] will be
   /// [SlashSuccessLevel.majorCut].
   ///
   /// This is `null` for assaults that were not slashing.
   final SlashSuccessLevel slashSuccessLevel;
 
-  /// Whether the current weapon was dropped as a result of the assault.
+  /// Whether the current weapon will be dropped as a result of the assault.
   ///
-  /// For example, if a slash disabled (or cuts off) an arm, and the arm
-  /// was holding the sword, than this will be `true`.
-  final bool droppedCurrentWeapon;
+  /// For example, if a slash disables (or cuts off) an arm, and the arm
+  /// is holding the sword, than this will be `true`.
+  ///
+  /// The drop itself didn't happen when the assault was executed but
+  /// the overarching action should make sure that by the end of it, the
+  /// victim's weapon is down (and that fact is explained in the storyline).
+  final bool willDropCurrentWeapon;
 
   const WeaponAssaultResult(
     this.actor,
@@ -53,8 +63,8 @@ class WeaponAssaultResult {
     @required this.severedPart,
     @required this.slashSuccessLevel,
     @required this.disabled,
-    @required this.fell,
-    @required this.droppedCurrentWeapon,
+    @required this.willFall,
+    @required this.willDropCurrentWeapon,
     @required this.wasBlinding,
   });
 }

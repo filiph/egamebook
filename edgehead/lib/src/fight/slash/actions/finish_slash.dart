@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -94,14 +95,15 @@ class FinishSlash extends OtherActorAction {
         result.touchedPart.report(s, "<subject> go<es> limp",
             negative: true, actionThread: thread);
       }
-      if (result.droppedCurrentWeapon) {
+      if (result.willDropCurrentWeapon) {
         final weapon = dropCurrentWeapon(w, result.actor);
         result.actor.report(s, "<subject> drop<s> <object>",
             object: weapon, negative: true, actionThread: thread);
       }
-      if (result.fell) {
+      if (result.willFall) {
         result.actor.report(s, "<subject> fall<s> {|down|to the ground}",
             negative: true, actionThread: thread);
+        w.updateActorById(result.actor.id, (b) => b.pose = Pose.onGround);
         w.recordCustom(fellToGroundCustomEventName, actor: result.actor);
       }
       inflictPain(context, result.actor, damage);

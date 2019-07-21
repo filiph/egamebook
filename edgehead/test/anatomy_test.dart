@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:test/test.dart';
@@ -155,6 +156,38 @@ void main() {
               designation: BodyPartDesignation.head)
           .actor;
       expect(doublyCutOrc.isAlive, isTrue);
+    });
+  });
+
+  group("executeThrustingHit", () {
+    test("disabling primary hand drops weapon", () {
+      final orc = Actor.initialized(1000, "orc",
+          currentWeapon: Item.weapon(10000, WeaponType.sword));
+      final dagger = Item.weapon(42, WeaponType.dagger);
+
+      final result =
+          executeThrustingHit(orc, dagger, BodyPartDesignation.primaryHand);
+      expect(result.willDropCurrentWeapon, isTrue);
+    });
+
+    test("disabling primary arm drops weapon", () {
+      final orc = Actor.initialized(1000, "orc",
+          currentWeapon: Item.weapon(10000, WeaponType.sword));
+      final dagger = Item.weapon(42, WeaponType.dagger);
+
+      final result =
+          executeThrustingHit(orc, dagger, BodyPartDesignation.primaryArm);
+      expect(result.willDropCurrentWeapon, isTrue);
+    });
+
+    test("disabling secondary hand doesn't drop weapon", () {
+      final orc = Actor.initialized(1000, "orc",
+          currentWeapon: Item.weapon(10000, WeaponType.sword));
+      final dagger = Item.weapon(42, WeaponType.dagger);
+
+      final result =
+          executeThrustingHit(orc, dagger, BodyPartDesignation.secondaryHand);
+      expect(result.willDropCurrentWeapon, isFalse);
     });
   });
 

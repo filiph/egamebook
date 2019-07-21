@@ -63,8 +63,8 @@ WeaponAssaultResult _addMajorThrustingWound(
     slashSuccessLevel: null,
     // Disabling thrusts are covered by an if statement above.
     disabled: false,
-    fell: false,
-    droppedCurrentWeapon: false,
+    willFall: false,
+    willDropCurrentWeapon: false,
     wasBlinding: false,
   );
 }
@@ -91,7 +91,7 @@ WeaponAssaultResult _disableByThrust(
     },
   );
 
-  bool victimDidFall = false;
+  bool victimWillFall = false;
   if (target.pose != Pose.onGround &&
       // Disabling any body part to which a mobile body part is recursively
       // attached makes the target fall down.
@@ -102,8 +102,7 @@ WeaponAssaultResult _disableByThrust(
       bodyPart
           .getDescendantParts()
           .any((part) => part.function == BodyPartFunction.mobile)) {
-    victim.pose = Pose.onGround;
-    victimDidFall = true;
+    victimWillFall = true;
   }
 
   final builtVictim = victim.build();
@@ -111,9 +110,9 @@ WeaponAssaultResult _disableByThrust(
   return WeaponAssaultResult(
     builtVictim,
     bodyPart,
-    fell: victimDidFall,
+    willFall: victimWillFall,
     disabled: true,
-    droppedCurrentWeapon:
+    willDropCurrentWeapon:
         isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
     severedPart: null,
     slashSuccessLevel: null,
