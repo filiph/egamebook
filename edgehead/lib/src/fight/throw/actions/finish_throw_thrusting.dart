@@ -70,16 +70,16 @@ class FinishThrowThrusting extends OtherActorAction {
     final result =
         executeThrustingHit(enemy, projectile, targetPart.designation);
 
-    w.updateActorById(enemy.id, (b) => b.replace(result.actor));
+    w.updateActorById(enemy.id, (b) => b.replace(result.victim));
     final thread = getThreadId(sim, w, throwSituationName);
-    bool killed = !result.actor.isAlive && !result.actor.isInvincible;
+    bool killed = !result.victim.isAlive && !result.victim.isInvincible;
     if (!killed) {
       projectile.report(
           s,
           "<subject> {pierce<s>|ram<s> into|drill<s> into} "
           "<objectOwner's> <object>",
           owner: a,
-          objectOwner: result.actor,
+          objectOwner: result.victim,
           object: result.touchedPart,
           actionThread: thread,
           positive: true);
@@ -90,38 +90,38 @@ class FinishThrowThrusting extends OtherActorAction {
             negative: true, actionThread: thread);
       }
       if (result.willDropCurrentWeapon) {
-        final weapon = dropCurrentWeapon(w, result.actor);
-        result.actor.report(s, "<subject> drop<s> <object>",
+        final weapon = dropCurrentWeapon(w, result.victim);
+        result.victim.report(s, "<subject> drop<s> <object>",
             object: weapon, negative: true, actionThread: thread);
       }
       if (result.willFall) {
-        result.actor.report(s, "<subject> fall<s> {|down|to the ground}",
+        result.victim.report(s, "<subject> fall<s> {|down|to the ground}",
             negative: true, actionThread: thread);
-        w.updateActorById(result.actor.id, (b) => b.pose = Pose.onGround);
-        w.recordCustom(fellToGroundCustomEventName, actor: result.actor);
+        w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
+        w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
       }
       inflictPain(
-          context, result.actor, projectile.damageCapability.thrustingDamage,
+          context, result.victim, projectile.damageCapability.thrustingDamage,
           extremePain: result.disabled);
 
-      result.actor
+      result.victim
           .report(s, "<subject> pull<s> <object> out", object: projectile);
       projectile.report(
           s, "<subject> fall<s> onto the ${getGroundMaterial(w)}");
 
       if (result.wasBlinding) {
-        result.actor.report(s, "<subject> <is> now blind", negative: true);
+        result.victim.report(s, "<subject> <is> now blind", negative: true);
       }
     } else {
       projectile.report(
           s,
           "<subject> {pierce<s>|ram<s> into|drill<s> through} "
           "<objectOwner's> <object>",
-          objectOwner: result.actor,
+          objectOwner: result.victim,
           object: result.touchedPart,
           positive: true,
           actionThread: thread);
-      killHumanoid(context, result.actor);
+      killHumanoid(context, result.victim);
     }
 
     moveProjectileToGround(w, a, projectile, false);

@@ -97,10 +97,10 @@ class CounterSweepFeet extends OtherActorAction {
         bodyPart: leg);
 
     w.actors.removeWhere((actor) => actor.id == enemy.id);
-    w.actors.add(result.actor);
+    w.actors.add(result.victim);
 
     assert(
-        result.actor.isAlive,
+        result.victim.isAlive,
         "This assumes the enemy doesn't immediately die from "
         "the leg wound. Which is a safe bet unless they have some really "
         "weird anatomy.");
@@ -110,7 +110,7 @@ class CounterSweepFeet extends OtherActorAction {
         s,
         "<subject> {slash<es>|cut<s>} <object's> "
         "${result.touchedPart.randomDesignation}",
-        object: result.actor,
+        object: result.victim,
         positive: true,
         actionThread: thread);
     if (result.disabled) {
@@ -118,17 +118,17 @@ class CounterSweepFeet extends OtherActorAction {
           negative: true, actionThread: thread);
     }
     if (result.willDropCurrentWeapon) {
-      final weapon = dropCurrentWeapon(w, result.actor);
-      result.actor.report(s, "<subject> drop<s> <object>",
+      final weapon = dropCurrentWeapon(w, result.victim);
+      result.victim.report(s, "<subject> drop<s> <object>",
           object: weapon, negative: true, actionThread: thread);
     }
     if (result.willFall) {
-      result.actor.report(s, "<subject> fall<s> {|down|to the ground}",
+      result.victim.report(s, "<subject> fall<s> {|down|to the ground}",
           negative: true, actionThread: thread);
-      w.updateActorById(result.actor.id, (b) => b.pose = Pose.onGround);
-      w.recordCustom(fellToGroundCustomEventName, actor: result.actor);
+      w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
+      w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
     }
-    inflictPain(context, result.actor, damage);
+    inflictPain(context, result.victim, damage);
 
     w.popSituationsUntil("FightSituation", sim);
 

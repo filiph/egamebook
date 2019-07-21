@@ -16,7 +16,7 @@ void main() {
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
-          .actor;
+          .victim;
       expect(deadOrc.isAlive, isFalse);
     });
 
@@ -26,7 +26,7 @@ void main() {
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
-          .actor;
+          .victim;
       expect(
           deadOrc.anatomy.findByDesignation(BodyPartDesignation.head), isNull);
     });
@@ -37,7 +37,7 @@ void main() {
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
-          .actor;
+          .victim;
       expect(
           deadOrc.anatomy.findByDesignation(BodyPartDesignation.neck).isAlive,
           isFalse);
@@ -61,7 +61,7 @@ void main() {
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.head)
-          .actor;
+          .victim;
       expect(
           deadOrc.anatomy.findByDesignation(BodyPartDesignation.head).isAlive,
           isFalse);
@@ -88,7 +88,7 @@ void main() {
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.torso)
-          .actor;
+          .victim;
       expect(cutOrc.isAlive, isTrue);
     });
 
@@ -100,11 +100,11 @@ void main() {
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.torso)
-          .actor;
+          .victim;
       final doublyCutOrc = executeSlashingHit(
               cutOrc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.torso)
-          .actor;
+          .victim;
       expect(doublyCutOrc.isAlive, isFalse);
     });
 
@@ -116,11 +116,11 @@ void main() {
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.rightLeg)
-          .actor;
+          .victim;
       final doublyCutOrc = executeSlashingHit(
               cutOrc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.rightLeg)
-          .actor;
+          .victim;
       expect(doublyCutOrc.isAlive, isTrue);
     });
 
@@ -132,11 +132,11 @@ void main() {
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.rightLeg)
-          .actor;
+          .victim;
       final doublyCutOrc = executeSlashingHit(
               cutOrc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.rightLeg)
-          .actor;
+          .victim;
       expect(
           doublyCutOrc.anatomy
               .findByDesignation(BodyPartDesignation.rightLeg)
@@ -150,11 +150,11 @@ void main() {
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.minorCut,
               designation: BodyPartDesignation.head)
-          .actor;
+          .victim;
       final doublyCutOrc = executeSlashingHit(
               cutOrc, sword, SlashSuccessLevel.minorCut,
               designation: BodyPartDesignation.head)
-          .actor;
+          .victim;
       expect(doublyCutOrc.isAlive, isTrue);
     });
   });

@@ -6,11 +6,11 @@ import 'package:meta/meta.dart';
 /// Result of an assault by a weapon (sword, spear, claw).
 ///
 /// The encapsulates things like "how did the assault leave the victim?"
-/// ([actor]), "did any part of the victim got severed?" ([severedPart]) or
+/// ([victim]), "did any part of the victim got severed?" ([severedPart]) or
 /// "will the victim fall as a result of the assault?" ([willFall]).
 class WeaponAssaultResult {
   /// The victim in their state after the slash (e.g. missing a limb).
-  final Actor actor;
+  final Actor victim;
 
   /// The body part that was severed (and should be added to the ground).
   /// This can be (and often _will_ be) `null`.
@@ -58,7 +58,7 @@ class WeaponAssaultResult {
   final bool willDropCurrentWeapon;
 
   const WeaponAssaultResult(
-    this.actor,
+    this.victim,
     this.touchedPart, {
     @required this.severedPart,
     @required this.slashSuccessLevel,
