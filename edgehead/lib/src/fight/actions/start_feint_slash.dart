@@ -104,8 +104,7 @@ class FeintSlash extends StartDefensibleActionBase {
       !a.anatomy.isBlind &&
       !enemy.anatomy.isBlind &&
       enemy.pose > Pose.extended &&
-      (a.currentDamageCapability.isSlashing ||
-          a.currentDamageCapability.isBlunt);
+      a.currentDamageCapability.isSlashing;
 
   @override
   Situation mainSituationBuilder(
