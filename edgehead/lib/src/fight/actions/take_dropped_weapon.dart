@@ -49,6 +49,7 @@ class TakeDroppedWeapon extends ItemAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final situation = w.currentSituation as FightSituation;
+    final previousWeapon = a.currentWeapon;
     w.replaceSituationById(
         situation.id,
         situation.rebuild(
@@ -61,6 +62,17 @@ class TakeDroppedWeapon extends ItemAction {
     bool intoPrimaryHand = a.anatomy.primaryWeaponAppendageAvailable;
     var offHandString = intoPrimaryHand ? "" : " with <subject's> off hand";
     a.report(s, "<subject> pick<s> <object> up$offHandString", object: item);
+    if (previousWeapon == null) {
+      a.report(s, "<subject> wield<s> <object>", object: item);
+    } else {
+      a.report(
+          s,
+          "<subject> wield<s> <object>, "
+          "replacing <object2> to <subject's> belt",
+          endSentence: true,
+          object: item,
+          object2: previousWeapon);
+    }
     return "${a.name} picks up ${item.name}";
   }
 
