@@ -1,7 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -10,8 +9,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.dart';
-import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
