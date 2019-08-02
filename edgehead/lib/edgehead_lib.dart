@@ -48,8 +48,15 @@ class EdgeheadGame extends Book {
   /// play-testing.
   final Pattern actionPattern;
   bool actionPatternWasHit = false;
+
+  /// The player character.
   Actor aren;
+
+  /// Player's companion in Insignificant Little Vermin.
   Actor briana;
+
+  /// Player's personal guard in Knights of San Francisco.
+  Actor tamara;
 
   final PubSub _pubsub = PubSub();
   Situation initialSituation;
@@ -211,6 +218,7 @@ class EdgeheadGame extends Book {
     stamina.value = aren.stamina;
 
     briana = edgeheadBriana;
+    tamara = edgeheadTamara;
 
     initialSituation = edgeheadInitialSituation;
 
@@ -234,7 +242,7 @@ class EdgeheadGame extends Book {
     } else {
       // Creating a new game from start.
       world = WorldState((b) => b
-        ..actors = SetBuilder<Actor>(<Actor>[aren, briana])
+        ..actors = SetBuilder<Actor>(<Actor>[aren, briana, tamara])
         ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)
@@ -268,7 +276,7 @@ class EdgeheadGame extends Book {
       storyline.generateOutput().forEach(elementsSink.add);
 
       if (!world.hasAliveActor(aren.id)) {
-        elementsSink.add(LoseGame((b) => b..markdownText = "You die."));
+        elementsSink.add(LoseGame((b) => b..markdownText = "I die."));
       } else {
         elementsSink.add(WinGame((b) => b..markdownText = "TODO win text"));
       }

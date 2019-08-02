@@ -175,19 +175,8 @@ abstract class FightSituation extends Object
         .map((id) => world.getActorById(id))
         .where((a) => a.isAliveAndActive)
         .toList(growable: false);
-    var players = actors.where((a) => a.isPlayer).toList(growable: false);
-    assert(players.length <= 1);
-    Actor player = players.length == 1 ? players.single : null;
-
-    if (turn == 0) {
-      // Always start with the player if possible.
-      if (player != null) {
-        return ActorTurn(player, world.time);
-      }
-    }
 
     Actor readiest;
-
     for (final actor in actors) {
       if (readiest == null) {
         readiest = actor;

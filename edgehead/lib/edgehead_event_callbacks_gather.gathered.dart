@@ -41,4 +41,10 @@ final _$eventCallbackSerializer = InstanceSerializer<EventCallback>({
   'sleeping_goblin_thief': sleeping_goblin_thief,
   // From lib/edgehead_event_callbacks_gather.dart:
   'youre_dead_slave': youre_dead_slave,
+  // From lib/edgehead_event_callbacks_gather.dart:
+  'start_what_is_it_about_this_place': start_what_is_it_about_this_place,
+  // From lib/edgehead_event_callbacks_gather.dart:
+  'start_this_place_is_nightmare': start_this_place_is_nightmare,
+  // From lib/edgehead_event_callbacks_gather.dart:
+  'start_come_back_with_me': start_come_back_with_me,
 });

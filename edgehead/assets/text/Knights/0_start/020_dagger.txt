@@ -1,0 +1,24 @@
+
+
+// ---
+ACTION: $start_take_dagger
+COMMAND: Take dagger
+
+FOR_LOCATION: $start_enter_goblin
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the dagger.
+
+// TODO: add something funny or interesting
+
+SUCCESS_EFFECT:
+w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
+movePlayer(c, "start_begin_fight");
+
+
+// ---
+APPROACH: $start_begin_fight FROM $start_enter_goblin
+COMMAND: “You are going to be fine.”
+DESCRIPTION: N/A

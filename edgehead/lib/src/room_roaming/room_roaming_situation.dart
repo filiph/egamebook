@@ -127,7 +127,7 @@ abstract class RoomRoamingSituation extends Object
       }
     }
 
-    for (final actor in getPartyOf(a, sim, originalWorld)) {
+    for (final actor in getPartyOf(a, sim, w.build())) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
       w.recordVisit(actor, room);
     }

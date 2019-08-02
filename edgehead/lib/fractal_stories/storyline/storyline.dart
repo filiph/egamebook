@@ -448,7 +448,9 @@ class Storyline {
             result.replaceAll(SUBJECT_POSSESIVE, SUBJECT_PRONOUN_POSSESIVE);
       }
 
-      if (subject.pronoun == Pronoun.YOU || subject.pronoun == Pronoun.THEY) {
+      if (subject.pronoun == Pronoun.I ||
+          subject.pronoun == Pronoun.YOU ||
+          subject.pronoun == Pronoun.THEY) {
         // "you fly there", "they pick up the bananas" ...
         result = result.replaceAll(VERB_S, "");
         result = result.replaceAll(VERB_ES, "");
@@ -972,9 +974,9 @@ class Storyline {
     if (owner != null) {
       if (owner.isPlayer) {
         result =
-            result.replaceAll(OWNER_OR_OBJECT_OWNER, Pronoun.YOU.accusative);
+            result.replaceAll(OWNER_OR_OBJECT_OWNER, Pronoun.I.accusative);
         result = result.replaceAll(
-            OWNER_OR_OBJECT_OWNER_POSSESSIVE, Pronoun.YOU.genitive);
+            OWNER_OR_OBJECT_OWNER_POSSESSIVE, Pronoun.I.genitive);
       } else {
         result = addParticleToFirstOccurrence(
             result, OWNER_OR_OBJECT_OWNER, owner, null, reportTime);

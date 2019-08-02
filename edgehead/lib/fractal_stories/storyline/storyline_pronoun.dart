@@ -14,6 +14,8 @@ part 'storyline_pronoun.g.dart';
 ///
 /// See http://en.wikipedia.org/wiki/Latin_declension.
 abstract class Pronoun implements Built<Pronoun, PronounBuilder> {
+  static final Pronoun I = Pronoun("I", "me", "my", "myself");
+
   static final Pronoun YOU = Pronoun("you", "you", "your", "yourself");
 
   static final Pronoun HE = Pronoun("he", "him", "his", "himself");

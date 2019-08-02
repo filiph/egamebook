@@ -38,13 +38,23 @@ final Actor edgeheadPlayer = Actor.initialized(
   isSurvivor: true,
   nameIsProperNoun: true,
   isPlayer: true,
-  pronoun: Pronoun.YOU,
+  pronoun: Pronoun.I,
   constitution: 2,
   dexterity: 150,
   stamina: 3,
   initiative: 1000,
   poseMax: Pose.combat,
   currentRoomName: _preStartBook.name,
+);
+
+final Actor edgeheadTamara = Actor.initialized(
+  tamaraId,
+  "Tamara",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.SHE,
+  constitution: 2,
+  currentRoomName: _preStartBook.name,
+  followingActorId: playerId,
 );
 
 final Simulation edgeheadSimulation =

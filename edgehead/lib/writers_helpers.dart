@@ -17,6 +17,9 @@ const int agruthId = 6666;
 
 const int brianaId = 100;
 
+/// [edgeheadTamara]'s [Actor.id].
+const int tamaraId = 2;
+
 const int escapeTunnelGoblinId = 12345;
 
 const int escapeTunnelOrcId = 12344;
@@ -69,6 +72,8 @@ final Item orcthorn = Item.weapon(orcthornId, WeaponType.sword,
 
 final Item sleepingGoblinsSpear =
     Item.weapon(sleepingGoblinsSpearId, WeaponType.spear);
+
+final Item tamarasDagger = Item.weapon(851651321, WeaponType.dagger);
 
 /// Ruleset created from [_brianaQuotes]. All quotes are `onlyOnce`. The last
 /// quote is `"END"`, which will not print, and is there as the terminal
@@ -188,6 +193,26 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
         9: agruth_enjoy_eating_flesh,
         12: agruth_grit_teeth,
         17: agruth_scowls,
+      });
+}
+
+/// The fight at the start of Knights of San Francisco, with Tamara.
+FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  var goblin = _makeGoblin(w);
+  w.actors.add(goblin);
+  w.updateActorById(playerId,
+      (b) => b.recoveringUntil = w.time.add(const Duration(seconds: 1)));
+  return FightSituation.initialized(
+      w.randomInt(),
+      party,
+      [goblin],
+      "{muddy |wet |}ground",
+      roomRoamingSituation,
+      {
+        2: start_what_is_it_about_this_place,
+        4: start_this_place_is_nightmare,
+        6: start_come_back_with_me,
       });
 }
 
@@ -506,7 +531,7 @@ Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear = false}) =>
         pronoun: Pronoun.HE,
         currentWeapon: spear
             ? Item.weapon(w.randomInt(), WeaponType.spear)
-            : Item.weapon(w.randomInt(), WeaponType.sword, name: "scimitar"),
+            : Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
         team: defaultEnemyTeam,
         foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 

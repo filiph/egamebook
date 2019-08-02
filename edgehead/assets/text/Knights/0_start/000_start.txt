@@ -1,0 +1,17 @@
+// ---
+APPROACH: $start FROM $pre_start_book
+COMMAND: DEBUG >> Play ‘Knights of San Francisco’
+DESCRIPTION: N/A
+
+// ---
+
+ROOM: $start
+
+FIRST_DESCRIPTION:
+We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.
+
+"Young sir, I quit." The guard says this as he unsheathes her sword. "This is the last and then I turn back."
+
+[[CODE]]
+w.actors.removeWhere((actor) => actor.id == brianaId);
+[[/CODE]]

@@ -16,6 +16,10 @@ Another crack and there is new blood pouring from a gash in Briana's face. Agrut
 
 Nobody else is in sight. It's just you, Agruth, and Briana. That's Agruth's first mistake.
 
+[[CODE]]
+w.actors.removeWhere((actor) => actor.id == tamaraId);
+[[/CODE]]
+
 
 FIGHT_SITUATION:
 generateAgruthFight

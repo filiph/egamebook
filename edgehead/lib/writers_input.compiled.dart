@@ -95,7 +95,7 @@ final Room undergroundChurch = Room('underground_church', (ActionContext c) {
       wholeSentence: true);
   rollBrianaQuote(c);
 }, null, null);
-Approach undergroundChurchFromCaveWithAgruth = Approach(
+final Approach undergroundChurchFromCaveWithAgruth = Approach(
     'cave_with_agruth', 'underground_church', 'Go to the Unholy Church',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -105,7 +105,7 @@ Approach undergroundChurchFromCaveWithAgruth = Approach(
   final Storyline s = c.outputStoryline;
   s.add('You make it to the Church undetected.\n', wholeSentence: true);
 });
-Approach undergroundChurchFromGuardpostAboveChurch = Approach(
+final Approach undergroundChurchFromGuardpostAboveChurch = Approach(
     'guardpost_above_church',
     'underground_church',
     'Descend toward the Underground Church', (ActionContext c) {
@@ -117,7 +117,7 @@ Approach undergroundChurchFromGuardpostAboveChurch = Approach(
   s.add('You take the passage leading down toward the temple.\n',
       wholeSentence: true);
 });
-Approach undergroundChurchFromUndergroundChurchAltar =
+final Approach undergroundChurchFromUndergroundChurchAltar =
     Approach('underground_church_altar', 'underground_church', 'Sneak back',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -214,7 +214,7 @@ final Room tunnel = Room('tunnel', (ActionContext c) {
       'Almost as soon as the circular room disappears from your line of sight, loud shouting rises from deep within the mountain. You hurry up, taking the high stairs by two. The voices from below quiet down a bit, and now you can hear dozens of orc and goblin feet stomping.\n\n\nThe air gets colder and fresher, but there\'s still no end in sight. The stairs get steeper and steeper until you feel like you’re climbing a ladder.\n\n\n"I have…" Briana gasps, catching her breath. "I have not fought my way through the depths of Mount Bloodrock just to die of exhaustion on its doorstep."\n\n\n_"That… that would be disappointing, yes."_\n\n\nThe sounds from behind grow louder. You can now pick out individual voices, although not what they are saying.\n\n\nThe stairway suddenly makes a sharp left turn and levels out. Tasting blood on the roof of your mouth, your whole body demands that you stop — but you start running anyway. Briana follows close behind.\n\n\nThe light in the tunnel gets brighter and the air gets colder. Suddenly, just when you can smell fresh air, an orc and a goblin jump out in front of you from a slimy crevice, swords in hands.\n\n\n![Picture of the Upper Door guard](https://egamebook.com/vermin/v/latest/img/orc_and_goblin_sketch.jpg)\n\n\nThey must be guarding the Upper Door. There is no way around them.\n',
       wholeSentence: true);
 }, null, generateEscapeTunnelFight, null);
-Approach tunnelFromTunnelCancelChance =
+final Approach tunnelFromTunnelCancelChance =
     Approach('tunnel_cancel_chance', 'tunnel', 'Continue', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -510,7 +510,7 @@ final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
       'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
       wholeSentence: true);
 }, null, generateTestFightWithGoblin, null);
-Approach testFightGoblinFromPreStartBook = Approach(
+final Approach testFightGoblinFromPreStartBook = Approach(
     'pre_start_book',
     'test_fight_goblin',
     'Playtest >> one-on-one test fight >> with a goblin', (ActionContext c) {
@@ -522,7 +522,7 @@ Approach testFightGoblinFromPreStartBook = Approach(
   s.add('You get transported to the development testing arena.\n',
       wholeSentence: true);
 });
-Approach endOfRoamFromTestFightGoblin = Approach(
+final Approach endOfRoamFromTestFightGoblin = Approach(
     'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -538,10 +538,11 @@ final Room startAdventure = Room('start_adventure', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming.\n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves.\n\n\n![Agruth whips Briana](https://egamebook.com/vermin/v/latest/img/agruth-attack.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.\n\n\nNobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.\n',
+      'The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming.\n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves.\n\n\n![Agruth whips Briana](https://egamebook.com/vermin/v/latest/img/agruth-attack.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.\n\n\nNobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.\n\n',
       wholeSentence: true);
+  w.actors.removeWhere((actor) => actor.id == tamaraId);
 }, null, generateAgruthFight, null);
-Approach startAdventureFromPreStartBook = Approach(
+final Approach startAdventureFromPreStartBook = Approach(
     'pre_start_book', 'start_adventure', 'DEBUG >> Smoke test \'Vermin\'',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -586,7 +587,7 @@ final Room slaveQuarters = Room('slave_quarters', (ActionContext c) {
   s.add('"We _really_ shouldn\'t push our luck," she says.\n',
       wholeSentence: true);
 }, null, null);
-Approach slaveQuartersFromSlaveQuartersPassage = Approach(
+final Approach slaveQuartersFromSlaveQuartersPassage = Approach(
     'slave_quarters_passage',
     'slave_quarters',
     'Go further toward the Gate of Screams', (ActionContext c) {
@@ -674,7 +675,7 @@ final Room justAfterAgruthFight =
       'You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.\n\n\nBriana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror.\n\n\n"What?" she says when she notices you\'re looking.\n\n\n_"We either go now, or die."_\n\n\nBriana spits down at the body. "He wasn\'t even the worst of them, you know."\n\n\n_"I know."_\n\n\n"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip.\n\n\n_"That one is already dead."_\n\n\n"Just making sure," she says.\n\n\n![Agruth\'s sword](https://egamebook.com/vermin/v/latest/img/agruth-sword.jpg)\n\n\nShe turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.\n',
       wholeSentence: true);
 }, null, null, null);
-Approach justAfterAgruthFightFromStartAdventure =
+final Approach justAfterAgruthFightFromStartAdventure =
     Approach('start_adventure', 'just_after_agruth_fight', '<implicit>',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -958,7 +959,7 @@ final Room guardpostAboveChurch =
             wholeSentence: true);
       })).apply(c);
 }, null, null);
-Approach guardpostAboveChurchFromUndergroundChurch = Approach(
+final Approach guardpostAboveChurchFromUndergroundChurch = Approach(
     'underground_church', 'guardpost_above_church', 'Enter the upwards passage',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -969,7 +970,7 @@ Approach guardpostAboveChurchFromUndergroundChurch = Approach(
   s.add('You take the sloping passage and walk upward for a long time.\n',
       wholeSentence: true);
 });
-Approach guardpostAboveChurchFromTunnelCancelChance =
+final Approach guardpostAboveChurchFromTunnelCancelChance =
     Approach('tunnel_cancel_chance', 'guardpost_above_church', 'Return',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -979,7 +980,7 @@ Approach guardpostAboveChurchFromTunnelCancelChance =
   final Storyline s = c.outputStoryline;
   s.add('You nod and step back into the circular room.\n', wholeSentence: true);
 });
-Approach guardpostAboveChurchFromSmelter = Approach(
+final Approach guardpostAboveChurchFromSmelter = Approach(
     'smelter', 'guardpost_above_church', 'Go through the smooth passage',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1355,7 +1356,7 @@ final Room smelter = Room('smelter', (ActionContext c) {
       })).apply(c);
   rollBrianaQuote(c);
 }, null, null);
-Approach smelterFromWarForge =
+final Approach smelterFromWarForge =
     Approach('war_forge', 'smelter', 'Go to smelter', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1366,7 +1367,7 @@ Approach smelterFromWarForge =
       'You keep low, ascending the stairs. When you reach the top, you feel a wave of hot air coming from a passage in the wall. You make your way through it.\n',
       wholeSentence: true);
 });
-Approach smelterFromGuardpostAboveChurch =
+final Approach smelterFromGuardpostAboveChurch =
     Approach('guardpost_above_church', 'smelter', 'Go to the smelter',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1461,7 +1462,7 @@ final Room caveWithAgruth = Room('cave_with_agruth', (ActionContext c) {
   s.add('The corpse lies still, getting cold.\n\n\n', wholeSentence: true);
   rollBrianaQuote(c);
 }, null, null);
-Approach caveWithAgruthFromUndergroundChurch = Approach(
+final Approach caveWithAgruthFromUndergroundChurch = Approach(
     'underground_church',
     'cave_with_agruth',
     'Go back to the cave with Agruth\'s corpse', (ActionContext c) {
@@ -1474,7 +1475,7 @@ Approach caveWithAgruthFromUndergroundChurch = Approach(
       'You walk slowly out of the church, back toward where you left Agruth\'s body.\n',
       wholeSentence: true);
 });
-Approach caveWithAgruthFromSlaveQuartersPassage = Approach(
+final Approach caveWithAgruthFromSlaveQuartersPassage = Approach(
     'slave_quarters_passage',
     'cave_with_agruth',
     'Go back to the cave where Agruth\'s corpse lies', (ActionContext c) {
@@ -1487,7 +1488,9 @@ Approach caveWithAgruthFromSlaveQuartersPassage = Approach(
       'You back away from the door, and go back to where you left Agruth\'s body.\n',
       wholeSentence: true);
 });
-Approach caveWithAgruthFromWarForge = Approach('war_forge', 'cave_with_agruth',
+final Approach caveWithAgruthFromWarForge = Approach(
+    'war_forge',
+    'cave_with_agruth',
     'Go back to the cave with Agruth\'s corpse', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1574,7 +1577,7 @@ final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
       'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAgruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrc, null);
-Approach testFightOrcFromPreStartBook = Approach(
+final Approach testFightOrcFromPreStartBook = Approach(
     'pre_start_book',
     'test_fight_orc',
     'Playtest >> one-on-one test fight >> with an orc', (ActionContext c) {
@@ -1586,7 +1589,7 @@ Approach testFightOrcFromPreStartBook = Approach(
   s.add('You get transported to the development testing arena.\n',
       wholeSentence: true);
 });
-Approach endOfRoamFromTestFightOrc = Approach(
+final Approach endOfRoamFromTestFightOrc = Approach(
     'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1615,7 +1618,7 @@ final Room undergroundChurchAltar =
       'The altar glows with a dim red light that reflects and shimmers in the eight black eyes above it.\n',
       wholeSentence: true);
 }, null, null);
-Approach undergroundChurchAltarFromUndergroundChurch = Approach(
+final Approach undergroundChurchAltarFromUndergroundChurch = Approach(
     'underground_church', 'underground_church_altar', 'Go towards the altar',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1911,7 +1914,7 @@ final Room slaveQuartersPassage =
       })).apply(c);
   rollBrianaQuote(c);
 }, generateSlaveQuartersPassageFight, null);
-Approach slaveQuartersPassageFromCaveWithAgruth = Approach(
+final Approach slaveQuartersPassageFromCaveWithAgruth = Approach(
     'cave_with_agruth', 'slave_quarters_passage', 'Go to the slave quarters',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1922,7 +1925,7 @@ Approach slaveQuartersPassageFromCaveWithAgruth = Approach(
   s.add('You and Briana hug the wall and start toward the slave quarters.\n',
       wholeSentence: true);
 });
-Approach slaveQuartersPassageFromSlaveQuarters = Approach(
+final Approach slaveQuartersPassageFromSlaveQuarters = Approach(
     'slave_quarters', 'slave_quarters_passage', 'Go back', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1932,7 +1935,7 @@ Approach slaveQuartersPassageFromSlaveQuarters = Approach(
   s.add('You nod, and then start carefully backing out through the passage.\n',
       wholeSentence: true);
 });
-Approach slaveQuartersPassageFromOrcthornRoom =
+final Approach slaveQuartersPassageFromOrcthornRoom =
     Approach('orcthorn_room', 'slave_quarters_passage', 'Exit the room',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2066,7 +2069,7 @@ final Room exitFromBloodrock = Room('exit_from_bloodrock', (ActionContext c) {
       wholeSentence: true);
   describeSuccessRate(sim, originalWorld, s);
 }, null, null, null);
-Approach exitFromBloodrockFromTunnel = Approach(
+final Approach exitFromBloodrockFromTunnel = Approach(
     'tunnel', 'exit_from_bloodrock', 'Start running again', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2075,7 +2078,7 @@ Approach exitFromBloodrockFromTunnel = Approach(
   final Storyline s = c.outputStoryline;
   s.add('You start running again.\n', wholeSentence: true);
 });
-Approach endOfRoamFromExitFromBloodrock =
+final Approach endOfRoamFromExitFromBloodrock =
     Approach('exit_from_bloodrock', '__END_OF_ROAM__', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2135,7 +2138,7 @@ final Room warForge = Room('war_forge', (ActionContext c) {
       wholeSentence: true);
   rollBrianaQuote(c);
 }, null, null);
-Approach warForgeFromSmelter =
+final Approach warForgeFromSmelter =
     Approach('smelter', 'war_forge', 'Go to the war forges', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2146,7 +2149,7 @@ Approach warForgeFromSmelter =
       'You walk through a short passage lined with stone, and toward the sound of hundreds of hammers clanging against anvils.\n',
       wholeSentence: true);
 });
-Approach warForgeFromCaveWithAgruth = Approach(
+final Approach warForgeFromCaveWithAgruth = Approach(
     'cave_with_agruth', 'war_forge', 'Go to the war forges', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2298,7 +2301,7 @@ final Room testFightOrcAndGoblin =
       'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAn orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrcAndGoblin, null);
-Approach testFightOrcAndGoblinFromPreStartBook = Approach(
+final Approach testFightOrcAndGoblinFromPreStartBook = Approach(
     'pre_start_book',
     'test_fight_orc_and_goblin',
     'Playtest >> one-on-two test fight >> with an orc and goblin',
@@ -2311,7 +2314,7 @@ Approach testFightOrcAndGoblinFromPreStartBook = Approach(
   s.add('You get transported to the development testing arena.\n',
       wholeSentence: true);
 });
-Approach endOfRoamFromTestFightOrcAndGoblin =
+final Approach endOfRoamFromTestFightOrcAndGoblin =
     Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2340,7 +2343,7 @@ final Room orcthornRoom = Room('orcthorn_room', (ActionContext c) {
       'The room is quiet. The Mad Guardian\'s huge body lies next to the heap of corpses.\n',
       wholeSentence: true);
 }, generateMadGuardianFight, null);
-Approach orcthornRoomFromSlaveQuartersPassage =
+final Approach orcthornRoomFromSlaveQuartersPassage =
     Approach('slave_quarters_passage', 'orcthorn_room', 'Open the door',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2349,6 +2352,187 @@ Approach orcthornRoomFromSlaveQuartersPassage =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('You open the door.\n', wholeSentence: true);
+});
+final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
+    '“It is just a rustle in the bush, Tamara. Probably a raccoon.”',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startRaccoon = Room('start_raccoon', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('"I\'m tired. And _that_ is definitely not a raccoon."\n',
+      wholeSentence: true);
+}, null, null, null);
+final Approach startCowardFromStart =
+    Approach('start', 'start_coward', '“You are leaving me now, coward?”',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startCoward = Room('start_coward', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '"Look, you paid me for the journey, not for babysitting you around the freaking Pyramid."\n',
+      wholeSentence: true);
+}, null, null, null);
+
+class StartTakeDagger extends RoamingAction {
+  @override
+  final String name = 'start_take_dagger';
+
+  static final StartTakeDagger singleton = StartTakeDagger();
+
+  @override
+  List<String> get commandPathTemplate => ['Take dagger'];
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'start_enter_goblin') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the dagger.\n', wholeSentence: true);
+    w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
+    movePlayer(c, "start_begin_fight");
+    return '${a.name} successfully performs StartTakeDagger';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Approach startBeginFightFromStartEnterGoblin = Approach(
+    'start_enter_goblin', 'start_begin_fight', '“You are going to be fine.”',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach startEnterGoblinFromStartRaccoon = Approach(
+    'start_raccoon', 'start_enter_goblin', '<implicit>', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach startEnterGoblinFromStartCoward = Approach(
+    'start_coward', 'start_enter_goblin', '<implicit>', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'She motions toward the bush. I look in the direction and see a figure with a short, rusty sword.\n\nThis place. Why does everything need to be so difficult around here?\n\n"You think you could help me with this one?" She hands me a long dagger.\n',
+      wholeSentence: true);
+}, null, null, null);
+final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'The fight begins. The goblin before us is especially feral. He\'s gnawing his teeth and growls like a wolf. He taps his thigh with the blunt side of his rusty sword.\n',
+      wholeSentence: true);
+}, null, generateStartFight, null);
+final Approach startFromPreStartBook = Approach(
+    'pre_start_book', 'start', 'DEBUG >> Play ‘Knights of San Francisco’',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room start = Room('start', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as he unsheathes her sword. "This is the last and then I turn back."\n\n',
+      wholeSentence: true);
+  w.actors.removeWhere((actor) => actor.id == brianaId);
+}, null, null, null);
+final Approach endOfRoamFromStartBeginFight =
+    Approach('start_begin_fight', '__END_OF_ROAM__', 'Travel back home',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You realize this adventuring life is not for you.\n',
+      wholeSentence: true);
 });
 final allRooms = <Room>[
   undergroundChurch,
@@ -2369,7 +2553,12 @@ final allRooms = <Room>[
   exitFromBloodrock,
   warForge,
   testFightOrcAndGoblin,
-  orcthornRoom
+  orcthornRoom,
+  startRaccoon,
+  startCoward,
+  startEnterGoblin,
+  startBeginFight,
+  start
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2401,7 +2590,14 @@ final allApproaches = <Approach>[
   warForgeFromCaveWithAgruth,
   testFightOrcAndGoblinFromPreStartBook,
   endOfRoamFromTestFightOrcAndGoblin,
-  orcthornRoomFromSlaveQuartersPassage
+  orcthornRoomFromSlaveQuartersPassage,
+  startRaccoonFromStart,
+  startCowardFromStart,
+  startBeginFightFromStartEnterGoblin,
+  startEnterGoblinFromStartRaccoon,
+  startEnterGoblinFromStartCoward,
+  startFromPreStartBook,
+  endOfRoamFromStartBeginFight
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
@@ -2422,5 +2618,6 @@ final allActions = <RoamingAction>[
   SmelterThrowSpear.singleton,
   SlaveQuartersPassageExamineDoor.singleton,
   WarForgeLookAround.singleton,
-  WarForgeWatchWorkers.singleton
+  WarForgeWatchWorkers.singleton,
+  StartTakeDagger.singleton
 ];

@@ -61,7 +61,7 @@ class FinishLeap extends OtherActorAction {
     a.report(s, "<subject> {ram<s>|smash<es>} into <object>",
         object: enemy, positive: true, actionThread: thread);
     s.add(
-        "both ${a.isPlayer || enemy.isPlayer ? 'of you' : ''} "
+        "both ${a.isPlayer || enemy.isPlayer ? 'of us' : ''} "
         "{land on|fall to} the $ground",
         actionThread: thread);
     if (enemy.hitpoints > 1) {

@@ -1,0 +1,22 @@
+// ---
+APPROACH: $start_raccoon FROM $start
+COMMAND: “It is just a rustle in the bush, Tamara. Probably a raccoon.”
+DESCRIPTION: N/A
+
+// ---
+ROOM: $start_raccoon
+
+FIRST_DESCRIPTION:
+"I'm tired. And _that_ is definitely not a raccoon."
+
+
+// ---
+APPROACH: $start_coward FROM $start
+COMMAND: “You are leaving me now, coward?”
+DESCRIPTION: N/A
+
+// ---
+ROOM: $start_coward
+
+FIRST_DESCRIPTION:
+"Look, you paid me for the journey, not for babysitting you around the freaking Pyramid."

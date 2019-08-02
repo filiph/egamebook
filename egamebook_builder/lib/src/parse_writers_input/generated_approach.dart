@@ -22,14 +22,17 @@ class GeneratedApproach extends GeneratedGameObject {
 
   @override
   Iterable<Spec> finalizeAst() sync* {
+    final command = _map['COMMAND'] ?? '';
+    assert(command.trim() != 'N/A', "Do not use N/A for command. "
+        "If you don't want the command to be shown, use '<implicit>'.");
+
     var newInstance = approachType.newInstance([
       literal(_tuple.from.snakeCase),
       literal(_tuple.to.snakeCase),
-      literal(_map['COMMAND'] ?? ''),
+      literal(command),
       createDescriber(_map['DESCRIPTION']),
     ]);
-    // TODO: investigate if this can be assignFinal
-    var assignment = newInstance.assignVar(name, approachType);
+    var assignment = newInstance.assignFinal(name, approachType);
     yield assignment.statement;
   }
 
