@@ -60,7 +60,6 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
 
   int countWeapons(WeaponType type) {
     int count = 0;
-    if (currentWeapon.damageCapability.type == type) count += 1;
     for (final weapon in weapons) {
       assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
       if (weapon.damageCapability.type == type) count += 1;
