@@ -526,16 +526,18 @@ void main() {
       expect(() => storyline.realizeAsString(), throwsStateError);
     });
 
-    test("ignores when multiple summary action reports are together", () {
+    test("prints all summary action reports when together", () {
       storyline.add("you aim at the sky",
           actionThread: threadA, startsThread: true);
       storyline.add("you look through the scopes", actionThread: threadA);
       storyline.add("you shoot the duck", actionThread: threadA);
-      storyline.add("you kill the duck",
+      storyline.add("the duck dies", actionThread: threadA);
+      storyline.add("you shoot the duck",
           actionThread: threadA, replacesThread: true);
-      storyline.add("you extinguish the duck",
+      storyline.add("and kill it",
           actionThread: threadA, replacesThread: true);
-      expect(() => storyline.realizeAsString(), throwsStateError);
+      expect(storyline.realizeAsString(), contains("shoot the duck"));
+      expect(storyline.realizeAsString(), contains("kill it"));
     });
   });
 

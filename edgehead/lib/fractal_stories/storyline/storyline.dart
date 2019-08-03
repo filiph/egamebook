@@ -683,10 +683,19 @@ class Storyline {
             // Put the index to just after [next].
             i = j + 1;
             continuousChain = true;
-            if (i < reports.length &&
-                reports[i].actionThread == report.actionThread &&
-                reports[i].replacesThread) {
-              throw StateError('Two summaries next to each other: $reports');
+            // Add any following summaries.
+            for (int z = j + 1; z < reports.length; z++) {
+              final followUp = reports[z];
+              if (followUp.actionThread == report.actionThread &&
+                  followUp.replacesThread) {
+                // A following summary exists.
+                yield followUp;
+                i = z + 1;
+                continue;
+              }
+              // Broken thread of follow-up summaries.
+              i = z;
+              break;
             }
             break;
           }
