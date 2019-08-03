@@ -71,9 +71,7 @@ class SweepFeet extends StartDefensibleActionBase {
       Storyline storyline, Actor enemy, Situation mainSituation) {
     actor.report(storyline,
         "<subject> tr<ies> to kick <object's> feet from under <object>",
-        object: enemy,
-        actionThread: mainSituation.id,
-        startsThread: true);
+        object: enemy, actionThread: mainSituation.id, startsThread: true);
   }
 
   @override
