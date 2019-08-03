@@ -43,6 +43,7 @@ import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
 import 'package:edgehead/src/fight/actions/start_throw_thrusting_weapon.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
+import 'package:edgehead/src/fight/actions/wait.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
@@ -119,7 +120,8 @@ abstract class FightSituation extends Object
         RegainBalance.singleton,
         StandUp.singleton,
         Scramble.singleton,
-        Unconfuse.singleton
+        Unconfuse.singleton,
+        Wait.singleton,
       ];
 
   /// The items dropped by combatants, or lying around from the beginning of
