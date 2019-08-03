@@ -446,62 +446,96 @@ void main() {
 
   group("actionThread", () {
     Storyline storyline;
+    var threadA = 42;
 
     setUp(() {
       storyline = Storyline();
     });
 
-    group("isSupportiveActionInThread", () {
-      var threadA = 42;
+    test("summary doesn't show when thread is broken", () {
+      storyline.add("you aim at the sky",
+          actionThread: threadA, startsThread: true);
+      storyline.add("a dog walks by");
+      storyline.add("you shoot the duck", actionThread: threadA);
+      storyline.add("you kill the duck",
+          actionThread: threadA, replacesThread: true);
+      expect(storyline.realizeAsString(), contains("aim at the sky"));
+      expect(storyline.realizeAsString(), contains("shoot the duck"));
+      expect(storyline.realizeAsString(), isNot(contains("kill the duck")));
+    });
 
-      test("shows normally when apart", () {
-        storyline.add("you aim at the sky",
-            actionThread: threadA, isSupportiveActionInThread: true);
-        var bigbang = Entity(name: "big bang");
-        storyline.markEntityAsUnmentioned(bigbang);
-        storyline.add("<subject> <is> heard from the distance",
-            subject: bigbang);
-        storyline.add("you shoot a duck", actionThread: threadA);
-        expect(storyline.realizeAsString(), contains("aim at the sky"));
-        expect(storyline.realizeAsString(), contains("shoot a duck"));
-      });
+    test("summary doesn't show when start is missing", () {
+      storyline.add("you shoot the duck", actionThread: threadA);
+      storyline.add("you kill the duck",
+          actionThread: threadA, replacesThread: true);
+      expect(storyline.realizeAsString(), contains("shoot the duck"));
+      expect(storyline.realizeAsString(), isNot(contains("kill the duck")));
+    });
 
-      test("not shown when next to another report of same actionThread", () {
-        storyline.add("you aim at the sky",
-            actionThread: threadA, isSupportiveActionInThread: true);
-        storyline.add("you shoot a duck", actionThread: threadA);
-        expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
-        expect(storyline.realizeAsString(), contains("shoot a duck"));
-      });
+    test("summary replaces unbroken thread", () {
+      storyline.add("you aim at the sky",
+          actionThread: threadA, startsThread: true);
+      storyline.add("you shoot the duck", actionThread: threadA);
+      storyline.add("you kill the duck",
+          actionThread: threadA, replacesThread: true);
+      expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
+      expect(storyline.realizeAsString(), contains("kill the duck"));
+    });
 
-      test(
-          "not shown supportive action doesn't influence making subjects "
-          "into pronouns", () {
-        var storyline = Storyline();
-        var player = _createPlayer("Filip");
-        var enemy =
-            Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
-        storyline.add("<subject> aim<s> at <object>",
-            subject: player,
-            object: enemy,
-            actionThread: threadA,
-            isSupportiveActionInThread: true);
-        storyline.add("<subject> shoot<s> <object>",
-            subject: player, object: enemy, actionThread: threadA);
-        expect(storyline.realizeAsString(), "I shoot the orc.");
-      });
+    test("summary replaces unbroken thread but leaves leading non-thread be",
+        () {
+      storyline.add("things are going great");
+      storyline.add("you aim at the sky",
+          actionThread: threadA, startsThread: true);
+      storyline.add("you shoot the duck", actionThread: threadA);
+      storyline.add("you kill the duck",
+          actionThread: threadA, replacesThread: true);
+      expect(storyline.realizeAsString(), contains("going great"));
+      expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
+      expect(storyline.realizeAsString(), contains("kill the duck"));
+    });
 
-      test("not shown when multiple supportive action reports together", () {
-        storyline.add("you aim at the sky",
-            actionThread: threadA, isSupportiveActionInThread: true);
-        storyline.add("you look through the scopes",
-            actionThread: threadA, isSupportiveActionInThread: true);
-        storyline.add("you shoot a duck", actionThread: threadA);
-        expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
-        expect(storyline.realizeAsString(),
-            isNot(contains("look through the scopes")));
-        expect(storyline.realizeAsString(), contains("shoot a duck"));
-      });
+    test(
+        "not shown supportive actions don't influence making subjects "
+        "into pronouns in summary", () {
+      var storyline = Storyline();
+      var player = _createPlayer("Filip");
+      var enemy =
+          Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
+      storyline.add("<subject> aim<s> at <object>",
+          subject: player,
+          object: enemy,
+          actionThread: threadA,
+          startsThread: true);
+      storyline.add("<subject> shoot<s> <object>",
+          subject: player, object: enemy, actionThread: threadA);
+      storyline.add("<subject> shoot<s> <object>",
+          subject: player,
+          object: enemy,
+          actionThread: threadA,
+          replacesThread: true);
+      expect(storyline.realizeAsString(), "I shoot the orc.");
+    });
+
+    test("throws when multiple starting action reports are together", () {
+      storyline.add("you aim at the sky",
+          actionThread: threadA, startsThread: true);
+      storyline.add("you look through the scopes",
+          actionThread: threadA, startsThread: true);
+      storyline.add("you shoot the duck", actionThread: threadA);
+      expect(() => storyline.realizeAsString(), throwsStateError);
+    });
+
+    test("ignores when multiple summary action reports are together", () {
+      storyline.add("you aim at the sky",
+          actionThread: threadA, startsThread: true);
+      storyline.add("you look through the scopes", actionThread: threadA);
+      storyline.add("you shoot the duck", actionThread: threadA);
+      storyline.add("you kill the duck",
+          actionThread: threadA, replacesThread: true);
+      storyline.add("you extinguish the duck",
+          actionThread: threadA, replacesThread: true);
+      expect(() => storyline.realizeAsString(), throwsStateError);
     });
   });
 

@@ -59,10 +59,7 @@ class CounterAttackFeint extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, feintSituationName);
     a.report(s, "<subject's> attempt to counter <object's> feint fails",
-        object: enemy,
-        negative: true,
-        actionThread: thread,
-        isSupportiveActionInThread: true);
+        object: enemy, negative: true, actionThread: thread);
     w.popSituation(sim);
     return "${a.name} fails to counter a feint from ${enemy.name}";
   }

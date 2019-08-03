@@ -73,7 +73,7 @@ class SweepFeet extends StartDefensibleActionBase {
         "<subject> tr<ies> to kick <object's> feet from under <object>",
         object: enemy,
         actionThread: mainSituation.id,
-        isSupportiveActionInThread: true);
+        startsThread: true);
   }
 
   @override

@@ -42,18 +42,32 @@ class Report {
   final bool wholeSentence;
 
   /// A unique identifier of a thread of events that belong together. This is
-  /// used with [isSupportiveActionInThread] but can also work as a hint for
-  /// the document planner.
+  /// used with [replacesThread].
+  ///
+  /// Given the following string of reports of the same [actionThread]:
+  ///
+  /// * (startsThread) <subject> tr<ies> to ruin <object's> stance
+  /// * <subject> do<esn't> get fooled
+  /// * <subject> deflect<s> the feint
+  /// * (replacesThread) <subject> deflect<s> <object's> feint
+  ///
+  /// If these reports are in a continuous string, then only
+  /// "I deflect goblin's feint" will be printed.
+  ///
+  /// If the thread is broken in any way (e.g. by a choice block or another
+  /// report with a missing or different [actionThread] id), then
+  /// the last report will be ignored and only the first three will be printed.
   final int actionThread;
 
-  /// This report will not be shown when report with same [actionThread] is
-  /// right next to this one.
-  ///
-  /// This is useful when you have a report such as "You start aiming at the
-  /// enemy" and another one that says "You shoot at the enemy". When there is
-  /// additional action between those two reports, it makes sense to keep both.
-  /// But when they're reported side by side, it doesn't read well.
-  final bool isSupportiveActionInThread;
+  /// This report marks start of a continuous thread of actions which can
+  /// be summarized with a single report (marked as [replacesThread]).
+  final bool startsThread;
+
+  /// If this is `true` and this report follows after a continuous string
+  /// of reports with same [actionThread] id (including a starting report
+  /// with [startsThread] set to `true`), then the preceding
+  /// report will be replaced by this one.
+  final bool replacesThread;
 
   final int time;
 
@@ -71,8 +85,14 @@ class Report {
       this.startSentence = false,
       this.wholeSentence = false,
       this.actionThread,
-      this.isSupportiveActionInThread = false,
-      this.time});
+      this.startsThread = false,
+      this.replacesThread = false,
+      this.time}) {
+    if (actionThread == null) {
+      assert(startsThread == false, "actionThread is null");
+      assert(replacesThread == false, "actionThread is null");
+    }
+  }
 
   Report.empty()
       : string = "",
@@ -89,13 +109,14 @@ class Report {
         startSentence = false,
         wholeSentence = false,
         actionThread = null,
-        isSupportiveActionInThread = false,
+        startsThread = false,
+        replacesThread = false,
         time = null;
 
   @override
   String toString() => "Report"
       "<${string.substring(0, min(string.length, 20))}...,"
-      "thread=$actionThread${isSupportiveActionInThread ? '(sup)' : ''}>";
+      "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
 }
 
 /// Class for reporting a sequence of events in 'natural' language.
@@ -184,27 +205,6 @@ class Storyline {
   bool get hasManyParagraphs =>
       _records.any((rec) => rec.report?.string == PARAGRAPH_NEWLINES);
 
-  /// If [entity] is non-null, then _every_ variant of [str] must contain
-  /// [pattern]. If [entity] is `null`, then _no_ variant of [str]
-  /// can contain [pattern].
-  ///
-  /// Parses [str] with [Randomly.parse] to get all variants.
-  bool _entityAndSubstringExistTogether(
-      String str, Entity entity, Pattern pattern) {
-    final entityExists = entity != null;
-
-    for (final variant in Randomly.parse(str)) {
-      if (entityExists) {
-        // Entity exists but pattern wasn't found in [variant].
-        if (!variant.contains(pattern)) return false;
-      } else {
-        // Entity doesn't exist but pattern was found in [variant].
-        if (variant.contains(pattern)) return false;
-      }
-    }
-    return true;
-  }
-
   /// Add another event to the story.
   ///
   /// When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
@@ -223,7 +223,8 @@ class Storyline {
       bool startSentence = false,
       bool wholeSentence = false,
       int actionThread,
-      bool isSupportiveActionInThread = false,
+      bool startsThread = false,
+      bool replacesThread = false,
       int time}) {
     if (str == null || str == "") {
       // Ignore empty records.
@@ -257,7 +258,8 @@ class Storyline {
         startSentence: startSentence,
         wholeSentence: wholeSentenceAutoDetected || wholeSentence,
         actionThread: actionThread,
-        isSupportiveActionInThread: isSupportiveActionInThread,
+        startsThread: startsThread,
+        replacesThread: replacesThread,
         time: time ?? this.time);
 
     _records.add(_StorylineRecord(report: report));
@@ -648,6 +650,57 @@ class Storyline {
     return false;
   }
 
+  /// Detect unbroken chains of actionThread from start to summary, remove
+  /// everything except summary.
+  Iterable<Report> _collapseThreads(List<Report> reports) sync* {
+    for (int i = 0; i < reports.length; i++) {
+      final report = reports[i];
+      if (report.actionThread == null) {
+        // Just copy over non-thread reports.
+        yield report;
+        continue;
+      }
+      if (report.replacesThread) {
+        // A lone summary we should just ignore.
+        continue;
+      }
+      if (report.startsThread) {
+        bool continuousChain = false;
+        // Walk the report chain until a (potential) summary.
+        for (int j = i + 1; j < reports.length; j++) {
+          final next = reports[j];
+          if (next.actionThread != report.actionThread) {
+            // A null or a different actionThread. Stop collapsing.
+            break;
+          }
+          if (next.startsThread) {
+            throw StateError('Cannot start thread several times: $reports.');
+          }
+          if (next.replacesThread) {
+            // Bingo. We have an unbroken chain from [report] to [next].
+            // Yield just [next] instead of the whole chain.
+            yield next;
+            // Put the index to just after [next].
+            i = j + 1;
+            continuousChain = true;
+            if (i < reports.length &&
+                reports[i].actionThread == report.actionThread &&
+                reports[i].replacesThread) {
+              throw StateError('Two summaries next to each other: $reports');
+            }
+            break;
+          }
+        }
+        if (continuousChain) {
+          // We already got rid of [report] and the chain after it.
+          continue;
+        }
+      }
+      // A report with an actionThread id but a part of a broken chain.
+      yield report;
+    }
+  }
+
   /// The main function that strings reports together into a coherent story.
   ///
   /// When [onlyFirstParagraph] is `true`, this will only realize the first
@@ -656,23 +709,15 @@ class Storyline {
   /// TODO: deprecate the generated List ([_reports]) and use [_records] instead
   List<ElementBase> realize({bool onlyFirstParagraph = false}) {
     StringBuffer strBuf = StringBuffer();
+
+    // Distill _records into a list of only storyline reports (without
+    // custom elements.
     _reports =
         _records.where((rec) => rec.isReport).map((rec) => rec.report).toList();
-    List<Report> cleanedReports =
-        _reports.fold([], (List<Report> list, Report report) {
-      Report previousReport = list.isNotEmpty ? list.last : null;
-      if (previousReport != null &&
-          previousReport.isSupportiveActionInThread &&
-          report.actionThread == previousReport.actionThread) {
-        // Skip the Report that is supportive and is next to another report
-        // of the same actionThread.
-        list[list.length - 1] = report;
-      } else {
-        list.add(report);
-      }
-      return list;
-    });
-    _reports.retainWhere((Report report) => cleanedReports.contains(report));
+
+    final cleanedReports = _collapseThreads(_reports).toList(growable: false);
+    _reports.retainWhere(cleanedReports.contains);
+
     final hasManyParagraphs = this.hasManyParagraphs;
     final int length = onlyFirstParagraph && hasManyParagraphs
         ? _reports.indexOf(
@@ -975,10 +1020,41 @@ class Storyline {
     }
   }
 
+  /// If [entity] is non-null, then _every_ variant of [str] must contain
+  /// [pattern]. If [entity] is `null`, then _no_ variant of [str]
+  /// can contain [pattern].
+  ///
+  /// Parses [str] with [Randomly.parse] to get all variants.
+  bool _entityAndSubstringExistTogether(
+      String str, Entity entity, Pattern pattern) {
+    final entityExists = entity != null;
+
+    for (final variant in Randomly.parse(str)) {
+      if (entityExists) {
+        // Entity exists but pattern wasn't found in [variant].
+        if (!variant.contains(pattern)) return false;
+      } else {
+        // Entity doesn't exist but pattern was found in [variant].
+        if (variant.contains(pattern)) return false;
+      }
+    }
+    return true;
+  }
+
   /// Returns whether or not the [entity] has been mentioned by time of the
   /// report ([reportTime]).
   bool _hasBeenMentioned(Entity entity, int reportTime) {
     return (_firstMentions[entity.id] ?? _beginningOfTime) < reportTime;
+  }
+
+  bool _object2BecomesObject(int i, int j) {
+    if (!valid(i) || !valid(j)) return false;
+    return object2(i) != null && object2(i) == object(j);
+  }
+
+  bool _objectBecomesObject2(int i, int j) {
+    if (!valid(i) || !valid(j)) return false;
+    return object(i) != null && object(i) == object2(j);
   }
 
   /// Applies the logic of needed for `<owner>` and `<owner's>` to work.
@@ -1038,16 +1114,6 @@ class Storyline {
     return _reports[i].object.id == _reports[j].object.id;
   }
 
-  bool _objectBecomesObject2(int i, int j) {
-    if (!valid(i) || !valid(j)) return false;
-    return object(i) != null && object(i) == object2(j);
-  }
-
-  bool _object2BecomesObject(int i, int j) {
-    if (!valid(i) || !valid(j)) return false;
-    return object2(i) != null && object2(i) == object(j);
-  }
-
   /// Taking care of all the exceptions and rules when comparing
   /// different reports call: [: sameSubject(i, i+1) ... :]
   bool _sameSubject(int i, int j) {
@@ -1073,7 +1139,9 @@ class Storyline {
   }
 }
 
-/// Used to store different kinds of user-facing output.
+/// Used to store different kinds of user-facing output. Normally, it's
+/// a [report], but sometimes, it can be a [customElement] (like an image,
+/// for example).
 @immutable
 class _StorylineRecord {
   final Report report;

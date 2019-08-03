@@ -49,23 +49,21 @@ class DodgeLeap extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, "LeapSituation");
     a.report(s, "<subject> tr<ies> to {dodge|sidestep}",
-        actionThread: thread, isSupportiveActionInThread: true);
+        actionThread: thread);
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance",
-          but: true, actionThread: thread, isSupportiveActionInThread: true);
+          but: true, actionThread: thread);
     } else if (a.pose == Pose.extended) {
       a.report(s, "<subject> <is> extended",
-          but: true, actionThread: thread, isSupportiveActionInThread: true);
+          but: true, actionThread: thread);
     } else {
       Randomly.run(
           () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
               but: true,
-              actionThread: thread,
-              isSupportiveActionInThread: true),
+              actionThread: thread),
           () => a.report(s, "<subject> {<is> too slow|<is>n't fast enough}",
               but: true,
-              actionThread: thread,
-              isSupportiveActionInThread: true));
+              actionThread: thread));
     }
     w.popSituation(sim);
     return "${a.name} fails to dodge ${enemy.name}";

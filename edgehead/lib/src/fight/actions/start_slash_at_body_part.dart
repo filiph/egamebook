@@ -98,7 +98,7 @@ PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
             object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
             actionThread: mainSituation.id,
-            isSupportiveActionInThread: true);
+            startsThread: true);
 
 bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     BodyPartDesignation designation) {

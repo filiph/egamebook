@@ -60,7 +60,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
           object: Entity(name: 'eye'),
           objectOwner: enemy,
           actionThread: mainSituation.id,
-          isSupportiveActionInThread: true),
+          startsThread: true),
       () => a.report(
           s,
           "<subject> thrust<s> <object2> at "
@@ -69,7 +69,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
           objectOwner: enemy,
           object2: a.currentWeaponOrBodyPart,
           actionThread: mainSituation.id,
-          isSupportiveActionInThread: true),
+          startsThread: true),
     );
   }
 

@@ -60,7 +60,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
           object: Entity(name: 'leg'),
           objectOwner: enemy,
           actionThread: mainSituation.id,
-          isSupportiveActionInThread: true),
+          startsThread: true),
       () => a.report(
           s,
           "<subject> swing<s> <object2> at "
@@ -69,7 +69,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
           objectOwner: enemy,
           object2: a.currentWeaponOrBodyPart,
           actionThread: mainSituation.id,
-          isSupportiveActionInThread: true),
+          startsThread: true),
     );
   }
 

@@ -47,15 +47,12 @@ class DodgePunch extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, "PunchSituation");
     a.report(s, "<subject> tr<ies> to {dodge|sidestep|move out of the way}",
-        actionThread: thread, isSupportiveActionInThread: true);
+        actionThread: thread);
     Randomly.run(
         () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
-            but: true, actionThread: thread, isSupportiveActionInThread: true),
+            but: true, actionThread: thread),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
-            object: a,
-            but: true,
-            actionThread: thread,
-            isSupportiveActionInThread: true));
+            object: a, but: true, actionThread: thread));
     w.popSituation(sim);
     return "${a.name} fails to dodge ${enemy.name}";
   }

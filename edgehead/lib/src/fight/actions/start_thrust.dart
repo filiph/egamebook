@@ -94,7 +94,7 @@ PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
             object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
             actionThread: mainSituation.id,
-            isSupportiveActionInThread: true),
+            startsThread: true),
         () => a.report(
             s,
             "<subject> thrust<s> <object2> at "
@@ -103,6 +103,6 @@ PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
             objectOwner: enemy,
             object2: a.currentWeapon,
             actionThread: mainSituation.id,
-            isSupportiveActionInThread: true),
+            startsThread: true),
       );
     };

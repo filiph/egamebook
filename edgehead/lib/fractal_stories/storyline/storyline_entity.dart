@@ -64,7 +64,8 @@ abstract class Entity {
       bool wholeSentence = false,
       bool subjectAndObjectAreEnemies = false,
       int actionThread,
-      bool isSupportiveActionInThread = false});
+      bool startsThread = false,
+      bool replacesThread = false});
 }
 
 /// Mixin that adds important methods and getters to Entity-like classes.
@@ -76,10 +77,6 @@ mixin EntityBehavior {
   bool get isAliveAndActive => isAlive && isActive;
 
   Team get team;
-
-  Report createReport(String text, {Entity object}) {
-    return Report(text, subject: this as Entity, object: object);
-  }
 
   void report(Storyline storyline, String text,
       {Entity owner,
@@ -93,7 +90,8 @@ mixin EntityBehavior {
       bool wholeSentence = false,
       bool subjectAndObjectAreEnemies = false,
       int actionThread,
-      bool isSupportiveActionInThread = false}) {
+      bool startsThread = false,
+      bool replacesThread = false}) {
     storyline.add(text,
         subject: this as Entity,
         owner: owner,
@@ -107,7 +105,8 @@ mixin EntityBehavior {
         endSentence: endSentence,
         wholeSentence: wholeSentence,
         actionThread: actionThread,
-        isSupportiveActionInThread: isSupportiveActionInThread);
+        startsThread: startsThread,
+        replacesThread: replacesThread);
   }
 }
 

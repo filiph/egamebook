@@ -60,7 +60,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
         objectOwner: enemy,
         object2: a.currentWeaponOrBodyPart,
         actionThread: mainSituation.id,
-        isSupportiveActionInThread: true);
+        startsThread: true);
   }
 
   @override

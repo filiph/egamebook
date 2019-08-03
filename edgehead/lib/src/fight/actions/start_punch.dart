@@ -60,5 +60,5 @@ void startPunchReportStart(Actor a, Simulation sim, WorldStateBuilder w,
       subject: a,
       object: enemy,
       actionThread: mainSituation.id,
-      isSupportiveActionInThread: true);
+      startsThread: true);
 }
