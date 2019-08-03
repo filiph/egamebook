@@ -64,10 +64,22 @@ class FinishSweepFeet extends OtherActorAction {
     }, () {
       a.report(s, "<subject> kick<s> <object's> {right|left} shin",
           object: enemy, positive: true, actionThread: threadId);
-      enemy.report(s, "<subject> {grunt|shriek}<s>");
+      enemy.report(s, "<subject> {grunt|shriek}<s>", actionThread: threadId);
     });
+
     final groundMaterial = getGroundMaterial(w);
-    enemy.report(s, "<subject> fall<s> to the $groundMaterial", negative: true);
+    enemy.report(s, "<subject> fall<s> to the $groundMaterial",
+        actionThread: threadId, negative: true);
+
+    // Summary
+    a.report(s, "<subject> sweep<s> <object's> feet away",
+        object: enemy,
+        positive: true,
+        actionThread: threadId,
+        replacesThread: true);
+    enemy.report(s, "<subject> fall<s> to the $groundMaterial",
+        actionThread: threadId, replacesThread: true, negative: true);
+
     w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
     w.recordCustom(fellToGroundCustomEventName, actor: enemy);
     return "${a.name} sweeps ${enemy.name} off feet";

@@ -47,7 +47,7 @@ void main() {
     "on ground parry": computeOnGroundParry,
     "on ground shield block": computeOnGroundShieldBlock,
     "roll out of way": computeRollOutOfWay,
-    "throw spear": computeThrowSpearPlayer,
+    "throw spear": computeThrowThrustingWeaponPlayer,
     "counter slash": computeCounterSlash,
     "counter tackle": computeCounterTackle,
     "off-balance opportunity thrust": computeOpportunityThrust,

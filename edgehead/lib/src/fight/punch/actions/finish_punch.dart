@@ -60,19 +60,28 @@ class FinishPunch extends OtherActorAction {
     w.updateActorById(enemy.id, (b) => b..pose = updatedPose);
     w.recordCustom(lostStanceCustomEvent, actor: enemy);
     switch (updatedPose) {
+      case Pose.extended:
       case Pose.standing:
-        throw StateError("Enemy's pose should never be 'standing' after "
+      case Pose.combat:
+        throw StateError("Enemy's pose should never be $updatedPose after "
             "a successful punch");
       case Pose.offBalance:
-        s.add(
+        const string =
             "<subject> {punch<es> <object> in the {face|nose|eye|jaw}|"
-            "punch<es> <object's> {face|nose|eye|jaw}}",
+            "punch<es> <object's> {face|nose|eye|jaw}}";
+        s.add(string,
+            subject: a, object: enemy, actionThread: thread, positive: true);
+        enemy.report(s, "<subject> {stagger<s>|stumble<s>} off balance",
+            actionThread: thread, negative: true);
+        // Summary
+        s.add(string,
             subject: a,
             object: enemy,
             actionThread: thread,
+            replacesThread: true,
             positive: true);
         enemy.report(s, "<subject> {stagger<s>|stumble<s>} off balance",
-            negative: true);
+            actionThread: thread, replacesThread: true, negative: true);
         break;
       case Pose.onGround:
         s.add(

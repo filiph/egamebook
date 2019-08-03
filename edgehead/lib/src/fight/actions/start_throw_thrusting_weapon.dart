@@ -18,7 +18,7 @@ const String startThrowSpearHelpMessage =
     "thrust with it, but it does have the advantage of keeping you "
     "at a distance.";
 
-ReasonedSuccessChance computeThrowSpearPlayer(
+ReasonedSuccessChance computeThrowThrustingWeaponPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   final hasSpear =
       a.currentWeapon?.damageCapability?.type == WeaponType.spear ?? false;
@@ -51,7 +51,7 @@ EnemyTargetAction startThrowThrustingWeapon() => StartDefensibleAction(
       defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
           createThrowDefenseSituation(
               w.randomInt(), a, enemy, predetermination),
-      successChanceGetter: computeThrowSpearPlayer,
+      successChanceGetter: computeThrowThrustingWeaponPlayer,
       rerollable: true,
       rerollResource: Resource.stamina,
       rollReasonTemplate: "will <subject> hit <object>?",
@@ -64,6 +64,8 @@ void _startThrowThrustingWeaponReportStart(Actor a, Simulation sim,
     "<subject> {throw<s>|hurl<s>|cast<s>} "
     "<object2> at <object>",
     object: enemy,
+    actionThread: situation.id,
+    startsThread: true,
     object2: a.currentWeapon,
   );
 }

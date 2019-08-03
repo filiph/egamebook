@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
+import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
@@ -66,6 +67,15 @@ class DodgePunch extends OtherActorAction {
     final thread = getThreadId(sim, w, "PunchSituation");
     a.report(s, "<subject> {dodge<s>|sidestep<s>} <object's> {punch|blow|jab}",
         object: enemy, positive: true, actionThread: thread);
+
+    // Summary
+    a.report(s, "<subject> {dodge<s>|sidestep<s>} <objectOwner's> <object>",
+        objectOwner: enemy,
+        object: MoveEntity.getFromAttackerSituation(context.world),
+        positive: true,
+        actionThread: thread,
+        replacesThread: true);
+
     w.popSituationsUntil("FightSituation", sim);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
