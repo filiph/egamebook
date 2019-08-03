@@ -457,7 +457,8 @@ class Storyline {
         result = result.replaceAll(VERB_SSES, "ss");
         result = result.replaceAll(VERB_IES, "y");
         result = result.replaceAll(VERB_DO, "do");
-        result = result.replaceAll(VERB_BE, "are");
+        result = result.replaceAll(
+            VERB_BE, subject.pronoun == Pronoun.I ? "am" : "are");
         result = result.replaceAll(VERB_HAVE, "have");
       } else {
         // "he flies there", "it picks up the bananas" ...
@@ -973,8 +974,7 @@ class Storyline {
     var result = resultSoFar;
     if (owner != null) {
       if (owner.isPlayer) {
-        result =
-            result.replaceAll(OWNER_OR_OBJECT_OWNER, Pronoun.I.accusative);
+        result = result.replaceAll(OWNER_OR_OBJECT_OWNER, Pronoun.I.accusative);
         result = result.replaceAll(
             OWNER_OR_OBJECT_OWNER_POSSESSIVE, Pronoun.I.genitive);
       } else {

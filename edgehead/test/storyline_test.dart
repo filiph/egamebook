@@ -24,7 +24,7 @@ void main() {
     expect(
         storyline.realizeAsString(),
         matches("The ship trembles. There is something wrong with the "
-            "engines. You gesture to Gorilla.+"
+            "engines. I gesture to Gorilla.+"
             "uns towards the engine room\."));
   });
 
@@ -105,8 +105,8 @@ void main() {
     expect(
         storyline.realizeAsString(),
         matches(
-            "You try to hit the enemy in the stomach.+ he dodges your strike. "
-            "He hits back.+ breaks your nose."));
+            "I try to hit the enemy in the stomach.+ he dodges my strike. "
+            "He hits back.+ breaks my nose."));
   });
 
   test("substitute pronouns where proper ('he gives him the money')", () {
@@ -158,12 +158,11 @@ void main() {
       "ignoring <owner's> at start of sentence doesn't screw up capitalization",
       () {
     var storyline = Storyline();
-    var player = _createPlayer("Filip");
     var hull = Entity(name: "hull", team: playerTeam, pronoun: Pronoun.IT);
 
-    storyline.add("<owner's> <subject> fail's to hit <object>",
-        subject: player, object: hull);
-    expect(storyline.realizeAsString(), matches("You.+"));
+    storyline.add("<owner's> <subject> explode<s>",
+        subject: hull);
+    expect(storyline.realizeAsString(), matches("The hull.+"));
   });
 
   test("don't substitute pronoun when it was used in the same form", () {
@@ -186,7 +185,7 @@ void main() {
     var apple = Entity(name: "apple", pronoun: Pronoun.IT);
     storyline.add("<subject> pick<s> up <object>",
         subject: player, object: apple);
-    expect(storyline.realizeAsString(), matches("You pick up the apple."));
+    expect(storyline.realizeAsString(), matches("I pick up the apple."));
   });
 
   test("don't use <owner's> to pronoun", () {
@@ -213,7 +212,7 @@ void main() {
         subject: player, object: ship, time: 10);
     expect(
         storyline.realizeAsString(),
-        matches("You take hold of the front laser's controls,? "
+        matches("I take hold of the front laser's controls,? "
             "and begin to aim at the Haijing\..+"));
   });
 
@@ -227,7 +226,7 @@ void main() {
         owner: player, subject: gun, object: enemy, time: 1);
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
     expect(storyline.realizeAsString(),
-        matches("Your gun is pointed at the enemy.+t fires."));
+        matches("My gun is pointed at the enemy.+t fires."));
 
     storyline.clear();
     var ship =
@@ -237,7 +236,7 @@ void main() {
     storyline.add("<owner's> <subject> <is> faster",
         owner: player, subject: gun, but: true);
     expect(storyline.realizeAsString(),
-        matches("The enemy's ship aims her guns at you.+ your gun is faster."));
+        matches("The enemy's ship aims her guns at me.+ my gun is faster."));
   });
 
   test("possesive particles works even with <objectOwner's> <object>", () {
@@ -255,10 +254,10 @@ void main() {
         time: 1);
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
     expect(storyline.realizeAsString(),
-        matches("Your gun is pointed at *the enemy.+t fires."));
+        matches("My gun is pointed at *the enemy.+t fires."));
   });
 
-  test("we don't show 'your the sword' even if Randomly is involved", () {
+  test("we don't show 'my the sword' even if Randomly is involved", () {
     var storyline = Storyline();
     var player = _createPlayer("Filip");
     var sword = Entity(name: "sword", pronoun: Pronoun.IT);
@@ -266,7 +265,7 @@ void main() {
     storyline.add("<subject> pound<s> on <objectOwner's> {<object>|<object>!}",
         subject: orc, objectOwner: player, object: sword);
     expect(
-        storyline.realizeAsString(), matches("The orc pounds on your sword."));
+        storyline.realizeAsString(), matches("The orc pounds on my sword."));
   });
 
   group("possessive pronoun", () {
@@ -283,13 +282,13 @@ void main() {
     test("do show with common nouns", () {
       dog = Entity(name: "dog", pronoun: Pronoun.IT);
       storyline.add(template, subject: player, object: dog);
-      expect(storyline.realizeAsString(), contains("your dog"));
+      expect(storyline.realizeAsString(), contains("my dog"));
     });
 
     test("don't show with proper nouns", () {
       dog = Entity(name: "Buster", nameIsProperNoun: true, pronoun: Pronoun.IT);
       storyline.add(template, subject: player, object: dog);
-      expect(storyline.realizeAsString(), isNot(contains("your Buster")));
+      expect(storyline.realizeAsString(), isNot(contains("my Buster")));
     });
   });
 
@@ -492,7 +491,7 @@ void main() {
             isSupportiveActionInThread: true);
         storyline.add("<subject> shoot<s> <object>",
             subject: player, object: enemy, actionThread: threadA);
-        expect(storyline.realizeAsString(), "You shoot the orc.");
+        expect(storyline.realizeAsString(), "I shoot the orc.");
       });
 
       test("not shown when multiple supportive action reports together", () {
@@ -526,7 +525,7 @@ void main() {
     test('is extracted', () {
       storyline.add("<subject> hit<s> <object> with <object2>",
           subject: player, object: goblin, object2: rock);
-      expect(storyline.realizeAsString(), "You hit the goblin with the rock.");
+      expect(storyline.realizeAsString(), "I hit the goblin with the rock.");
     });
 
     test('makes pronouns', () {
@@ -535,7 +534,7 @@ void main() {
       storyline.add("<subject> hit<s> <object> with <object2>",
           subject: player, object: goblin, object2: rock);
       var realized = storyline.realizeAsString();
-      expect(realized, contains("You pick up the rock"));
+      expect(realized, contains("I pick up the rock"));
       expect(realized, contains("hit the goblin with it"));
     });
 
@@ -551,8 +550,8 @@ void main() {
             subject: goblin, object: player, object2: rock);
         var realized = storyline.realizeAsString();
         expect(realized,
-            contains("You throw yourself at the goblin with the rock"));
-        expect(realized, contains("hits you back with it"));
+            contains("I throw myself at the goblin with the rock"));
+        expect(realized, contains("hits me back with it"));
       });
 
       test('object becomes object2', () {
@@ -562,7 +561,7 @@ void main() {
         storyline.add("<subject> hit<s> <object> with <object2>",
             subject: player, object: statue, object2: rock);
         var realized = storyline.realizeAsString();
-        expect(realized, contains("You pick up the rock"));
+        expect(realized, contains("I pick up the rock"));
         expect(realized, contains("hit the statue with it"));
       });
 
@@ -572,7 +571,7 @@ void main() {
         storyline.add("<subject> move<s> out of <object's> way",
             subject: goblin, object: rock);
         var realized = storyline.realizeAsString();
-        expect(realized, contains("You cast the rock at the goblin"));
+        expect(realized, contains("I cast the rock at the goblin"));
         expect(realized, contains("moves out of its way"));
       });
     });
@@ -585,11 +584,11 @@ void main() {
       storyline.add("<subject> hit<s> <object> with <object2>",
           subject: player, object: statue, object2: rock);
       var realized = storyline.realizeAsString();
-      expect(realized, contains("You examine the statue"));
+      expect(realized, contains("I examine the statue"));
       expect(realized, contains("hit it with the rock"));
     });
   });
 }
 
 Entity _createPlayer(String name) =>
-    Entity(name: name, pronoun: Pronoun.YOU, team: playerTeam, isPlayer: true);
+    Entity(name: name, pronoun: Pronoun.I, team: playerTeam, isPlayer: true);
