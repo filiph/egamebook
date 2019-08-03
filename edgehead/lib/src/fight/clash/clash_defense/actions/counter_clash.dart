@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/clash/clash_situation.dart';
+import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 
@@ -57,8 +58,9 @@ class CounterAttackClash extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, clashSituationName);
-    a.report(s, "<subject's> attempt to counter <object's> clash fails",
-        object: enemy,
+    a.report(s, "<subject's> attempt to counter <objectOwner's> <object> fails",
+        objectOwner: enemy,
+        object: MoveEntity.getFromAttackerSituation(context.world),
         negative: true,
         actionThread: thread,
         isSupportiveActionInThread: true);

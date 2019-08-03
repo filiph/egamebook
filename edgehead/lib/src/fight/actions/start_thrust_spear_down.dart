@@ -42,6 +42,6 @@ void startThrustSpearDownReportStart(Actor a, Simulation sim,
     a.report(
         s,
         "<subject> thrust<s> down "
-        "{with <object2> |}at <object>",
+        "with <object2> at <object>",
         object: enemy,
         object2: a.currentWeaponOrBodyPart);

@@ -54,7 +54,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
       Actor enemy, Situation mainSituation) {
     a.report(
         s,
-        "<subject> swing<s> {<object2> |}at "
+        "<subject> swing<s> <subject's> <object2> at "
         "<objectOwner's> <object>",
         object: Entity(name: 'arm'),
         objectOwner: enemy,

@@ -21,8 +21,6 @@ class FinishClash extends OtherActorAction {
   static final Entity _balance =
       Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
 
-  static final Entity _pounding = Entity(name: "pounding", team: neutralTeam);
-
   @override
   final String helpMessage = null;
 
@@ -102,7 +100,7 @@ class FinishClash extends OtherActorAction {
     s.add(
         "<subject> make<s> <object> fall "
         "to the $groundMaterial",
-        subject: _pounding,
+        subject: MoveEntity.getFromAttackerSituation(context.world),
         object: enemy,
         actionThread: thread);
     w.recordCustom(fellToGroundCustomEventName, actor: enemy);

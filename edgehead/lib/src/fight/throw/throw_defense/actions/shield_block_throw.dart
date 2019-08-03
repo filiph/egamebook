@@ -6,14 +6,10 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
-
-final Entity theThrow =
-    Entity(name: "throw", team: neutralTeam, nameIsProperNoun: true);
 
 ReasonedSuccessChance computeShieldBlockThrow(
     Actor a, Simulation sim, WorldState w, Actor enemy) {

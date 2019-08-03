@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
@@ -80,8 +81,12 @@ class DodgeThrust extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> {dodge<s>|sidestep<s>} it",
-        object: enemy, positive: true);
+    a.report(
+      s,
+      "<subject> {dodge<s>|sidestep<s>} <objectPronoun>",
+      object: MoveEntity.getFromAttackerSituation(context.world),
+      positive: true,
+    );
     if (enemy.pose > Pose.offBalance) {
       enemy.report(s, "<subject> lose<s> balance because of that",
           endSentence: true, negative: true);

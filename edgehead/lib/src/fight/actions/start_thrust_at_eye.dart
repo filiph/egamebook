@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
@@ -51,15 +52,25 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   @override
   void applyStart(Actor a, Simulation sim, WorldStateBuilder world, Storyline s,
       Actor enemy, Situation mainSituation) {
-    a.report(
-        s,
-        "<subject> thrust<s> {<object2> |}at "
-        "<objectOwner's> <object>",
-        object: Entity(name: 'eye'),
-        objectOwner: enemy,
-        object2: a.currentWeaponOrBodyPart,
-        actionThread: mainSituation.id,
-        isSupportiveActionInThread: true);
+    Randomly.run(
+      () => a.report(
+          s,
+          "<subject> thrust<s> at "
+          "<objectOwner's> <object>",
+          object: Entity(name: 'eye'),
+          objectOwner: enemy,
+          actionThread: mainSituation.id,
+          isSupportiveActionInThread: true),
+      () => a.report(
+          s,
+          "<subject> thrust<s> <object2> at "
+          "<objectOwner's> <object>",
+          object: Entity(name: 'eye'),
+          objectOwner: enemy,
+          object2: a.currentWeaponOrBodyPart,
+          actionThread: mainSituation.id,
+          isSupportiveActionInThread: true),
+    );
   }
 
   @override

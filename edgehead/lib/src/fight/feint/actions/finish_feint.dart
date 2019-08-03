@@ -15,8 +15,6 @@ class FinishFeint extends OtherActorAction {
 
   static const String className = "FinishFeint";
 
-  static final Entity _feint = Entity(name: "feint");
-
   @override
   final String helpMessage = null;
 
@@ -74,7 +72,8 @@ class FinishFeint extends OtherActorAction {
     Simulation sim = context.simulation;
 
     final thread = getThreadId(sim, w, feintSituationName);
-    _feint.report(s, "<subject> is successful", actionThread: thread);
+    final feint = MoveEntity.getFromAttackerSituation(context.world);
+    feint.report(s, "<subject> is successful", actionThread: thread);
     enemy.report(s, "<subject> expose<s> <subject's> arm", negative: true);
 
     w.updateActorById(enemy.id, (b) => b..pose = Pose.extended);

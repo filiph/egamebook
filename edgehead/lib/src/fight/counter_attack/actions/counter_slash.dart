@@ -67,7 +67,7 @@ EnemyTargetAction counterSlashBuilder() => StartDefensibleAction(
 
 void counterSlashReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, Situation mainSituation) =>
-    a.report(s, "<subject> swing<s> back", object: enemy);
+    a.report(s, "<subject> swing<s> back");
 
 void counterSlashShortCircuitFailure(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation situation) {

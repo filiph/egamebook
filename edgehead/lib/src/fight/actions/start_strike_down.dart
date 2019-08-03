@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
@@ -60,10 +61,18 @@ EnemyTargetAction startStrikeDownBuilder() => StartDefensibleAction(
     );
 
 void startStrikeDownReportStart(Actor a, Simulation sim, WorldStateBuilder w,
-        Storyline s, Actor enemy, Situation situation) =>
-    a.report(
+    Storyline s, Actor enemy, Situation situation) {
+  Randomly.run(
+    () => a.report(
         s,
         "<subject> strike<s> down "
-        "{with <object2> |}at <object>",
+        "at <object>",
+        object: enemy),
+    () => a.report(
+        s,
+        "<subject> strike<s> down "
+        "with <object2> at <object>",
         object: enemy,
-        object2: a.currentWeaponOrBodyPart);
+        object2: a.currentWeaponOrBodyPart),
+  );
+}

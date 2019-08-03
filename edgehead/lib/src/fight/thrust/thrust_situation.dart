@@ -13,6 +13,13 @@ Situation createThrustSituation(int id, Actor attacker, Actor target,
     {@required BodyPartDesignation designation}) {
   assert(designation != null, "You must define designation.");
   return AttackerSituation.initialized(
-      id, thrustSituationName, [FinishThrust.singleton], [], attacker, target,
-      attackDirection: AttackDirection.fromBodyPartDesignation(designation));
+    id,
+    thrustSituationName,
+    [FinishThrust.singleton],
+    [],
+    attacker,
+    target,
+    "thrust",
+    attackDirection: AttackDirection.fromBodyPartDesignation(designation),
+  );
 }

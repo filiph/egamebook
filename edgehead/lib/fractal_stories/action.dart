@@ -195,7 +195,9 @@ abstract class Action<T> {
         "Actions with empty commandPathTemplate must override getCommandPath "
         "or must be isImplicit. Culprit: $this.");
 
-    if (object is Entity) {
+    if (object is Entity &&
+        commandPathTemplate.any(
+            (part) => part.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP))) {
       // Realize the "<object>" parts of the template.
       return (Storyline()..add(commandPathTemplate.join('>>'), object: object))
           .realizeAsString()
@@ -453,11 +455,20 @@ abstract class OtherActorActionBase extends Action<Actor> {
   String get rollReasonTemplate;
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Actor target) =>
-      (Storyline()
-            ..add(rollReasonTemplate,
-                subject: a, object: target, wholeSentence: true))
-          .realizeAsString();
+  String getRollReason(Actor a, Simulation sim, WorldState w, Actor target) {
+    assert(
+        rollReasonTemplate != null,
+        "Action<$name> has null roll reason "
+        "template. $this");
+    final hasObject =
+        rollReasonTemplate.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP);
+    return (Storyline()
+          ..add(rollReasonTemplate,
+              subject: a,
+              object: hasObject ? target : null,
+              wholeSentence: true))
+        .realizeAsString();
+  }
 
   /// Gets the [Situation.id] of the main situation of this action.
   ///
@@ -471,7 +482,7 @@ abstract class OtherActorActionBase extends Action<Actor> {
       w.getSituationByName<Situation>(mainSituationName).id;
 
   @override
-  String toString() => "_OtherActorActionBase<$commandPathTemplate>";
+  String toString() => "OtherActorActionBase<$commandPathTemplate>";
 }
 
 /// The [action] to use and the [object] to use it on. The _performing_

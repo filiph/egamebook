@@ -184,6 +184,27 @@ class Storyline {
   bool get hasManyParagraphs =>
       _records.any((rec) => rec.report?.string == PARAGRAPH_NEWLINES);
 
+  /// If [entity] is non-null, then _every_ variant of [str] must contain
+  /// [pattern]. If [entity] is `null`, then _no_ variant of [str]
+  /// can contain [pattern].
+  ///
+  /// Parses [str] with [Randomly.parse] to get all variants.
+  bool _entityAndSubstringExistTogether(
+      String str, Entity entity, Pattern pattern) {
+    final entityExists = entity != null;
+
+    for (final variant in Randomly.parse(str)) {
+      if (entityExists) {
+        // Entity exists but pattern wasn't found in [variant].
+        if (!variant.contains(pattern)) return false;
+      } else {
+        // Entity doesn't exist but pattern was found in [variant].
+        if (variant.contains(pattern)) return false;
+      }
+    }
+    return true;
+  }
+
   /// Add another event to the story.
   ///
   /// When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
@@ -210,11 +231,13 @@ class Storyline {
     }
 
     assert(
-        subject != null || !str.contains("<subject"), "'$str' lacks subject");
-    assert(object != null || !str.contains(OBJECT_NOT_OBJECT2_REGEXP),
-        "'$str' lacks object");
+        !str.contains("<subject") || subject != null, "'$str' lacks subject");
     assert(
-        object2 != null || !str.contains("<object2"), "'$str' lacks object2");
+        _entityAndSubstringExistTogether(
+            str, object, OBJECT_NOT_OBJECT2_REGEXP),
+        "'$str' lacks object");
+    assert(_entityAndSubstringExistTogether(str, object2, "<object2"),
+        "'$str' lacks object2");
 
     bool wholeSentenceAutoDetected =
         (str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&

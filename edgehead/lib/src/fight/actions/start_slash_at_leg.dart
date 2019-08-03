@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
@@ -51,15 +52,25 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   @override
   void applyStart(Actor a, Simulation sim, WorldStateBuilder world, Storyline s,
       Actor enemy, Situation mainSituation) {
-    a.report(
-        s,
-        "<subject> swing<s> {<object2> |}at "
-        "<objectOwner's> <object>",
-        object: Entity(name: 'leg'),
-        objectOwner: enemy,
-        object2: a.currentWeaponOrBodyPart,
-        actionThread: mainSituation.id,
-        isSupportiveActionInThread: true);
+    Randomly.run(
+      () => a.report(
+          s,
+          "<subject> {swing<s>|slash<es>} at "
+          "<objectOwner's> <object>",
+          object: Entity(name: 'leg'),
+          objectOwner: enemy,
+          actionThread: mainSituation.id,
+          isSupportiveActionInThread: true),
+      () => a.report(
+          s,
+          "<subject> swing<s> <object2> at "
+          "<objectOwner's> <object>",
+          object: Entity(name: 'leg'),
+          objectOwner: enemy,
+          object2: a.currentWeaponOrBodyPart,
+          actionThread: mainSituation.id,
+          isSupportiveActionInThread: true),
+    );
   }
 
   @override

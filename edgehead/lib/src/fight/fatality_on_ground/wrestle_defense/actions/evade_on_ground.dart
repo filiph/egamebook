@@ -66,8 +66,7 @@ class EvadeOnGround extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> {evade<s>|break<s> free}",
-        object: enemy, positive: true);
+    a.report(s, "<subject> {evade<s>|break<s> free}", positive: true);
     w.popSituationsUntil("FightSituation", sim);
     return "${a.name} evades ${enemy.name}";
   }

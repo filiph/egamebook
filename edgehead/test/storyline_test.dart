@@ -99,7 +99,7 @@ void main() {
     storyline.add("<subject> dodge<s> <object's> strike",
         subject: enemy, object: player, but: true, time: 2);
     storyline.add("<subject> hit<s> back",
-        subject: enemy, object: player, positive: true, time: 3);
+        subject: enemy, positive: true, time: 3);
     storyline.add("<subject> break<s> <object's> nose",
         subject: enemy, object: player, positive: true, time: 4);
     expect(

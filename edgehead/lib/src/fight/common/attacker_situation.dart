@@ -9,6 +9,8 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
@@ -158,13 +160,17 @@ abstract class AttackerSituation extends Object
     Iterable<OtherActorAction> builtOtherActorActionGenerators,
     Iterable<EnemyTargetAction> builtEnemyTargetActionGenerators,
     Actor attacker,
-    Actor target, {
+    Actor target,
+    String moveName, {
     AttackDirection attackDirection = AttackDirection.unspecified,
     String additionalData,
   }) =>
       AttackerSituation((b) => b
         ..id = id
         ..name = situationName
+        ..move = (MoveEntityBuilder()
+          ..id = id * 31
+          ..name = moveName)
         ..builtOtherActorActionGenerators =
             ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
@@ -197,6 +203,8 @@ abstract class AttackerSituation extends Object
   @override
   int get id;
 
+  MoveEntity get move;
+
   @override
   String get name;
 
@@ -216,5 +224,56 @@ abstract class AttackerSituation extends Object
   ActorTurn getNextTurn(Simulation sim, WorldState w) {
     if (turn == 0) return ActorTurn.byId(attacker, w);
     return ActorTurn.never;
+  }
+}
+
+abstract class MoveEntity extends Object
+    with EntityBehavior
+    implements Built<MoveEntity, MoveEntityBuilder>, Entity {
+  static Serializer<MoveEntity> get serializer => _$moveEntitySerializer;
+
+  factory MoveEntity([void Function(MoveEntityBuilder) updates]) = _$MoveEntity;
+
+  factory MoveEntity.initialized(
+    int id,
+    String name,
+  ) =>
+      MoveEntity((b) => b
+        ..id = id
+        ..name = name);
+
+  MoveEntity._();
+
+  @override
+  int get id;
+
+  @override
+  bool get isActive => true;
+
+  @override
+  bool get isAlive => true;
+
+  @override
+  bool get isPlayer => false;
+
+  @override
+  String get name;
+
+  @override
+  bool get nameIsProperNoun => false;
+
+  @override
+  Pronoun get pronoun => Pronoun.IT;
+
+  @override
+  Team get team => neutralTeam;
+
+  static MoveEntity getFromAttackerSituation(WorldState w) {
+    for (int i = w.situations.length - 1; i >= 0; i--) {
+      if (w.situations[i] is AttackerSituation) {
+        return (w.situations[i] as AttackerSituation).move;
+      }
+    }
+    throw ArgumentError("No situation that is AttackerSituation found.");
   }
 }

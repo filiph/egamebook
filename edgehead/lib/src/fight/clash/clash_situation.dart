@@ -15,4 +15,5 @@ Situation createClashSituation(int id, Actor attacker, Actor target) =>
       [],
       attacker,
       target,
+      "pounding",
     );

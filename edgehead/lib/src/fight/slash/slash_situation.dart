@@ -16,8 +16,15 @@ Situation createSlashSituation(int id, Actor attacker, Actor target,
           (direction == null && designation != null),
       "You must define only one of direction or designation.");
   return AttackerSituation.initialized(
-      id, slashSituationName, [FinishSlash.singleton], [], attacker, target,
-      attackDirection: _convert(direction, designation));
+    id,
+    slashSituationName,
+    [FinishSlash.singleton],
+    [],
+    attacker,
+    target,
+    "slash",
+    attackDirection: _convert(direction, designation),
+  );
 }
 
 /// Converts a slash direction from the simple [SlashDirection] enum

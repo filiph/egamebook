@@ -19,5 +19,6 @@ Situation createThrowSituation(int id, Actor attacker, Actor target) {
     [],
     attacker,
     target,
+    "throw",
   );
 }

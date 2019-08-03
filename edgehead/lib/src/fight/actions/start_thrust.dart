@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
@@ -84,13 +85,24 @@ CombatCommandType _startThrustCombatCommandType(
 
 PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
     (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy,
-            Situation mainSituation) =>
-        a.report(
+        Situation mainSituation) {
+      Randomly.run(
+        () => a.report(
             s,
-            "<subject> thrust<s> {<object2> |}at "
+            "<subject> thrust<s> at "
+            "<objectOwner's> <object>",
+            object: Entity(name: designation.toHumanString()),
+            objectOwner: enemy,
+            actionThread: mainSituation.id,
+            isSupportiveActionInThread: true),
+        () => a.report(
+            s,
+            "<subject> thrust<s> <object2> at "
             "<objectOwner's> <object>",
             object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
             object2: a.currentWeapon,
             actionThread: mainSituation.id,
-            isSupportiveActionInThread: true);
+            isSupportiveActionInThread: true),
+      );
+    };

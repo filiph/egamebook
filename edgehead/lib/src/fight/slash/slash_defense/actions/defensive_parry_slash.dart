@@ -103,13 +103,6 @@ class DefensiveParrySlash extends OtherActorAction {
         object2: a.currentWeaponOrBodyPart,
       ),
     );
-    a.report(
-        s,
-        "<subject> {parr<ies> it|deflect<s> it|"
-        "meet<s> it with <object2>|"
-        "fend<s> it off}",
-        object2: a.currentWeaponOrBodyPart,
-        positive: true);
 
     if (a.pose < Pose.standing) {
       w.updateActorById(a.id, (b) => b..pose = Pose.standing);

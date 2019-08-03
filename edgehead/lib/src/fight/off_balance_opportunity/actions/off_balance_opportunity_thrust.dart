@@ -75,17 +75,14 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     if (!killed) {
       a.report(
           s,
-          "<subject> thrust<s> {|<object2>} "
+          "<subject> thrust<s> <object2> "
           "deep into <object's> {shoulder|hip|thigh}",
           object: updatedEnemy,
           object2: a.currentWeaponOrBodyPart,
           positive: true);
       inflictPain(context, updatedEnemy, damage);
     } else {
-      a.report(
-          s,
-          "<subject> {stab<s>|"
-          "run<s> <object2> through} <object>",
+      a.report(s, "<subject> run<s> <object2> through <object>",
           object: updatedEnemy,
           object2: a.currentWeaponOrBodyPart,
           positive: true);

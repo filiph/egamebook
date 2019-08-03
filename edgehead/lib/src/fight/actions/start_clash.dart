@@ -52,7 +52,8 @@ class StartClash extends StartDefensibleActionBase {
   Resource get rerollResource => null;
 
   @override
-  String get rollReasonTemplate => null;
+  String get rollReasonTemplate => "will <subject> force "
+      "<object> off balance?";
 
   @override
   bool get shouldShortCircuitWhenFailed => false;

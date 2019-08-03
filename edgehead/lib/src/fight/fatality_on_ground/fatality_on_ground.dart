@@ -22,4 +22,5 @@ Situation createFatalityOnGroundSituation(
       [],
       actor,
       enemy,
+      "maneuver",
     );

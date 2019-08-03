@@ -10,8 +10,15 @@ const String feintSituationName = "FeintSituation";
 Situation createFeintSituation(
         int id, Actor attacker, Actor target, FeintType type) =>
     AttackerSituation.initialized(
-        id, feintSituationName, [FinishFeint.singleton], [], attacker, target,
-        additionalData: _feintTypeToString(type));
+      id,
+      feintSituationName,
+      [FinishFeint.singleton],
+      [],
+      attacker,
+      target,
+      "feint",
+      additionalData: _feintTypeToString(type),
+    );
 
 String _feintTypeToString(FeintType type) {
   switch (type) {

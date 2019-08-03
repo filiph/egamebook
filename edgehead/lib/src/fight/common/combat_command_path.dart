@@ -48,19 +48,30 @@ mixin CombatCommandPath on EnemyTargetAction {
       ];
     }
 
-    // Realize the "<object>" parts of the template.
-    return (Storyline()
-          ..add(commandPathTemplate.join('>>'),
-              subject: context.actor, object: target))
-        .realizeAsString()
-        // Then split again into a list.
-        .split('>>');
+    var result = commandPathTemplate;
+
+    var commandPathJoined = commandPathTemplate.join(' >> ');
+    if (commandPathJoined.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP)) {
+      // Realize the "<object>" parts of the template.
+      result = (Storyline()
+            ..add(commandPathJoined, subject: context.actor, object: target))
+          .realizeAsString()
+          // Then split again into a list.
+          .split('>>');
+    }
+
+    return result;
   }
 
   /// The last part of the command path.
   ///
   /// For example, for "Goblin >> Maim >> Cut off arm", it is "Cut off arm".
   String getCommandPathTail(ApplicabilityContext context, Actor object);
+
+  /// Overridden because the default toString of actions uses
+  /// [commandPathTemplate] (which throws in this mixin).
+  @override
+  String toString() => 'EnemyTargetAction<$combatCommandType>';
 
   String _getBodyCommand(Actor target) {
     var nonLimbParts = target.anatomy.allParts

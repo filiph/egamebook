@@ -93,11 +93,10 @@ PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
             Situation mainSituation) =>
         a.report(
             s,
-            "<subject> swing<s> {<object2> |}at "
+            "<subject> swing<s> at "
             "<objectOwner's> <object>",
             object: Entity(name: designation.toHumanString()),
             objectOwner: enemy,
-            object2: a.currentWeaponOrBodyPart,
             actionThread: mainSituation.id,
             isSupportiveActionInThread: true);
 

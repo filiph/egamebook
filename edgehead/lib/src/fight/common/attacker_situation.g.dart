@@ -70,6 +70,7 @@ Serializer<AttackDirection> _$attackDirectionSerializer =
     new _$AttackDirectionSerializer();
 Serializer<AttackerSituation> _$attackerSituationSerializer =
     new _$AttackerSituationSerializer();
+Serializer<MoveEntity> _$moveEntitySerializer = new _$MoveEntitySerializer();
 
 class _$AttackDirectionSerializer
     implements PrimitiveSerializer<AttackDirection> {
@@ -116,6 +117,9 @@ class _$AttackerSituationSerializer
               BuiltList, const [const FullType(OtherActorAction)])),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'move',
+      serializers.serialize(object.move,
+          specifiedType: const FullType(MoveEntity)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'target',
@@ -175,6 +179,10 @@ class _$AttackerSituationSerializer
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'move':
+          result.move.replace(serializers.deserialize(value,
+              specifiedType: const FullType(MoveEntity)) as MoveEntity);
+          break;
         case 'name':
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -186,6 +194,51 @@ class _$AttackerSituationSerializer
         case 'turn':
           result.turn = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$MoveEntitySerializer implements StructuredSerializer<MoveEntity> {
+  @override
+  final Iterable<Type> types = const [MoveEntity, _$MoveEntity];
+  @override
+  final String wireName = 'MoveEntity';
+
+  @override
+  Iterable<Object> serialize(Serializers serializers, MoveEntity object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'name',
+      serializers.serialize(object.name, specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  MoveEntity deserialize(Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new MoveEntityBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'name':
+          result.name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -208,6 +261,8 @@ class _$AttackerSituation extends AttackerSituation {
   @override
   final int id;
   @override
+  final MoveEntity move;
+  @override
   final String name;
   @override
   final int target;
@@ -225,6 +280,7 @@ class _$AttackerSituation extends AttackerSituation {
       this.builtEnemyTargetActionGenerators,
       this.builtOtherActorActionGenerators,
       this.id,
+      this.move,
       this.name,
       this.target,
       this.turn})
@@ -246,6 +302,9 @@ class _$AttackerSituation extends AttackerSituation {
     }
     if (id == null) {
       throw new BuiltValueNullFieldError('AttackerSituation', 'id');
+    }
+    if (move == null) {
+      throw new BuiltValueNullFieldError('AttackerSituation', 'move');
     }
     if (name == null) {
       throw new BuiltValueNullFieldError('AttackerSituation', 'name');
@@ -278,6 +337,7 @@ class _$AttackerSituation extends AttackerSituation {
         builtOtherActorActionGenerators ==
             other.builtOtherActorActionGenerators &&
         id == other.id &&
+        move == other.move &&
         name == other.name &&
         target == other.target &&
         turn == other.turn;
@@ -292,12 +352,14 @@ class _$AttackerSituation extends AttackerSituation {
                     $jc(
                         $jc(
                             $jc(
-                                $jc($jc(0, additionalData.hashCode),
-                                    attackDirection.hashCode),
-                                attacker.hashCode),
-                            builtEnemyTargetActionGenerators.hashCode),
-                        builtOtherActorActionGenerators.hashCode),
-                    id.hashCode),
+                                $jc(
+                                    $jc($jc(0, additionalData.hashCode),
+                                        attackDirection.hashCode),
+                                    attacker.hashCode),
+                                builtEnemyTargetActionGenerators.hashCode),
+                            builtOtherActorActionGenerators.hashCode),
+                        id.hashCode),
+                    move.hashCode),
                 name.hashCode),
             target.hashCode),
         turn.hashCode));
@@ -314,6 +376,7 @@ class _$AttackerSituation extends AttackerSituation {
           ..add('builtOtherActorActionGenerators',
               builtOtherActorActionGenerators)
           ..add('id', id)
+          ..add('move', move)
           ..add('name', name)
           ..add('target', target)
           ..add('turn', turn))
@@ -360,6 +423,10 @@ class AttackerSituationBuilder
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
 
+  MoveEntityBuilder _move;
+  MoveEntityBuilder get move => _$this._move ??= new MoveEntityBuilder();
+  set move(MoveEntityBuilder move) => _$this._move = move;
+
   String _name;
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
@@ -384,6 +451,7 @@ class AttackerSituationBuilder
       _builtOtherActorActionGenerators =
           _$v.builtOtherActorActionGenerators?.toBuilder();
       _id = _$v.id;
+      _move = _$v.move?.toBuilder();
       _name = _$v.name;
       _target = _$v.target;
       _turn = _$v.turn;
@@ -419,6 +487,7 @@ class AttackerSituationBuilder
               builtOtherActorActionGenerators:
                   builtOtherActorActionGenerators.build(),
               id: id,
+              move: move.build(),
               name: name,
               target: target,
               turn: turn);
@@ -429,12 +498,103 @@ class AttackerSituationBuilder
         builtEnemyTargetActionGenerators.build();
         _$failedField = 'builtOtherActorActionGenerators';
         builtOtherActorActionGenerators.build();
+
+        _$failedField = 'move';
+        move.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AttackerSituation', _$failedField, e.toString());
       }
       rethrow;
     }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$MoveEntity extends MoveEntity {
+  @override
+  final int id;
+  @override
+  final String name;
+
+  factory _$MoveEntity([void Function(MoveEntityBuilder) updates]) =>
+      (new MoveEntityBuilder()..update(updates)).build();
+
+  _$MoveEntity._({this.id, this.name}) : super._() {
+    if (id == null) {
+      throw new BuiltValueNullFieldError('MoveEntity', 'id');
+    }
+    if (name == null) {
+      throw new BuiltValueNullFieldError('MoveEntity', 'name');
+    }
+  }
+
+  @override
+  MoveEntity rebuild(void Function(MoveEntityBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  MoveEntityBuilder toBuilder() => new MoveEntityBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is MoveEntity && id == other.id && name == other.name;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), name.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('MoveEntity')
+          ..add('id', id)
+          ..add('name', name))
+        .toString();
+  }
+}
+
+class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
+  _$MoveEntity _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
+
+  MoveEntityBuilder();
+
+  MoveEntityBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _name = _$v.name;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(MoveEntity other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$MoveEntity;
+  }
+
+  @override
+  void update(void Function(MoveEntityBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$MoveEntity build() {
+    final _$result = _$v ?? new _$MoveEntity._(id: id, name: name);
     replace(_$result);
     return _$result;
   }

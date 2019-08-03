@@ -56,8 +56,7 @@ class OnGroundParry extends OtherActorAction {
     a.report(
         s,
         "<subject> tr<ies> to {parry|deflect it|"
-        "stop it{| with <object2>}}",
-        object2: a.currentWeaponOrBodyPart);
+        "stop it}");
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
@@ -72,12 +71,11 @@ class OnGroundParry extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(
-        s,
-        "<subject> {parr<ies> it|"
-        "stop<s> it with <object2>}",
-        object2: a.currentWeaponOrBodyPart,
-        positive: true);
+    Randomly.run(
+      () => a.report(s, "<subject> parr<ies> it", positive: true),
+      () => a.report(s, "<subject> stop<s> it with <object2>",
+          object2: a.currentWeaponOrBodyPart, positive: true),
+    );
     w.popSituationsUntil("FightSituation", sim);
     return "${a.name} parries ${enemy.name}";
   }

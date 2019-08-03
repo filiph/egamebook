@@ -5,13 +5,10 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-
-final Entity swing =
-    Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
 
 ReasonedSuccessChance computeOnGroundShieldBlock(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -80,7 +77,8 @@ class OnGroundShieldBlock extends OtherActorAction {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
-          owner: enemy, subject: swing);
+          owner: enemy,
+          subject: MoveEntity.getFromAttackerSituation(context.world));
       a.report(
           s,
           "<subject> easily {block<s>|stop<s>|deflect<s>} "

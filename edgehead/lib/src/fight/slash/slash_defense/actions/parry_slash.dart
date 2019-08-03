@@ -5,14 +5,11 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
-
-final Entity swing =
-    Entity(name: "swing", team: neutralTeam, nameIsProperNoun: true);
 
 ReasonedSuccessChance computeParrySlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -66,12 +63,7 @@ class ParrySlash extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(
-        s,
-        "<subject> tr<ies> to {parry|deflect it|"
-        "meet it with <object2>|"
-        "fend it off}",
-        object2: a.currentWeaponOrBodyPart);
+    a.report(s, "<subject> tr<ies> to {parry|deflect it|fend it off}");
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
@@ -94,20 +86,21 @@ class ParrySlash extends OtherActorAction {
       s.add("<subject> <is> out of balance",
           subject: enemy, negative: true, startSentence: true);
       s.add("so <ownerPronoun's> <subject> is {weak|feeble}",
-          owner: enemy, subject: swing);
+          owner: enemy,
+          subject: MoveEntity.getFromAttackerSituation(context.world));
       a.report(
           s,
           "<subject> {parr<ies> it easily|"
-          "easily meet<s> it with <object2>|"
-          "fend<s> it off easily}",
+          "easily meet<s> it|"
+          "fend<s> it off easily} with <object2>",
           object2: a.currentWeaponOrBodyPart,
           positive: true);
     } else {
       a.report(
           s,
           "<subject> {parr<ies> it|"
-          "meet<s> it with <object2>|"
-          "fend<s> it off}",
+          "meet<s> it|"
+          "fend<s> it off} with <object2>",
           object2: a.currentWeaponOrBodyPart,
           positive: true);
     }
