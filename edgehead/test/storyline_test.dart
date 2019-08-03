@@ -464,6 +464,16 @@ void main() {
       expect(storyline.realizeAsString(), isNot(contains("kill the duck")));
     });
 
+    test("thread is shown even when thread is broken (no summary)", () {
+      storyline.add("you aim at the sky",
+          actionThread: threadA, startsThread: true);
+      storyline.add("you shoot the duck", actionThread: threadA);
+      storyline.add("someone calls you by name");
+      expect(storyline.realizeAsString(), contains("aim at the sky"));
+      expect(storyline.realizeAsString(), contains("shoot the duck"));
+      expect(storyline.realizeAsString(), contains("calls you by name"));
+    });
+
     test("summary doesn't show when start is missing", () {
       storyline.add("you shoot the duck", actionThread: threadA);
       storyline.add("you kill the duck",
@@ -517,6 +527,22 @@ void main() {
       expect(storyline.realizeAsString(), "I shoot the orc.");
     });
 
+    test("summary doesn't affect following reports", () {
+      var threadB = 12345;
+      storyline.add("you aim at the sky",
+          actionThread: threadA, startsThread: true);
+      storyline.add("you shoot the duck", actionThread: threadA);
+      storyline.add("you kill the duck",
+          actionThread: threadA, replacesThread: true);
+      storyline.add("a dog barks at me",
+          actionThread: threadB, startsThread: true);
+      storyline.add("but I ignore it", actionThread: threadB);
+      expect(storyline.realizeAsString(), isNot(contains("aim at the sky")));
+      expect(storyline.realizeAsString(), contains("kill the duck"));
+      expect(storyline.realizeAsString(), contains("dog barks at me"));
+      expect(storyline.realizeAsString(), contains("I ignore it"));
+    });
+
     test("throws when multiple starting action reports are together", () {
       storyline.add("you aim at the sky",
           actionThread: threadA, startsThread: true);
@@ -534,8 +560,7 @@ void main() {
       storyline.add("the duck dies", actionThread: threadA);
       storyline.add("you shoot the duck",
           actionThread: threadA, replacesThread: true);
-      storyline.add("and kill it",
-          actionThread: threadA, replacesThread: true);
+      storyline.add("and kill it", actionThread: threadA, replacesThread: true);
       expect(storyline.realizeAsString(), contains("shoot the duck"));
       expect(storyline.realizeAsString(), contains("kill it"));
     });

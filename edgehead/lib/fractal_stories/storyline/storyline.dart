@@ -680,8 +680,8 @@ class Storyline {
             // Bingo. We have an unbroken chain from [report] to [next].
             // Yield just [next] instead of the whole chain.
             yield next;
-            // Put the index to just after [next].
-            i = j + 1;
+            // Put the index to [next] (it will be incremented by the for loop).
+            i = j;
             continuousChain = true;
             // Add any following summaries.
             for (int z = j + 1; z < reports.length; z++) {
@@ -690,11 +690,9 @@ class Storyline {
                   followUp.replacesThread) {
                 // A following summary exists.
                 yield followUp;
-                i = z + 1;
                 continue;
               }
               // Broken thread of follow-up summaries.
-              i = z;
               break;
             }
             break;
