@@ -58,12 +58,17 @@ class DefensiveParrySlash extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(
-      s,
-      "<subject> tr<ies> to {parry|deflect it|"
-      "meet it with <object2>|"
-      "fend it off}",
-      object2: a.currentWeaponOrBodyPart,
+    Randomly.run(
+      () => a.report(
+        s,
+        "<subject> tr<ies> to {parry|deflect it|fend it off}",
+      ),
+      () => a.report(
+        s,
+        "<subject> tr<ies> to {deflect it|meet it|fend it off} "
+        "with <object2>",
+        object2: a.currentWeaponOrBodyPart,
+      ),
     );
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
@@ -86,6 +91,18 @@ class DefensiveParrySlash extends OtherActorAction {
     if (a.isPlayer) {
       a.report(s, "<subject> {step<s>|take<s> a step} back");
     }
+    Randomly.run(
+      () => a.report(
+        s,
+        "<subject> {parr<ies>|deflect<s> it|fend<s> it off}",
+      ),
+      () => a.report(
+        s,
+        "<subject> {deflect<s> it|meet<s> it|fend<s> it off} "
+        "with <object2>",
+        object2: a.currentWeaponOrBodyPart,
+      ),
+    );
     a.report(
         s,
         "<subject> {parr<ies> it|deflect<s> it|"
