@@ -143,9 +143,9 @@ abstract class BodyPart extends Object
   /// A designation that can be used in storyline to refer to this part, e.g.
   /// `"{abdomen|chest|belly}"` for torso.
   ///
-  /// Note that the resulting string (after being processed by [Randomly.parse])
-  /// will really be random. Don't use [randomDesignation] of the same
-  /// body part two times in a row.
+  /// Note that the resulting string (after being processed by
+  /// [Randomly.parseAndPick]) will really be random. Don't use
+  /// [randomDesignation] of the same body part two times in a row.
   ///
   /// This is useful when you want to, for example, report a slash of a torso,
   /// and you'd like to make the report a little more specific, with something

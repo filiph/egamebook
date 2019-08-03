@@ -7,7 +7,7 @@ class Randomly {
   static final Random _random = Random();
 
   // Function gets a list of choices, picks one of them randomly.
-  static dynamic choose(List choices) {
+  static T choose<T>(List<T> choices) {
     if (choices == null) throw ArgumentError("Cannot choose from null.");
     int number = choices.length;
     if (number == 0) {
@@ -85,7 +85,7 @@ class Randomly {
     return "impossible";
   }
 
-  /// Returns the probability in "rounded" by [precisionSteps]. So, if
+  /// Returns the probability "rounded" by [precisionSteps]. So, if
   /// [precisionSteps] is [:10:], a [humanProbability] of [:0.46:]
   /// becomes "50%".
   /// When [precisionSteps] is [:5:], then it becomes "45%".
@@ -97,65 +97,76 @@ class Randomly {
     return "$prefix${humanProbability.toStringAsFixed(0)}$postfix";
   }
 
-  // Function gets a String in the format 'something {is fishy|doesn't add up}'
-  // and outputs either 'something is fishy' or 'something doesn't add up'. This
-  // works even recursively ('{I {think|guess}|Maybe} it will work.') and
-  // also with empty choices ('This is {very|} interesting').
-  //
-  // When creating messaging that the user/player will likely see often, this will
-  // make sure that they see some 'natural' variance.
-  static String parse(String str) {
+  /// Function gets a String in the format 'something {is fishy|doesn't add up}'
+  /// and outputs either 'something is fishy' or 'something doesn't add up'.
+  /// This works even recursively ('{I {think|guess}|Maybe} it will work.') and
+  /// also with empty choices ('This is {very|} interesting').
+  ///
+  /// When creating messaging that the user/player will likely see often, this
+  /// will make sure that they see some 'natural' variance.
+  static String parseAndPick(String str) {
+    final variants = parse(str).toList(growable: false);
+    return choose(variants);
+  }
+
+  /// Takes a string like 'something {is fishy|doesn't add up}' and returns
+  /// all the variants (`['something is fishy', 'something doesn't add up']`).
+  static Iterable<String> parse(String str) sync* {
     int startTagIndex = str.indexOf("{");
-    if (startTagIndex != -1 && startTagIndex < str.length - 1) {
-      final indexes = <int>[];
-      indexes.add(startTagIndex);
-      int lastIndex;
-      int endTagIndex;
-      int depth = 1;
-      for (int i = startTagIndex + 1; i < str.length; i++) {
-        lastIndex = i;
-        String ch = str[i];
-        if (ch == "{") {
-          depth++;
-        } else if (ch == "|" && depth == 1) {
-          indexes.add(i);
-        } else if (ch == "}") {
-          depth--;
-          if (depth == 0) {
-            endTagIndex = i;
-            indexes.add(endTagIndex);
-            break;
-          }
+    if (startTagIndex == -1 || startTagIndex >= str.length - 1) {
+      // no startTag ("{") found
+      yield str;
+      return;
+    }
+    final indexes = <int>[];
+    indexes.add(startTagIndex);
+    int lastIndex;
+    int endTagIndex;
+    int depth = 1;
+    for (int i = startTagIndex + 1; i < str.length; i++) {
+      lastIndex = i;
+      String ch = str[i];
+      if (ch == "{") {
+        depth++;
+      } else if (ch == "|" && depth == 1) {
+        indexes.add(i);
+      } else if (ch == "}") {
+        depth--;
+        if (depth == 0) {
+          endTagIndex = i;
+          indexes.add(endTagIndex);
+          break;
         }
       }
+    }
 
-      int numOptions = indexes.length - 1;
-      if (numOptions > 1) {
-        int choice = _random.nextInt(numOptions);
+    int numOptions = indexes.length - 1;
+    if (numOptions <= 1) {
+      // not a real options string
+      if (lastIndex == str.length - 1) {
+        yield str;
+      } else {
+        final subs = parse(str.substring(lastIndex + 1));
+        for (final sub in subs) {
+          yield "${str.substring(0, lastIndex + 1)}$sub";
+        }
+      }
+      return;
+    }
 
+    for (int i = 0; i < numOptions; i++) {
+      String current = str.substring(indexes[i] + 1, indexes[i + 1]);
+      for (final sub in parse(current)) {
         StringBuffer strBuf = StringBuffer();
         strBuf.write(str.substring(0, startTagIndex));
-        String choiceString =
-            str.substring(indexes[choice] + 1, indexes[choice + 1]);
-        strBuf.write(parse(choiceString));
+        strBuf.write(sub);
         strBuf.write(str.substring(endTagIndex + 1, str.length));
         if (lastIndex == str.length - 1) {
-          return strBuf.toString();
+          yield strBuf.toString();
         } else {
-          return parse(strBuf.toString());
-        }
-      } else {
-        // not a real options string
-        if (lastIndex == str.length - 1) {
-          return str;
-        } else {
-          return "${str.substring(0, lastIndex + 1)}"
-              "${parse(str.substring(lastIndex + 1))}";
+          yield* parse(strBuf.toString());
         }
       }
-    } else {
-      // no startTag ("{") found
-      return str;
     }
   }
 

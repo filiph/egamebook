@@ -51,11 +51,15 @@ void main() {
 
   group("Randomly.parse", () {
     test("parses simple stuff", () {
-      expect(Randomly.parse("you {hit|punch} him in the face"),
-          isIn(["you hit him in the face", "you punch him in the face"]));
+      expect(
+          Randomly.parse("you {hit|punch} him in the face"),
+          unorderedEquals(<String>[
+            "you hit him in the face",
+            "you punch him in the face"
+          ]));
       expect(
           Randomly.parse("{you|thy} have my word, {Sir|Sire}"),
-          isIn([
+          unorderedEquals(<String>[
             "you have my word, Sir",
             "thy have my word, Sir",
             "you have my word, Sire",
@@ -64,33 +68,38 @@ void main() {
     });
     test("blank options", () {
       expect(Randomly.parse("{||blank }options"),
-          isIn(["options", "blank options"]));
+          unorderedEquals(<String>["options", "options", "blank options"]));
     });
     test("three options", () {
       expect(Randomly.parse("{1|two|3} options"),
-          isIn(["1 options", "two options", "3 options"]));
+          unorderedEquals(<String>["1 options", "two options", "3 options"]));
     });
     test("recursion", () {
       var s = "{I am deeply {honoured|humbled}|You {honour|humble} me, Sire}.";
-      var result = Randomly.parse(s);
-      expect(result.startsWith("I am") || result.startsWith("You "), true);
-      expect(result.endsWith("ed.") || result.endsWith("Sire."), true);
+      expect(
+          Randomly.parse(s),
+          unorderedEquals(<String>[
+            "I am deeply honoured.",
+            "I am deeply humbled.",
+            "You honour me, Sire.",
+            "You humble me, Sire."
+          ]));
     });
     test("no tags", () {
       var s = "no tags";
-      expect(Randomly.parse(s), equals(s));
+      expect(Randomly.parse(s), hasLength(1));
     });
     test("leaves brackets alone when not an option string", () {
       var s = "This is {not an option string}.";
-      expect(Randomly.parse(s), equals(s));
+      expect(Randomly.parse(s), unorderedEquals(<String>[s]));
     });
     test("leaves malformed string", () {
       var s = "{}malformed {} horrible string{}";
-      expect(Randomly.parse(s), equals(s));
+      expect(Randomly.parse(s), unorderedEquals(<String>[s]));
     });
     test("leaves malformed string with unbalanced brackets", () {
       var s = "{unbalanced{g|er|e}";
-      expect(Randomly.parse(s), equals(s));
+      expect(Randomly.parse(s), unorderedEquals(<String>[s]));
     });
   });
 

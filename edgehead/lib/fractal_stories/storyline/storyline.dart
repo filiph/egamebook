@@ -722,7 +722,7 @@ class Storyline {
       String randomReport = string(i);
 
       // Resolve randomness first.
-      String report = Randomly.parse(randomReport);
+      String report = Randomly.parseAndPick(randomReport);
       if (report.contains('{') || report.contains('}')) {
         log.severe('Storyline result includes { and/or } even after being '
             'parsed by Randomly. Is there a dangling bracket here? '
