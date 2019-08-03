@@ -2454,16 +2454,68 @@ class StartTakeDagger extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach startBeginFightFromStartEnterGoblin = Approach(
-    'start_enter_goblin', 'start_begin_fight', '“You are going to be fine.”',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
+class StartDeclineDagger extends RoamingAction {
+  @override
+  final String name = 'start_decline_dagger';
+
+  static final StartDeclineDagger singleton = StartDeclineDagger();
+
+  @override
+  List<String> get commandPathTemplate => ['“You are going to be fine.”'];
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'start_enter_goblin') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Tamara shrugs and puts the dagger in her belt.\n',
+        wholeSentence: true);
+    w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
+    movePlayer(c, "start_begin_fight");
+    return '${a.name} successfully performs StartDeclineDagger';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Approach startEnterGoblinFromStartRaccoon = Approach(
     'start_raccoon', 'start_enter_goblin', '<implicit>', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2593,7 +2645,6 @@ final allApproaches = <Approach>[
   orcthornRoomFromSlaveQuartersPassage,
   startRaccoonFromStart,
   startCowardFromStart,
-  startBeginFightFromStartEnterGoblin,
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
@@ -2619,5 +2670,6 @@ final allActions = <RoamingAction>[
   SlaveQuartersPassageExamineDoor.singleton,
   WarForgeLookAround.singleton,
   WarForgeWatchWorkers.singleton,
-  StartTakeDagger.singleton
+  StartTakeDagger.singleton,
+  StartDeclineDagger.singleton
 ];

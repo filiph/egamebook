@@ -199,7 +199,14 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
 /// The fight at the start of Knights of San Francisco, with Tamara.
 FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var goblin = _makeGoblin(w);
+  var goblin = Actor.initialized(w.randomInt(), "goblin",
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
+      dexterity: 150,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   w.actors.add(goblin);
   w.updateActorById(playerId,
       (b) => b.recoveringUntil = w.time.add(const Duration(seconds: 1)));

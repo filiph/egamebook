@@ -1,5 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
+import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/room.dart';
@@ -52,9 +54,9 @@ final Actor edgeheadTamara = Actor.initialized(
   "Tamara",
   nameIsProperNoun: true,
   pronoun: Pronoun.SHE,
-  constitution: 2,
   currentRoomName: _preStartBook.name,
   followingActorId: playerId,
+  currentWeapon: Item.weapon(2342341, WeaponType.sword),
 );
 
 final Simulation edgeheadSimulation =

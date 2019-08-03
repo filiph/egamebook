@@ -1,5 +1,3 @@
-
-
 // ---
 ACTION: $start_take_dagger
 COMMAND: Take dagger
@@ -19,6 +17,17 @@ movePlayer(c, "start_begin_fight");
 
 
 // ---
-APPROACH: $start_begin_fight FROM $start_enter_goblin
+ACTION: $start_decline_dagger
 COMMAND: “You are going to be fine.”
-DESCRIPTION: N/A
+
+FOR_LOCATION: $start_enter_goblin
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+Tamara shrugs and puts the dagger in her belt.
+
+SUCCESS_EFFECT:
+w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
+movePlayer(c, "start_begin_fight");
+
