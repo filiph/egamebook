@@ -104,8 +104,7 @@ void main() {
         subject: enemy, object: player, positive: true, time: 4);
     expect(
         storyline.realizeAsString(),
-        matches(
-            "I try to hit the enemy in the stomach.+ he dodges my strike. "
+        matches("I try to hit the enemy in the stomach.+ he dodges my strike. "
             "He hits back.+ breaks my nose."));
   });
 
@@ -160,8 +159,7 @@ void main() {
     var storyline = Storyline();
     var hull = Entity(name: "hull", team: playerTeam, pronoun: Pronoun.IT);
 
-    storyline.add("<owner's> <subject> explode<s>",
-        subject: hull);
+    storyline.add("<owner's> <subject> explode<s>", subject: hull);
     expect(storyline.realizeAsString(), matches("The hull.+"));
   });
 
@@ -264,8 +262,7 @@ void main() {
     var orc = Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
     storyline.add("<subject> pound<s> on <objectOwner's> {<object>|<object>!}",
         subject: orc, objectOwner: player, object: sword);
-    expect(
-        storyline.realizeAsString(), matches("The orc pounds on my sword."));
+    expect(storyline.realizeAsString(), matches("The orc pounds on my sword."));
   });
 
   group("possessive pronoun", () {
@@ -549,8 +546,8 @@ void main() {
         storyline.add("<subject> hit<s> <object> back with <object2>",
             subject: goblin, object: player, object2: rock);
         var realized = storyline.realizeAsString();
-        expect(realized,
-            contains("I throw myself at the goblin with the rock"));
+        expect(
+            realized, contains("I throw myself at the goblin with the rock"));
         expect(realized, contains("hits me back with it"));
       });
 

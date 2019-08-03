@@ -23,7 +23,9 @@ class GeneratedApproach extends GeneratedGameObject {
   @override
   Iterable<Spec> finalizeAst() sync* {
     final command = _map['COMMAND'] ?? '';
-    assert(command.trim() != 'N/A', "Do not use N/A for command. "
+    assert(
+        command.trim() != 'N/A',
+        "Do not use N/A for command. "
         "If you don't want the command to be shown, use '<implicit>'.");
 
     var newInstance = approachType.newInstance([
