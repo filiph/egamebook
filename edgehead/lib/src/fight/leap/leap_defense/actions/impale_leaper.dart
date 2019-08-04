@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
+import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 
 class ImpaleLeaper extends EnemyTargetAction {
   static final ImpaleLeaper singleton = ImpaleLeaper();

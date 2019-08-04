@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
+import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 
 class FinishLeap extends OtherActorAction {
   static const String className = "FinishLeap";

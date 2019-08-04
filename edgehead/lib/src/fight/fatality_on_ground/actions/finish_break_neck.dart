@@ -4,7 +4,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/humanoid_pain_or_death.dart';
+import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 
 class FinishBreakNeck extends OtherActorAction {
   static final FinishBreakNeck singleton = FinishBreakNeck();
