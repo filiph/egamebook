@@ -2353,6 +2353,197 @@ final Approach orcthornRoomFromSlaveQuartersPassage =
   final Storyline s = c.outputStoryline;
   s.add('You open the door.\n', wholeSentence: true);
 });
+
+class ReadLetterFromFather extends RoamingAction {
+  @override
+  final String name = 'read_letter_from_father';
+
+  static final ReadLetterFromFather singleton = ReadLetterFromFather();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['self >> letter from father >> read'];
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+    if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and plentiful.\n\nTo be completely honest, I am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your mother back from the dead.\n\n- Father\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs ReadLetterFromFather';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ReadLetterFromMentor extends RoamingAction {
+  @override
+  final String name = 'read_letter_from_mentor';
+
+  static final ReadLetterFromMentor singleton = ReadLetterFromMentor();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['self >> letter from mentor >> read'];
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+    if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I take the letter from my pocket and read it.\n\nMy young friend,\n\nYou ask good questions. But before I will answer them, we must do something with your situation.\n\nYou must understand that a necromancer cannot be poor. There is no glory for practitioners of our profession unless we wield the resources and power to lead others.\n\nIt\'s not my place, or style, to share my wealth with you. But I can do something more exciting.\n\nWith this letter, the messenger should have also brought you a book. If he did not, find out where it is, then kill him.\n\nThe book contains knowledge about a curious structure called the Pyramid, which lies in the ruins of an ancient city called San Francisco. The place is rich with ancient artifacts and gold.\n\nGo there, and take all you can. Learn about the place.\n\nIf you succeed in your quest, you may have the apprenticeship you seek.\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs ReadLetterFromMentor';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Approach startPostFightFromStartBeginFight = Approach(
+    'start_begin_fight', 'start_post_fight', '<implicit>', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startPostFight = Room('start_post_fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The fight is over.\n\n', wholeSentence: true);
+  assert(!originalWorld.isDead(tamaraId));
+
+  Ruleset(
+      Rule(595260527, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return playerHasVisited(sim, w, "start_raccoon");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('"Raccoon my ass."\n', wholeSentence: true);
+      }),
+      Rule(1052429754, 0, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n',
+            wholeSentence: true);
+      })).apply(c);
+  s.add(
+      '\n"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it\'s time for you to quit. Go back to safety. You won\'t survive here."\n\n"Thanks for your service, Tamara. But I\'ve come this far."\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+      wholeSentence: true);
+  w.actors.removeWhere((actor) => actor.id == tamaraId);
+}, null, null, null, isIdle: true);
+final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('"Sorry, Tamara."\n', wholeSentence: true);
+}, null, null, null,
+    parent: 'start_post_fight',
+    prerequisite: Prerequisite(996731518, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return w.isDead(tamaraId);
+    }));
 final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
     '“It is just a rustle in the bush, Tamara. Probably a raccoon.”',
     (ActionContext c) {
@@ -2570,13 +2761,32 @@ final Room start = Room('start', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as he unsheathes her sword. "This is the last and then I turn back."\n\n',
+      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her sword. "This is the last and then I turn back."\n\n',
       wholeSentence: true);
   w.actors.removeWhere((actor) => actor.id == brianaId);
 }, null, null, null);
-final Approach endOfRoamFromStartPostFight =
-    Approach('start_post_fight', '__END_OF_ROAM__', 'Travel back home',
+final Approach bleedsMainFromStartPostFight =
+    Approach('start_post_fight', 'bleeds_main', 'Go >> towards the Pyramid',
         (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'I finally see it. The Pyramid.\n\nA little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement Bleeds, as in the village bleeds outside of the Pyramid.\n\nIt was harder than I expected but I made it here. The Manual is somewhere here. I can find it.\n',
+      wholeSentence: true);
+}, null, null, null, isIdle: true);
+final Approach endOfRoamFromBleedsMain = Approach(
+    'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2585,65 +2795,6 @@ final Approach endOfRoamFromStartPostFight =
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
-final Approach startPostFightFromStartBeginFight = Approach(
-    'start_begin_fight', 'start_post_fight', '<implicit>', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startPostFight = Room('start_post_fight', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The fight is over.\n\n', wholeSentence: true);
-  Ruleset(
-      Rule(33899545, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return w.isDead(tamaraId);
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add('"Sorry, Tamara."\n', wholeSentence: true);
-      }),
-      Rule(1036996063, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return playerHasVisited(sim, w, "start_raccoon");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add('"Raccoon my ass."\n\n', wholeSentence: true);
-      }),
-      Rule(847964281, 0, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return true;
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n\n',
-            wholeSentence: true);
-      })).apply(c);
-}, null, null, null);
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2664,12 +2815,14 @@ final allRooms = <Room>[
   warForge,
   testFightOrcAndGoblin,
   orcthornRoom,
+  startPostFight,
+  startPostFightTamaraDead,
   startRaccoon,
   startCoward,
   startEnterGoblin,
   startBeginFight,
   start,
-  startPostFight
+  bleedsMain
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2702,13 +2855,14 @@ final allApproaches = <Approach>[
   testFightOrcAndGoblinFromPreStartBook,
   endOfRoamFromTestFightOrcAndGoblin,
   orcthornRoomFromSlaveQuartersPassage,
+  startPostFightFromStartBeginFight,
   startRaccoonFromStart,
   startCowardFromStart,
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
-  endOfRoamFromStartPostFight,
-  startPostFightFromStartBeginFight
+  bleedsMainFromStartPostFight,
+  endOfRoamFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
@@ -2730,6 +2884,8 @@ final allActions = <RoamingAction>[
   SlaveQuartersPassageExamineDoor.singleton,
   WarForgeLookAround.singleton,
   WarForgeWatchWorkers.singleton,
+  ReadLetterFromFather.singleton,
+  ReadLetterFromMentor.singleton,
   StartTakeDagger.singleton,
   StartDeclineDagger.singleton
 ];

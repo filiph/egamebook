@@ -17,9 +17,6 @@ const int agruthId = 6666;
 
 const int brianaId = 100;
 
-/// [edgeheadTamara]'s [Actor.id].
-const int tamaraId = 2;
-
 const int escapeTunnelGoblinId = 12345;
 
 const int escapeTunnelOrcId = 12344;
@@ -35,6 +32,9 @@ const int slaveQuartersOrcId = 789456;
 const int sleepingGoblinId = 4445655;
 
 const int sleepingGoblinsSpearId = 45234205;
+
+/// [edgeheadTamara]'s [Actor.id].
+const int tamaraId = 2;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = [
@@ -196,33 +196,6 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
       });
 }
 
-/// The fight at the start of Knights of San Francisco, with Tamara.
-FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  var goblin = Actor.initialized(w.randomInt(), "goblin",
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
-      dexterity: 150,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  w.actors.add(goblin);
-  w.updateActorById(playerId,
-      (b) => b.recoveringUntil = w.time.add(const Duration(seconds: 1)));
-  return FightSituation.initialized(
-      w.randomInt(),
-      party,
-      [goblin],
-      "{muddy |wet |}ground",
-      roomRoamingSituation,
-      {
-        2: start_what_is_it_about_this_place,
-        4: start_this_place_is_nightmare,
-        6: start_come_back_with_me,
-      });
-}
-
 FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var orc = _makeOrc(w, id: escapeTunnelOrcId);
@@ -290,6 +263,33 @@ FightSituation generateSlaveQuartersPassageFight(
     1: slave_quarters_orc_looks,
     3: slave_quarters_mean_nothing,
   });
+}
+
+/// The fight at the start of Knights of San Francisco, with Tamara.
+FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  var goblin = Actor.initialized(w.randomInt(), "goblin",
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
+      dexterity: 150,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  w.actors.add(goblin);
+  w.updateActorById(playerId,
+      (b) => b.recoveringUntil = w.time.add(const Duration(seconds: 1)));
+  return FightSituation.initialized(
+      w.randomInt(),
+      party,
+      [goblin],
+      "{muddy |wet |}ground",
+      roomRoamingSituation,
+      {
+        2: start_what_is_it_about_this_place,
+        4: start_this_place_is_nightmare,
+        6: start_come_back_with_me,
+      });
 }
 
 /// Test fight. Do not use in production.
@@ -399,6 +399,15 @@ void giveGoldToPlayer(WorldStateBuilder w, int amount) {
 
 void giveStaminaToPlayer(WorldStateBuilder w, int amount) {
   w.updateActorById(getPlayer(w.build()).id, (b) => b..stamina += amount);
+}
+
+/// Returns `true` while player is roaming through Knights and is in an idle
+/// room (i.e. can do things like chatting or reading).
+bool isInIdleRoom(Simulation sim, WorldState w) {
+  if (w.currentSituation is! RoomRoamingSituation) return false;
+  final situation = w.currentSituation as RoomRoamingSituation;
+  if (situation.monstersAlive) return false;
+  return sim.getRoomByName(situation.currentRoomName).isIdle;
 }
 
 /// Returns `true` while player is roaming through Bloodrock. Note that the list

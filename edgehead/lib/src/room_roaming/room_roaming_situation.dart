@@ -39,7 +39,7 @@ abstract class RoomRoamingSituation extends Object
 
   RoomRoamingSituation._();
 
-  /// TODO: add all other actions that player can do while exploring
+  /// All actions that player can do while exploring.
   @override
   List<Action> get actions => [
         TakeApproachAction.singleton,

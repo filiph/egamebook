@@ -6,25 +6,44 @@ DESCRIPTION: N/A
 // ---
 ROOM: $start_post_fight
 
+FLAGS: idle
+
 FIRST_DESCRIPTION:
 The fight is over.
 
+[[CODE]]
+assert(!originalWorld.isDead(tamaraId));
+[[/CODE]]
+
 - RULESET
-- RULE:
-  w.isDead(tamaraId)
-- THEN:
-"Sorry, Tamara."
-- END RULE
 - RULE:
   playerHasVisited(sim, w, "start_raccoon")
 - THEN:
 "Raccoon my ass."
-
 - END RULE
 - RULE:
   default
 - THEN:
 "Well, as I said, that was the last one. And, young sir, call me coward one more time and I'll slash your neck." She seems to mean it.
-
 - END RULE
 - END RULESET
+
+"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it's time for you to quit. Go back to safety. You won't survive here."
+
+"Thanks for your service, Tamara. But I've come this far."
+
+Tamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.
+
+[[CODE]]
+w.actors.removeWhere((actor) => actor.id == tamaraId);
+[[/CODE]]
+
+// ---
+ROOM: $start_post_fight_tamara_dead
+
+VARIANT_OF: $start_post_fight
+
+RULE: w.isDead(tamaraId)
+
+FIRST_DESCRIPTION:
+"Sorry, Tamara."

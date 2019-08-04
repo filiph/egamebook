@@ -1,0 +1,27 @@
+ACTION: $read_letter_from_father
+COMMAND: self >> letter from father >> read
+
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+isInIdleRoom(sim, w)
+
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the letter from my pocket and read it.
+
+Son,
+
+I learned about your plans from a family friend. Although I hope you don't mean to execute them, I am writing this letter. I will come back home as soon as I am able.
+
+There is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and plentiful.
+
+To be completely honest, I am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.
+
+And remember, revenge won't bring your mother back from the dead.
+
+- Father

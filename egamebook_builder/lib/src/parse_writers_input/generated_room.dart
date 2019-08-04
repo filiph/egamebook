@@ -67,6 +67,20 @@ class GeneratedRoom extends GeneratedGameObject {
       namedArguments["prerequisite"] = prerequisite;
     }
 
+    if (_map.containsKey('FLAGS')) {
+      final flags = _map['FLAGS'].split(' ').map((s) => s.trim()).toList();
+      for (final flag in flags) {
+        switch (flag) {
+          case 'idle':
+            namedArguments["isIdle"] = literalTrue;
+            break;
+          default:
+            throw ArgumentError(
+                'Unknown flag "$flag" in $writersName ($path).');
+        }
+      }
+    }
+
     var newInstance = roomType.newInstance([
       literal(writersName),
       createDescriber(_map['FIRST_DESCRIPTION']),

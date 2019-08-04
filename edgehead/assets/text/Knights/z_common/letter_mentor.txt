@@ -1,0 +1,28 @@
+ACTION: $read_letter_from_mentor
+COMMAND: self >> letter from mentor >> read
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+isInIdleRoom(sim, w)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the letter from my pocket and read it.
+
+My young friend,
+
+You ask good questions. But before I will answer them, we must do something with your situation.
+
+You must understand that a necromancer cannot be poor. There is no glory for practitioners of our profession unless we wield the resources and power to lead others.
+
+It's not my place, or style, to share my wealth with you. But I can do something more exciting.
+
+With this letter, the messenger should have also brought you a book. If he did not, find out where it is, then kill him.
+
+The book contains knowledge about a curious structure called the Pyramid, which lies in the ruins of an ancient city called San Francisco. The place is rich with ancient artifacts and gold.
+
+Go there, and take all you can. Learn about the place.
+
+If you succeed in your quest, you may have the apprenticeship you seek.

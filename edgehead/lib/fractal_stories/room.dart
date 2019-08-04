@@ -102,11 +102,22 @@ class Room {
 
   final String groundMaterial;
 
+  /// The room is a place where the player can idle (they can read letters,
+  /// talk to NPCs, etc.).
+  final bool isIdle;
+
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
-  const Room(this.name, this.firstDescribe, this.describe, this.fightGenerator,
-      this.itemGenerator,
-      {this.groundMaterial = "ground", this.parent, this.prerequisite})
-      : assert(name != null),
+  const Room(
+    this.name,
+    this.firstDescribe,
+    this.describe,
+    this.fightGenerator,
+    this.itemGenerator, {
+    this.groundMaterial = "ground",
+    this.parent,
+    this.prerequisite,
+    this.isIdle = false,
+  })  : assert(name != null),
         assert(
             describe != null || firstDescribe != null,
             "You must provide at least one description of the room. "
