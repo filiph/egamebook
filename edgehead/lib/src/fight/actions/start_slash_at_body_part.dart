@@ -108,13 +108,17 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
   if (enemy.isOnGround) return false;
   if (a.anatomy.isBlind) return false;
   if (!a.currentDamageCapability.isSlashing) return false;
-  // Only allow torso slashes when enemy is (at least) extended.
-  if (designation == BodyPartDesignation.torso && enemy.pose > Pose.extended) {
-    return false;
-  }
-  // Only allow decapitation when enemy is (at least) off balance.
-  if (designation == BodyPartDesignation.neck && enemy.pose > Pose.offBalance) {
-    return false;
+  if (!enemy.isBarehanded) {
+    // When armed, only allow torso slashes when enemy is (at least) extended.
+    if (designation == BodyPartDesignation.torso &&
+        enemy.pose > Pose.extended) {
+      return false;
+    }
+    // When armed, only allow decapitation when enemy is (at least) off balance.
+    if (designation == BodyPartDesignation.neck &&
+        enemy.pose > Pose.offBalance) {
+      return false;
+    }
   }
   // Don't offer to hit body parts that are already crippled.
   if (!enemy.anatomy.findByDesignation(designation).isAlive) return false;

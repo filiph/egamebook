@@ -86,8 +86,9 @@ class StartSlashAtArm extends StartDefensibleActionBase {
       !enemy.isOnGround &&
       !a.anatomy.isBlind &&
       a.currentDamageCapability.isSlashing &&
-      // Only allow arm attacks when enemy is at least extended.
-      enemy.pose <= Pose.extended &&
+      // Only allow arm attacks when enemy is at least extended
+      // or is barehanded.
+      (enemy.pose <= Pose.extended || enemy.isBarehanded) &&
       enemy.anatomy.anyWeaponAppendageAvailable;
 
   @override
