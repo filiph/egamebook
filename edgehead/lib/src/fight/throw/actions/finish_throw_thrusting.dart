@@ -90,7 +90,7 @@ class FinishThrowThrusting extends OtherActorAction {
             negative: true, actionThread: thread);
       }
       if (result.willDropCurrentWeapon) {
-        final weapon = dropCurrentWeapon(w, result.victim);
+        final weapon = dropCurrentWeapon(w, result.victim.id);
         result.victim.report(s, "<subject> drop<s> <object>",
             object: weapon, negative: true, actionThread: thread);
       }

@@ -13,9 +13,10 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 ///
 /// If this method is called when there is no [FightSituation]
 /// in the current [WorldState.situations] stack, it will throw.
-Item dropCurrentWeapon(WorldStateBuilder w, Actor actor) {
+Item dropCurrentWeapon(WorldStateBuilder w, int actorId) {
   final situation =
       w.getSituationByName<FightSituation>(FightSituation.className);
+  final actor = w.getActorById(actorId);
   final weapon = actor.currentWeapon;
   assert(weapon != null);
   w.replaceSituationById(
