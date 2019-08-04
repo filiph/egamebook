@@ -2775,6 +2775,17 @@ final Approach bleedsMainFromStartPostFight =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Approach bleedsMainFromGoblinSkirmishMain =
+    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to Bleeds',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('I sneak through the bushes and emerge back in Bleeds.\n',
+      wholeSentence: true);
+});
 final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2784,7 +2795,14 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   s.add(
       'I finally see it. The Pyramid.\n\nA little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement Bleeds, as in the village bleeds outside of the Pyramid.\n\nIt was harder than I expected but I made it here. The Manual is somewhere here. I can find it.\n',
       wholeSentence: true);
-}, null, null, null, isIdle: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('Lots of shacks and their inhabitants.\n', wholeSentence: true);
+}, null, null, isIdle: true);
 final Approach endOfRoamFromBleedsMain = Approach(
     'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2795,6 +2813,59 @@ final Approach endOfRoamFromBleedsMain = Approach(
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
+final Approach goblinSkirmishMainFromGoblinSkirmishPatrol = Approach(
+    'goblin_skirmish_patrol',
+    'goblin_skirmish_main',
+    'Go >> (sneak) towards the outpost', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('I sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblins are still here.\n', wholeSentence: true);
+}, null, null);
+final Approach goblinSkirmishPatrolFromBleedsMain =
+    Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room goblinSkirmishPatrol =
+    Room('goblin_skirmish_patrol', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('I meet a patrol. A lone goblin with a spear.\n', wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('Nothing here, just death.\n', wholeSentence: true);
+}, generateTestFightWithGoblin, null);
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2822,7 +2893,9 @@ final allRooms = <Room>[
   startEnterGoblin,
   startBeginFight,
   start,
-  bleedsMain
+  bleedsMain,
+  goblinSkirmishMain,
+  goblinSkirmishPatrol
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2862,7 +2935,10 @@ final allApproaches = <Approach>[
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
   bleedsMainFromStartPostFight,
-  endOfRoamFromBleedsMain
+  bleedsMainFromGoblinSkirmishMain,
+  endOfRoamFromBleedsMain,
+  goblinSkirmishMainFromGoblinSkirmishPatrol,
+  goblinSkirmishPatrolFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
