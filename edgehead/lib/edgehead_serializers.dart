@@ -37,6 +37,11 @@ import 'package:edgehead/writers_input.compiled.dart';
 
 part 'edgehead_serializers.g.dart';
 
+/// These are the types that `package:built_value` will be able to
+/// serialize and de-serialize.
+///
+/// Make sure you add every new [Built] type here. Otherwise you'll get
+/// weird build errors ("Are all types imported?").
 @SerializersFor([
   ActionRecord,
   Actor,
