@@ -8,8 +8,9 @@ const String lostStanceCustomEvent = "lost_stance";
 /// in some way. That's useful to know so that they can't immediately
 /// improve it.
 bool recentlyLostStance(Actor a, WorldState world) {
-  final latestFall =
-      world.customHistory.query(name: lostStanceCustomEvent, actor: a).latest;
+  final latestFall = world.customHistory
+      .query(name: lostStanceCustomEvent, actorId: a.id)
+      .latest;
   if (latestFall == null) return false;
 
   final recency = world.time.difference(latestFall.time);

@@ -8,7 +8,7 @@ const String fellToGroundCustomEventName = "fell_to_ground";
 /// That's useful to know so that they can't immediately stand up.
 bool recentlyForcedToGround(Actor a, WorldState world) {
   final latestFall = world.customHistory
-      .query(name: fellToGroundCustomEventName, actor: a)
+      .query(name: fellToGroundCustomEventName, actorId: a.id)
       .latest;
   if (latestFall == null) return false;
 

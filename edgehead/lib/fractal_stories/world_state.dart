@@ -140,7 +140,9 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
 
   /// Returns true if [Actor] with [actorId] has been slain.
   bool isDead(int actorId) {
-    return customHistory.query(name: "${actorId}_is_dead").hasHappened;
+    return customHistory
+        .query(name: CustomEvent.actorDeath, actorId: actorId)
+        .hasHappened;
   }
 
   bool situationExists(int situationId) =>
@@ -313,11 +315,6 @@ abstract class WorldStateBuilder
           data: data,
           actorId: actor?.id,
         ));
-  }
-
-  void recordDeath(Actor actor) {
-    const eventName = "actor_dies";
-    recordCustom(eventName, actor: actor);
   }
 
   void recordRule(Rule rule) {

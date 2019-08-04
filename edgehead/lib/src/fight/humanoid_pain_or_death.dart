@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
@@ -74,7 +75,7 @@ void killHumanoid(ActionContext context, Actor actor) {
   context.pubSub
       .publishActorKilled(ActorKilledEvent(context, actor, context.actor));
 
-  w.recordDeath(actor);
+  w.recordCustom(CustomEvent.actorDeath, actor: actor);
 
   w.replaceSituationById(fight.id, fight.rebuild((b) {
     if (actor.currentWeapon != null) {

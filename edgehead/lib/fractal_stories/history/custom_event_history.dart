@@ -11,6 +11,9 @@ part 'custom_event_history.g.dart';
 
 abstract class CustomEvent
     implements Record, Built<CustomEvent, CustomEventBuilder> {
+  /// An event that marks death of an actor with [actorId].
+  static const String actorDeath = 'actor_death';
+
   static Serializer<CustomEvent> get serializer => _$customEventSerializer;
 
   factory CustomEvent({
@@ -70,16 +73,16 @@ abstract class CustomEventHistory
   /// [name] is currently a required argument but might be optional in future
   /// versions.
   ///
-  /// If you provide [actor], only events with a corresponding
+  /// If you provide [actorId], only events with a corresponding
   /// [CustomEvent.actorId] will be returned.
-  SerialQueryResult<CustomEvent> query({@required String name, Actor actor}) {
+  SerialQueryResult<CustomEvent> query({@required String name, int actorId}) {
     final key = getKey(name);
     if (!records.containsKey(key)) return SerialQueryResult(const []);
-    if (actor == null) {
+    if (actorId == null) {
       return SerialQueryResult(records[key].reversed);
     }
     final filtered =
-        records[key].reversed.where((event) => event.actorId == actor.id);
+        records[key].reversed.where((event) => event.actorId == actorId);
     return SerialQueryResult(filtered);
   }
 
