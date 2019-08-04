@@ -2373,8 +2373,7 @@ final Room startRaccoon = Room('start_raccoon', (ActionContext c) {
       wholeSentence: true);
 }, null, null, null);
 final Approach startCowardFromStart =
-    Approach('start', 'start_coward', '“You are leaving me now, coward?”',
-        (ActionContext c) {
+    Approach('start', 'start_coward', '“Coward.”', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2575,8 +2574,8 @@ final Room start = Room('start', (ActionContext c) {
       wholeSentence: true);
   w.actors.removeWhere((actor) => actor.id == brianaId);
 }, null, null, null);
-final Approach endOfRoamFromStartBeginFight =
-    Approach('start_begin_fight', '__END_OF_ROAM__', 'Travel back home',
+final Approach endOfRoamFromStartPostFight =
+    Approach('start_post_fight', '__END_OF_ROAM__', 'Travel back home',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2586,6 +2585,65 @@ final Approach endOfRoamFromStartBeginFight =
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
+final Approach startPostFightFromStartBeginFight = Approach(
+    'start_begin_fight', 'start_post_fight', '<implicit>', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startPostFight = Room('start_post_fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The fight is over.\n\n', wholeSentence: true);
+  Ruleset(
+      Rule(33899545, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return w.isDead(tamaraId);
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('"Sorry, Tamara."\n', wholeSentence: true);
+      }),
+      Rule(1036996063, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return playerHasVisited(sim, w, "start_raccoon");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('"Raccoon my ass."\n\n', wholeSentence: true);
+      }),
+      Rule(847964281, 0, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n\n',
+            wholeSentence: true);
+      })).apply(c);
+}, null, null, null);
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2610,7 +2668,8 @@ final allRooms = <Room>[
   startCoward,
   startEnterGoblin,
   startBeginFight,
-  start
+  start,
+  startPostFight
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2648,7 +2707,8 @@ final allApproaches = <Approach>[
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
-  endOfRoamFromStartBeginFight
+  endOfRoamFromStartPostFight,
+  startPostFightFromStartBeginFight
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,

@@ -12,7 +12,7 @@ FIRST_DESCRIPTION:
 
 // ---
 APPROACH: $start_coward FROM $start
-COMMAND: “You are leaving me now, coward?”
+COMMAND: “Coward.”
 DESCRIPTION: N/A
 
 // ---

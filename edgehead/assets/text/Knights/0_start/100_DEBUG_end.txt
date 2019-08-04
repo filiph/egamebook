@@ -1,4 +1,4 @@
-APPROACH: $__END_OF_ROAM__ FROM $start_begin_fight
+APPROACH: $__END_OF_ROAM__ FROM $start_post_fight
 COMMAND: Travel back home
 DESCRIPTION: You realize this adventuring life is not for you.
 
