@@ -50,7 +50,12 @@ class EquipWeapon extends Action<Item> {
     Storyline s = context.outputStoryline;
 
     if (a.currentWeapon != null) {
-      a.report(s, "<subject> replace<s> <object> to <subject's> belt",
+      var beltOrBack = a.currentWeapon.damageCapability.length > 1
+          // Spears and swords belong behind one's back.
+          ? "behind <subject's> back"
+          // The rest can go in the belt.
+          : "to <subject's> belt";
+      a.report(s, "<subject> replace<s> <object> $beltOrBack",
           object: a.currentWeapon);
     }
 
