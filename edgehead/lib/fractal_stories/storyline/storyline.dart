@@ -160,6 +160,7 @@ class Storyline {
   static const String VERB_IES = "<ies>";
   static const String VERB_DO = "<does>";
   static const String VERB_BE = "<is>";
+  static const String VERB_BE_NOT = "<isn't>";
   static const String VERB_HAVE = "<has>";
   static final RegExp QUOTE_INTERPUNCTION_DUPLICATION =
       RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
@@ -486,6 +487,8 @@ class Storyline {
 
     String result = str;
 
+    assert(!str.contains("<is>n't"), "Please use <isn't> instead.");
+
     if (subject != null) {
       if (subject.isPlayer) {
         // don't talk like a robot: "player attack wolf" -> "you attack wolf"
@@ -505,6 +508,8 @@ class Storyline {
         result = result.replaceAll(VERB_DO, "do");
         result = result.replaceAll(
             VERB_BE, subject.pronoun == Pronoun.I ? "am" : "are");
+        result = result.replaceAll(
+            VERB_BE_NOT, subject.pronoun == Pronoun.I ? "am not" : "aren't");
         result = result.replaceAll(VERB_HAVE, "have");
       } else {
         // "he flies there", "it picks up the bananas" ...
@@ -514,6 +519,7 @@ class Storyline {
         result = result.replaceAll(VERB_IES, "ies");
         result = result.replaceAll(VERB_DO, "does");
         result = result.replaceAll(VERB_BE, "is");
+        result = result.replaceAll(VERB_BE_NOT, "isn't");
         result = result.replaceAll(VERB_HAVE, "has");
       }
 

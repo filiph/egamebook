@@ -71,7 +71,7 @@ class CounterAttackFeint extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, feintSituationName);
-    a.report(s, "<subject> <is>n't fooled", actionThread: thread);
+    a.report(s, "<subject> <isn't> fooled", actionThread: thread);
     a.report(
         s,
         "<subject> {retain<s>|keep<s>} "

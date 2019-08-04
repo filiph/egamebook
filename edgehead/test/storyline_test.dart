@@ -28,6 +28,13 @@ void main() {
             "uns towards the engine room\."));
   });
 
+  test('I am not', () {
+    var storyline = Storyline();
+    storyline.add("<subject> <isn't> fooled", subject: _createPlayer('Filip'));
+    expect(storyline.realizeAsString(), contains('m not'));
+    expect(storyline.realizeAsString(), isNot(contains('amn\'t')));
+  });
+
   test("storyline.addParagraph", () {
     var storyline = Storyline();
     var player = _createPlayer("Filip");

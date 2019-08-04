@@ -33,7 +33,7 @@ final agruth_enjoy_eating_flesh = EventCallback((sim, w, s) {
 final agruth_grit_teeth = EventCallback((sim, w, s) {
   var agruth = w.getActorById(agruthId);
   agruth.report(s, "<subject> grit<s> <subject's> teeth");
-  agruth.report(s, "<subject> do<es>n't talk any more", but: true);
+  agruth.report(s, "<subject> <does>n't talk any more", but: true);
 });
 
 final agruth_scowls = EventCallback((sim, w, s) {

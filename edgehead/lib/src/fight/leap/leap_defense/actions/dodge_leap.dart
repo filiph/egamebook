@@ -58,7 +58,7 @@ class DodgeLeap extends OtherActorAction {
       Randomly.run(
           () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
               but: true, actionThread: thread),
-          () => a.report(s, "<subject> {<is> too slow|<is>n't fast enough}",
+          () => a.report(s, "<subject> {<is> too slow|<isn't> fast enough}",
               but: true, actionThread: thread));
     }
     w.popSituation(sim);
