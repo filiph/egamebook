@@ -55,9 +55,9 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
         subject: a.currentWeaponOrBodyPart, object: updatedEnemy);
     if (enemy.isInvincible) {
-      inflictPain(context, updatedEnemy, damage);
+      inflictPain(context, enemy.id, damage);
     } else {
-      killHumanoid(context, updatedEnemy);
+      killHumanoid(context, enemy.id);
     }
     return "${a.name} slains ${enemy.name} on the ground";
   }

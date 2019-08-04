@@ -110,7 +110,7 @@ class FinishSlash extends OtherActorAction {
         w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
         w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
       }
-      inflictPain(context, result.victim, damage);
+      inflictPain(context, result.victim.id, damage);
       if (result.wasBlinding) {
         result.victim.report(s, "<subject> <is> now blind", negative: true);
       }
@@ -128,7 +128,7 @@ class FinishSlash extends OtherActorAction {
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
       }
-      killHumanoid(context, result.victim);
+      killHumanoid(context, result.victim.id);
     }
     return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
   }

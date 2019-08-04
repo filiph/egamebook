@@ -80,13 +80,13 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           object: updatedEnemy,
           object2: a.currentWeaponOrBodyPart,
           positive: true);
-      inflictPain(context, updatedEnemy, damage);
+      inflictPain(context, enemy.id, damage);
     } else {
       a.report(s, "<subject> run<s> <object2> through <object>",
           object: updatedEnemy,
           object2: a.currentWeaponOrBodyPart,
           positive: true);
-      killHumanoid(context, updatedEnemy);
+      killHumanoid(context, enemy.id);
     }
     return "${a.name} stabs ${enemy.name}";
   }

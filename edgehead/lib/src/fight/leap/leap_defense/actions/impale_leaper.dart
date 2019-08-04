@@ -105,7 +105,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<object's> flesh",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> fall<s> to the ground");
-      inflictPain(context, updatedEnemy, damage);
+      inflictPain(context, enemy.id, damage);
     } else {
       a.currentWeaponOrBodyPart.report(
           s,
@@ -113,7 +113,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "bore<s> through} <object's> {body|chest|stomach|neck}",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> go<es> down", negative: true);
-      killHumanoid(context, updatedEnemy);
+      killHumanoid(context, enemy.id);
     }
 
     w.popSituationsUntil("FightSituation", sim);

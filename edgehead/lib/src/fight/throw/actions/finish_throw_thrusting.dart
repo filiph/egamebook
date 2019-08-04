@@ -101,7 +101,7 @@ class FinishThrowThrusting extends OtherActorAction {
         w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
       }
       inflictPain(
-          context, result.victim, projectile.damageCapability.thrustingDamage,
+          context, enemy.id, projectile.damageCapability.thrustingDamage,
           extremePain: result.disabled);
 
       result.victim
@@ -121,7 +121,7 @@ class FinishThrowThrusting extends OtherActorAction {
           object: result.touchedPart,
           positive: true,
           actionThread: thread);
-      killHumanoid(context, result.victim);
+      killHumanoid(context, enemy.id);
     }
 
     moveProjectileToGround(w, a, projectile, false);

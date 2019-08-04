@@ -11,16 +11,18 @@ const Duration painShockDuration = Duration(seconds: 1);
 
 final Random _random = Random();
 
-void inflictPain(ActionContext context, Actor actor, int damage,
+void inflictPain(ActionContext context, int actorId, int damage,
     {bool extremePain = false}) {
   final s = context.outputStoryline;
+  final actor = context.outputWorld.getActorById(actorId);
+
   if (damage > 0) {
     context.pubSub.publishActorLostHitpoints(
         ActorLostHitpointsEvent(context, actor, damage));
   }
   if (actor.isInvincible && !actor.isAlive) {
     // Actor should be dead but is invincible, so inflictPain was called.
-    _reportPainForInvincibleActors(context, actor);
+    _reportPainForInvincibleActors(context, actorId);
     return;
   }
   assert(
@@ -62,11 +64,12 @@ void inflictPain(ActionContext context, Actor actor, int damage,
 ///
 /// Special case is for invincible actors, who will never die, only lose
 /// consciousness.
-void killHumanoid(ActionContext context, Actor actor) {
+void killHumanoid(ActionContext context, int actorId) {
   final w = context.outputWorld;
   final s = context.outputStoryline;
   var fight = w.getSituationByName<FightSituation>(FightSituation.className);
   var groundMaterial = fight.groundMaterial;
+  final actor = w.getActorById(actorId);
   assert(
       !actor.isInvincible,
       "Invincible actors cannot die. Never call killHumanoid "
@@ -123,8 +126,9 @@ void killHumanoid(ActionContext context, Actor actor) {
 
 /// This is called when an actor that is [Actor.isInvincible] should have
 /// been killed. For invincible characters, this is just "pain".
-void _reportPainForInvincibleActors(ActionContext context, Actor actor) {
+void _reportPainForInvincibleActors(ActionContext context, int actorId) {
   final s = context.outputStoryline;
+  final actor = context.outputWorld.getActorById(actorId);
   assert(actor.isInvincible);
   if (actor.pose == Pose.onGround) {
     actor.report(s, "<subject> stop<s> moving", negative: true);

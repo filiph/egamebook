@@ -53,7 +53,6 @@ class FinishLeap extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
-    final updatedEnemy = w.getActorById(enemy.id);
     w.recordCustom(fellToGroundCustomEventName, actor: enemy);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     final thread = getThreadId(sim, w, "LeapSituation");
@@ -71,7 +70,7 @@ class FinishLeap extends OtherActorAction {
           object: enemy,
           actionThread: thread);
       const damage = 1;
-      inflictPain(context, updatedEnemy, damage);
+      inflictPain(context, enemy.id, damage);
       w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     }
     return "${a.name} finishes leap at ${enemy.name}";

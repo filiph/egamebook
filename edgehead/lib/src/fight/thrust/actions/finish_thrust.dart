@@ -89,7 +89,7 @@ class FinishThrust extends OtherActorAction {
         w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
         w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
       }
-      inflictPain(context, result.victim, damage,
+      inflictPain(context, enemy.id, damage,
           extremePain: result.touchedPart.designation.isHumanoidEye);
       if (result.wasBlinding) {
         result.victim.report(s, "<subject> <is> now blind", negative: true);
@@ -108,7 +108,7 @@ class FinishThrust extends OtherActorAction {
             s, "<subject> slit<s> through the flesh like it isn't there.",
             wholeSentence: true);
       }
-      killHumanoid(context, result.victim);
+      killHumanoid(context, enemy.id);
     }
     return "${a.name} thrusts${killed ? ' (and kills)' : ''} ${enemy.name}";
   }

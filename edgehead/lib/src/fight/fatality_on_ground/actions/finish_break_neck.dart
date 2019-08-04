@@ -55,7 +55,7 @@ class FinishBreakNeck extends OtherActorAction {
       // Special case for actors who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: updatedEnemy, positive: true);
-      inflictPain(context, updatedEnemy, damage);
+      inflictPain(context, enemy.id, damage);
     } else {
       a.report(
           s,
@@ -64,7 +64,7 @@ class FinishBreakNeck extends OtherActorAction {
           "neck" /* TODO: add variants */,
           object: updatedEnemy,
           positive: true);
-      killHumanoid(context, updatedEnemy);
+      killHumanoid(context, enemy.id);
     }
     return "${a.name} breaks ${enemy.name}'s neck on ground";
   }
