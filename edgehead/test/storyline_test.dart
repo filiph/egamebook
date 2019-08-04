@@ -289,14 +289,34 @@ void main() {
     });
   });
 
-  test("we don't show 'his the scimitar' for <subject's> <object>", () {
-    var storyline = Storyline();
-    var orc = Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
-    var sword = Entity(name: "scimitar", pronoun: Pronoun.IT);
-    orc.report(storyline, "<subject> drop<s> the whip");
-    orc.report(storyline, "<subject> draw<s> <subject's> <object>",
-        object: sword);
-    expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
+  group('vs definitive article (no \'his the scimitar\')', () {
+    Storyline storyline;
+    Entity orc, sword;
+
+    setUp(() {
+      storyline = Storyline();
+      orc = Entity(name: "orc", pronoun: Pronoun.HE);
+      sword = Entity(name: "scimitar");
+    });
+
+    test("for <subject's> <object>", () {
+      orc.report(storyline, "<subject> draw<s> <subject's> <object>",
+          object: sword);
+      expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
+    });
+
+    test("for <subject's> <object2>", () {
+      orc.report(storyline, "<subject> draw<s> <subject's> <object2>",
+          object2: sword);
+      expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
+    });
+
+    test("for <object's> <object2>", () {
+      var goblin = Entity(name: "goblin");
+      orc.report(storyline, "<subject> draw<s> <object's> <object2>",
+          object: goblin, object2: sword);
+      expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
+    });
   });
 
   test(
@@ -596,7 +616,7 @@ void main() {
       expect(realized, contains("hit the goblin with it"));
     });
 
-    group('make pronouns even with to Pronoun.IT when not confusing', () {
+    group('make pronouns even with two Pronoun.IT when not confusing', () {
       test('object2 stays object2', () {
         storyline.add(
             "<subject> throw<s> <subjectPronounSelf> at <object> "

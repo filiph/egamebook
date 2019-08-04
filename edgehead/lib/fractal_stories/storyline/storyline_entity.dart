@@ -56,6 +56,7 @@ abstract class Entity {
   void report(Storyline storyline, String text,
       {Entity owner,
       Entity object,
+      Entity object2,
       Entity objectOwner,
       bool positive = false,
       bool negative = false,

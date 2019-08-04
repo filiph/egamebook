@@ -343,23 +343,44 @@ class Storyline {
 
   /// Adds [:the:] or [:a:] to first occurrence of [SUB_STRING] (like
   /// [:<subject>:]) in [string]. The next occurrences will be automatically
-  /// converted to pronouns.
+  /// converted to pronouns elsewhere.
   ///
   /// The [reportTime] should correspond to the time this report is being said.
   /// Storyline tracks when different entities were first mentioned so it
   /// can apply either definitive (the) or indefinite (a) article.
   String addParticleToFirstOccurrence(String string, String SUB_STRING,
       Entity entity, Entity entityOwner, int reportTime) {
+    // Returns true if [str] contains at least one of the stopwords
+    // as prefixes to [SUB_STRING].
+    bool containsOneOfPrefixes(String str, List<String> stopwords) {
+      for (final stopword in stopwords) {
+        if (str.contains("$stopword $SUB_STRING")) return true;
+      }
+      return false;
+    }
+
     // Make sure we don't add particles to "your car" etc.
+    // The following if statement checks whether we have a string such as
+    // `<owner's> <object>` while also having [entityOwner] defined.
+    // (When [entityOwner] is `null`, Storyline ignores it.
     if (entityOwner != null &&
-        (string.contains("$OWNER_POSSESIVE $SUB_STRING") ||
-            string.contains("$OWNER_PRONOUN_POSSESIVE $SUB_STRING") ||
-            string.contains("$OBJECT_OWNER_POSSESIVE $SUB_STRING") ||
-            string.contains("$OBJECT_OWNER_PRONOUN_POSSESIVE $SUB_STRING"))) {
+        containsOneOfPrefixes(string, [
+          OWNER_POSSESIVE,
+          OWNER_PRONOUN_POSSESIVE,
+          OBJECT_OWNER_POSSESIVE,
+          OBJECT_OWNER_PRONOUN_POSSESIVE
+        ])) {
       return string;
     }
-    if (string.contains("$SUBJECT_POSSESIVE $SUB_STRING") ||
-        string.contains("$SUBJECT_PRONOUN_POSSESIVE $SUB_STRING")) {
+    // Matches all the other possible possessive stopwords, such as
+    // `<subject's>`. Here we don't ignore when subject or object aren't
+    // defined.
+    if (containsOneOfPrefixes(string, [
+      SUBJECT_POSSESIVE,
+      SUBJECT_PRONOUN_POSSESIVE,
+      OBJECT_POSSESSIVE,
+      OBJECT_PRONOUN_POSSESSIVE
+    ])) {
       return string;
     }
 
@@ -506,7 +527,8 @@ class Storyline {
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
       if (str.contains(RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
         // "actor takes his weapon"
-        result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+        result =
+            result.replaceAll(SUBJECT_POSSESIVE, SUBJECT_PRONOUN_POSSESIVE);
       }
       result = addParticleToFirstOccurrence(
           result, SUBJECT_POSSESIVE, subject, owner, report.time);
