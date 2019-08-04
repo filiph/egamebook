@@ -17,7 +17,7 @@ class TakeDroppedShield extends ItemAction {
 
   @override
   List<String> get commandPathTemplate =>
-      const ["environment", "pick up <object>"];
+      const ["environment", "<object>", "pick up"];
 
   @override
   String get helpMessage => "A shield makes a huge difference in battle.";
