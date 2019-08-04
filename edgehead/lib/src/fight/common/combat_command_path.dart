@@ -48,19 +48,17 @@ mixin CombatCommandPath on EnemyTargetAction {
       ];
     }
 
-    var result = commandPathTemplate;
-
     var commandPathJoined = commandPathTemplate.join(' >> ');
-    if (commandPathJoined.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP)) {
-      // Realize the "<object>" parts of the template.
-      result = (Storyline()
-            ..add(commandPathJoined, subject: context.actor, object: target))
-          .realizeAsString()
-          // Then split again into a list.
-          .split('>>');
-    }
-
-    return result;
+    var commandContainsObject =
+        commandPathJoined.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP);
+    // Realize the "<object>" parts of the template.
+    return (Storyline()
+          ..add(commandPathJoined,
+              subject: context.actor,
+              object: commandContainsObject ? target : null))
+        .realizeAsString()
+        // Then split again into a list.
+        .split(' >> ');
   }
 
   /// The last part of the command path.

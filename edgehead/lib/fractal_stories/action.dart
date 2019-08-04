@@ -195,14 +195,16 @@ abstract class Action<T> {
         "Actions with empty commandPathTemplate must override getCommandPath "
         "or must be isImplicit. Culprit: $this.");
 
-    if (object is Entity &&
-        commandPathTemplate.any(
-            (part) => part.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP))) {
-      // Realize the "<object>" parts of the template.
-      return (Storyline()..add(commandPathTemplate.join('>>'), object: object))
+    if (object is Entity) {
+      final templateContainsObject = commandPathTemplate
+          .any((part) => part.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP));
+      // Realize the template, optionally with "<object>".
+      return (Storyline()
+            ..add(commandPathTemplate.join(' >> '),
+                object: templateContainsObject ? object : null))
           .realizeAsString()
           // Then split again into a list.
-          .split('>>');
+          .split(' >> ');
     } else {
       assert(
           !commandPathTemplate
