@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -91,7 +92,10 @@ class FinishSlash extends OtherActorAction {
           object: result.victim,
           positive: true,
           actionThread: thread);
-      if (result.disabled) {
+      if (result.disabled &&
+          (result.touchedPart.function == BodyPartFunction.damageDealing ||
+              result.touchedPart.function == BodyPartFunction.mobile ||
+              result.touchedPart.function == BodyPartFunction.wielding)) {
         result.touchedPart.report(s, "<subject> go<es> limp",
             negative: true, actionThread: thread);
       }
