@@ -52,6 +52,7 @@ part 'edgehead_serializers.g.dart';
   Inventory,
   Item,
   LootSituation,
+  MoveEntity,
   OffBalanceOpportunitySituation,
   Pose,
   Predetermination,
