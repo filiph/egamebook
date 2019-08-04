@@ -2362,7 +2362,7 @@ class ReadLetterFromFather extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['self >> letter from father >> read'];
+      ['self', 'letter from father', 'read'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
@@ -2423,7 +2423,7 @@ class ReadLetterFromMentor extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['self >> letter from mentor >> read'];
+      ['self', 'letter from mentor', 'read'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
@@ -2476,6 +2476,59 @@ class ReadLetterFromMentor extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Approach goblinSkirmishMainFromGoblinSkirmishPatrol = Approach(
+    'goblin_skirmish_patrol',
+    'goblin_skirmish_main',
+    'Go >> (sneak) towards the outpost', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('I sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblins are still here.\n', wholeSentence: true);
+}, null, null);
+final Approach goblinSkirmishPatrolFromBleedsMain =
+    Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room goblinSkirmishPatrol =
+    Room('goblin_skirmish_patrol', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('I meet a patrol. A lone goblin with a spear.\n', wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('Nothing here, just death.\n', wholeSentence: true);
+}, generateTestFightWithGoblin, null);
 final Approach startPostFightFromStartBeginFight = Approach(
     'start_begin_fight', 'start_post_fight', '<implicit>', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2813,59 +2866,6 @@ final Approach endOfRoamFromBleedsMain = Approach(
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
-final Approach goblinSkirmishMainFromGoblinSkirmishPatrol = Approach(
-    'goblin_skirmish_patrol',
-    'goblin_skirmish_main',
-    'Go >> (sneak) towards the outpost', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('I sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblins are still here.\n', wholeSentence: true);
-}, null, null);
-final Approach goblinSkirmishPatrolFromBleedsMain =
-    Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room goblinSkirmishPatrol =
-    Room('goblin_skirmish_patrol', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('I meet a patrol. A lone goblin with a spear.\n', wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('Nothing here, just death.\n', wholeSentence: true);
-}, generateTestFightWithGoblin, null);
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2886,6 +2886,8 @@ final allRooms = <Room>[
   warForge,
   testFightOrcAndGoblin,
   orcthornRoom,
+  goblinSkirmishMain,
+  goblinSkirmishPatrol,
   startPostFight,
   startPostFightTamaraDead,
   startRaccoon,
@@ -2893,9 +2895,7 @@ final allRooms = <Room>[
   startEnterGoblin,
   startBeginFight,
   start,
-  bleedsMain,
-  goblinSkirmishMain,
-  goblinSkirmishPatrol
+  bleedsMain
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2928,6 +2928,8 @@ final allApproaches = <Approach>[
   testFightOrcAndGoblinFromPreStartBook,
   endOfRoamFromTestFightOrcAndGoblin,
   orcthornRoomFromSlaveQuartersPassage,
+  goblinSkirmishMainFromGoblinSkirmishPatrol,
+  goblinSkirmishPatrolFromBleedsMain,
   startPostFightFromStartBeginFight,
   startRaccoonFromStart,
   startCowardFromStart,
@@ -2936,9 +2938,7 @@ final allApproaches = <Approach>[
   startFromPreStartBook,
   bleedsMainFromStartPostFight,
   bleedsMainFromGoblinSkirmishMain,
-  endOfRoamFromBleedsMain,
-  goblinSkirmishMainFromGoblinSkirmishPatrol,
-  goblinSkirmishPatrolFromBleedsMain
+  endOfRoamFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,

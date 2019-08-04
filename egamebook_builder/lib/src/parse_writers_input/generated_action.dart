@@ -48,7 +48,7 @@ class GeneratedAction extends GeneratedGameObject {
 
     String command = _map['COMMAND'];
     var isImplicit = command == '<implicit>';
-    var commandPathTemplate = isImplicit ? const [] : [command];
+    var commandPathTemplate = isImplicit ? const [] : command.split(' >> ');
     final getCommandPathBuilder = Method((b) => b
       ..type = MethodType.getter
       ..name = 'commandPathTemplate'
