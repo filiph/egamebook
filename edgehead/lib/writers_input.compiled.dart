@@ -2495,7 +2495,7 @@ final Room startPostFight = Room('start_post_fight', (ActionContext c) {
   assert(!originalWorld.isDead(tamaraId));
 
   Ruleset(
-      Rule(595260527, 1, false, (ApplicabilityContext c) {
+      Rule(1036996063, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2506,9 +2506,9 @@ final Room startPostFight = Room('start_post_fight', (ActionContext c) {
         final Actor a = c.actor;
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
-        s.add('"Raccoon my ass."\n', wholeSentence: true);
+        s.add('"Raccoon my ass."\n\n', wholeSentence: true);
       }),
-      Rule(1052429754, 0, false, (ApplicabilityContext c) {
+      Rule(847964281, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2520,7 +2520,7 @@ final Room startPostFight = Room('start_post_fight', (ActionContext c) {
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
         s.add(
-            '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n',
+            '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n\n',
             wholeSentence: true);
       })).apply(c);
   s.add(

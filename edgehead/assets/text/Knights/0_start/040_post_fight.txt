@@ -20,11 +20,13 @@ assert(!originalWorld.isDead(tamaraId));
   playerHasVisited(sim, w, "start_raccoon")
 - THEN:
 "Raccoon my ass."
+
 - END RULE
 - RULE:
   default
 - THEN:
 "Well, as I said, that was the last one. And, young sir, call me coward one more time and I'll slash your neck." She seems to mean it.
+
 - END RULE
 - END RULESET
 
