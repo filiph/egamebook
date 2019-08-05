@@ -2588,7 +2588,9 @@ final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('"Sorry, Tamara."\n', wholeSentence: true);
+  s.add(
+      '"Sorry, Tamara." I dig a shallow grave and give Tamara at least a semblance of a proper burial.\n',
+      wholeSentence: true);
 }, null, null, null,
     parent: 'start_post_fight',
     prerequisite: Prerequisite(996731518, 1, true, (ApplicabilityContext c) {
@@ -2596,7 +2598,8 @@ final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
       return w.isDead(tamaraId);
-    }));
+    }),
+    isIdle: true);
 final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
     '“It is just a rustle in the bush, Tamara. Probably a raccoon.”',
     (ActionContext c) {
