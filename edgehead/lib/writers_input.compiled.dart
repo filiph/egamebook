@@ -2479,7 +2479,7 @@ class ReadLetterFromMentor extends RoamingAction {
 final Approach goblinSkirmishMainFromGoblinSkirmishPatrol = Approach(
     'goblin_skirmish_patrol',
     'goblin_skirmish_main',
-    'Go >> (sneak) towards the outpost', (ActionContext c) {
+    'Go >> towards the outpost', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2577,9 +2577,8 @@ final Room startPostFight = Room('start_post_fight', (ActionContext c) {
             wholeSentence: true);
       })).apply(c);
   s.add(
-      '\n"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it\'s time for you to quit. Go back to safety. You won\'t survive here."\n\n"Thanks for your service, Tamara. But I\'ve come this far."\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+      '\n"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it\'s time for you to quit. Go back to safety. You won\'t survive here."\n\n"Thanks for your service, Tamara. But I\'ve come this far."\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n',
       wholeSentence: true);
-  w.actors.removeWhere((actor) => actor.id == tamaraId);
 }, null, null, null, isIdle: true);
 final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
     (ActionContext c) {
