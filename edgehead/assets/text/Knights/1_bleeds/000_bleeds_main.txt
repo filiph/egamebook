@@ -5,8 +5,8 @@ DESCRIPTION: N/A
 
 // ---
 APPROACH: $bleeds_main FROM $goblin_skirmish_main
-COMMAND: Go >> to Bleeds
-DESCRIPTION: I sneak through the bushes and emerge back in Bleeds.
+COMMAND: Go >> to the Bleeds
+DESCRIPTION: I sneak through the bushes and emerge back in the Bleeds.
 
 // ---
 ROOM: $bleeds_main
@@ -16,10 +16,9 @@ FLAGS: idle
 FIRST_DESCRIPTION:
 I finally see it. The Pyramid.
 
-A little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement Bleeds, as in the village bleeds outside of the Pyramid.
+A little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement the Bleeds, as in the village bleeds outside of the Pyramid.
 
 It was harder than I expected but I made it here. The Manual is somewhere here. I can find it.
 
 DESCRIPTION:
 Lots of shacks and their inhabitants.
-
