@@ -257,7 +257,7 @@ final start_what_is_it_about_this_place = EventCallback((sim, w, s) {
 
 final start_this_place_is_nightmare = EventCallback((sim, w, s) {
   var current = w.build();
-  if (!current.hasAliveActor(tamaraId)) return;
+  if (current.isDead(tamaraId)) return;
   s.addParagraph();
   s.add("“This place is a nightmare.”", wholeSentence: true);
   s.addParagraph();
@@ -265,7 +265,7 @@ final start_this_place_is_nightmare = EventCallback((sim, w, s) {
 
 final start_come_back_with_me = EventCallback((sim, w, s) {
   var current = w.build();
-  if (!current.hasAliveActor(tamaraId)) return;
+  if (current.isDead(tamaraId)) return;
   s.addParagraph();
   s.add(
       "“You would do well coming back with me. "

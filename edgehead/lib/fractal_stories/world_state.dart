@@ -131,14 +131,13 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
     throw ArgumentError("No situation with name=$situationName found.");
   }
 
-  bool hasAliveActor(int actorId) {
-    var actor =
-        actors.firstWhere((actor) => actor.id == actorId, orElse: () => null);
-    if (actor == null) return false;
-    return actor.isAlive;
-  }
-
   /// Returns true if [Actor] with [actorId] has been slain.
+  ///
+  /// This will work correctly even if the actor with [actorId] hasn't
+  /// been created yet. This happens when the actor is yet to be
+  /// built with a fight situation generator, for example. Since this function
+  /// checks [customHistory] for [CustomEvent.actorDeath] events, it's safe
+  /// to use it even for NPCs that haven't yet been generated.
   bool isDead(int actorId) {
     return customHistory
         .query(name: CustomEvent.actorDeath, actorId: actorId)
