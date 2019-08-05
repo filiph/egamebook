@@ -96,8 +96,7 @@ class CounterSweepFeet extends OtherActorAction {
         enemy, a.currentWeaponOrBodyPart, SlashSuccessLevel.majorCut,
         bodyPart: leg);
 
-    w.actors.removeWhere((actor) => actor.id == enemy.id);
-    w.actors.add(result.victim);
+    w.updateActorById(enemy.id, (b) => b.replace(result.victim));
 
     assert(
         result.victim.isAlive,

@@ -137,9 +137,6 @@ abstract class RoomRoamingSituation extends Object
   void onAfterAction(
       Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
     assert(_assertInvincibleActorsAlive(world.build()));
-    // When going from place to place, remove the actors that died. It makes
-    // sure we don't leak memory.
-    world.actors.removeWhere((a) => !a.isAlive);
   }
 
   @override
