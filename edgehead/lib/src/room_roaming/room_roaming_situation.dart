@@ -97,10 +97,11 @@ abstract class RoomRoamingSituation extends Object
     final WorldStateBuilder w = context.outputWorld;
     final Storyline s = context.outputStoryline;
     final specifiedRoom = sim.getRoomByName(destinationRoomName);
+    final parentRoom = sim.getRoomParent(specifiedRoom);
     final room = sim.getVariantIfApplicable(specifiedRoom, context);
 
-    // Find if monsters were slain by seeing if there was a [TakeExit] action
-    // record leading to this room.
+    // Find if monsters were slain by seeing if there was a [TakeApproach]
+    // action record leading to this room.
     bool visited = originalWorld.visitHistory.query(a, room).hasHappened;
 
     var nextRoomSituation = RoomRoamingSituation.initialized(
@@ -125,6 +126,15 @@ abstract class RoomRoamingSituation extends Object
         room.firstDescribe(context);
         s.addParagraph();
       }
+
+      final localCorpses = _getCorpses(w.build())
+          .where((a) => a.currentRoomName == parentRoom.name)
+          .toList();
+      if (localCorpses.isNotEmpty) {
+        s.addEnumeration(
+            "<subject> can <also> see the remains of", localCorpses, "here",
+            subject: _getPlayer(originalWorld));
+      }
     }
 
     for (final actor in getPartyOf(a, sim, w.build())) {
@@ -134,9 +144,20 @@ abstract class RoomRoamingSituation extends Object
   }
 
   @override
-  void onAfterAction(
-      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
-    assert(_assertInvincibleActorsAlive(world.build()));
+  void onAfterAction(ActionContext context) {
+    final world = context.outputWorld.build();
+    final sim = context.simulation;
+    assert(_assertInvincibleActorsAlive(world));
+
+    // Move corpses to the parent room so they can be found more easily.
+    final corpses = _getCorpses(world);
+    for (final corpse in corpses) {
+      var parent = sim.getRoomParent(sim.getRoomByName(corpse.currentRoomName));
+      if (parent.name != corpse.currentRoomName) {
+        context.outputWorld
+            .updateActorById(corpse.id, (b) => b.currentRoomName = parent.name);
+      }
+    }
   }
 
   @override
@@ -144,9 +165,6 @@ abstract class RoomRoamingSituation extends Object
     if (currentRoomName == endOfRoam.name) return false;
     return true;
   }
-
-  Actor _getPlayer(WorldState world) => world.actors
-      .firstWhere((a) => a.isPlayer && a.isAliveAndActive, orElse: () => null);
 
   bool _assertInvincibleActorsAlive(WorldState world) {
     for (final actor in world.actors) {
@@ -160,4 +178,10 @@ abstract class RoomRoamingSituation extends Object
     }
     return true;
   }
+
+  Iterable<Actor> _getCorpses(WorldState world) =>
+      world.actors.where((a) => a.isActive && !a.isAlive);
+
+  Actor _getPlayer(WorldState world) => world.actors
+      .firstWhere((a) => a.isPlayer && a.isAliveAndActive, orElse: () => null);
 }

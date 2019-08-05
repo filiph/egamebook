@@ -2,6 +2,7 @@ library stranded.situation;
 
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
@@ -78,8 +79,7 @@ abstract class Situation {
   ///
   /// For example, a room roaming situation can remove dead actors from play
   /// after you've left the area.
-  void onAfterAction(
-      Simulation sim, WorldStateBuilder world, Storyline outputStoryline);
+  void onAfterAction(ActionContext context);
 
   /// Called after action is executed inside this situation, including any
   /// subsequent actions that happen in situations above in the stack.
@@ -123,8 +123,7 @@ mixin SituationBaseBehavior implements Situation {
   int get maxActionsToShow => Situation.defaultMaxActionsToShow;
 
   @override
-  void onAfterAction(
-      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
+  void onAfterAction(ActionContext context) {
     // No-op by default.
   }
 

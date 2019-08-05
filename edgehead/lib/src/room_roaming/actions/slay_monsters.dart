@@ -65,6 +65,12 @@ class SlayMonstersAction extends Action<Nothing> {
         "generator. At least one of these actors is missing: "
         "${fightSituation.enemyTeamIds}");
 
+    // Move enemy combatants to the room (fightGenerator cannot know which
+    // room it will be, so their currentRoomName is `null`).
+    for (final enemyId in fightSituation.enemyTeamIds) {
+      w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
+    }
+
     w.pushSituation(fightSituation);
 
     return "${a.name} initiated combat with monsters in $room";
