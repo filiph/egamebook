@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/cower.dart';
 
 class Wait extends Action<Nothing> {
   static final Wait singleton = Wait();
@@ -64,5 +65,7 @@ class Wait extends Action<Nothing> {
   bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) =>
       actor.isPlayer &&
       // Don't allow waiting when there are no friendlies.
-      getPartyOf(actor, sim, world).length > 1;
+      getPartyOf(actor, sim, world).length > 1 &&
+      // Don't allow waiting if cowering is an option.
+      !Cower.singleton.isApplicable(actor, sim, world, _);
 }
