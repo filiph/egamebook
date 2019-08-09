@@ -202,8 +202,7 @@ class Simulation {
     assert(
         rooms.any((room) => room.name == roomName),
         "Room with name $roomName not defined.\n"
-        "Rooms: ${rooms.map((r) => r.name).join(', ')}.\n"
-        "Current world: $this.");
+        "Rooms: ${rooms.map((r) => r.name).join(', ')}.");
 
     return rooms.singleWhere((room) => room.name == roomName);
   }
