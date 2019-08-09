@@ -73,10 +73,10 @@ final escape_tunnel_insignificant = EventCallback((sim, w, s) {
   final built = w.build();
   final orc = getEscapeTunnelOrc(built);
   final goblin = getEscapeTunnelGoblin(built);
-  final actor = orc.isAliveAndActive ? orc : goblin;
+  final actor = orc.isAnimatedAndActive ? orc : goblin;
   final player = getPlayer(built);
-  assert(actor.isAliveAndActive);
-  assert(player.isAliveAndActive);
+  assert(actor.isAnimatedAndActive);
+  assert(player.isAnimatedAndActive);
   final kicking = actor.currentWeapon == null ||
       (player.currentWeapon == null && player.currentShield == null);
   var assaultVerbing = kicking ? 'kicking' : 'slashing';
@@ -125,8 +125,8 @@ final escape_tunnel_look = EventCallback((sim, w, s) {
           object: player.currentWeapon, wholeSentence: true);
     }
   } else {
-    final actor = orc.isAliveAndActive ? orc : goblin;
-    assert(actor.isAliveAndActive);
+    final actor = orc.isAnimatedAndActive ? orc : goblin;
+    assert(actor.isAnimatedAndActive);
     actor.report(
         s,
         "\"Look at you,\" <subject> laugh<s>. "
@@ -166,7 +166,7 @@ final mad_guardian_pain = EventCallback((sim, w, s) {
   guardian.report(s, "\"Pain is good,\" <subject> chuckle<s>.",
       wholeSentence: true);
   s.addParagraph();
-  if (briana.isAliveAndActive) {
+  if (briana.isAnimatedAndActive) {
     briana.report(s, "<subject> glare<s> at him");
     briana.report(s, "\"Shut up and die.\"", wholeSentence: true);
     s.addParagraph();
@@ -195,7 +195,7 @@ final mad_guardian_shut_up = EventCallback((sim, w, s) {
 final slave_quarters_mean_nothing = EventCallback((sim, w, s) {
   final orc = getSlaveQuartersOrc(w);
   final goblin = getSlaveQuartersGoblin(w);
-  final actor = orc.isAliveAndActive ? orc : goblin;
+  final actor = orc.isAnimatedAndActive ? orc : goblin;
   actor.report(
       s,
       "\"You don't understand,\" <subject> growl<s>. "
@@ -209,7 +209,7 @@ final slave_quarters_mean_nothing = EventCallback((sim, w, s) {
 final slave_quarters_orc_looks = EventCallback((sim, w, s) {
   final orc = getSlaveQuartersOrc(w);
   final goblin = getSlaveQuartersGoblin(w);
-  if (!goblin.isAlive) {
+  if (!goblin.isAnimated) {
     orc.report(s, "<subject> look<s> at <object's> body", object: goblin);
     orc.report(s, "\"You'll pay for this, vermin,\" <subject> snarl<s>.",
         wholeSentence: true);

@@ -106,7 +106,7 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
 }
 
 /// Returns the portion of body parts with given [function] that are disabled
-/// ([BodyPart.isAlive] is `false`).
+/// ([BodyPart.isAnimated] is `false`).
 ///
 /// When [actor] has no parts with that [function], this method returns `1.0`.
 /// It's possible that these parts were cleaved off.
@@ -116,7 +116,7 @@ double _fractionDisabled(Actor actor, BodyPartFunction function) {
   for (final part in actor.anatomy.allParts) {
     if (part.function != function) continue;
     total += 1;
-    if (!part.isAlive) {
+    if (!part.isAnimated) {
       disabled += 1;
     }
   }
@@ -226,9 +226,9 @@ double _lerp(double current, int bonus) {
 }
 
 /// Returns `true` if the (single) part that's defined by [designation]
-/// is dead ([BodyPart.isAlive] is `false`).
+/// is dead ([BodyPart.isAnimated] is `false`).
 bool _partDisabled(Actor actor, BodyPartDesignation designation) {
-  return !actor.anatomy.findByDesignation(designation).isAlive;
+  return !actor.anatomy.findByDesignation(designation).isAnimated;
 }
 
 /// A [Modifier] that is always positive for the actor (and always negative

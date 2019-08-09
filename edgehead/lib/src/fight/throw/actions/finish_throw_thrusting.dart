@@ -63,7 +63,7 @@ class FinishThrowThrusting extends OtherActorAction {
 
     final allLivingParts = enemy.anatomy.torso
         .getDescendantParts()
-        .where((part) => part.isAlive)
+        .where((part) => part.isAnimated)
         .toList(growable: false);
     final targetPart = w.randomChoose(allLivingParts);
 
@@ -72,7 +72,7 @@ class FinishThrowThrusting extends OtherActorAction {
 
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
     final thread = getThreadId(sim, w, throwSituationName);
-    bool killed = !result.victim.isAlive && !result.victim.isInvincible;
+    bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
     if (!killed) {
       projectile.report(
           s,

@@ -97,7 +97,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           ..hitpoints -= damage
           ..pose = Pose.onGround);
     final updatedEnemy = w.getActorById(enemy.id);
-    bool killed = !updatedEnemy.isAlive && !enemy.isInvincible;
+    bool killed = !updatedEnemy.isAnimated && !enemy.isInvincible;
     if (!killed) {
       a.currentWeaponOrBodyPart.report(
           s,

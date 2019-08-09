@@ -27,7 +27,7 @@ abstract class Entity {
   bool get isActive => true;
 
   /// True if Actor is alive, i.e. not destroyed or dead.
-  bool get isAlive => true;
+  bool get isAnimated => true;
 
   bool get isPlayer;
 
@@ -73,9 +73,9 @@ abstract class Entity {
 mixin EntityBehavior {
   bool get isActive;
 
-  bool get isAlive;
+  bool get isAnimated;
 
-  bool get isAliveAndActive => isAlive && isActive;
+  bool get isAnimatedAndActive => isAnimated && isActive;
 
   Team get team;
 
@@ -147,5 +147,5 @@ class _NonserializableEntity extends Object
   bool get isActive => true;
 
   @override
-  bool get isAlive => true;
+  bool get isAnimated => true;
 }

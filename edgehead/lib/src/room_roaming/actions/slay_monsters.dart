@@ -50,7 +50,7 @@ class SlayMonstersAction extends Action<Nothing> {
 
     WorldState built = w.build();
     var friends = built.actors.where((other) =>
-        other.isAliveAndActive &&
+        other.isAnimatedAndActive &&
         other.team.isFriendWith(a.team) &&
         other.currentRoomName == room.name);
 

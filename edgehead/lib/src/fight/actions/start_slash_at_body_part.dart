@@ -121,7 +121,7 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     }
   }
   // Don't offer to hit body parts that are already crippled.
-  if (!enemy.anatomy.findByDesignation(designation).isAlive) return false;
+  if (!enemy.anatomy.findByDesignation(designation).isAnimated) return false;
 
   return true;
 }

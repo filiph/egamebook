@@ -23,7 +23,7 @@ Iterable<Actor> getPartyOf(
     Actor actor, Simulation sim, WorldState world) sync* {
   yield actor;
   yield* world.actors
-      .where((other) => other.followingActorId == actor.id && other.isAlive);
+      .where((other) => other.followingActorId == actor.id && other.isAnimated);
 }
 
 @immutable
@@ -41,28 +41,32 @@ abstract class Actor extends Object
 
   factory Actor([void updates(ActorBuilder b)]) = _$Actor;
 
-  factory Actor.initialized(int id, String name,
-      {bool isPlayer = false,
-      bool isInvincible = false,
-      bool isSurvivor = false,
-      bool nameIsProperNoun = false,
-      Pronoun pronoun,
-      Item currentWeapon,
-      Item currentShield,
-      int hitpoints,
-      int maxHitpoints,
-      int constitution = 1,
-      int dexterity = 100,
-      int stamina = 0,
-      int initiative = 0,
-      Anatomy anatomy,
-      int gold = 0,
-      String currentRoomName,
-      int followingActorId,
-      Team team,
-      Pose poseMax = Pose.standing,
-      bool isConfused = false,
-      String foldFunctionHandle = "normal"}) {
+  factory Actor.initialized(
+    int id,
+    String name, {
+    bool isPlayer = false,
+    bool isInvincible = false,
+    bool isSurvivor = false,
+    bool nameIsProperNoun = false,
+    Pronoun pronoun,
+    Item currentWeapon,
+    Item currentShield,
+    int hitpoints,
+    int maxHitpoints,
+    int constitution = 1,
+    int dexterity = 100,
+    int stamina = 0,
+    int initiative = 0,
+    Anatomy anatomy,
+    int gold = 0,
+    String currentRoomName,
+    int followingActorId,
+    Team team,
+    Pose poseMax = Pose.standing,
+    bool isConfused = false,
+    bool isUndead = false,
+    String foldFunctionHandle = "normal",
+  }) {
     Anatomy currentAnatomy =
         anatomy ?? buildHumanoid(id, constitution: constitution);
     Item weapon = currentWeapon;
@@ -91,6 +95,7 @@ abstract class Actor extends Object
       ..currentRoomName = currentRoomName
       ..followingActorId = followingActorId
       ..isConfused = isConfused
+      ..isUndead = isUndead
       ..foldFunctionHandle = foldFunctionHandle
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = poseMax
@@ -179,11 +184,23 @@ abstract class Actor extends Object
   /// that has to do with items.
   Inventory get inventory;
 
+  /// This is mostly `true`. The flag exists so that we can have actors
+  /// "waiting" to be activated. For example, an actor created at start
+  /// of play can become active much later.
   @override
   bool get isActive;
 
+  /// When `true`, this actor can move around, attack, etc.
+  ///
+  /// They can be either alive or undead (when [isUndead] is `true`).
   @override
-  bool get isAlive => hitpoints > 0;
+  bool get isAnimated => hitpoints > 0;
+
+  /// When `true`, this actor is undead.
+  ///
+  /// This field is separate from [isAnimated]. An actor can be [isUndead]
+  /// but killed ([isAnimated] == `false`).
+  bool get isUndead;
 
   /// This is `true` if the actor is barehanded. This means that the actor
   /// _is_ ready to fight, but only with their bare hands.
@@ -318,7 +335,7 @@ abstract class Actor extends Object
     num selfPreservation = 2 * actor.hitpoints;
     selfPreservation += actor.pose.differenceFrom(Pose.onGround);
     // Extra painful if actor dies in this world.
-    if (!actor.isAlive) selfPreservation -= 10;
+    if (!actor.isAnimated) selfPreservation -= 10;
     // Add bonus point for weapon.
     if (actor.currentWeapon != null) selfPreservation += 4;
     // Add points for weapon value.
@@ -335,7 +352,7 @@ abstract class Actor extends Object
     var friends = world.actors.where((a) => a.team == team && a.id != id);
     num teamPreservation = 0;
     for (final friend in friends) {
-      teamPreservation += friend.isAliveAndActive ? 2 : 0;
+      teamPreservation += friend.isAnimatedAndActive ? 2 : 0;
       teamPreservation += 2 * friend.hitpoints;
       teamPreservation += (friend.currentWeapon?.value ?? 0) / 2;
       for (final item in friend.inventory.weapons) {
@@ -345,7 +362,7 @@ abstract class Actor extends Object
 
     // Remove points for every enemy and their hitpoints.
     var enemy = world.actors.fold(0, (num sum, Actor a) {
-      final aliveScore = a.isAliveAndActive ? 1 : 0;
+      final aliveScore = a.isAnimatedAndActive ? 1 : 0;
       final hitpointScore = a.hitpoints;
       final stanceScore = a.pose.differenceFrom(Pose.onGround) / 2;
       final enemyScore = aliveScore + hitpointScore + stanceScore;

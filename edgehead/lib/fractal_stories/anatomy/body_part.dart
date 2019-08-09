@@ -99,7 +99,7 @@ abstract class BodyPart extends Object
   bool get isActive;
 
   @override
-  bool get isAlive => hitpoints > 0;
+  bool get isAnimated => hitpoints > 0;
 
   @override
   bool get isPlayer => false;

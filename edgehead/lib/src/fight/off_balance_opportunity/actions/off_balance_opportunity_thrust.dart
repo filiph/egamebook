@@ -71,7 +71,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     final damage = a.currentDamageCapability.thrustingDamage;
     w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
-    bool killed = !updatedEnemy.isAlive && !enemy.isInvincible;
+    bool killed = !updatedEnemy.isAnimated && !enemy.isInvincible;
     if (!killed) {
       a.report(
           s,

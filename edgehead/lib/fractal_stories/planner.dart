@@ -66,7 +66,7 @@ class ActorPlanner {
           "Action Records: "
           "${initialWorld.actionHistory.describe()}");
     }
-    assert(actor.isAlive);
+    assert(actor.isAnimated);
   }
 
   /// Computes the combined score for a bunch of consequences.

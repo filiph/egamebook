@@ -92,7 +92,7 @@ WeaponAssaultResult _addMajorCut(
   final ActorBuilder victim = target.toBuilder();
 
   // When a body part is vital, each major cut removes one actor's hit point.
-  if (designated.isVital && designated.isAlive) {
+  if (designated.isVital && designated.isAnimated) {
     victim.hitpoints -= 1;
   }
 
@@ -130,8 +130,8 @@ WeaponAssaultResult _addMajorCut(
 /// combat effect.
 WeaponAssaultResult _addMinorCut(
     Actor target, BodyPart designated, Item weapon) {
-  assert(
-      designated.isAlive, "Slashing a dead body part is not yet implemented");
+  assert(designated.isAnimated,
+      "Slashing a dead body part is not yet implemented");
 
   final victim = target.toBuilder();
 

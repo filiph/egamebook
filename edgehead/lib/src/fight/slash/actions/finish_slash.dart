@@ -83,7 +83,7 @@ class FinishSlash extends OtherActorAction {
 
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
     final thread = getThreadId(sim, w, slashSituationName);
-    bool killed = !result.victim.isAlive && !result.victim.isInvincible;
+    bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
     if (!killed) {
       a.report(
           s,

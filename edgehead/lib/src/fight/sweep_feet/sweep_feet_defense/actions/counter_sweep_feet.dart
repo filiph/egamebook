@@ -88,7 +88,8 @@ class CounterSweepFeet extends OtherActorAction {
         "and that those are the only 'mobile' bodyparts.");
     var leg = enemy.anatomy.allParts
         .where((part) =>
-            part.function == BodyPartFunction.mobile && part.isAliveAndActive)
+            part.function == BodyPartFunction.mobile &&
+            part.isAnimatedAndActive)
         .first;
 
     final damage = a.currentDamageCapability.slashingDamage;
@@ -99,7 +100,7 @@ class CounterSweepFeet extends OtherActorAction {
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
 
     assert(
-        result.victim.isAlive,
+        result.victim.isAnimated,
         "This assumes the enemy doesn't immediately die from "
         "the leg wound. Which is a safe bet unless they have some really "
         "weird anatomy.");

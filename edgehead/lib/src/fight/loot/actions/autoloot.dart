@@ -60,7 +60,7 @@ class AutoLoot extends Action<Nothing> {
         world.getSituationByName<LootSituation>(LootSituation.className);
 
     for (final actor in initialWorld.actors) {
-      if (actor.isInvincible && actor.isActive && !actor.isAlive) {
+      if (actor.isInvincible && actor.isActive && !actor.isAnimated) {
         // Invincible actors cannot die.
         a.report(s, "<subject> kneel<s> next to <object>", object: actor);
         a.report(s, "<subject> help<s> <object> to <object's> feet",
@@ -88,7 +88,7 @@ class AutoLoot extends Action<Nothing> {
 
         world.updateActorById(actor.id, (b) => b.replace(actorBuilder.build()));
 
-        assert(world.getActorById(actor.id).isAlive);
+        assert(world.getActorById(actor.id).isAnimated);
       }
     }
 
@@ -188,7 +188,9 @@ class AutoLoot extends Action<Nothing> {
     var unshielded = situation.playerTeamIds
         .map((id) => world.getActorById(id))
         .where((a) =>
-            a.isAliveAndActive && a.currentShield == null && a.id != player.id);
+            a.isAnimatedAndActive &&
+            a.currentShield == null &&
+            a.id != player.id);
     for (final friend in unshielded) {
       if (shields.isEmpty) break;
       var shield = shields.removeLast();
@@ -224,7 +226,7 @@ class AutoLoot extends Action<Nothing> {
     var couldUseWeapon = situation.playerTeamIds
         .map((id) => world.getActorById(id))
         .where((a) =>
-            a.isAliveAndActive &&
+            a.isAnimatedAndActive &&
             a.currentWeapon == null &&
             a.anatomy.anyWeaponAppendageAvailable &&
             a.id != player.id);

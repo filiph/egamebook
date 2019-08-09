@@ -118,7 +118,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
         "body parts providing mobility.");
 
     return target.anatomy.allParts.where((part) =>
-        part.function == BodyPartFunction.wielding && part.isAliveAndActive);
+        part.function == BodyPartFunction.wielding && part.isAnimatedAndActive);
   }
 
   static BodyPart _getTargetArm(Actor enemy) {

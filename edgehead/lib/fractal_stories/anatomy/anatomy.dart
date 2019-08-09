@@ -49,7 +49,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
 
     final candidates = torso
         .getDescendantParts()
-        .where((p) => p.isAliveAndActive && p.damageCapability != null)
+        .where((p) => p.isAnimatedAndActive && p.damageCapability != null)
         .toList(growable: false);
 
     if (candidates.isEmpty) return null;
@@ -70,7 +70,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
     for (final part in allParts) {
       if ((part.designation == BodyPartDesignation.leftLeg ||
               part.designation == BodyPartDesignation.rightLeg) &&
-          part.isAlive) {
+          part.isAnimated) {
         return false;
       }
     }
@@ -82,7 +82,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   @memoized
   bool get isBlind {
     for (final part in allParts) {
-      if (part.function == BodyPartFunction.vision && part.isAlive) {
+      if (part.function == BodyPartFunction.vision && part.isAnimated) {
         return false;
       }
     }
@@ -109,7 +109,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   }
 
   bool get primaryWeaponAppendageAvailable =>
-      primaryWeaponAppendage?.isAliveAndActive ?? false;
+      primaryWeaponAppendage?.isAnimatedAndActive ?? false;
 
   /// The appendage that is used as the secondary weapon-wielding one. Returns
   /// `null` when there is no such body part (i.e. it was severed).
@@ -127,7 +127,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   }
 
   bool get secondaryWeaponAppendageAvailable =>
-      secondaryWeaponAppendage?.isAliveAndActive ?? false;
+      secondaryWeaponAppendage?.isAnimatedAndActive ?? false;
 
   /// The root of the anatomy tree. Often the part of the anatomy with
   /// a heart or a similarly 'core' organ.

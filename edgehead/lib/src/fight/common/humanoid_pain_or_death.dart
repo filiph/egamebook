@@ -20,13 +20,13 @@ void inflictPain(ActionContext context, int actorId, int damage,
     context.pubSub.publishActorLostHitpoints(
         ActorLostHitpointsEvent(context, actor, damage));
   }
-  if (actor.isInvincible && !actor.isAlive) {
+  if (actor.isInvincible && !actor.isAnimated) {
     // Actor should be dead but is invincible, so inflictPain was called.
     _reportPainForInvincibleActors(context, actorId);
     return;
   }
   assert(
-      actor.isAlive,
+      actor.isAnimated,
       "All actors except invincible ones should call killHumanoid "
       "(not reportPain) when they lose all hitpoints. "
       "This actor didn't: $actor");

@@ -94,10 +94,10 @@ mixin CombatCommandPath on EnemyTargetAction {
     String legStatus;
     var leftLegAvailable = target.anatomy
         .findByDesignation(BodyPartDesignation.leftLeg)
-        .isAliveAndActive;
+        .isAnimatedAndActive;
     var rightLegAvailable = target.anatomy
         .findByDesignation(BodyPartDesignation.rightLeg)
-        .isAliveAndActive;
+        .isAnimatedAndActive;
     if (!leftLegAvailable && !rightLegAvailable) {
       legStatus = "both legs";
     } else if (!leftLegAvailable || !rightLegAvailable) {

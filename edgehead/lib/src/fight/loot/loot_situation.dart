@@ -80,5 +80,5 @@ abstract class LootSituation extends Object
   bool shouldContinue(Simulation sim, WorldState w) => true;
 
   Actor _getPlayer(Iterable<Actor> actors) =>
-      actors.firstWhere((a) => a.isPlayer && a.isAliveAndActive);
+      actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive);
 }

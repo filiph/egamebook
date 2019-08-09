@@ -46,6 +46,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'isActive',
       serializers.serialize(object.isActive,
           specifiedType: const FullType(bool)),
+      'isUndead',
+      serializers.serialize(object.isUndead,
+          specifiedType: const FullType(bool)),
       'isConfused',
       serializers.serialize(object.isConfused,
           specifiedType: const FullType(bool)),
@@ -156,6 +159,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.isActive = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
+        case 'isUndead':
+          result.isUndead = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'isConfused':
           result.isConfused = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
@@ -241,6 +248,8 @@ class _$Actor extends Actor {
   @override
   final bool isActive;
   @override
+  final bool isUndead;
+  @override
   final bool isConfused;
   @override
   final bool isInvincible;
@@ -283,6 +292,7 @@ class _$Actor extends Actor {
       this.initiative,
       this.inventory,
       this.isActive,
+      this.isUndead,
       this.isConfused,
       this.isInvincible,
       this.isPlayer,
@@ -326,6 +336,9 @@ class _$Actor extends Actor {
     }
     if (isActive == null) {
       throw new BuiltValueNullFieldError('Actor', 'isActive');
+    }
+    if (isUndead == null) {
+      throw new BuiltValueNullFieldError('Actor', 'isUndead');
     }
     if (isConfused == null) {
       throw new BuiltValueNullFieldError('Actor', 'isConfused');
@@ -391,6 +404,7 @@ class _$Actor extends Actor {
         initiative == other.initiative &&
         inventory == other.inventory &&
         isActive == other.isActive &&
+        isUndead == other.isUndead &&
         isConfused == other.isConfused &&
         isInvincible == other.isInvincible &&
         isPlayer == other.isPlayer &&
@@ -426,13 +440,13 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), foldFunctionHandle.hashCode), followingActorId.hashCode),
-                                                                                gold.hashCode),
-                                                                            hitpoints.hashCode),
-                                                                        id.hashCode),
-                                                                    initiative.hashCode),
-                                                                inventory.hashCode),
-                                                            isActive.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), foldFunctionHandle.hashCode), followingActorId.hashCode), gold.hashCode),
+                                                                                hitpoints.hashCode),
+                                                                            id.hashCode),
+                                                                        initiative.hashCode),
+                                                                    inventory.hashCode),
+                                                                isActive.hashCode),
+                                                            isUndead.hashCode),
                                                         isConfused.hashCode),
                                                     isInvincible.hashCode),
                                                 isPlayer.hashCode),
@@ -463,6 +477,7 @@ class _$Actor extends Actor {
           ..add('initiative', initiative)
           ..add('inventory', inventory)
           ..add('isActive', isActive)
+          ..add('isUndead', isUndead)
           ..add('isConfused', isConfused)
           ..add('isInvincible', isInvincible)
           ..add('isPlayer', isPlayer)
@@ -535,6 +550,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   bool get isActive => _$this._isActive;
   set isActive(bool isActive) => _$this._isActive = isActive;
 
+  bool _isUndead;
+  bool get isUndead => _$this._isUndead;
+  set isUndead(bool isUndead) => _$this._isUndead = isUndead;
+
   bool _isConfused;
   bool get isConfused => _$this._isConfused;
   set isConfused(bool isConfused) => _$this._isConfused = isConfused;
@@ -605,6 +624,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _initiative = _$v.initiative;
       _inventory = _$v.inventory?.toBuilder();
       _isActive = _$v.isActive;
+      _isUndead = _$v.isUndead;
       _isConfused = _$v.isConfused;
       _isInvincible = _$v.isInvincible;
       _isPlayer = _$v.isPlayer;
@@ -654,6 +674,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               initiative: initiative,
               inventory: inventory.build(),
               isActive: isActive,
+              isUndead: isUndead,
               isConfused: isConfused,
               isInvincible: isInvincible,
               isPlayer: isPlayer,

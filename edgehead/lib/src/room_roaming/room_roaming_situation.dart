@@ -168,7 +168,7 @@ abstract class RoomRoamingSituation extends Object
 
   bool _assertInvincibleActorsAlive(WorldState world) {
     for (final actor in world.actors) {
-      if (actor.isInvincible && !actor.isAlive) {
+      if (actor.isInvincible && !actor.isAnimated) {
         assert(
             false,
             "Actor ${actor.name} is invincible but not alive. "
@@ -180,8 +180,9 @@ abstract class RoomRoamingSituation extends Object
   }
 
   Iterable<Actor> _getCorpses(WorldState world) =>
-      world.actors.where((a) => a.isActive && !a.isAlive);
+      world.actors.where((a) => a.isActive && !a.isAnimated);
 
-  Actor _getPlayer(WorldState world) => world.actors
-      .firstWhere((a) => a.isPlayer && a.isAliveAndActive, orElse: () => null);
+  Actor _getPlayer(WorldState world) =>
+      world.actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive,
+          orElse: () => null);
 }

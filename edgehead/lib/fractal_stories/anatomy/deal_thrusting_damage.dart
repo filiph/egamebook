@@ -35,7 +35,7 @@ WeaponAssaultResult _addMajorThrustingWound(
   final ActorBuilder victim = target.toBuilder();
 
   // When a body part is vital, each major thrust removes one actor's hitpoint.
-  if (designated.isVital && designated.isAlive) {
+  if (designated.isVital && designated.isAnimated) {
     victim.hitpoints -= 1;
   }
 

@@ -165,7 +165,7 @@ abstract class FightSituation extends Object
   /// (and is active).
   bool canFight(
           Simulation sim, WorldStateBuilder world, Iterable<int> teamIds) =>
-      teamIds.any((id) => world.getActorById(id).isAliveAndActive);
+      teamIds.any((id) => world.getActorById(id).isAnimatedAndActive);
 
   @override
   FightSituation elapseTurn() => rebuild((b) => b..turn += 1);
@@ -175,7 +175,7 @@ abstract class FightSituation extends Object
     var allActorIds = alternate(playerTeamIds, enemyTeamIds);
     var actors = allActorIds
         .map((id) => world.getActorById(id))
-        .where((a) => a.isAliveAndActive)
+        .where((a) => a.isAnimatedAndActive)
         .toList(growable: false);
 
     Actor readiest;
@@ -198,7 +198,7 @@ abstract class FightSituation extends Object
   // created other (child) situations.
   @override
   Iterable<Actor> getActors(_, WorldState w) => w.actors.where((Actor actor) =>
-      actor.isAliveAndActive &&
+      actor.isAnimatedAndActive &&
       (playerTeamIds.contains(actor.id) || enemyTeamIds.contains(actor.id)));
 
   @override
@@ -222,7 +222,7 @@ abstract class FightSituation extends Object
           situation.id, situation.rebuild((b) => b..monstersAlive = false));
 
       for (final id in playerTeamIds) {
-        if (world.getActorById(id).isAliveAndActive) {
+        if (world.getActorById(id).isAnimatedAndActive) {
           world.updateActorById(id, (b) => b..pose = Pose.standing);
         }
       }
@@ -249,7 +249,7 @@ abstract class FightSituation extends Object
   bool shouldContinue(Simulation sim, WorldState world) {
     bool isPlayerAndAlive(int id) {
       var actor = world.getActorById(id);
-      return actor.isPlayer && actor.isAliveAndActive;
+      return actor.isPlayer && actor.isAnimatedAndActive;
     }
 
     final built = world.toBuilder();

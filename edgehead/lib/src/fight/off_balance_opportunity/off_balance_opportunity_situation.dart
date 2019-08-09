@@ -69,7 +69,7 @@ abstract class OffBalanceOpportunitySituation extends Object
     var actor = world.getActorById(actorId);
     List<Actor> enemies = world.actors
         .where((Actor a) =>
-            a.isAliveAndActive && a.hates(actor, world) && a.id != culpritId)
+            a.isAnimatedAndActive && a.hates(actor, world) && a.id != culpritId)
         .toList();
     // TODO: sort by distance, cut off if too far
 

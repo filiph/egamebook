@@ -86,7 +86,7 @@ final _brianaQuotesRuleset = Ruleset.unordered(_brianaQuotes.map((quote) {
 }));
 
 bool bothAreAlive(Actor a, Actor b) {
-  return a.isAliveAndActive && b.isAliveAndActive;
+  return a.isAnimatedAndActive && b.isAnimatedAndActive;
 }
 
 void describeSuccessRate(Simulation sim, WorldState w, Storyline s) {

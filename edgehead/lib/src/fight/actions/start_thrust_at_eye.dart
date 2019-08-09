@@ -110,7 +110,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
 
   static Iterable<BodyPart> _getAllEyes(Actor target) =>
       target.anatomy.allParts.where((part) =>
-          part.function == BodyPartFunction.vision && part.isAliveAndActive);
+          part.function == BodyPartFunction.vision && part.isAnimatedAndActive);
 
   static BodyPart _getTargetEye(Actor enemy, int time) {
     final eyes = _getAllEyes(enemy).toList(growable: false);

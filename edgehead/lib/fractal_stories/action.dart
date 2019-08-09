@@ -372,7 +372,7 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
     var actors = context.world.currentSituation
         .getActors(context.simulation, context.world);
     return actors.where((other) {
-      if (other == context.actor || !other.isAliveAndActive) return false;
+      if (other == context.actor || !other.isAnimatedAndActive) return false;
       // Currently, we are only generating enemy-target actions for actors
       // towards which the actor feels hate.
       return context.actor.hates(other, context.world);
@@ -427,7 +427,7 @@ abstract class OtherActorAction extends OtherActorActionBase {
     var actors = context.world.currentSituation
         .getActors(context.simulation, context.world);
     return actors.where((other) {
-      return other != context.actor && other.isAliveAndActive;
+      return other != context.actor && other.isAnimatedAndActive;
     });
   }
 

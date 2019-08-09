@@ -54,7 +54,7 @@ abstract class Item extends Object
   bool get isActive => true;
 
   @override
-  bool get isAlive => false;
+  bool get isAnimated => false;
 
   @override
   bool get isPlayer => false;

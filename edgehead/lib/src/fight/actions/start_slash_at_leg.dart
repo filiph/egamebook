@@ -111,7 +111,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
         "body parts providing mobility.");
 
     return target.anatomy.allParts.where((part) =>
-        part.function == BodyPartFunction.mobile && part.isAliveAndActive);
+        part.function == BodyPartFunction.mobile && part.isAnimatedAndActive);
   }
 
   static BodyPart _getTargetLeg(Actor enemy, int time) {

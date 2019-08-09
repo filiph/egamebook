@@ -17,7 +17,7 @@ void main() {
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
           .victim;
-      expect(deadOrc.isAlive, isFalse);
+      expect(deadOrc.isAnimated, isFalse);
     });
 
     test("cleaving neck removes head", () {
@@ -39,7 +39,9 @@ void main() {
               designation: BodyPartDesignation.neck)
           .victim;
       expect(
-          deadOrc.anatomy.findByDesignation(BodyPartDesignation.neck).isAlive,
+          deadOrc.anatomy
+              .findByDesignation(BodyPartDesignation.neck)
+              .isAnimated,
           isFalse);
     });
 
@@ -63,12 +65,14 @@ void main() {
               designation: BodyPartDesignation.head)
           .victim;
       expect(
-          deadOrc.anatomy.findByDesignation(BodyPartDesignation.head).isAlive,
+          deadOrc.anatomy
+              .findByDesignation(BodyPartDesignation.head)
+              .isAnimated,
           isFalse);
       expect(
           deadOrc.anatomy
               .findByDesignation(BodyPartDesignation.leftEye)
-              .isAlive,
+              .isAnimated,
           isFalse);
     });
 
@@ -89,7 +93,7 @@ void main() {
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.torso)
           .victim;
-      expect(cutOrc.isAlive, isTrue);
+      expect(cutOrc.isAnimated, isTrue);
     });
 
     test(
@@ -105,7 +109,7 @@ void main() {
               cutOrc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.torso)
           .victim;
-      expect(doublyCutOrc.isAlive, isFalse);
+      expect(doublyCutOrc.isAnimated, isFalse);
     });
 
     test(
@@ -121,7 +125,7 @@ void main() {
               cutOrc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.rightLeg)
           .victim;
-      expect(doublyCutOrc.isAlive, isTrue);
+      expect(doublyCutOrc.isAnimated, isTrue);
     });
 
     test(
@@ -140,7 +144,7 @@ void main() {
       expect(
           doublyCutOrc.anatomy
               .findByDesignation(BodyPartDesignation.rightLeg)
-              .isAlive,
+              .isAnimated,
           isFalse);
     });
 
@@ -155,7 +159,7 @@ void main() {
               cutOrc, sword, SlashSuccessLevel.minorCut,
               designation: BodyPartDesignation.head)
           .victim;
-      expect(doublyCutOrc.isAlive, isTrue);
+      expect(doublyCutOrc.isAnimated, isTrue);
     });
   });
 

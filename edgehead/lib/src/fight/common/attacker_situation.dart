@@ -251,7 +251,7 @@ abstract class MoveEntity extends Object
   bool get isActive => true;
 
   @override
-  bool get isAlive => true;
+  bool get isAnimated => true;
 
   @override
   bool get isPlayer => false;
