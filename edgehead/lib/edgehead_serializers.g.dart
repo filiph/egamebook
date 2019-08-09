@@ -70,16 +70,14 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Item)]),
           () => new ListBuilder<Item>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(int)]),
-          () => new ListBuilder<int>())
+      ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
+          () => new SetBuilder<int>())
       ..addBuilderFactory(
           const FullType(BuiltMap,
               const [const FullType(int), const FullType(EventCallback)]),
           () => new MapBuilder<int, EventCallback>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(int)]),
-          () => new ListBuilder<int>())
+      ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
+          () => new SetBuilder<int>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Item)]),
           () => new ListBuilder<Item>())

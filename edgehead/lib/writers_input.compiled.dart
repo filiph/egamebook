@@ -932,7 +932,7 @@ final Room guardpostAboveChurch =
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return w.isDead(sleepingGoblinId);
+        return w.wasKilled(sleepingGoblinId);
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -2545,7 +2545,7 @@ final Room startPostFight = Room('start_post_fight', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('The fight is over.\n\n', wholeSentence: true);
-  assert(!originalWorld.isDead(tamaraId));
+  assert(!originalWorld.wasKilled(tamaraId));
 
   Ruleset(
       Rule(1036996063, 1, false, (ApplicabilityContext c) {
@@ -2596,7 +2596,7 @@ final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
       final WorldState w = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
-      return w.isDead(tamaraId);
+      return w.wasKilled(tamaraId);
     }),
     isIdle: true);
 final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',

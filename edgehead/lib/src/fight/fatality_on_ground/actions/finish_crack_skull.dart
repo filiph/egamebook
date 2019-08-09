@@ -62,17 +62,21 @@ class FinishCrackSkull extends OtherActorAction {
 
     final victim = enemy.toBuilder();
     victim.hitpoints = 0;
+
     deepReplaceBodyPart(
       enemy,
       victim,
       (part) => part.designation == BodyPartDesignation.head,
       (b, isDescendant) {
-        if (!isDescendant) {
-          b.majorCutsCount += 1;
+        if (isDescendant) {
+          // Ignore descendants, they aren't affected.
+          return;
         }
+        b.majorCutsCount += 1;
         b.hitpoints = 0;
       },
     );
+
     final updatedEnemy = victim.build();
     w.updateActorById(enemy.id, (b) => b.replace(updatedEnemy));
     if (!enemy.isInvincible) {

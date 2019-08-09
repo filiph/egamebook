@@ -14,6 +14,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
+import 'package:meta/meta.dart';
 
 part 'world_state.g.dart';
 
@@ -131,19 +132,6 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
     throw ArgumentError("No situation with name=$situationName found.");
   }
 
-  /// Returns true if [Actor] with [actorId] has been slain.
-  ///
-  /// This will work correctly even if the actor with [actorId] hasn't
-  /// been created yet. This happens when the actor is yet to be
-  /// built with a fight situation generator, for example. Since this function
-  /// checks [customHistory] for [CustomEvent.actorDeath] events, it's safe
-  /// to use it even for NPCs that haven't yet been generated.
-  bool isDead(int actorId) {
-    return customHistory
-        .query(name: CustomEvent.actorDeath, actorId: actorId)
-        .hasHappened;
-  }
-
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 
@@ -172,8 +160,34 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
     return time.difference(latest.time).inSeconds;
   }
 
+  /// Returns number of seconds since a [CustomEvent] that conforms to
+  /// the specified named parameters occurred.
+  ///
+  /// Returns `null` when such a record doesn't exist.
+  int timeSinceLastCustomRecord({@required String name, int actorId}) {
+    final latest = customHistory.query(name: name, actorId: actorId).latest;
+    if (latest == null) {
+      // ignore: avoid_returning_null
+      return null;
+    }
+    return time.difference(latest.time).inSeconds;
+  }
+
   @override
   String toString() => "World<${actors.toSet()}>";
+
+  /// Returns true if [Actor] with [actorId] has been slain.
+  ///
+  /// This will work correctly even if the actor with [actorId] hasn't
+  /// been created yet. This happens when the actor is yet to be
+  /// built with a fight situation generator, for example. Since this function
+  /// checks [customHistory] for [CustomEvent.actorDeath] events, it's safe
+  /// to use it even for NPCs that haven't yet been generated.
+  bool wasKilled(int actorId) {
+    return customHistory
+        .query(name: CustomEvent.actorDeath, actorId: actorId)
+        .hasHappened;
+  }
 
   /// Returns the index at which the [Situation] with [situationId] resides
   /// in the [situations] list.

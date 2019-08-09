@@ -81,12 +81,9 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// [BodyPartFunction.vision]) are dead.
   @memoized
   bool get isBlind {
-    for (final part in allParts) {
-      if (part.function == BodyPartFunction.vision && part.isAnimated) {
-        return false;
-      }
-    }
-    return true;
+    assert(torso.isAnimatedAndActive,
+        "Finding out if an actor is blind when they're dead.");
+    return !_hasPartWithFunction(torso, BodyPartFunction.vision);
   }
 
   /// Is this anatomy humanoid? That means, in general: 2 arms, 2 legs,
@@ -224,6 +221,24 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
       if (needle < current) return part;
     }
     throw StateError("Part weights aren't adding up.");
+  }
+
+  /// Returns `true` if [part] or any of its animated (living) descendants
+  /// has the [BodyPartFunction] specified in [function].
+  static bool _hasPartWithFunction(BodyPart part, BodyPartFunction function) {
+    assert(part.isAnimatedAndActive);
+    if (part.function == BodyPartFunction.vision) {
+      return true;
+    }
+
+    for (final child in part.children) {
+      if (!child.isAnimatedAndActive) continue;
+      if (_hasPartWithFunction(child, function)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   static int _sum(int a, int b) => a + b;

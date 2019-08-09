@@ -84,9 +84,11 @@ WeaponAssaultResult _disableByThrust(
     victim,
     (part) => part.id == bodyPart.id,
     (b, isDescendant) {
-      if (!isDescendant) {
-        b.majorCutsCount += 1;
+      if (isDescendant) {
+        // Ignore descendants, they aren't affected.
+        return;
       }
+      b.majorCutsCount += 1;
       b.hitpoints = 0;
     },
   );
@@ -116,6 +118,8 @@ WeaponAssaultResult _disableByThrust(
         isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
     severedPart: null,
     slashSuccessLevel: null,
-    wasBlinding: !startedBlind && builtVictim.anatomy.isBlind,
+    wasBlinding: builtVictim.isAnimatedAndActive &&
+        !startedBlind &&
+        builtVictim.anatomy.isBlind,
   );
 }

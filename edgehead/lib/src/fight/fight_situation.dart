@@ -19,29 +19,30 @@ import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/equip_weapon.dart';
-import 'package:edgehead/src/fight/actions/start_crack_skull_on_ground.dart';
-import 'package:edgehead/src/fight/actions/start_feint_jab.dart';
-import 'package:edgehead/src/fight/actions/start_feint_slash.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
-import 'package:edgehead/src/fight/actions/start_clash.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
 import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
+import 'package:edgehead/src/fight/actions/start_clash.dart';
+import 'package:edgehead/src/fight/actions/start_crack_skull_on_ground.dart';
+import 'package:edgehead/src/fight/actions/start_feint_jab.dart';
+import 'package:edgehead/src/fight/actions/start_feint_slash.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_arm.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_leg.dart';
 import 'package:edgehead/src/fight/actions/start_strike_down.dart';
+import 'package:edgehead/src/fight/actions/start_sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/start_throw_rock.dart';
+import 'package:edgehead/src/fight/actions/start_throw_thrusting_weapon.dart';
 import 'package:edgehead/src/fight/actions/start_thrust.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_at_eye.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_spear_down.dart';
-import 'package:edgehead/src/fight/actions/start_sweep_feet.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
-import 'package:edgehead/src/fight/actions/start_throw_thrusting_weapon.dart';
+import 'package:edgehead/src/fight/actions/turn_undead.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/actions/wait.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
@@ -120,6 +121,7 @@ abstract class FightSituation extends Object
         RegainBalance.singleton,
         StandUp.singleton,
         Scramble.singleton,
+        TurnUndead.singleton,
         Unconfuse.singleton,
         Wait.singleton,
       ];
@@ -133,7 +135,7 @@ abstract class FightSituation extends Object
   /// recoverable after combat.
   BuiltList<Item> get droppedItemsOutOfReach;
 
-  BuiltList<int> get enemyTeamIds;
+  BuiltSet<int> get enemyTeamIds;
 
   BuiltMap<int, EventCallback> get events;
 
@@ -152,7 +154,7 @@ abstract class FightSituation extends Object
   @override
   String get name => className;
 
-  BuiltList<int> get playerTeamIds;
+  BuiltSet<int> get playerTeamIds;
 
   /// This is used to update the underlying [RoomRoamingSituation] with the
   /// fact that all monsters have been slain.
@@ -169,6 +171,11 @@ abstract class FightSituation extends Object
 
   @override
   FightSituation elapseTurn() => rebuild((b) => b..turn += 1);
+
+  @override
+  Iterable<Actor> getActors(_, WorldState w) => w.actors.where((Actor actor) =>
+      actor.isAnimatedAndActive &&
+      (playerTeamIds.contains(actor.id) || enemyTeamIds.contains(actor.id)));
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {
@@ -193,16 +200,11 @@ abstract class FightSituation extends Object
     return ActorTurn(readiest, world.time);
   }
 
-  // We're using [onBeforeAction] because when using onAfterAction, we'd report
-  // timed events at a time when an action in FightSituation might have
-  // created other (child) situations.
-  @override
-  Iterable<Actor> getActors(_, WorldState w) => w.actors.where((Actor actor) =>
-      actor.isAnimatedAndActive &&
-      (playerTeamIds.contains(actor.id) || enemyTeamIds.contains(actor.id)));
-
   @override
   void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {
+    // We're using [onAfterTurn] because when using onAfterAction, we'd report
+    // timed events at a time when an action in FightSituation might have
+    // created other (child) situations.
     if (events.containsKey(turn)) {
       final callback = events[turn];
       callback.run(sim, world, s);

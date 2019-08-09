@@ -31,6 +31,30 @@ void main() {
           deadOrc.anatomy.findByDesignation(BodyPartDesignation.head), isNull);
     });
 
+    test("disabling a part that leads to a single eye will make actor blind",
+        () {
+      final monster = Actor.initialized(1000, "monster").toBuilder();
+      // This monster has no neck.
+      monster.anatomy.torso.children
+          .removeWhere((part) => part.designation == BodyPartDesignation.neck);
+      // It has some tail-like outgrowth with an eye.
+      monster.anatomy.torso.children.add(BodyPart(
+        123123,
+        "tail",
+        designation: BodyPartDesignation.tail,
+        children: [
+          BodyPart(1234123222, "eye", designation: BodyPartDesignation.leftEye)
+        ],
+      ));
+      final sword = Item.weapon(42, WeaponType.sword);
+
+      final blindMonster = executeSlashingHit(
+              monster.build(), sword, SlashSuccessLevel.cleave,
+              designation: BodyPartDesignation.tail)
+          .victim;
+      expect(blindMonster.anatomy.isBlind, isTrue);
+    });
+
     test("cleaving neck disables it", () {
       final orc = Actor.initialized(1000, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
@@ -57,7 +81,8 @@ void main() {
           isNotNull);
     });
 
-    test("cleaving non-severable body part kills it and its descendants", () {
+    test("cleaving non-severable body part kills it but not its descendants",
+        () {
       final orc = Actor.initialized(1000, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
@@ -73,7 +98,7 @@ void main() {
           deadOrc.anatomy
               .findByDesignation(BodyPartDesignation.leftEye)
               .isAnimated,
-          isFalse);
+          isTrue);
     });
 
     test("cleaving non-severable body part downgrades to major cut", () {

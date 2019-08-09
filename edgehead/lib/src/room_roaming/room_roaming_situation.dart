@@ -152,6 +152,11 @@ abstract class RoomRoamingSituation extends Object
     // Move corpses to the parent room so they can be found more easily.
     final corpses = _getCorpses(world);
     for (final corpse in corpses) {
+      assert(
+          corpse.currentRoomName != null,
+          "Corpse of ${corpse.name} has "
+          "currentRoomName null.\n"
+          "How we got here: ${world.actionHistory.describe()}");
       var parent = sim.getRoomParent(sim.getRoomByName(corpse.currentRoomName));
       if (parent.name != corpse.currentRoomName) {
         context.outputWorld

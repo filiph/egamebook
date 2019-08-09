@@ -256,6 +256,9 @@ class BodyPartDesignation extends EnumClass {
   /// and so this tends to be the root of the anatomy.
   static const BodyPartDesignation torso = _$torso;
 
+  /// A part not normally present in humanoid creatures.
+  static const BodyPartDesignation tail = _$tail;
+
   /// The body part is not "named".
   static const BodyPartDesignation none = _$noSpecification;
 
@@ -306,6 +309,8 @@ class BodyPartDesignation extends EnumClass {
         return "right eye";
       case torso:
         return "torso";
+      case tail:
+        return "tail";
       default:
         assert(false, "No human string defined for $this.");
         return name;

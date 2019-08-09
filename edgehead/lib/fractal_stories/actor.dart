@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
+import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
@@ -386,11 +387,20 @@ abstract class Actor extends Object
   }
 
   /// Returns true if this actor was attacked by [actor] in the past
-  /// [time] seconds.
-  bool _hasBeenAttackedBy(Actor other, WorldState w, int time) {
+  /// [maxTime] seconds.
+  bool _hasBeenAttackedBy(Actor other, WorldState w, int maxTime) {
     int recency = w.timeSinceLastActionRecord(
         protagonist: other, sufferer: this, wasAggressive: true);
     if (recency == null) return false;
-    return recency <= time;
+
+    int deathRecency =
+        w.timeSinceLastCustomRecord(name: CustomEvent.actorDeath, actorId: id);
+    if (deathRecency != null && deathRecency <= recency) {
+      // Actor died between the last attack by [other] and now. They don't
+      // remember.
+      return false;
+    }
+
+    return recency <= maxTime;
   }
 }

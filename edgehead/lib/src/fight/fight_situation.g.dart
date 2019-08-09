@@ -30,8 +30,7 @@ class _$FightSituationSerializer
               const FullType(BuiltList, const [const FullType(Item)])),
       'enemyTeamIds',
       serializers.serialize(object.enemyTeamIds,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(int)])),
+          specifiedType: const FullType(BuiltSet, const [const FullType(int)])),
       'events',
       serializers.serialize(object.events,
           specifiedType: const FullType(BuiltMap,
@@ -43,8 +42,7 @@ class _$FightSituationSerializer
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'playerTeamIds',
       serializers.serialize(object.playerTeamIds,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(int)])),
+          specifiedType: const FullType(BuiltSet, const [const FullType(int)])),
       'roomRoamingSituationId',
       serializers.serialize(object.roomRoamingSituationId,
           specifiedType: const FullType(int)),
@@ -82,8 +80,8 @@ class _$FightSituationSerializer
         case 'enemyTeamIds':
           result.enemyTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<dynamic>);
+                      const FullType(BuiltSet, const [const FullType(int)]))
+              as BuiltSet<dynamic>);
           break;
         case 'events':
           result.events.replace(serializers.deserialize(value,
@@ -103,8 +101,8 @@ class _$FightSituationSerializer
         case 'playerTeamIds':
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<dynamic>);
+                      const FullType(BuiltSet, const [const FullType(int)]))
+              as BuiltSet<dynamic>);
           break;
         case 'roomRoamingSituationId':
           result.roomRoamingSituationId = serializers.deserialize(value,
@@ -127,7 +125,7 @@ class _$FightSituation extends FightSituation {
   @override
   final BuiltList<Item> droppedItemsOutOfReach;
   @override
-  final BuiltList<int> enemyTeamIds;
+  final BuiltSet<int> enemyTeamIds;
   @override
   final BuiltMap<int, EventCallback> events;
   @override
@@ -135,7 +133,7 @@ class _$FightSituation extends FightSituation {
   @override
   final int id;
   @override
-  final BuiltList<int> playerTeamIds;
+  final BuiltSet<int> playerTeamIds;
   @override
   final int roomRoamingSituationId;
   @override
@@ -261,10 +259,10 @@ class FightSituationBuilder
   set droppedItemsOutOfReach(ListBuilder<Item> droppedItemsOutOfReach) =>
       _$this._droppedItemsOutOfReach = droppedItemsOutOfReach;
 
-  ListBuilder<int> _enemyTeamIds;
-  ListBuilder<int> get enemyTeamIds =>
-      _$this._enemyTeamIds ??= new ListBuilder<int>();
-  set enemyTeamIds(ListBuilder<int> enemyTeamIds) =>
+  SetBuilder<int> _enemyTeamIds;
+  SetBuilder<int> get enemyTeamIds =>
+      _$this._enemyTeamIds ??= new SetBuilder<int>();
+  set enemyTeamIds(SetBuilder<int> enemyTeamIds) =>
       _$this._enemyTeamIds = enemyTeamIds;
 
   MapBuilder<int, EventCallback> _events;
@@ -281,10 +279,10 @@ class FightSituationBuilder
   int get id => _$this._id;
   set id(int id) => _$this._id = id;
 
-  ListBuilder<int> _playerTeamIds;
-  ListBuilder<int> get playerTeamIds =>
-      _$this._playerTeamIds ??= new ListBuilder<int>();
-  set playerTeamIds(ListBuilder<int> playerTeamIds) =>
+  SetBuilder<int> _playerTeamIds;
+  SetBuilder<int> get playerTeamIds =>
+      _$this._playerTeamIds ??= new SetBuilder<int>();
+  set playerTeamIds(SetBuilder<int> playerTeamIds) =>
       _$this._playerTeamIds = playerTeamIds;
 
   int _roomRoamingSituationId;

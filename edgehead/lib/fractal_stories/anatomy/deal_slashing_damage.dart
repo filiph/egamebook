@@ -212,7 +212,9 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
         isWeaponHeld(target.currentWeapon, severedPart, target.inventory),
     disabled: false,
     willFall: victimWillFall,
-    wasBlinding: !startedBlind && builtVictim.anatomy.isBlind,
+    wasBlinding: builtVictim.isAnimatedAndActive &&
+        !startedBlind &&
+        builtVictim.anatomy.isBlind,
   );
 }
 
@@ -230,9 +232,11 @@ WeaponAssaultResult _disableBySlash(
     victim,
     (part) => part.id == bodyPart.id,
     (b, isDescendant) {
-      if (!isDescendant) {
-        b.majorCutsCount += 1;
+      if (isDescendant) {
+        // Ignore descendants, they aren't affected.
+        return;
       }
+      b.majorCutsCount += 1;
       b.hitpoints = 0;
     },
   );
@@ -251,10 +255,10 @@ WeaponAssaultResult _disableBySlash(
     victimWillFall = true;
   }
 
-  bool endedBlind = victim.anatomy.build().isBlind;
+  final builtVictim = victim.build();
 
   return WeaponAssaultResult(
-    victim.build(),
+    builtVictim,
     bodyPart,
     slashSuccessLevel: SlashSuccessLevel.majorCut,
     willFall: victimWillFall,
@@ -262,7 +266,9 @@ WeaponAssaultResult _disableBySlash(
     willDropCurrentWeapon:
         isWeaponHeld(target.currentWeapon, bodyPart, target.inventory),
     severedPart: null,
-    wasBlinding: !startedBlind && endedBlind,
+    wasBlinding: builtVictim.isAnimatedAndActive &&
+        !startedBlind &&
+        builtVictim.anatomy.isBlind,
   );
 }
 

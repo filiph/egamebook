@@ -21,6 +21,7 @@ const BodyPartDesignation _$secondaryArm =
 const BodyPartDesignation _$secondaryHand =
     const BodyPartDesignation._('secondaryHand');
 const BodyPartDesignation _$torso = const BodyPartDesignation._('torso');
+const BodyPartDesignation _$tail = const BodyPartDesignation._('tail');
 const BodyPartDesignation _$noSpecification =
     const BodyPartDesignation._('none');
 
@@ -48,6 +49,8 @@ BodyPartDesignation _$valueOfSpecifiedBodyPart(String name) {
       return _$secondaryHand;
     case 'torso':
       return _$torso;
+    case 'tail':
+      return _$tail;
     case 'none':
       return _$noSpecification;
     default:
@@ -68,6 +71,7 @@ final BuiltSet<BodyPartDesignation> _$specificBodyPartValues =
   _$secondaryArm,
   _$secondaryHand,
   _$torso,
+  _$tail,
   _$noSpecification,
 ]);
 
