@@ -494,9 +494,11 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
-    final goblin = _makeGoblin(w, id: sleepingGoblinId);
-    w.actors.add(goblin);
     final roomRoamingSituation = getRoomRoaming(built);
+    final goblin = _makeGoblin(w,
+        id: sleepingGoblinId,
+        currentRoomName: roomRoamingSituation.currentRoomName);
+    w.actors.add(goblin);
     w.pushSituation(FightSituation.initialized(
         w.randomInt(),
         playerParty,
@@ -541,7 +543,8 @@ Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 }
 
-Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear = false}) =>
+Actor _makeGoblin(WorldStateBuilder w,
+        {int id, bool spear = false, String currentRoomName}) =>
     Actor.initialized(id ?? w.randomInt(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
@@ -549,6 +552,7 @@ Actor _makeGoblin(WorldStateBuilder w, {int id, bool spear = false}) =>
             ? Item.weapon(w.randomInt(), WeaponType.spear)
             : Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
         team: defaultEnemyTeam,
+        currentRoomName: currentRoomName,
         foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
 Actor _makeOrc(WorldStateBuilder w, {int id, int constitution = 2}) =>
