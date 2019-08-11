@@ -56,7 +56,10 @@ class TurnUndead extends OtherActorActionBase {
     final w = context.outputWorld;
     final situation = context.world.currentSituation as FightSituation;
 
-    a.report(s, "<subject> raise<s> <subject's> hands over <object>",
+    final preposition =
+        a.anatomy.isBlind ? "in the general direction of" : "over";
+
+    a.report(s, "<subject> raise<s> <subject's> hands $preposition <object>",
         object: corpse);
     corpse.report(s, "<subject> open<s> <subject's> eyes");
     corpse.report(s, "<subject> stand<s> up");
@@ -125,5 +128,5 @@ class TurnUndead extends OtherActorActionBase {
 
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor object) =>
-      a.isPlayer && !a.anatomy.isBlind;
+      a.isPlayer;
 }
