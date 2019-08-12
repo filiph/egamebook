@@ -29,7 +29,7 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He's s
 DESCRIPTION:
 - RULESET
 - RULE:
-  w.isDead(sleepingGoblinId)
+  w.wasKilled(sleepingGoblinId)
 - THEN:
 The goblin's corpse is sprawled on the ground in the middle of the circular room.
 - END RULE

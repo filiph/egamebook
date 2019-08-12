@@ -928,7 +928,7 @@ final Room guardpostAboveChurch =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   Ruleset(
-      Rule(438680119, 1, false, (ApplicabilityContext c) {
+      Rule(453960981, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2831,14 +2831,14 @@ final Approach bleedsMainFromStartPostFight =
   s.add('', wholeSentence: true);
 });
 final Approach bleedsMainFromGoblinSkirmishMain =
-    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to the Bleeds',
+    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to The Bleeds',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I sneak through the bushes and emerge back in the Bleeds.\n',
+  s.add('I sneak through the bushes and emerge back in The Bleeds.\n',
       wholeSentence: true);
 });
 final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
@@ -2848,7 +2848,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\nA little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement the Bleeds, as in the village bleeds outside of the Pyramid.\n\nIt was harder than I expected but I made it here. The Manual is somewhere here. I can find it.\n',
+      'I finally see it. The Pyramid.\n\nA little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement The Bleeds.\n\nIt was harder than I expected but I made it here. The Manual is somewhere here. I can find it.\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;

@@ -12,7 +12,7 @@ FIRST_DESCRIPTION:
 The fight is over.
 
 [[CODE]]
-assert(!originalWorld.isDead(tamaraId));
+assert(!originalWorld.wasKilled(tamaraId));
 [[/CODE]]
 
 - RULESET
@@ -41,7 +41,7 @@ ROOM: $start_post_fight_tamara_dead
 
 VARIANT_OF: $start_post_fight
 
-RULE: w.isDead(tamaraId)
+RULE: w.wasKilled(tamaraId)
 
 FLAGS: idle
 
