@@ -79,7 +79,7 @@ class AssumeStance extends Action<Nothing> {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState world, void _) =>
       // Only player is able to assume better stance.
-      // It's boring to look at in enemies.
+      // It's boring to look at when enemies do it.
       a.isPlayer &&
       a.pose > Pose.offBalance &&
       a.pose < a.poseMax &&

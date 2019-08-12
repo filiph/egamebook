@@ -78,6 +78,11 @@ class KickItemOutOfReach extends ItemAction {
     // stupid). We're basically patching this A.I. planner deficiency via
     // direct rules. It's a bit impure but it gets the job done.
     if (!a.isPlayer) {
+      if (a.isUndead) {
+        // The undead are supposed to act stupid.
+        return false;
+      }
+
       if (item.value > (a.currentWeapon?.value ?? 0)) {
         // Never kick away weapons that are more valuable than what the actor
         // has.

@@ -37,6 +37,7 @@ EnemyTargetAction startPunchBuilder() => StartDefensibleAction(
       applyStart: startPunchReportStart,
       isApplicable: (a, sim, w, enemy) =>
           !a.anatomy.isBlind &&
+          !a.isUndead &&
           (a.pose >= Pose.offBalance) &&
           !enemy.isOnGround &&
           a.isBarehanded,

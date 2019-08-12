@@ -41,10 +41,15 @@ class Scramble extends Action<Nothing> {
   String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
-    a.report(
-        s,
-        "<subject> tr<ies> to {scramble|crawl} "
-        "out of {reach|harm's way}");
+    if (a.isUndead) {
+      a.report(s,
+          "<subject> <is> {trying|attempting} to {stand up|rise|get up|arise}");
+    } else {
+      a.report(
+          s,
+          "<subject> tr<ies> to {scramble|crawl} "
+          "out of {reach|harm's way}");
+    }
     return "${a.name} scrambles on ground";
   }
 
