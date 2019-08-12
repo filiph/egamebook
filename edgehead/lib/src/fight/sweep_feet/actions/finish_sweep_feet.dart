@@ -64,7 +64,9 @@ class FinishSweepFeet extends OtherActorAction {
     }, () {
       a.report(s, "<subject> kick<s> <object's> {right|left} shin",
           object: enemy, positive: true, actionThread: threadId);
-      enemy.report(s, "<subject> {grunt|shriek}<s>", actionThread: threadId);
+      if (!enemy.isUndead) {
+        enemy.report(s, "<subject> {grunt|shriek}<s>", actionThread: threadId);
+      }
     });
 
     final groundMaterial = getGroundMaterial(w);
