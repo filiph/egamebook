@@ -49,7 +49,7 @@ class EquipWeapon extends Action<Item> {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
 
-    if (a.currentWeapon != null) {
+    if (a.holdsSomeWeapon) {
       var beltOrBack = a.currentWeapon.damageCapability.length > 1
           // Spears and swords belong behind one's back.
           ? "behind <subject's> back"

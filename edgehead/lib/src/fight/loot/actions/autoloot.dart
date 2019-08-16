@@ -227,7 +227,7 @@ class AutoLoot extends Action<Nothing> {
         .map((id) => world.getActorById(id))
         .where((a) =>
             a.isAnimatedAndActive &&
-            a.currentWeapon == null &&
+            a.holdsNoWeapon &&
             a.anatomy.anyWeaponAppendageAvailable &&
             a.id != player.id);
     for (final friend in couldUseWeapon) {
@@ -268,7 +268,7 @@ class AutoLoot extends Action<Nothing> {
 
   bool _noCurrentWeaponsMissingFromInventory(WorldStateBuilder world) {
     for (final actor in world.build().actors) {
-      if (actor.currentWeapon != null &&
+      if (actor.holdsSomeWeapon &&
           !actor.inventory.weapons.contains(actor.currentWeapon)) {
         assert(
             false,

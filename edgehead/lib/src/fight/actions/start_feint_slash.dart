@@ -103,7 +103,9 @@ class FeintSlash extends StartDefensibleActionBase {
       !a.anatomy.isBlind &&
       !enemy.anatomy.isBlind &&
       enemy.pose > Pose.extended &&
-      !enemy.isBarehanded &&
+      // Feints really only make sense when the enemy has something to defend
+      // themselves with.
+      enemy.holdsSomeWeapon &&
       a.currentDamageCapability.isSlashing;
 
   @override

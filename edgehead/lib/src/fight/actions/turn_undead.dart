@@ -67,7 +67,7 @@ class TurnUndead extends OtherActorActionBase {
     w.updateActorById(
         corpse.id,
         (b) => b
-          ..isUndead = true
+          ..anatomy.isUndead = true
           ..hitpoints = 1
           ..pose = b.poseMax
           ..team = a.team.toBuilder());

@@ -13,11 +13,22 @@ part 'weapon_type.g.dart';
 /// because each weapon can have only one type and we want to have versatile
 /// weapons (sword is both slashing and piercing, for example).
 ///
-/// Note that [fist] and [claw] are also weapons.
+/// Note that [fist] and [claw] and [teeth] are also weapons.
 class WeaponType extends EnumClass {
+  /// The weapons that are not actual holdable weapons, but actually
+  /// body parts.
+  ///
+  /// Use this for asserts, nothing more. The set may not be updated.
+  static const Set<WeaponType> bodyPartWeapons = {claw, teeth, fist};
+
   /// This is only used in [DamageCapability.none].
   static const WeaponType none = _$none;
+
+  /// An animal claw.
   static const WeaponType claw = _$claw;
+
+  /// Teeth.
+  static const WeaponType teeth = _$teeth;
 
   /// A humanoid fist.
   static const WeaponType fist = _$fist;
@@ -73,9 +84,13 @@ class WeaponType extends EnumClass {
   /// * `1` for a dagger
   /// * `2` for everything else
   int get defaultLength {
-    if (this == none || this == rock) return 0;
+    if (this == none) return 0;
+    if (bodyPartWeapons.contains(this)) return 0;
+    if (this == rock) return 0;
     if (this == dagger) return 1;
-    return 2;
+    if (this == sword) return 2;
+    if (this == spear) return 3;
+    throw UnimplementedError('No length for $this');
   }
 
   int get defaultSlashingDamage {
@@ -85,6 +100,12 @@ class WeaponType extends EnumClass {
       default:
         return 0;
     }
+  }
+
+  int get defaultTearingDamage {
+    if (this == claw) return 1;
+    if (this == teeth) return 1;
+    return 0;
   }
 
   int get defaultThrustingDamage {
@@ -99,10 +120,6 @@ class WeaponType extends EnumClass {
         return 0;
     }
   }
-
-  /// Returns `true` if the weapon is part of the anatomy (as opposed to
-  /// a wield-able weapon like a sword).
-  bool get isBodyPart => this == fist || this == claw;
 
   static WeaponType valueOf(String name) => _$valueOf(name);
 }

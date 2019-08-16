@@ -10,6 +10,7 @@ const BodyPartDesignation _$neck = const BodyPartDesignation._('neck');
 const BodyPartDesignation _$head = const BodyPartDesignation._('head');
 const BodyPartDesignation _$leftLeg = const BodyPartDesignation._('leftLeg');
 const BodyPartDesignation _$rightLeg = const BodyPartDesignation._('rightLeg');
+const BodyPartDesignation _$teeth = const BodyPartDesignation._('teeth');
 const BodyPartDesignation _$leftEye = const BodyPartDesignation._('leftEye');
 const BodyPartDesignation _$rightEye = const BodyPartDesignation._('rightEye');
 const BodyPartDesignation _$primaryArm =
@@ -35,6 +36,8 @@ BodyPartDesignation _$valueOfSpecifiedBodyPart(String name) {
       return _$leftLeg;
     case 'rightLeg':
       return _$rightLeg;
+    case 'teeth':
+      return _$teeth;
     case 'leftEye':
       return _$leftEye;
     case 'rightEye':
@@ -64,6 +67,7 @@ final BuiltSet<BodyPartDesignation> _$specificBodyPartValues =
   _$head,
   _$leftLeg,
   _$rightLeg,
+  _$teeth,
   _$leftEye,
   _$rightEye,
   _$primaryArm,

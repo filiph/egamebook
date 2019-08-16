@@ -18,6 +18,9 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
   Iterable<Object> serialize(Serializers serializers, Anatomy object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
+      'isUndead',
+      serializers.serialize(object.isUndead,
+          specifiedType: const FullType(bool)),
       'torso',
       serializers.serialize(object.torso,
           specifiedType: const FullType(BodyPart)),
@@ -37,6 +40,10 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'isUndead':
+          result.isUndead = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'torso':
           result.torso.replace(serializers.deserialize(value,
               specifiedType: const FullType(BodyPart)) as BodyPart);
@@ -50,6 +57,8 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
 
 class _$Anatomy extends Anatomy {
   @override
+  final bool isUndead;
+  @override
   final BodyPart torso;
   List<BodyPart> __allParts;
   Item __bodyPartWeapon;
@@ -61,7 +70,10 @@ class _$Anatomy extends Anatomy {
   factory _$Anatomy([void Function(AnatomyBuilder) updates]) =>
       (new AnatomyBuilder()..update(updates)).build();
 
-  _$Anatomy._({this.torso}) : super._() {
+  _$Anatomy._({this.isUndead, this.torso}) : super._() {
+    if (isUndead == null) {
+      throw new BuiltValueNullFieldError('Anatomy', 'isUndead');
+    }
     if (torso == null) {
       throw new BuiltValueNullFieldError('Anatomy', 'torso');
     }
@@ -97,23 +109,31 @@ class _$Anatomy extends Anatomy {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Anatomy && torso == other.torso;
+    return other is Anatomy &&
+        isUndead == other.isUndead &&
+        torso == other.torso;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, torso.hashCode));
+    return $jf($jc($jc(0, isUndead.hashCode), torso.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Anatomy')..add('torso', torso))
+    return (newBuiltValueToStringHelper('Anatomy')
+          ..add('isUndead', isUndead)
+          ..add('torso', torso))
         .toString();
   }
 }
 
 class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   _$Anatomy _$v;
+
+  bool _isUndead;
+  bool get isUndead => _$this._isUndead;
+  set isUndead(bool isUndead) => _$this._isUndead = isUndead;
 
   BodyPartBuilder _torso;
   BodyPartBuilder get torso => _$this._torso ??= new BodyPartBuilder();
@@ -123,6 +143,7 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
 
   AnatomyBuilder get _$this {
     if (_$v != null) {
+      _isUndead = _$v.isUndead;
       _torso = _$v.torso?.toBuilder();
       _$v = null;
     }
@@ -146,7 +167,8 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   _$Anatomy build() {
     _$Anatomy _$result;
     try {
-      _$result = _$v ?? new _$Anatomy._(torso: torso.build());
+      _$result =
+          _$v ?? new _$Anatomy._(isUndead: isUndead, torso: torso.build());
     } catch (_) {
       String _$failedField;
       try {

@@ -131,8 +131,8 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
       !a.anatomy.isBlind &&
       a.currentDamageCapability.isSlashing &&
       // Only allow arm attacks when enemy has worse than combat stance
-      // or is barehanded.
-      (enemy.pose < Pose.combat || enemy.isBarehanded) &&
+      // or holds no weapon. This prevents immediately going after the arm.
+      (enemy.pose < Pose.combat || enemy.holdsNoWeapon) &&
       !enemy.anatomy.hasCrippledLegs;
 }
 

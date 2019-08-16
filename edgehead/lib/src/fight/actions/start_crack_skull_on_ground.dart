@@ -34,7 +34,7 @@ EnemyTargetAction startCrackSkullOnGroundBuilder() => StartDefensibleAction(
           (a.currentWeaponOrBodyPart?.damageCapability?.isBlunt ?? false) &&
           !a.anatomy.isBlind &&
           enemy.isOnGround &&
-          enemy.currentWeapon == null,
+          enemy.holdsNoWeapon,
       applyStart: startBreakNeckOnGroundReportStart,
       mainSituationBuilder: createFatalityOnGroundSituation,
       defenseSituationBuilder: createOnGroundWrestleDefenseSituation,

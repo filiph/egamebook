@@ -131,7 +131,7 @@ abstract class InventoryBuilder
   /// appendages.
   WeaponEquipResult equip(Item weapon, Anatomy anatomy) {
     assert(weapon.isWeapon);
-    assert(weapon.damageCapability.type != WeaponType.fist,
+    assert(!WeaponType.bodyPartWeapons.contains(weapon.damageCapability.type),
         "Tried to equip a body part. Use goBarehanded instead.");
     if (!anatomy.anyWeaponAppendageAvailable) {
       // Crippled actor can't equip.

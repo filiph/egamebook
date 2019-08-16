@@ -33,7 +33,7 @@ EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
           a.isBarehanded &&
           !a.anatomy.isBlind &&
           enemy.isOnGround &&
-          enemy.currentWeapon == null,
+          enemy.holdsNoWeapon,
       applyStart: startBreakNeckOnGroundReportStart,
       mainSituationBuilder: createFatalityOnGroundSituation,
       defenseSituationBuilder: createOnGroundWrestleDefenseSituation,

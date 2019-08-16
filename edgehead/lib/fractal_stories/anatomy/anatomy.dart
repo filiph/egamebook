@@ -5,6 +5,7 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
+import 'package:edgehead/fractal_stories/items/teeth.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
 
@@ -17,7 +18,7 @@ part 'anatomy.g.dart';
 abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   static Serializer<Anatomy> get serializer => _$anatomySerializer;
 
-  factory Anatomy({@required BodyPart torso}) = _$Anatomy._;
+  factory Anatomy({@required BodyPart torso, bool isUndead}) = _$Anatomy._;
 
   Anatomy._();
 
@@ -45,6 +46,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
         part.damageCapability.bluntDamage +
         part.damageCapability.slashingDamage +
         part.damageCapability.thrustingDamage +
+        part.damageCapability.tearingDamage +
         part.damageCapability.length;
 
     final candidates = torso
@@ -56,10 +58,19 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
 
     candidates.sort((a, b) => -scoreBodyPart(a).compareTo(scoreBodyPart(b)));
 
-    assert(
-        isHumanoid,
-        "Assumes the damage dealing body part is a fist. "
-        "Should be easy to extend to claws etc.");
+    if (candidates.first.designation == BodyPartDesignation.teeth) {
+      if (isHumanoid) {
+        if (isUndead) {
+          // Humanoids who are undead are not afraid to use their teeth.
+          return createTeeth(candidates.first);
+        }
+      } else {
+        // Solve for non-humanoid teethed creatures.
+        throw UnimplementedError('Non-humanoid teeth not implemented yet');
+      }
+    }
+
+    assert(isHumanoid, "Assumes the damage dealing body part is a fist.");
     return createFist(candidates.first);
   }
 
@@ -92,6 +103,12 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// Humanoid creatures can still have extra appendages (like a tail)
   /// or missing ones (like an amputated leg) but the main idea is there.
   bool get isHumanoid => true;
+
+  /// When `true`, this actor is undead.
+  ///
+  /// This field is separate from [Actor.isAnimated]. An actor can be [isUndead]
+  /// but killed ([isAnimated] == `false`).
+  bool get isUndead;
 
   /// The appendage that is used as the main weapon-wielding one. Returns
   /// `null` when there is no such body part (i.e. it was severed).

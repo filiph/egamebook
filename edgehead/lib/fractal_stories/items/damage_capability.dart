@@ -22,6 +22,7 @@ abstract class DamageCapability
       {int bluntDamage,
       int slashingDamage,
       int thrustingDamage,
+      int tearingDamage,
       int length,
       bool isNone = false}) {
     assert(type != null);
@@ -30,13 +31,15 @@ abstract class DamageCapability
         !isNone ||
             (bluntDamage == null &&
                 slashingDamage == null &&
-                thrustingDamage == null),
+                thrustingDamage == null &&
+                tearingDamage == null),
         "Do not provide values to DamageCapability.isNone.");
     return _$DamageCapability((b) => b
       ..type = type
       ..bluntDamage = bluntDamage ?? type.defaultBluntDamage
       ..slashingDamage = slashingDamage ?? type.defaultSlashingDamage
       ..thrustingDamage = thrustingDamage ?? type.defaultThrustingDamage
+      ..tearingDamage = tearingDamage ?? type.defaultTearingDamage
       ..length = length ?? type.defaultLength
       ..isNone = isNone);
   }
@@ -55,11 +58,18 @@ abstract class DamageCapability
 
   bool get isThrusting => thrustingDamage > 0;
 
+  /// Tearing damage is something done by teeth or claws. It's different
+  /// from slashing damage because it _chomps_ on its target. It tears
+  /// skin and muscle.
+  bool get isTearing => tearingDamage > 0;
+
   int get length;
 
   int get slashingDamage;
 
   int get thrustingDamage;
+
+  int get tearingDamage;
 
   WeaponType get type;
 }

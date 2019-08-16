@@ -109,7 +109,7 @@ void killHumanoid(ActionContext context, int actorId) {
   w.recordCustom(CustomEvent.actorDeath, actor: actor);
 
   w.replaceSituationById(fight.id, fight.rebuild((b) {
-    if (actor.currentWeapon != null) {
+    if (actor.holdsSomeWeapon) {
       // Drop weapon.
       b.droppedItems.add(actor.currentWeapon);
     }
@@ -120,7 +120,7 @@ void killHumanoid(ActionContext context, int actorId) {
     return b;
   }));
   w.updateActorById(actor.id, (a) {
-    if (actor.currentWeapon != null) {
+    if (actor.holdsSomeWeapon) {
       a.inventory.remove(actor.currentWeapon);
     }
     if (actor.currentShield != null) {

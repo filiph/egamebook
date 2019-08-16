@@ -108,7 +108,7 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
   if (enemy.isOnGround) return false;
   if (a.anatomy.isBlind) return false;
   if (!a.currentDamageCapability.isSlashing) return false;
-  if (!enemy.isBarehanded) {
+  if (enemy.holdsSomeWeapon) {
     // When armed, only allow torso slashes when enemy is (at least) extended.
     if (designation == BodyPartDesignation.torso &&
         enemy.pose > Pose.extended) {

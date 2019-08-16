@@ -33,6 +33,9 @@ class _$DamageCapabilitySerializer
       'thrustingDamage',
       serializers.serialize(object.thrustingDamage,
           specifiedType: const FullType(int)),
+      'tearingDamage',
+      serializers.serialize(object.tearingDamage,
+          specifiedType: const FullType(int)),
       'type',
       serializers.serialize(object.type,
           specifiedType: const FullType(WeaponType)),
@@ -73,6 +76,10 @@ class _$DamageCapabilitySerializer
           result.thrustingDamage = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'tearingDamage':
+          result.tearingDamage = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'type':
           result.type = serializers.deserialize(value,
               specifiedType: const FullType(WeaponType)) as WeaponType;
@@ -96,6 +103,8 @@ class _$DamageCapability extends DamageCapability {
   @override
   final int thrustingDamage;
   @override
+  final int tearingDamage;
+  @override
   final WeaponType type;
 
   factory _$DamageCapability(
@@ -108,6 +117,7 @@ class _$DamageCapability extends DamageCapability {
       this.length,
       this.slashingDamage,
       this.thrustingDamage,
+      this.tearingDamage,
       this.type})
       : super._() {
     if (bluntDamage == null) {
@@ -124,6 +134,9 @@ class _$DamageCapability extends DamageCapability {
     }
     if (thrustingDamage == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'thrustingDamage');
+    }
+    if (tearingDamage == null) {
+      throw new BuiltValueNullFieldError('DamageCapability', 'tearingDamage');
     }
     if (type == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'type');
@@ -147,6 +160,7 @@ class _$DamageCapability extends DamageCapability {
         length == other.length &&
         slashingDamage == other.slashingDamage &&
         thrustingDamage == other.thrustingDamage &&
+        tearingDamage == other.tearingDamage &&
         type == other.type;
   }
 
@@ -155,10 +169,12 @@ class _$DamageCapability extends DamageCapability {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, bluntDamage.hashCode), isNone.hashCode),
-                    length.hashCode),
-                slashingDamage.hashCode),
-            thrustingDamage.hashCode),
+                $jc(
+                    $jc($jc($jc(0, bluntDamage.hashCode), isNone.hashCode),
+                        length.hashCode),
+                    slashingDamage.hashCode),
+                thrustingDamage.hashCode),
+            tearingDamage.hashCode),
         type.hashCode));
   }
 
@@ -170,6 +186,7 @@ class _$DamageCapability extends DamageCapability {
           ..add('length', length)
           ..add('slashingDamage', slashingDamage)
           ..add('thrustingDamage', thrustingDamage)
+          ..add('tearingDamage', tearingDamage)
           ..add('type', type))
         .toString();
   }
@@ -201,6 +218,10 @@ class DamageCapabilityBuilder
   set thrustingDamage(int thrustingDamage) =>
       _$this._thrustingDamage = thrustingDamage;
 
+  int _tearingDamage;
+  int get tearingDamage => _$this._tearingDamage;
+  set tearingDamage(int tearingDamage) => _$this._tearingDamage = tearingDamage;
+
   WeaponType _type;
   WeaponType get type => _$this._type;
   set type(WeaponType type) => _$this._type = type;
@@ -214,6 +235,7 @@ class DamageCapabilityBuilder
       _length = _$v.length;
       _slashingDamage = _$v.slashingDamage;
       _thrustingDamage = _$v.thrustingDamage;
+      _tearingDamage = _$v.tearingDamage;
       _type = _$v.type;
       _$v = null;
     }
@@ -242,6 +264,7 @@ class DamageCapabilityBuilder
             length: length,
             slashingDamage: slashingDamage,
             thrustingDamage: thrustingDamage,
+            tearingDamage: tearingDamage,
             type: type);
     replace(_$result);
     return _$result;

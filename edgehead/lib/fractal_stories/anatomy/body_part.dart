@@ -138,7 +138,12 @@ abstract class BodyPart extends Object
   bool get nameIsProperNoun => false;
 
   @override
-  Pronoun get pronoun => Pronoun.IT;
+  Pronoun get pronoun {
+    // Special case for teeth. If we have more plurals in body parts,
+    // we might want to save the actual pronoun with each body part.
+    if (designation == BodyPartDesignation.teeth) return Pronoun.THEY;
+    return Pronoun.IT;
+  }
 
   /// A designation that can be used in storyline to refer to this part, e.g.
   /// `"{abdomen|chest|belly}"` for torso.
@@ -226,6 +231,9 @@ class BodyPartDesignation extends EnumClass {
   /// Right leg of a humanoid (two-legged) creature.
   static const BodyPartDesignation rightLeg = _$rightLeg;
 
+  /// The teeth of a creature.
+  static const BodyPartDesignation teeth = _$teeth;
+
   /// Left eye of a humanoid (two-eyed) creature.
   static const BodyPartDesignation leftEye = _$leftEye;
 
@@ -273,10 +281,10 @@ class BodyPartDesignation extends EnumClass {
   /// counts.
   bool get isArm => this == primaryArm || this == secondaryArm;
 
+  bool get isHand => this == primaryHand || this == secondaryHand;
+
   /// Assumes humanoid anatomy (2 eyes).
   bool get isHumanoidEye => this == leftEye || this == rightEye;
-
-  bool get isHand => this == primaryHand || this == secondaryHand;
 
   /// This is `true` for any part of a limb.
   ///
@@ -303,6 +311,8 @@ class BodyPartDesignation extends EnumClass {
         return "main hand";
       case secondaryHand:
         return "off hand";
+      case teeth:
+        return "teeth";
       case leftEye:
         return "left eye";
       case rightEye:

@@ -7,7 +7,7 @@ import 'package:edgehead/stateful_random/stateful_random.dart';
 /// Builds a standard humanoid body (two legs, two arms, etc.).
 /// Provide a unique seed (probably the actor's ID) so we can create
 /// random ids for each body part.
-Anatomy buildHumanoid(int seed, {int constitution = 1}) {
+Anatomy buildHumanoid(int seed, {int constitution = 1, bool isUndead}) {
   assert(constitution >= 1, "Cannot have creature with constitution below 1");
 
   final random = StatefulRandom(seed);
@@ -30,7 +30,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       thrustSurface: 5,
       isSeverable: true);
 
-  final primaryHand = BodyPart(random.next(), "wielding hand",
+  final primaryHand = BodyPart(random.next(), "right hand",
       designation: BodyPartDesignation.primaryHand,
       function: BodyPartFunction.wielding,
       damageCapability: DamageCapability(WeaponType.fist).toBuilder(),
@@ -39,7 +39,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       thrustSurface: 1,
       isSeverable: true);
 
-  final primaryArm = BodyPart(random.next(), "wielding arm",
+  final primaryArm = BodyPart(random.next(), "right arm",
       randomDesignation: "{right arm|right shoulder}",
       designation: BodyPartDesignation.primaryArm,
       isSeverable: true,
@@ -48,7 +48,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       thrustSurface: 5,
       children: [primaryHand]);
 
-  final secondaryHand = BodyPart(random.next(), "wielding hand",
+  final secondaryHand = BodyPart(random.next(), "left hand",
       designation: BodyPartDesignation.secondaryHand,
       function: BodyPartFunction.wielding,
       damageCapability: DamageCapability(WeaponType.fist).toBuilder(),
@@ -57,7 +57,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       thrustSurface: 1,
       isSeverable: true);
 
-  final secondaryArm = BodyPart(random.next(), "shield arm",
+  final secondaryArm = BodyPart(random.next(), "left arm",
       randomDesignation: "{left arm|left shoulder}",
       designation: BodyPartDesignation.secondaryArm,
       isSeverable: true,
@@ -84,6 +84,14 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
     thrustSurface: 1,
   );
 
+  final teeth = BodyPart(
+    random.next(),
+    "teeth",
+    designation: BodyPartDesignation.teeth,
+    function: BodyPartFunction.damageDealing,
+    damageCapability: DamageCapability(WeaponType.teeth).toBuilder(),
+  );
+
   final head = BodyPart(random.next(), "head",
       randomDesignation: "{forehead|face|cheek|chin|nose}",
       designation: BodyPartDesignation.head,
@@ -91,7 +99,7 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       swingSurfaceLeft: 2,
       swingSurfaceRight: 2,
       thrustSurface: 2,
-      children: [leftEye, rightEye]);
+      children: [leftEye, rightEye, teeth]);
 
   final neck = BodyPart(random.next(), "neck",
       randomDesignation: "{throat|neck}",
@@ -113,5 +121,5 @@ Anatomy buildHumanoid(int seed, {int constitution = 1}) {
       thrustSurface: 8,
       children: [neck, primaryArm, secondaryArm, leftLeg, rightLeg]);
 
-  return Anatomy(torso: torso);
+  return Anatomy(torso: torso, isUndead: isUndead);
 }

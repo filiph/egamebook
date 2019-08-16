@@ -91,15 +91,14 @@ abstract class Item extends Object
     if (nameIsProperNoun) score += 1;
     if (isShield) score += 1;
     if (damageCapability != null) {
+      assert(!WeaponType.bodyPartWeapons.contains(damageCapability.type),
+          "Getting value of a body part weapon: ${damageCapability.type}.");
       score += 1;
-      if (!damageCapability.type.isBodyPart) {
-        // Actual hold-able weapon.
-        score += 1;
-      }
       score += damageCapability.length;
       score += damageCapability.slashingDamage;
       score += damageCapability.thrustingDamage;
       score += damageCapability.bluntDamage;
+      score += damageCapability.tearingDamage;
     }
     return score;
   }

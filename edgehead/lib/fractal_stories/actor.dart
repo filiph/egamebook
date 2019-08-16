@@ -68,8 +68,8 @@ abstract class Actor extends Object
     bool isUndead = false,
     String foldFunctionHandle = "normal",
   }) {
-    Anatomy currentAnatomy =
-        anatomy ?? buildHumanoid(id, constitution: constitution);
+    Anatomy currentAnatomy = anatomy ??
+        buildHumanoid(id, constitution: constitution, isUndead: isUndead);
     Item weapon = currentWeapon;
 
     return _$Actor((b) => b
@@ -96,7 +96,6 @@ abstract class Actor extends Object
       ..currentRoomName = currentRoomName
       ..followingActorId = followingActorId
       ..isConfused = isConfused
-      ..isUndead = isUndead
       ..foldFunctionHandle = foldFunctionHandle
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
       ..pose = poseMax
@@ -201,16 +200,38 @@ abstract class Actor extends Object
   ///
   /// This field is separate from [isAnimated]. An actor can be [isUndead]
   /// but killed ([isAnimated] == `false`).
-  bool get isUndead;
+  ///
+  /// Forwards to [Anatomy.isUndead].
+  bool get isUndead => anatomy.isUndead;
+
+  /// This is `true` if the actor doesn't hold any weapon.
+  ///
+  /// This doesn't mean the actor is defenseless (they can have claws
+  /// or teeth).
+  ///
+  /// It's the opposite of [holdsSomeWeapon].
+  bool get holdsNoWeapon => currentWeapon == null;
+
+  /// This is `true` if the actor is holding a weapon.
+  ///
+  /// It's the opposite of [holdsNoWeapon].
+  bool get holdsSomeWeapon => !holdsNoWeapon;
 
   /// This is `true` if the actor is barehanded. This means that the actor
   /// _is_ ready to fight, but only with their bare hands.
   ///
   /// This is `false` if the actor holds a weapon, or has all her fists
-  /// crippled. It is also `false` for creatures without fists.
-  bool get isBarehanded =>
-      currentWeapon == null &&
-      anatomy.bodyPartWeapon?.damageCapability?.type == WeaponType.fist;
+  /// crippled.
+  ///
+  /// Throws for creatures without fists.
+  bool get isBarehanded {
+    if (!anatomy.isHumanoid) {
+      throw StateError("Calling isBarehanded for a non-humanoid creature "
+          "doesn't make sense.");
+    }
+    return currentWeapon == null &&
+        anatomy.bodyPartWeapon?.damageCapability?.type == WeaponType.fist;
+  }
 
   bool get isConfused;
 
