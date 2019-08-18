@@ -4,5 +4,9 @@ import 'package:edgehead/stateful_random/stateful_random.dart';
 
 /// Creates an instance of [Item] that represents a fist as a weapon.
 /// Disarmed actors will receive this.
-Item createFist(BodyPart part) => Item(StatefulRandom(part.id << 2).next(),
-    name: "fist", damageCapability: part.damageCapability.toBuilder());
+Item createFist(BodyPart part) {
+  assert(part.designation == BodyPartDesignation.primaryHand ||
+      part.designation == BodyPartDesignation.secondaryHand);
+  return Item(StatefulRandom(part.id << 2).next(),
+      name: "fist", damageCapability: part.damageCapability.toBuilder());
+}

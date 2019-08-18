@@ -52,7 +52,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
     final candidates = torso
         .getDescendantParts()
         .where((p) => p.isAnimatedAndActive && p.damageCapability != null)
-        .toList(growable: false);
+        .toList();
 
     if (candidates.isEmpty) return null;
 
@@ -64,6 +64,10 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
           // Humanoids who are undead are not afraid to use their teeth.
           return createTeeth(candidates.first);
         }
+        // Other humanoids don't use teeth.
+        candidates.removeWhere(
+            (part) => part.designation == BodyPartDesignation.teeth);
+        if (candidates.isEmpty) return null;
       } else {
         // Solve for non-humanoid teethed creatures.
         throw UnimplementedError('Non-humanoid teeth not implemented yet');

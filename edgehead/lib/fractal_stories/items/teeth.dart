@@ -3,5 +3,8 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 
 /// Creates an instance of [Item] that represents teeth as a weapon.
-Item createTeeth(BodyPart part) => Item(StatefulRandom(part.id << 2).next(),
+Item createTeeth(BodyPart part) {
+  assert(part.designation == BodyPartDesignation.teeth);
+  return Item(StatefulRandom(part.id << 2).next(),
     name: "teeth", damageCapability: part.damageCapability.toBuilder());
+}
