@@ -16,6 +16,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/turn_undead.dart';
 import 'package:meta/meta.dart';
 
 part 'actor.g.dart';
@@ -419,6 +420,17 @@ abstract class Actor extends Object
     if (deathRecency != null && deathRecency <= recency) {
       // Actor died between the last attack by [other] and now. They don't
       // remember.
+      return false;
+    }
+
+    int turnUndeadRecency = w.timeSinceLastActionRecord(
+        actionName: TurnUndead.className,
+        protagonist: this,
+        sufferer: other,
+        wasSuccess: true);
+    if (turnUndeadRecency != null && turnUndeadRecency <= recency) {
+      // This actor turned the other actor undead since the last time they hurt
+      // this actor. The necromancer shouldn't be mad at her minions.
       return false;
     }
 
