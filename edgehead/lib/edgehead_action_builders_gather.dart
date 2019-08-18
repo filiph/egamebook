@@ -1,6 +1,11 @@
 library edgehead.action_builders;
 
 import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/src/fight/bite/actions/finish_bite.dart';
+import 'package:edgehead/src/fight/bite/bite_defense/actions/dodge_bite.dart';
+import 'package:edgehead/src/fight/bite/bite_defense/actions/impale_biter.dart';
+import 'package:edgehead/src/fight/bite/bite_defense/actions/jump_back_from_bite.dart';
+import 'package:edgehead/src/fight/bite/bite_defense/actions/shield_block_bite.dart';
 import 'package:edgehead/src/fight/clash/actions/finish_clash.dart';
 import 'package:edgehead/src/fight/clash/clash_defense/actions/counter_clash.dart';
 import 'package:edgehead/src/fight/clash/clash_defense/actions/withstand_clash.dart';

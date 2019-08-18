@@ -89,6 +89,16 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrust.singleton': DodgeThrust.singleton,
   // From lib/src/fight/thrust/actions/finish_thrust.dart:
   'FinishThrust.singleton': FinishThrust.singleton,
+  // From lib/src/fight/bite/actions/finish_bite.dart:
+  'FinishBite.singleton': FinishBite.singleton,
+  // From lib/src/fight/bite/bite_defense/actions/dodge_bite.dart:
+  'DodgeBite.singleton': DodgeBite.singleton,
+  // From lib/src/fight/bite/bite_defense/actions/shield_block_bite.dart:
+  'ShieldBlockBite.singleton': ShieldBlockBite.singleton,
+  // From lib/src/fight/bite/bite_defense/actions/jump_back_from_bite.dart:
+  'JumpBackFromBite.singleton': JumpBackFromBite.singleton,
+  // From lib/src/fight/bite/bite_defense/actions/impale_biter.dart:
+  'ImpaleBiter.singleton': ImpaleBiter.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

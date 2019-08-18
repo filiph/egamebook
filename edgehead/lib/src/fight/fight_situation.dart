@@ -15,6 +15,7 @@ import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/assume_stance.dart';
+import 'package:edgehead/src/fight/actions/start_bite.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
@@ -96,6 +97,12 @@ abstract class FightSituation extends Object
         FeintJab.singleton,
         FeintSlash.singleton,
         SweepFeet.singleton,
+        startBiteAtBodyPartGenerator(BodyPartDesignation.leftLeg),
+        startBiteAtBodyPartGenerator(BodyPartDesignation.rightLeg),
+        startBiteAtBodyPartGenerator(BodyPartDesignation.primaryArm),
+        startBiteAtBodyPartGenerator(BodyPartDesignation.secondaryArm),
+        startBiteAtBodyPartGenerator(BodyPartDesignation.neck),
+        startBiteAtBodyPartGenerator(BodyPartDesignation.torso),
         startBreakNeckOnGroundBuilder(),
         startCrackSkullOnGroundBuilder(),
         startLeapBuilder(),
