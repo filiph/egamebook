@@ -1,8 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
-import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -64,8 +62,9 @@ class FinishThrust extends OtherActorAction {
     assert(situation.attackDirection != AttackDirection.fromLeft ||
         situation.attackDirection != AttackDirection.fromRight);
 
-    final result = _executeAtDesignation(
-        a, enemy, situation.attackDirection.toBodyPartDesignation());
+    assert(a.currentWeaponOrBodyPart != null);
+    final result = executeThrustingHit(enemy, a.currentWeaponOrBodyPart,
+        situation.attackDirection.toBodyPartDesignation());
 
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
     final thread = getThreadId(sim, w, thrustSituationName);
@@ -121,11 +120,4 @@ class FinishThrust extends OtherActorAction {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
       a.currentDamageCapability.isThrusting;
-
-  WeaponAssaultResult _executeAtDesignation(
-      Actor attacker, Actor enemy, BodyPartDesignation designation) {
-    assert(attacker.currentWeaponOrBodyPart != null);
-    return executeThrustingHit(
-        enemy, attacker.currentWeaponOrBodyPart, designation);
-  }
 }

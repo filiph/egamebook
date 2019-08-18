@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
+import 'package:edgehead/src/fight/leap/leap_situation.dart';
 
 class ImpaleLeaper extends EnemyTargetAction {
   static final ImpaleLeaper singleton = ImpaleLeaper();
@@ -47,7 +48,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, "LeapSituation");
+    final thread = getThreadId(sim, w, leapSituationName);
     a.report(
         s,
         "<subject> tr<ies> to {move|swing|shift} "
@@ -78,7 +79,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, "LeapSituation");
+    final thread = getThreadId(sim, w, leapSituationName);
     a.report(
         s,
         "<subject> {move<s>|swing<s>|shift<s>} "
