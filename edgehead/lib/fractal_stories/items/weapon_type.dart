@@ -78,15 +78,18 @@ class WeaponType extends EnumClass {
 
   /// The length of the weapon.
   ///
-  /// Right now, there are only three lengths:
+  /// When you have a weapon that is longer than your opponents, that should
+  /// make your attacks a little easier. You can keep the opponent at distance.
+  /// On the other hand, a long weapon is harder to be brought to bear
+  /// in close combat.
   ///
-  /// * `0` for being bare handed
-  /// * `1` for a dagger
-  /// * `2` for everything else
+  /// Note that even [shield] has a "length". This just means it's in front
+  /// of you.
   int get defaultLength {
     if (this == none) return 0;
     if (bodyPartWeapons.contains(this)) return 0;
     if (this == rock) return 0;
+    if (this == shield) return 1;
     if (this == dagger) return 1;
     if (this == sword) return 2;
     if (this == spear) return 3;
