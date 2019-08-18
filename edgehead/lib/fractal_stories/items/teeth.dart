@@ -6,5 +6,5 @@ import 'package:edgehead/stateful_random/stateful_random.dart';
 Item createTeeth(BodyPart part) {
   assert(part.designation == BodyPartDesignation.teeth);
   return Item(StatefulRandom(part.id << 2).next(),
-    name: "teeth", damageCapability: part.damageCapability.toBuilder());
+      name: "teeth", damageCapability: part.damageCapability.toBuilder());
 }
