@@ -330,7 +330,7 @@ abstract class Action<T> {
       ..wasFailure = isFailure
       ..wasAggressive = isAggressive
       ..wasProactive = isProactive;
-    if (this is EnemyTargetAction) {
+    if (this is OtherActorActionBase) {
       builder.sufferers.add((object as Actor).id);
     }
     return builder;

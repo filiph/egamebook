@@ -124,7 +124,7 @@ abstract class Actor extends Object
   ///
   /// When the actor can deal no damage at all, [DamageCapability.none]
   /// is returned. This getter never returns `null` (as opposed
-  /// to [currentWeaponOrBodyPart].
+  /// to [currentWeaponOrBodyPart]).
   DamageCapability get currentDamageCapability {
     final weapon = currentWeaponOrBodyPart;
     if (weapon == null) return DamageCapability.none;
