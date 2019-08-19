@@ -19,6 +19,7 @@ class InstanceSerializerGenerator extends Generator {
   Future<String> generate(
       LibraryReader gatherLibrary, BuildStep buildStep) async {
     final result = StringBuffer();
+    final typeSystem = gatherLibrary.element.context.typeSystem;
 
     log.fine("InstanceSerializer for: $gatherLibrary");
 
@@ -94,7 +95,8 @@ class InstanceSerializerGenerator extends Generator {
             log.finest('- looking at top level element '
                 '${topLevelElement.name} in $id');
             if (topLevelElement is TopLevelVariableElement) {
-              if (!topLevelElement.type.isAssignableTo(instanceType)) {
+              if (!typeSystem.isAssignableTo(
+                  instanceType, topLevelElement.type)) {
                 log.fine(
                     '$topLevelElement not assignable to $instanceTypeName');
                 continue;
@@ -109,8 +111,9 @@ class InstanceSerializerGenerator extends Generator {
             if (topLevelElement is! ClassElement) continue;
 
             final classEl = topLevelElement as ClassElement;
-            final elements = classEl.fields.where(
-                (el) => el.isStatic && el.type.isAssignableTo(instanceType));
+            final elements = classEl.fields.where((el) =>
+                el.isStatic &&
+                typeSystem.isAssignableTo(instanceType, el.type));
             for (final element in elements) {
               _writeElement(id, result, element, gatherLibrary,
                   '${classEl.name}.${element.name}');
