@@ -51,7 +51,11 @@ class TakeDroppedShield extends ItemAction {
         situation.rebuild(
             (FightSituationBuilder b) => b..droppedItems.remove(item)));
     w.updateActorById(a.id, (b) => b..inventory.equipShield(item, a.anatomy));
-    a.report(s, "<subject> pick<s> <object> up", object: item);
+    if (a.isOnGround) {
+      a.report(s, "<subject> grab<s> <object>", object: item);
+    } else {
+      a.report(s, "<subject> pick<s> <object> up", object: item);
+    }
     return "${a.name} picks up ${item.name}";
   }
 

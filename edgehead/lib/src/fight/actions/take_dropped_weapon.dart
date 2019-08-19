@@ -61,7 +61,11 @@ class TakeDroppedWeapon extends ItemAction {
     assert(a.anatomy.anyWeaponAppendageAvailable);
     bool intoPrimaryHand = a.anatomy.primaryWeaponAppendageAvailable;
     var offHandString = intoPrimaryHand ? "" : " with <subject's> off hand";
-    a.report(s, "<subject> pick<s> <object> up$offHandString", object: item);
+    if (a.isOnGround) {
+      a.report(s, "<subject> grab<s> <object>$offHandString", object: item);
+    } else {
+      a.report(s, "<subject> pick<s> <object> up$offHandString", object: item);
+    }
     if (previousWeapon == null) {
       a.report(s, "<subject> wield<s> <object>", object: item);
     } else {
