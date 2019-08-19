@@ -75,18 +75,22 @@ EnemyTargetAction startBiteAtBodyPartGenerator(
 /// [designation].
 PartialApplyFunction startBiteReportStart(BodyPartDesignation designation) =>
     (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, Actor enemy,
-            Situation mainSituation) =>
-        a.report(
-            s,
-            "<subject> {lunge<s>|spring<s>|launch<es> <subjectPronounSelf>} "
-            "at <objectOwner's> <object>, "
-            "{teeth bared|jaws open|"
-            "ready to {bite|gnaw|sink <subject's> teeth into <object>}}",
-            endSentence: true,
-            object: enemy.anatomy.findByDesignation(designation),
-            objectOwner: enemy,
-            actionThread: mainSituation.id,
-            startsThread: true);
+        Situation mainSituation) {
+      final goesDown = enemy.isOnGround && !a.isOnGround;
+      w.updateActorById(a.id, (b) => b.pose == Pose.onGround);
+      final down = goesDown ? 'down ' : ' ';
+      a.report(
+          s,
+          "<subject> {lunge<s>|spring<s>|launch<es> <subjectPronounSelf>} "
+          "${down}at <objectOwner's> <object>, "
+          "{teeth bared|jaws open|"
+          "ready to {bite|gnaw|sink <subject's> teeth into <object>}}",
+          endSentence: true,
+          object: enemy.anatomy.findByDesignation(designation),
+          objectOwner: enemy,
+          actionThread: mainSituation.id,
+          startsThread: true);
+    };
 
 bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     BodyPartDesignation designation) {
