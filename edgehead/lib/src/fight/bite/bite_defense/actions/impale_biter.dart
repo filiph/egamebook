@@ -205,7 +205,6 @@ class ImpaleBiter extends OtherActorAction {
           actionThread: thread,
           replacesThread: true);
 
-      result.touchedPart.report(s, "<subject> go<es> down", negative: true);
       killHumanoid(context, enemy.id);
     }
 
