@@ -93,6 +93,8 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
   if (a.anatomy.isBlind) return false;
   if (!a.currentDamageCapability.isTearing) return false;
   if (a.isOnGround && !designation.isLeg) return false;
+  // Do not let upright humanoids gnaw at leg.
+  if (designation.isLeg && a.anatomy.isHumanoid && !a.isOnGround) return false;
   if (enemy.holdsSomeWeapon) {
     // When armed, only allow torso bites when enemy is (at least) extended.
     if (designation == BodyPartDesignation.torso &&
