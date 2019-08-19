@@ -109,7 +109,7 @@ class ShieldBlockBite extends OtherActorAction {
     }
     w.popSituationsUntil("FightSituation", sim);
 
-    // TODO: the folllowing is never true:
+    // TODO: the following is never true:
     // https://trello.com/c/1iw1yXZj/909-bug-situation-is-counterattacksituation
     if (context.world.situations
         .any((situation) => situation is CounterAttackSituation)) {

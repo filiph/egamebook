@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/bite/bite_situation.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
@@ -61,18 +62,20 @@ class DodgeBite extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
+    final thread = getThreadId(sim, w, biteSituationName);
 
     final dodgeDescription =
         a.isOnGround ? '{dodge|roll out of the way}' : '{dodge|sidestep}';
-    a.report(s, "<subject> tr<ies> to $dodgeDescription");
+    a.report(s, "<subject> tr<ies> to $dodgeDescription", actionThread: thread);
     if (a.pose == Pose.offBalance) {
-      a.report(s, "<subject> <is> out of balance", but: true);
+      a.report(s, "<subject> <is> out of balance",
+          but: true, actionThread: thread);
     } else {
       Randomly.run(
           () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
-              but: true),
+              but: true, actionThread: thread),
           () => enemy.report(s, "<subject> <is> too quick for <object>",
-              object: a, but: true));
+              object: a, but: true, actionThread: thread));
     }
     w.popSituation(sim);
     return "${a.name} fails to dodge ${enemy.name}";
@@ -84,15 +87,15 @@ class DodgeBite extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
+    final thread = getThreadId(sim, w, biteSituationName);
+
     final dodgeDescription = a.isOnGround
         ? '{dodge<s>|roll<s> out of the way}'
         : '{dodge<s>|sidestep<s>}';
-    a.report(
-      s,
-      "<subject> $dodgeDescription <objectPronoun>",
-      object: MoveEntity.getFromAttackerSituation(context.world),
-      positive: true,
-    );
+    a.report(s, "<subject> $dodgeDescription <objectPronoun>",
+        object: MoveEntity.getFromAttackerSituation(context.world),
+        positive: true,
+        actionThread: thread);
 
     assert(enemy.anatomy.isHumanoid,
         "Not prepared for non-humanoids. They should fall to ground.");
@@ -103,7 +106,8 @@ class DodgeBite extends OtherActorAction {
           "<subject> {stagger<s>|stumble<s>|lurch<es>|sway<s>} "
           "next to <object>",
           object: a,
-          negative: true);
+          negative: true,
+          actionThread: thread);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
     }
     w.popSituationsUntil("FightSituation", sim);
