@@ -112,14 +112,6 @@ class DodgeBite extends OtherActorAction {
     }
     w.popSituationsUntil("FightSituation", sim);
 
-    if (context.world.situations
-        .any((situation) => situation is CounterAttackSituation)) {
-      // TODO: this can never happen because we're popping until FightSituation
-      //       above.
-      return "${a.name} dodges ${enemy.name} (and doesn't get to create "
-          "a counter attack because we're already inside one)";
-    }
-
     if (a.isOnGround) {
       // No counter attack from ground.
       return "${a.name} dodges ${enemy.name} on ground";

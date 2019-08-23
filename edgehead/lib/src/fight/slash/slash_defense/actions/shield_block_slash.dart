@@ -108,12 +108,6 @@ class ShieldBlockSlash extends OtherActorAction {
     }
     w.popSituationsUntil("FightSituation", sim);
 
-    if (context.world.situations
-        .any((situation) => situation is CounterAttackSituation)) {
-      return "${a.name} dodges ${enemy.name} (and doesn't get to create "
-          "a counter attack because we're already inside one)";
-    }
-
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }

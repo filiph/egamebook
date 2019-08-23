@@ -109,14 +109,6 @@ class ShieldBlockBite extends OtherActorAction {
     }
     w.popSituationsUntil("FightSituation", sim);
 
-    // TODO: the following is never true:
-    // https://trello.com/c/1iw1yXZj/909-bug-situation-is-counterattacksituation
-    if (context.world.situations
-        .any((situation) => situation is CounterAttackSituation)) {
-      return "${a.name} dodges ${enemy.name} (and doesn't get to create "
-          "a counter attack because we're already inside one)";
-    }
-
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }
