@@ -11,6 +11,7 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/npc/npc_capability.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -24,8 +25,8 @@ part 'actor.g.dart';
 Iterable<Actor> getPartyOf(
     Actor actor, Simulation sim, WorldState world) sync* {
   yield actor;
-  yield* world.actors
-      .where((other) => other.followingActorId == actor.id && other.isAnimated);
+  yield* world.actors.where(
+      (other) => other.npc.followingActorId == actor.id && other.isAnimated);
 }
 
 @immutable
@@ -62,6 +63,7 @@ abstract class Actor extends Object
     Anatomy anatomy,
     int gold = 0,
     String currentRoomName,
+    bool isHireable = false,
     int followingActorId,
     Team team,
     Pose poseMax = Pose.standing,
@@ -83,8 +85,13 @@ abstract class Actor extends Object
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
       ..inventory = (InventoryBuilder()
         ..currentWeapon = weapon
-        ..weapons.addAll(currentWeapon != null ? [currentWeapon] : const [])
+        ..weapons.addAll([
+          if (currentWeapon != null) currentWeapon,
+        ])
         ..currentShield = currentShield
+        ..shields.addAll([
+          if (currentShield != null) currentShield,
+        ])
         ..weaponInPrimaryAppendage = true)
       ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
       ..maxHitpoints = maxHitpoints ?? constitution ?? 1
@@ -95,7 +102,10 @@ abstract class Actor extends Object
       ..anatomy = currentAnatomy.toBuilder()
       ..gold = gold
       ..currentRoomName = currentRoomName
-      ..followingActorId = followingActorId
+      ..npc = NpcCapability(
+        isHireable: isHireable,
+        followingActorId: followingActorId,
+      ).toBuilder()
       ..isConfused = isConfused
       ..foldFunctionHandle = foldFunctionHandle
       ..team = team != null ? team.toBuilder() : playerTeam.toBuilder()
@@ -160,10 +170,6 @@ abstract class Actor extends Object
 
   /// The string handle to the fold function that this actor should use.
   String get foldFunctionHandle;
-
-  /// The actor that [this] actor is following around.
-  @nullable
-  int get followingActorId;
 
   int get gold;
 
@@ -284,6 +290,10 @@ abstract class Actor extends Object
 
   @override
   bool get nameIsProperNoun;
+
+  /// The component that includes data related to NPC systems, like
+  /// hiring and NPC, talking to them, and so on.
+  NpcCapability get npc;
 
   Pose get pose;
 

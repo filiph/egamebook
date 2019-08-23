@@ -52,12 +52,6 @@ class EdgeheadGame extends Book {
   /// The player character.
   Actor aren;
 
-  /// Player's companion in Insignificant Little Vermin.
-  Actor briana;
-
-  /// Player's personal guard in Knights of San Francisco.
-  Actor tamara;
-
   final PubSub _pubsub = PubSub();
   Situation initialSituation;
   WorldState world;
@@ -217,9 +211,6 @@ class EdgeheadGame extends Book {
     hitpoints.value = aren.hitpoints / aren.maxHitpoints;
     stamina.value = aren.stamina;
 
-    briana = edgeheadBriana;
-    tamara = edgeheadTamara;
-
     initialSituation = edgeheadInitialSituation;
 
     final startingTime = DateTime.utc(1294, 5, 9, 10, 0);
@@ -242,7 +233,8 @@ class EdgeheadGame extends Book {
     } else {
       // Creating a new game from start.
       world = WorldState((b) => b
-        ..actors = SetBuilder<Actor>(<Actor>[aren, briana, tamara])
+        ..actors = SetBuilder<Actor>(
+            <Actor>[aren, edgeheadBriana, edgeheadTamara, edgeheadVees])
         ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)

@@ -10,7 +10,7 @@ FIRST_DESCRIPTION:
 I meet a patrol. A lone goblin with a spear.
 
 FIGHT_SITUATION:
-generateTestFightWithGoblin
+generateBleedsGoblinSkirmishPatrol
 
 DESCRIPTION:
 Nothing here, just death.

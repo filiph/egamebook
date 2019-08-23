@@ -540,7 +540,7 @@ final Room startAdventure = Room('start_adventure', (ActionContext c) {
   s.add(
       'The path from slavery to power begins with a single crack of a whip. Briana spins around, her face red with pain and anger. She is new here, but she knows what is coming.\n\n\nOnce Agruth starts whipping, the victim ends up dead. Agruth loves killing slaves.\n\n\n![Agruth whips Briana](https://egamebook.com/vermin/v/latest/img/agruth-attack.jpg)\n\n\nAnother crack and there is new blood pouring from a gash in Briana\'s face. Agruth grins.\n\n\nNobody else is in sight. It\'s just you, Agruth, and Briana. That\'s Agruth\'s first mistake.\n\n',
       wholeSentence: true);
-  w.actors.removeWhere((actor) => actor.id == tamaraId);
+  w.actors.removeWhere((actor) => !actor.isPlayer && actor.id != brianaId);
 }, null, generateAgruthFight, null);
 final Approach startAdventureFromPreStartBook = Approach(
     'pre_start_book', 'start_adventure', 'DEBUG >> Smoke test \'Vermin\'',
@@ -2528,7 +2528,7 @@ final Room goblinSkirmishPatrol =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('Nothing here, just death.\n', wholeSentence: true);
-}, generateTestFightWithGoblin, null);
+}, generateBleedsGoblinSkirmishPatrol, null);
 final Approach startPostFightFromStartBeginFight = Approach(
     'start_begin_fight', 'start_post_fight', '<implicit>', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2587,8 +2587,9 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
             wholeSentence: true);
       })).apply(c);
   s.add(
-      '\n"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it\'s time for you to quit. Go back to safety. You won\'t survive here."\n\n"Thanks for your service, Tamara. But I\'ve come this far."\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n',
+      '\n"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it\'s time for you to quit. Go back to safety. You won\'t survive here."\n\n"Thanks for your service, Tamara. But I\'ve come this far."\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
       wholeSentence: true);
+  w.updateActorById(tamaraId, (b) => b.isActive = false);
 }, null, null, null,
     parent: 'start_post_fight',
     prerequisite: Prerequisite(284371720, 1, true, (ApplicabilityContext c) {

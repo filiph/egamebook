@@ -36,6 +36,8 @@ const int sleepingGoblinsSpearId = 45234205;
 /// [edgeheadTamara]'s [Actor.id].
 const int tamaraId = 2;
 
+const int veesId = 9847981951;
+
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = [
   '''Briana spits on the floor. "Can't wait to smell something other than 
@@ -292,6 +294,23 @@ FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
       });
 }
 
+/// The fight west of The Bleeds.
+FightSituation generateBleedsGoblinSkirmishPatrol(
+    Simulation sim,
+    WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation,
+    Iterable<Actor> party) {
+  var goblin = Actor.initialized(w.randomInt(), "goblin",
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear),
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  w.actors.add(goblin);
+  return FightSituation.initialized(w.randomInt(), party, [goblin],
+      "{muddy |wet |}ground", roomRoamingSituation, {});
+}
+
 /// Test fight. Do not use in production.
 FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
@@ -451,8 +470,10 @@ void movePlayer(ActionContext context, String locationName,
 void nameAgruthSword(WorldStateBuilder w, String name) {
   final built = w.build();
   var n = 0;
-  for (final actor in built.actors.where((a) => a.team == playerTeam)) {
-    if (actor.currentWeapon != null) {
+  for (final actor in built.actors
+      .where((a) => a.isAnimatedAndActive && a.team == playerTeam)) {
+    if (actor.currentWeapon != null &&
+        actor.currentWeapon.damageCapability.type == WeaponType.sword) {
       var sword = actor.currentWeapon;
       var named = sword.toBuilder()
         ..name = name

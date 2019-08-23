@@ -34,7 +34,7 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
 
   /// Inventory of items possessed by the actor.
   ///
-  /// This does not include things that are wield-able (weapons, shields) or
+  /// This does not include things that are wield-able ([weapons], [shields]) or
   /// otherwise equip-able (armor). Consider [items] more like "contents of
   /// actor's backpack": potions, books, scrolls.
   BuiltList<Item> get items;
@@ -56,6 +56,8 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   ///
   /// This is a list because we want to allow having duplicate items
   /// (2 apples).
+  ///
+  /// Put shields in [shields].
   BuiltList<Item> get weapons;
 
   int countWeapons(WeaponType type) {

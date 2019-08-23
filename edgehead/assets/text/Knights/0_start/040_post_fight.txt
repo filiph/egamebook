@@ -49,6 +49,11 @@ assert(!originalWorld.wasKilled(tamaraId));
 
 Tamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.
 
+[[CODE]]
+w.updateActorById(tamaraId, (b) => b.isActive = false);
+[[/CODE]]
+
+
 // ---
 ROOM: $start_post_fight_tamara_dead
 

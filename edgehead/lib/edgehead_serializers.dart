@@ -19,6 +19,7 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
+import 'package:edgehead/fractal_stories/npc/npc_capability.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -58,6 +59,7 @@ part 'edgehead_serializers.g.dart';
   Item,
   LootSituation,
   MoveEntity,
+  NpcCapability,
   OffBalanceOpportunitySituation,
   Pose,
   Predetermination,

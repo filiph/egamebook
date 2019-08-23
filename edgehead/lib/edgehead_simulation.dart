@@ -59,6 +59,17 @@ final Actor edgeheadTamara = Actor.initialized(
   currentWeapon: Item.weapon(2342341, WeaponType.sword),
 );
 
+final Actor edgeheadVees = Actor.initialized(
+  veesId,
+  "Vees",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.HE,
+  isHireable: true,
+  currentRoomName: 'bleeds_main',
+  currentWeapon: Item.weapon(234234, WeaponType.dagger),
+  currentShield: Item.weapon(1188984, WeaponType.shield),
+);
+
 final Simulation edgeheadSimulation =
     Simulation(_rooms, allApproaches, _foldFunctions);
 

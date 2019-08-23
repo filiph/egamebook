@@ -1,0 +1,89 @@
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/writers_helpers.dart';
+
+class HireNpcAction extends OtherActorActionBase {
+  static const String className = "HireNpcAction";
+
+  static final HireNpcAction singleton = HireNpcAction();
+
+  @override
+  List<String> get commandPathTemplate => ["<object>", "hire"];
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+
+  @override
+  bool get isImplicit => false;
+
+  @override
+  bool get isProactive => true;
+
+  @override
+  String get name => className;
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String get rollReasonTemplate => null;
+
+  @override
+  String applyFailure(ActionContext context, Actor npc) {
+    throw UnimplementedError();
+  }
+
+  @override
+  String applySuccess(ActionContext context, Actor npc) {
+    final a = context.actor;
+    final w = context.outputWorld;
+    final s = context.outputStoryline;
+
+    npc.report(s, "<subject> nod<s>");
+    npc.report(s, "<subject> stand<s> next to <object>", object: a);
+
+    w.updateActorById(npc.id, (b) => b.npc.followingActorId = a.id);
+
+    return "${a.name} hires ${npc.name}";
+  }
+
+  /// Returns actors who are in the same room as the performing actor
+  /// and are not in his party.
+  @override
+  Iterable<Actor> generateObjects(ApplicabilityContext context) {
+    final w = context.world;
+    final sim = context.simulation;
+
+    final currentRoom = getRoomRoaming(w).currentRoomName;
+    final currentParty = getPartyOf(context.actor, sim, w);
+
+    return w.actors.where((a) =>
+        a.isAnimatedAndActive &&
+        a.currentRoomName == currentRoom &&
+        a.npc.isHireable &&
+        !currentParty.contains(a));
+  }
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Actor npc) =>
+      "WARNING should not be user-visible";
+
+  @override
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w, Actor npc) =>
+      ReasonedSuccessChance.sureSuccess;
+
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor npc) {
+    return true;
+  }
+}

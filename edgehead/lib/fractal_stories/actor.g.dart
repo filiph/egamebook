@@ -66,6 +66,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'nameIsProperNoun',
       serializers.serialize(object.nameIsProperNoun,
           specifiedType: const FullType(bool)),
+      'npc',
+      serializers.serialize(object.npc,
+          specifiedType: const FullType(NpcCapability)),
       'pose',
       serializers.serialize(object.pose, specifiedType: const FullType(Pose)),
       'poseMax',
@@ -87,12 +90,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         ..add('currentRoomName')
         ..add(serializers.serialize(object.currentRoomName,
             specifiedType: const FullType(String)));
-    }
-    if (object.followingActorId != null) {
-      result
-        ..add('followingActorId')
-        ..add(serializers.serialize(object.followingActorId,
-            specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -127,10 +124,6 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         case 'foldFunctionHandle':
           result.foldFunctionHandle = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
-          break;
-        case 'followingActorId':
-          result.followingActorId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
           break;
         case 'gold':
           result.gold = serializers.deserialize(value,
@@ -184,6 +177,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.nameIsProperNoun = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
+        case 'npc':
+          result.npc.replace(serializers.deserialize(value,
+              specifiedType: const FullType(NpcCapability)) as NpcCapability);
+          break;
         case 'pose':
           result.pose = serializers.deserialize(value,
               specifiedType: const FullType(Pose)) as Pose;
@@ -227,8 +224,6 @@ class _$Actor extends Actor {
   @override
   final String foldFunctionHandle;
   @override
-  final int followingActorId;
-  @override
   final int gold;
   @override
   final int hitpoints;
@@ -255,6 +250,8 @@ class _$Actor extends Actor {
   @override
   final bool nameIsProperNoun;
   @override
+  final NpcCapability npc;
+  @override
   final Pose pose;
   @override
   final Pose poseMax;
@@ -276,7 +273,6 @@ class _$Actor extends Actor {
       this.currentRoomName,
       this.dexterity,
       this.foldFunctionHandle,
-      this.followingActorId,
       this.gold,
       this.hitpoints,
       this.id,
@@ -290,6 +286,7 @@ class _$Actor extends Actor {
       this.maxHitpoints,
       this.name,
       this.nameIsProperNoun,
+      this.npc,
       this.pose,
       this.poseMax,
       this.pronoun,
@@ -348,6 +345,9 @@ class _$Actor extends Actor {
     if (nameIsProperNoun == null) {
       throw new BuiltValueNullFieldError('Actor', 'nameIsProperNoun');
     }
+    if (npc == null) {
+      throw new BuiltValueNullFieldError('Actor', 'npc');
+    }
     if (pose == null) {
       throw new BuiltValueNullFieldError('Actor', 'pose');
     }
@@ -384,7 +384,6 @@ class _$Actor extends Actor {
         currentRoomName == other.currentRoomName &&
         dexterity == other.dexterity &&
         foldFunctionHandle == other.foldFunctionHandle &&
-        followingActorId == other.followingActorId &&
         gold == other.gold &&
         hitpoints == other.hitpoints &&
         id == other.id &&
@@ -398,6 +397,7 @@ class _$Actor extends Actor {
         maxHitpoints == other.maxHitpoints &&
         name == other.name &&
         nameIsProperNoun == other.nameIsProperNoun &&
+        npc == other.npc &&
         pose == other.pose &&
         poseMax == other.poseMax &&
         pronoun == other.pronoun &&
@@ -426,20 +426,20 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), foldFunctionHandle.hashCode), followingActorId.hashCode),
-                                                                                gold.hashCode),
-                                                                            hitpoints.hashCode),
-                                                                        id.hashCode),
-                                                                    initiative.hashCode),
-                                                                inventory.hashCode),
-                                                            isActive.hashCode),
-                                                        isConfused.hashCode),
-                                                    isInvincible.hashCode),
-                                                isPlayer.hashCode),
-                                            isSurvivor.hashCode),
-                                        maxHitpoints.hashCode),
-                                    name.hashCode),
-                                nameIsProperNoun.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), foldFunctionHandle.hashCode), gold.hashCode),
+                                                                                hitpoints.hashCode),
+                                                                            id.hashCode),
+                                                                        initiative.hashCode),
+                                                                    inventory.hashCode),
+                                                                isActive.hashCode),
+                                                            isConfused.hashCode),
+                                                        isInvincible.hashCode),
+                                                    isPlayer.hashCode),
+                                                isSurvivor.hashCode),
+                                            maxHitpoints.hashCode),
+                                        name.hashCode),
+                                    nameIsProperNoun.hashCode),
+                                npc.hashCode),
                             pose.hashCode),
                         poseMax.hashCode),
                     pronoun.hashCode),
@@ -456,7 +456,6 @@ class _$Actor extends Actor {
           ..add('currentRoomName', currentRoomName)
           ..add('dexterity', dexterity)
           ..add('foldFunctionHandle', foldFunctionHandle)
-          ..add('followingActorId', followingActorId)
           ..add('gold', gold)
           ..add('hitpoints', hitpoints)
           ..add('id', id)
@@ -470,6 +469,7 @@ class _$Actor extends Actor {
           ..add('maxHitpoints', maxHitpoints)
           ..add('name', name)
           ..add('nameIsProperNoun', nameIsProperNoun)
+          ..add('npc', npc)
           ..add('pose', pose)
           ..add('poseMax', poseMax)
           ..add('pronoun', pronoun)
@@ -504,11 +504,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   String get foldFunctionHandle => _$this._foldFunctionHandle;
   set foldFunctionHandle(String foldFunctionHandle) =>
       _$this._foldFunctionHandle = foldFunctionHandle;
-
-  int _followingActorId;
-  int get followingActorId => _$this._followingActorId;
-  set followingActorId(int followingActorId) =>
-      _$this._followingActorId = followingActorId;
 
   int _gold;
   int get gold => _$this._gold;
@@ -564,6 +559,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   set nameIsProperNoun(bool nameIsProperNoun) =>
       _$this._nameIsProperNoun = nameIsProperNoun;
 
+  NpcCapabilityBuilder _npc;
+  NpcCapabilityBuilder get npc => _$this._npc ??= new NpcCapabilityBuilder();
+  set npc(NpcCapabilityBuilder npc) => _$this._npc = npc;
+
   Pose _pose;
   Pose get pose => _$this._pose;
   set pose(Pose pose) => _$this._pose = pose;
@@ -598,7 +597,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _currentRoomName = _$v.currentRoomName;
       _dexterity = _$v.dexterity;
       _foldFunctionHandle = _$v.foldFunctionHandle;
-      _followingActorId = _$v.followingActorId;
       _gold = _$v.gold;
       _hitpoints = _$v.hitpoints;
       _id = _$v.id;
@@ -612,6 +610,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _maxHitpoints = _$v.maxHitpoints;
       _name = _$v.name;
       _nameIsProperNoun = _$v.nameIsProperNoun;
+      _npc = _$v.npc?.toBuilder();
       _pose = _$v.pose;
       _poseMax = _$v.poseMax;
       _pronoun = _$v.pronoun?.toBuilder();
@@ -647,7 +646,6 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               currentRoomName: currentRoomName,
               dexterity: dexterity,
               foldFunctionHandle: foldFunctionHandle,
-              followingActorId: followingActorId,
               gold: gold,
               hitpoints: hitpoints,
               id: id,
@@ -661,6 +659,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               maxHitpoints: maxHitpoints,
               name: name,
               nameIsProperNoun: nameIsProperNoun,
+              npc: npc.build(),
               pose: pose,
               poseMax: poseMax,
               pronoun: pronoun.build(),
@@ -675,6 +674,9 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
         _$failedField = 'inventory';
         inventory.build();
+
+        _$failedField = 'npc';
+        npc.build();
 
         _$failedField = 'pronoun';
         pronoun.build();
