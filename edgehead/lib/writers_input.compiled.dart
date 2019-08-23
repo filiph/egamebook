@@ -2544,6 +2544,16 @@ final Room startPostFight = Room('start_post_fight', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
+  throw StateError(
+      "Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
+}, null, null, null);
+final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
   s.add('The fight is over.\n\n', wholeSentence: true);
   assert(!originalWorld.wasKilled(tamaraId));
 
@@ -2579,7 +2589,15 @@ final Room startPostFight = Room('start_post_fight', (ActionContext c) {
   s.add(
       '\n"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it\'s time for you to quit. Go back to safety. You won\'t survive here."\n\n"Thanks for your service, Tamara. But I\'ve come this far."\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n',
       wholeSentence: true);
-}, null, null, null, isIdle: true);
+}, null, null, null,
+    parent: 'start_post_fight',
+    prerequisite: Prerequisite(284371720, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return !w.wasKilled(tamaraId);
+    }),
+    isIdle: true);
 final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2588,15 +2606,34 @@ final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '"Sorry, Tamara." I dig a shallow grave and give Tamara at least a semblance of a proper burial.\n',
+      '"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n',
       wholeSentence: true);
 }, null, null, null,
     parent: 'start_post_fight',
-    prerequisite: Prerequisite(996731518, 1, true, (ApplicabilityContext c) {
+    prerequisite: Prerequisite(996731518, 2, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
-      return w.wasKilled(tamaraId);
+      return w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated;
+    }),
+    isIdle: true);
+final Room startPostFightTamaraAnimated = Room(
+    'start_post_fight_tamara_animated', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her to follow me.\n',
+      wholeSentence: true);
+}, null, null, null,
+    parent: 'start_post_fight',
+    prerequisite: Prerequisite(640676048, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead;
     }),
     isIdle: true);
 final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
@@ -2891,7 +2928,9 @@ final allRooms = <Room>[
   goblinSkirmishMain,
   goblinSkirmishPatrol,
   startPostFight,
+  startPostFightTamaraAlive,
   startPostFightTamaraDead,
+  startPostFightTamaraAnimated,
   startRaccoon,
   startCoward,
   startEnterGoblin,

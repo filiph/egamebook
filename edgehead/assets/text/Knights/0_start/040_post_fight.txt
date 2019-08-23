@@ -6,6 +6,19 @@ DESCRIPTION: N/A
 // ---
 ROOM: $start_post_fight
 
+FIRST_DESCRIPTION:
+
+[[CODE]]
+throw StateError("Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
+[[/CODE]]
+
+// ---
+ROOM: $start_post_fight_tamara_alive
+
+VARIANT_OF: $start_post_fight
+
+RULE: !w.wasKilled(tamaraId)
+
 FLAGS: idle
 
 FIRST_DESCRIPTION:
@@ -41,10 +54,26 @@ ROOM: $start_post_fight_tamara_dead
 
 VARIANT_OF: $start_post_fight
 
-RULE: w.wasKilled(tamaraId)
+RULE: w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated
 
 FLAGS: idle
 
 FIRST_DESCRIPTION:
-"Sorry, Tamara." I dig a shallow grave and give Tamara at least a semblance of a proper burial.
+"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.
+
+// ---
+ROOM: $start_post_fight_tamara_animated
+
+VARIANT_OF: $start_post_fight
+
+RULE: w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead
+
+FLAGS: idle
+
+FIRST_DESCRIPTION:
+I look into Tamara's undead eyes.
+
+"I'm sorry."
+
+She doesn't respond, so I nod, and tell her to follow me.
 
