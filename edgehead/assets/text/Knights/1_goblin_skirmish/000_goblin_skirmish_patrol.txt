@@ -7,7 +7,7 @@ DESCRIPTION: N/A
 ROOM: $goblin_skirmish_patrol
 
 FIRST_DESCRIPTION:
-I meet a patrol. A lone goblin with a spear.
+[[We]] meet a patrol. A lone goblin with a spear.
 
 FIGHT_SITUATION:
 generateBleedsGoblinSkirmishPatrol

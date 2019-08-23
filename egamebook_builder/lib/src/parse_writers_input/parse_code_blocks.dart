@@ -33,17 +33,31 @@ final RegExp rulesetOpenTag = RegExp(r"^\s*- RULESET\s*$");
 /// of a [BlockType.rule] parent block.
 final RegExp ruleThenTag = RegExp(r"^\s*- THEN:\s*$");
 
+final Pattern weSubstitution = "[[we]]";
+
+final Pattern weSubstitutionCapitalized = "[[We]]";
+
 final RegExp _logicalAndPattern = RegExp(r"\s+&&\s+");
 
 final RegExp _whiteSpaceOnly = RegExp(r"^\s*$");
 
 /// Parses a block of text (containing a `[[CODE]]` block or not) and returns
 /// an iterable of statements.
-Iterable<Code> createDescriptionStatements(String text) {
+Iterable<Code> createDescriptionStatements(String text) sync* {
+  // Define we substitutions if needed.
+  if (text.contains(weSubstitution)) {
+    yield Code("final weSubstitution = "
+        "getWeOrI(a, sim, originalWorld, capitalized: false);");
+  }
+  if (text.contains(weSubstitutionCapitalized)) {
+    yield Code("final weSubstitutionCapitalized = "
+        "getWeOrI(a, sim, originalWorld, capitalized: true);");
+  }
+
   final root = parseBlocks(text ?? '');
   final visitor = SequenceBlockVisitor();
   root.accept(visitor);
-  return visitor.statements;
+  yield* visitor.statements;
 }
 
 int getSpecificity(String conditionCode) {

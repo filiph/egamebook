@@ -2493,7 +2493,10 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2520,7 +2523,11 @@ final Room goblinSkirmishPatrol =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I meet a patrol. A lone goblin with a spear.\n', wholeSentence: true);
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized meet a patrol. A lone goblin with a spear.\n',
+      wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2876,7 +2883,10 @@ final Approach bleedsMainFromGoblinSkirmishMain =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I sneak through the bushes and emerge back in The Bleeds.\n',
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized sneak through the bushes and emerge back in The Bleeds.\n',
       wholeSentence: true);
 });
 final Room bleedsMain = Room('bleeds_main', (ActionContext c) {

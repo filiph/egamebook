@@ -6,7 +6,7 @@ DESCRIPTION: N/A
 // ---
 APPROACH: $bleeds_main FROM $goblin_skirmish_main
 COMMAND: Go >> to The Bleeds
-DESCRIPTION: I sneak through the bushes and emerge back in The Bleeds.
+DESCRIPTION: [[We]] sneak through the bushes and emerge back in The Bleeds.
 
 // ---
 ROOM: $bleeds_main

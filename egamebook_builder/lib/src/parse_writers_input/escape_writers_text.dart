@@ -1,3 +1,4 @@
+import 'package:egamebook_builder/src/parse_writers_input/parse_code_blocks.dart';
 import 'package:logging/logging.dart';
 
 final Logger _log = Logger("escape_dollar_sign");
@@ -11,6 +12,8 @@ String escapeWritersText(String s) {
   }
   return s
       .replaceAll(r'$', r"(DOLLAR_SIGN)")
+      .replaceAll(weSubstitution, r'$weSubstitution')
+      .replaceAll(weSubstitutionCapitalized, r'$weSubstitutionCapitalized')
       .replaceAll('\n', r'\n')
       .replaceAll('\r', '');
 }

@@ -12,6 +12,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:meta/meta.dart';
 
 const int agruthId = 6666;
 
@@ -198,6 +199,23 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
       });
 }
 
+/// The fight west of The Bleeds.
+FightSituation generateBleedsGoblinSkirmishPatrol(
+    Simulation sim,
+    WorldStateBuilder w,
+    RoomRoamingSituation roomRoamingSituation,
+    Iterable<Actor> party) {
+  var goblin = Actor.initialized(w.randomInt(), "goblin",
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear),
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  w.actors.add(goblin);
+  return FightSituation.initialized(w.randomInt(), party, [goblin],
+      "{muddy |wet |}ground", roomRoamingSituation, {});
+}
+
 FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   var orc = _makeOrc(w, id: escapeTunnelOrcId);
@@ -292,23 +310,6 @@ FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
         4: start_this_place_is_nightmare,
         6: start_come_back_with_me,
       });
-}
-
-/// The fight west of The Bleeds.
-FightSituation generateBleedsGoblinSkirmishPatrol(
-    Simulation sim,
-    WorldStateBuilder w,
-    RoomRoamingSituation roomRoamingSituation,
-    Iterable<Actor> party) {
-  var goblin = Actor.initialized(w.randomInt(), "goblin",
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear),
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  w.actors.add(goblin);
-  return FightSituation.initialized(w.randomInt(), party, [goblin],
-      "{muddy |wet |}ground", roomRoamingSituation, {});
 }
 
 /// Test fight. Do not use in production.
@@ -408,6 +409,19 @@ Actor getSlaveQuartersGoblin(WorldStateBuilder w) =>
 
 Actor getSlaveQuartersOrc(WorldStateBuilder w) =>
     w.getActorById(slaveQuartersOrcId);
+
+/// Either returns `we` or `I`, depending on the current state of the party.
+///
+/// Calls [getPartyOf] in the background.
+String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
+    {@required bool capitalized}) {
+  final party = getPartyOf(a, sim, originalWorld);
+  if (party.length > 1) {
+    return capitalized ? 'We' : 'I';
+  } else {
+    return 'I';
+  }
+}
 
 void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
     getPlayer(w.build()).id, (b) => b.inventory.add(sleepingGoblinsSpear));

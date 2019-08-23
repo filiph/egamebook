@@ -7,7 +7,7 @@ DESCRIPTION: N/A
 ROOM: $goblin_skirmish_main
 
 FIRST_DESCRIPTION:
-I sneak around. It's only 3 goblins. They are speaking loudly.
+[[We]] sneak around. It's only 3 goblins. They are speaking loudly.
 
 DESCRIPTION:
 The goblins are still here.
