@@ -25,8 +25,8 @@ part 'actor.g.dart';
 Iterable<Actor> getPartyOf(
     Actor actor, Simulation sim, WorldState world) sync* {
   yield actor;
-  yield* world.actors.where(
-      (other) => other.npc.followingActorId == actor.id && other.isAnimated);
+  yield* world.actors.where((other) =>
+      other.npc.followingActorId == actor.id && other.isAnimatedAndActive);
 }
 
 @immutable
