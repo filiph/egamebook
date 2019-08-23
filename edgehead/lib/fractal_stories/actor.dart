@@ -169,6 +169,19 @@ abstract class Actor extends Object
 
   int get hitpoints;
 
+  /// This is `true` if the actor doesn't hold any weapon.
+  ///
+  /// This doesn't mean the actor is defenseless (they can have claws
+  /// or teeth).
+  ///
+  /// It's the opposite of [holdsSomeWeapon].
+  bool get holdsNoWeapon => currentWeapon == null;
+
+  /// This is `true` if the actor is holding a weapon.
+  ///
+  /// It's the opposite of [holdsNoWeapon].
+  bool get holdsSomeWeapon => !holdsNoWeapon;
+
   /// Names can change or can even be duplicate. [id] is the only safe way
   /// to find out if we're talking about the same actor.
   @override
@@ -196,27 +209,6 @@ abstract class Actor extends Object
   /// They can be either alive or undead (when [isUndead] is `true`).
   @override
   bool get isAnimated => hitpoints > 0;
-
-  /// When `true`, this actor is undead.
-  ///
-  /// This field is separate from [isAnimated]. An actor can be [isUndead]
-  /// but killed ([isAnimated] == `false`).
-  ///
-  /// Forwards to [Anatomy.isUndead].
-  bool get isUndead => anatomy.isUndead;
-
-  /// This is `true` if the actor doesn't hold any weapon.
-  ///
-  /// This doesn't mean the actor is defenseless (they can have claws
-  /// or teeth).
-  ///
-  /// It's the opposite of [holdsSomeWeapon].
-  bool get holdsNoWeapon => currentWeapon == null;
-
-  /// This is `true` if the actor is holding a weapon.
-  ///
-  /// It's the opposite of [holdsNoWeapon].
-  bool get holdsSomeWeapon => !holdsNoWeapon;
 
   /// This is `true` if the actor is barehanded. This means that the actor
   /// _is_ ready to fight, but only with their bare hands.
@@ -276,6 +268,14 @@ abstract class Actor extends Object
   ///
   /// Contrast with [isInvincible], which is plot armor (actor cannot die).
   bool get isSurvivor;
+
+  /// When `true`, this actor is undead.
+  ///
+  /// This field is separate from [isAnimated]. An actor can be [isUndead]
+  /// but killed ([isAnimated] == `false`).
+  ///
+  /// Forwards to [Anatomy.isUndead].
+  bool get isUndead => anatomy.isUndead;
 
   int get maxHitpoints;
 
