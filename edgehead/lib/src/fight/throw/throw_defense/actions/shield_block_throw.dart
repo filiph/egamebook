@@ -91,7 +91,7 @@ class ShieldBlockThrow extends OtherActorAction {
     Item projectile = enemy.currentWeapon;
     a.report(
         s,
-        "<subject> {block<s>|stop<s>|deflect<s>} the <object> "
+        "<subject> {block<s>|stop<s>|deflect<s>} <object> "
         "with <object2>",
         object2: a.currentShield,
         object: projectile,

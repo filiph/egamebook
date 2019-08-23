@@ -324,6 +324,23 @@ void main() {
           object: goblin, object2: sword);
       expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
     });
+
+    test("for <object2> pronoun ('verbs the it')", () {
+      var goblin = Entity(name: "goblin");
+      var vees = Entity(name: "Vees", nameIsProperNoun: true);
+      var spear = Entity(name: "spear");
+      var shield = Entity(name: "shield");
+      goblin.report(storyline, "<subject> cast<s> <object2> at <object>",
+          object: vees, object2: spear);
+      vees.report(
+          storyline,
+          "<subject> stop<s> <object> "
+          "with <object2>",
+          object: spear,
+          object2: shield);
+      expect(storyline.realizeAsString(), isNot(matches("the it")));
+      expect(storyline.realizeAsString(), matches("stops it"));
+    });
   });
 
   test(
