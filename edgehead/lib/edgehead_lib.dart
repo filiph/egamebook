@@ -49,8 +49,11 @@ class EdgeheadGame extends Book {
   final Pattern actionPattern;
   bool actionPatternWasHit = false;
 
-  /// The player character.
-  Actor aren;
+  /// The player character as it started the game. It is mostly used in
+  /// [_setup], but it also defines whether or not to end the game
+  /// (if the character with [playerCharacter]'s [Actor.id] is dead, then
+  /// that's game over).
+  Actor playerCharacter;
 
   final PubSub _pubsub = PubSub();
   Situation initialSituation;
@@ -206,10 +209,10 @@ class EdgeheadGame extends Book {
   /// Sets up the game, either as a load from [saveGameSerialized] or
   /// as a new game from scratch.
   void _setup(String saveGameSerialized, int randomSeed) {
-    aren = edgeheadPlayer;
+    playerCharacter = edgeheadPlayer;
 
-    hitpoints.value = aren.hitpoints / aren.maxHitpoints;
-    stamina.value = aren.stamina;
+    hitpoints.value = playerCharacter.hitpoints / playerCharacter.maxHitpoints;
+    stamina.value = playerCharacter.stamina;
 
     initialSituation = edgeheadInitialSituation;
 
@@ -233,8 +236,12 @@ class EdgeheadGame extends Book {
     } else {
       // Creating a new game from start.
       world = WorldState((b) => b
-        ..actors = SetBuilder<Actor>(
-            <Actor>[aren, edgeheadBriana, edgeheadTamara, edgeheadLeroy])
+        ..actors = SetBuilder<Actor>(<Actor>[
+          playerCharacter,
+          edgeheadBriana,
+          edgeheadTamara,
+          edgeheadLeroy
+        ])
         ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)
@@ -258,7 +265,7 @@ class EdgeheadGame extends Book {
       return;
     }
 
-    var currentPlayer = world.getActorById(aren.id);
+    var currentPlayer = world.getActorById(playerCharacter.id);
     hitpoints.value = currentPlayer.hitpoints / currentPlayer.maxHitpoints;
     stamina.value = currentPlayer.stamina;
 
@@ -267,7 +274,7 @@ class EdgeheadGame extends Book {
       storyline.addParagraph();
       storyline.generateOutput().forEach(elementsSink.add);
 
-      if (world.wasKilled(aren.id)) {
+      if (world.wasKilled(playerCharacter.id)) {
         elementsSink.add(LoseGame((b) => b..markdownText = "I die."));
       } else {
         elementsSink.add(WinGame((b) => b..markdownText = "TODO win text"));
