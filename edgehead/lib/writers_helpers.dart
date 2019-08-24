@@ -398,9 +398,6 @@ Actor getEscapeTunnelGoblin(WorldState w) =>
 
 Actor getEscapeTunnelOrc(WorldState w) => w.getActorById(escapeTunnelOrcId);
 
-EdgeheadGlobalState getGlobal(WorldStateBuilder w) =>
-    w.global as EdgeheadGlobalState;
-
 Actor getPlayer(WorldState w) => w.getActorById(playerId);
 
 Actor getSlaveQuartersGoblin(WorldStateBuilder w) =>
@@ -525,12 +522,6 @@ void setUpStealShield(ActionContext c, bool wasSuccess) {
 
 void takeOrcthorn(Simulation sim, WorldStateBuilder w, Actor a) {
   w.updateActorById(a.id, (b) => b.inventory.equip(orcthorn, a.anatomy));
-}
-
-void updateGlobal(Simulation sim, WorldStateBuilder w,
-    EdgeheadGlobalStateBuilder updates(EdgeheadGlobalStateBuilder b)) {
-  var builder = (w.global as EdgeheadGlobalState).toBuilder();
-  w.global = updates(builder).build();
 }
 
 Actor _generateAgruth() {
