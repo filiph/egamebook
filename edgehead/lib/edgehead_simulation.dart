@@ -81,11 +81,19 @@ final Map<String, FoldFunction> _foldFunctions = {
   carelessMonsterFoldFunctionHandle: carelessMonsterFoldFunction,
 };
 
+/// This is a special room that starts every adventure.
+///
+/// Writers should create an [Approach] from this room to their first meaningful
+/// room. For example:
+///
+///     APPROACH: $my_adventure_start FROM $pre_start_book
+///     COMMAND: <implicit>
+///     DESCRIPTION: N/A
 final _preStartBook = Room(
     "pre_start_book",
-    (c) => c.outputStoryline
-        .add("UNUSED because this is the first room", wholeSentence: true),
-    (c) => throw StateError("Room isn't to be revisited"),
+    (c) => throw StateError("pre_start_book is never visited, only used for "
+        "approaching other rooms"),
+    (c) => throw StateError("pre_start_book isn't to be revisited"),
     null,
     null);
 
