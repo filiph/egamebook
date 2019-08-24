@@ -294,11 +294,11 @@ FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
       currentWeapon:
           Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
       dexterity: 150,
+      // The goblin starts the fight.
+      initiative: 2000,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   w.actors.add(goblin);
-  w.updateActorById(playerId,
-      (b) => b.recoveringUntil = w.time.add(const Duration(seconds: 1)));
   return FightSituation.initialized(
       w.randomInt(),
       party,

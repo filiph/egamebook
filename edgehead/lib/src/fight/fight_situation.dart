@@ -170,7 +170,7 @@ abstract class FightSituation extends Object
   @override
   int get turn;
 
-  /// Returns `true` if any actor among `teamIds` can still fight
+  /// Returns `true` if any actor among [teamIds] can still fight
   /// (and is active).
   bool canFight(
           Simulation sim, WorldStateBuilder world, Iterable<int> teamIds) =>

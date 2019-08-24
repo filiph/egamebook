@@ -12,22 +12,28 @@ class SlayMonstersAction extends Action<Nothing> {
   static const String className = "SlayMonstersAction";
 
   @override
-  List<String> get commandPathTemplate => const [];
-
-  @override
   final bool isAggressive = false;
 
   @override
   final bool rerollable = false;
 
+  /// Since we set up [Actor.recoveringUntil] in [_assignRecoveringUntil],
+  /// we don't want the performing actor to get their [Actor.recoveringUntil]
+  /// overridden.
+  ///
+  /// The actor performing [SlayMonsters] doesn't actually do anything,
+  /// it's an implicit action. Fight is considered to start immediately.
   @override
-  final bool isProactive = true;
+  final bool isProactive = false;
 
   @override
   final bool isImplicit = true;
 
   @override
   final Resource rerollResource = null;
+
+  @override
+  List<String> get commandPathTemplate => const [];
 
   @override
   String get helpMessage => null;
@@ -44,6 +50,7 @@ class SlayMonstersAction extends Action<Nothing> {
   String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
+    WorldState originalWorld = context.world;
     WorldStateBuilder w = context.outputWorld;
     final situation = w.currentSituation as RoomRoamingSituation;
     Room room = sim.getRoomByName(situation.currentRoomName);
@@ -71,6 +78,9 @@ class SlayMonstersAction extends Action<Nothing> {
       w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
     }
 
+    _assignRecoveringUntil(
+        originalWorld.time, w, fightSituation.getActors(sim, w.build()));
+
     w.pushSituation(fightSituation);
 
     return "${a.name} initiated combat with monsters in $room";
@@ -88,4 +98,19 @@ class SlayMonstersAction extends Action<Nothing> {
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, void _) =>
       (w.currentSituation as RoomRoamingSituation).monstersAlive;
+
+  /// Assign recoveringUntil according to initiative.
+  static void _assignRecoveringUntil(
+      DateTime now, WorldStateBuilder w, Iterable<Actor> combatants) {
+    final list = combatants.toList();
+    // Sort from best initiative to worst.
+    list.sort((a, b) => -a.initiative.compareTo(b.initiative));
+    const delay = Duration(milliseconds: 100);
+
+    for (int i = 0; i < list.length; i++) {
+      final actor = list[i];
+      w.updateActorById(
+          actor.id, (b) => b.recoveringUntil = now.add(delay * i));
+    }
+  }
 }

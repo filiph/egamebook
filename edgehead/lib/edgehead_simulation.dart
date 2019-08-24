@@ -54,6 +54,8 @@ final Actor edgeheadTamara = Actor.initialized(
   "Tamara",
   nameIsProperNoun: true,
   pronoun: Pronoun.SHE,
+  // Slightly quicker than the player but not quicker than the first goblin.
+  initiative: 1500,
   currentRoomName: _preStartBook.name,
   followingActorId: playerId,
   currentWeapon: Item.weapon(2342341, WeaponType.sword),
