@@ -2875,6 +2875,18 @@ final Approach bleedsMainFromStartPostFight =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Approach bleedsMainFromBleedsTraderHut = Approach(
+    'bleeds_trader_hut', 'bleeds_main', 'Go >> outside', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add('$weSubstitutionCapitalized walk out into the muddy street.\n',
+      wholeSentence: true);
+});
 final Approach bleedsMainFromGoblinSkirmishMain =
     Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to The Bleeds',
         (ActionContext c) {
@@ -2916,6 +2928,102 @@ final Approach endOfRoamFromBleedsMain = Approach(
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
+final Approach bleedsTraderHutFromBleedsMain = Approach(
+    'bleeds_main', 'bleeds_trader_hut', 'Go >> trader', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+  s.add(
+      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n',
+      wholeSentence: true);
+}, null, null, isIdle: true);
+
+class BleedsTraderAskBusiness extends RoamingAction {
+  @override
+  final String name = 'bleeds_trader_ask_business';
+
+  static final BleedsTraderAskBusiness singleton = BleedsTraderAskBusiness();
+
+  @override
+  List<String> get commandPathTemplate => ['Trader', '“How is business?”'];
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_trader_hut') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, everyone is leaving, nobody buys anything. Except for travel gear, that is. But we\'re out of that until the next caravan."\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs BleedsTraderAskBusiness';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -2947,7 +3055,8 @@ final allRooms = <Room>[
   startEnterGoblin,
   startBeginFight,
   start,
-  bleedsMain
+  bleedsMain,
+  bleedsTraderHut
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -2989,8 +3098,10 @@ final allApproaches = <Approach>[
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
   bleedsMainFromStartPostFight,
+  bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishMain,
-  endOfRoamFromBleedsMain
+  endOfRoamFromBleedsMain,
+  bleedsTraderHutFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
@@ -3015,5 +3126,6 @@ final allActions = <RoamingAction>[
   ReadLetterFromFather.singleton,
   ReadLetterFromMentor.singleton,
   StartTakeDagger.singleton,
-  StartDeclineDagger.singleton
+  StartDeclineDagger.singleton,
+  BleedsTraderAskBusiness.singleton
 ];

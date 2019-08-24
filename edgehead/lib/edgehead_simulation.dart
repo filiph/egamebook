@@ -66,7 +66,7 @@ final Actor edgeheadLeroy = Actor.initialized(
   nameIsProperNoun: true,
   pronoun: Pronoun.HE,
   isHireable: true,
-  currentRoomName: 'bleeds_main',
+  currentRoomName: 'bleeds_trader_hut',
   currentWeapon: Item.weapon(234234, WeaponType.dagger),
   currentShield: Item.weapon(1188984, WeaponType.shield),
 );

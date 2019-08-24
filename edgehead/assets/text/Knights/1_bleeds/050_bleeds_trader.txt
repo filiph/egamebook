@@ -1,0 +1,35 @@
+// ---
+APPROACH: $bleeds_trader_hut FROM $bleeds_main
+COMMAND: Go >> trader
+DESCRIPTION: N/A
+
+// ---
+ROOM: $bleeds_trader_hut
+
+FLAGS: idle
+
+FIRST_DESCRIPTION:
+[[We]] enter a small building made of stone. It's dark in here but cozy.
+A gray haired trader greets me and gestures around.
+
+"Everything is for sale. And for good price, too."
+
+I don't really have any money, so I just nod and smile.
+
+DESCRIPTION: The trader {nods|pretends to smile} as [[we]] enter his shop.
+
+
+// ---
+ACTION: $bleeds_trader_ask_business
+COMMAND: Trader >> “How is business?”
+
+FOR_LOCATION: $bleeds_trader_hut
+
+PREREQUISITES: w.actionNeverUsed(name)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+The trader shrugs.
+
+"It's terrible. Everyone is afraid, everyone is leaving, nobody buys anything. Except for travel gear, that is. But we're out of that until the next caravan."
