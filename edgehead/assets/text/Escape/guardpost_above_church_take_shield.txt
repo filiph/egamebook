@@ -50,7 +50,7 @@ You deftly lift the shield, take a few slow steps back, then grip the shield in 
 CONTINUATION_OF_FAILURE_COMMAND: Snatch the shield
 CONTINUATION_OF_FAILURE_HINT: You can quickly snatch the shield, jump back and prepare for a fight.
 CONTINUATION_OF_FAILURE_EFFECT: 
-setUpStealShield(a, sim, w, s, false);
+setUpStealShield(c, false);
 CONTINUATION_OF_FAILURE_DESCRIPTION: 
 You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.
 
@@ -59,4 +59,4 @@ You look at Briana. Both of you are ready to fight.
 
 
 SUCCESS_EFFECT: 
-setUpStealShield(a, sim, w, s, true);
+setUpStealShield(c, true);

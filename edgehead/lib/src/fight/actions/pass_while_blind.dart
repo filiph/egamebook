@@ -86,6 +86,7 @@ class PassWhileBlind extends OtherActorAction {
   }
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, _) =>
-      actor.anatomy.isBlind;
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, _) =>
+      a.anatomy.isBlind;
 }

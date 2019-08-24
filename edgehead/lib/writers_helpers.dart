@@ -22,6 +22,8 @@ const int escapeTunnelGoblinId = 12345;
 
 const int escapeTunnelOrcId = 12344;
 
+const int leroyId = 9847981951;
+
 const int madGuardianId = 50615;
 
 const int orcthornId = 425015;
@@ -36,8 +38,6 @@ const int sleepingGoblinsSpearId = 45234205;
 
 /// [edgeheadTamara]'s [Actor.id].
 const int tamaraId = 2;
-
-const int leroyId = 9847981951;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = [
@@ -87,6 +87,10 @@ final _brianaQuotesRuleset = Ruleset.unordered(_brianaQuotes.map((quote) {
     c.outputStoryline.add(quote, wholeSentence: true);
   });
 }));
+
+/// A helper wrapper around ActionContext which provides the writer with
+/// many helper methods.
+_HelperAccessor $(ApplicabilityContext c) => _HelperAccessor(c);
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
@@ -149,11 +153,11 @@ void enterTunnelWithCancel(ActionContext c) {
       "guardpost_above_church_enter_tunnel_with_cancel");
 
   if (hasOrcthorn || destroyedIronMonster || hasHadChanceToCancel) {
-    movePlayer(c, "tunnel");
+    $(c).movePlayer("tunnel");
     return;
   }
 
-  movePlayer(c, "tunnel_cancel_chance");
+  $(c).movePlayer("tunnel_cancel_chance");
 }
 
 void executeSpearThrowAtOgre(ActionContext c) {
@@ -177,7 +181,7 @@ void executeSpearThrowAtOgre(ActionContext c) {
         player.id, (b) => b.inventory.remove(inventorySpears.first));
   }
 
-  movePlayer(c, "war_forge", silent: true);
+  $(c).movePlayer("war_forge", silent: true);
 }
 
 FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
@@ -399,11 +403,6 @@ EdgeheadGlobalState getGlobal(WorldStateBuilder w) =>
 
 Actor getPlayer(WorldState w) => w.getActorById(playerId);
 
-RoomRoamingSituation getRoomRoaming(WorldState w) {
-  return w
-      .getSituationByName<RoomRoamingSituation>(RoomRoamingSituation.className);
-}
-
 Actor getSlaveQuartersGoblin(WorldStateBuilder w) =>
     w.getActorById(slaveQuartersGoblinId);
 
@@ -425,23 +424,6 @@ String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
 
 void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
     getPlayer(w.build()).id, (b) => b.inventory.add(sleepingGoblinsSpear));
-
-void giveGoldToPlayer(WorldStateBuilder w, int amount) {
-  w.updateActorById(getPlayer(w.build()).id, (b) => b..gold += amount);
-}
-
-void giveStaminaToPlayer(WorldStateBuilder w, int amount) {
-  w.updateActorById(getPlayer(w.build()).id, (b) => b..stamina += amount);
-}
-
-/// Returns `true` while player is roaming through Knights and is in an idle
-/// room (i.e. can do things like chatting or reading).
-bool isInIdleRoom(Simulation sim, WorldState w) {
-  if (w.currentSituation is! RoomRoamingSituation) return false;
-  final situation = w.currentSituation as RoomRoamingSituation;
-  if (situation.monstersAlive) return false;
-  return sim.getRoomByName(situation.currentRoomName).isIdle;
-}
 
 /// Returns `true` while player is roaming through Bloodrock. Note that the list
 /// of rooms contains only those that are actual rooms (it excludes the likes
@@ -473,12 +455,6 @@ bool justCameFrom(WorldState w, String fromRoomName) {
   if (latest == null) return false;
   return latest.roomName == fromRoomName ||
       latest.parentRoomName == fromRoomName;
-}
-
-void movePlayer(ActionContext context, String locationName,
-    {bool silent = false}) {
-  getRoomRoaming(context.world)
-      .moveActor(context, locationName, silent: silent);
 }
 
 void nameAgruthSword(WorldStateBuilder w, String name) {
@@ -517,8 +493,9 @@ void rollBrianaQuote(ActionContext context) {
 /// Updates state according to whatever happened when Aren tried to steal
 /// the shield from the sleeping guard. If he was successful, there will be
 /// no fight, otherwise, there will be fight.
-void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
-    bool wasSuccess) {
+void setUpStealShield(ActionContext c, bool wasSuccess) {
+  final a = c.actor;
+  final w = c.outputWorld;
   final shield = Item.weapon(w.randomInt(), WeaponType.shield);
   if (a.anatomy.secondaryWeaponAppendageAvailable) {
     w.updateActorById(a.id, (b) => b.inventory.equipShield(shield, a.anatomy));
@@ -529,7 +506,7 @@ void setUpStealShield(Actor a, Simulation sim, WorldStateBuilder w, Storyline s,
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
-    final roomRoamingSituation = getRoomRoaming(built);
+    final roomRoamingSituation = $(c).getRoomRoaming();
     final goblin = _makeGoblin(w,
         id: sleepingGoblinId,
         currentRoomName: roomRoamingSituation.currentRoomName);
@@ -598,3 +575,69 @@ Actor _makeOrc(WorldStateBuilder w, {int id, int constitution = 2}) =>
         constitution: constitution,
         team: defaultEnemyTeam,
         foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+
+/// The class behind [$].
+///
+/// This can be rewritten into a set of extension methods on [ActionContext]
+/// and another set on [ApplicabilityContext].
+class _HelperAccessor {
+  /// The provided context. This could actually be an [ActionContext].
+  ///
+  /// At runtime, the helper can cast this to [ActionContext] or fail.
+  final ApplicabilityContext _applicabilityContext;
+
+  /// Whether we received an action context.
+  final bool _isActionContext;
+
+  _HelperAccessor(this._applicabilityContext)
+      : _isActionContext = _applicabilityContext is ActionContext;
+
+  /// Returns `true` while player is roaming through Knights and is in an idle
+  /// room (i.e. can do things like chatting or reading).
+  bool get isInIdleRoom {
+    final w = _applicabilityContext.world;
+    final sim = _applicabilityContext.simulation;
+    if (w.currentSituation is! RoomRoamingSituation) return false;
+    final situation = w.currentSituation as RoomRoamingSituation;
+    if (situation.monstersAlive) return false;
+    return sim.getRoomByName(situation.currentRoomName).isIdle;
+  }
+
+  ActionContext get _context {
+    if (!_isActionContext) {
+      throw StateError('Tried to use ApplicabilityContext (read-only) '
+          'as ActionContext (read/write)');
+    }
+    return _applicabilityContext as ActionContext;
+  }
+
+  RoomRoamingSituation getRoomRoaming() {
+    return _applicabilityContext.world.getSituationByName<RoomRoamingSituation>(
+        RoomRoamingSituation.className);
+  }
+
+  void giveStaminaToPlayer(int amount) {
+    final w = _context.outputWorld;
+    w.updateActorById(getPlayer(w.build()).id, (b) => b..stamina += amount);
+  }
+
+  bool knowsAbout(String topic) {
+    throw UnimplementedError();
+  }
+
+  bool knowsOf(String topic) {
+    throw UnimplementedError();
+  }
+
+  void learnAbout(String topic) {
+    throw UnimplementedError();
+  }
+
+  void learnOf(String topic) {
+    throw UnimplementedError();
+  }
+
+  void movePlayer(String locationName, {bool silent = false}) {
+    getRoomRoaming().moveActor(_context, locationName, silent: silent);
+  }
+}

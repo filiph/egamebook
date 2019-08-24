@@ -127,6 +127,7 @@ class TurnUndead extends OtherActorActionBase {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor object) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor object) =>
       a.isPlayer;
 }

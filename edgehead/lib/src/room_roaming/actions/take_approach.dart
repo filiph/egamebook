@@ -75,7 +75,8 @@ class TakeApproachAction extends ApproachAction {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Approach approach) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Approach approach) {
     if (approach.isImplicit) {
       // Implicit approaches are covered by TakeImplicitApproachAction.
       return false;

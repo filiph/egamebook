@@ -75,7 +75,8 @@ class StartSlashAtArm extends StartDefensibleActionBase {
       "slash at <objectPronoun's> arm";
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       _isApplicableBase(a, sim, w, enemy) && _getAllHands(enemy).length >= 2;
 
   static bool _isApplicableBase(
@@ -148,7 +149,8 @@ class StartSlashAtRemainingArm extends StartSlashAtArm {
       "slash at <objectPronoun's> remaining arm";
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       StartSlashAtArm._isApplicableBase(a, sim, w, enemy) &&
       // This action assumes we're targeting just one of (several?) arms.
       StartSlashAtArm._getAllHands(enemy).length == 1;

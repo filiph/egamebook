@@ -142,7 +142,8 @@ class CounterSweepFeet extends OtherActorAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       !a.anatomy.isBlind &&
       a.currentDamageCapability.isSlashing &&
       // Never do this to the player, that would just suck.

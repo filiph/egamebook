@@ -139,7 +139,8 @@ class ExamineUndergroundChurch extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Look around'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'underground_church') {
       return false;
@@ -245,7 +246,8 @@ class TalkToBriana1 extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Talk to Briana'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionNeverUsed(name) && isRoamingInBloodrock(w))) {
       return false;
     }
@@ -305,7 +307,8 @@ class TalkToBriana2 extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Ask Briana about her capture'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionHasBeenPerformed("talk_to_briana_1") &&
         w.actionNeverUsed(name) &&
         isRoamingInBloodrock(w))) {
@@ -367,7 +370,8 @@ class TalkToBriana3 extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Ask Briana about Orcthorn'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionHasBeenPerformed("talk_to_briana_2") &&
         w.actionNeverUsed(name) &&
         isRoamingInBloodrock(w))) {
@@ -610,7 +614,8 @@ class SlaveQuartersContinue extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Continue'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'slave_quarters') {
       return false;
@@ -697,7 +702,8 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['"Luck Bringer"'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'just_after_agruth_fight') {
       return false;
@@ -716,7 +722,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
         '_"We will call it Luck Bringer. We got lucky with Arguth, and luck is our only chance to get out of this place."_\n\n\nBriana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."\n',
         wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
-    movePlayer(c, "cave_with_agruth");
+    $(c).movePlayer("cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordOpportunity';
   }
 
@@ -761,7 +767,8 @@ class NameAgruthSwordRedemption extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['"Savior"'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'just_after_agruth_fight') {
       return false;
@@ -780,7 +787,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
         '_"We will call it Savior. Getting it was our first step toward freedom. The sword should have killed us, and instead it set us free."_\n\n\nBriana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."\n',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
-    movePlayer(c, "cave_with_agruth");
+    $(c).movePlayer("cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordRedemption';
   }
 
@@ -824,7 +831,8 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['No name'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'just_after_agruth_fight') {
       return false;
@@ -842,7 +850,7 @@ class NameAgruthSwordNothing extends RoamingAction {
     s.add(
         '_"That is foolish. It is just a sword, after all."_\n\n\nBriana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."\n',
         wholeSentence: true);
-    movePlayer(c, "cave_with_agruth");
+    $(c).movePlayer("cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordNothing';
   }
 
@@ -1002,7 +1010,8 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Go to the Upper Door'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'guardpost_above_church') {
       return false;
@@ -1063,7 +1072,8 @@ class TakeOrcthorn extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Search for Orcthorn'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'orcthorn_room') {
       return false;
@@ -1131,7 +1141,8 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Cautiously take the shield'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'guardpost_above_church') {
       return false;
@@ -1152,7 +1163,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
     s.add(
         'You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and leans his head to the side, but stays asleep.\n\n\nYou take a few slow steps back, then grip the shield in your left hand, ready for anything.\n',
         wholeSentence: true);
-    setUpStealShield(a, sim, w, s, true);
+    setUpStealShield(c, true);
     return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
   }
 
@@ -1221,27 +1232,37 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
       SimpleAction(
           'guardpost_above_church_take_shield_rescue',
           'Stay perfectly still',
-          (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, self) {
+          (ActionContext c, self) {
+            final WorldState originalWorld = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            final WorldStateBuilder w = c.outputWorld;
+            final Storyline s = c.outputStoryline;
             s.add(
                 'You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.\n\n\n<p class="toast">Your stamina decreases by 1.</p>\n\n\nFortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.\n\n\nYou deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.',
                 wholeSentence: true);
             w.popSituation(sim);
             w.updateActorById(a.id, (b) => b..stamina -= 1);
-            setUpStealShield(a, sim, w, s, true);
+            setUpStealShield(c, true);
             return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
           },
           'If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)',
-          isApplicableClosure: (Actor a, Simulation sim, WorldState w, self) {
+          isApplicableClosure: (ApplicabilityContext c, Actor a, Simulation sim,
+              WorldState w, self) {
             return a.stamina > 0;
           }),
       SimpleAction('guardpost_above_church_take_shield_continuation_of_failure',
-          'Snatch the shield',
-          (Actor a, Simulation sim, WorldStateBuilder w, Storyline s, self) {
+          'Snatch the shield', (ActionContext c, self) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
         s.add(
             'You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.\n\n\nYou look at Briana. Both of you are ready to fight.',
             wholeSentence: true);
         w.popSituation(sim);
-        setUpStealShield(a, sim, w, s, false);
+        setUpStealShield(c, false);
         return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
       }, 'You can quickly snatch the shield, jump back and prepare for a fight.')
     ];
@@ -1389,7 +1410,8 @@ class SmelterLookAround extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Look around'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'smelter') {
       return false;
@@ -1510,7 +1532,8 @@ class SearchAgruth extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Search Agruth'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'cave_with_agruth') {
       return false;
@@ -1531,7 +1554,7 @@ class SearchAgruth extends RoamingAction {
     s.add(
         'You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a _troma_ herb. This boosts your energy right when you need it – very handy. \n\n\n<p class="toast">Your stamina increases by 1.</p>\n',
         wholeSentence: true);
-    giveStaminaToPlayer(w, 1);
+    $(c).giveStaminaToPlayer(1);
     return '${a.name} successfully performs SearchAgruth';
   }
 
@@ -1640,7 +1663,8 @@ class WaitForRitual extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Wait'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'underground_church_altar') {
       return false;
@@ -1661,7 +1685,7 @@ class WaitForRitual extends RoamingAction {
     s.add(
         'You move into the shadows and wait. After a few heartbeats, there is a scraping sound — stone against stone. You lean out from your hiding place and see a section of the wall to the right of the altar opening.\n\n\nAn orc priest, tall and pale, enters through the stone door. Suddenly, the whole temple reverberates with a strong, dissonant tone that is both sickening and powerful. As if the whole mountain were groaning. \n\n\nFollowing the orc priest, a huge creature enters through the door, crouching below its frame. It\'s unclear what the creature is, exactly, but it could be some large breed of ogre. Judging by the braided hair, it\'s a female. Her sword — attached to her hip with a rope — is as long as you are tall. \n\n\nWhen she enters the temple and stands upright, you can see that she is leading someone in by a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.\n\n\nThe three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana.\n\n\nThe dissonant tone stops. You lean a little further out from your hiding place to have a better view.\n\n\nWithout words, the priest beckons the orc to lie at the altar. The orc is now shaking uncontrollably, but he obeys. You can hear his fitful breath, the rustle of his body against the stone as he glides into position, and nothing else.\n\n\nWhen the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.\n\n\nSomehow, you know.\n\n\n_"Maggots."_\n\n\nBriana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.\n\n\n![Picture of the sadistic slavers](https://egamebook.com/vermin/v/latest/img/altar.jpg)\n\n\nThe ogre pushes down on the orc, preparing for the inevitable struggle. The orc knows what’s coming, and he opens his mouth to scream.\n\n\nBut the scream doesn\'t come. Instead, the dissonant tone sounds again, more powerful than before.\n\n\nThe maggots crawl over the edge of the altar\'s surface, onto the orc\'s body, and move straight toward his face. They move faster now.\n\n\n\n\nThe orc\'s eyes go wide. He struggles against the ogre\'s grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.\n\n\nSuddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed.\n\n\n<p class="toast">Your stamina increases by 1.</p>\n\n\nYou notice that the priest inhales deeply as well.\n\n\nThen, the sound stops and the orc\'s body collapses into itself. The invigorating feeling is gone. You realize the maggots have eaten through the orc\'s eyes and cheeks, and that they are now scuttling back to the base of the altar.\n\n\nThe priest puts his arms down again and — without saying anything — heads back to the stone door. The ogre takes the orc\'s dead body, throws it over her shoulder, and follows the priest. In a few heartbeats, they are all gone and the door closes. A new pool of blood on the altar is the only reminder of what happened.\n\n\nBriana stares ahead. "How did you know it would be maggots?"\n\n\n_"I do not know."_\n\n\n"I _felt_ that sound, somehow. I _felt_ it."\n\n\n_"This place does something weird to people."_\n\n\n"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head. "Let\'s… let\'s just get out of here."\n',
         wholeSentence: true);
-    giveStaminaToPlayer(w, 1);
+    $(c).giveStaminaToPlayer(1);
     return '${a.name} successfully performs WaitForRitual';
   }
 
@@ -1706,7 +1730,8 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Take the spear'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'underground_church_altar') {
       return false;
@@ -1771,7 +1796,8 @@ class SmelterThrowSpear extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Throw spear at the ogre'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'smelter') {
       return false;
@@ -1958,7 +1984,8 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Examine the door'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'slave_quarters_passage') {
       return false;
@@ -2170,7 +2197,8 @@ class WarForgeLookAround extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Look around'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'war_forge') {
       return false;
@@ -2234,7 +2262,8 @@ class WarForgeWatchWorkers extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Watch the workers'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'war_forge') {
       return false;
@@ -2364,8 +2393,9 @@ class ReadLetterFromFather extends RoamingAction {
   List<String> get commandPathTemplate =>
       ['inventory', 'letter from father', 'read'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
-    if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(w.actionNeverUsed(name) && $(c).isInIdleRoom)) {
       return false;
     }
     return true;
@@ -2425,8 +2455,9 @@ class ReadLetterFromMentor extends RoamingAction {
   List<String> get commandPathTemplate =>
       ['inventory', 'letter from mentor', 'read'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
-    if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(w.actionNeverUsed(name) && $(c).isInIdleRoom)) {
       return false;
     }
     return true;
@@ -2692,7 +2723,8 @@ class StartTakeDagger extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Take dagger'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'start_enter_goblin') {
       return false;
@@ -2709,7 +2741,7 @@ class StartTakeDagger extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add('I take the dagger.\n', wholeSentence: true);
     w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
-    movePlayer(c, "start_begin_fight");
+    $(c).movePlayer("start_begin_fight");
     return '${a.name} successfully performs StartTakeDagger';
   }
 
@@ -2753,7 +2785,8 @@ class StartDeclineDagger extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['“You are going to be fine.”'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'start_enter_goblin') {
       return false;
@@ -2771,7 +2804,7 @@ class StartDeclineDagger extends RoamingAction {
     s.add('Tamara shrugs and puts the dagger in her belt.\n',
         wholeSentence: true);
     w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
-    movePlayer(c, "start_begin_fight");
+    $(c).movePlayer("start_begin_fight");
     return '${a.name} successfully performs StartDeclineDagger';
   }
 
@@ -2865,6 +2898,104 @@ final Room start = Room('start', (ActionContext c) {
       wholeSentence: true);
   w.actors.removeWhere((actor) => actor.id == brianaId);
 }, null, null, null);
+final Approach bleedsTraderHutFromBleedsMain = Approach(
+    'bleeds_main', 'bleeds_trader_hut', 'Go >> inside the trader\'s shop',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+  s.add(
+      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n',
+      wholeSentence: true);
+}, null, null, isIdle: true);
+
+class BleedsTraderAskBusiness extends RoamingAction {
+  @override
+  final String name = 'bleeds_trader_ask_business';
+
+  static final BleedsTraderAskBusiness singleton = BleedsTraderAskBusiness();
+
+  @override
+  List<String> get commandPathTemplate => ['Trader', '“How is business?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_trader_hut') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs BleedsTraderAskBusiness';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Approach bleedsMainFromPreStartBook = Approach('pre_start_book',
     'bleeds_main', 'DEBUG >> Play ‘Knights of San Francisco’ from The Bleeds',
     (ActionContext c) {
@@ -2928,112 +3059,6 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, null, isIdle: true);
-final Approach endOfRoamFromBleedsMain = Approach(
-    'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You realize this adventuring life is not for you.\n',
-      wholeSentence: true);
-});
-final Approach bleedsTraderHutFromBleedsMain = Approach(
-    'bleeds_main', 'bleeds_trader_hut', 'Go >> inside the trader\'s shop',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      '$weSubstitutionCapitalized enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
-  s.add(
-      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n',
-      wholeSentence: true);
-}, null, null, isIdle: true);
-
-class BleedsTraderAskBusiness extends RoamingAction {
-  @override
-  final String name = 'bleeds_trader_ask_business';
-
-  static final BleedsTraderAskBusiness singleton = BleedsTraderAskBusiness();
-
-  @override
-  List<String> get commandPathTemplate => ['Trader', '“How is business?”'];
-  @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_trader_hut') {
-      return false;
-    }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n',
-        wholeSentence: true);
-    return '${a.name} successfully performs BleedsTraderAskBusiness';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
 
 class BleedsBlindGuideGreet extends RoamingAction {
   @override
@@ -3044,7 +3069,8 @@ class BleedsBlindGuideGreet extends RoamingAction {
   @override
   List<String> get commandPathTemplate => ['Blind man', '“Hello!”'];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'bleeds_main') {
       return false;
@@ -3112,7 +3138,8 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
         '“Why is hunting for treasure in the Pyramid a terrible idea?”'
       ];
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
         'bleeds_main') {
       return false;
@@ -3169,6 +3196,16 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Approach endOfRoamFromBleedsMain = Approach(
+    'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You realize this adventuring life is not for you.\n',
+      wholeSentence: true);
+});
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -3200,8 +3237,8 @@ final allRooms = <Room>[
   startEnterGoblin,
   startBeginFight,
   start,
-  bleedsMain,
-  bleedsTraderHut
+  bleedsTraderHut,
+  bleedsMain
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -3242,12 +3279,12 @@ final allApproaches = <Approach>[
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
+  bleedsTraderHutFromBleedsMain,
   bleedsMainFromPreStartBook,
   bleedsMainFromStartPostFight,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishMain,
-  endOfRoamFromBleedsMain,
-  bleedsTraderHutFromBleedsMain
+  endOfRoamFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,

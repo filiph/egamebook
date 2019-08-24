@@ -95,6 +95,7 @@ class FinishThrowBlunt extends OtherActorAction {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       a.currentWeapon.damageCapability.isBlunt;
 }

@@ -68,7 +68,7 @@ MethodAndBlock createActionContextMethod() {
   final method = MethodBuilder()
     ..requiredParameters = ListBuilder<Parameter>([actionContextParameter]);
   final result = MethodAndBlock(method);
-  _addActionContextConvenienceAccessors(result);
+  addActionContextConvenienceAccessors(result);
   return result;
 }
 
@@ -84,7 +84,7 @@ MethodAndBlock createActionContextVoidMethod(
         ListBuilder<Parameter>([actionContextParameter, voidParameter])
     ..annotations = ListBuilder<Expression>([overrideAnnotation]);
   final result = MethodAndBlock(method);
-  _addActionContextConvenienceAccessors(result);
+  addActionContextConvenienceAccessors(result);
   return result;
 }
 
@@ -95,6 +95,22 @@ MethodAndBlock createActorSimWorldVoidMethod(
     ..returns = returnType
     ..requiredParameters = ListBuilder<Parameter>(
         [actorParameter, simulationParameter, worldParameter, voidParameter])
+    ..annotations = ListBuilder<Expression>([overrideAnnotation]);
+  return MethodAndBlock(method);
+}
+
+MethodAndBlock createContextActorSimWorldVoidMethod(
+    String methodName, TypeReference returnType) {
+  final method = MethodBuilder()
+    ..name = methodName
+    ..returns = returnType
+    ..requiredParameters = ListBuilder<Parameter>([
+      applicabilityContextParameter,
+      actorParameter,
+      simulationParameter,
+      worldParameter,
+      voidParameter
+    ])
     ..annotations = ListBuilder<Expression>([overrideAnnotation]);
   return MethodAndBlock(method);
 }
@@ -129,7 +145,7 @@ Code stateErrorThrow(String message) => Code('throw StateError("$message");');
 ///     Actor a = c.actor;
 ///     WorldStateBuilder w = c.outputWorld;
 ///     Storyline s = c.outputStoryline;
-void _addActionContextConvenienceAccessors(MethodAndBlock method) {
+void addActionContextConvenienceAccessors(MethodAndBlock method) {
   method.block
     ..addExpression(refer("c")
         .property("world")

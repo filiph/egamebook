@@ -218,7 +218,7 @@ class GeneratedAction extends GeneratedGameObject {
 
   Method _createIsApplicableBuilder(String forLocation) {
     var isApplicableBuilder =
-        createActorSimWorldVoidMethod("isApplicable", boolType);
+        createContextActorSimWorldVoidMethod("isApplicable", boolType);
     if (forLocation != null) {
       final locationCondition = (refer(worldParameter.name)
               .property("currentSituation")

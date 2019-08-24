@@ -87,7 +87,8 @@ class StartThrustAtEye extends StartDefensibleActionBase {
       "stab <objectPronoun's> eye";
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       _isApplicableBase(a, sim, w, enemy) &&
       // This action assumes we're targeting just one of (several?) eyes.
       _getAllEyes(enemy).length >= 2;
@@ -148,7 +149,8 @@ class StartThrustAtRemainingEye extends StartThrustAtEye {
       "stab <objectPronoun's> remaining eye";
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       StartThrustAtEye._isApplicableBase(a, sim, w, enemy) &&
       // This action assumes we're targeting just one of (several?) eyes.
       StartThrustAtEye._getAllEyes(enemy).length == 1;

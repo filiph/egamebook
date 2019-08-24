@@ -66,7 +66,8 @@ class Scramble extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, void _) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState world, void _) {
     if (!a.isOnGround) return false;
     // Actor must have just fallen.
     if (recentlyForcedToGround(a, world)) return true;

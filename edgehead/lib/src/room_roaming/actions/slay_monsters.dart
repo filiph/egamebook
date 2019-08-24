@@ -96,7 +96,8 @@ class SlayMonstersAction extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, void _) =>
       (w.currentSituation as RoomRoamingSituation).monstersAlive;
 
   /// Assign recoveringUntil according to initiative.

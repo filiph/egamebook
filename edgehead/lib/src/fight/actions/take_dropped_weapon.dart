@@ -90,7 +90,8 @@ class TakeDroppedWeapon extends ItemAction {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Item item) {
     if (!item.isWeapon) return false;
     if (!a.anatomy.anyWeaponAppendageAvailable) return false;
     if (recentlyDisarmed(a, w)) return false;

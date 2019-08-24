@@ -77,7 +77,8 @@ class AssumeStance extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, void _) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, void _) =>
       // Only player is able to assume better stance.
       // It's boring to look at when enemies do it.
       a.isPlayer &&

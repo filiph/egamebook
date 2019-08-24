@@ -68,7 +68,8 @@ class KickItemOutOfReach extends ItemAction {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Item item) {
     if (a.isOnGround) return false;
     if (a.anatomy.isBlind) return false;
 

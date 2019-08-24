@@ -20,7 +20,7 @@ Expression generateSimpleAction(
     command = 'MISSING';
   }
 
-  final successClosure = _createActorSimWorldBuilderStorylineSelfClosure();
+  final successClosure = createActionContextSelfClosure();
   successClosure.block.addExpression(refer('s').property('add').call(
       [literal(escapeWritersText(description))],
       {'wholeSentence': literalTrue}));
@@ -37,7 +37,7 @@ Expression generateSimpleAction(
 
   final namedArguments = <String, Expression>{};
   if (prerequisites != null) {
-    final isApplicableClosure = _createActorSimWorldSelfClosure();
+    final isApplicableClosure = _createContextActorSimWorldSelfClosure();
     isApplicableClosure.block.statements.add(Code('return $prerequisites;'));
     namedArguments["isApplicableClosure"] = isApplicableClosure.bakeAsClosure();
   }
@@ -50,10 +50,11 @@ Expression generateSimpleAction(
   ], namedArguments);
 }
 
-MethodAndBlock _createActorSimWorldSelfClosure() {
+MethodAndBlock _createContextActorSimWorldSelfClosure() {
   final method = MethodBuilder()
     ..returns = stringType
     ..requiredParameters.addAll([
+      applicabilityContextParameter,
       actorParameter,
       simulationParameter,
       worldParameter,
@@ -62,15 +63,13 @@ MethodAndBlock _createActorSimWorldSelfClosure() {
   return MethodAndBlock(method);
 }
 
-MethodAndBlock _createActorSimWorldBuilderStorylineSelfClosure() {
+/// Use in `SimpleAction`.
+MethodAndBlock createActionContextSelfClosure() {
   final method = MethodBuilder()
     ..returns = stringType
-    ..requiredParameters.addAll([
-      actorParameter,
-      simulationParameter,
-      worldStateBuilderParameter,
-      storylineParameter,
-      Parameter((b) => b..name = 'self')
-    ]);
-  return MethodAndBlock(method);
+    ..requiredParameters
+        .addAll([actionContextParameter, Parameter((b) => b..name = 'self')]);
+  final result = MethodAndBlock(method);
+  addActionContextConvenienceAccessors(result);
+  return result;
 }

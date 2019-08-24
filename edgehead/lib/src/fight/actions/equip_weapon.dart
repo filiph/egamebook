@@ -85,7 +85,8 @@ class EquipWeapon extends Action<Item> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Item object) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Item object) {
     if (!a.anatomy.anyWeaponAppendageAvailable) return false;
     if (a.isPlayer) return true;
 

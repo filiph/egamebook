@@ -1,4 +1,5 @@
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -25,7 +26,8 @@ class FeintJab extends FeintSlash {
       "<object's> stance?";
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, Actor enemy) =>
       !a.isOnGround &&
       !a.anatomy.isBlind &&
       !enemy.anatomy.isBlind &&

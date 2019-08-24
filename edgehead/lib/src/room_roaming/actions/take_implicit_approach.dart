@@ -1,4 +1,5 @@
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -18,7 +19,8 @@ class TakeImplicitApproachAction extends TakeApproachAction {
   String get name => className;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Approach approach) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Approach approach) {
     if (!approach.isImplicit) {
       // Non-implicit approaches are covered by TakeApproachAction.
       return false;

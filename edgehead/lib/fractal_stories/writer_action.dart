@@ -5,14 +5,17 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 /// This is analogous to [SimpleActionApplyFunction], but for the
 /// [Action.isApplicable] closure.
 typedef SimpleActionApplicableFunction = bool Function(
-    Actor a, Simulation sim, WorldState w, SimpleAction self);
+    ApplicabilityContext context,
+    Actor a,
+    Simulation sim,
+    WorldState w,
+    SimpleAction self);
 
 /// This closure signature is here in order to allow [SimpleAction] to be
 /// defined without needing to implement the class.
@@ -20,8 +23,8 @@ typedef SimpleActionApplicableFunction = bool Function(
 /// For example, apply function needs access to the class's
 /// [SimpleAction.movePlayer] method, but a closure won't be able to access it
 /// without the [self] parameter.
-typedef SimpleActionApplyFunction = String Function(Actor a, Simulation sim,
-    WorldStateBuilder w, Storyline s, SimpleAction self);
+typedef SimpleActionApplyFunction = String Function(
+    ActionContext c, SimpleAction self);
 
 /// An action that takes place in the context of a [RoomRoamingSituation]
 /// (either directly or as an indirect descendant of such situation).
@@ -71,8 +74,7 @@ class SimpleAction extends RoamingAction {
 
   @override
   String applySuccess(ActionContext context, void object) {
-    return success(context.actor, context.simulation, context.outputWorld,
-        context.outputStoryline, this);
+    return success(context, this);
   }
 
   @override
@@ -87,9 +89,10 @@ class SimpleAction extends RoamingAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, void object) {
+  bool isApplicable(ApplicabilityContext context, Actor a, Simulation sim,
+      WorldState w, void object) {
     if (isApplicableClosure == null) return true;
-    return isApplicableClosure(a, sim, w, this);
+    return isApplicableClosure(context, a, sim, w, this);
   }
 
   @override

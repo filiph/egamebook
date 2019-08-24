@@ -86,7 +86,8 @@ class SweepFeet extends StartDefensibleActionBase {
       "sweep feet";
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, Actor enemy) =>
       a.pose >= Pose.offBalance &&
       !a.anatomy.hasCrippledLegs &&
       !enemy.isOnGround &&

@@ -84,7 +84,8 @@ class StandUp extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, void _) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, void _) =>
       a.isOnGround &&
       !a.anatomy.hasCrippledLegs &&
       // If this actor just fell, do not let him stand up.

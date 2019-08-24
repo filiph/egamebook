@@ -69,7 +69,8 @@ class TakeDroppedShield extends ItemAction {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Item item) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Item item) {
     if (!item.isShield) return false;
     if (!a.anatomy.anyWeaponAppendageAvailable) return false;
     if (a.currentShield != null) return false;

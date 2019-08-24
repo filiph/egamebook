@@ -98,7 +98,8 @@ class FeintSlash extends StartDefensibleActionBase {
       'feint';
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, Actor enemy) =>
       !a.isOnGround &&
       !a.anatomy.isBlind &&
       !enemy.anatomy.isBlind &&

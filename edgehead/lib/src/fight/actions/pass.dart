@@ -65,7 +65,8 @@ class Pass extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, void _) =>
       // For blind actors, we have PassUnseeing.
-      !actor.anatomy.isBlind;
+      !a.anatomy.isBlind;
 }

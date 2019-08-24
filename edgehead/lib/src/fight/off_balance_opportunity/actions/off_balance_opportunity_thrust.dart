@@ -98,7 +98,8 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       !a.anatomy.isBlind &&
       a.currentDamageCapability.isThrusting &&
       a.pose >= Pose.standing &&

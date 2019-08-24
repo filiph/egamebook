@@ -85,7 +85,8 @@ class RegainBalance extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, void _) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, void _) =>
       // Only player is able to regain balance.
       // It's boring when others do it.
       a.isPlayer && a.pose == Pose.offBalance && !recentlyLostStance(a, world);

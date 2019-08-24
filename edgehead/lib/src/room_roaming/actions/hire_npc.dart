@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/writers_helpers.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class HireNpcAction extends OtherActorActionBase {
   static const String className = "HireNpcAction";
@@ -63,7 +63,10 @@ class HireNpcAction extends OtherActorActionBase {
     final w = context.world;
     final sim = context.simulation;
 
-    final currentRoom = getRoomRoaming(w).currentRoomName;
+    final currentRoom = context.world
+        .getSituationByName<RoomRoamingSituation>(
+            RoomRoamingSituation.className)
+        .currentRoomName;
     final currentParty = getPartyOf(context.actor, sim, w);
 
     return w.actors.where((a) =>
@@ -83,7 +86,8 @@ class HireNpcAction extends OtherActorActionBase {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor npc) {
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Actor npc) {
     return true;
   }
 }

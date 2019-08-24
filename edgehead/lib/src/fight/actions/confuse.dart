@@ -82,7 +82,8 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, Actor enemy) =>
       a.isPlayer &&
       a.pose >= Pose.standing &&
       world.actors

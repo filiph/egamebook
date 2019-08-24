@@ -249,7 +249,14 @@ abstract class Action<T> {
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, T object);
 
-  bool isApplicable(Actor a, Simulation sim, WorldState w, T object);
+  /// Returns whether or not the action is applicable given the current
+  /// state of the world.
+  ///
+  /// The parameters [a], [sim] and [w] are redundant since they are already
+  /// included in [c]. But they allow for a much easier access when writing
+  /// the actual actions (instead of `c.actor` we can just write `a`).
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, T object);
 
   void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world) {
     if (_description == null) {

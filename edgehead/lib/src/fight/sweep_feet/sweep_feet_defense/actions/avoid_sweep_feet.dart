@@ -80,6 +80,7 @@ class AvoidSweepFeet extends OtherActorAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState w, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState w, Actor enemy) =>
       !a.anatomy.isBlind;
 }

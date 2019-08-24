@@ -61,8 +61,9 @@ class Cower extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) =>
-      actor.currentDamageCapability.isNone ||
-      actor.anatomy.hasCrippledLegs ||
-      actor.anatomy.isBlind;
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, void _) =>
+      a.currentDamageCapability.isNone ||
+      a.anatomy.hasCrippledLegs ||
+      a.anatomy.isBlind;
 }

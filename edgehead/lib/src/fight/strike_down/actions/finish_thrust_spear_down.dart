@@ -74,7 +74,8 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, Actor enemy) =>
       enemy.isOnGround &&
       a.currentWeapon?.damageCapability?.type == WeaponType.spear;
 }

@@ -89,7 +89,8 @@ class OnGroundParry extends OtherActorAction {
   }
 
   @override
-  bool isApplicable(Actor a, Simulation sim, WorldState world, Actor enemy) =>
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, Actor enemy) =>
       !a.anatomy.isBlind &&
       enemy.currentDamageCapability.isSlashing &&
       a.currentDamageCapability.type.canParrySlash;

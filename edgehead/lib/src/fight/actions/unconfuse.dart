@@ -66,10 +66,11 @@ class Unconfuse extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) {
-    if (!actor.isConfused) return false;
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState world, void _) {
+    if (!a.isConfused) return false;
     final timeSince = world.timeSinceLastActionRecord(
-        actionName: Confuse.className, sufferer: actor, wasSuccess: true);
+        actionName: Confuse.className, sufferer: a, wasSuccess: true);
     return timeSince > Confuse.minimalEffectLength;
   }
 }

@@ -163,8 +163,9 @@ class AutoLoot extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) =>
-      actor.isPlayer;
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, void _) =>
+      a.isPlayer;
 
   /// Give shields to unshielded teammates.
   void _distributeShields(

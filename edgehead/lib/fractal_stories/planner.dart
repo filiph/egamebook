@@ -134,8 +134,8 @@ class ActorPlanner {
 
     for (final performance in simulation.generateAllPerformances(context)) {
       assert(
-          performance.action.isApplicable(
-              currentActor, simulation, _initial.world, performance.object),
+          performance.action.isApplicable(context, currentActor, simulation,
+              _initial.world, performance.object),
           "We got an unapplicable action '${performance.commandPath}' from "
           "Simulation.generateAllPerformances.");
 
@@ -186,14 +186,15 @@ class ActorPlanner {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
     var startTurn = ActorTurn(mainActor, initial.world.time);
+    var context = ApplicabilityContext(mainActor, simulation, initial.world);
 
     log.finer("=====");
     log.finer(() => "_getConsequenceStats for firstAction "
         "'${firstPerformance.commandPath}' of ${mainActor.name}");
     log.finer(() => "- firstAction == $firstPerformance");
 
-    if (!firstPerformance.action.isApplicable(
-        mainActor, simulation, initial.world, firstPerformance.object)) {
+    if (!firstPerformance.action.isApplicable(context, mainActor, simulation,
+        initial.world, firstPerformance.object)) {
       log.finer("- firstAction not applicable");
       return;
     }
@@ -328,8 +329,8 @@ class ActorPlanner {
           simulation.generateAllPerformances(context).toList(growable: false);
 
       for (final performance in performances) {
-        assert(performance.action.isApplicable(
-            currentActor, simulation, current.world, performance.object));
+        assert(performance.action.isApplicable(context, currentActor,
+            simulation, current.world, performance.object));
 
         var consequences = performance.action.apply(
             currentActorTurn,

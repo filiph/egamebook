@@ -60,4 +60,4 @@ You search his pockets but turn up with nothing. Just then, you realize that if 
 
 
 SUCCESS_EFFECT:
-giveStaminaToPlayer(w, 1);
+$(c).giveStaminaToPlayer(1);

@@ -62,10 +62,11 @@ class Wait extends Action<Nothing> {
       ReasonedSuccessChance.sureSuccess;
 
   @override
-  bool isApplicable(Actor actor, Simulation sim, WorldState world, void _) =>
-      actor.isPlayer &&
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+          WorldState world, void _) =>
+      a.isPlayer &&
       // Don't allow waiting when there are no friendlies.
-      getPartyOf(actor, sim, world).length > 1 &&
+      getPartyOf(a, sim, world).length > 1 &&
       // Don't allow waiting if cowering is an option.
-      !Cower.singleton.isApplicable(actor, sim, world, _);
+      !Cower.singleton.isApplicable(c, a, sim, world, _);
 }

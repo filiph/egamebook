@@ -4,6 +4,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
@@ -81,8 +82,9 @@ abstract class OffBalanceOpportunitySituation extends Object
     var offBalanceOpportunityThrust = OffBalanceOpportunityThrust.singleton;
 
     // Only change the situation when the candidate can actually pull it off.
+    var context = ApplicabilityContext(candidate, sim, world);
     if (offBalanceOpportunityThrust.isApplicable(
-        candidate, sim, world, actor)) {
+        context, candidate, sim, world, actor)) {
       return ActorTurn(candidate, world.time);
     }
     return ActorTurn.never;

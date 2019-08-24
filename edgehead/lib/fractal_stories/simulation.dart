@@ -115,7 +115,7 @@ class Simulation {
       if (action is Action<Nothing>) {
         assert(action is! Action<Approach>);
         if (!action.isApplicable(
-            context.actor, context.simulation, context.world, null)) {
+            context, context.actor, context.simulation, context.world, null)) {
           log.finer(() => "- action '${action.name}' isn't applicable");
           continue;
         }
@@ -128,8 +128,8 @@ class Simulation {
       final targets = action.generateObjects(context);
 
       for (final target in targets) {
-        if (!action.isApplicable(
-            context.actor, context.simulation, context.world, target)) {
+        if (!action.isApplicable(context, context.actor, context.simulation,
+            context.world, target)) {
           log.finer(() => "- action '${action.name}' isn't applicable");
           continue;
         }
