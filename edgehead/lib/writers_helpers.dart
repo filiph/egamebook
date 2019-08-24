@@ -417,7 +417,7 @@ String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
     {@required bool capitalized}) {
   final party = getPartyOf(a, sim, originalWorld);
   if (party.length > 1) {
-    return capitalized ? 'We' : 'I';
+    return capitalized ? 'We' : 'we';
   } else {
     return 'I';
   }
