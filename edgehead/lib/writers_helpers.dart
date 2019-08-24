@@ -37,7 +37,7 @@ const int sleepingGoblinsSpearId = 45234205;
 /// [edgeheadTamara]'s [Actor.id].
 const int tamaraId = 2;
 
-const int veesId = 9847981951;
+const int leroyId = 9847981951;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = [

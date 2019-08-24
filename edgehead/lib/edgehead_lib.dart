@@ -234,7 +234,7 @@ class EdgeheadGame extends Book {
       // Creating a new game from start.
       world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(
-            <Actor>[aren, edgeheadBriana, edgeheadTamara, edgeheadVees])
+            <Actor>[aren, edgeheadBriana, edgeheadTamara, edgeheadLeroy])
         ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)

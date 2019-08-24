@@ -59,9 +59,10 @@ final Actor edgeheadTamara = Actor.initialized(
   currentWeapon: Item.weapon(2342341, WeaponType.sword),
 );
 
-final Actor edgeheadVees = Actor.initialized(
-  veesId,
-  "Vees",
+/// Trader Joseph's son.
+final Actor edgeheadLeroy = Actor.initialized(
+  leroyId,
+  "Leroy",
   nameIsProperNoun: true,
   pronoun: Pronoun.HE,
   isHireable: true,
