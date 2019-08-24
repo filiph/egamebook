@@ -46,6 +46,6 @@ EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
 void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation mainSituation) {
   a.report(s, "<subject> throw<s> <subjectPronounSelf> {on|upon} <object>",
-      object: enemy);
+      object: enemy, positive: true);
   w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
 }

@@ -53,6 +53,7 @@ void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
       "with <object2> held high",
       object: enemy,
       object2: weapon,
+      positive: true,
       endSentence: true);
   w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
 }
