@@ -58,7 +58,9 @@ class DodgeThrow extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
-    a.report(s, "<subject> tr<ies> to {dodge|sidestep}");
+    final dodgeDescription =
+        a.isOnGround ? '{dodge|roll out of the way}' : '{dodge|sidestep}';
+    a.report(s, "<subject> tr<ies> to $dodgeDescription");
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
