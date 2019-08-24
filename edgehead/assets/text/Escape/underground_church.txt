@@ -9,13 +9,13 @@ Your bare footsteps reverberate in the room, so you slow down to quiet them.
 
 - RULESET
 - RULE:
-  justCameFrom(w, "cave_with_agruth")
+  $(c).justCameFrom("cave_with_agruth")
 - THEN:
 After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.
 
 - END RULE
 - RULE:
-  justCameFrom(w, "guardpost_above_church")
+  $(c).justCameFrom("guardpost_above_church")
 - THEN:
 Not far from here, a tunnel leads slightly downward, back to where you killed Agruth.
 

@@ -87,8 +87,7 @@ abstract class Situation {
   /// For example, if the action adds new situations at the top of the stack,
   /// those situations will first get resolved (and popped) and only then will
   /// [onAfterTurn] get called.
-  void onAfterTurn(
-      Simulation sim, WorldStateBuilder world, Storyline outputStoryline);
+  void onAfterTurn(ActionContext context);
 
   /// Called just before executing an action.
   ///
@@ -128,8 +127,7 @@ mixin SituationBaseBehavior implements Situation {
   }
 
   @override
-  void onAfterTurn(
-      Simulation sim, WorldStateBuilder world, Storyline outputStoryline) {
+  void onAfterTurn(ActionContext context) {
     // No-op by default.
   }
 

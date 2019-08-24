@@ -1,5 +1,4 @@
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
-import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -90,20 +89,24 @@ final _brianaQuotesRuleset = Ruleset.unordered(_brianaQuotes.map((quote) {
 
 /// A helper wrapper around ActionContext which provides the writer with
 /// many helper methods.
+///
+/// Yes, the name of the function is `$`.
 _HelperAccessor $(ApplicabilityContext c) => _HelperAccessor(c);
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
 }
 
-void describeSuccessRate(Simulation sim, WorldState w, Storyline s) {
+void describeSuccessRate(ActionContext c) {
+  final w = c.world;
+  final s = c.outputStoryline;
   s.add("<p class='meta'>", wholeSentence: true);
   s.add("Thanks for playing _Insignificant Little Vermin._",
       wholeSentence: true);
 
   bool hasOrcthorn = w.actionHasBeenPerformedSuccessfully("take_orcthorn");
   bool destroyed = w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
-  final player = getPlayer(w);
+  final player = $(c).player;
 
   player.report(
       s, "<subject> ${hasOrcthorn ? 'took' : 'didn\'t find'} Orcthorn");
@@ -161,7 +164,7 @@ void enterTunnelWithCancel(ActionContext c) {
 }
 
 void executeSpearThrowAtOgre(ActionContext c) {
-  final player = getPlayer(c.world);
+  final player = $(c).player;
   final inventorySpears = player.inventory.weapons
       .where((item) => item.damageCapability.type == WeaponType.spear)
       .toList(growable: false);
@@ -184,8 +187,9 @@ void executeSpearThrowAtOgre(ActionContext c) {
   $(c).movePlayer("war_forge", silent: true);
 }
 
-FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
+FightSituation generateAgruthFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   var agruth = _generateAgruth();
   w.actors.add(agruth);
   return FightSituation.initialized(
@@ -204,11 +208,9 @@ FightSituation generateAgruthFight(Simulation sim, WorldStateBuilder w,
 }
 
 /// The fight west of The Bleeds.
-FightSituation generateBleedsGoblinSkirmishPatrol(
-    Simulation sim,
-    WorldStateBuilder w,
-    RoomRoamingSituation roomRoamingSituation,
-    Iterable<Actor> party) {
+FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   var goblin = Actor.initialized(w.randomInt(), "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
@@ -220,8 +222,9 @@ FightSituation generateBleedsGoblinSkirmishPatrol(
       "{muddy |wet |}ground", roomRoamingSituation, {});
 }
 
-FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
+FightSituation generateEscapeTunnelFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   var orc = _makeOrc(w, id: escapeTunnelOrcId);
   var goblin = _makeGoblin(w, id: escapeTunnelGoblinId);
   var monsters = [orc, goblin];
@@ -237,8 +240,9 @@ FightSituation generateEscapeTunnelFight(Simulation sim, WorldStateBuilder w,
   });
 }
 
-FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
+FightSituation generateMadGuardianFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   var knowsAboutGuardian = w.actionHasBeenPerformed("talk_to_briana_3");
   var madGuardian = _generateMadGuardian(w, knowsAboutGuardian);
   w.actors.add(madGuardian);
@@ -255,29 +259,9 @@ FightSituation generateMadGuardianFight(Simulation sim, WorldStateBuilder w,
       });
 }
 
-FightSituation generateMountainPassGuardPostFight(
-    Simulation sim,
-    WorldStateBuilder w,
-    RoomRoamingSituation roomRoamingSituation,
-    Iterable<Actor> party) {
-  List<Actor> monsters;
-  if (w.actionHasBeenPerformedSuccessfully("take_out_gate_guards") ||
-      w.actionHasBeenPerformedSuccessfully("take_out_gate_guards_rescue")) {
-    monsters = [_makeOrc(w)];
-  } else {
-    monsters = [_makeOrc(w), _makeGoblin(w)];
-  }
-  w.actors.addAll(monsters);
-
-  return FightSituation.initialized(
-      w.randomInt(), party, monsters, "ground", roomRoamingSituation, {});
-}
-
-FightSituation generateSlaveQuartersPassageFight(
-    Simulation sim,
-    WorldStateBuilder w,
-    RoomRoamingSituation roomRoamingSituation,
-    Iterable<Actor> party) {
+FightSituation generateSlaveQuartersPassageFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   var orc = _makeOrc(w, id: slaveQuartersOrcId);
   var goblin = _makeGoblin(w, id: slaveQuartersGoblinId, spear: true);
   var monsters = [orc, goblin];
@@ -290,8 +274,9 @@ FightSituation generateSlaveQuartersPassageFight(
 }
 
 /// The fight at the start of Knights of San Francisco, with Tamara.
-FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
+FightSituation generateStartFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   var goblin = Actor.initialized(w.randomInt(), "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
@@ -317,8 +302,9 @@ FightSituation generateStartFight(Simulation sim, WorldStateBuilder w,
 }
 
 /// Test fight. Do not use in production.
-FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
+FightSituation generateTestFightWithGoblin(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   final goblin = _makeGoblin(w, spear: true);
   w.actors.add(goblin);
   // final playersSword = Item.weapon(89892133, WeaponType.sword);
@@ -339,8 +325,9 @@ FightSituation generateTestFightWithGoblin(Simulation sim, WorldStateBuilder w,
 }
 
 /// Test fight. Do not use in production.
-FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
+FightSituation generateTestFightWithOrc(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   final aguthsSword = Item.weapon(89892130, WeaponType.sword);
   final playersSword = Item.weapon(89892131, WeaponType.sword);
   // TODO: add dagger to player's inventory (instead of on ground)
@@ -348,8 +335,8 @@ FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
   final equippedAgruth =
       agruth.rebuild((b) => b.inventory.equip(aguthsSword, agruth.anatomy));
   w.actors.add(equippedAgruth);
-  w.updateActorById(playerId,
-      (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
+  w.updateActorById(
+      playerId, (b) => b.inventory.equip(playersSword, $(c).player.anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
@@ -362,11 +349,9 @@ FightSituation generateTestFightWithOrc(Simulation sim, WorldStateBuilder w,
 }
 
 /// Test fight. Do not use in production.
-FightSituation generateTestFightWithOrcAndGoblin(
-    Simulation sim,
-    WorldStateBuilder w,
-    RoomRoamingSituation roomRoamingSituation,
-    Iterable<Actor> party) {
+FightSituation generateTestFightWithOrcAndGoblin(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
   final orcsSword = Item.weapon(898921730, WeaponType.sword);
   final playersSword = Item.weapon(898921731, WeaponType.sword);
   final orc = Actor.initialized(agruthId, "orc",
@@ -381,8 +366,8 @@ FightSituation generateTestFightWithOrcAndGoblin(
   final goblin = _makeGoblin(w, spear: true);
   w.actors.add(goblin);
 
-  w.updateActorById(playerId,
-      (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
+  w.updateActorById(
+      playerId, (b) => b.inventory.equip(playersSword, $(c).player.anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
@@ -397,8 +382,6 @@ Actor getEscapeTunnelGoblin(WorldState w) =>
     w.getActorById(escapeTunnelGoblinId);
 
 Actor getEscapeTunnelOrc(WorldState w) => w.getActorById(escapeTunnelOrcId);
-
-Actor getPlayer(WorldState w) => w.getActorById(playerId);
 
 Actor getSlaveQuartersGoblin(WorldStateBuilder w) =>
     w.getActorById(slaveQuartersGoblinId);
@@ -419,8 +402,8 @@ String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
   }
 }
 
-void giveGoblinsSpearToPlayer(WorldStateBuilder w) => w.updateActorById(
-    getPlayer(w.build()).id, (b) => b.inventory.add(sleepingGoblinsSpear));
+void giveGoblinsSpearToPlayer(WorldStateBuilder w) =>
+    w.updateActorById(playerId, (b) => b.inventory.add(sleepingGoblinsSpear));
 
 /// Returns `true` while player is roaming through Bloodrock. Note that the list
 /// of rooms contains only those that are actual rooms (it excludes the likes
@@ -439,19 +422,6 @@ bool isRoamingInBloodrock(WorldState w) {
   ];
   return bloodrockRoamingRooms
       .contains((w.currentSituation as RoomRoamingSituation).currentRoomName);
-}
-
-/// Checks whether player was just now at [fromRoomName].
-///
-/// This only returns `true` if no other room was visited since then.
-///
-/// If player was in a variant of [fromRoomName], then that counts as well.
-bool justCameFrom(WorldState w, String fromRoomName) {
-  final player = getPlayer(w);
-  final latest = w.visitHistory.getLatestOnly(player);
-  if (latest == null) return false;
-  return latest.roomName == fromRoomName ||
-      latest.parentRoomName == fromRoomName;
 }
 
 void nameAgruthSword(WorldStateBuilder w, String name) {
@@ -475,12 +445,6 @@ void nameAgruthSword(WorldStateBuilder w, String name) {
   }
   assert(n == 1,
       "This assumes exactly one sword wielded by either Aren or Briana.");
-}
-
-bool playerHasVisited(Simulation sim, WorldState built, String roomName) {
-  final room = sim.getRoomByName(roomName);
-  final player = getPlayer(built);
-  return built.visitHistory.query(player, room).hasHappened;
 }
 
 void rollBrianaQuote(ActionContext context) {
@@ -594,7 +558,14 @@ class _HelperAccessor {
     return sim.getRoomByName(situation.currentRoomName).isIdle;
   }
 
-  ActionContext get _context {
+  Actor get player {
+    if (_isActionContext) {
+      return _actionContext.outputWorld.getActorById(playerId);
+    }
+    return _applicabilityContext.world.getActorById(playerId);
+  }
+
+  ActionContext get _actionContext {
     if (!_isActionContext) {
       throw StateError('Tried to use ApplicabilityContext (read-only) '
           'as ActionContext (read/write)');
@@ -608,8 +579,21 @@ class _HelperAccessor {
   }
 
   void giveStaminaToPlayer(int amount) {
-    final w = _context.outputWorld;
-    w.updateActorById(getPlayer(w.build()).id, (b) => b..stamina += amount);
+    final w = _actionContext.outputWorld;
+    w.updateActorById(playerId, (b) => b..stamina += amount);
+  }
+
+  /// Checks whether player was just now at [fromRoomName].
+  ///
+  /// This only returns `true` if no other room was visited since then.
+  ///
+  /// If player was in a variant of [fromRoomName], then that counts as well.
+  bool justCameFrom(String fromRoomName) {
+    final latest =
+        _applicabilityContext.world.visitHistory.getLatestOnly(player);
+    if (latest == null) return false;
+    return latest.roomName == fromRoomName ||
+        latest.parentRoomName == fromRoomName;
   }
 
   bool knowsAbout(String topic) {
@@ -629,6 +613,14 @@ class _HelperAccessor {
   }
 
   void movePlayer(String locationName, {bool silent = false}) {
-    getRoomRoaming().moveActor(_context, locationName, silent: silent);
+    getRoomRoaming().moveActor(_actionContext, locationName, silent: silent);
+  }
+
+  /// Returns `true` if player has ever visited [roomName].
+  bool playerHasVisited(String roomName) {
+    final room = _applicabilityContext.simulation.getRoomByName(roomName);
+    return _applicabilityContext.world.visitHistory
+        .query(player, room)
+        .hasHappened;
   }
 }

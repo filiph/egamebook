@@ -3,6 +3,7 @@ library edgehead.event_callbacks;
 // ignore_for_file: type_annotate_public_apis
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -19,7 +20,7 @@ part 'edgehead_event_callbacks_gather.gathered.dart';
 final InstanceSerializer<EventCallback> eventCallbackSerializer =
     _$eventCallbackSerializer;
 
-final agruth_enjoy_eating_flesh = EventCallback((sim, w, s) {
+final agruth_enjoy_eating_flesh = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
   s.addParagraph();
   agruth.report(
@@ -30,34 +31,33 @@ final agruth_enjoy_eating_flesh = EventCallback((sim, w, s) {
   s.addParagraph();
 });
 
-final agruth_grit_teeth = EventCallback((sim, w, s) {
+final agruth_grit_teeth = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
   agruth.report(s, "<subject> grit<s> <subject's> teeth");
   agruth.report(s, "<subject> <does>n't talk any more", but: true);
 });
 
-final agruth_scowls = EventCallback((sim, w, s) {
+final agruth_scowls = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
   agruth.report(s, "<subject> scowl<s> with pure hatred");
 });
 
-final agruth_spits = EventCallback((sim, w, s) {
+final agruth_spits = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
   agruth.report(s, "<subject> spit<s> on the cavern floor");
 });
 
-final escape_pursuers_reach = EventCallback((sim, w, s) {
-  final built = w.build();
+final escape_pursuers_reach = EventCallback((c, sim, w, s) {
   s.add(
       "Your pursuers reach you from behind and a sword pierces your chest "
       "with formidable power.",
       wholeSentence: true);
-  w.updateActorById(getPlayer(built).id, (b) => b..hitpoints = 0);
+  w.updateActorById(playerId, (b) => b..hitpoints = 0);
   w.popSituationsUntil(RoomRoamingSituation.className, sim);
   w.popSituation(sim);
 });
 
-final escape_tunnel_earsplitting = EventCallback((sim, w, s) {
+final escape_tunnel_earsplitting = EventCallback((c, sim, w, s) {
   s.add(
       "Ear-splitting shouts come from behind. You wheel around and see "
       "a body of orcs and goblins approaching at top speed, their "
@@ -65,16 +65,16 @@ final escape_tunnel_earsplitting = EventCallback((sim, w, s) {
       wholeSentence: true);
 });
 
-final escape_tunnel_halfway = EventCallback((sim, w, s) {
+final escape_tunnel_halfway = EventCallback((c, sim, w, s) {
   s.add("The orcs and goblins are halfway here.", wholeSentence: true);
 });
 
-final escape_tunnel_insignificant = EventCallback((sim, w, s) {
+final escape_tunnel_insignificant = EventCallback((c, sim, w, s) {
   final built = w.build();
   final orc = getEscapeTunnelOrc(built);
   final goblin = getEscapeTunnelGoblin(built);
   final actor = orc.isAnimatedAndActive ? orc : goblin;
-  final player = getPlayer(built);
+  final player = $(c).player;
   assert(actor.isAnimatedAndActive);
   assert(player.isAnimatedAndActive);
   final kicking = actor.currentWeapon == null ||
@@ -104,11 +104,11 @@ final escape_tunnel_insignificant = EventCallback((sim, w, s) {
       owner: actor, subject: eyes);
 });
 
-final escape_tunnel_look = EventCallback((sim, w, s) {
+final escape_tunnel_look = EventCallback((c, sim, w, s) {
   final built = w.build();
   final orc = getEscapeTunnelOrc(built);
   final goblin = getEscapeTunnelGoblin(built);
-  final player = getPlayer(built);
+  final player = $(c).player;
   if (bothAreAlive(orc, goblin)) {
     final actor = orc.isConfused ? goblin : orc;
     final otherActor = actor == orc ? goblin : orc;
@@ -145,21 +145,21 @@ final escape_tunnel_look = EventCallback((sim, w, s) {
   }
 });
 
-final escape_tunnel_loud_cries = EventCallback((sim, w, s) {
+final escape_tunnel_loud_cries = EventCallback((c, sim, w, s) {
   s.add(
       "From behind, you hear loud cries. Your pursuers must have reached "
       "the top of the stairs.",
       wholeSentence: true);
 });
 
-final mad_guardian_good = EventCallback((sim, w, s) {
+final mad_guardian_good = EventCallback((c, sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
   guardian.report(
       s, "\"Good good good,\" <subject> whisper<s>, eyeing <object>.",
-      object: getPlayer(w.build()), wholeSentence: true);
+      object: $(c).player, wholeSentence: true);
 });
 
-final mad_guardian_pain = EventCallback((sim, w, s) {
+final mad_guardian_pain = EventCallback((c, sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
   var briana = w.getActorById(brianaId);
   s.addParagraph();
@@ -173,9 +173,9 @@ final mad_guardian_pain = EventCallback((sim, w, s) {
   }
 });
 
-final mad_guardian_shut_up = EventCallback((sim, w, s) {
+final mad_guardian_shut_up = EventCallback((c, sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
-  var player = getPlayer(w.build());
+  var player = $(c).player;
   s.addParagraph();
   guardian.report(
       s,
@@ -192,7 +192,7 @@ final mad_guardian_shut_up = EventCallback((sim, w, s) {
   s.addParagraph();
 });
 
-final slave_quarters_mean_nothing = EventCallback((sim, w, s) {
+final slave_quarters_mean_nothing = EventCallback((c, sim, w, s) {
   final orc = getSlaveQuartersOrc(w);
   final goblin = getSlaveQuartersGoblin(w);
   final actor = orc.isAnimatedAndActive ? orc : goblin;
@@ -206,7 +206,7 @@ final slave_quarters_mean_nothing = EventCallback((sim, w, s) {
   actor.report(s, "\"You mean nothing.\"", wholeSentence: true);
 });
 
-final slave_quarters_orc_looks = EventCallback((sim, w, s) {
+final slave_quarters_orc_looks = EventCallback((c, sim, w, s) {
   final orc = getSlaveQuartersOrc(w);
   final goblin = getSlaveQuartersGoblin(w);
   if (!goblin.isAnimated) {
@@ -223,9 +223,9 @@ final slave_quarters_orc_looks = EventCallback((sim, w, s) {
   }
 });
 
-final sleeping_goblin_thief = EventCallback((sim, w, s) {
+final sleeping_goblin_thief = EventCallback((c, sim, w, s) {
   final goblin = w.getActorById(sleepingGoblinId);
-  final player = getPlayer(w.build());
+  final player = $(c).player;
   final tookSpear =
       w.actionHasBeenPerformedSuccessfully("take_spear_in_underground_church");
   if (tookSpear) {
@@ -235,7 +235,7 @@ final sleeping_goblin_thief = EventCallback((sim, w, s) {
   }
 });
 
-final youre_dead_slave = EventCallback((sim, w, s) {
+final youre_dead_slave = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
   var sword = Item.weapon(w.randomInt(), WeaponType.sword);
   agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
@@ -245,17 +245,17 @@ final youre_dead_slave = EventCallback((sim, w, s) {
       s,
       "\"You're dead, slave,\" <subject> growl<s> at <object> "
       "with hatred.",
-      object: getPlayer(w.build()),
+      object: $(c).player,
       wholeSentence: true);
 });
 
-final start_what_is_it_about_this_place = EventCallback((sim, w, s) {
+final start_what_is_it_about_this_place = EventCallback((c, sim, w, s) {
   s.addParagraph();
   s.add("“What _is_ it about this place?”", wholeSentence: true);
   s.addParagraph();
 });
 
-final start_this_place_is_nightmare = EventCallback((sim, w, s) {
+final start_this_place_is_nightmare = EventCallback((c, sim, w, s) {
   var current = w.build();
   if (current.wasKilled(tamaraId)) return;
   s.addParagraph();
@@ -263,7 +263,7 @@ final start_this_place_is_nightmare = EventCallback((sim, w, s) {
   s.addParagraph();
 });
 
-final start_come_back_with_me = EventCallback((sim, w, s) {
+final start_come_back_with_me = EventCallback((c, sim, w, s) {
   var current = w.build();
   if (current.wasKilled(tamaraId)) return;
   s.addParagraph();

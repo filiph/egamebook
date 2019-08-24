@@ -55,11 +55,11 @@ final Room undergroundChurch = Room('underground_church', (ActionContext c) {
       'You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. \n\n\nYour bare footsteps reverberate in the room, so you slow down to quiet them. \n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(404031087, 1, false, (ApplicabilityContext c) {
+      Rule(744937563, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "cave_with_agruth");
+        return $(c).justCameFrom("cave_with_agruth");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -70,11 +70,11 @@ final Room undergroundChurch = Room('underground_church', (ActionContext c) {
             'After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.\n\n',
             wholeSentence: true);
       }),
-      Rule(1058415809, 1, false, (ApplicabilityContext c) {
+      Rule(436107182, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "guardpost_above_church");
+        return $(c).justCameFrom("guardpost_above_church");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -391,12 +391,12 @@ class TalkToBriana3 extends RoamingAction {
         '_"What is Orcthorn?"_\n\n\n"A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed weird enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him_ grach kamkorr _– The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n',
         wholeSentence: true);
     Ruleset(
-        Rule(675414120, 2, false, (ApplicabilityContext c) {
+        Rule(621956786, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
           return a.currentRoomName == "slave_quarters_passage" &&
-              !playerHasVisited(sim, originalWorld, "orcthorn_room");
+              !$(c).playerHasVisited("orcthorn_room");
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -407,11 +407,11 @@ class TalkToBriana3 extends RoamingAction {
               '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide and nods towards the door.\n\n\n',
               wholeSentence: true);
         }),
-        Rule(363993062, 2, false, (ApplicabilityContext c) {
+        Rule(33780515, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
-          return playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+          return $(c).playerHasVisited("orcthorn_room") &&
               a.currentRoomName != "orcthorn_room";
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -423,13 +423,12 @@ class TalkToBriana3 extends RoamingAction {
               '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "The mad orc behind that door."\n\n\n',
               wholeSentence: true);
         }),
-        Rule(392088263, 2, false, (ApplicabilityContext c) {
+        Rule(384668601, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
-          return playerHasVisited(
-                  sim, originalWorld, "slave_quarters_passage") &&
-              !playerHasVisited(sim, originalWorld, "orcthorn_room");
+          return $(c).playerHasVisited("slave_quarters_passage") &&
+              !$(c).playerHasVisited("orcthorn_room");
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -896,11 +895,11 @@ final Room guardpostAboveChurch =
       'You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(133764767, 1, false, (ApplicabilityContext c) {
+      Rule(1002529998, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "smelter");
+        return $(c).justCameFrom("smelter");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -911,11 +910,11 @@ final Room guardpostAboveChurch =
             'The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.\n\n',
             wholeSentence: true);
       }),
-      Rule(318594253, 1, false, (ApplicabilityContext c) {
+      Rule(651703369, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "underground_church");
+        return $(c).justCameFrom("underground_church");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1308,11 +1307,11 @@ final Room smelter = Room('smelter', (ActionContext c) {
       'A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(1010398177, 1, false, (ApplicabilityContext c) {
+      Rule(66031380, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "war_forge");
+        return $(c).justCameFrom("war_forge");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1323,11 +1322,11 @@ final Room smelter = Room('smelter', (ActionContext c) {
             'You notice a smooth passage leading up and out of the smelter. You\'ll be able to go there unnoticed.\n',
             wholeSentence: true);
       }),
-      Rule(9791310, 1, false, (ApplicabilityContext c) {
+      Rule(824502225, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "guardpost_above_church");
+        return $(c).justCameFrom("guardpost_above_church");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1805,7 +1804,7 @@ class SmelterThrowSpear extends RoamingAction {
     if (!(!w.actionHasBeenPerformed(name) &&
         w.actionHasBeenPerformed("war_forge_watch_workers") &&
         w.actionHasBeenPerformed("smelter_look_around") &&
-        getPlayer(w).inventory.hasWeapon(WeaponType.spear))) {
+        $(c).player.inventory.hasWeapon(WeaponType.spear))) {
       return false;
     }
     return true;
@@ -1897,12 +1896,12 @@ final Room slaveQuartersPassage =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   Ruleset(
-      Rule(299502294, 2, false, (ApplicabilityContext c) {
+      Rule(818453219, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return playerHasVisited(sim, originalWorld, "orcthorn_room") &&
-            !justCameFrom(w, "orcthorn_room");
+        return $(c).playerHasVisited("orcthorn_room") &&
+            !$(c).justCameFrom("orcthorn_room");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1912,11 +1911,11 @@ final Room slaveQuartersPassage =
         s.add('  The reinforced door on the side of the corridor is silent.\n',
             wholeSentence: true);
       }),
-      Rule(871855510, 1, false, (ApplicabilityContext c) {
+      Rule(869270593, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return playerHasVisited(sim, originalWorld, "orcthorn_room");
+        return $(c).playerHasVisited("orcthorn_room");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1924,11 +1923,11 @@ final Room slaveQuartersPassage =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
       }),
-      Rule(233666017, 1, false, (ApplicabilityContext c) {
+      Rule(550453050, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return !playerHasVisited(sim, originalWorld, "orcthorn_room");
+        return !$(c).playerHasVisited("orcthorn_room");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1992,7 +1991,7 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
     }
     if (!(!w.actionHasBeenPerformed(name) &&
         !(w.currentSituation as RoomRoamingSituation).monstersAlive &&
-        !playerHasVisited(sim, w, "orcthorn_room"))) {
+        !$(c).playerHasVisited("orcthorn_room"))) {
       return false;
     }
     return true;
@@ -2094,7 +2093,7 @@ final Room exitFromBloodrock = Room('exit_from_bloodrock', (ActionContext c) {
   s.add(
       '\n\n"A connection."\n\n\n_"With the Dead Prince. I dream his dreams. I think I have some of his power. You feel it, too — I am sure of it — but you have not been in the mountain for as long as I have. Most slaves are lucky to survive the first month. I survived three years."_\n\n\n"So the thing you have that kings don\'t is… a way to communicate? Or negotiate with him?"\n\n\n_"Negotiate? No, I do not have anything the Dead Prince wants. I do not think any mortal man does. But I think I am starting to understand what that is, and how the Dead Prince wants to seize it."_\n\n\n"So what’s the plan?"\n\n\n_"Giving him the exact opposite of what he wants."_\n\n\n"You know we could just run, slay some orcs along the way, and get as far away from this place as possible, right?"\n\n\n_"Yes."_\n\n\n"Anyone else would do exactly that."\n\n\n_"But we will not."_\n\n\nBriana sighs. "No, I suppose we won\'t."\n\n\nWith that, you both start down the road toward the black fort in the distance.\n\n\nTHE END.\n\n\n',
       wholeSentence: true);
-  describeSuccessRate(sim, originalWorld, s);
+  describeSuccessRate(c);
 }, null, null, null);
 final Approach exitFromBloodrockFromTunnel = Approach(
     'tunnel', 'exit_from_bloodrock', 'Start running again', (ActionContext c) {
@@ -2124,11 +2123,11 @@ final Room warForge = Room('war_forge', (ActionContext c) {
       'You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.\n\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(1010631821, 1, false, (ApplicabilityContext c) {
+      Rule(443839703, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "cave_with_agruth");
+        return $(c).justCameFrom("cave_with_agruth");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -2139,11 +2138,11 @@ final Room warForge = Room('war_forge', (ActionContext c) {
             'You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.\n\n',
             wholeSentence: true);
       }),
-      Rule(383419248, 1, false, (ApplicabilityContext c) {
+      Rule(810564652, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return justCameFrom(w, "smelter");
+        return $(c).justCameFrom("smelter");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -2596,11 +2595,11 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
   assert(!originalWorld.wasKilled(tamaraId));
 
   Ruleset(
-      Rule(1036996063, 1, false, (ApplicabilityContext c) {
+      Rule(785012535, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return playerHasVisited(sim, w, "start_raccoon");
+        return $(c).playerHasVisited("start_raccoon");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;

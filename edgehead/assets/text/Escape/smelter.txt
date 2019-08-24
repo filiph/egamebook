@@ -6,12 +6,12 @@ A blast of smoke and heat greets you as you step into the room. A roaring fire d
 
 - RULESET
 - RULE:
-  justCameFrom(w, "war_forge")
+  $(c).justCameFrom("war_forge")
 - THEN:
 You notice a smooth passage leading up and out of the smelter. You'll be able to go there unnoticed.
 - END RULE
 - RULE:
-  justCameFrom(w, "guardpost_above_church")
+  $(c).justCameFrom("guardpost_above_church")
 - THEN:
 Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You'll be able to go there unnoticed.
 - END RULE

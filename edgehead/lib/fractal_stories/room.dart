@@ -24,11 +24,8 @@ final Room endOfRoam =
 ///
 /// TODO: remove the dependency on [FightSituation] and [RoomRoamingSituation]
 ///       or pull out Room into RoomRoaming instead of having it here.
-typedef FightGenerator = FightSituation Function(
-    Simulation sim,
-    WorldStateBuilder world,
-    RoomRoamingSituation roomRoamingSituation,
-    Iterable<Actor> party);
+typedef FightGenerator = FightSituation Function(ActionContext context,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party);
 
 typedef ItemGenerator = Iterable<Item> Function(
     Simulation sim, WorldState world);

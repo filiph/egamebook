@@ -6,11 +6,11 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -208,13 +208,14 @@ abstract class FightSituation extends Object
   }
 
   @override
-  void onAfterTurn(Simulation sim, WorldStateBuilder world, Storyline s) {
+  void onAfterTurn(ActionContext context) {
     // We're using [onAfterTurn] because when using onAfterAction, we'd report
     // timed events at a time when an action in FightSituation might have
     // created other (child) situations.
     if (events.containsKey(turn)) {
       final callback = events[turn];
-      callback.run(sim, world, s);
+      callback.run(context, context.simulation, context.outputWorld,
+          context.outputStoryline);
     }
   }
 

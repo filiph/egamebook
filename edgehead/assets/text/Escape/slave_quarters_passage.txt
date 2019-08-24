@@ -39,18 +39,18 @@ DESCRIPTION:
 
 - RULESET
 - RULE:
-  playerHasVisited(sim, originalWorld, "orcthorn_room") &&
-  !justCameFrom(w, "orcthorn_room")
+  $(c).playerHasVisited("orcthorn_room") &&
+  !$(c).justCameFrom("orcthorn_room")
 - THEN:
   The reinforced door on the side of the corridor is silent.
 - END RULE
 - RULE:
-  playerHasVisited(sim, originalWorld, "orcthorn_room")
+  $(c).playerHasVisited("orcthorn_room")
 - THEN:
 // Intentionally left blank.
 - END RULE
 - RULE:
-  !playerHasVisited(sim, originalWorld, "orcthorn_room")
+  !$(c).playerHasVisited("orcthorn_room")
 - THEN:
   The reinforced door on the side of the corridor is closed.
 - END RULE
@@ -97,7 +97,7 @@ PREREQUISITES:
 &&
 !(w.currentSituation as RoomRoamingSituation).monstersAlive
 &&
-!playerHasVisited(sim, w, "orcthorn_room")
+!$(c).playerHasVisited("orcthorn_room")
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%

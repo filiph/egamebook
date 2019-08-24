@@ -61,7 +61,7 @@ class SlayMonstersAction extends Action<Nothing> {
         other.team.isFriendWith(a.team) &&
         other.currentRoomName == room.name);
 
-    var fightSituation = room.fightGenerator(sim, w, situation, friends);
+    var fightSituation = room.fightGenerator(context, situation, friends);
     assert(() {
       WorldState rebuilt = w.build();
       return fightSituation.enemyTeamIds

@@ -13,8 +13,8 @@ import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
-typedef EventCallbackFunction = void Function(
-    Simulation sim, WorldStateBuilder world, Storyline storyline);
+typedef EventCallbackFunction = void Function(ActionContext c, Simulation sim,
+    WorldStateBuilder world, Storyline storyline);
 
 /// A function to be called at a specified time.
 ///
@@ -31,8 +31,9 @@ class EventCallback {
   ///
   /// This method should have the same signature as [EventCallbackFunction]
   /// itself.
-  void run(Simulation sim, WorldStateBuilder world, Storyline storyline) =>
-      _function(sim, world, storyline);
+  void run(ActionContext c, Simulation sim, WorldStateBuilder world,
+          Storyline storyline) =>
+      _function(c, sim, world, storyline);
 }
 
 /// This object contains everything that is completely immutable about the world

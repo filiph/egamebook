@@ -110,7 +110,7 @@ _"That is what Agruth and the other slavers were talking about a couple of weeks
 - RULESET
 - RULE:
   a.currentRoomName == "slave_quarters_passage" &&
-  !playerHasVisited(sim, originalWorld, "orcthorn_room")
+  !$(c).playerHasVisited("orcthorn_room")
 - THEN:
 _"Somewhere here in the slave quarters."_
 
@@ -119,7 +119,7 @@ Briana's eyes go wide and nods towards the door.
 
 - END RULE
 - RULE:
-  playerHasVisited(sim, originalWorld, "orcthorn_room") &&
+  $(c).playerHasVisited("orcthorn_room") &&
   a.currentRoomName != "orcthorn_room"
 - THEN:
 _"Down the slave quarters."_
@@ -129,8 +129,8 @@ Briana's eyes go wide. "The mad orc behind that door."
 
 - END RULE
 - RULE:
-  playerHasVisited(sim, originalWorld, "slave_quarters_passage") &&
-  !playerHasVisited(sim, originalWorld, "orcthorn_room")
+  $(c).playerHasVisited("slave_quarters_passage") &&
+  !$(c).playerHasVisited("orcthorn_room")
 - THEN:
 _"Down the slave quarters."_
 

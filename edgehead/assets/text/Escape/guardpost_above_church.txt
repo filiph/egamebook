@@ -6,13 +6,13 @@ You enter a small circular room. You see three openings that lead to passages, e
 
 - RULESET
 - RULE:
-  justCameFrom(w, "smelter")
+  $(c).justCameFrom("smelter")
 - THEN:
 The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.
 
 - END RULE
 - RULE:
-  justCameFrom(w, "underground_church")
+  $(c).justCameFrom("underground_church")
 - THEN:
 The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these passages slope downward.
 

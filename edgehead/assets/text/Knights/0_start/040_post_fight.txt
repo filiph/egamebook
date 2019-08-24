@@ -30,7 +30,7 @@ assert(!originalWorld.wasKilled(tamaraId));
 
 - RULESET
 - RULE:
-  playerHasVisited(sim, w, "start_raccoon")
+  $(c).playerHasVisited("start_raccoon")
 - THEN:
 "Raccoon my ass."
 

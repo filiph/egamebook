@@ -322,7 +322,7 @@ abstract class Action<T> {
 
     // Only 'surviving' (non-popped) situations get to run their `onAfterTurn`
     // methods.
-    output.currentSituation?.onAfterTurn(sim, output, outputStoryline);
+    output.currentSituation?.onAfterTurn(context);
 
     _addWorldRecord(builder, output);
     return outputStoryline;
