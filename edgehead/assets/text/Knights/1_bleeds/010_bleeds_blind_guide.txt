@@ -1,0 +1,73 @@
+// Jisad - Blind Guide NPC
+//
+// What does he want that clashes with Aren at the start? He wants the Tome of Necromancy to stay hidden, he wants to destroy it.
+// He wants his old Pyramid back, the way it was in a brittle equilibrium.
+// He hates violence and necromancy.
+// "I will do anything to make this place peaceful again. Just don't ask me to touch magic. Much less _black_ magic."
+// In the end, of course, he will need to do just that.
+
+// ---
+ACTION: $bleeds_blind_guide_greet
+COMMAND: Blind man >> “Hello!”
+
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES: w.actionNeverUsed(name)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I come over to the blind man and introduce myself.
+
+"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."
+
+_"Hilarious."_
+
+"So what brings you here?"
+
+I have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.
+
+// We can add branching here.
+
+_"I seek treasure."_
+
+"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."
+
+
+// ---
+ACTION: $bleeds_blind_guide_terrible_idea
+COMMAND: Blind Guide >> “Why is hunting for treasure in the Pyramid a terrible idea?”
+
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"So you want to explore the Pyramid."
+
+_"I need something that's in there."_
+
+"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"
+
+I don't want to reveal more than needed. But "magic" is vague enough. So I just say yes.
+
+The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.
+
+_"What about it?"_
+
+"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."
+
+_"And this is because of magic?"_
+
+The otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."
+
+The man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."
+
+[[CODE]]
+// knowOf -- learnedOf events: pyramid_dangerous, goblins_closing_in, orcs, knights_leaving
+[[/CODE]]

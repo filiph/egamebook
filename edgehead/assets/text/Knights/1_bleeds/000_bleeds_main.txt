@@ -1,4 +1,9 @@
 // ---
+APPROACH: $bleeds_main FROM $pre_start_book
+COMMAND: DEBUG >> Play ‘Knights of San Francisco’ from The Bleeds
+DESCRIPTION: N/A
+
+// ---
 APPROACH: $bleeds_main FROM $start_post_fight
 COMMAND: Go >> towards the Pyramid
 DESCRIPTION: N/A
@@ -21,9 +26,12 @@ FLAGS: idle
 FIRST_DESCRIPTION:
 I finally see it. The Pyramid.
 
-A little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement The Bleeds.
+// TODO: add image
 
-It was harder than I expected but I made it here. The Manual is somewhere here. I can find it.
+Below the Pyramid there's a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.
 
-DESCRIPTION:
-Lots of shacks and their inhabitants.
+At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.
+
+Every door is shut except for two. One is the entrance into a trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
+
+DESCRIPTION: N/A

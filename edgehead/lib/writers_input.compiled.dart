@@ -2362,7 +2362,7 @@ class ReadLetterFromFather extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['self', 'letter from father', 'read'];
+      ['inventory', 'letter from father', 'read'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
@@ -2423,7 +2423,7 @@ class ReadLetterFromMentor extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['self', 'letter from mentor', 'read'];
+      ['inventory', 'letter from mentor', 'read'];
   @override
   bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
     if (!(w.actionNeverUsed(name) && isInIdleRoom(sim, w))) {
@@ -2865,6 +2865,16 @@ final Room start = Room('start', (ActionContext c) {
       wholeSentence: true);
   w.actors.removeWhere((actor) => actor.id == brianaId);
 }, null, null, null);
+final Approach bleedsMainFromPreStartBook = Approach('pre_start_book',
+    'bleeds_main', 'DEBUG >> Play ‘Knights of San Francisco’ from The Bleeds',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Approach bleedsMainFromStartPostFight =
     Approach('start_post_fight', 'bleeds_main', 'Go >> towards the Pyramid',
         (ActionContext c) {
@@ -2908,7 +2918,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\nA little village, more of a tent camp, stands outside of the entrance. Later, I learn the locals call the settlement The Bleeds.\n\nIt was harder than I expected but I made it here. The Manual is somewhere here. I can find it.\n',
+      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nAt any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2916,7 +2926,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Lots of shacks and their inhabitants.\n', wholeSentence: true);
+  s.add('', wholeSentence: true);
 }, null, null, isIdle: true);
 final Approach endOfRoamFromBleedsMain = Approach(
     'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
@@ -2929,7 +2939,8 @@ final Approach endOfRoamFromBleedsMain = Approach(
       wholeSentence: true);
 });
 final Approach bleedsTraderHutFromBleedsMain = Approach(
-    'bleeds_main', 'bleeds_trader_hut', 'Go >> trader', (ActionContext c) {
+    'bleeds_main', 'bleeds_trader_hut', 'Go >> inside the trader\'s shop',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2988,9 +2999,143 @@ class BleedsTraderAskBusiness extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, everyone is leaving, nobody buys anything. Except for travel gear, that is. But we\'re out of that until the next caravan."\n',
+        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n',
         wholeSentence: true);
     return '${a.name} successfully performs BleedsTraderAskBusiness';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsBlindGuideGreet extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_greet';
+
+  static final BleedsBlindGuideGreet singleton = BleedsBlindGuideGreet();
+
+  @override
+  List<String> get commandPathTemplate => ['Blind man', '“Hello!”'];
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_main') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs BleedsBlindGuideGreet';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsBlindGuideTerribleIdea extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_terrible_idea';
+
+  static final BleedsBlindGuideTerribleIdea singleton =
+      BleedsBlindGuideTerribleIdea();
+
+  @override
+  List<String> get commandPathTemplate => [
+        'Blind Guide',
+        '“Why is hunting for treasure in the Pyramid a terrible idea?”'
+      ];
+  @override
+  bool isApplicable(Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_main') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) &&
+        w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"So you want to explore the Pyramid."\n\n_"I need something that\'s in there."_\n\n"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n\nI don\'t want to reveal more than needed. But "magic" is vague enough. So I just say yes.\n\nThe man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n\n_"What about it?"_\n\n"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."\n\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n\n',
+        wholeSentence: true);
+
+    return '${a.name} successfully performs BleedsBlindGuideTerribleIdea';
   }
 
   @override
@@ -3097,6 +3242,7 @@ final allApproaches = <Approach>[
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
+  bleedsMainFromPreStartBook,
   bleedsMainFromStartPostFight,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishMain,
@@ -3127,5 +3273,7 @@ final allActions = <RoamingAction>[
   ReadLetterFromMentor.singleton,
   StartTakeDagger.singleton,
   StartDeclineDagger.singleton,
-  BleedsTraderAskBusiness.singleton
+  BleedsTraderAskBusiness.singleton,
+  BleedsBlindGuideGreet.singleton,
+  BleedsBlindGuideTerribleIdea.singleton
 ];

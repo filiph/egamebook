@@ -1,5 +1,5 @@
 ACTION: $read_letter_from_mentor
-COMMAND: self >> letter from mentor >> read
+COMMAND: inventory >> letter from mentor >> read
 
 PREREQUISITES:
 w.actionNeverUsed(name)

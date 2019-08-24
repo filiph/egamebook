@@ -1,6 +1,6 @@
 // ---
 APPROACH: $bleeds_trader_hut FROM $bleeds_main
-COMMAND: Go >> trader
+COMMAND: Go >> inside the trader's shop
 DESCRIPTION: N/A
 
 // ---
@@ -18,7 +18,6 @@ I don't really have any money, so I just nod and smile.
 
 DESCRIPTION: The trader {nods|pretends to smile} as [[we]] enter his shop.
 
-
 // ---
 ACTION: $bleeds_trader_ask_business
 COMMAND: Trader >> “How is business?”
@@ -32,4 +31,16 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 The trader shrugs.
 
-"It's terrible. Everyone is afraid, everyone is leaving, nobody buys anything. Except for travel gear, that is. But we're out of that until the next caravan."
+"It's terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we're out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.
+
+_"Why travel gear?"_
+
+"People are leaving. Even _he_ wants to leave."
+
+This is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader's son.
+
+"Well why wouldn't I leave, father? We all should. What awaits us here?"
+
+The trader shakes his head and interjects: "What awaits us anywhere else?"
+
+"Death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
