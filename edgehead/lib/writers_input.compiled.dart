@@ -2591,6 +2591,9 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
+  final ifBlock_329a5969a = $(c).isHurt(tamaraId)
+      ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
+      : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
   s.add('The fight is over.\n\n', wholeSentence: true);
   assert(!originalWorld.wasKilled(tamaraId));
 
@@ -2624,7 +2627,7 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
             wholeSentence: true);
       })).apply(c);
   s.add(
-      '\n"Look, kid, I understand how hard it must have been to leave your comfortable life behind, and come to this scary place all by yourself. And I respect you for that strength of will. But it\'s time for you to quit. Go back to safety. You won\'t survive here."\n\n"Thanks for your service, Tamara. But I\'ve come this far."\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+      '\n$ifBlock_329a5969a "Come with me back to safety. I\'ll give you a half price for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
       wholeSentence: true);
   w.updateActorById(tamaraId, (b) => b.isActive = false);
 }, null, null, null,

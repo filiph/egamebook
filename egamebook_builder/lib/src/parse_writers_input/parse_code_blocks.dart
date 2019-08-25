@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:code_builder/code_builder.dart';
+import 'package:egamebook_builder/src/parse_writers_input/if_block.dart';
 import 'package:meta/meta.dart' hide literal;
 
 import 'escape_writers_text.dart';
@@ -33,18 +34,6 @@ final RegExp rulesetOpenTag = RegExp(r"^\s*- RULESET\s*$");
 /// of a [BlockType.rule] parent block.
 final RegExp ruleThenTag = RegExp(r"^\s*- THEN:\s*$");
 
-final Pattern weSubstitution = "[[we]]";
-
-final Pattern weSubstitutionCapitalized = "[[We]]";
-
-final Pattern sirSubstitution = "[[sir]]";
-
-final Pattern sirSubstitutionCapitalized = "[[Sir]]";
-
-final Pattern youngSirSubstitution = "[[young sir]]";
-
-final Pattern youngSirSubstitutionCapitalized = "[[Young sir]]";
-
 final RegExp _logicalAndPattern = RegExp(r"\s+&&\s+");
 
 final RegExp _whiteSpaceOnly = RegExp(r"^\s*$");
@@ -54,16 +43,25 @@ final RegExp _whiteSpaceOnly = RegExp(r"^\s*$");
 Iterable<Code> createDescriptionStatements(String text) sync* {
   // Define we substitutions if needed.
   if (text.contains(weSubstitution)) {
-    yield Code("final weSubstitution = "
-        "getWeOrI(a, sim, originalWorld, capitalized: false);");
+    yield Code(r"final weSubstitution = "
+        r"getWeOrI(a, sim, originalWorld, capitalized: false);");
   }
   if (text.contains(weSubstitutionCapitalized)) {
-    yield Code("final weSubstitutionCapitalized = "
-        "getWeOrI(a, sim, originalWorld, capitalized: true);");
+    yield Code(r"final weSubstitutionCapitalized = "
+        r"getWeOrI(a, sim, originalWorld, capitalized: true);");
+  }
+
+  // Define if-block substitutions if needed.
+  final ifBlocks = IfBlock.parse(text).toList(growable: false);
+  for (final block in ifBlocks) {
+    final body = escapeWritersText(block.body);
+    final elseBody = escapeWritersText(block.elseBody);
+    yield Code("final ${block.identifier} = "
+        "${block.condition} ? \'\'\'$body\'\'\' : \'\'\'$elseBody\'\'\';");
   }
 
   final root = parseBlocks(text ?? '');
-  final visitor = SequenceBlockVisitor();
+  final visitor = SequenceBlockVisitor(ifBlocks);
   root.accept(visitor);
   yield* visitor.statements;
 }
@@ -288,6 +286,11 @@ enum BlockType {
 class SequenceBlockVisitor {
   final BlockBuilder _builder = BlockBuilder();
 
+  /// The iterable if [IfBlock]s that are present in the text.
+  final List<IfBlock> _ifBlocks;
+
+  SequenceBlockVisitor(this._ifBlocks);
+
   Iterable<Code> get statements => _builder.build().statements;
 
   void visit(Block block) {
@@ -302,7 +305,7 @@ class SequenceBlockVisitor {
       case BlockType.text:
         _builder.addExpression(refer(storylineParameter.name)
             .property("add")
-            .call([literal(escapeWritersText(block.content))],
+            .call([literal(escapeWritersText(block.content, _ifBlocks))],
                 {"wholeSentence": literalTrue}));
         break;
       case BlockType.code:
@@ -340,7 +343,7 @@ class SequenceBlockVisitor {
     final isApplicable = createApplicabilityContextMethod()
       ..block.statements.add(Code('return $conditionCode;'));
 
-    final consequenceVisitor = SequenceBlockVisitor();
+    final consequenceVisitor = SequenceBlockVisitor(const []);
     rule.children.last.accept(consequenceVisitor);
 
     final applyClosure = createActionContextMethod()

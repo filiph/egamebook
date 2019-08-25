@@ -21,12 +21,12 @@ const int escapeTunnelGoblinId = 12345;
 
 const int escapeTunnelOrcId = 12344;
 
+/// The goblin at the start of Knights.
+const int firstGoblinId = 3453454409;
+
 const int leroyId = 1847981951;
 
 const int madGuardianId = 50615;
-
-// The goblin at the start of Knights.
-const int firstGoblinId = 3453454409;
 
 const int orcthornId = 425015;
 
@@ -626,6 +626,16 @@ class _HelperAccessor {
     final actorRoom = sim.getRoomByName(actor.currentRoomName);
     assert(actorRoom.parent == null, "Actor is in a variant room.");
     return playerRoom == actorRoom;
+  }
+
+  /// Returns `true` if [actorId] is currently hurt (one of their body parts
+  /// is disabled).
+  bool isHurt(int actorId) {
+    final actor = _applicabilityContext.world.getActorById(actorId);
+    for (final part in actor.anatomy.allParts) {
+      if (part.hitpoints == 0) return true;
+    }
+    return false;
   }
 
   /// Checks whether player was just now at [fromRoomName].
