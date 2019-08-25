@@ -37,6 +37,14 @@ final Pattern weSubstitution = "[[we]]";
 
 final Pattern weSubstitutionCapitalized = "[[We]]";
 
+final Pattern sirSubstitution = "[[sir]]";
+
+final Pattern sirSubstitutionCapitalized = "[[Sir]]";
+
+final Pattern youngSirSubstitution = "[[young sir]]";
+
+final Pattern youngSirSubstitutionCapitalized = "[[Young sir]]";
+
 final RegExp _logicalAndPattern = RegExp(r"\s+&&\s+");
 
 final RegExp _whiteSpaceOnly = RegExp(r"^\s*$");

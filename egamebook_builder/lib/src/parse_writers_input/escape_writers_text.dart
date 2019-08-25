@@ -14,6 +14,11 @@ String escapeWritersText(String s) {
       .replaceAll(r'$', r"(DOLLAR_SIGN)")
       .replaceAll(weSubstitution, r'$weSubstitution')
       .replaceAll(weSubstitutionCapitalized, r'$weSubstitutionCapitalized')
+      // TODO: Actually change the substitutions according to player gender.
+      .replaceAll(sirSubstitution, r'sir')
+      .replaceAll(sirSubstitutionCapitalized, r'Sir')
+      .replaceAll(youngSirSubstitution, r'young sir')
+      .replaceAll(youngSirSubstitutionCapitalized, r'Young sir')
       .replaceAll('\n', r'\n')
       .replaceAll('\r', '');
 }
