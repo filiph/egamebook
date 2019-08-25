@@ -49,7 +49,9 @@ class FinishBreakNeck extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final damage = enemy.hitpoints;
-    w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
+    if (!enemy.isInvincible) {
+      w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
+    }
     final updatedEnemy = w.getActorById(enemy.id);
     if (updatedEnemy.isInvincible) {
       // Special case for actors who cannot die.

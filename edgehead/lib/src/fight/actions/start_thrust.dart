@@ -56,7 +56,10 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
         !a.anatomy.isBlind &&
         a.currentDamageCapability.isThrusting &&
         // Only allow thrusting when stance is worse than combat stance.
-        enemy.pose < Pose.combat,
+        enemy.pose < Pose.combat &&
+        // Don't allow fatal slashes for invincible actors.
+        !(enemy.isInvincible &&
+            enemy.anatomy.findByDesignation(designation).isVital),
     mainSituationBuilder: (a, sim, w, enemy) => createThrustSituation(
         w.randomInt(), a, enemy,
         designation: designation),

@@ -120,6 +120,11 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
       return false;
     }
   }
+  if (enemy.isInvincible &&
+      enemy.anatomy.findByDesignation(designation).isVital) {
+    // Don't allow fatal slashes for invincible actors.
+    return false;
+  }
   // Don't offer to hit body parts that are already crippled.
   if (!enemy.anatomy.findByDesignation(designation).isAnimated) return false;
 

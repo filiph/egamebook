@@ -63,7 +63,7 @@ class FinishThrowThrusting extends OtherActorAction {
 
     final allLivingParts = enemy.anatomy.torso
         .getDescendantParts()
-        .where((part) => part.isAnimated)
+        .where((part) => part.isAnimatedAndActive)
         .toList(growable: false);
     final targetPart = w.randomChoose(allLivingParts);
 

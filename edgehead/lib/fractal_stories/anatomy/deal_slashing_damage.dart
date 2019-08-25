@@ -70,7 +70,8 @@ WeaponAssaultResult executeSlashingHitFromDirection(
       "The logic below assumes only two possible directions. Update it.");
 
   // Only slash vital parts if the enemy is almost ready to go down.
-  final avoidVital = target.hitpoints > 1 || target.isSurvivor;
+  final avoidVital =
+      target.hitpoints > 1 || target.isSurvivor || !target.isInvincible;
 
   final bodyPart = fromLeft
       ? target.anatomy
@@ -92,7 +93,7 @@ WeaponAssaultResult _addMajorCut(
   final ActorBuilder victim = target.toBuilder();
 
   // When a body part is vital, each major cut removes one actor's hit point.
-  if (designated.isVital && designated.isAnimated) {
+  if (designated.isVital && designated.isAnimated && !victim.isInvincible) {
     victim.hitpoints -= 1;
   }
 
@@ -221,7 +222,8 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
 WeaponAssaultResult _disableBySlash(
     Actor target, BodyPart bodyPart, Item weapon) {
   final ActorBuilder victim = target.toBuilder();
-  if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
+  if (!target.isInvincible &&
+      (bodyPart.isVital || bodyPart.hasVitalDescendants)) {
     victim.hitpoints = 0;
   }
 
@@ -237,7 +239,9 @@ WeaponAssaultResult _disableBySlash(
         return;
       }
       b.majorCutsCount += 1;
-      b.hitpoints = 0;
+      if (!target.isInvincible) {
+        b.hitpoints = 0;
+      }
     },
   );
 

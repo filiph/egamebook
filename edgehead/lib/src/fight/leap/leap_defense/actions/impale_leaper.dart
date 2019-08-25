@@ -91,7 +91,7 @@ class ImpaleLeaper extends EnemyTargetAction {
         actionThread: thread);
     enemy.report(s, "<subject> {leap<s>|run<s>|lunge<s>} right into it",
         negative: true);
-    const damage = 1;
+    final damage = enemy.isInvincible ? 0 : 1;
     w.updateActorById(
         enemy.id,
         (b) => b

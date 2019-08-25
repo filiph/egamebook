@@ -14,12 +14,6 @@ import 'package:egamebook_builder/instance_serializer.dart';
 
 part 'edgehead_event_callbacks_gather.gathered.dart';
 
-/// Gathers [EventCallback] instances from this file and puts them
-/// into the `edgehead_event_callbacks_gather.gathered.dart` file.
-@GatherInstancesFrom(['lib/edgehead_event_callbacks_gather.dart'])
-final InstanceSerializer<EventCallback> eventCallbackSerializer =
-    _$eventCallbackSerializer;
-
 final agruth_enjoy_eating_flesh = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
   s.addParagraph();
@@ -152,6 +146,12 @@ final escape_tunnel_loud_cries = EventCallback((c, sim, w, s) {
       wholeSentence: true);
 });
 
+/// Gathers [EventCallback] instances from this file and puts them
+/// into the `edgehead_event_callbacks_gather.gathered.dart` file.
+@GatherInstancesFrom(['lib/edgehead_event_callbacks_gather.dart'])
+final InstanceSerializer<EventCallback> eventCallbackSerializer =
+    _$eventCallbackSerializer;
+
 final mad_guardian_good = EventCallback((c, sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
   guardian.report(
@@ -235,6 +235,26 @@ final sleeping_goblin_thief = EventCallback((c, sim, w, s) {
   }
 });
 
+final start_make_goblin_not_invincible = EventCallback((c, sim, w, s) {
+  w.updateActorById(firstGoblinId, (b) => b.isInvincible = false);
+});
+
+final start_tamara_bellows = EventCallback((c, sim, w, s) {
+  var goblin = w.getActorById(firstGoblinId);
+  goblin.report(s, "<subject> {smirk<s>|chuckle<s>}", positive: true);
+  var tamara = w.getActorById(tamaraId);
+  if (!tamara.isAnimatedAndActive ||
+      tamara.isUndead ||
+      tamara.anatomy.isBlind) {
+    // The rest of this event doesn't make sense if Tamara can't see or talk.
+    return;
+  }
+  s.addParagraph();
+  tamara.report(s, "<subject> bellow<s> in {frustration|anger}");
+  tamara.report(s, '"I hate this place."', wholeSentence: true);
+  s.addParagraph();
+});
+
 final youre_dead_slave = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
   var sword = Item.weapon(w.randomInt(), WeaponType.sword);
@@ -247,29 +267,4 @@ final youre_dead_slave = EventCallback((c, sim, w, s) {
       "with hatred.",
       object: $(c).player,
       wholeSentence: true);
-});
-
-final start_what_is_it_about_this_place = EventCallback((c, sim, w, s) {
-  s.addParagraph();
-  s.add("“What _is_ it about this place?”", wholeSentence: true);
-  s.addParagraph();
-});
-
-final start_this_place_is_nightmare = EventCallback((c, sim, w, s) {
-  var current = w.build();
-  if (current.wasKilled(tamaraId)) return;
-  s.addParagraph();
-  s.add("“This place is a nightmare.”", wholeSentence: true);
-  s.addParagraph();
-});
-
-final start_come_back_with_me = EventCallback((c, sim, w, s) {
-  var current = w.build();
-  if (current.wasKilled(tamaraId)) return;
-  s.addParagraph();
-  s.add(
-      "“You would do well coming back with me. "
-      "I‘ll give you a good price.”",
-      wholeSentence: true);
-  s.addParagraph();
 });

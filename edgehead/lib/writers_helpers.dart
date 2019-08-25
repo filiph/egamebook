@@ -21,9 +21,12 @@ const int escapeTunnelGoblinId = 12345;
 
 const int escapeTunnelOrcId = 12344;
 
-const int leroyId = 9847981951;
+const int leroyId = 1847981951;
 
 const int madGuardianId = 50615;
+
+// The goblin at the start of Knights.
+const int firstGoblinId = 3453454409;
 
 const int orcthornId = 425015;
 
@@ -277,7 +280,7 @@ FightSituation generateSlaveQuartersPassageFight(ActionContext c,
 FightSituation generateStartFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
-  var goblin = Actor.initialized(w.randomInt(), "goblin",
+  var firstGoblin = Actor.initialized(firstGoblinId, "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon:
@@ -285,19 +288,21 @@ FightSituation generateStartFight(ActionContext c,
       dexterity: 150,
       // The goblin starts the fight.
       initiative: 2000,
+      // For the first 2 rounds, the goblin is invincible. We don't want
+      // Tamara to kill him before the player has any chance to do something.
+      isInvincible: true,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  w.actors.add(goblin);
+  w.actors.add(firstGoblin);
   return FightSituation.initialized(
       w.randomInt(),
       party,
-      [goblin],
+      [firstGoblin],
       "{muddy |wet |}ground",
       roomRoamingSituation,
       {
-        2: start_what_is_it_about_this_place,
-        4: start_this_place_is_nightmare,
-        6: start_come_back_with_me,
+        1: start_make_goblin_not_invincible,
+        2: start_tamara_bellows,
       });
 }
 

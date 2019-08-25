@@ -1,12 +1,9 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/inventory.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -60,35 +57,12 @@ class AutoLoot extends Action<Nothing> {
         world.getSituationByName<LootSituation>(LootSituation.className);
 
     for (final actor in initialWorld.actors) {
-      if (actor.isInvincible && actor.isActive && !actor.isAnimated) {
-        // Invincible actors cannot die.
-        a.report(s, "<subject> kneel<s> next to <object>", object: actor);
-        a.report(s, "<subject> help<s> <object> to <object's> feet",
-            object: actor);
-        actor.report(s, "\"I'll live,\" <subject> say<s>.",
-            wholeSentence: true);
-
-        final actorBuilder = actor.toBuilder();
-
-        actorBuilder
-          ..pose = Pose.offBalance
-          ..hitpoints = 1;
-
-        // Revive each body part of an invincible actor.
-        deepReplaceBodyPart(
-          actor,
-          actorBuilder,
-          (part) => part.designation == BodyPartDesignation.torso,
-          (b, isDescendant) {
-            if (b.hitpoints == 0) {
-              b.hitpoints = 1;
-            }
-          },
-        );
-
-        world.updateActorById(actor.id, (b) => b.replace(actorBuilder.build()));
-
-        assert(world.getActorById(actor.id).isAnimated);
+      if (actor.isInvincible && actor.isActive) {
+        assert(
+            actor.isAnimated,
+            "Actor ${actor.name} should be alive "
+            "since they are invincible. "
+            "What happened: ${context.world.actionHistory.describe()}");
       }
     }
 

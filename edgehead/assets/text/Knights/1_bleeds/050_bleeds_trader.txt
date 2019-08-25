@@ -65,7 +65,7 @@ $(c).hasLearnedAbout("trader")
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they're the worst. I fear we won't get a caravan anytime soon because of them. No caravan means no good. No goods mean no trade."
+The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they're the worst. I fear we won't get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."
 
 [[CODE]]
 assert($(c).inRoomWith(leroyId));
@@ -123,7 +123,7 @@ assert($(c).inRoomWith(leroyId));
 $(c).hearAbout("knights_leaving");
 [[/CODE]]
 
-"Well, if we don't leave this place, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
+"Well, if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
 
 The trader groans. "Don't be stupid, Leroy."
 

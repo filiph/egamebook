@@ -28,14 +28,14 @@ WeaponAssaultResult _addMajorThrustingWound(
     Actor target, BodyPart designated, Item weapon) {
   assert(designated.hitpoints >= 0);
 
-  if (designated.hitpoints == 1) {
+  if (designated.hitpoints == 1 && !target.isInvincible) {
     return _disableByThrust(target, designated, weapon);
   }
 
   final ActorBuilder victim = target.toBuilder();
 
   // When a body part is vital, each major thrust removes one actor's hitpoint.
-  if (designated.isVital && designated.isAnimated) {
+  if (designated.isVital && designated.isAnimated && !target.isInvincible) {
     victim.hitpoints -= 1;
   }
 
@@ -50,7 +50,7 @@ WeaponAssaultResult _addMajorThrustingWound(
         return;
       }
       b.majorCutsCount += 1;
-      if (b.hitpoints > 0) {
+      if (b.hitpoints > 0 && !target.isInvincible) {
         b.hitpoints -= 1;
       }
     },
