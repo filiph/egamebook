@@ -583,6 +583,46 @@ class _HelperAccessor {
     w.updateActorById(playerId, (b) => b..stamina += amount);
   }
 
+  /// Queries the history of [hearAbout].
+  bool hasHeardAbout(String topic) {
+    return _applicabilityContext.world.customHistory
+        .query(name: "hears_about_$topic", actorId: playerId)
+        .hasHappened;
+  }
+
+  /// Queries the history of [learnAbout].
+  bool hasLearnedAbout(String topic) {
+    return _applicabilityContext.world.customHistory
+        .query(name: "learns_about_$topic", actorId: playerId)
+        .hasHappened;
+  }
+
+  /// _Hearing_ about something means we have heard it mentioned, but
+  /// we haven't been told any details.
+  ///
+  /// For example, someone might have said "well and then there's the wizard"
+  /// and nothing else. Then we have just heard about the wizard, and we might
+  /// want to [learnAbout] him.
+  void hearAbout(String topic) {
+    _actionContext.outputWorld
+        .recordCustom("hears_about_$topic", actor: player);
+  }
+
+  /// Returns `true` if the player is currently in the same room as [actorId].
+  ///
+  /// Ignores variants, so it's safe even if one of the actors is in
+  /// a different "variant".
+  bool inRoomWith(int actorId) {
+    final sim = _applicabilityContext.simulation;
+    final w = _applicabilityContext.world;
+    final playerRoom = sim.getRoomByName(player.currentRoomName);
+    assert(playerRoom.parent == null, "Player is in a variant room.");
+    final actor = w.getActorById(actorId);
+    final actorRoom = sim.getRoomByName(actor.currentRoomName);
+    assert(actorRoom.parent == null, "Actor is in a variant room.");
+    return playerRoom == actorRoom;
+  }
+
   /// Checks whether player was just now at [fromRoomName].
   ///
   /// This only returns `true` if no other room was visited since then.
@@ -596,20 +636,14 @@ class _HelperAccessor {
         latest.parentRoomName == fromRoomName;
   }
 
-  bool knowsAbout(String topic) {
-    throw UnimplementedError();
-  }
-
-  bool knowsOf(String topic) {
-    throw UnimplementedError();
-  }
-
+  /// _Learning_ about something means that someone has already .
   void learnAbout(String topic) {
-    throw UnimplementedError();
-  }
+    _actionContext.outputWorld
+        .recordCustom("learns_about_$topic", actor: player);
 
-  void learnOf(String topic) {
-    throw UnimplementedError();
+    // When someone learns about something, they automatically
+    // also _hear_ about it.
+    hearAbout(topic);
   }
 
   void movePlayer(String locationName, {bool silent = false}) {

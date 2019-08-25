@@ -208,8 +208,9 @@ class Simulation {
     return rooms.singleWhere((room) => room.name == roomName);
   }
 
-  /// Returns the parent of this room. If this is a variant, this function
-  /// will return the main room.
+  /// Returns the parent of this room. If [room] is a variant, this function
+  /// will return the main room. If [room] is the main room, it will be
+  /// returned.
   Room getRoomParent(Room room) {
     var result = room;
     // This method is ready for the possibility of a chain of variants

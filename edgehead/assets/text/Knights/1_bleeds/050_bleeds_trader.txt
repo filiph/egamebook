@@ -19,7 +19,7 @@ I don't really have any money, so I just nod and smile.
 DESCRIPTION: The trader {nods|pretends to smile} as [[we]] enter his shop.
 
 // ---
-ACTION: $bleeds_trader_ask_business
+ACTION: $bleeds_trader_hello
 COMMAND: Trader >> “How is business?”
 
 FOR_LOCATION: $bleeds_trader_hut
@@ -44,3 +44,93 @@ This is the first time I notice a person sitting in one corner of the room, quie
 The trader shakes his head and interjects: "What awaits us anywhere else?"
 
 "Death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
+
+[[CODE]]
+$(c).learnAbout("trader");
+$(c).learnAbout("leroy");
+[[/CODE]]
+
+
+// ---
+ACTION: $bleeds_trader_goblins
+COMMAND: Trader >> “What's with all the goblins around here?”
+
+FOR_LOCATION: $bleeds_trader_hut
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+$(c).hasLearnedAbout("trader")
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they're the worst. I fear we won't get a caravan anytime soon because of them. No caravan means no good. No goods mean no trade."
+
+[[CODE]]
+assert($(c).inRoomWith(leroyId));
+[[/CODE]]
+
+Leroy smiles wryly. "No trade means no money."
+
+His father looks at him, annoyed. "No money means no food."
+
+Leroy looks as if he wants to add something, but thinks better of it.
+
+The trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn't dare approach the Pyramid. But lately, they come much closer."
+
+"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.
+
+"What smoke?" the trader says.
+
+"There's a camp to the west, less than a mile from here."
+
+"There's a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"
+
+Leroy seems genuinely surprised. "I thought you knew. Everyone knows."
+
+[[CODE]]
+$(c).hearAbout("goblin_smoke");
+$(c).learnAbout("leroy_knows_goblin_smoke");
+[[/CODE]]
+
+
+// ---
+ACTION: $bleeds_trader_goblin_smoke
+COMMAND: Leroy >> “Can you tell me more about that goblin camp?”
+
+FOR_LOCATION: $bleeds_trader_hut
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+$(c).hasLearnedAbout("leroy")
+&&
+$(c).hasLearnedAbout("leroy_knows_goblin_smoke")
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+[[CODE]]
+assert($(c).inRoomWith(leroyId));
+[[/CODE]]
+
+"They are to the west. It doesn't seem like there is a lot of them. We thought the Knights would get rid of them for sure."
+
+"But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
+
+[[CODE]]
+$(c).hearAbout("knights_leaving");
+[[/CODE]]
+
+"Well, if we don't leave this place, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
+
+The trader groans. "Don't be stupid, Leroy."
+
+"I mean it! [[Sir]], you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."
+
+[[CODE]]
+w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
+[[/CODE]]
+
+"The hell you can! You're a trader, Leroy! You're no fighter." Leroy's father is shaking. When he remembers that I'm there with them, he apologizes, then turns back to Leroy. "Son, I forget that you are a grown man now. But... it is my wish that you don't go."
