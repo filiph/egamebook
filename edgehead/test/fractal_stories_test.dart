@@ -193,11 +193,25 @@ void main() {
               null, world.toBuilder(), null, sureSuccess);
           forgeIsAfterFire = true;
 
+          expect(world.visitHistory.getLatestOnly(aren)?.roomName,
+              isNot(_forgeAfterFireName));
+
           initialSituation.moveActor(actionContext, _forgeName, silent: true);
           final result = actionContext.outputWorld.build();
 
-          expect(result.getActorById(aren.id).currentRoomName,
+          expect(result.visitHistory.getLatestOnly(aren).roomName,
               _forgeAfterFireName);
+        });
+
+        test("actor's currentRoom is always the parent", () {
+          final actionContext = ActionContext(null, aren, simulation, world,
+              null, world.toBuilder(), null, sureSuccess);
+          forgeIsAfterFire = true;
+
+          initialSituation.moveActor(actionContext, _forgeName, silent: true);
+          final result = actionContext.outputWorld.build();
+
+          expect(result.getActorById(aren.id).currentRoomName, _forgeName);
         });
       });
     });

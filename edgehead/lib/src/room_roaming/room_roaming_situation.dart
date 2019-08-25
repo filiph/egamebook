@@ -139,7 +139,7 @@ abstract class RoomRoamingSituation extends Object
     }
 
     for (final actor in getPartyOf(a, sim, w.build())) {
-      w.updateActorById(actor.id, (b) => b..currentRoomName = room.name);
+      w.updateActorById(actor.id, (b) => b..currentRoomName = parentRoom.name);
       w.recordVisit(actor, room);
     }
   }
@@ -149,6 +149,7 @@ abstract class RoomRoamingSituation extends Object
     final world = context.outputWorld.build();
     final sim = context.simulation;
     assert(_assertInvincibleActorsAlive(world));
+    assert(_assertNobodyInVariantRoom(world, sim));
 
     // Move corpses to the parent room so they can be found more easily.
     final corpses = _getCorpses(world);
@@ -191,4 +192,20 @@ abstract class RoomRoamingSituation extends Object
   Actor _getPlayer(WorldState world) =>
       world.actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive,
           orElse: () => null);
+
+  bool _assertNobodyInVariantRoom(WorldState world, Simulation sim) {
+    for (final actor in world.actors) {
+      if (actor.currentRoomName == null) continue;
+      final room = sim.getRoomByName(actor.currentRoomName);
+      if (room.parent != null) {
+        assert(
+            false,
+            "Actors should be placed into parent rooms, never into a variant. "
+            "Actor ${actor.name} is in ${actor.currentRoomName}, "
+            "which has a parent (${room.parent})");
+        return false;
+      }
+    }
+    return true;
+  }
 }
