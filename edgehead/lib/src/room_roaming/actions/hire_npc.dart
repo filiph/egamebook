@@ -49,7 +49,19 @@ class HireNpcAction extends OtherActorActionBase {
     final s = context.outputStoryline;
 
     npc.report(s, "<subject> nod<s>");
-    npc.report(s, "<subject> stand<s> next to <object>", object: a);
+    npc.report(s, "in a few moments, <subject> stand<s> next to <object>",
+        object: a, endSentence: true);
+
+    if (npc.isBarehanded) {
+      npc.report(s, "<subject> <is> unarmed");
+    } else {
+      npc.report(s, "<subject> <has> <subjectPronoun's> <object>",
+          object: npc.currentWeapon);
+      if (npc.currentShield != null) {
+        npc.report(s, "<subject> <has> <subjectPronoun's> <object>",
+            object: npc.currentShield);
+      }
+    }
 
     w.updateActorById(npc.id, (b) => b.npc.followingActorId = a.id);
 
