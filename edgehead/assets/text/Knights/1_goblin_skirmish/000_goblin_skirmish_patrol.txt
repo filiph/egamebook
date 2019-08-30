@@ -2,6 +2,10 @@
 APPROACH: $goblin_skirmish_patrol FROM $bleeds_main
 COMMAND: Go >> to the west
 DESCRIPTION: N/A
+PREREQUISITES:
+$(c).hasLearnedAbout(kbGoblinsNearBleeds)
+&&
+!$(c).playerHasVisited("goblin_skirmish_patrol")
 
 // ---
 ROOM: $goblin_skirmish_patrol

@@ -1,4 +1,5 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:egamebook_builder/src/parse_writers_input/method_builders.dart';
 
 import 'describer.dart';
 import 'generated_game_object.dart';
@@ -14,9 +15,12 @@ class GeneratedApproach extends GeneratedGameObject {
 
   final _FromToTuple _tuple;
 
+  final String _prerequisites;
+
   GeneratedApproach(Map<String, String> map, String path)
       : _map = map,
         _tuple = _parseFromTo(map['APPROACH']),
+        _prerequisites = map['PREREQUISITES']?.trim(),
         super(_parseFromTo(map['APPROACH']).asWritersName,
             _parseFromTo(map['APPROACH']).bothCamelCased, approachType, path);
 
@@ -28,12 +32,24 @@ class GeneratedApproach extends GeneratedGameObject {
         "Do not use N/A for command. "
         "If you don't want the command to be shown, use '<implicit>'.");
 
-    var newInstance = approachType.newInstance([
-      literal(_tuple.from.snakeCase),
-      literal(_tuple.to.snakeCase),
-      literal(command),
-      createDescriber(_map['DESCRIPTION']),
-    ]);
+    final namedArguments = <String, Expression>{};
+    if (_prerequisites != null) {
+      final isApplicableClosure = createApplicabilityContextMethod();
+      final conditional = Code(_prerequisites);
+      isApplicableClosure.block
+          .addExpression(CodeExpression(conditional).returned);
+      namedArguments['isApplicable'] = isApplicableClosure.bakeAsClosure();
+    }
+
+    var newInstance = approachType.newInstance(
+      [
+        literal(_tuple.from.snakeCase),
+        literal(_tuple.to.snakeCase),
+        literal(command),
+        createDescriber(_map['DESCRIPTION']),
+      ],
+      namedArguments,
+    );
     var assignment = newInstance.assignFinal(name, approachType);
     yield assignment.statement;
   }

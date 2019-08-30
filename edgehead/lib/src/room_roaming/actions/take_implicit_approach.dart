@@ -31,6 +31,10 @@ class TakeImplicitApproachAction extends TakeApproachAction {
       return false;
     }
 
+    if (approach.isApplicable != null) {
+      return approach.isApplicable(c);
+    }
+
     return true;
   }
 }

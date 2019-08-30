@@ -2507,36 +2507,6 @@ class ReadLetterFromMentor extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach goblinSkirmishMainFromGoblinSkirmishPatrol = Approach(
-    'goblin_skirmish_patrol',
-    'goblin_skirmish_main',
-    'Go >> towards the outpost', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      '$weSubstitutionCapitalized sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblins are still here.\n', wholeSentence: true);
-}, null, null);
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
         (ActionContext c) {
@@ -2546,6 +2516,12 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).hasLearnedAbout(kbGoblinsNearBleeds) &&
+      !$(c).playerHasVisited("goblin_skirmish_patrol");
 });
 final Room goblinSkirmishPatrol =
     Room('goblin_skirmish_patrol', (ActionContext c) {
@@ -3179,7 +3155,12 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     assert($(c).inRoomWith(leroyId));
 
     s.add(
-        '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
+        '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n',
+        wholeSentence: true);
+    $(c).learnAbout(kbGoblinsNearBleeds);
+
+    s.add(
+        '\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
         wholeSentence: true);
     $(c).hearAbout(kbKnightsLeaving);
 
@@ -3257,8 +3238,8 @@ final Approach bleedsMainFromBleedsTraderHut = Approach(
   s.add('$weSubstitutionCapitalized walk out into the muddy street.\n',
       wholeSentence: true);
 });
-final Approach bleedsMainFromGoblinSkirmishMain =
-    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to The Bleeds',
+final Approach bleedsMainFromGoblinSkirmishSneak =
+    Approach('goblin_skirmish_sneak', 'bleeds_main', 'Go >> to The Bleeds',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3269,6 +3250,19 @@ final Approach bleedsMainFromGoblinSkirmishMain =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
       '$weSubstitutionCapitalized sneak through the bushes and emerge back in The Bleeds.\n',
+      wholeSentence: true);
+});
+final Approach bleedsMainFromGoblinSkirmishMain =
+    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to The Bleeds',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add('$weSubstitutionCapitalized walk back to The Bleeds.\n',
       wholeSentence: true);
 });
 final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
@@ -3318,8 +3312,10 @@ class BleedsBlindGuideGreet extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n',
+        'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n\n',
         wholeSentence: true);
+    $(c).learnAbout(kbBlindGuide);
+
     return '${a.name} successfully performs BleedsBlindGuideGreet';
   }
 
@@ -3373,8 +3369,7 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
         'bleeds_main') {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
+    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbBlindGuide))) {
       return false;
     }
     return true;
@@ -3452,7 +3447,9 @@ class BleedsBlindGuideGoblins extends RoamingAction {
         'bleeds_main') {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && $(c).hasHeardAbout(kbGoblinsNearBleeds))) {
+    if (!(w.actionNeverUsed(name) &&
+        $(c).hasLearnedAbout(kbBlindGuide) &&
+        $(c).hasHeardAbout(kbGoblinsNearBleeds))) {
       return false;
     }
     return true;
@@ -3514,6 +3511,100 @@ final Approach endOfRoamFromBleedsMain = Approach(
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
+final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
+    'goblin_skirmish_patrol',
+    'goblin_skirmish_sneak',
+    'Go >> towards the goblin outpost', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach goblinSkirmishSneakFromBleedsMain = Approach(
+    'bleeds_main', 'goblin_skirmish_sneak', 'Go >> towards the goblin outpost',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).playerHasVisited("goblin_skirmish_sneak");
+});
+final Room goblinSkirmishSneak =
+    Room('goblin_skirmish_sneak', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblins are still here.\n', wholeSentence: true);
+}, null, null);
+final Approach goblinSkirmishMainFromBleedsMain = Approach(
+    'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).hasHappened(evGoblinCampCleared);
+});
+final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
+    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> attack the camp',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return !$(c).hasHappened(evGoblinCampCleared);
+});
+final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('TODO -- an actual battle with the goblins.\n\nAssume you won.\n\n',
+      wholeSentence: true);
+  w.recordCustom(evGoblinCampCleared);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
+  w.recordCustom(evGoblinCampCleared);
+}, null, null);
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -3534,7 +3625,6 @@ final allRooms = <Room>[
   warForge,
   testFightOrcAndGoblin,
   orcthornRoom,
-  goblinSkirmishMain,
   goblinSkirmishPatrol,
   startPostFight,
   startPostFightTamaraAlive,
@@ -3546,7 +3636,9 @@ final allRooms = <Room>[
   startBeginFight,
   start,
   bleedsTraderHut,
-  bleedsMain
+  bleedsMain,
+  goblinSkirmishSneak,
+  goblinSkirmishMain
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -3579,7 +3671,6 @@ final allApproaches = <Approach>[
   testFightOrcAndGoblinFromPreStartBook,
   endOfRoamFromTestFightOrcAndGoblin,
   orcthornRoomFromSlaveQuartersPassage,
-  goblinSkirmishMainFromGoblinSkirmishPatrol,
   goblinSkirmishPatrolFromBleedsMain,
   startPostFightFromStartBeginFight,
   startRaccoonFromStart,
@@ -3591,8 +3682,13 @@ final allApproaches = <Approach>[
   bleedsMainFromPreStartBook,
   bleedsMainFromStartPostFight,
   bleedsMainFromBleedsTraderHut,
+  bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromGoblinSkirmishMain,
-  endOfRoamFromBleedsMain
+  endOfRoamFromBleedsMain,
+  goblinSkirmishSneakFromGoblinSkirmishPatrol,
+  goblinSkirmishSneakFromBleedsMain,
+  goblinSkirmishMainFromBleedsMain,
+  goblinSkirmishMainFromGoblinSkirmishSneak
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,

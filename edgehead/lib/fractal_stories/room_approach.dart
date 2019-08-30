@@ -22,7 +22,15 @@ class Approach {
   /// supposed to see it. They will be automatically transported.
   final bool isImplicit;
 
-  const Approach(this.from, this.to, this.command, this.description)
+  /// A callback defining whether anyone can take the approach, given
+  /// the current state of the world.
+  ///
+  /// This can (and often will) be `null`. That just means the approach
+  /// is always applicable.
+  final bool Function(ApplicabilityContext) isApplicable;
+
+  const Approach(this.from, this.to, this.command, this.description,
+      {this.isApplicable})
       : isImplicit = command == '<implicit>',
         assert(from != null),
         assert(to != null),

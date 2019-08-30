@@ -1,0 +1,20 @@
+// ---
+APPROACH: $goblin_skirmish_sneak FROM $goblin_skirmish_patrol
+COMMAND: Go >> towards the goblin outpost
+DESCRIPTION: N/A
+
+// ---
+APPROACH: $goblin_skirmish_sneak FROM $bleeds_main
+COMMAND: Go >> towards the goblin outpost
+DESCRIPTION: N/A
+PREREQUISITES:
+$(c).playerHasVisited("goblin_skirmish_sneak")
+
+// ---
+ROOM: $goblin_skirmish_sneak
+
+FIRST_DESCRIPTION:
+[[We]] sneak around. It's only 3 goblins. They are speaking loudly.
+
+DESCRIPTION:
+The goblins are still here.

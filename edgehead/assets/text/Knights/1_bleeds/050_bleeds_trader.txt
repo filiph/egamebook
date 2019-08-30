@@ -138,6 +138,10 @@ assert($(c).inRoomWith(leroyId));
 
 "They are to the west. It doesn't seem like there is a lot of them. We thought the Knights would get rid of them for sure."
 
+[[CODE]]
+$(c).learnAbout(kbGoblinsNearBleeds);
+[[/CODE]]
+
 "But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 
 [[CODE]]

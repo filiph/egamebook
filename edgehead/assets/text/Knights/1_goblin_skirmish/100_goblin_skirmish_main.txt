@@ -1,13 +1,32 @@
 // ---
-APPROACH: $goblin_skirmish_main FROM $goblin_skirmish_patrol
-COMMAND: Go >> towards the outpost
+APPROACH: $goblin_skirmish_main FROM $bleeds_main
+COMMAND: Go >> to the goblin outpost
 DESCRIPTION: N/A
+PREREQUISITES:
+$(c).hasHappened(evGoblinCampCleared)
+
+// ---
+APPROACH: $goblin_skirmish_main FROM $goblin_skirmish_sneak
+COMMAND: Go >> attack the camp
+DESCRIPTION: N/A
+PREREQUISITES:
+!$(c).hasHappened(evGoblinCampCleared)
 
 // ---
 ROOM: $goblin_skirmish_main
 
 FIRST_DESCRIPTION:
-[[We]] sneak around. It's only 3 goblins. They are speaking loudly.
+TODO -- an actual battle with the goblins.
+
+Assume you won.
+
+[[CODE]]
+w.recordCustom(evGoblinCampCleared);
+[[/CODE]]
 
 DESCRIPTION:
-The goblins are still here.
+The goblin camp is deserted.
+
+[[CODE]]
+w.recordCustom(evGoblinCampCleared);
+[[/CODE]]

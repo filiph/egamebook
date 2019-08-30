@@ -86,6 +86,11 @@ class TakeApproachAction extends ApproachAction {
       // Don't allow exit taking when monsters in this room are still alive.
       return false;
     }
+
+    if (approach.isApplicable != null) {
+      return approach.isApplicable(c);
+    }
+
     return true;
   }
 }

@@ -33,6 +33,10 @@ _"I seek treasure."_
 
 "Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."
 
+[[CODE]]
+$(c).learnAbout(kbBlindGuide);
+[[/CODE]]
+
 
 // ---
 ACTION: $bleeds_blind_guide_terrible_idea
@@ -43,7 +47,7 @@ FOR_LOCATION: $bleeds_main
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+$(c).hasLearnedAbout(kbBlindGuide)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -87,6 +91,8 @@ FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
 w.actionNeverUsed(name)
+&&
+$(c).hasLearnedAbout(kbBlindGuide)
 &&
 $(c).hasHeardAbout(kbGoblinsNearBleeds)
 
