@@ -31,8 +31,25 @@ final Actor edgeheadBriana = Actor.initialized(
   followingActorId: playerId,
 );
 
+final Actor edgeheadDirector = Actor.initialized(
+  directorId,
+  "DIRECTOR",
+  isDirector: true,
+);
+
 final Situation edgeheadInitialSituation =
     RoomRoamingSituation.initialized(100, _preStartBook, false);
+
+/// Trader Joseph's son.
+final Actor edgeheadLeroy = Actor.initialized(
+  leroyId,
+  "Leroy",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.HE,
+  currentRoomName: 'bleeds_trader_hut',
+  currentWeapon: Item.weapon(234234, WeaponType.dagger, name: "long dagger"),
+  currentShield: Item.weapon(1188984, WeaponType.shield),
+);
 
 final Actor edgeheadPlayer = Actor.initialized(
   playerId,
@@ -49,6 +66,9 @@ final Actor edgeheadPlayer = Actor.initialized(
   currentRoomName: _preStartBook.name,
 );
 
+final Simulation edgeheadSimulation =
+    Simulation(_rooms, allApproaches, _foldFunctions);
+
 final Actor edgeheadTamara = Actor.initialized(
   tamaraId,
   "Tamara",
@@ -60,20 +80,6 @@ final Actor edgeheadTamara = Actor.initialized(
   followingActorId: playerId,
   currentWeapon: Item.weapon(2342341, WeaponType.sword),
 );
-
-/// Trader Joseph's son.
-final Actor edgeheadLeroy = Actor.initialized(
-  leroyId,
-  "Leroy",
-  nameIsProperNoun: true,
-  pronoun: Pronoun.HE,
-  currentRoomName: 'bleeds_trader_hut',
-  currentWeapon: Item.weapon(234234, WeaponType.dagger, name: "long dagger"),
-  currentShield: Item.weapon(1188984, WeaponType.shield),
-);
-
-final Simulation edgeheadSimulation =
-    Simulation(_rooms, allApproaches, _foldFunctions);
 
 final Map<String, FoldFunction> _foldFunctions = {
   normalFoldFunctionHandle: normalFoldFunction,

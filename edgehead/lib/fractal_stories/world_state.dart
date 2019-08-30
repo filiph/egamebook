@@ -44,6 +44,11 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   /// History of custom events, such as "killed Akatosh" or "saw rainbow".
   CustomEventHistory get customHistory;
 
+  /// The director of the book. She can change the state of the world
+  /// at select points (for example, when the player is "not looking").
+  @nullable
+  Actor get director;
+
   /// The global flags and counters that make up the state of the world that
   /// doesn't fit into [actors], [actionRecords], etc.
   ///
@@ -98,8 +103,19 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
     return !actionHasBeenPerformed(actionName);
   }
 
+  /// Will get the actor (or [director]) with [Actor.id] == [id].
+  ///
+  /// Will throw when there is either no actor with the given [id], or there
+  /// are several.
   Actor getActorById(int id) {
-    assert(actors.where((actor) => actor.id == id).isNotEmpty,
+    if (director?.id == id) {
+      return director;
+    }
+
+    // Using two asserts because the message is then much more concrete.
+    // Instead of 'number of actors with id is not 1', we can show the
+    // more helpful messages below.
+    assert(actors.any((actor) => actor.id == id),
         "No actor of id=$id in world: $this.");
     assert(actors.where((actor) => actor.id == id).length < 2,
         "Too many actors of id=$id in world: $this.");
@@ -210,6 +226,8 @@ abstract class WorldStateBuilder
   RuleHistoryBuilder ruleHistory;
 
   SetBuilder<Actor> actors;
+
+  ActorBuilder director;
 
   int statefulRandomState;
 
@@ -358,8 +376,12 @@ abstract class WorldStateBuilder
     var original = getActorById(id);
     var updated = original.rebuild(updates);
     assert(original.id == updated.id);
-    actors.remove(original);
-    actors.add(updated);
+    if (original.isDirector) {
+      director = updated.toBuilder();
+    } else {
+      actors.remove(original);
+      actors.add(updated);
+    }
   }
 }
 

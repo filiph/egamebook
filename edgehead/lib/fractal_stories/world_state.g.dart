@@ -45,6 +45,12 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       serializers.serialize(object.visitHistory,
           specifiedType: const FullType(VisitHistory)),
     ];
+    if (object.director != null) {
+      result
+        ..add('director')
+        ..add(serializers.serialize(object.director,
+            specifiedType: const FullType(Actor)));
+    }
     if (object.global != null) {
       result
         ..add('global')
@@ -79,6 +85,10 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           result.customHistory.replace(serializers.deserialize(value,
                   specifiedType: const FullType(CustomEventHistory))
               as CustomEventHistory);
+          break;
+        case 'director':
+          result.director.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Actor)) as Actor);
           break;
         case 'global':
           result.global = serializers.deserialize(value,
@@ -122,6 +132,8 @@ class _$WorldState extends WorldState {
   @override
   final CustomEventHistory customHistory;
   @override
+  final Actor director;
+  @override
   final WorldStateFlags global;
   @override
   final RuleHistory ruleHistory;
@@ -141,6 +153,7 @@ class _$WorldState extends WorldState {
       {this.actionHistory,
       this.actors,
       this.customHistory,
+      this.director,
       this.global,
       this.ruleHistory,
       this.situations,
@@ -188,6 +201,7 @@ class _$WorldState extends WorldState {
         actionHistory == other.actionHistory &&
         actors == other.actors &&
         customHistory == other.customHistory &&
+        director == other.director &&
         global == other.global &&
         ruleHistory == other.ruleHistory &&
         situations == other.situations &&
@@ -205,9 +219,11 @@ class _$WorldState extends WorldState {
                     $jc(
                         $jc(
                             $jc(
-                                $jc($jc(0, actionHistory.hashCode),
-                                    actors.hashCode),
-                                customHistory.hashCode),
+                                $jc(
+                                    $jc($jc(0, actionHistory.hashCode),
+                                        actors.hashCode),
+                                    customHistory.hashCode),
+                                director.hashCode),
                             global.hashCode),
                         ruleHistory.hashCode),
                     situations.hashCode),
@@ -254,6 +270,18 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   set customHistory(CustomEventHistoryBuilder customHistory) {
     _$this;
     super.customHistory = customHistory;
+  }
+
+  @override
+  ActorBuilder get director {
+    _$this;
+    return super.director ??= new ActorBuilder();
+  }
+
+  @override
+  set director(ActorBuilder director) {
+    _$this;
+    super.director = director;
   }
 
   @override
@@ -335,6 +363,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
       super.actionHistory = _$v.actionHistory?.toBuilder();
       super.actors = _$v.actors?.toBuilder();
       super.customHistory = _$v.customHistory?.toBuilder();
+      super.director = _$v.director?.toBuilder();
       super.global = _$v.global;
       super.ruleHistory = _$v.ruleHistory?.toBuilder();
       super.situations = _$v.situations?.toBuilder();
@@ -368,6 +397,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
               actionHistory: actionHistory.build(),
               actors: actors.build(),
               customHistory: customHistory.build(),
+              director: super.director?.build(),
               global: global,
               ruleHistory: ruleHistory.build(),
               situations: situations.build(),
@@ -383,6 +413,8 @@ class _$WorldStateBuilder extends WorldStateBuilder {
         actors.build();
         _$failedField = 'customHistory';
         customHistory.build();
+        _$failedField = 'director';
+        super.director?.build();
 
         _$failedField = 'ruleHistory';
         ruleHistory.build();

@@ -67,6 +67,9 @@ abstract class Action<T> {
   /// aggressive although it doesn't harm the intended target.
   bool get isAggressive;
 
+  /// This action can only be taken by the [WorldState.director].
+  bool get isDirectorAction => false;
+
   /// Returns `true` for actions that shouldn't be presented to the player
   /// because they are the only thing that _can_ be done in a situation.
   ///

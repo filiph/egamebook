@@ -115,7 +115,8 @@ abstract class Actor extends Object
       ..poseMax = poseMax
       ..isActive = true
       ..recoveringUntil = DateTime.utc(-9999)
-      ..director = isDirector ? DirectorCapabilityBuilder() : null);
+      ..director =
+          isDirector ? (DirectorCapabilityBuilder()..isActive = true) : null);
   }
 
   Actor._();

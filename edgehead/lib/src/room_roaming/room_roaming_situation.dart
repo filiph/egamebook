@@ -11,6 +11,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/room_roaming/actions/direct.dart';
 import 'package:edgehead/src/room_roaming/actions/hire_npc.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
@@ -43,6 +44,7 @@ abstract class RoomRoamingSituation extends Object
   /// All actions that player can do while exploring.
   @override
   List<Action> get actions => [
+        DirectAction.singleton,
         SlayMonstersAction.singleton,
         TakeApproachAction.singleton,
         TakeImplicitApproachAction.singleton,
@@ -68,19 +70,29 @@ abstract class RoomRoamingSituation extends Object
   @override
   RoomRoamingSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
+  /// Only player can roam at the moment. But there is also Director.
   @override
   Iterable<Actor> getActors(Simulation sim, WorldState w) {
     var _player = _getPlayer(w);
     if (_player == null) return [];
+
+    if (w.director != null) {
+      final room = sim.getRoomByName(currentRoomName);
+      if (room.isIdle) {
+        return [_player, w.director];
+      }
+    }
+
     return [_player];
   }
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {
-    // Only player can roam at the moment.
-    var player = _getPlayer(world);
-    if (player == null) return ActorTurn.never;
-    return ActorTurn(player, world.time);
+    final actors = getActors(sim, world).toList(growable: false);
+    if (actors.isEmpty) return ActorTurn.never;
+
+    final actor = actors[turn % actors.length];
+    return ActorTurn(actor, world.time);
   }
 
   /// Moves [a] with their party to [destination].

@@ -242,6 +242,7 @@ class EdgeheadGame extends Book {
           edgeheadTamara,
           edgeheadLeroy
         ])
+        ..director = edgeheadDirector.toBuilder()
         ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
         ..global = global
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)

@@ -112,7 +112,15 @@ class Simulation {
     assert(context.world.currentSituation.actions.isNotEmpty,
         "There are no actions defined for ${context.world.currentSituation}");
 
+    bool correspondsToDirectorStatus(Action action) {
+      if (action.isDirectorAction && context.actor.isDirector) return true;
+      if (!action.isDirectorAction && !context.actor.isDirector) return true;
+      return false;
+    }
+
     for (final action in context.world.currentSituation.actions) {
+      if (!correspondsToDirectorStatus(action)) continue;
+
       if (action is Action<Nothing>) {
         assert(action is! Action<Approach>);
         if (!action.isApplicable(

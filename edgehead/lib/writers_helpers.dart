@@ -17,6 +17,8 @@ const int agruthId = 6666;
 
 const int brianaId = 100;
 
+const int directorId = -1;
+
 const int escapeTunnelGoblinId = 12345;
 
 const int escapeTunnelOrcId = 12344;

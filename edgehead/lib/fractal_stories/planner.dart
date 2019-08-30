@@ -123,8 +123,7 @@ class ActorPlanner {
   }) async {
     _firstActionScores.clear();
 
-    var currentActor =
-        _initial.world.actors.singleWhere((a) => a.id == actorId);
+    var currentActor = _initial.world.getActorById(actorId);
     var initialScore = currentActor.scoreWorld(_initial.world);
 
     log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
@@ -184,7 +183,7 @@ class ActorPlanner {
       int maxConsequences,
       Future<void> waitFunction()) async* {
     // Actor object changes during planning, so we need to look up via id.
-    var mainActor = initial.world.actors.singleWhere((a) => a.id == actorId);
+    var mainActor = initial.world.getActorById(actorId);
     var startTurn = ActorTurn(mainActor, initial.world.time);
     var context = ApplicabilityContext(mainActor, simulation, initial.world);
 
