@@ -1,27 +1,57 @@
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/writers_helpers.dart';
+
+final _default = Rule(_id++, 0, false, (ApplicabilityContext c) {
+  return true;
+}, (ActionContext c) {
+  // Nothing here. Let's at least "log" this.
+  c.outputWorld.recordCustom("director_no_rule_applicable");
+});
+
+int _id = 100000;
+
+final _leroyQuits = Rule(_id++, 2, false, (ApplicabilityContext c) {
+  final leroy = c.world.getActorById(leroyId);
+  if (leroy.npc.followingActorId != playerId) return false;
+  assert($(c).inRoomWith(leroyId));
+  return c.world.customHistory
+      .query(name: "cleared_goblin_skirmish")
+      .hasHappened;
+}, (ActionContext c) {
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.addParagraph();
+  s.add(
+      'Leroy turns to me. "We did it. And I am proud. '
+      'But now I need to go back to my father. Thank you." '
+      'Leroy leaves towards the trader\'s shop.',
+      wholeSentence: true);
+  w.updateActorById(leroyId, (b) {
+    b.npc
+      ..isHireable = false
+      ..followingActorId = null;
+    b.currentRoomName = 'bleeds_trader_hut';
+  });
+});
+
+final _playerHurt = Rule(_id++, 1, false, (ApplicabilityContext c) {
+  return $(c).isHurt(playerId);
+}, (ActionContext c) {
+  final Storyline s = c.outputStoryline;
+  s.addParagraph();
+  s.add('I still hurt.', wholeSentence: true);
+});
 
 /// These are the rules that the director in the game will be using
 /// whenever there is an idle moment.
 Ruleset get edgeheadDirectorRuleset {
-  int id = 100000;
-
-  return Ruleset(
-    Rule(id++, 1, false, (ApplicabilityContext c) {
-      return $(c).isHurt(playerId);
-    }, (ActionContext c) {
-      final Storyline s = c.outputStoryline;
-      s.addParagraph();
-      s.add('I still hurt.', wholeSentence: true);
-    }),
-    Rule(id++, 0, false, (ApplicabilityContext c) {
-      return true;
-    }, (ActionContext c) {
-      // Nothing here. Let's at least "log" this.
-      c.outputWorld.recordCustom("director_no_rule_applicable");
-    }),
-  );
+  return Ruleset.unordered([
+    _playerHurt,
+    _leroyQuits,
+    _default,
+  ]);
 }
