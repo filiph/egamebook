@@ -85,6 +85,8 @@ class WritersInputGenerator extends Generator {
         .add(cb.Directive.import('package:built_value/serializer.dart'));
     lib.directives
         .add(cb.Directive.import('package:edgehead/writers_helpers.dart'));
+    lib.directives
+        .add(cb.Directive.import('package:edgehead/edgehead_ids.dart'));
 
     lib.body.add(cb.Code("part '$fileName.compiled.g.dart';"));
 

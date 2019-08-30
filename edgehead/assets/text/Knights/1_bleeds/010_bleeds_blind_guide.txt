@@ -59,7 +59,7 @@ I don't want to reveal more than needed. But "magic" is vague enough. So I just 
 The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.
 
 [[CODE]]
-$(c).hearAbout("jisad_hates_magic");
+$(c).hearAbout(kbJisadHatesMagic);
 [[/CODE]]
 
 _"What about it?"_
@@ -67,10 +67,9 @@ _"What about it?"_
 "I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."
 
 [[CODE]]
-$(c).hearAbout("orcs");
-$(c).hearAbout("knights_leaving");
-$(c).hearAbout("goblins");
-$(c).hearAbout("san_francisco_dangerous");
+$(c).hearAbout(kbOrcsInPyramid);
+$(c).hearAbout(kbKnightsLeaving);
+$(c).hearAbout(kbGoblinsNearBleeds);
 [[/CODE]]
 
 _"And this is because of magic?"_
@@ -89,7 +88,7 @@ FOR_LOCATION: $bleeds_main
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasHeardAbout("goblins")
+$(c).hasHeardAbout(kbGoblinsNearBleeds)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -111,5 +110,5 @@ _"No."_
 "It must be a harrowing sight. A herald of our own future, possibly."
 
 [[CODE]]
-$(c).hearAbout("goblin_smoke");
+$(c).hearAbout(kbGoblinSmoke);
 [[/CODE]]

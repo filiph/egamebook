@@ -46,8 +46,8 @@ The trader shakes his head and interjects: "What awaits us anywhere else?"
 "Death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
 
 [[CODE]]
-$(c).learnAbout("trader");
-$(c).learnAbout("leroy");
+$(c).learnAbout(kbTrader);
+$(c).learnAbout(kbLeroy);
 [[/CODE]]
 
 
@@ -60,7 +60,7 @@ FOR_LOCATION: $bleeds_trader_hut
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasLearnedAbout("trader")
+$(c).hasLearnedAbout(kbTrader)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -90,8 +90,8 @@ The trader, obviously satisfied, turns back to me. "The suckers are closing in f
 Leroy seems genuinely surprised. "I thought you knew. Everyone knows."
 
 [[CODE]]
-$(c).hearAbout("goblin_smoke");
-$(c).learnAbout("leroy_knows_goblin_smoke");
+$(c).hearAbout(kbGoblinSmoke);
+$(c).learnAbout(kbLeroyKnowsGoblinSmoke);
 [[/CODE]]
 
 
@@ -104,9 +104,9 @@ FOR_LOCATION: $bleeds_trader_hut
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasLearnedAbout("leroy")
+$(c).hasLearnedAbout(kbLeroy)
 &&
-$(c).hasLearnedAbout("leroy_knows_goblin_smoke")
+$(c).hasLearnedAbout(kbLeroyKnowsGoblinSmoke)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -120,7 +120,7 @@ assert($(c).inRoomWith(leroyId));
 "But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 
 [[CODE]]
-$(c).hearAbout("knights_leaving");
+$(c).hearAbout(kbKnightsLeaving);
 [[/CODE]]
 
 "Well, if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."

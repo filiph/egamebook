@@ -1,15 +1,16 @@
-import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/writers_helpers.dart';
 
+import 'edgehead_ids.dart';
+
 final _default = Rule(_id++, 0, false, (ApplicabilityContext c) {
   return true;
 }, (ActionContext c) {
   // Nothing here. Let's at least "log" this.
-  c.outputWorld.recordCustom("director_no_rule_applicable");
+  c.outputWorld.recordCustom(evDirectorNoRuleApplicable);
 });
 
 int _id = 100000;

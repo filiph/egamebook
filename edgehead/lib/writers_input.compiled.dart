@@ -42,6 +42,7 @@ import 'package:edgehead/fractal_stories/world_state.dart' show WorldState;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/writers_helpers.dart';
+import 'package:edgehead/edgehead_ids.dart';
 part 'writers_input.compiled.g.dart';
 
 const bool DEV_MODE = false;
@@ -2964,8 +2965,8 @@ class BleedsTraderHello extends RoamingAction {
     s.add(
         'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
         wholeSentence: true);
-    $(c).learnAbout("trader");
-    $(c).learnAbout("leroy");
+    $(c).learnAbout(kbTrader);
+    $(c).learnAbout(kbLeroy);
 
     return '${a.name} successfully performs BleedsTraderHello';
   }
@@ -3017,7 +3018,7 @@ class BleedsTraderGoblins extends RoamingAction {
         'bleeds_trader_hut') {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout("trader"))) {
+    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbTrader))) {
       return false;
     }
     return true;
@@ -3038,8 +3039,8 @@ class BleedsTraderGoblins extends RoamingAction {
     s.add(
         '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
         wholeSentence: true);
-    $(c).hearAbout("goblin_smoke");
-    $(c).learnAbout("leroy_knows_goblin_smoke");
+    $(c).hearAbout(kbGoblinSmoke);
+    $(c).learnAbout(kbLeroyKnowsGoblinSmoke);
 
     return '${a.name} successfully performs BleedsTraderGoblins';
   }
@@ -3092,8 +3093,8 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
-        $(c).hasLearnedAbout("leroy") &&
-        $(c).hasLearnedAbout("leroy_knows_goblin_smoke"))) {
+        $(c).hasLearnedAbout(kbLeroy) &&
+        $(c).hasLearnedAbout(kbLeroyKnowsGoblinSmoke))) {
       return false;
     }
     return true;
@@ -3111,7 +3112,7 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     s.add(
         '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
         wholeSentence: true);
-    $(c).hearAbout("knights_leaving");
+    $(c).hearAbout(kbKnightsLeaving);
 
     s.add(
         '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! Sir, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
@@ -3320,15 +3321,14 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
     s.add(
         '"So you want to explore the Pyramid."\n\n_"I need something that\'s in there."_\n\n"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n\nI don\'t want to reveal more than needed. But "magic" is vague enough. So I just say yes.\n\nThe man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n\n',
         wholeSentence: true);
-    $(c).hearAbout("jisad_hates_magic");
+    $(c).hearAbout(kbJisadHatesMagic);
 
     s.add(
         '\n_"What about it?"_\n\n"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."\n\n',
         wholeSentence: true);
-    $(c).hearAbout("orcs");
-    $(c).hearAbout("knights_leaving");
-    $(c).hearAbout("goblins");
-    $(c).hearAbout("san_francisco_dangerous");
+    $(c).hearAbout(kbOrcsInPyramid);
+    $(c).hearAbout(kbKnightsLeaving);
+    $(c).hearAbout(kbGoblinsNearBleeds);
 
     s.add(
         '\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
@@ -3383,7 +3383,7 @@ class BleedsBlindGuideGoblins extends RoamingAction {
         'bleeds_main') {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && $(c).hasHeardAbout("goblins"))) {
+    if (!(w.actionNeverUsed(name) && $(c).hasHeardAbout(kbGoblinsNearBleeds))) {
       return false;
     }
     return true;
@@ -3399,7 +3399,7 @@ class BleedsBlindGuideGoblins extends RoamingAction {
     s.add(
         '"Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It\'s like the goblins are being drawn here."\n\n_"What do they want?"_\n\n"They\'re goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it\'s strange. They come in larger numbers than you would think makes sense. They\'d get more slaves and more steel elsewhere."\n\n_"They want into the Pyramid, perhaps?"_\n\n"Nonsense. Goblins fear these kinds of things. Even if they didn\'t, they\'d probably get slaughtered by the orcs. Oh, that\'s something I\'d like to see." He absentmindedly touches his face just under the left eye.\n\n"Anyway. The goblins aren\'t stupid, but they _are_ getting awfully bold. I\'ve heard a band has made their camp not far from here. So close that people can see their campfire\'s smoke sometimes." He shudders. "Can you see it?"\n\n_"No."_\n\n"It must be a harrowing sight. A herald of our own future, possibly."\n\n',
         wholeSentence: true);
-    $(c).hearAbout("goblin_smoke");
+    $(c).hearAbout(kbGoblinSmoke);
 
     return '${a.name} successfully performs BleedsBlindGuideGoblins';
   }

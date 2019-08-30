@@ -10,15 +10,13 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
-import 'package:edgehead/writers_helpers.dart';
 import 'package:edgehead/writers_input.compiled.dart';
+
+import 'edgehead_ids.dart';
 
 const String carelessMonsterFoldFunctionHandle = "carelessMonster";
 
 const String normalFoldFunctionHandle = "normal";
-
-/// [edgeheadPlayer]'s [Actor.id].
-const int playerId = 1;
 
 final Actor edgeheadBriana = Actor.initialized(
   brianaId,

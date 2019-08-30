@@ -1,4 +1,5 @@
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
+import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -12,36 +13,6 @@ import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
-
-const int agruthId = 6666;
-
-const int brianaId = 100;
-
-const int directorId = -1;
-
-const int escapeTunnelGoblinId = 12345;
-
-const int escapeTunnelOrcId = 12344;
-
-/// The goblin at the start of Knights.
-const int firstGoblinId = 3453454409;
-
-const int leroyId = 1847981951;
-
-const int madGuardianId = 50615;
-
-const int orcthornId = 425015;
-
-const int slaveQuartersGoblinId = 789457;
-
-const int slaveQuartersOrcId = 789456;
-
-const int sleepingGoblinId = 4445655;
-
-const int sleepingGoblinsSpearId = 45234205;
-
-/// [edgeheadTamara]'s [Actor.id].
-const int tamaraId = 2;
 
 /// Mostly quotes that Briana says while roaming Bloodrock.
 const _brianaQuotes = [
