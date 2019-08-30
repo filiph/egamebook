@@ -32,3 +32,5 @@ const int sleepingGoblinsSpearId = 77001;
 
 /// [edgeheadTamara]'s [Actor.id].
 const int tamaraId = 2;
+
+const int tamarasDaggerId = 77002;

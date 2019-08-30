@@ -96,6 +96,25 @@ $(c).learnAbout(kbLeroyKnowsGoblinSmoke);
 
 
 // ---
+ACTION: $bleeds_trader_tell_about_cleared_camp
+COMMAND: Trader >> “No need to worry about that camp anymore.”
+
+FOR_LOCATION: $bleeds_trader_hut
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+$(c).hasHappened(evGoblinCampCleared)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+“What happened?”
+
+I describe the battle to [[IF $(c).inRoomWith(leroyId)]]them[[ELSE]]the trader[[ENDIF]].
+
+
+// ---
 ACTION: $bleeds_trader_goblin_smoke
 COMMAND: Leroy >> “Can you tell me more about that goblin camp?”
 
@@ -107,6 +126,8 @@ w.actionNeverUsed(name)
 $(c).hasLearnedAbout(kbLeroy)
 &&
 $(c).hasLearnedAbout(kbLeroyKnowsGoblinSmoke)
+&&
+!$(c).hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 

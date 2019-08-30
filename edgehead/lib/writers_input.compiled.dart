@@ -3076,6 +3076,74 @@ class BleedsTraderGoblins extends RoamingAction {
   bool get isAggressive => false;
 }
 
+class BleedsTraderTellAboutClearedCamp extends RoamingAction {
+  @override
+  final String name = 'bleeds_trader_tell_about_cleared_camp';
+
+  static final BleedsTraderTellAboutClearedCamp singleton =
+      BleedsTraderTellAboutClearedCamp();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Trader', '“No need to worry about that camp anymore.”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_trader_hut') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) && $(c).hasHappened(evGoblinCampCleared))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_740d97de9 =
+        $(c).inRoomWith(leroyId) ? '''them''' : '''the trader''';
+    s.add('“What happened?”\n\nI describe the battle to $ifBlock_740d97de9.\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs BleedsTraderTellAboutClearedCamp';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class BleedsTraderGoblinSmoke extends RoamingAction {
   @override
   final String name = 'bleeds_trader_goblin_smoke';
@@ -3094,7 +3162,8 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     }
     if (!(w.actionNeverUsed(name) &&
         $(c).hasLearnedAbout(kbLeroy) &&
-        $(c).hasLearnedAbout(kbLeroyKnowsGoblinSmoke))) {
+        $(c).hasLearnedAbout(kbLeroyKnowsGoblinSmoke) &&
+        !$(c).hasHappened(evGoblinCampCleared))) {
       return false;
     }
     return true;
@@ -3551,6 +3620,7 @@ final allActions = <RoamingAction>[
   StartDeclineDagger.singleton,
   BleedsTraderHello.singleton,
   BleedsTraderGoblins.singleton,
+  BleedsTraderTellAboutClearedCamp.singleton,
   BleedsTraderGoblinSmoke.singleton,
   BleedsBlindGuideGreet.singleton,
   BleedsBlindGuideTerribleIdea.singleton,

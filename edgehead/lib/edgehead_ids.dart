@@ -13,6 +13,8 @@ part 'edgehead_ids_actors.dart';
 
 const evDirectorNoRuleApplicable = "evDirectorNoRuleApplicable";
 
+const evGoblinCampCleared = "evGoblinCampCleared";
+
 const kbGoblinSmoke = "kbGoblinSmoke";
 
 const kbGoblinsNearBleeds = "kbGoblinsNearBleeds";

@@ -53,6 +53,7 @@ part 'edgehead_serializers.g.dart';
   CounterAttackSituation,
   CustomEventHistory,
   DefenseSituation,
+  DirectorCapability,
   EdgeheadGlobalState,
   FightSituation,
   GuardpostAboveChurchTakeShieldRescueSituation,

@@ -51,7 +51,7 @@ final Item orcthorn = Item.weapon(orcthornId, WeaponType.sword,
 final Item sleepingGoblinsSpear =
     Item.weapon(sleepingGoblinsSpearId, WeaponType.spear);
 
-final Item tamarasDagger = Item.weapon(851651321, WeaponType.dagger);
+final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger);
 
 /// Ruleset created from [_brianaQuotes]. All quotes are `onlyOnce`. The last
 /// quote is `"END"`, which will not print, and is there as the terminal
@@ -559,6 +559,12 @@ class _HelperAccessor {
   void giveStaminaToPlayer(int amount) {
     final w = _actionContext.outputWorld;
     w.updateActorById(playerId, (b) => b..stamina += amount);
+  }
+
+  bool hasHappened(String eventId, {int actorId}) {
+    return _applicabilityContext.world.customHistory
+        .query(name: eventId, actorId: actorId)
+        .hasHappened;
   }
 
   /// Queries the history of [hearAbout].
