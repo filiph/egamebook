@@ -91,6 +91,12 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         ..add(serializers.serialize(object.currentRoomName,
             specifiedType: const FullType(String)));
     }
+    if (object.director != null) {
+      result
+        ..add('director')
+        ..add(serializers.serialize(object.director,
+            specifiedType: const FullType(DirectorCapability)));
+    }
     return result;
   }
 
@@ -120,6 +126,11 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
         case 'dexterity':
           result.dexterity = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'director':
+          result.director.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(DirectorCapability))
+              as DirectorCapability);
           break;
         case 'foldFunctionHandle':
           result.foldFunctionHandle = serializers.deserialize(value,
@@ -222,6 +233,8 @@ class _$Actor extends Actor {
   @override
   final int dexterity;
   @override
+  final DirectorCapability director;
+  @override
   final String foldFunctionHandle;
   @override
   final int gold;
@@ -272,6 +285,7 @@ class _$Actor extends Actor {
       this.constitution,
       this.currentRoomName,
       this.dexterity,
+      this.director,
       this.foldFunctionHandle,
       this.gold,
       this.hitpoints,
@@ -383,6 +397,7 @@ class _$Actor extends Actor {
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
         dexterity == other.dexterity &&
+        director == other.director &&
         foldFunctionHandle == other.foldFunctionHandle &&
         gold == other.gold &&
         hitpoints == other.hitpoints &&
@@ -426,7 +441,7 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), foldFunctionHandle.hashCode), gold.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), director.hashCode), foldFunctionHandle.hashCode), gold.hashCode),
                                                                                 hitpoints.hashCode),
                                                                             id.hashCode),
                                                                         initiative.hashCode),
@@ -455,6 +470,7 @@ class _$Actor extends Actor {
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
           ..add('dexterity', dexterity)
+          ..add('director', director)
           ..add('foldFunctionHandle', foldFunctionHandle)
           ..add('gold', gold)
           ..add('hitpoints', hitpoints)
@@ -499,6 +515,12 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   int _dexterity;
   int get dexterity => _$this._dexterity;
   set dexterity(int dexterity) => _$this._dexterity = dexterity;
+
+  DirectorCapabilityBuilder _director;
+  DirectorCapabilityBuilder get director =>
+      _$this._director ??= new DirectorCapabilityBuilder();
+  set director(DirectorCapabilityBuilder director) =>
+      _$this._director = director;
 
   String _foldFunctionHandle;
   String get foldFunctionHandle => _$this._foldFunctionHandle;
@@ -596,6 +618,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
       _dexterity = _$v.dexterity;
+      _director = _$v.director?.toBuilder();
       _foldFunctionHandle = _$v.foldFunctionHandle;
       _gold = _$v.gold;
       _hitpoints = _$v.hitpoints;
@@ -645,6 +668,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               constitution: constitution,
               currentRoomName: currentRoomName,
               dexterity: dexterity,
+              director: _director?.build(),
               foldFunctionHandle: foldFunctionHandle,
               gold: gold,
               hitpoints: hitpoints,
@@ -671,6 +695,9 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       try {
         _$failedField = 'anatomy';
         anatomy.build();
+
+        _$failedField = 'director';
+        _director?.build();
 
         _$failedField = 'inventory';
         inventory.build();

@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
+import 'package:edgehead/fractal_stories/director/director.dart';
 import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
@@ -70,6 +71,7 @@ abstract class Actor extends Object
     bool isConfused = false,
     bool isUndead = false,
     String foldFunctionHandle = "normal",
+    bool isDirector = false,
   }) {
     Anatomy currentAnatomy = anatomy ??
         buildHumanoid(id, constitution: constitution, isUndead: isUndead);
@@ -112,7 +114,8 @@ abstract class Actor extends Object
       ..pose = poseMax
       ..poseMax = poseMax
       ..isActive = true
-      ..recoveringUntil = DateTime.utc(-9999));
+      ..recoveringUntil = DateTime.utc(-9999)
+      ..director = isDirector ? DirectorCapabilityBuilder() : null);
   }
 
   Actor._();
@@ -167,6 +170,11 @@ abstract class Actor extends Object
   ///
   /// Average human has [dexterity] of `100`.
   int get dexterity;
+
+  /// Special data attached to the game's director. Normal actors (like
+  /// the player, the monsters and the NPCs) don't have this.
+  @nullable
+  DirectorCapability get director;
 
   /// The string handle to the fold function that this actor should use.
   String get foldFunctionHandle;
@@ -233,6 +241,10 @@ abstract class Actor extends Object
   }
 
   bool get isConfused;
+
+  /// If `true`, this actor has special powers over the game world. They should
+  /// not appear physically in the game world.
+  bool get isDirector => director != null;
 
   /// The actor has "plot armor". They should never die. Actions should go
   /// out of their way to prevent the actor from dying.
