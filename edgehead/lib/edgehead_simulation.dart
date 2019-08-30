@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_director.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -67,7 +68,7 @@ final Actor edgeheadPlayer = Actor.initialized(
 );
 
 final Simulation edgeheadSimulation =
-    Simulation(_rooms, allApproaches, _foldFunctions);
+    Simulation(_rooms, allApproaches, _foldFunctions, edgeheadDirectorRuleset);
 
 final Actor edgeheadTamara = Actor.initialized(
   tamaraId,

@@ -59,6 +59,8 @@ class Simulation {
 
   final Set<Approach> approaches;
 
+  final Ruleset directorRuleset;
+
   final Logger log = Logger('Simulation');
 
   /// Fold functions are the different ways an actor scores the world.
@@ -75,6 +77,7 @@ class Simulation {
     Iterable<Room> rooms,
     Iterable<Approach> approaches,
     this.foldFunctions,
+    this.directorRuleset,
   )   : rooms = Set<Room>.from(rooms),
         approaches = Set<Approach>.from(approaches),
         assert(!hasDuplicities(rooms.map((r) => r.name))),

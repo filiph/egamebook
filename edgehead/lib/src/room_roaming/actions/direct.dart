@@ -43,7 +43,7 @@ class DirectAction extends Action<Nothing> {
 
   @override
   String applySuccess(ActionContext context, void _) {
-    // TODO
+    context.simulation.directorRuleset.apply(context);
     return "the director acted";
   }
 
@@ -59,8 +59,8 @@ class DirectAction extends Action<Nothing> {
   }
 
   @override
-  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
-      WorldState w, void _) {
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     return true;
   }
 }

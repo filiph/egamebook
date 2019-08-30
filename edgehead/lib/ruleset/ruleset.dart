@@ -9,6 +9,15 @@ typedef RuleApplyCallback = void Function(ActionContext context);
 
 typedef RuleIsApplicableCallback = bool Function(ApplicabilityContext context);
 
+class NoRuleApplicableException implements Exception {
+  final String message;
+
+  NoRuleApplicableException(this.message);
+
+  @override
+  String toString() => message;
+}
+
 @immutable
 class Prerequisite implements Comparable<Prerequisite> {
   /// The priority of a [Rule]. The higher the priority, the sooner the
@@ -98,6 +107,19 @@ class Ruleset {
       this.rule9,
       this.rule10]);
 
+  /// Creates an empty ruleset. Will throw when you try to [Ruleset.apply].
+  const Ruleset.empty()
+      : rule1 = null,
+        rule2 = null,
+        rule3 = null,
+        rule4 = null,
+        rule5 = null,
+        rule6 = null,
+        rule7 = null,
+        rule8 = null,
+        rule9 = null,
+        rule10 = null;
+
   /// Prefer using the [Ruleset] constructor, which is much faster, but which
   /// requires the rules to be provided in order from highest priority to
   /// lowest.
@@ -144,20 +166,24 @@ class Ruleset {
   /// Runs the ruleset, choosing the most specific rule and running its
   /// [Rule.applyCallback].
   ///
-  /// This also record the used rule into [context.outputWorld]'s history.
+  /// This also records the used rule into [context.outputWorld]'s history.
+  ///
+  /// Throws [NoRuleApplicableException] when no rule is applicable.
   void apply(ActionContext context) {
+    if (rule1 == null) throw StateError('Trying to use an empty ruleset.');
+
     for (int i = 0; i < 10; i++) {
       final rule = _getByIndex(i);
       if (rule == null) break;
       if (rule.prerequisite.isSatisfiedBy(context)) {
         rule.applyCallback(context);
         context.outputWorld?.recordRule(rule);
-        // TODO: when 2+ rules of same priority is applicable, use sim.random
+        // TODO: when 2+ rules of same priority are applicable, use sim.random
         return;
       }
     }
 
-    throw StateError("No rule was applicable. "
+    throw NoRuleApplicableException("No rule was applicable. "
         "Action history: ${context.world?.actionHistory?.describe()}, "
         "Rules: $_all");
   }

@@ -29,7 +29,8 @@ void main() {
     );
     final context =
         ActionContext(null, orc, null, null, null, null, null, sureSuccess);
-    expect(() => ruleset.apply(context), throwsStateError);
+    expect(() => ruleset.apply(context),
+        throwsA(const TypeMatcher<NoRuleApplicableException>()));
   });
 
   test("ruleset with 3 rules applies the most specific one", () {
