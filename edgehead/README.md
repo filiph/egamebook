@@ -169,6 +169,26 @@ might want to start with `lib/edgehead_lib.dart`.
 To test, run `pub run test`, and to include long-running fuzzy tests,
 run `pub run -c test --run-skipped`.
 
+#### Debug play-testing
+
+If you use an IDE that lets you attach the debugger to a port, you might want
+to run the playtest in regular console and attach to it. To do that, execute
+this command:
+
+    dart --enable-asserts --enable-vm-service:5858 --disable-service-auth-codes bin/play.dart
+
+The port number is up to you. I use `5858` as a convention. The
+`disable-service-auth-codes` flag makes your debug less safe (but way more
+convenient).
+
+Now, you can start the debug. For example, in IntelliJ editors, there's a run
+configuration template called "Dart Remote Debug". You just need to set it
+up for `localhost` and port `5858`.
+
+Once both the executable and the debug are running, you can play as you normally
+would in the terminal window, and attach breakpoints, see output and inspect
+variables in the IDE.
+
 ### Testing
 
 Run `pub run test` or setup your IDE for continuous unit testing.
