@@ -72,7 +72,7 @@ class TakeDroppedShield extends ItemAction {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, Item item) {
     if (!item.isShield) return false;
-    if (!a.anatomy.anyWeaponAppendageAvailable) return false;
+    if (!a.anatomy.secondaryWeaponAppendageAvailable) return false;
     if (a.currentShield != null) return false;
     if (a.anatomy.isBlind) return false;
     return true;
