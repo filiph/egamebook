@@ -50,8 +50,8 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final damage = enemy.hitpoints;
-    w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
+    final damage = enemy.isInvincible ? enemy.hitpoints - 1 : enemy.hitpoints;
+    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     var bodyPart = enemy.isInvincible ? 'side' : '{throat|neck|heart}';
     s.add(
