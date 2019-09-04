@@ -1,0 +1,107 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Egamebook",
+	"patterns": [
+		{
+			"include": "#object_definitions"
+		},
+		{
+			"include": "#approach_from"
+		},
+		{
+			"include": "#map_keys"
+		},
+		{
+			"include": "#variable_names"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#brackets"
+		},
+		{
+			"include": "#ruleset"
+		},
+		{
+			"include": "#substitutions"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#markdown"
+		}
+	],
+	"repository": {
+		"object_definitions": {
+			"patterns": [{
+				"name": "keyword.egb",
+				"match": "^(ROOM|APPROACH|ACTION):"
+			}]
+		},
+		"approach_from": {
+			"patterns": [{
+				"name": "keyword.egb",
+				"match": "\\sFROM\\s"
+			}]
+		},
+		"map_keys": {
+			"patterns": [{
+				"name": "keyword.egb",
+				"match": "^(VARIANT_OF|RULE|FLAGS|DESCRIPTION|FIRST_DESCRIPTION|FIGHT_SITUATION|COMMAND|FOR_LOCATION|PREREQUISITES|COMPLETE_SUCCESS_PROBABILITY|COMPLETE_SUCCESS_DESCRIPTION):"
+			}]
+		},
+		"variable_names": {
+			"patterns": [{
+				"name": "variable.name.egb",
+				"match": "\\$[\\w_]+"
+			}]
+		},
+		"constants": {
+			"patterns": [{
+				"name": "variable.other",
+				"match": "\\s(<implicit>|N/A|default)\\s"
+			}]
+		},
+		"brackets": {
+			"patterns": [{
+				"name": "keyword.egb",
+				"match": "^\\[\\[/?CODE\\]\\]$"
+			},{
+				"name": "keyword.egb",
+				"match": "\\[\\[IF .+?\\]\\]"
+			},{
+				"name": "keyword.egb",
+				"match": "\\[\\[ELSE\\]\\]"
+			},{
+				"name": "keyword.egb",
+				"match": "\\[\\[ENDIF\\]\\]"
+			}]
+		},
+		"ruleset": {
+			"patterns": [{
+				"name": "keyword.egb",
+				"match": "^- (RULESET|RULE:|THEN:|END RULE|END RULESET)$"
+			}]
+		},
+		"substitutions": {
+			"patterns": [{
+				"name": "variable.other",
+				"match": "\\[\\[\\w.+?\\w\\]\\]"
+			}]
+		},
+		"comments": {
+			"patterns": [{
+				"name": "comment.line.double-slash",
+				"match": "^//.*$"
+			}]
+		},
+		"markdown": {
+			"name": "markup.italic",
+			"begin": "(\\s|^)_\\S",
+			"end": "\\S_(\\s|$)"
+		}
+	},
+	"scopeName": "source.egb"
+}

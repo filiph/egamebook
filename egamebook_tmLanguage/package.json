@@ -1,0 +1,25 @@
+{
+    "name": "egb-txt",
+    "displayName": "Egamebook Writer Input",
+    "description": "Syntax highlighting for egamebook.com's syntax for writers",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.37.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "egb",
+            "aliases": ["Egamebook", "egb"],
+            "extensions": [".egb",".egb.txt"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "egb",
+            "scopeName": "source.egb",
+            "path": "./syntaxes/egb.tmLanguage.json"
+        }]
+    }
+}
