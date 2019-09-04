@@ -2543,6 +2543,100 @@ final Room goblinSkirmishPatrol =
   final Storyline s = c.outputStoryline;
   s.add('Nothing here, just death.\n', wholeSentence: true);
 }, generateBleedsGoblinSkirmishPatrol, null);
+final Approach goblinSkirmishMainFromBleedsMain = Approach(
+    'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).hasHappened(evGoblinCampCleared);
+});
+final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
+    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> attack the camp',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return !$(c).hasHappened(evGoblinCampCleared);
+});
+final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('TODO -- an actual battle with the goblins.\n\nAssume you won.\n\n',
+      wholeSentence: true);
+  w.recordCustom(evGoblinCampCleared);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
+  w.recordCustom(evGoblinCampCleared);
+}, null, null);
+final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
+    'goblin_skirmish_patrol',
+    'goblin_skirmish_sneak',
+    'Go >> towards the goblin outpost', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach goblinSkirmishSneakFromBleedsMain = Approach(
+    'bleeds_main', 'goblin_skirmish_sneak', 'Go >> towards the goblin outpost',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).playerHasVisited("goblin_skirmish_sneak");
+});
+final Room goblinSkirmishSneak =
+    Room('goblin_skirmish_sneak', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblins are still here.\n', wholeSentence: true);
+}, null, null);
 final Approach startPostFightFromStartBeginFight = Approach(
     'start_begin_fight', 'start_post_fight', '<implicit>', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2654,6 +2748,55 @@ final Room startPostFightTamaraAnimated = Room(
       return w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead;
     }),
     isIdle: true);
+final Approach startEnterGoblinFromStartRaccoon = Approach(
+    'start_raccoon', 'start_enter_goblin', '<implicit>', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach startEnterGoblinFromStartCoward = Approach(
+    'start_coward', 'start_enter_goblin', '<implicit>', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'She motions toward the bush. I look in the direction and see a figure with a short, rusty sword.\n\nThis place. Why does everything need to be so difficult around here?\n\n"You think you could help me with this one?" She hands me a long dagger.\n',
+      wholeSentence: true);
+}, null, null, null);
+final Approach startFromPreStartBook = Approach(
+    'pre_start_book', 'start', 'DEBUG >> Play ‘Knights of San Francisco’',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room start = Room('start', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her sword. "This is the last and then I turn back."\n\n',
+      wholeSentence: true);
+  w.actors.removeWhere((actor) => actor.id == brianaId);
+}, null, null, null);
 final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
     '“It is just a rustle in the bush, Tamara. Probably a raccoon.”',
     (ActionContext c) {
@@ -2818,34 +2961,6 @@ class StartDeclineDagger extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach startEnterGoblinFromStartRaccoon = Approach(
-    'start_raccoon', 'start_enter_goblin', '<implicit>', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach startEnterGoblinFromStartCoward = Approach(
-    'start_coward', 'start_enter_goblin', '<implicit>', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'She motions toward the bush. I look in the direction and see a figure with a short, rusty sword.\n\nThis place. Why does everything need to be so difficult around here?\n\n"You think you could help me with this one?" She hands me a long dagger.\n',
-      wholeSentence: true);
-}, null, null, null);
 final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2856,8 +2971,8 @@ final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
       'The fight begins. The goblin before us is especially feral. He\'s gnawing his teeth and growls like a wolf. He taps his thigh with the blunt side of his rusty sword.\n',
       wholeSentence: true);
 }, null, generateStartFight, null);
-final Approach startFromPreStartBook = Approach(
-    'pre_start_book', 'start', 'DEBUG >> Play ‘Knights of San Francisco’',
+final Approach bleedsMainFromPreStartBook = Approach('pre_start_book',
+    'bleeds_main', 'DEBUG >> Play ‘Knights of San Francisco’ from The Bleeds',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2866,17 +2981,301 @@ final Approach startFromPreStartBook = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Room start = Room('start', (ActionContext c) {
+final Approach bleedsMainFromStartPostFight =
+    Approach('start_post_fight', 'bleeds_main', 'Go >> towards the Pyramid',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach bleedsMainFromBleedsTraderHut = Approach(
+    'bleeds_trader_hut', 'bleeds_main', 'Go >> outside', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add('$weSubstitutionCapitalized walk out into the muddy street.\n',
+      wholeSentence: true);
+});
+final Approach bleedsMainFromGoblinSkirmishSneak =
+    Approach('goblin_skirmish_sneak', 'bleeds_main', 'Go >> to The Bleeds',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized sneak through the bushes and emerge back in The Bleeds.\n',
+      wholeSentence: true);
+});
+final Approach bleedsMainFromGoblinSkirmishMain =
+    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to The Bleeds',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add('$weSubstitutionCapitalized walk back to The Bleeds.\n',
+      wholeSentence: true);
+});
+final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her sword. "This is the last and then I turn back."\n\n',
+      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nAt any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
       wholeSentence: true);
-  w.actors.removeWhere((actor) => actor.id == brianaId);
-}, null, null, null);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, null, null, isIdle: true);
+
+class BleedsBlindGuideGreet extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_greet';
+
+  static final BleedsBlindGuideGreet singleton = BleedsBlindGuideGreet();
+
+  @override
+  List<String> get commandPathTemplate => ['Blind man', '“Hello!”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_main') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n\n',
+        wholeSentence: true);
+    $(c).learnAbout(kbBlindGuide);
+
+    return '${a.name} successfully performs BleedsBlindGuideGreet';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsBlindGuideTerribleIdea extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_terrible_idea';
+
+  static final BleedsBlindGuideTerribleIdea singleton =
+      BleedsBlindGuideTerribleIdea();
+
+  @override
+  List<String> get commandPathTemplate => [
+        'Blind Guide',
+        '“Why is hunting for treasure in the Pyramid a terrible idea?”'
+      ];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_main') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbBlindGuide))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"So you want to explore the Pyramid."\n\n_"I need something that\'s in there."_\n\n"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n\nI don\'t want to reveal more than needed. But "magic" is vague enough. So I just say yes.\n\nThe man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n\n',
+        wholeSentence: true);
+    $(c).hearAbout(kbJisadHatesMagic);
+
+    s.add(
+        '\n_"What about it?"_\n\n"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."\n\n',
+        wholeSentence: true);
+    $(c).hearAbout(kbOrcsInPyramid);
+    $(c).hearAbout(kbKnightsLeaving);
+    $(c).hearAbout(kbGoblinsNearBleeds);
+
+    s.add(
+        '\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs BleedsBlindGuideTerribleIdea';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsBlindGuideGoblins extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_goblins';
+
+  static final BleedsBlindGuideGoblins singleton = BleedsBlindGuideGoblins();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Blind Guide', '“The goblins are new here?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_main') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) &&
+        $(c).hasLearnedAbout(kbBlindGuide) &&
+        $(c).hasHeardAbout(kbGoblinsNearBleeds))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It\'s like the goblins are being drawn here."\n\n_"What do they want?"_\n\n"They\'re goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it\'s strange. They come in larger numbers than you would think makes sense. They\'d get more slaves and more steel elsewhere."\n\n_"They want into the Pyramid, perhaps?"_\n\n"Nonsense. Goblins fear these kinds of things. Even if they didn\'t, they\'d probably get slaughtered by the orcs. Oh, that\'s something I\'d like to see." He absentmindedly touches his face just under the left eye.\n\n"Anyway. The goblins aren\'t stupid, but they _are_ getting awfully bold. I\'ve heard a band has made their camp not far from here. So close that people can see their campfire\'s smoke sometimes." He shudders. "Can you see it?"\n\n_"No."_\n\n"It must be a harrowing sight. A herald of our own future, possibly."\n\n',
+        wholeSentence: true);
+    $(c).hearAbout(kbGoblinSmoke);
+
+    return '${a.name} successfully performs BleedsBlindGuideGoblins';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Approach endOfRoamFromBleedsMain = Approach(
+    'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You realize this adventuring life is not for you.\n',
+      wholeSentence: true);
+});
 final Approach bleedsTraderHutFromBleedsMain = Approach(
     'bleeds_main', 'bleeds_trader_hut', 'Go >> inside the trader\'s shop',
     (ActionContext c) {
@@ -3206,405 +3605,6 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach bleedsMainFromPreStartBook = Approach('pre_start_book',
-    'bleeds_main', 'DEBUG >> Play ‘Knights of San Francisco’ from The Bleeds',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach bleedsMainFromStartPostFight =
-    Approach('start_post_fight', 'bleeds_main', 'Go >> towards the Pyramid',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach bleedsMainFromBleedsTraderHut = Approach(
-    'bleeds_trader_hut', 'bleeds_main', 'Go >> outside', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add('$weSubstitutionCapitalized walk out into the muddy street.\n',
-      wholeSentence: true);
-});
-final Approach bleedsMainFromGoblinSkirmishSneak =
-    Approach('goblin_skirmish_sneak', 'bleeds_main', 'Go >> to The Bleeds',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      '$weSubstitutionCapitalized sneak through the bushes and emerge back in The Bleeds.\n',
-      wholeSentence: true);
-});
-final Approach bleedsMainFromGoblinSkirmishMain =
-    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to The Bleeds',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add('$weSubstitutionCapitalized walk back to The Bleeds.\n',
-      wholeSentence: true);
-});
-final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nAt any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-}, null, null, isIdle: true);
-
-class BleedsBlindGuideGreet extends RoamingAction {
-  @override
-  final String name = 'bleeds_blind_guide_greet';
-
-  static final BleedsBlindGuideGreet singleton = BleedsBlindGuideGreet();
-
-  @override
-  List<String> get commandPathTemplate => ['Blind man', '“Hello!”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
-      return false;
-    }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n\n',
-        wholeSentence: true);
-    $(c).learnAbout(kbBlindGuide);
-
-    return '${a.name} successfully performs BleedsBlindGuideGreet';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class BleedsBlindGuideTerribleIdea extends RoamingAction {
-  @override
-  final String name = 'bleeds_blind_guide_terrible_idea';
-
-  static final BleedsBlindGuideTerribleIdea singleton =
-      BleedsBlindGuideTerribleIdea();
-
-  @override
-  List<String> get commandPathTemplate => [
-        'Blind Guide',
-        '“Why is hunting for treasure in the Pyramid a terrible idea?”'
-      ];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
-      return false;
-    }
-    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbBlindGuide))) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '"So you want to explore the Pyramid."\n\n_"I need something that\'s in there."_\n\n"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n\nI don\'t want to reveal more than needed. But "magic" is vague enough. So I just say yes.\n\nThe man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n\n',
-        wholeSentence: true);
-    $(c).hearAbout(kbJisadHatesMagic);
-
-    s.add(
-        '\n_"What about it?"_\n\n"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."\n\n',
-        wholeSentence: true);
-    $(c).hearAbout(kbOrcsInPyramid);
-    $(c).hearAbout(kbKnightsLeaving);
-    $(c).hearAbout(kbGoblinsNearBleeds);
-
-    s.add(
-        '\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
-        wholeSentence: true);
-    return '${a.name} successfully performs BleedsBlindGuideTerribleIdea';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class BleedsBlindGuideGoblins extends RoamingAction {
-  @override
-  final String name = 'bleeds_blind_guide_goblins';
-
-  static final BleedsBlindGuideGoblins singleton = BleedsBlindGuideGoblins();
-
-  @override
-  List<String> get commandPathTemplate =>
-      ['Blind Guide', '“The goblins are new here?”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
-      return false;
-    }
-    if (!(w.actionNeverUsed(name) &&
-        $(c).hasLearnedAbout(kbBlindGuide) &&
-        $(c).hasHeardAbout(kbGoblinsNearBleeds))) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '"Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It\'s like the goblins are being drawn here."\n\n_"What do they want?"_\n\n"They\'re goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it\'s strange. They come in larger numbers than you would think makes sense. They\'d get more slaves and more steel elsewhere."\n\n_"They want into the Pyramid, perhaps?"_\n\n"Nonsense. Goblins fear these kinds of things. Even if they didn\'t, they\'d probably get slaughtered by the orcs. Oh, that\'s something I\'d like to see." He absentmindedly touches his face just under the left eye.\n\n"Anyway. The goblins aren\'t stupid, but they _are_ getting awfully bold. I\'ve heard a band has made their camp not far from here. So close that people can see their campfire\'s smoke sometimes." He shudders. "Can you see it?"\n\n_"No."_\n\n"It must be a harrowing sight. A herald of our own future, possibly."\n\n',
-        wholeSentence: true);
-    $(c).hearAbout(kbGoblinSmoke);
-
-    return '${a.name} successfully performs BleedsBlindGuideGoblins';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-final Approach endOfRoamFromBleedsMain = Approach(
-    'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You realize this adventuring life is not for you.\n',
-      wholeSentence: true);
-});
-final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
-    'goblin_skirmish_patrol',
-    'goblin_skirmish_sneak',
-    'Go >> towards the goblin outpost', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach goblinSkirmishSneakFromBleedsMain = Approach(
-    'bleeds_main', 'goblin_skirmish_sneak', 'Go >> towards the goblin outpost',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return $(c).playerHasVisited("goblin_skirmish_sneak");
-});
-final Room goblinSkirmishSneak =
-    Room('goblin_skirmish_sneak', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      '$weSubstitutionCapitalized sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblins are still here.\n', wholeSentence: true);
-}, null, null);
-final Approach goblinSkirmishMainFromBleedsMain = Approach(
-    'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return $(c).hasHappened(evGoblinCampCleared);
-});
-final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
-    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> attack the camp',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return !$(c).hasHappened(evGoblinCampCleared);
-});
-final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('TODO -- an actual battle with the goblins.\n\nAssume you won.\n\n',
-      wholeSentence: true);
-  w.recordCustom(evGoblinCampCleared);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
-  w.recordCustom(evGoblinCampCleared);
-}, null, null);
 final allRooms = <Room>[
   undergroundChurch,
   tunnel,
@@ -3626,19 +3626,19 @@ final allRooms = <Room>[
   testFightOrcAndGoblin,
   orcthornRoom,
   goblinSkirmishPatrol,
+  goblinSkirmishMain,
+  goblinSkirmishSneak,
   startPostFight,
   startPostFightTamaraAlive,
   startPostFightTamaraDead,
   startPostFightTamaraAnimated,
+  startEnterGoblin,
+  start,
   startRaccoon,
   startCoward,
-  startEnterGoblin,
   startBeginFight,
-  start,
-  bleedsTraderHut,
   bleedsMain,
-  goblinSkirmishSneak,
-  goblinSkirmishMain
+  bleedsTraderHut
 ];
 final allApproaches = <Approach>[
   undergroundChurchFromCaveWithAgruth,
@@ -3672,23 +3672,23 @@ final allApproaches = <Approach>[
   endOfRoamFromTestFightOrcAndGoblin,
   orcthornRoomFromSlaveQuartersPassage,
   goblinSkirmishPatrolFromBleedsMain,
+  goblinSkirmishMainFromBleedsMain,
+  goblinSkirmishMainFromGoblinSkirmishSneak,
+  goblinSkirmishSneakFromGoblinSkirmishPatrol,
+  goblinSkirmishSneakFromBleedsMain,
   startPostFightFromStartBeginFight,
-  startRaccoonFromStart,
-  startCowardFromStart,
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
   startFromPreStartBook,
-  bleedsTraderHutFromBleedsMain,
+  startRaccoonFromStart,
+  startCowardFromStart,
   bleedsMainFromPreStartBook,
   bleedsMainFromStartPostFight,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromGoblinSkirmishMain,
   endOfRoamFromBleedsMain,
-  goblinSkirmishSneakFromGoblinSkirmishPatrol,
-  goblinSkirmishSneakFromBleedsMain,
-  goblinSkirmishMainFromBleedsMain,
-  goblinSkirmishMainFromGoblinSkirmishSneak
+  bleedsTraderHutFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   ExamineUndergroundChurch.singleton,
@@ -3714,11 +3714,11 @@ final allActions = <RoamingAction>[
   ReadLetterFromMentor.singleton,
   StartTakeDagger.singleton,
   StartDeclineDagger.singleton,
+  BleedsBlindGuideGreet.singleton,
+  BleedsBlindGuideTerribleIdea.singleton,
+  BleedsBlindGuideGoblins.singleton,
   BleedsTraderHello.singleton,
   BleedsTraderGoblins.singleton,
   BleedsTraderTellAboutClearedCamp.singleton,
-  BleedsTraderGoblinSmoke.singleton,
-  BleedsBlindGuideGreet.singleton,
-  BleedsBlindGuideTerribleIdea.singleton,
-  BleedsBlindGuideGoblins.singleton
+  BleedsTraderGoblinSmoke.singleton
 ];
