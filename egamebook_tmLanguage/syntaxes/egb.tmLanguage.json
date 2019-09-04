@@ -48,6 +48,15 @@
 		},
 		"map_keys": {
 			"patterns": [{
+				"begin": "^(RULE:) ",
+				"end": "$",
+				"beginCaptures": {
+					"1": {"name": "keyword.egb"}
+				},
+				"patterns": [
+					{"include": "source.dart"}
+				]
+			},{
 				"name": "keyword.egb",
 				"match": "^(VARIANT_OF|RULE|FLAGS|DESCRIPTION|FIRST_DESCRIPTION|FIGHT_SITUATION|COMMAND|FOR_LOCATION|PREREQUISITES|COMPLETE_SUCCESS_PROBABILITY|COMPLETE_SUCCESS_DESCRIPTION):"
 			}]
@@ -61,16 +70,28 @@
 		"constants": {
 			"patterns": [{
 				"name": "variable.other",
-				"match": "\\s(<implicit>|N/A|default)\\s"
+				"match": "\\s(<implicit>|N/A|default|idle)\\s"
 			}]
 		},
 		"brackets": {
 			"patterns": [{
-				"name": "keyword.egb",
-				"match": "^\\[\\[/?CODE\\]\\]$"
+				"begin": "^(\\[\\[CODE\\]\\])$",
+				"end": "^(\\[\\[/CODE\\]\\])$",
+				"captures": {
+					"1": {"name": "keyword.egb"}
+				},
+				"patterns": [
+					{"include": "source.dart"}
+				]
 			},{
-				"name": "keyword.egb",
-				"match": "\\[\\[IF .+?\\]\\]"
+				"begin": "(\\[\\[IF) ",
+				"end": "(\\]\\])",
+				"captures": {
+					"1": {"name": "keyword.egb"}
+				},
+				"patterns": [
+					{"include": "source.dart"}
+				]
 			},{
 				"name": "keyword.egb",
 				"match": "\\[\\[ELSE\\]\\]"
@@ -81,8 +102,17 @@
 		},
 		"ruleset": {
 			"patterns": [{
+				"begin": "^(- RULE:)$",
+				"end": "^(- THEN:)$",
+				"captures": {
+					"1": {"name": "keyword.egb"}
+				},
+				"patterns": [
+					{"include": "source.dart"}
+				]
+			},{
 				"name": "keyword.egb",
-				"match": "^- (RULESET|RULE:|THEN:|END RULE|END RULESET)$"
+				"match": "^- (RULESET|END RULE|END RULESET)$"
 			}]
 		},
 		"substitutions": {
@@ -94,7 +124,12 @@
 		"comments": {
 			"patterns": [{
 				"name": "comment.line.double-slash",
-				"match": "^//.*$"
+				"begin": "^//",
+				"end": "$",
+				"patterns": [{
+					"match": "\\bTODO\\b",
+					"name": "keyword.todo"
+				}]
 			}]
 		},
 		"markdown": {
