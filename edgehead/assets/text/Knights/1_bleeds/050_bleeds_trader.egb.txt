@@ -1,22 +1,22 @@
 // ---
 APPROACH: $bleeds_trader_hut FROM $bleeds_main
 COMMAND: Go >> inside the trader's shop
-DESCRIPTION: N/A
+DESCRIPTION: $NONE
 
 // ---
 ROOM: $bleeds_trader_hut
 
-FLAGS: idle
+FLAGS: $IDLE
 
 FIRST_DESCRIPTION:
-[[We]] enter a small building made of stone. It's dark in here but cozy.
+[We] enter a small building made of stone. It's dark in here but cozy.
 A gray haired trader greets me and gestures around.
 
 "Everything is for sale. And for good price, too."
 
 I don't really have any money, so I just nod and smile.
 
-DESCRIPTION: The trader {nods|pretends to smile} as [[we]] enter his shop.
+DESCRIPTION: The trader {nods|pretends to smile} as [we] enter his shop.
 
 // ---
 ACTION: $bleeds_trader_hello
@@ -48,7 +48,7 @@ The trader shakes his head and interjects: "What awaits us anywhere else?"
 [[CODE]]
 $(c).learnAbout(kbTrader);
 $(c).learnAbout(kbLeroy);
-[[/CODE]]
+[[ENDCODE]]
 
 
 // ---
@@ -69,7 +69,7 @@ The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers
 
 [[CODE]]
 assert($(c).inRoomWith(leroyId));
-[[/CODE]]
+[[ENDCODE]]
 
 Leroy smiles wryly. "No trade means no money."
 
@@ -92,7 +92,7 @@ Leroy seems genuinely surprised. "I thought you knew. Everyone knows."
 [[CODE]]
 $(c).hearAbout(kbGoblinSmoke);
 $(c).learnAbout(kbLeroyKnowsGoblinSmoke);
-[[/CODE]]
+[[ENDCODE]]
 
 
 // ---
@@ -134,28 +134,28 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
 assert($(c).inRoomWith(leroyId));
-[[/CODE]]
+[[ENDCODE]]
 
 "They are to the west. It doesn't seem like there is a lot of them. We thought the Knights would get rid of them for sure."
 
 [[CODE]]
 $(c).learnAbout(kbGoblinsNearBleeds);
-[[/CODE]]
+[[ENDCODE]]
 
 "But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 
 [[CODE]]
 $(c).hearAbout(kbKnightsLeaving);
-[[/CODE]]
+[[ENDCODE]]
 
 "Well, if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
 
 The trader groans. "Don't be stupid, Leroy."
 
-"I mean it! [[Sir]], you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."
+"I mean it! [Sir], you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."
 
 [[CODE]]
 w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
-[[/CODE]]
+[[ENDCODE]]
 
 "The hell you can! You're a trader, Leroy! You're no fighter." Leroy's father is shaking. When he remembers that I'm there with them, he apologizes, then turns back to Leroy. "Son, I forget that you are a grown man now. But... it is my wish that you don't go."

@@ -23,4 +23,4 @@ DESCRIPTION: You get transported to the development testing arena.
 // ---
 APPROACH: $__END_OF_ROAM__ FROM $test_fight_orc
 COMMAND: End game
-DESCRIPTION: N/A
+DESCRIPTION: $NONE

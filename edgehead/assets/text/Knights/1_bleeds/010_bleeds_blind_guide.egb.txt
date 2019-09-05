@@ -35,7 +35,7 @@ _"I seek treasure."_
 
 [[CODE]]
 $(c).learnAbout(kbBlindGuide);
-[[/CODE]]
+[[ENDCODE]]
 
 
 // ---
@@ -64,7 +64,7 @@ The man purses his lips. "I hate magic." He shifts on his stool and the wood cre
 
 [[CODE]]
 $(c).hearAbout(kbJisadHatesMagic);
-[[/CODE]]
+[[ENDCODE]]
 
 _"What about it?"_
 
@@ -74,7 +74,7 @@ _"What about it?"_
 $(c).hearAbout(kbOrcsInPyramid);
 $(c).hearAbout(kbKnightsLeaving);
 $(c).hearAbout(kbGoblinsNearBleeds);
-[[/CODE]]
+[[ENDCODE]]
 
 _"And this is because of magic?"_
 
@@ -117,4 +117,4 @@ _"No."_
 
 [[CODE]]
 $(c).hearAbout(kbGoblinSmoke);
-[[/CODE]]
+[[ENDCODE]]

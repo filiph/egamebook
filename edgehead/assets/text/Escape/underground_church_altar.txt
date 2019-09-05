@@ -87,11 +87,6 @@ But the scream doesn't come. Instead, the dissonant tone sounds again, more powe
 The maggots crawl over the edge of the altar's surface, onto the orc's body, and move straight toward his face. They move faster now.
 
 
-// TODO: make this a separate 'ROOM' so we can try and attack or throw spear (and abort the throw)
-// TODO - throw spear - ability to abort, briana says "coming here was bravery. this is madness".
-// Probably NOPE, this will increase confusion.
-
-
 The orc's eyes go wide. He struggles against the ogre's grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.
 
 

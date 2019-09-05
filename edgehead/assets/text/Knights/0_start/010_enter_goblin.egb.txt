@@ -1,12 +1,12 @@
 // ---
 APPROACH: $start_enter_goblin FROM $start_raccoon
-COMMAND: <implicit>
-DESCRIPTION: N/A
+COMMAND: $IMPLICIT
+DESCRIPTION: $NONE
 
 // ---
 APPROACH: $start_enter_goblin FROM $start_coward
-COMMAND: <implicit>
-DESCRIPTION: N/A
+COMMAND: $IMPLICIT
+DESCRIPTION: $NONE
 
 
 // ---

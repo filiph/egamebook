@@ -4,41 +4,41 @@
 FIRST_DESCRIPTION:
 A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.
 
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   $(c).justCameFrom("war_forge")
-- THEN:
+[[THEN]]
 You notice a smooth passage leading up and out of the smelter. You'll be able to go there unnoticed.
-- END RULE
-- RULE:
+[[ENDRULE]]
+[[RULE]]
   $(c).justCameFrom("guardpost_above_church")
-- THEN:
+[[THEN]]
 Not far from here there is a short tunnel, sloping down. It leads into the same room where the molten steel ends up — the war forges. You'll be able to go there unnoticed.
-- END RULE
-- END RULESET
+[[ENDRULE]]
+[[ENDRULESET]]
 
 DESCRIPTION:
 The coal reflects the reds and whites of the molten steel.
 
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   w.actionHasBeenPerformedSuccessfully("smelter_look_around") &&
   !w.actionHasBeenPerformedSuccessfully("smelter_throw_spear")
-- THEN:
+[[THEN]]
 About a spear's throw away, the blind ogre is {idling|waiting for commands from the forges}.
 
 
-- END RULE
-- RULE:
-  default
-- THEN:
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
 // Nothing
-- END RULE
-- END RULESET
+[[ENDRULE]]
+[[ENDRULESET]]
 
 [[CODE]]
 rollBrianaQuote(c);
-[[/CODE]]
+[[ENDCODE]]
 
 
 // ---

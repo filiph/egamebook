@@ -3,17 +3,17 @@ import 'package:logging/logging.dart';
 
 final Logger _log = Logger("escape_writers_text");
 
-final Pattern sirSubstitution = "[[sir]]";
+final Pattern sirSubstitution = "[sir]";
 
-final Pattern sirSubstitutionCapitalized = "[[Sir]]";
+final Pattern sirSubstitutionCapitalized = "[Sir]";
 
-final Pattern weSubstitution = "[[we]]";
+final Pattern weSubstitution = "[we]";
 
-final Pattern weSubstitutionCapitalized = "[[We]]";
+final Pattern weSubstitutionCapitalized = "[We]";
 
-final Pattern youngSirSubstitution = "[[young sir]]";
+final Pattern youngSirSubstitution = "[young sir]";
 
-final Pattern youngSirSubstitutionCapitalized = "[[Young sir]]";
+final Pattern youngSirSubstitutionCapitalized = "[Young sir]";
 
 /// Escape writer's string to be used in code.
 ///

@@ -4,20 +4,20 @@ ROOM: $guardpost_above_church
 FIRST_DESCRIPTION:
 You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.
 
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   $(c).justCameFrom("smelter")
-- THEN:
+[[THEN]]
 The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.
 
-- END RULE
-- RULE:
+[[ENDRULE]]
+[[RULE]]
   $(c).justCameFrom("underground_church")
-- THEN:
+[[THEN]]
 The passage you came from is marked with the words "Unholy Church". Another one has the words "Hot iron" above it, which must mean "smelter" in the orcs' vocabulary. Both of these passages slope downward.
 
-- END RULE
-- END RULESET
+[[ENDRULE]]
+[[ENDRULESET]]
 
 A third passage is marked "Up Door".  Beyond the opening, you see a steep stairway leading upward. This is it. Your final path to escape.
 
@@ -27,18 +27,18 @@ Just inside the “Up Door” path sits a goblin guard. You’re in luck: He's s
 
 
 DESCRIPTION:
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   w.wasKilled(sleepingGoblinId)
-- THEN:
+[[THEN]]
 The goblin's corpse is sprawled on the ground in the middle of the circular room.
-- END RULE
-- RULE:
-  default
-- THEN:
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
 The goblin is sleeping soundly next to the passage to the Upper Door.
-- END RULE
-- END RULESET
+[[ENDRULE]]
+[[ENDRULESET]]
 
 // ---
 APPROACH: $guardpost_above_church FROM $underground_church

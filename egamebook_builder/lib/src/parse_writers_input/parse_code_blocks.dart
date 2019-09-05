@@ -11,28 +11,28 @@ import 'types.dart';
 
 /// The keyword to end a [BlockType.code] block and start a [BlockType.text]
 /// block.
-final RegExp codeCloseTag = RegExp(r"^\s*\[\[/CODE\]\]\s*$");
+final RegExp codeCloseTag = RegExp(r"^\s*\[\[ENDCODE\]\]\s*$");
 
 /// The keyword to start a [BlockType.code] block.
 final RegExp codeOpenTag = RegExp(r"^\s*\[\[CODE\]\]\s*$");
 
 /// The keyword to open a new [BlockType.sequence] block as a consequence
 /// of a [BlockType.rule] parent block.
-final RegExp ruleCloseTag = RegExp(r"^\s*- END RULE\s*$");
+final RegExp ruleCloseTag = RegExp(r"^\s*\[\[ENDRULE\]\]\s*$");
 
 /// The keyword to open a new [BlockType.rule] block
 /// (with a [BlockType.ruleCondition] sub-block).
-final RegExp ruleOpenTag = RegExp(r"^\s*- RULE:\s*$");
+final RegExp ruleOpenTag = RegExp(r"^\s*\[\[RULE\]\]\s*$");
 
 /// The keyword to end a [BlockType.ruleset] block.
-final RegExp rulesetCloseTag = RegExp(r"^\s*- END RULESET\s*$");
+final RegExp rulesetCloseTag = RegExp(r"^\s*\[\[ENDRULESET\]\]\s*$");
 
 /// The keyword to start a [BlockType.ruleset] block.
-final RegExp rulesetOpenTag = RegExp(r"^\s*- RULESET\s*$");
+final RegExp rulesetOpenTag = RegExp(r"^\s*\[\[RULESET\]\]\s*$");
 
 /// The keyword to open a new [BlockType.sequence] block as a consequence
 /// of a [BlockType.rule] parent block.
-final RegExp ruleThenTag = RegExp(r"^\s*- THEN:\s*$");
+final RegExp ruleThenTag = RegExp(r"^\s*\[\[THEN\]\]\s*$");
 
 final RegExp _logicalAndPattern = RegExp(r"\s+&&\s+");
 
@@ -67,7 +67,7 @@ Iterable<Code> createDescriptionStatements(String text) sync* {
 }
 
 int getSpecificity(String conditionCode) {
-  if (conditionCode == "default") return 0;
+  if (conditionCode == r"$DEFAULT") return 0;
   return _logicalAndPattern.allMatches(conditionCode).length + 1;
 }
 
@@ -168,7 +168,7 @@ Block _parseSequence(String text) {
       continue;
     } else if (codeCloseTag.hasMatch(line)) {
       if (typeStack.last == BlockType.text) {
-        throw FormatException("A [[/CODE]] close tag found in a text "
+        throw FormatException("An [[ENDCODE]] close tag found in a text "
             "block. Cannot exit a code block when there is none.\n"
             "$text");
       }
@@ -249,7 +249,7 @@ class Block {
   const Block(this.type, this.content, {this.children = const []});
 
   factory Block.textContent(String content) {
-    final sanitized = content.trim() == "N/A" ? "" : content;
+    final sanitized = content.trim() == r"$NONE" ? "" : content;
 
     return Block(BlockType.text, sanitized);
   }

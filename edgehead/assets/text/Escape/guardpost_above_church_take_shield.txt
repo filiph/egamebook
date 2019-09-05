@@ -1,7 +1,6 @@
 ACTION: $guardpost_above_church_take_shield
 COMMAND: Cautiously take the shield
 
-
 HINT: The goblin is asleep, but not soundly — the floor here is cold and uncomfortable, and the wall isn’t much of a headrest. Taking the shield from the goblin's lap will likely wake him up.
 
 

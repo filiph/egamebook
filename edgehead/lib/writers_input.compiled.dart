@@ -56,7 +56,7 @@ final Room undergroundChurch = Room('underground_church', (ActionContext c) {
       'You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. \n\n\nYour bare footsteps reverberate in the room, so you slow down to quiet them. \n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(744937563, 1, false, (ApplicabilityContext c) {
+      Rule(513393440, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -71,7 +71,7 @@ final Room undergroundChurch = Room('underground_church', (ActionContext c) {
             'After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.\n\n',
             wholeSentence: true);
       }),
-      Rule(436107182, 1, false, (ApplicabilityContext c) {
+      Rule(449655042, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -392,7 +392,7 @@ class TalkToBriana3 extends RoamingAction {
         '_"What is Orcthorn?"_\n\n\n"A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed weird enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him_ grach kamkorr _– The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n',
         wholeSentence: true);
     Ruleset(
-        Rule(621956786, 2, false, (ApplicabilityContext c) {
+        Rule(54901828, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -408,7 +408,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide and nods towards the door.\n\n\n',
               wholeSentence: true);
         }),
-        Rule(33780515, 2, false, (ApplicabilityContext c) {
+        Rule(149905314, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -424,7 +424,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "The mad orc behind that door."\n\n\n',
               wholeSentence: true);
         }),
-        Rule(384668601, 2, false, (ApplicabilityContext c) {
+        Rule(764008120, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -440,7 +440,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "That door in the slave quarters."\n\n\n',
               wholeSentence: true);
         }),
-        Rule(361178650, 1, false, (ApplicabilityContext c) {
+        Rule(435710016, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -455,7 +455,7 @@ class TalkToBriana3 extends RoamingAction {
               '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide as she looks around the room.\n\n\n',
               wholeSentence: true);
         }),
-        Rule(974180978, 0, false, (ApplicabilityContext c) {
+        Rule(828906436, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -681,7 +681,7 @@ final Room justAfterAgruthFight =
       wholeSentence: true);
 }, null, null, null);
 final Approach justAfterAgruthFightFromStartAdventure =
-    Approach('start_adventure', 'just_after_agruth_fight', '<implicit>',
+    Approach('start_adventure', 'just_after_agruth_fight', r'$IMPLICIT',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -896,7 +896,7 @@ final Room guardpostAboveChurch =
       'You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(1002529998, 1, false, (ApplicabilityContext c) {
+      Rule(1066693326, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -911,7 +911,7 @@ final Room guardpostAboveChurch =
             'The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.\n\n',
             wholeSentence: true);
       }),
-      Rule(651703369, 1, false, (ApplicabilityContext c) {
+      Rule(666999442, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -936,7 +936,7 @@ final Room guardpostAboveChurch =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   Ruleset(
-      Rule(453960981, 1, false, (ApplicabilityContext c) {
+      Rule(540437251, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -951,7 +951,7 @@ final Room guardpostAboveChurch =
             'The goblin\'s corpse is sprawled on the ground in the middle of the circular room.\n',
             wholeSentence: true);
       }),
-      Rule(948011826, 0, false, (ApplicabilityContext c) {
+      Rule(374419935, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1308,7 +1308,7 @@ final Room smelter = Room('smelter', (ActionContext c) {
       'A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(66031380, 1, false, (ApplicabilityContext c) {
+      Rule(716584229, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1323,7 +1323,7 @@ final Room smelter = Room('smelter', (ActionContext c) {
             'You notice a smooth passage leading up and out of the smelter. You\'ll be able to go there unnoticed.\n',
             wholeSentence: true);
       }),
-      Rule(824502225, 1, false, (ApplicabilityContext c) {
+      Rule(488993248, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1347,7 +1347,7 @@ final Room smelter = Room('smelter', (ActionContext c) {
   s.add('The coal reflects the reds and whites of the molten steel.\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(988691356, 2, false, (ApplicabilityContext c) {
+      Rule(338283821, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1363,7 +1363,7 @@ final Room smelter = Room('smelter', (ActionContext c) {
             'About a spear\'s throw away, the blind ogre is {idling|waiting for commands from the forges}.\n\n\n',
             wholeSentence: true);
       }),
-      Rule(978029961, 0, false, (ApplicabilityContext c) {
+      Rule(1053387971, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1683,7 +1683,7 @@ class WaitForRitual extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'You move into the shadows and wait. After a few heartbeats, there is a scraping sound — stone against stone. You lean out from your hiding place and see a section of the wall to the right of the altar opening.\n\n\nAn orc priest, tall and pale, enters through the stone door. Suddenly, the whole temple reverberates with a strong, dissonant tone that is both sickening and powerful. As if the whole mountain were groaning. \n\n\nFollowing the orc priest, a huge creature enters through the door, crouching below its frame. It\'s unclear what the creature is, exactly, but it could be some large breed of ogre. Judging by the braided hair, it\'s a female. Her sword — attached to her hip with a rope — is as long as you are tall. \n\n\nWhen she enters the temple and stands upright, you can see that she is leading someone in by a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.\n\n\nThe three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana.\n\n\nThe dissonant tone stops. You lean a little further out from your hiding place to have a better view.\n\n\nWithout words, the priest beckons the orc to lie at the altar. The orc is now shaking uncontrollably, but he obeys. You can hear his fitful breath, the rustle of his body against the stone as he glides into position, and nothing else.\n\n\nWhen the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.\n\n\nSomehow, you know.\n\n\n_"Maggots."_\n\n\nBriana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.\n\n\n![Picture of the sadistic slavers](https://egamebook.com/vermin/v/latest/img/altar.jpg)\n\n\nThe ogre pushes down on the orc, preparing for the inevitable struggle. The orc knows what’s coming, and he opens his mouth to scream.\n\n\nBut the scream doesn\'t come. Instead, the dissonant tone sounds again, more powerful than before.\n\n\nThe maggots crawl over the edge of the altar\'s surface, onto the orc\'s body, and move straight toward his face. They move faster now.\n\n\n\n\nThe orc\'s eyes go wide. He struggles against the ogre\'s grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.\n\n\nSuddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed.\n\n\n<p class="toast">Your stamina increases by 1.</p>\n\n\nYou notice that the priest inhales deeply as well.\n\n\nThen, the sound stops and the orc\'s body collapses into itself. The invigorating feeling is gone. You realize the maggots have eaten through the orc\'s eyes and cheeks, and that they are now scuttling back to the base of the altar.\n\n\nThe priest puts his arms down again and — without saying anything — heads back to the stone door. The ogre takes the orc\'s dead body, throws it over her shoulder, and follows the priest. In a few heartbeats, they are all gone and the door closes. A new pool of blood on the altar is the only reminder of what happened.\n\n\nBriana stares ahead. "How did you know it would be maggots?"\n\n\n_"I do not know."_\n\n\n"I _felt_ that sound, somehow. I _felt_ it."\n\n\n_"This place does something weird to people."_\n\n\n"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head. "Let\'s… let\'s just get out of here."\n',
+        'You move into the shadows and wait. After a few heartbeats, there is a scraping sound — stone against stone. You lean out from your hiding place and see a section of the wall to the right of the altar opening.\n\n\nAn orc priest, tall and pale, enters through the stone door. Suddenly, the whole temple reverberates with a strong, dissonant tone that is both sickening and powerful. As if the whole mountain were groaning. \n\n\nFollowing the orc priest, a huge creature enters through the door, crouching below its frame. It\'s unclear what the creature is, exactly, but it could be some large breed of ogre. Judging by the braided hair, it\'s a female. Her sword — attached to her hip with a rope — is as long as you are tall. \n\n\nWhen she enters the temple and stands upright, you can see that she is leading someone in by a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.\n\n\nThe three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana.\n\n\nThe dissonant tone stops. You lean a little further out from your hiding place to have a better view.\n\n\nWithout words, the priest beckons the orc to lie at the altar. The orc is now shaking uncontrollably, but he obeys. You can hear his fitful breath, the rustle of his body against the stone as he glides into position, and nothing else.\n\n\nWhen the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.\n\n\nSomehow, you know.\n\n\n_"Maggots."_\n\n\nBriana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.\n\n\n![Picture of the sadistic slavers](https://egamebook.com/vermin/v/latest/img/altar.jpg)\n\n\nThe ogre pushes down on the orc, preparing for the inevitable struggle. The orc knows what’s coming, and he opens his mouth to scream.\n\n\nBut the scream doesn\'t come. Instead, the dissonant tone sounds again, more powerful than before.\n\n\nThe maggots crawl over the edge of the altar\'s surface, onto the orc\'s body, and move straight toward his face. They move faster now.\n\n\nThe orc\'s eyes go wide. He struggles against the ogre\'s grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.\n\n\nSuddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed.\n\n\n<p class="toast">Your stamina increases by 1.</p>\n\n\nYou notice that the priest inhales deeply as well.\n\n\nThen, the sound stops and the orc\'s body collapses into itself. The invigorating feeling is gone. You realize the maggots have eaten through the orc\'s eyes and cheeks, and that they are now scuttling back to the base of the altar.\n\n\nThe priest puts his arms down again and — without saying anything — heads back to the stone door. The ogre takes the orc\'s dead body, throws it over her shoulder, and follows the priest. In a few heartbeats, they are all gone and the door closes. A new pool of blood on the altar is the only reminder of what happened.\n\n\nBriana stares ahead. "How did you know it would be maggots?"\n\n\n_"I do not know."_\n\n\n"I _felt_ that sound, somehow. I _felt_ it."\n\n\n_"This place does something weird to people."_\n\n\n"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head. "Let\'s… let\'s just get out of here."\n',
         wholeSentence: true);
     $(c).giveStaminaToPlayer(1);
     return '${a.name} successfully performs WaitForRitual';
@@ -1897,7 +1897,7 @@ final Room slaveQuartersPassage =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   Ruleset(
-      Rule(818453219, 2, false, (ApplicabilityContext c) {
+      Rule(46934531, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1912,7 +1912,7 @@ final Room slaveQuartersPassage =
         s.add('  The reinforced door on the side of the corridor is silent.\n',
             wholeSentence: true);
       }),
-      Rule(869270593, 1, false, (ApplicabilityContext c) {
+      Rule(847105853, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -1924,7 +1924,7 @@ final Room slaveQuartersPassage =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
       }),
-      Rule(550453050, 1, false, (ApplicabilityContext c) {
+      Rule(729288676, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2061,7 +2061,7 @@ final Room exitFromBloodrock = Room('exit_from_bloodrock', (ActionContext c) {
       'Only a few bends ahead, the tunnel gets blindingly bright and you catch the scent of fresh mountain air. The surface! For the first time in three years, you hear the howling wind.\n\n\nYou run through a small stone doorway and out of the mountain.\n\n\nThe blinding sun makes you squint. You let the wind chill your muscles and then you jump down a steep descending path.\n\n\nOutside, you and Briana have the upper hand. The orcs and goblins are used to the dark, dank caves, and they come out only when they must.\n\n\nSoon, the orcs and goblins stop following altogether, presumably leaving the two of you to their aboveground brothers.\n\n\nYou look around for a safe route. At first, you cannot make much sense of what you see — this is nothing like the country you left three years ago. Black smoke rises from orc camps and razed villages. You look out over the burned forests and notice the cracks in the wall of the distant Fort Ironcast, just visible over the Glenview Hill. You see no birds, only some horrible dark eagle-like creatures that have no heads circling in both directions above Mount Bloodrock.\n\n\n![View of the road ahead](https://egamebook.com/vermin/v/latest/img/path.jpg)\n\n\nBriana doesn\'t seem surprised.\n\n\n_"We have to stop this."_\n\nBriana follows your gaze, then shakes her head. "This is bigger than us, Aren. This is a problem for kings, not peasants."\n\n_"No king has what we have."_\n\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(937280785, 1, false, (ApplicabilityContext c) {
+      Rule(759499160, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2076,7 +2076,7 @@ final Room exitFromBloodrock = Room('exit_from_bloodrock', (ActionContext c) {
             '"Orcthorn? Bah, you think they\'ll let you keep it? A farmhand?"\n\n_"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_\n',
             wholeSentence: true);
       }),
-      Rule(36322634, 0, false, (ApplicabilityContext c) {
+      Rule(46118044, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2124,7 +2124,7 @@ final Room warForge = Room('war_forge', (ActionContext c) {
       'You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.\n\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(443839703, 1, false, (ApplicabilityContext c) {
+      Rule(411943067, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2139,7 +2139,7 @@ final Room warForge = Room('war_forge', (ActionContext c) {
             'You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.\n\n',
             wholeSentence: true);
       }),
-      Rule(810564652, 1, false, (ApplicabilityContext c) {
+      Rule(1054440166, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2579,7 +2579,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('TODO -- an actual battle with the goblins.\n\nAssume you won.\n\n',
+  s.add('(To be done: actual battle. Assume you won.)\n\n',
       wholeSentence: true);
   w.recordCustom(evGoblinCampCleared);
 }, (ActionContext c) {
@@ -2638,7 +2638,7 @@ final Room goblinSkirmishSneak =
   s.add('The goblins are still here.\n', wholeSentence: true);
 }, null, null);
 final Approach startPostFightFromStartBeginFight = Approach(
-    'start_begin_fight', 'start_post_fight', '<implicit>', (ActionContext c) {
+    'start_begin_fight', 'start_post_fight', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2662,14 +2662,14 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final ifBlock_329a5969a = $(c).isHurt(tamaraId)
+  final ifBlock_3a12b716b = $(c).isHurt(tamaraId)
       ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
       : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
   s.add('The fight is over.\n\n', wholeSentence: true);
   assert(!originalWorld.wasKilled(tamaraId));
 
   Ruleset(
-      Rule(785012535, 1, false, (ApplicabilityContext c) {
+      Rule(225876590, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2682,7 +2682,7 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
         final Storyline s = c.outputStoryline;
         s.add('"Raccoon my ass."\n\n', wholeSentence: true);
       }),
-      Rule(847964281, 0, false, (ApplicabilityContext c) {
+      Rule(633100163, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2698,7 +2698,7 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
             wholeSentence: true);
       })).apply(c);
   s.add(
-      '\n$ifBlock_329a5969a "Come with me back to safety. I\'ll give you a half price for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+      '\n$ifBlock_3a12b716b "Come with me back to safety. I\'ll give you a half price for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
       wholeSentence: true);
   w.updateActorById(tamaraId, (b) => b.isActive = false);
 }, null, null, null,
@@ -2749,7 +2749,7 @@ final Room startPostFightTamaraAnimated = Room(
     }),
     isIdle: true);
 final Approach startEnterGoblinFromStartRaccoon = Approach(
-    'start_raccoon', 'start_enter_goblin', '<implicit>', (ActionContext c) {
+    'start_raccoon', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2758,7 +2758,7 @@ final Approach startEnterGoblinFromStartRaccoon = Approach(
   s.add('', wholeSentence: true);
 });
 final Approach startEnterGoblinFromStartCoward = Approach(
-    'start_coward', 'start_enter_goblin', '<implicit>', (ActionContext c) {
+    'start_coward', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3266,8 +3266,9 @@ class BleedsBlindGuideGoblins extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach endOfRoamFromBleedsMain = Approach(
-    'bleeds_main', '__END_OF_ROAM__', 'Travel back home', (ActionContext c) {
+final Approach endOfRoamFromBleedsMain =
+    Approach('bleeds_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;

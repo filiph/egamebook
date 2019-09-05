@@ -11,6 +11,9 @@ import 'parse_percent.dart';
 import 'recase.dart';
 import 'types.dart';
 
+/// The constant used for implicit actions and approaches.
+final implicitPattern = r"$IMPLICIT";
+
 final Logger log = Logger("generated_action");
 
 /// Generates code for writer's action.
@@ -23,6 +26,8 @@ GeneratedGameObject generateAction(Map<String, String> map, String dirPath) {
 
 class GeneratedAction extends GeneratedGameObject {
   final Map<String, String> _map;
+
+  final _dartEmitter = DartEmitter();
 
   GeneratedAction(Map<String, String> map, String path)
       : _map = map,
@@ -47,7 +52,7 @@ class GeneratedAction extends GeneratedGameObject {
     var classType = TypeReference((b) => b..symbol = className);
 
     String command = _map['COMMAND'];
-    var isImplicit = command == '<implicit>';
+    var isImplicit = command == implicitPattern;
     var commandPathTemplate = isImplicit ? const [] : command.split(' >> ');
     final getCommandPathBuilder = Method((b) => b
       ..type = MethodType.getter
@@ -152,15 +157,6 @@ class GeneratedAction extends GeneratedGameObject {
     }
   }
 
-  Method _createGetter(String name, TypeReference type, Object returnValue) {
-    return Method((b) => b
-      ..type = MethodType.getter
-      ..name = name
-      ..returns = type
-      ..annotations.add(overrideAnnotation)
-      ..body = literal(returnValue).code);
-  }
-
   Method _createApplyFailureBuilder(num successChance, bool hasRescue,
       String rescueSituationClassName, String className) {
     var applyFailureBuilder =
@@ -216,6 +212,27 @@ class GeneratedAction extends GeneratedGameObject {
     return applySuccessBuilder.bake();
   }
 
+  Method _createGetter(String name, TypeReference type, Object returnValue) {
+    return Method((b) => b
+      ..type = MethodType.getter
+      ..name = name
+      ..returns = type
+      ..annotations.add(overrideAnnotation)
+      ..body = literal(returnValue).code);
+  }
+
+  /// Generates a piece of code that will return literal [returnValue]
+  /// if [condition] is `true`.
+  ///
+  /// This is here until https://github.com/dart-lang/code_builder/issues/223
+  /// is resolved.
+  Code _createIfGuard(Expression condition, Object returnValue) {
+    final conditionString = condition.accept(_dartEmitter).toString();
+    final returnStatement = literal(returnValue).returned.statement;
+    final returnString = returnStatement.accept(_dartEmitter).toString();
+    return Code('if ($conditionString) { $returnString }');
+  }
+
   Method _createIsApplicableBuilder(String forLocation) {
     var isApplicableBuilder =
         createContextActorSimWorldVoidMethod("isApplicable", boolType);
@@ -236,19 +253,5 @@ class GeneratedAction extends GeneratedGameObject {
     }
     isApplicableBuilder.block.addExpression(literal(true).returned);
     return isApplicableBuilder.bake();
-  }
-
-  final _dartEmitter = DartEmitter();
-
-  /// Generates a piece of code that will return literal [returnValue]
-  /// if [condition] is `true`.
-  ///
-  /// This is here until https://github.com/dart-lang/code_builder/issues/223
-  /// is resolved.
-  Code _createIfGuard(Expression condition, Object returnValue) {
-    final conditionString = condition.accept(_dartEmitter).toString();
-    final returnStatement = literal(returnValue).returned.statement;
-    final returnString = returnStatement.accept(_dartEmitter).toString();
-    return Code('if ($conditionString) { $returnString }');
   }
 }

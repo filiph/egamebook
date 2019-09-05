@@ -15,10 +15,10 @@
 			"include": "#map_keys"
 		},
 		{
-			"include": "#variable_names"
+			"include": "#constants"
 		},
 		{
-			"include": "#constants"
+			"include": "#variable_names"
 		},
 		{
 			"include": "#brackets"
@@ -51,7 +51,7 @@
 		},
 		"map_to_dart_block": {
 			"patterns": [{
-				"begin": "^((PREREQUISITES|SUCCESS_EFFECT):)$",
+				"begin": "^((PREREQUISITES|SUCCESS_EFFECT|RESCUE_PREREQUISITES|RESCUE_EFFECT|CONTINUATION_OF_FAILURE_EFFECT|FIGHT_SITUATION):)$",
 				"end": "^$",
 				"beginCaptures": {
 					"1": {"name": "keyword.egb"}
@@ -63,7 +63,7 @@
 		},
 		"map_keys": {
 			"patterns": [{
-				"begin": "^(RULE:) ",
+				"begin": "^((RULE|PREREQUISITES):) ",
 				"end": "$",
 				"beginCaptures": {
 					"1": {"name": "keyword.egb"}
@@ -73,7 +73,13 @@
 				]
 			},{
 				"name": "keyword.egb",
-				"match": "^(VARIANT_OF|RULE|FLAGS|DESCRIPTION|FIRST_DESCRIPTION|FIGHT_SITUATION|COMMAND|FOR_LOCATION|PREREQUISITES|COMPLETE_SUCCESS_PROBABILITY|COMPLETE_SUCCESS_DESCRIPTION|SUCCESS_EFFECT:):"
+				"match": "^(VARIANT_OF|RULE|FLAGS|DESCRIPTION|FIRST_DESCRIPTION|HINT|FIGHT_SITUATION|COMMAND|FOR_LOCATION|PREREQUISITES|COMPLETE_SUCCESS_PROBABILITY|COMPLETE_SUCCESS_DESCRIPTION|FAILURE_BEGINNING_DESCRIPTION|RESCUE_COMMAND|RESCUE_HINT|RESCUE_PREREQUISITES|RESCUE_EFFECT|RESCUE_DESCRIPTION|CONTINUATION_OF_FAILURE_COMMAND|CONTINUATION_OF_FAILURE_HINT|CONTINUATION_OF_FAILURE_EFFECT|CONTINUATION_OF_FAILURE_DESCRIPTION|SUCCESS_EFFECT):"
+			}]
+		},
+		"constants": {
+			"patterns": [{
+				"name": "constant.language.egb",
+				"match": "(\\s|^)\\$(IMPLICIT|NONE|DEFAULT|IDLE|__END_OF_ROAM__)(\\s|$)"
 			}]
 		},
 		"variable_names": {
@@ -82,16 +88,10 @@
 				"match": "\\$[\\w_]+"
 			}]
 		},
-		"constants": {
-			"patterns": [{
-				"name": "variable.other",
-				"match": "\\s(<implicit>|N/A|default|idle)\\s"
-			}]
-		},
 		"brackets": {
 			"patterns": [{
 				"begin": "^(\\[\\[CODE\\]\\])$",
-				"end": "^(\\[\\[/CODE\\]\\])$",
+				"end": "^(\\[\\[ENDCODE\\]\\])$",
 				"captures": {
 					"1": {"name": "keyword.egb"}
 				},
@@ -117,8 +117,8 @@
 		},
 		"ruleset": {
 			"patterns": [{
-				"begin": "^(- RULE:)$",
-				"end": "^(- THEN:)$",
+				"begin": "^(\\[\\[RULE\\]\\])$",
+				"end": "^(\\[\\[THEN\\]\\])$",
 				"captures": {
 					"1": {"name": "keyword.egb"}
 				},
@@ -127,13 +127,13 @@
 				]
 			},{
 				"name": "keyword.egb",
-				"match": "^- (RULESET|END RULE|END RULESET)$"
+				"match": "^\\[\\[(RULESET|ENDRULE|ENDRULESET)\\]\\]$"
 			}]
 		},
 		"substitutions": {
 			"patterns": [{
 				"name": "variable.other",
-				"match": "\\[\\[\\w.*?\\w\\]\\]"
+				"match": "\\[\\w.*?\\w\\]"
 			}]
 		},
 		"comments": {
@@ -150,7 +150,7 @@
 		"markdown": {
 			"name": "markup.italic",
 			"begin": "(\\s|^)_\\S",
-			"end": "\\S_(\\s|$)"
+			"end": "((\\S_(\\s|$))|$)"
 		}
 	},
 	"scopeName": "source.egb"

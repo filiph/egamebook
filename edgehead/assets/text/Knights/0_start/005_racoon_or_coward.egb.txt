@@ -1,7 +1,7 @@
 // ---
 APPROACH: $start_raccoon FROM $start
 COMMAND: “It is just a rustle in the bush, Tamara. Probably a raccoon.”
-DESCRIPTION: N/A
+DESCRIPTION: $NONE
 
 // ---
 ROOM: $start_raccoon
@@ -13,7 +13,7 @@ FIRST_DESCRIPTION:
 // ---
 APPROACH: $start_coward FROM $start
 COMMAND: “Coward.”
-DESCRIPTION: N/A
+DESCRIPTION: $NONE
 
 // ---
 ROOM: $start_coward

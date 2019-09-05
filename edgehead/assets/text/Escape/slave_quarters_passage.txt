@@ -37,28 +37,28 @@ The two slavers are now looking directly at you. The goblin yanks his spear from
 
 DESCRIPTION:
 
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   $(c).playerHasVisited("orcthorn_room") &&
   !$(c).justCameFrom("orcthorn_room")
-- THEN:
+[[THEN]]
   The reinforced door on the side of the corridor is silent.
-- END RULE
-- RULE:
+[[ENDRULE]]
+[[RULE]]
   $(c).playerHasVisited("orcthorn_room")
-- THEN:
+[[THEN]]
 // Intentionally left blank.
-- END RULE
-- RULE:
+[[ENDRULE]]
+[[RULE]]
   !$(c).playerHasVisited("orcthorn_room")
-- THEN:
+[[THEN]]
   The reinforced door on the side of the corridor is closed.
-- END RULE
-- END RULESET
+[[ENDRULE]]
+[[ENDRULESET]]
 
 [[CODE]]
 rollBrianaQuote(c);
-[[/CODE]]
+[[ENDCODE]]
 
 
 FIGHT_SITUATION:
@@ -116,4 +116,4 @@ You look at Briana and nod.
 _"The Mad Guardian."_
 """, wholeSentence: true);
 }
-[[/CODE]]
+[[ENDCODE]]

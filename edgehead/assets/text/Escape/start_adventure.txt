@@ -18,7 +18,7 @@ Nobody else is in sight. It's just you, Agruth, and Briana. That's Agruth's firs
 
 [[CODE]]
 w.actors.removeWhere((actor) => !actor.isPlayer && actor.id != brianaId);
-[[/CODE]]
+[[ENDCODE]]
 
 
 FIGHT_SITUATION:
@@ -28,4 +28,4 @@ generateAgruthFight
 // ---
 APPROACH: $start_adventure FROM $pre_start_book
 COMMAND: DEBUG >> Smoke test 'Vermin'
-DESCRIPTION: N/A
+DESCRIPTION: $NONE

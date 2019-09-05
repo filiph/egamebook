@@ -1,7 +1,7 @@
 // ---
 APPROACH: $start_post_fight FROM $start_begin_fight
-COMMAND: <implicit>
-DESCRIPTION: N/A
+COMMAND: $IMPLICIT
+DESCRIPTION: $NONE
 
 // ---
 ROOM: $start_post_fight
@@ -10,7 +10,7 @@ FIRST_DESCRIPTION:
 
 [[CODE]]
 throw StateError("Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
-[[/CODE]]
+[[ENDCODE]]
 
 // ---
 ROOM: $start_post_fight_tamara_alive
@@ -19,31 +19,31 @@ VARIANT_OF: $start_post_fight
 
 RULE: !w.wasKilled(tamaraId)
 
-FLAGS: idle
+FLAGS: $IDLE
 
 FIRST_DESCRIPTION:
 The fight is over.
 
 [[CODE]]
 assert(!originalWorld.wasKilled(tamaraId));
-[[/CODE]]
+[[ENDCODE]]
 
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   $(c).playerHasVisited("start_raccoon")
-- THEN:
+[[THEN]]
 "Raccoon my ass."
 
-- END RULE
-- RULE:
-  default
-- THEN:
-"Well, as I said, that was the last one. And, young sir, call me coward one more time and I'll slash your neck." She seems to mean it.
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+"Well, as I said, that was the last one. And, [young sir], call me coward one more time and I'll slash your neck." She seems to mean it.
 
-- END RULE
-- END RULESET
+[[ENDRULE]]
+[[ENDRULESET]]
 
-[[IF $(c).isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "I'll survive, [[young sir]]. But you might not." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "Come with me back to safety. I'll give you a half price for the way back."
+[[IF $(c).isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "I'll survive, [young sir]. But you might not." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "Come with me back to safety. I'll give you a half price for the way back."
 
 _"Thanks for your service, Tamara. But I've come this far."_
 
@@ -51,7 +51,7 @@ Tamara nods, and leaves without ceremony. In a few moments, she disappears among
 
 [[CODE]]
 w.updateActorById(tamaraId, (b) => b.isActive = false);
-[[/CODE]]
+[[ENDCODE]]
 
 
 // ---
@@ -61,7 +61,7 @@ VARIANT_OF: $start_post_fight
 
 RULE: w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated
 
-FLAGS: idle
+FLAGS: $IDLE
 
 FIRST_DESCRIPTION:
 "Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.
@@ -73,7 +73,7 @@ VARIANT_OF: $start_post_fight
 
 RULE: w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead
 
-FLAGS: idle
+FLAGS: $IDLE
 
 FIRST_DESCRIPTION:
 I look into Tamara's undead eyes.

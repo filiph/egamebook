@@ -1,4 +1,6 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:egamebook_builder/src/parse_writers_input/generated_action.dart'
+    show implicitPattern;
 import 'package:egamebook_builder/src/parse_writers_input/method_builders.dart';
 
 import 'describer.dart';
@@ -26,11 +28,8 @@ class GeneratedApproach extends GeneratedGameObject {
 
   @override
   Iterable<Spec> finalizeAst() sync* {
-    final command = _map['COMMAND'] ?? '';
-    assert(
-        command.trim() != 'N/A',
-        "Do not use N/A for command. "
-        "If you don't want the command to be shown, use '<implicit>'.");
+    final command = (_map['COMMAND'] ?? '').trim();
+    final isImplicit = command == implicitPattern;
 
     final namedArguments = <String, Expression>{};
     if (_prerequisites != null) {
@@ -45,7 +44,8 @@ class GeneratedApproach extends GeneratedGameObject {
       [
         literal(_tuple.from.snakeCase),
         literal(_tuple.to.snakeCase),
-        literal(command),
+        // Output r'$IMPLICIT' if this is an implicit approach.
+        isImplicit ? literalString(command, raw: true) : literal(command),
         createDescriber(_map['DESCRIPTION']),
       ],
       namedArguments,

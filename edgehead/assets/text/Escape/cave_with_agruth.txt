@@ -14,7 +14,7 @@ The corpse lies still, getting cold.
 
 [[CODE]]
 rollBrianaQuote(c);
-[[/CODE]]
+[[ENDCODE]]
 
 // ---
 APPROACH: $cave_with_agruth FROM $underground_church

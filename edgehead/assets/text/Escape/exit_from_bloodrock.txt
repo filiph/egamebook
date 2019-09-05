@@ -33,22 +33,22 @@ Briana follows your gaze, then shakes her head. "This is bigger than us, Aren. T
 _"No king has what we have."_
 
 
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   w.actionHasBeenPerformed("take_orcthorn")
-- THEN:
+[[THEN]]
 "Orcthorn? Bah, you think they'll let you keep it? A farmhand?"
 
 _"I am_ not _a farmhand. And I do not mean Orcthorn, no. I have a strange connection. We both do."_
-- END RULE
-- RULE:
-  default
-- THEN:
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
 "Let me guess. Muscles and a bit of brains? Don't be a fool, you're still a farmhand."
 
 _"I am_ not _a farmhand. And I don't mean muscles or brains, no. I have a strange connection. We both do."_
-- END RULE
-- END RULESET
+[[ENDRULE]]
+[[ENDRULESET]]
 
 
 "A connection."
@@ -92,7 +92,7 @@ THE END.
 
 [[CODE]]
 describeSuccessRate(c);
-[[/CODE]]
+[[ENDCODE]]
 
 
 // ---
@@ -104,4 +104,4 @@ DESCRIPTION: You start running again.
 // ---
 APPROACH: $__END_OF_ROAM__ FROM $exit_from_bloodrock
 COMMAND:
-DESCRIPTION: N/A
+DESCRIPTION: $NONE

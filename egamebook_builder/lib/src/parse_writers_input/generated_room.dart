@@ -71,7 +71,7 @@ class GeneratedRoom extends GeneratedGameObject {
       final flags = _map['FLAGS'].split(' ').map((s) => s.trim()).toList();
       for (final flag in flags) {
         switch (flag) {
-          case 'idle':
+          case r'$IDLE':
             namedArguments["isIdle"] = literalTrue;
             break;
           default:

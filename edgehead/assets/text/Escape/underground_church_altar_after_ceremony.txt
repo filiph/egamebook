@@ -9,4 +9,4 @@ The altar is covered with black blood.
 
 [[CODE]]
 rollBrianaQuote(c);
-[[/CODE]]
+[[ENDCODE]]

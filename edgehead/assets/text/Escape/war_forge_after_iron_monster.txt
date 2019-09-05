@@ -12,4 +12,4 @@ Pure chaos everywhere.
 
 [[CODE]]
 rollBrianaQuote(c);
-[[/CODE]]
+[[ENDCODE]]

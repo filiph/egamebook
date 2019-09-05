@@ -1,33 +1,33 @@
 // ---
 APPROACH: $bleeds_main FROM $pre_start_book
 COMMAND: DEBUG >> Play ‘Knights of San Francisco’ from The Bleeds
-DESCRIPTION: N/A
+DESCRIPTION: $NONE
 
 // ---
 APPROACH: $bleeds_main FROM $start_post_fight
 COMMAND: Go >> towards the Pyramid
-DESCRIPTION: N/A
+DESCRIPTION: $NONE
 
 // ---
 APPROACH: $bleeds_main FROM $bleeds_trader_hut
 COMMAND: Go >> outside
-DESCRIPTION: [[We]] walk out into the muddy street.
+DESCRIPTION: [We] walk out into the muddy street.
 
 // ---
 APPROACH: $bleeds_main FROM $goblin_skirmish_sneak
 COMMAND: Go >> to The Bleeds
-DESCRIPTION: [[We]] sneak through the bushes and emerge back in The Bleeds.
+DESCRIPTION: [We] sneak through the bushes and emerge back in The Bleeds.
 
 // ---
 APPROACH: $bleeds_main FROM $goblin_skirmish_main
 COMMAND: Go >> to The Bleeds
-DESCRIPTION: [[We]] walk back to The Bleeds.
+DESCRIPTION: [We] walk back to The Bleeds.
 
 
 // ---
 ROOM: $bleeds_main
 
-FLAGS: idle
+FLAGS: $IDLE
 
 FIRST_DESCRIPTION:
 I finally see it. The Pyramid.
@@ -40,4 +40,4 @@ At any point I can see at least a few villagers going about their business. Thei
 
 Every door is shut except for two. One is the entrance into a trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
 
-DESCRIPTION: N/A
+DESCRIPTION: $NONE

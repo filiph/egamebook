@@ -1,7 +1,7 @@
 // ---
 APPROACH: $goblin_skirmish_patrol FROM $bleeds_main
 COMMAND: Go >> to the west
-DESCRIPTION: N/A
+DESCRIPTION: $NONE
 PREREQUISITES:
 $(c).hasLearnedAbout(kbGoblinsNearBleeds)
 &&
@@ -11,7 +11,7 @@ $(c).hasLearnedAbout(kbGoblinsNearBleeds)
 ROOM: $goblin_skirmish_patrol
 
 FIRST_DESCRIPTION:
-[[We]] meet a patrol. A lone goblin with a spear.
+[We] meet a patrol. A lone goblin with a spear.
 
 FIGHT_SITUATION:
 generateBleedsGoblinSkirmishPatrol

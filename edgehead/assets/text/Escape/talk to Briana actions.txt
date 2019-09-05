@@ -24,18 +24,8 @@ _"Three years."_
 "Three years! Gods. A lot has happened. Just this winter, the orcs took over the upper valley. They are raiding way beyond Fort Ironcast now."
 
 
-// TODO: some replacement for what's commented out below
-
-
-// "So when we escape from here — *if* we escape from here — we still have to cover miles of orc territory."
-
-
-// "Correct. The closest refuge is Fort Ironcast."
-
 
 // -----
-
-
 ACTION: $talk_to_briana_2
 COMMAND: Ask Briana about her capture
 
@@ -107,56 +97,53 @@ _"That is what Agruth and the other slavers were talking about a couple of weeks
 "Where is that cell?"
 
 
-- RULESET
-- RULE:
+[[RULESET]]
+[[RULE]]
   a.currentRoomName == "slave_quarters_passage" &&
   !$(c).playerHasVisited("orcthorn_room")
-- THEN:
+[[THEN]]
 _"Somewhere here in the slave quarters."_
 
 Briana's eyes go wide and nods towards the door.
 
 
-- END RULE
-- RULE:
+[[ENDRULE]]
+[[RULE]]
   $(c).playerHasVisited("orcthorn_room") &&
   a.currentRoomName != "orcthorn_room"
-- THEN:
+[[THEN]]
 _"Down the slave quarters."_
 
 Briana's eyes go wide. "The mad orc behind that door."
 
 
-- END RULE
-- RULE:
+[[ENDRULE]]
+[[RULE]]
   $(c).playerHasVisited("slave_quarters_passage") &&
   !$(c).playerHasVisited("orcthorn_room")
-- THEN:
+[[THEN]]
 _"Down the slave quarters."_
 
 Briana's eyes go wide. "That door in the slave quarters."
 
 
-- END RULE
-- RULE:
+[[ENDRULE]]
+[[RULE]]
   a.currentRoomName == "orcthorn_room"
-- THEN:
+[[THEN]]
 _"Somewhere here in the slave quarters."_
 
 Briana's eyes go wide as she looks around the room.
 
 
-- END RULE
-- RULE:
-  default
-- THEN:
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
 _"Down the slave quarters."_
 
 Briana tenses. "Well then, at least we have that choice."
 
 
-- END RULE
-- END RULESET
-
-
-// TODO: briana_talk_4 - about her mission (maybe after taking orcthorn, so that we give the player some breathing space?) - You must be a hero of your army. (for sneaking into mount bloodrock) - Her laugh is sharp and humorless.
+[[ENDRULE]]
+[[ENDRULESET]]

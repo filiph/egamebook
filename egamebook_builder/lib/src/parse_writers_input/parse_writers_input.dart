@@ -11,8 +11,6 @@ const List<String> objectTypes = ["ROOM", "ACTION", "APPROACH"];
 
 final RegExp commentPattern = RegExp(r"^//.*");
 
-final RegExp docsFootnotePattern = RegExp(r"^\[\w+\]");
-
 final RegExp keyPattern = RegExp(r"^([A-Z_]+):");
 
 /// Logger for the writer's input.
@@ -62,11 +60,6 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
 
   for (var line in contents) {
     if (commentPattern.hasMatch(line)) continue;
-    if (docsFootnotePattern.hasMatch(line)) {
-      log.info("There's a Google Docs comment in one of the files: "
-          "${line}");
-      continue;
-    }
     var keyMatch = keyPattern.firstMatch(line);
     if (keyMatch == null ||
         keyMatch.group(1) == "TODO" /* for lines starting with "TODO:" */) {
