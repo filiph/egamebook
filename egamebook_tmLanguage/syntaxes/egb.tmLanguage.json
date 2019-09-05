@@ -9,6 +9,9 @@
 			"include": "#approach_from"
 		},
 		{
+			"include": "#map_to_dart_block"
+		},
+		{
 			"include": "#map_keys"
 		},
 		{
@@ -46,6 +49,18 @@
 				"match": "\\sFROM\\s"
 			}]
 		},
+		"map_to_dart_block": {
+			"patterns": [{
+				"begin": "^((PREREQUISITES|SUCCESS_EFFECT):)$",
+				"end": "^$",
+				"beginCaptures": {
+					"1": {"name": "keyword.egb"}
+				},
+				"patterns": [
+					{"include": "source.dart"}
+				]
+			}]
+		},
 		"map_keys": {
 			"patterns": [{
 				"begin": "^(RULE:) ",
@@ -58,7 +73,7 @@
 				]
 			},{
 				"name": "keyword.egb",
-				"match": "^(VARIANT_OF|RULE|FLAGS|DESCRIPTION|FIRST_DESCRIPTION|FIGHT_SITUATION|COMMAND|FOR_LOCATION|PREREQUISITES|COMPLETE_SUCCESS_PROBABILITY|COMPLETE_SUCCESS_DESCRIPTION):"
+				"match": "^(VARIANT_OF|RULE|FLAGS|DESCRIPTION|FIRST_DESCRIPTION|FIGHT_SITUATION|COMMAND|FOR_LOCATION|PREREQUISITES|COMPLETE_SUCCESS_PROBABILITY|COMPLETE_SUCCESS_DESCRIPTION|SUCCESS_EFFECT:):"
 			}]
 		},
 		"variable_names": {
