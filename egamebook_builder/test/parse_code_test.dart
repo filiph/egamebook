@@ -25,7 +25,7 @@ void main() {
     if (true) {
       print(1);
     }
-    [[/CODE]]
+    [[ENDCODE]]
 
     And so on.
     """;
@@ -52,7 +52,7 @@ void main() {
     [[CODE]]
     if (true) {
       print(1);
-    }[[/CODE]]
+    }[[ENDCODE]]
 
     And so on.
     """;
@@ -69,19 +69,19 @@ void main() {
 
   test("block with ruleset only", () {
     var text = r"""
-    - RULESET
-    - RULE:
+    [[RULESET]]
+    [[RULE]]
       currentRoom == orcthornRoom
-    - THEN:
+    [[THEN]]
     Briana looks around, her eyes wide.
-    - END RULE
-    - RULE:
+    [[ENDRULE]]
+    [[RULE]]
       currentRoom == slaveQuartersPassage
       !w.actorHasVisited(orcthornRoom)
-    - THEN:
+    [[THEN]]
     Briana looks at the door, eyes wide.
-    - END RULE
-    - END RULESET
+    [[ENDRULE]]
+    [[ENDRULESET]]
     """;
 
     var result = parseBlocks(text).children;
@@ -96,20 +96,20 @@ void main() {
 
   test("ruleset within a ruleset", () {
     var text = r"""
-    - RULESET
-    - RULE:
+    [[RULESET]]
+    [[RULE]]
       currentRoom == orcthornRoom
-    - THEN:
-      - RULESET
-      - RULE:
+    [[THEN]]
+      [[RULESET]]
+      [[RULE]]
         currentRoom == slaveQuartersPassage
         !w.actorHasVisited(orcthornRoom)
-      - THEN:
+      [[THEN]]
       Briana looks at the door, eyes wide.
-      - END RULE
-      - END RULESET
-    - END RULE
-    - END RULESET
+      [[ENDRULE]]
+      [[ENDRULESET]]
+    [[ENDRULE]]
+    [[ENDRULESET]]
     """;
 
     var result = parseBlocks(text).children;
