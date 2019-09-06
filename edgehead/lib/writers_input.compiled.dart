@@ -703,7 +703,9 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
       'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nAt any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
       wholeSentence: true);
   w.updateActorById(tamaraId, (b) => b.isActive = false);
-  w.updateActorById(brianaId, (b) => b.isActive = false);
+  if (w.actors.build().any((a) => a.id == brianaId)) {
+    w.updateActorById(brianaId, (b) => b.isActive = false);
+  }
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;

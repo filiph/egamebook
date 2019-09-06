@@ -44,7 +44,9 @@ Every door is shut except for two. One is the entrance into a trader's shop. The
 // Making sure that Tamara & Briana are not active by now, in case we skip
 // the initial fight during debug.
 w.updateActorById(tamaraId, (b) => b.isActive = false);
-w.updateActorById(brianaId, (b) => b.isActive = false);
+if (w.actors.build().any((a) => a.id == brianaId)) {
+  w.updateActorById(brianaId, (b) => b.isActive = false);    
+}
 [[ENDCODE]]
 
 DESCRIPTION: $NONE
