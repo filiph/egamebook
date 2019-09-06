@@ -1,6 +1,6 @@
 // ---
 APPROACH: $start_post_fight FROM $start_begin_fight
-COMMAND: $IMPLICIT
+COMMAND: End fight
 DESCRIPTION: $NONE
 
 // ---

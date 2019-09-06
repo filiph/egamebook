@@ -34,6 +34,15 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   bool get anyWeaponAppendageAvailable =>
       primaryWeaponAppendageAvailable || secondaryWeaponAppendageAvailable;
 
+  /// Returns all body parts that are currently hurt (damaged and
+  /// not healed yet)
+  Iterable<BodyPart> get woundedParts sync* {
+    for (final part in allParts) {
+      if (!part.isActive) continue;
+      if (part.hitpoints < part.maxHitpoints) yield part;
+    }
+  }
+
   /// Returns the best body-part weapon currently available. This could
   /// be a fist for a humanoid, a claw for a monster, a stinger for
   /// a wasp.

@@ -303,7 +303,7 @@ final Room goblinSkirmishSneak =
   s.add('The goblins are still here.\n', wholeSentence: true);
 }, null, null);
 final Approach startPostFightFromStartBeginFight = Approach(
-    'start_begin_fight', 'start_post_fight', r'$IMPLICIT', (ActionContext c) {
+    'start_begin_fight', 'start_post_fight', 'End fight', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1826,7 +1826,7 @@ final Room justAfterAgruthFight =
       wholeSentence: true);
 }, null, null, null);
 final Approach justAfterAgruthFightFromStartAdventure =
-    Approach('start_adventure', 'just_after_agruth_fight', r'$IMPLICIT',
+    Approach('start_adventure', 'just_after_agruth_fight', 'End fight',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;

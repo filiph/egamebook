@@ -607,14 +607,10 @@ class _HelperAccessor {
     return playerRoom == actorRoom;
   }
 
-  /// Returns `true` if [actorId] is currently hurt (one of their body parts
-  /// is disabled).
+  /// Returns `true` if [actorId] is currently hurt.
   bool isHurt(int actorId) {
     final actor = _applicabilityContext.world.getActorById(actorId);
-    for (final part in actor.anatomy.allParts) {
-      if (part.hitpoints == 0) return true;
-    }
-    return false;
+    return actor.anatomy.woundedParts.isNotEmpty;
   }
 
   /// Checks whether player was just now at [fromRoomName].

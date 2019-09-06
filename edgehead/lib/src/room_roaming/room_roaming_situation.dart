@@ -12,6 +12,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/direct.dart';
+import 'package:edgehead/src/room_roaming/actions/heal.dart';
 import 'package:edgehead/src/room_roaming/actions/hire_npc.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
@@ -49,6 +50,7 @@ abstract class RoomRoamingSituation extends Object
         TakeApproachAction.singleton,
         TakeImplicitApproachAction.singleton,
         HireNpcAction.singleton,
+        HealAction.singleton,
       ]..addAll(writers_input.allActions);
 
   String get currentRoomName;

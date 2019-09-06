@@ -46,6 +46,7 @@ abstract class BodyPart extends Object
         ..designation = designation ?? BodyPartDesignation.none
         ..function = function ?? BodyPartFunction.none
         ..hitpoints = hitpoints ?? 1
+        ..maxHitpoints = hitpoints ?? 1
         ..isVital = isVital ?? false
         ..isSeverable = isSeverable ?? false
         ..isSevered = isSevered ?? false
@@ -125,6 +126,10 @@ abstract class BodyPart extends Object
   /// The number of unhealed major cuts (from slashes and thrusts) that the
   /// body part received.
   int get majorCutsCount;
+
+  /// The number of hitpoints that this body part has when it is completely
+  /// healthy or healed.
+  int get maxHitpoints;
 
   /// The number of unhealed minor cuts (from slashes and thrusts and thorns)
   /// that the body part received. Minor cuts are also known as nicks

@@ -161,6 +161,9 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
       'majorCutsCount',
       serializers.serialize(object.majorCutsCount,
           specifiedType: const FullType(int)),
+      'maxHitpoints',
+      serializers.serialize(object.maxHitpoints,
+          specifiedType: const FullType(int)),
       'minorCutsCount',
       serializers.serialize(object.minorCutsCount,
           specifiedType: const FullType(int)),
@@ -250,6 +253,10 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           break;
         case 'majorCutsCount':
           result.majorCutsCount = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'maxHitpoints':
+          result.maxHitpoints = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
         case 'minorCutsCount':
@@ -345,6 +352,8 @@ class _$BodyPart extends BodyPart {
   @override
   final int majorCutsCount;
   @override
+  final int maxHitpoints;
+  @override
   final int minorCutsCount;
   @override
   final String name;
@@ -373,6 +382,7 @@ class _$BodyPart extends BodyPart {
       this.isSevered,
       this.isVital,
       this.majorCutsCount,
+      this.maxHitpoints,
       this.minorCutsCount,
       this.name,
       this.randomDesignation,
@@ -412,6 +422,9 @@ class _$BodyPart extends BodyPart {
     }
     if (majorCutsCount == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'majorCutsCount');
+    }
+    if (maxHitpoints == null) {
+      throw new BuiltValueNullFieldError('BodyPart', 'maxHitpoints');
     }
     if (minorCutsCount == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'minorCutsCount');
@@ -456,6 +469,7 @@ class _$BodyPart extends BodyPart {
         isSevered == other.isSevered &&
         isVital == other.isVital &&
         majorCutsCount == other.majorCutsCount &&
+        maxHitpoints == other.maxHitpoints &&
         minorCutsCount == other.minorCutsCount &&
         name == other.name &&
         randomDesignation == other.randomDesignation &&
@@ -484,23 +498,26 @@ class _$BodyPart extends BodyPart {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            0,
-                                                                            bluntHitsCount
+                                                                            $jc(
+                                                                                0,
+                                                                                bluntHitsCount
+                                                                                    .hashCode),
+                                                                            children
                                                                                 .hashCode),
-                                                                        children
+                                                                        damageCapability
                                                                             .hashCode),
-                                                                    damageCapability
+                                                                    designation
                                                                         .hashCode),
-                                                                designation
+                                                                function
                                                                     .hashCode),
-                                                            function.hashCode),
-                                                        hitpoints.hashCode),
-                                                    id.hashCode),
-                                                isActive.hashCode),
-                                            isSeverable.hashCode),
-                                        isSevered.hashCode),
-                                    isVital.hashCode),
-                                majorCutsCount.hashCode),
+                                                            hitpoints.hashCode),
+                                                        id.hashCode),
+                                                    isActive.hashCode),
+                                                isSeverable.hashCode),
+                                            isSevered.hashCode),
+                                        isVital.hashCode),
+                                    majorCutsCount.hashCode),
+                                maxHitpoints.hashCode),
                             minorCutsCount.hashCode),
                         name.hashCode),
                     randomDesignation.hashCode),
@@ -524,6 +541,7 @@ class _$BodyPart extends BodyPart {
           ..add('isSevered', isSevered)
           ..add('isVital', isVital)
           ..add('majorCutsCount', majorCutsCount)
+          ..add('maxHitpoints', maxHitpoints)
           ..add('minorCutsCount', minorCutsCount)
           ..add('name', name)
           ..add('randomDesignation', randomDesignation)
@@ -591,6 +609,10 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   set majorCutsCount(int majorCutsCount) =>
       _$this._majorCutsCount = majorCutsCount;
 
+  int _maxHitpoints;
+  int get maxHitpoints => _$this._maxHitpoints;
+  set maxHitpoints(int maxHitpoints) => _$this._maxHitpoints = maxHitpoints;
+
   int _minorCutsCount;
   int get minorCutsCount => _$this._minorCutsCount;
   set minorCutsCount(int minorCutsCount) =>
@@ -635,6 +657,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
       _isSevered = _$v.isSevered;
       _isVital = _$v.isVital;
       _majorCutsCount = _$v.majorCutsCount;
+      _maxHitpoints = _$v.maxHitpoints;
       _minorCutsCount = _$v.minorCutsCount;
       _name = _$v.name;
       _randomDesignation = _$v.randomDesignation;
@@ -677,6 +700,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
               isSevered: isSevered,
               isVital: isVital,
               majorCutsCount: majorCutsCount,
+              maxHitpoints: maxHitpoints,
               minorCutsCount: minorCutsCount,
               name: name,
               randomDesignation: randomDesignation,
