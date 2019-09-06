@@ -15,6 +15,8 @@ const evDirectorNoRuleApplicable = "evDirectorNoRuleApplicable";
 
 const evGoblinCampCleared = "evGoblinCampCleared";
 
+const evJisadSeesUndeadLeroy = "evJisadSeesUndeadLeroy";
+
 const kbBlindGuide = "kbBlindGuide";
 
 const kbGoblinSmoke = "kbGoblinSmoke";

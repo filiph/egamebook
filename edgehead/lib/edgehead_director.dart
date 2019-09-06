@@ -17,6 +17,7 @@ int _id = 100000;
 
 final _leroyQuits = Rule(_id++, 2, false, (ApplicabilityContext c) {
   final leroy = c.world.getActorById(leroyId);
+  if (leroy.anatomy.isUndead) return false;
   if (leroy.npc.followingActorId != playerId) return false;
   assert($(c).inRoomWith(leroyId));
   return c.world.customHistory.query(name: evGoblinCampCleared).hasHappened;

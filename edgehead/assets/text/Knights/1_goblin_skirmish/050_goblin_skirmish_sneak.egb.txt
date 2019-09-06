@@ -9,6 +9,8 @@ COMMAND: Go >> towards the goblin outpost
 DESCRIPTION: $NONE
 PREREQUISITES:
 $(c).playerHasVisited("goblin_skirmish_sneak")
+&&
+!$(c).hasHappened(evGoblinCampCleared)
 
 // ---
 ROOM: $goblin_skirmish_sneak

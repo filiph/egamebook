@@ -16,7 +16,18 @@ A gray haired trader greets me and gestures around.
 
 I don't really have any money, so I just nod and smile.
 
-DESCRIPTION: The trader {nods|pretends to smile} as [we] enter his shop.
+DESCRIPTION: 
+The trader {nods|pretends to smile} as [we] enter his shop.
+
+[[CODE]]
+if ($(c).inRoomWith(leroyId) && 
+    w.getActorById(leroyId).anatomy.isUndead && 
+    !$(c).hasHappened(evJisadSeesUndeadLeroy)) {
+  s.add('He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Sir," he says, his eyes wet, "please have mercy on the soul of this young boy. Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.', wholeSentence: true);
+  w.recordCustom(evJisadSeesUndeadLeroy);
+}
+[[ENDCODE]]
+
 
 // ---
 ACTION: $bleeds_trader_hello

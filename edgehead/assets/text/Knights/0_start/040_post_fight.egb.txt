@@ -9,6 +9,7 @@ ROOM: $start_post_fight
 FIRST_DESCRIPTION:
 
 [[CODE]]
+// This room is always served by one of the variants below.
 throw StateError("Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
 [[ENDCODE]]
 
@@ -23,10 +24,6 @@ FLAGS: $IDLE
 
 FIRST_DESCRIPTION:
 The fight is over.
-
-[[CODE]]
-assert(!originalWorld.wasKilled(tamaraId));
-[[ENDCODE]]
 
 [[RULESET]]
 [[RULE]]
@@ -43,7 +40,7 @@ assert(!originalWorld.wasKilled(tamaraId));
 [[ENDRULE]]
 [[ENDRULESET]]
 
-[[IF $(c).isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "I'll survive, [young sir]. But you might not." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "Come with me back to safety. I'll give you a half price for the way back."
+[[IF $(c).isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "I'll survive, [young sir]. But you might not." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "Come with me back to safety. I'll give you a discount for the way back."
 
 _"Thanks for your service, Tamara. But I've come this far."_
 
@@ -80,5 +77,4 @@ I look into Tamara's undead eyes.
 
 "I'm sorry."
 
-She doesn't respond, so I nod, and tell her to follow me.
-
+She doesn't respond, so I nod, and tell her corpse to follow me.
