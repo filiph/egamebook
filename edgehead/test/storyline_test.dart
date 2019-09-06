@@ -1,5 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:test/test.dart';
@@ -427,6 +429,22 @@ void main() {
           "Tamara's teeth bite empty air.",
           "Tamara's teeth snap at empty air."
         ]));
+  });
+
+  test("he has his dagger and his shield", () {
+    var storyline = Storyline();
+    var a = Actor.initialized(42, 'Leroy',
+        nameIsProperNoun: true, pronoun: Pronoun.HE);
+    var npc = a.rebuild((b) => b
+      ..inventory.equip(Item.weapon(50, WeaponType.dagger), a.anatomy)
+      ..inventory.currentShield = Item.weapon(60, WeaponType.shield));
+
+    npc.report(storyline, "<subject> <has> <subjectPronoun's> <object>",
+        object: npc.currentWeapon);
+    npc.report(storyline, "<subject> <has> <subjectPronoun's> <object>",
+        object: npc.currentShield);
+
+    expect(storyline.realizeAsString(), "Leroy has his dagger and his shield.");
   });
 
   test("enumeration", () {

@@ -832,6 +832,14 @@ class Storyline {
             'Input = """$randomReport""" Output = """$report"""');
       }
 
+      // clear subject and verb ("He has his sword and his shield.")
+      if (!endPreviousSentence &&
+          _sameSubject(i, i - 1) &&
+          string(i - 1).startsWith("$SUBJECT ") &&
+          report.startsWith("$SUBJECT $VERB_HAVE ")) {
+        report = report.replaceFirst("$SUBJECT $VERB_HAVE ", "");
+      }
+
       // clear subjects when e.g. "Wolf hits you, it growls, it strikes again."
       if (!endPreviousSentence &&
           _sameSubject(i, i - 1) &&

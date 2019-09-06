@@ -55,9 +55,11 @@ class HireNpcAction extends OtherActorActionBase {
     if (npc.isBarehanded) {
       npc.report(s, "<subject> <is> unarmed");
     } else {
+      // He has his sword.
       npc.report(s, "<subject> <has> <subjectPronoun's> <object>",
           object: npc.currentWeapon);
       if (npc.currentShield != null) {
+        // ... and his shield.
         npc.report(s, "<subject> <has> <subjectPronoun's> <object>",
             object: npc.currentShield);
       }
