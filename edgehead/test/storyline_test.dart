@@ -447,80 +447,93 @@ void main() {
     expect(storyline.realizeAsString(), "Leroy has his dagger and his shield.");
   });
 
-  test("enumeration", () {
-    var storyline = Storyline();
+  group("enumeration", () {
+    Storyline storyline;
     Entity handkerchief = Entity(name: "handkerchief");
     Entity brush = Entity(name: "brush");
     Entity mirror = Entity(name: "mirror");
     Entity lipstick = Entity(name: "lipstick");
     Entity crateOfTnt = Entity(name: "crate of TNT");
 
-    void resetAlreadyMentioned() {
+    setUp(() {
+      storyline = Storyline();
+
+      // Make all entities unmentioned.
       storyline.markEntityAsUnmentioned(handkerchief);
       storyline.markEntityAsUnmentioned(brush);
       storyline.markEntityAsUnmentioned(mirror);
       storyline.markEntityAsUnmentioned(lipstick);
       storyline.markEntityAsUnmentioned(crateOfTnt);
-    }
+    });
 
-    // 0
-    expect(() => storyline.addEnumeration("you see", [], "here"),
-        throwsArgumentError);
-    storyline.clear();
-    // 1
-    resetAlreadyMentioned();
-    storyline.addEnumeration("you see", [handkerchief], "here");
-    expect(
-        storyline.realizeAsString(), matches("You see a handkerchief here."));
-    storyline.clear();
-    // 2
-    resetAlreadyMentioned();
-    storyline.addEnumeration("you see", [handkerchief, brush], "here");
-    expect(storyline.realizeAsString(),
-        matches("You see a handkerchief and a brush here."));
-    storyline.clear();
-    // 3
-    resetAlreadyMentioned();
-    storyline.addEnumeration("you see", [handkerchief, brush, mirror], "here");
-    expect(storyline.realizeAsString(),
-        matches("You see a handkerchief, a brush, and a mirror here."));
-    storyline.clear();
-    // 4
-    resetAlreadyMentioned();
-    storyline.addEnumeration(
-        "you see", [handkerchief, brush, mirror, lipstick], "here");
-    expect(
-        storyline.realizeAsString(),
-        matches("You see a handkerchief, a brush, and a mirror here. "
-            "You see a lipstick here."));
-    storyline.clear();
-    // 5
-    resetAlreadyMentioned();
-    storyline.addEnumeration(
-        "you see", [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
-    expect(
-        storyline.realizeAsString(),
-        matches("You see a handkerchief, a brush, and a mirror here. "
-            "You see a lipstick and a crate of TNT here."));
-    storyline.clear();
-    // 5 + also
-    resetAlreadyMentioned();
-    storyline.addEnumeration("you <also> see",
-        [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
-    expect(
-        storyline.realizeAsString(),
-        matches("You see a handkerchief, a brush, and a mirror here. "
-            "You also see a lipstick and a crate of TNT here."));
-    storyline.clear();
-    // 5 + also + no end
-    resetAlreadyMentioned();
-    storyline.addEnumeration("you <also> see",
-        [handkerchief, brush, mirror, lipstick, crateOfTnt], null);
-    expect(
-        storyline.realizeAsString(),
-        matches("You see a handkerchief, a brush, and a mirror. "
-            "You also see a lipstick and a crate of TNT."));
-    storyline.clear();
+    test('throws with no elements', () {
+      expect(() => storyline.addEnumeration("you see", [], "here"),
+          throwsArgumentError);
+    });
+
+    test('one element', () {
+      storyline.addEnumeration("you see", [handkerchief], "here");
+      expect(
+          storyline.realizeAsString(), matches("You see a handkerchief here."));
+    });
+
+    test('two elements', () {
+      storyline.addEnumeration("you see", [handkerchief, brush], "here");
+      expect(storyline.realizeAsString(),
+          matches("You see a handkerchief and a brush here."));
+    });
+
+    test('three elements', () {
+      storyline.addEnumeration(
+          "you see", [handkerchief, brush, mirror], "here");
+      expect(storyline.realizeAsString(),
+          matches("You see a handkerchief, a brush, and a mirror here."));
+    });
+
+    test('four elements', () {
+      storyline.addEnumeration(
+          "you see", [handkerchief, brush, mirror, lipstick], "here");
+      expect(
+          storyline.realizeAsString(),
+          matches("You see a handkerchief, a brush, and a mirror here. "
+              "You see a lipstick here."));
+    });
+
+    test('five elements', () {
+      storyline.addEnumeration("you see",
+          [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
+      expect(
+          storyline.realizeAsString(),
+          matches("You see a handkerchief, a brush, and a mirror here. "
+              "You see a lipstick and a crate of TNT here."));
+    });
+
+    test('five elements and <also>', () {
+      storyline.addEnumeration("you <also> see",
+          [handkerchief, brush, mirror, lipstick, crateOfTnt], "here");
+      expect(
+          storyline.realizeAsString(),
+          matches("You see a handkerchief, a brush, and a mirror here. "
+              "You also see a lipstick and a crate of TNT here."));
+    });
+
+    test('five elements, <also>, and no end', () {
+      storyline.addEnumeration("you <also> see",
+          [handkerchief, brush, mirror, lipstick, crateOfTnt], null);
+      expect(
+          storyline.realizeAsString(),
+          matches("You see a handkerchief, a brush, and a mirror. "
+              "You also see a lipstick and a crate of TNT."));
+    });
+
+    test('implicit entity', () {
+      storyline.addEnumeration(
+          "", [handkerchief, brush, mirror, lipstick], "<is> <also> here");
+      expect(
+          storyline.realizeAsString(),
+          matches("A handkerchief, a brush, and a mirror are here. "
+              "A lipstick is also here."));
+    });
   });
 
   group("actionThread", () {

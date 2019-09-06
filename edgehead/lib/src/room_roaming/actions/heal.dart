@@ -71,7 +71,7 @@ class HealAction extends Action<Actor> {
 
     w.updateActorById(patient.id, (b) => b.replace(patientBuilder.build()));
 
-    s.addEnumeration("", parts, "${count > 1 ? 'are' : 'is'} <also> healed");
+    s.addEnumeration("", parts, "<is> <also> healed");
     return "${a.name} healed ${patient.name}";
   }
 

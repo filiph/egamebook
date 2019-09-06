@@ -7,7 +7,7 @@ part of storyline;
 /// than not they are at a [location].
 abstract class Entity {
   factory Entity(
-      {String name,
+      {@required String name,
       Pronoun pronoun,
       Team team,
       bool nameIsProperNoun,
@@ -132,7 +132,7 @@ class _NonserializableEntity extends Object
   final bool isPlayer;
 
   _NonserializableEntity(
-      {this.name,
+      {@required this.name,
       Pronoun pronoun,
       Team team,
       this.nameIsProperNoun = false,

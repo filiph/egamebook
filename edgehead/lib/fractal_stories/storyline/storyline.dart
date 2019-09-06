@@ -315,7 +315,8 @@ class Storyline {
           article.name, article.name, article, null, time);
       buf.write(articleWithParticle);
       i++;
-      if (i > maxPerSentence - 1 || article == articles.last) {
+      if (i >= maxPerSentence || article == articles.last) {
+        // Finish sentence.
         if (end != null) {
           buf.write(" ");
           if (sentenceCount == 0) {
@@ -325,8 +326,16 @@ class Storyline {
           }
         }
         buf.write(".");
+        // An entity for the articles themselves, so that the writer can
+        // write <is> and so on.
+        var articlesEntity = Entity(
+          name: '<NEVER SHOWN>',
+          pronoun: (article == articles.last && i % maxPerSentence == 1)
+              ? article.pronoun
+              : Pronoun.THEY,
+        );
         add(buf.toString(),
-            subject: subject,
+            subject: subject ?? articlesEntity,
             object: object,
             object2: object2,
             owner: owner,
