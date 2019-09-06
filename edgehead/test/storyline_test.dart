@@ -1,3 +1,5 @@
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:test/test.dart';
@@ -410,6 +412,21 @@ void main() {
 
     expect(second, startsWith("A sword lies"));
     expect(second, contains("The sword is rusty"));
+  });
+
+  test("'they bite' (not bites)", () {
+    var storyline = Storyline();
+    var enemy = Actor.initialized(42, "Tamara", nameIsProperNoun: true);
+
+    storyline.add("<owner's> <subject> {snap<s> at|bite<s>} empty air",
+        subject: enemy.anatomy.findByDesignation(BodyPartDesignation.teeth),
+        owner: enemy);
+    expect(
+        storyline.realizeAsString(),
+        isIn([
+          "Tamara's teeth bite empty air.",
+          "Tamara's teeth snap at empty air."
+        ]));
   });
 
   test("enumeration", () {
