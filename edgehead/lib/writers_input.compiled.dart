@@ -279,7 +279,8 @@ final Approach goblinSkirmishSneakFromBleedsMain = Approach(
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return $(c).playerHasVisited("goblin_skirmish_sneak");
+  return $(c).playerHasVisited("goblin_skirmish_sneak") &&
+      !$(c).hasHappened(evGoblinCampCleared);
 });
 final Room goblinSkirmishSneak =
     Room('goblin_skirmish_sneak', (ActionContext c) {
@@ -330,8 +331,6 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
       ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
       : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
   s.add('The fight is over.\n\n', wholeSentence: true);
-  assert(!originalWorld.wasKilled(tamaraId));
-
   Ruleset(
       Rule(225876590, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
@@ -362,7 +361,7 @@ final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
             wholeSentence: true);
       })).apply(c);
   s.add(
-      '\n$ifBlock_3a12b716b "Come with me back to safety. I\'ll give you a half price for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+      '\n$ifBlock_3a12b716b "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
       wholeSentence: true);
   w.updateActorById(tamaraId, (b) => b.isActive = false);
 }, null, null, null,
@@ -401,7 +400,7 @@ final Room startPostFightTamaraAnimated = Room(
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her to follow me.\n',
+      'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
       wholeSentence: true);
 }, null, null, null,
     parent: 'start_post_fight',
@@ -632,7 +631,7 @@ final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The fight begins. The goblin before us is especially feral. He\'s gnawing his teeth and growls like a wolf. He taps his thigh with the blunt side of his rusty sword.\n',
+      'The fight begins. The goblin before us is especially feral. He\'s gnawing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
       wholeSentence: true);
 }, null, generateStartFight, null);
 final Approach bleedsMainFromPreStartBook = Approach('pre_start_book',
@@ -701,8 +700,10 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nAt any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
+      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nAt any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
       wholeSentence: true);
+  w.updateActorById(tamaraId, (b) => b.isActive = false);
+  w.updateActorById(brianaId, (b) => b.isActive = false);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -970,8 +971,16 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n',
+      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n\n',
       wholeSentence: true);
+  if ($(c).inRoomWith(leroyId) &&
+      w.getActorById(leroyId).anatomy.isUndead &&
+      !$(c).hasHappened(evJisadSeesUndeadLeroy)) {
+    s.add(
+        'He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Sir," he says, his eyes wet, "please have mercy on the soul of this young boy. Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.',
+        wholeSentence: true);
+    w.recordCustom(evJisadSeesUndeadLeroy);
+  }
 }, null, null, isIdle: true);
 
 class BleedsTraderHello extends RoamingAction {
