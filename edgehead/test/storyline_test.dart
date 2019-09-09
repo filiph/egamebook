@@ -444,7 +444,10 @@ void main() {
     npc.report(storyline, "<subject> <has> <subjectPronoun's> <object>",
         object: npc.currentShield);
 
-    expect(storyline.realizeAsString(), "Leroy has his dagger and his shield.");
+    final result = storyline.realizeAsString();
+    expect(result, contains("Leroy has his dagger"));
+    expect(result, isNot(contains("and has his shield.")));
+    expect(result, contains("and his shield"));
   });
 
   group("enumeration", () {
