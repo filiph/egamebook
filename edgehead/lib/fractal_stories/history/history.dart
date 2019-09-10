@@ -74,7 +74,7 @@ class SerialQueryResult<T extends Record> implements QueryResult<T> {
 ///
 /// The counterpart class is [SerialQueryResult].
 class SingleQueryResult<T extends Record> implements QueryResult<T> {
-  T _record;
+  final T _record;
 
   SingleQueryResult(this._record);
 

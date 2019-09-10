@@ -40,7 +40,7 @@ class ActorPlanner {
 
   bool _resultsReady = false;
 
-  PubSub _pubsub;
+  final PubSub _pubsub;
 
   final Simulation simulation;
 

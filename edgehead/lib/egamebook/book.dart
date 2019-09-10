@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:slot_machine/result.dart' as slot;
 
 abstract class Book {
-  StreamController<ElementBase> _elementsController;
+  final StreamController<ElementBase> _elementsController;
 
   /// The completer for [showChoices]. Should be `null` by default, and only
   /// `non-null` when there is a [ChoiceBlock] waiting for player input.
