@@ -14,7 +14,7 @@ packages:
       name: analyzer_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-alpha.8"
+    version: "0.1.0"
   args:
     dependency: "direct dev"
     description:
@@ -70,14 +70,14 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.6"
+    version: "1.6.9"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.9"
+    version: "3.1.1"
   built_collection:
     dependency: "direct main"
     description:
@@ -91,14 +91,14 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.7.0"
+    version: "6.7.1"
   built_value_generator:
     dependency: "direct dev"
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.7.0"
+    version: "6.7.1"
   charcode:
     dependency: transitive
     description:
@@ -154,7 +154,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1+1"
+    version: "2.1.3"
   csslib:
     dependency: transitive
     description:
@@ -301,7 +301,7 @@ packages:
       name: node_preamble
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.6"
+    version: "1.4.7"
   package_config:
     dependency: transitive
     description:
@@ -399,7 +399,7 @@ packages:
       name: source_gen
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.4+3"
+    version: "0.9.4+4"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -462,21 +462,21 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.7"
+    version: "1.6.9"
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.6"
+    version: "0.2.7"
   test_core:
     dependency: transitive
     description:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.8"
+    version: "0.2.9"
   timing:
     dependency: transitive
     description:
@@ -497,7 +497,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   watcher:
     dependency: transitive
     description:
