@@ -90,6 +90,9 @@ Anatomy buildHumanoid(int seed, {int constitution = 1, bool isUndead}) {
     designation: BodyPartDesignation.teeth,
     function: BodyPartFunction.damageDealing,
     damageCapability: DamageCapability(WeaponType.teeth).toBuilder(),
+    swingSurfaceLeft: 0,
+    swingSurfaceRight: 0,
+    thrustSurface: 0,
   );
 
   final head = BodyPart(random.next(), "head",

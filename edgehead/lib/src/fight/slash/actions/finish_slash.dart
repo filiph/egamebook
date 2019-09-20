@@ -96,6 +96,7 @@ class FinishSlash extends OtherActorAction {
           (result.touchedPart.function == BodyPartFunction.damageDealing ||
               result.touchedPart.function == BodyPartFunction.mobile ||
               result.touchedPart.function == BodyPartFunction.wielding)) {
+        assert(result.touchedPart.designation != BodyPartDesignation.teeth);
         result.touchedPart.report(s, "<subject> go<es> limp",
             negative: true, actionThread: thread);
       }
