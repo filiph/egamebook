@@ -178,43 +178,47 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// Returns a body part that is about to be hit by an attack from the left.
   BodyPart pickRandomBodyPartFromLeft(
       RandomIntGetter randomIntGetter, bool avoidVital) {
-    final parts = _getLeftPartsWithWeights(avoidVital);
+    final parts =
+        _getPartsWithWeights((part) => part.swingSurfaceLeft, avoidVital);
     return pickRandomBodyPart(parts, randomIntGetter);
   }
 
   /// Returns a body part that is about to be hit by an attack from the right.
   BodyPart pickRandomBodyPartFromRight(
       RandomIntGetter randomIntGetter, bool avoidVital) {
-    final parts = _getRightPartsWithWeights(avoidVital);
+    final parts =
+        _getPartsWithWeights((part) => part.swingSurfaceRight, avoidVital);
+    return pickRandomBodyPart(parts, randomIntGetter);
+  }
+
+  /// Returns a body part that is about to be hit by an attack from front.
+  /// For example, a random thrust or a spear throw.
+  BodyPart pickRandomBodyPartFromFront(
+      RandomIntGetter randomIntGetter, bool avoidVital) {
+    final parts =
+        _getPartsWithWeights((part) => part.thrustSurface, avoidVital);
     return pickRandomBodyPart(parts, randomIntGetter);
   }
 
   /// Creates a map of parts to their weight. The weight is the [Map.value]
   /// part.
   ///
-  /// When [avoidVital] is `true`, no vital parts will be in the resulting map.
-  Map<BodyPart, int> _getLeftPartsWithWeights(bool avoidVital) {
-    final map = <BodyPart, int>{};
-
-    for (final part in torso.getDescendantParts()) {
-      if (part.swingSurfaceLeft == 0) continue;
-      if (avoidVital && part.isVital) continue;
-      map[part] = part.swingSurfaceLeft;
-    }
-    return map;
-  }
-
-  /// Creates a map of parts to their weight. The weight is the [Map.value]
-  /// part.
+  /// The [surfaceGetter] is a closure that takes a body part and returns
+  /// the surface of it. For example, a caller that wants body parts
+  /// accessible with a left swing should call something like:
+  ///
+  ///     _getPartsWithWeights((part) => part.swingSurfaceLeft, false)
   ///
   /// When [avoidVital] is `true`, no vital parts will be in the resulting map.
-  Map<BodyPart, int> _getRightPartsWithWeights(bool avoidVital) {
+  Map<BodyPart, int> _getPartsWithWeights(
+      int Function(BodyPart) surfaceGetter, bool avoidVital) {
     final map = <BodyPart, int>{};
 
     for (final part in torso.getDescendantParts()) {
-      if (part.swingSurfaceRight == 0) continue;
+      final surface = surfaceGetter(part);
+      if (surface == 0) continue;
       if (avoidVital && part.isVital) continue;
-      map[part] = part.swingSurfaceRight;
+      map[part] = surface;
     }
     return map;
   }

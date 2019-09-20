@@ -61,11 +61,8 @@ class FinishThrowThrusting extends OtherActorAction {
     assert(projectile.isWeapon);
     assert(projectile.damageCapability.isThrusting);
 
-    final allLivingParts = enemy.anatomy.torso
-        .getDescendantParts()
-        .where((part) => part.isAnimatedAndActive)
-        .toList(growable: false);
-    final targetPart = w.randomChoose(allLivingParts);
+    final targetPart = enemy.anatomy
+        .pickRandomBodyPartFromFront(w.randomInt, enemy.isSurvivor);
 
     final result =
         executeThrustingHit(enemy, projectile, targetPart.designation);

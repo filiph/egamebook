@@ -13,9 +13,9 @@ import 'package:edgehead/src/fight/common/object2_in_command_path.dart';
 import 'package:edgehead/src/fight/throw/throw_defense/throw_defense_situation.dart';
 import 'package:edgehead/src/fight/throw/throw_situation.dart';
 
-const String startThrowSpearHelpMessage =
-    "Successfully hitting with a thrown spear is generally harder than if you "
-    "thrust with it, but it does have the advantage of keeping you "
+const String startThrowThrustingWeaponHelpMessage =
+    "Successfully hitting with a thrusting weapon is generally harder than "
+    "if you thrust with it, but it does have the advantage of keeping you "
     "at a distance.";
 
 ReasonedSuccessChance computeThrowThrustingWeaponPlayer(
@@ -40,7 +40,7 @@ EnemyTargetAction startThrowThrustingWeapon() => StartDefensibleAction(
       combatCommandType: CombatCommandType.body,
       commandPathTailGenerator: (w, a, target) =>
           "throw ${weaponAsObject2InCommandPath(a)} at <objectPronoun>",
-      helpMessage: startThrowSpearHelpMessage,
+      helpMessage: startThrowThrustingWeaponHelpMessage,
       applyStart: _startThrowThrustingWeaponReportStart,
       isApplicable: (a, sim, w, enemy) =>
           (a.currentWeapon?.damageCapability?.isThrusting ?? false) &&
