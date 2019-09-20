@@ -128,7 +128,7 @@ class CounterSweepFeet extends OtherActorAction {
       w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
       w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
     }
-    inflictPain(context, enemy.id, damage);
+    inflictPain(context, enemy.id, damage, result.touchedPart);
 
     w.popSituationsUntil("FightSituation", sim);
 

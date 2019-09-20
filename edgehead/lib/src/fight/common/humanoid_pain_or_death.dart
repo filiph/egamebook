@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
@@ -21,7 +22,8 @@ final Random _random = Random();
 ///
 /// For actors that are [Actor.isUndead], the reporting and effects of pain
 /// are much diminished (since the undead don't feel pain).
-void inflictPain(ActionContext context, int actorId, int damage,
+void inflictPain(
+    ActionContext context, int actorId, int damage, BodyPart bodyPart,
     {bool extremePain = false}) {
   final s = context.outputStoryline;
   final actor = context.outputWorld.getActorById(actorId);
@@ -65,7 +67,7 @@ void inflictPain(ActionContext context, int actorId, int damage,
 
   if (actor.isUndead) {
     actor.report(s, "<subject> freeze<s> for a while");
-    if (!actor.anatomy.isBlind) {
+    if (!actor.anatomy.isBlind && _canSeeOwnBodyPart(bodyPart)) {
       actor.report(s, "<subject> briefly look<s> at the wound, studying it",
           endSentence: true);
     }
@@ -166,4 +168,33 @@ void _reportPainForInvincibleActors(ActionContext context, int actorId) {
   actor.report(s, "<subject> drop<s> to <subject's> knees", negative: true);
   actor.report(s, "<subject> keel<s> over", negative: true);
   s.addParagraph();
+}
+
+/// Returns `true` if the given body part is something a humanoid can see with
+/// their own eyes. For example, a human can see their legs and arms, but cannot
+/// see their own eyes or ears or teeth (without using a mirror).
+bool _canSeeOwnBodyPart(BodyPart bodyPart) {
+  switch (bodyPart.designation) {
+    case BodyPartDesignation.neck:
+    case BodyPartDesignation.head:
+    case BodyPartDesignation.teeth:
+    case BodyPartDesignation.leftEye:
+    case BodyPartDesignation.rightEye:
+      return false;
+    case BodyPartDesignation.leftLeg:
+    case BodyPartDesignation.rightLeg:
+    case BodyPartDesignation.primaryArm:
+    case BodyPartDesignation.primaryHand:
+    case BodyPartDesignation.secondaryArm:
+    case BodyPartDesignation.secondaryHand:
+    case BodyPartDesignation.torso:
+    case BodyPartDesignation.tail:
+      return true;
+    case BodyPartDesignation.none:
+      assert(false, "$bodyPart is not defined in _canSeeOwnBodyPart");
+      return true;
+    default:
+      assert(false, "$bodyPart is not defined in _canSeeOwnBodyPart");
+      return true;
+  }
 }

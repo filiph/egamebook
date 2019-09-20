@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -70,7 +71,8 @@ class FinishLeap extends OtherActorAction {
           object: enemy,
           actionThread: thread);
       const damage = 1;
-      inflictPain(context, enemy.id, damage);
+      inflictPain(context, enemy.id, damage,
+          enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
       w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     }
     return "${a.name} finishes leap at ${enemy.name}";

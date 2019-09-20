@@ -82,7 +82,8 @@ class FinishCrackSkull extends OtherActorAction {
     if (!enemy.isInvincible) {
       killHumanoid(context, enemy.id);
     } else {
-      inflictPain(context, enemy.id, 1);
+      inflictPain(context, enemy.id, 1,
+          enemy.anatomy.findByDesignation(BodyPartDesignation.head));
     }
 
     return "${a.name} cracks ${enemy.name}'s skull on ground";

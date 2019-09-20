@@ -97,8 +97,8 @@ class FinishThrowThrusting extends OtherActorAction {
         w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
         w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
       }
-      inflictPain(
-          context, enemy.id, projectile.damageCapability.thrustingDamage,
+      inflictPain(context, enemy.id,
+          projectile.damageCapability.thrustingDamage, result.touchedPart,
           extremePain: result.disabled);
 
       result.victim

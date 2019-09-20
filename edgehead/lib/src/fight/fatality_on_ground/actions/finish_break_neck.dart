@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -57,7 +58,8 @@ class FinishBreakNeck extends OtherActorAction {
       // Special case for actors who cannot die.
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: updatedEnemy, positive: true);
-      inflictPain(context, enemy.id, damage);
+      inflictPain(context, enemy.id, damage,
+          enemy.anatomy.findByDesignation(BodyPartDesignation.head));
     } else {
       a.report(
           s,

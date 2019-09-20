@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -106,7 +107,8 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<object's> flesh",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> fall<s> to the ground");
-      inflictPain(context, enemy.id, damage);
+      inflictPain(context, enemy.id, damage,
+          enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
     } else {
       a.currentWeaponOrBodyPart.report(
           s,

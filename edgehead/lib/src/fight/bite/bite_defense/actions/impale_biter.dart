@@ -165,7 +165,7 @@ class ImpaleBiter extends OtherActorAction {
         w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
         w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
       }
-      inflictPain(context, enemy.id, damage,
+      inflictPain(context, enemy.id, damage, result.touchedPart,
           extremePain: result.touchedPart.designation.isHumanoidEye);
       if (result.wasBlinding) {
         result.victim.report(s, "<subject> <is> now blind", negative: true);

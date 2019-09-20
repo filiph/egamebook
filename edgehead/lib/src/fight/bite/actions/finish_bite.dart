@@ -111,7 +111,7 @@ class FinishBite extends OtherActorAction {
         w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
         w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
       }
-      inflictPain(context, result.victim.id, damage);
+      inflictPain(context, result.victim.id, damage, result.touchedPart);
       if (result.wasBlinding) {
         result.victim.report(s, "<subject> <is> now blind", negative: true);
       }

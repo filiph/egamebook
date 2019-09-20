@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -75,6 +76,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAnimated && !enemy.isInvincible;
     if (!killed) {
+      // TODO: actually decide which body part to hit
       a.report(
           s,
           "<subject> thrust<s> <object2> "
@@ -82,7 +84,8 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           object: updatedEnemy,
           object2: a.currentWeaponOrBodyPart,
           positive: true);
-      inflictPain(context, enemy.id, damage);
+      inflictPain(context, enemy.id, damage,
+          enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
     } else {
       a.report(s, "<subject> run<s> <object2> through <object>",
           object: updatedEnemy,

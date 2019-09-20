@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -53,11 +54,13 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
       w.updateActorById(enemy.id, (b) => b..hitpoints = 0);
     }
     final updatedEnemy = w.getActorById(enemy.id);
+    // TODO: actually decide which body part to hit
     var bodyPart = enemy.isInvincible ? 'side' : '{throat|neck|side}';
     s.add("<subject> {cut<s>|slash<es>|slit<s>} <object's> $bodyPart",
         subject: a.currentWeaponOrBodyPart, object: updatedEnemy);
     if (enemy.isInvincible) {
-      inflictPain(context, enemy.id, damage);
+      inflictPain(context, enemy.id, damage,
+          enemy.anatomy.findByDesignation(BodyPartDesignation.neck));
     } else {
       killHumanoid(context, enemy.id);
     }
