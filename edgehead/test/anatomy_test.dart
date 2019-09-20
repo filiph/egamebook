@@ -4,6 +4,7 @@ import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:test/test.dart';
@@ -278,9 +279,30 @@ void main() {
       expect(part, anyOf(head, neck));
     });
 
+    test("does not get the body part with weight 0", () {
+      final bodyPartsWithWeights = {
+        head: 0,
+        neck: 1,
+      };
+
+      final part =
+          Anatomy.pickRandomBodyPart(bodyPartsWithWeights, randomIntGetter);
+      expect(part, neck);
+    });
+
     test("throws if there are no body parts", () {
       expect(() => Anatomy.pickRandomBodyPart({}, randomIntGetter),
           throwsArgumentError);
+    });
+
+    test("pickRandomBodyPartFromLeft never picks teeth", () {
+      final humanoid = buildHumanoid(42, isUndead: false);
+
+      for (int i = 0; i < 10000; i++) {
+        final bodyPart =
+            humanoid.pickRandomBodyPartFromLeft(randomIntGetter, false);
+        expect(bodyPart.designation, isNot(BodyPartDesignation.teeth));
+      }
     });
   });
 }
