@@ -8,7 +8,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
@@ -233,7 +232,7 @@ abstract class FightSituation extends Object
 
       for (final id in playerTeamIds) {
         if (world.getActorById(id).isAnimatedAndActive) {
-          world.updateActorById(id, (b) => b..pose = Pose.standing);
+          world.updateActorById(id, (b) => b..pose = b.poseMax);
         }
       }
 
