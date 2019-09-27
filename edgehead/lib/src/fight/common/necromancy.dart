@@ -11,9 +11,10 @@ Actor turnUndead(Actor necromancer, Actor corpse) {
   final corpseBuilder = corpse.toBuilder();
 
   corpseBuilder
-    ..name = corpse.name.startsWith('undead ')
-        ? corpse.name
-        : 'undead ${corpse.name}'
+    // TODO: Fix this in Storyline because otherwise all actors that have
+    //       been turned undead at any point will have the same name.
+    ..name = 'undead'
+    ..nameIsProperNoun = false
     ..anatomy.isUndead = true
     ..hitpoints = 1
     ..pose = corpse.anatomy.hasCrippledLegs ? Pose.onGround : corpse.poseMax

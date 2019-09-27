@@ -14,6 +14,9 @@ abstract class CustomEvent
   /// An event that marks death of an actor with [actorId].
   static const String actorDeath = 'actor_death';
 
+  /// Marks the turning of [actorId].
+  static const String actorTurningUndead = 'actor_turning_undead';
+
   static Serializer<CustomEvent> get serializer => _$customEventSerializer;
 
   factory CustomEvent({

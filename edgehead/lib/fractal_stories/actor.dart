@@ -446,11 +446,9 @@ abstract class Actor extends Object
       return false;
     }
 
-    int turnUndeadRecency = w.timeSinceLastActionRecord(
-        actionName: TurnUndead.className,
-        protagonist: this,
-        sufferer: other,
-        wasSuccess: true);
+    int turnUndeadRecency = w.timeSinceLastCustomRecord(
+        name: CustomEvent.actorTurningUndead, actorId: id);
+
     if (turnUndeadRecency != null && turnUndeadRecency <= recency) {
       // This actor turned the other actor undead since the last time they hurt
       // this actor. The necromancer shouldn't be mad at her minions.

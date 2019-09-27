@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
@@ -57,8 +58,9 @@ class TurnUndeadIdle extends OtherActorActionBase {
     corpse.report(s, "<subject> open<s> <subject's> eyes");
     corpse.report(s, "<subject> stand<s> up");
 
-    final raisedCorpse = turnUndead(a, corpse);
+    w.recordCustom(CustomEvent.actorTurningUndead, actor: corpse);
 
+    final raisedCorpse = turnUndead(a, corpse);
     w.updateActorById(corpse.id, (b) => b.replace(raisedCorpse));
 
     return "${a.name} turned ${corpse.name} undead (while roaming)";
