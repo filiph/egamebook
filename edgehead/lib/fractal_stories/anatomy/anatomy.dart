@@ -34,15 +34,6 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   bool get anyWeaponAppendageAvailable =>
       primaryWeaponAppendageAvailable || secondaryWeaponAppendageAvailable;
 
-  /// Returns all body parts that are currently hurt (damaged and
-  /// not healed yet)
-  Iterable<BodyPart> get woundedParts sync* {
-    for (final part in allParts) {
-      if (!part.isActive) continue;
-      if (part.hitpoints < part.maxHitpoints) yield part;
-    }
-  }
-
   /// Returns the best body-part weapon currently available. This could
   /// be a fist for a humanoid, a claw for a monster, a stinger for
   /// a wasp.
@@ -160,6 +151,34 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// a heart or a similarly 'core' organ.
   BodyPart get torso;
 
+  /// Returns the available weapon appendage (mostly hand).
+  /// Returns the [secondaryWeaponAppendage] if the [primaryWeaponAppendage]
+  /// is crippled.
+  ///
+  /// Throws if the actor is completely crippled. You should check
+  /// [anyWeaponAppendageAvailable] before accessing this getter.
+  BodyPart get weaponAppendage {
+    if (!anyWeaponAppendageAvailable) {
+      throw StateError("Trying to access weaponAppendage "
+          "when the actor is crippled.");
+    }
+
+    if (primaryWeaponAppendageAvailable) {
+      return primaryWeaponAppendage;
+    } else {
+      return secondaryWeaponAppendage;
+    }
+  }
+
+  /// Returns all body parts that are currently hurt (damaged and
+  /// not healed yet)
+  Iterable<BodyPart> get woundedParts sync* {
+    for (final part in allParts) {
+      if (!part.isActive) continue;
+      if (part.hitpoints < part.maxHitpoints) yield part;
+    }
+  }
+
   /// Finds [BodyPart] of [designation] or returns `null`.
   ///
   /// There should be at most one [BodyPart] of any [BodyPartDesignation]. This
@@ -175,6 +194,15 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
     return null;
   }
 
+  /// Returns a body part that is about to be hit by an attack from front.
+  /// For example, a random thrust or a spear throw.
+  BodyPart pickRandomBodyPartFromFront(
+      RandomIntGetter randomIntGetter, bool avoidVital) {
+    final parts =
+        _getPartsWithWeights((part) => part.thrustSurface, avoidVital);
+    return pickRandomBodyPart(parts, randomIntGetter);
+  }
+
   /// Returns a body part that is about to be hit by an attack from the left.
   BodyPart pickRandomBodyPartFromLeft(
       RandomIntGetter randomIntGetter, bool avoidVital) {
@@ -188,15 +216,6 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
       RandomIntGetter randomIntGetter, bool avoidVital) {
     final parts =
         _getPartsWithWeights((part) => part.swingSurfaceRight, avoidVital);
-    return pickRandomBodyPart(parts, randomIntGetter);
-  }
-
-  /// Returns a body part that is about to be hit by an attack from front.
-  /// For example, a random thrust or a spear throw.
-  BodyPart pickRandomBodyPartFromFront(
-      RandomIntGetter randomIntGetter, bool avoidVital) {
-    final parts =
-        _getPartsWithWeights((part) => part.thrustSurface, avoidVital);
     return pickRandomBodyPart(parts, randomIntGetter);
   }
 
