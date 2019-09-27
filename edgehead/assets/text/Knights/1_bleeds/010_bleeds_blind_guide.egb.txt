@@ -12,7 +12,10 @@ COMMAND: Blind man >> “Hello!”
 
 FOR_LOCATION: $bleeds_main
 
-PREREQUISITES: w.actionNeverUsed(name)
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+$(c).hasLearnedAbout(kbBlindGuide)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -47,7 +50,7 @@ FOR_LOCATION: $bleeds_main
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasLearnedAbout(kbBlindGuide)
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -73,7 +76,6 @@ _"What about it?"_
 [[CODE]]
 $(c).hearAbout(kbOrcsInPyramid);
 $(c).hearAbout(kbKnightsLeaving);
-$(c).hearAbout(kbGoblinsNearBleeds);
 [[ENDCODE]]
 
 _"And this is because of magic?"_
@@ -92,9 +94,7 @@ FOR_LOCATION: $bleeds_main
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasLearnedAbout(kbBlindGuide)
-&&
-$(c).hasHeardAbout(kbGoblinsNearBleeds)
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -109,12 +109,22 @@ _"They want into the Pyramid, perhaps?"_
 
 "Nonsense. Goblins fear these kinds of things. Even if they didn't, they'd probably get slaughtered by the orcs. Oh, that's something I'd like to see." He absentmindedly touches his face just under the left eye.
 
+[[RULESET]]
+[[RULE]]
+  !$(c).hasHappened(evGoblinCampCleared)
+[[THEN]]
+
 "Anyway. The goblins aren't stupid, but they _are_ getting awfully bold. I've heard a band has made their camp not far from here. So close that people can see their campfire's smoke sometimes." He shudders. "Can you see it?"
 
-_"No."_
+_"Yes."_
 
 "It must be a harrowing sight. A herald of our own future, possibly."
 
-[[CODE]]
-$(c).hearAbout(kbGoblinSmoke);
-[[ENDCODE]]
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+// Nothing here. Aren already cleared the camp, so no need talking about it.
+[[ENDRULE]]
+[[ENDRULESET]]
+

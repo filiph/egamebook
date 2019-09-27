@@ -19,9 +19,7 @@ const evJisadSeesUndeadLeroy = "evJisadSeesUndeadLeroy";
 
 const kbBlindGuide = "kbBlindGuide";
 
-const kbGoblinSmoke = "kbGoblinSmoke";
-
-const kbGoblinsNearBleeds = "kbGoblinsNearBleeds";
+const kbGoblinCampSmoke = "kbGoblinCampSmoke";
 
 const kbJisadHatesMagic = "kbJisadHatesMagic";
 

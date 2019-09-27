@@ -2,6 +2,8 @@
 APPROACH: $bleeds_trader_hut FROM $bleeds_main
 COMMAND: Go >> inside the trader's shop
 DESCRIPTION: $NONE
+PREREQUISITES:
+$(c).hasLearnedAbout(kbTrader)
 
 // ---
 ROOM: $bleeds_trader_hut
@@ -30,7 +32,7 @@ if ($(c).inRoomWith(leroyId) &&
 
 
 // ---
-ACTION: $bleeds_trader_hello
+ACTION: $bleeds_trader_greet
 COMMAND: Trader >> “How is business?”
 
 FOR_LOCATION: $bleeds_trader_hut
@@ -57,7 +59,6 @@ The trader shakes his head and interjects: "What awaits us anywhere else?"
 "Death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
 
 [[CODE]]
-$(c).learnAbout(kbTrader);
 $(c).learnAbout(kbLeroy);
 [[ENDCODE]]
 
@@ -71,7 +72,7 @@ FOR_LOCATION: $bleeds_trader_hut
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasLearnedAbout(kbTrader)
+w.actionHasBeenPerformed("bleeds_trader_greet")
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -101,7 +102,6 @@ The trader, obviously satisfied, turns back to me. "The suckers are closing in f
 Leroy seems genuinely surprised. "I thought you knew. Everyone knows."
 
 [[CODE]]
-$(c).hearAbout(kbGoblinSmoke);
 $(c).learnAbout(kbLeroyKnowsGoblinSmoke);
 [[ENDCODE]]
 
@@ -115,6 +115,8 @@ FOR_LOCATION: $bleeds_trader_hut
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
+w.actionHasBeenPerformed("bleeds_trader_greet")
+&&
 $(c).hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
@@ -122,7 +124,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 “What happened?”
 
-I describe the battle to [[IF $(c).inRoomWith(leroyId)]]them[[ELSE]]the trader[[ENDIF]].
+I describe the battle to him.
 
 
 // ---
@@ -148,10 +150,6 @@ assert($(c).inRoomWith(leroyId));
 [[ENDCODE]]
 
 "They are to the west. It doesn't seem like there is a lot of them. We thought the Knights would get rid of them for sure."
-
-[[CODE]]
-$(c).learnAbout(kbGoblinsNearBleeds);
-[[ENDCODE]]
 
 "But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 

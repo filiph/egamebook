@@ -2520,7 +2520,7 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return $(c).hasLearnedAbout(kbGoblinsNearBleeds) &&
+  return $(c).hasLearnedAbout(kbGoblinCampSmoke) &&
       !$(c).playerHasVisited("goblin_skirmish_patrol");
 });
 final Room goblinSkirmishPatrol =
@@ -3036,7 +3036,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nAt any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
+      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\n',
       wholeSentence: true);
   w.updateActorById(tamaraId, (b) => b.isActive = false);
   if (w.actors.build().any((a) => a.id == brianaId)) {
@@ -3050,6 +3050,79 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, null, isIdle: true);
+
+class BleedsMainObserve extends RoamingAction {
+  @override
+  final String name = 'bleeds_main_observe';
+
+  static final BleedsMainObserve singleton = BleedsMainObserve();
+
+  @override
+  List<String> get commandPathTemplate => ['Environment', 'Observe'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_main') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
+        wholeSentence: true);
+    $(c).learnAbout(kbTrader);
+    $(c).learnAbout(kbBlindGuide);
+
+    s.add(
+        '\nI see a pillar of smoke to the west of here. Looks like nothing more than a camp fire.\n\n',
+        wholeSentence: true);
+    $(c).learnAbout(kbGoblinCampSmoke);
+
+    return '${a.name} successfully performs BleedsMainObserve';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
 
 class BleedsBlindGuideGreet extends RoamingAction {
   @override
@@ -3066,7 +3139,7 @@ class BleedsBlindGuideGreet extends RoamingAction {
         'bleeds_main') {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
+    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbBlindGuide))) {
       return false;
     }
     return true;
@@ -3137,7 +3210,8 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
         'bleeds_main') {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbBlindGuide))) {
+    if (!(w.actionNeverUsed(name) &&
+        w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
       return false;
     }
     return true;
@@ -3160,7 +3234,6 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
         wholeSentence: true);
     $(c).hearAbout(kbOrcsInPyramid);
     $(c).hearAbout(kbKnightsLeaving);
-    $(c).hearAbout(kbGoblinsNearBleeds);
 
     s.add(
         '\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
@@ -3216,8 +3289,7 @@ class BleedsBlindGuideGoblins extends RoamingAction {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
-        $(c).hasLearnedAbout(kbBlindGuide) &&
-        $(c).hasHeardAbout(kbGoblinsNearBleeds))) {
+        w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
       return false;
     }
     return true;
@@ -3231,10 +3303,36 @@ class BleedsBlindGuideGoblins extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It\'s like the goblins are being drawn here."\n\n_"What do they want?"_\n\n"They\'re goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it\'s strange. They come in larger numbers than you would think makes sense. They\'d get more slaves and more steel elsewhere."\n\n_"They want into the Pyramid, perhaps?"_\n\n"Nonsense. Goblins fear these kinds of things. Even if they didn\'t, they\'d probably get slaughtered by the orcs. Oh, that\'s something I\'d like to see." He absentmindedly touches his face just under the left eye.\n\n"Anyway. The goblins aren\'t stupid, but they _are_ getting awfully bold. I\'ve heard a band has made their camp not far from here. So close that people can see their campfire\'s smoke sometimes." He shudders. "Can you see it?"\n\n_"No."_\n\n"It must be a harrowing sight. A herald of our own future, possibly."\n\n',
+        '"Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It\'s like the goblins are being drawn here."\n\n_"What do they want?"_\n\n"They\'re goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it\'s strange. They come in larger numbers than you would think makes sense. They\'d get more slaves and more steel elsewhere."\n\n_"They want into the Pyramid, perhaps?"_\n\n"Nonsense. Goblins fear these kinds of things. Even if they didn\'t, they\'d probably get slaughtered by the orcs. Oh, that\'s something I\'d like to see." He absentmindedly touches his face just under the left eye.\n\n',
         wholeSentence: true);
-    $(c).hearAbout(kbGoblinSmoke);
-
+    Ruleset(
+        Rule(258032518, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return !$(c).hasHappened(evGoblinCampCleared);
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '\n"Anyway. The goblins aren\'t stupid, but they _are_ getting awfully bold. I\'ve heard a band has made their camp not far from here. So close that people can see their campfire\'s smoke sometimes." He shudders. "Can you see it?"\n\n_"Yes."_\n\n"It must be a harrowing sight. A herald of our own future, possibly."\n\n',
+              wholeSentence: true);
+        }),
+        Rule(775067539, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+        })).apply(c);
     return '${a.name} successfully performs BleedsBlindGuideGoblins';
   }
 
@@ -3289,6 +3387,11 @@ final Approach bleedsTraderHutFromBleedsMain = Approach(
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).hasLearnedAbout(kbTrader);
 });
 final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3321,11 +3424,11 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   }
 }, null, null, isIdle: true);
 
-class BleedsTraderHello extends RoamingAction {
+class BleedsTraderGreet extends RoamingAction {
   @override
-  final String name = 'bleeds_trader_hello';
+  final String name = 'bleeds_trader_greet';
 
-  static final BleedsTraderHello singleton = BleedsTraderHello();
+  static final BleedsTraderGreet singleton = BleedsTraderGreet();
 
   @override
   List<String> get commandPathTemplate => ['Trader', '“How is business?”'];
@@ -3352,10 +3455,9 @@ class BleedsTraderHello extends RoamingAction {
     s.add(
         'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
         wholeSentence: true);
-    $(c).learnAbout(kbTrader);
     $(c).learnAbout(kbLeroy);
 
-    return '${a.name} successfully performs BleedsTraderHello';
+    return '${a.name} successfully performs BleedsTraderGreet';
   }
 
   @override
@@ -3405,7 +3507,8 @@ class BleedsTraderGoblins extends RoamingAction {
         'bleeds_trader_hut') {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbTrader))) {
+    if (!(w.actionNeverUsed(name) &&
+        w.actionHasBeenPerformed("bleeds_trader_greet"))) {
       return false;
     }
     return true;
@@ -3426,7 +3529,6 @@ class BleedsTraderGoblins extends RoamingAction {
     s.add(
         '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
         wholeSentence: true);
-    $(c).hearAbout(kbGoblinSmoke);
     $(c).learnAbout(kbLeroyKnowsGoblinSmoke);
 
     return '${a.name} successfully performs BleedsTraderGoblins';
@@ -3480,7 +3582,9 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
         'bleeds_trader_hut') {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && $(c).hasHappened(evGoblinCampCleared))) {
+    if (!(w.actionNeverUsed(name) &&
+        w.actionHasBeenPerformed("bleeds_trader_greet") &&
+        $(c).hasHappened(evGoblinCampCleared))) {
       return false;
     }
     return true;
@@ -3493,9 +3597,7 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_740d97de9 =
-        $(c).inRoomWith(leroyId) ? '''them''' : '''the trader''';
-    s.add('“What happened?”\n\nI describe the battle to $ifBlock_740d97de9.\n',
+    s.add('“What happened?”\n\nI describe the battle to him.\n',
         wholeSentence: true);
     return '${a.name} successfully performs BleedsTraderTellAboutClearedCamp';
   }
@@ -3566,12 +3668,7 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     assert($(c).inRoomWith(leroyId));
 
     s.add(
-        '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n',
-        wholeSentence: true);
-    $(c).learnAbout(kbGoblinsNearBleeds);
-
-    s.add(
-        '\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
+        '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
         wholeSentence: true);
     $(c).hearAbout(kbKnightsLeaving);
 
@@ -3726,10 +3823,11 @@ final allActions = <RoamingAction>[
   ReadLetterFromMentor.singleton,
   StartTakeDagger.singleton,
   StartDeclineDagger.singleton,
+  BleedsMainObserve.singleton,
   BleedsBlindGuideGreet.singleton,
   BleedsBlindGuideTerribleIdea.singleton,
   BleedsBlindGuideGoblins.singleton,
-  BleedsTraderHello.singleton,
+  BleedsTraderGreet.singleton,
   BleedsTraderGoblins.singleton,
   BleedsTraderTellAboutClearedCamp.singleton,
   BleedsTraderGoblinSmoke.singleton

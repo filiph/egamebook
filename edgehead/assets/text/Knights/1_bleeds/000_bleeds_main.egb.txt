@@ -36,10 +36,6 @@ I finally see it. The Pyramid.
 
 Below the Pyramid there's a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.
 
-At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.
-
-Every door is shut except for two. One is the entrance into a trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
-
 [[CODE]]
 // Making sure that Tamara & Briana are not active by now, in case we skip
 // the initial fight during debug.
@@ -50,3 +46,31 @@ if (w.actors.build().any((a) => a.id == brianaId)) {
 [[ENDCODE]]
 
 DESCRIPTION: $NONE
+
+
+// ---
+ACTION: $bleeds_main_observe
+COMMAND: Environment >> Observe
+
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.
+
+Every door is shut except for two. One is the entrance into a trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
+
+[[CODE]]
+$(c).learnAbout(kbTrader);
+$(c).learnAbout(kbBlindGuide);
+[[ENDCODE]]
+
+I see a pillar of smoke to the west of here. Looks like nothing more than a camp fire.
+
+[[CODE]]
+$(c).learnAbout(kbGoblinCampSmoke);
+[[ENDCODE]]
