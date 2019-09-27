@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -13,7 +14,7 @@ class TurnUndead extends OtherActorActionBase {
 
   @override
   List<String> get commandPathTemplate =>
-      ['environment', '<object>', 'turn undead'];
+      ["<object's> copse", "turn undead"];
 
   @override
   String get helpMessage =>
@@ -69,7 +70,7 @@ class TurnUndead extends OtherActorActionBase {
         (b) => b
           ..anatomy.isUndead = true
           ..hitpoints = 1
-          ..pose = b.poseMax
+          ..pose = corpse.anatomy.hasCrippledLegs ? Pose.onGround : b.poseMax
           ..isConfused = false
           ..team = a.team.toBuilder());
 
