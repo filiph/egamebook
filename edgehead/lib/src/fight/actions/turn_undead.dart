@@ -13,8 +13,7 @@ class TurnUndead extends OtherActorActionBase {
   static const String className = "TurnUndead";
 
   @override
-  List<String> get commandPathTemplate =>
-      ["<object's> copse", "turn undead"];
+  List<String> get commandPathTemplate => ["<object's> copse", "turn undead"];
 
   @override
   String get helpMessage =>

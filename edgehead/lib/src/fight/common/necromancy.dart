@@ -3,7 +3,7 @@ import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 
-bool isFollowedByAnUndead(ApplicabilityContext context, Actor necromancer, ) {
+bool isFollowedByAnUndead(ApplicabilityContext context, Actor necromancer) {
   final party = getPartyOf(necromancer, context.simulation, context.world);
   return party.any((actor) => actor.anatomy.isUndead);
 }
