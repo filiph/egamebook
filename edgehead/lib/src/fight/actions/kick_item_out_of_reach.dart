@@ -72,6 +72,7 @@ class KickItemOutOfReach extends ItemAction {
       WorldState w, Item item) {
     if (a.isOnGround) return false;
     if (a.anatomy.isBlind) return false;
+    if (!a.anatomy.hasHealthyLegs) return false;
 
     // Monsters and NPCs have additional constraints. Without those, monsters
     // are way too happy to kick weapons out of reach (because it's often

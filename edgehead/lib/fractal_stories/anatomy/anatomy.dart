@@ -85,7 +85,28 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
     for (final part in allParts) {
       if ((part.designation == BodyPartDesignation.leftLeg ||
               part.designation == BodyPartDesignation.rightLeg) &&
-          part.isAnimated) {
+          part.isAnimatedAndActive) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// Returns `true` if both legs are operational.
+  ///
+  /// They don't need to be completely healthy, but they should be
+  /// [BodyPart.isAnimated].
+  ///
+  /// The polar opposite of [hasCrippledLegs]. There is a spectrum between,
+  /// where an actor can have only one of their legs crippled.
+  @memoized
+  bool get hasHealthyLegs {
+    assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
+    for (final part in allParts) {
+      if ((part.designation == BodyPartDesignation.leftLeg ||
+              part.designation == BodyPartDesignation.rightLeg) &&
+          part.isActive &&
+          !part.isAnimated) {
         return false;
       }
     }

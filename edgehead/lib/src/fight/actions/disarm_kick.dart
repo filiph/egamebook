@@ -97,8 +97,9 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, Actor enemy) =>
-      (a.pose >= Pose.offBalance) &&
+      (a.pose > Pose.onGround) &&
       !a.anatomy.isBlind &&
+      a.anatomy.hasHealthyLegs &&
       enemy.pose <= Pose.onGround &&
       enemy.holdsSomeWeapon;
 }

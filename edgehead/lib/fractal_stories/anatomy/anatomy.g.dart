@@ -63,6 +63,7 @@ class _$Anatomy extends Anatomy {
   List<BodyPart> __allParts;
   Item __bodyPartWeapon;
   bool __hasCrippledLegs;
+  bool __hasHealthyLegs;
   bool __isBlind;
   BodyPart __primaryWeaponAppendage;
   BodyPart __secondaryWeaponAppendage;
@@ -87,6 +88,9 @@ class _$Anatomy extends Anatomy {
 
   @override
   bool get hasCrippledLegs => __hasCrippledLegs ??= super.hasCrippledLegs;
+
+  @override
+  bool get hasHealthyLegs => __hasHealthyLegs ??= super.hasHealthyLegs;
 
   @override
   bool get isBlind => __isBlind ??= super.isBlind;
