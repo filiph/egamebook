@@ -4,16 +4,17 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 
-class TurnUndead extends OtherActorActionBase {
-  static final TurnUndead singleton = TurnUndead();
+/// Turns a corpse undead. To be used when we are roaming or in an idle room.
+/// Use [TurnUndead] in combat.
+class TurnUndeadIdle extends OtherActorActionBase {
+  static final TurnUndeadIdle singleton = TurnUndeadIdle();
 
-  static const String className = "TurnUndead";
+  static const String className = "TurnUndeadIdle";
 
   @override
   List<String> get commandPathTemplate =>
-      ["<object's> copse", "turn undead"];
+      ["environment", "<object's> copse", "turn undead"];
 
   @override
   String get helpMessage =>
@@ -29,24 +30,17 @@ class TurnUndead extends OtherActorActionBase {
   String get name => className;
 
   @override
-  bool get rerollable => true;
+  bool get rerollable => false;
 
   @override
-  Resource get rerollResource => Resource.stamina;
+  Resource get rerollResource => null;
 
   @override
-  String get rollReasonTemplate => "will <subject> turn <object> undead";
+  String get rollReasonTemplate => null;
 
   @override
   String applyFailure(ActionContext context, Actor corpse) {
-    final a = context.actor;
-    final s = context.outputStoryline;
-    a.report(s, "<subject> tr<ies> to raise <object> from the dead",
-        object: corpse);
-    a.report(s, "<subject> fail<s>", but: true);
-    s.add("nothing happens");
-
-    return "${a.name} failed to turn ${corpse.name} undead";
+    throw UnimplementedError();
   }
 
   @override
@@ -54,7 +48,6 @@ class TurnUndead extends OtherActorActionBase {
     final a = context.actor;
     final s = context.outputStoryline;
     final w = context.outputWorld;
-    final situation = context.world.currentSituation as FightSituation;
 
     final preposition =
         a.anatomy.isBlind ? "in the general direction of" : "over";
@@ -68,39 +61,32 @@ class TurnUndead extends OtherActorActionBase {
 
     w.updateActorById(corpse.id, (b) => b.replace(raisedCorpse));
 
-    // Place actor in the correct team.
-    w.replaceSituationById<FightSituation>(situation.id, situation.rebuild((b) {
-      if (a.isPlayer) {
-        b.playerTeamIds.add(corpse.id);
-        b.enemyTeamIds.remove(corpse.id);
-      } else {
-        b.enemyTeamIds.add(corpse.id);
-        b.playerTeamIds.remove(corpse.id);
-      }
-    }));
-
-    return "${a.name} turned ${corpse.name} undead";
+    return "${a.name} turned ${corpse.name} undead (while roaming)";
   }
 
   @override
   Iterable<Actor> generateObjects(ApplicabilityContext context) {
+    final actor = context.actor;
     final w = context.world;
-    final situation = context.world.currentSituation as FightSituation;
+    final sim = context.simulation;
 
-    final corpses = w.actors.where((Actor actor) =>
-        actor.isActive &&
-        !actor.isAnimated &&
-        (situation.playerTeamIds.contains(actor.id) ||
-            situation.enemyTeamIds.contains(actor.id)));
+    final currentRoom =
+        sim.getRoomParent(sim.getRoomByName(actor.currentRoomName));
+
+    final corpses = w.actors.where((a) =>
+        a.id != actor.id &&
+        a.isActive &&
+        !a.isAnimated &&
+        sim.getRoomParent(sim.getRoomByName(a.currentRoomName)) ==
+            currentRoom);
 
     return corpses;
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Actor object) {
-    return const ReasonedSuccessChance<void>(0.8);
-  }
+          Actor a, Simulation sim, WorldState w, Actor object) =>
+      ReasonedSuccessChance.sureSuccess;
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
