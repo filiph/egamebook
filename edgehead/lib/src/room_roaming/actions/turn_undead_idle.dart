@@ -79,8 +79,7 @@ class TurnUndeadIdle extends OtherActorActionBase {
         a.id != actor.id &&
         a.isActive &&
         !a.isAnimated &&
-        sim.getRoomParent(sim.getRoomByName(a.currentRoomName)) ==
-            currentRoom);
+        sim.getRoomParent(sim.getRoomByName(a.currentRoomName)) == currentRoom);
 
     return corpses;
   }
@@ -93,5 +92,5 @@ class TurnUndeadIdle extends OtherActorActionBase {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor object) =>
-      a.isPlayer;
+      a.isPlayer && !isFollowedByAnUndead(c, a);
 }

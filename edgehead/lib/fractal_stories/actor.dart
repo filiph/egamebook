@@ -23,6 +23,8 @@ import 'package:meta/meta.dart';
 
 part 'actor.g.dart';
 
+/// Returns the actors who are following [actor] and are animated
+/// (alive or undead).
 Iterable<Actor> getPartyOf(
     Actor actor, Simulation sim, WorldState world) sync* {
   yield actor;
