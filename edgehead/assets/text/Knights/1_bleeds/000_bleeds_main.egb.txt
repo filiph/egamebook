@@ -69,6 +69,12 @@ $(c).learnAbout(kbTrader);
 $(c).learnAbout(kbBlindGuide);
 [[ENDCODE]]
 
+[[CODE]]
+// We can assert this because player cannot go to the camp
+// before first seeing the smoke stack.
+assert(!$(c).hasHappened(evGoblinCampCleared));
+[[ENDCODE]]
+
 I see a pillar of smoke to the west of here. Looks like nothing more than a camp fire.
 
 [[CODE]]

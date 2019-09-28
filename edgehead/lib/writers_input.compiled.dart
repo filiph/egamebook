@@ -3085,6 +3085,8 @@ class BleedsMainObserve extends RoamingAction {
     $(c).learnAbout(kbTrader);
     $(c).learnAbout(kbBlindGuide);
 
+    assert(!$(c).hasHappened(evGoblinCampCleared));
+
     s.add(
         '\nI see a pillar of smoke to the west of here. Looks like nothing more than a camp fire.\n\n',
         wholeSentence: true);
