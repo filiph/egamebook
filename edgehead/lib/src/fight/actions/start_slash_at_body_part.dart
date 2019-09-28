@@ -95,7 +95,7 @@ PartialApplyFunction startSlashReportStart(BodyPartDesignation designation) =>
             s,
             "<subject> swing<s> at "
             "<objectOwner's> <object>",
-            object: Entity(name: designation.toHumanString()),
+            object: enemy.anatomy.findByDesignation(designation),
             objectOwner: enemy,
             actionThread: mainSituation.id,
             startsThread: true);
