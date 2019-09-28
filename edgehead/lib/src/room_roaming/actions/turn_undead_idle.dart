@@ -56,7 +56,9 @@ class TurnUndeadIdle extends OtherActorActionBase {
     a.report(s, "<subject> raise<s> <subject's> hands $preposition <object>",
         object: corpse);
     corpse.report(s, "<subject> open<s> <subject's> eyes");
-    corpse.report(s, "<subject> stand<s> up");
+    if (!corpse.anatomy.hasCrippledLegs) {
+      corpse.report(s, "<subject> stand<s> up");
+    }
 
     w.recordCustom(CustomEvent.actorTurningUndead, actor: corpse);
 
