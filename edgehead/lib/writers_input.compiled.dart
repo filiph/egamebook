@@ -2526,7 +2526,7 @@ final Room goblinSkirmishPatrol =
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'When $weSubstitution come out of a particularly nasty shrub, $weSubstitution hear a show, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasant?"\n',
+      'When $weSubstitution come out of a particularly nasty shrub, $weSubstitution hear a short, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasant?"\n',
       wholeSentence: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null);
 final Approach goblinSkirmishMainFromBleedsMain = Approach(
