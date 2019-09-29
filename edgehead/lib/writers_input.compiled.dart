@@ -3276,6 +3276,11 @@ final Approach endOfRoamFromBleedsMain =
   final Storyline s = c.outputStoryline;
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).hasHappened(evGoblinCampCleared);
 });
 final Approach bleedsTraderHutFromBleedsMain = Approach(
     'bleeds_main', 'bleeds_trader_hut', 'Go >> inside the trader\'s shop',
