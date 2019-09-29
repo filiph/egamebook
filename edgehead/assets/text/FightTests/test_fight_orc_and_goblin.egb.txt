@@ -2,9 +2,6 @@ ROOM: $test_fight_orc_and_goblin
 
 
 FIRST_DESCRIPTION:
-This is a development-only test fight. If you still see this in a production
-build, it's a bug.
-
 An orc and a goblin stand in front of you. The orc is wielding a sword,
 the goblin is holding a spear.
 

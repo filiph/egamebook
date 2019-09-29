@@ -2303,7 +2303,7 @@ class ReadLetterFromFather extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and plentiful.\n\nTo be completely honest, I am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your mother back from the dead.\n\n- Father\n',
+        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and plentiful.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your brother back from the dead.\n\n- Father\n',
         wholeSentence: true);
     return '${a.name} successfully performs ReadLetterFromFather';
   }
@@ -2365,7 +2365,7 @@ class ReadLetterFromMentor extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I take the letter from my pocket and read it.\n\nMy young friend,\n\nYou ask good questions. But before I will answer them, we must do something with your situation.\n\nYou must understand that a necromancer cannot be poor. There is no glory for practitioners of our profession unless we wield the resources and power to lead others.\n\nIt\'s not my place, or style, to share my wealth with you. But I can do something more exciting.\n\nWith this letter, the messenger should have also brought you a book. If he did not, find out where it is, then kill him.\n\nThe book contains knowledge about a curious structure called the Pyramid, which lies in the ruins of an ancient city called San Francisco. The place is rich with ancient artifacts and gold.\n\nGo there, and take all you can. Learn about the place.\n\nIf you succeed in your quest, you may have the apprenticeship you seek.\n',
+        'I take the letter from my pocket and read it.\n\nMy young friend,\n\nYou ask good questions. But before I will answer them, we must do something with your situation.\n\nYou must understand that a necromancer cannot be poor. There is no glory for practitioners of our profession unless we wield the resources and power to lead others.\n\nIt\'s not my place, or style, to share my wealth with you. But I can do something more exciting.\n\nI can share some knowledge. There exists a curious structure called the Pyramid. It lies in the ruins of an ancient city called San Francisco. The place is rich with ancient artifacts and gold.\n\nGo there, and take all you can. Learn about the place.\n\nIf you succeed in your quest, you may have the apprenticeship you seek.\n',
         wholeSentence: true);
     return '${a.name} successfully performs ReadLetterFromMentor';
   }
@@ -3620,7 +3620,7 @@ final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
+      'A goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
       wholeSentence: true);
 }, null, generateTestFightWithGoblin, null);
 final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
@@ -3652,7 +3652,7 @@ final Room testFightOrcAndGoblin =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAn orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
+      'An orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrcAndGoblin, null);
 final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
@@ -3684,7 +3684,7 @@ final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAgruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
+      'Agruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrc, null);
 final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
