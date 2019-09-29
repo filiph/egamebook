@@ -16,8 +16,8 @@ generateTestFightWithGoblin
 
 
 // ---
-APPROACH: $test_fight_goblin FROM $pre_start_book
-COMMAND: Playtest >> one-on-one test fight >> with a goblin
+APPROACH: $test_fight_goblin FROM $start_roguelike_celeb
+COMMAND: Fight >> one-on-one >> with a goblin
 DESCRIPTION: You get transported to the development testing arena.
 
 

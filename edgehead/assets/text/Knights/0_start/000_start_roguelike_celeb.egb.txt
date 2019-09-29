@@ -1,0 +1,10 @@
+// ---
+APPROACH: $start_roguelike_celeb FROM $pre_start_book
+COMMAND: $IMPLICIT
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $start_roguelike_celeb
+
+FIRST_DESCRIPTION:
+Welcome to the Roguelike Celebration demo of this game. Here are the things you can try.

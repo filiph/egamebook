@@ -15,8 +15,8 @@ generateTestFightWithOrcAndGoblin
 
 
 // ---
-APPROACH: $test_fight_orc_and_goblin FROM $pre_start_book
-COMMAND: Playtest >> one-on-two test fight >> with an orc and goblin
+APPROACH: $test_fight_orc_and_goblin FROM $start_roguelike_celeb
+COMMAND: Fight >> one-on-two >> with an orc and goblin
 DESCRIPTION: You get transported to the development testing arena.
 
 

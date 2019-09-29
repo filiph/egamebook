@@ -1031,37 +1031,6 @@ class SlaveQuartersContinue extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithGoblin, null);
-final Approach testFightGoblinFromPreStartBook = Approach(
-    'pre_start_book',
-    'test_fight_goblin',
-    'Playtest >> one-on-one test fight >> with a goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
-      wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightGoblin = Approach(
-    'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
 final Room undergroundChurch = Room('underground_church', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1388,37 +1357,6 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAgruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithOrc, null);
-final Approach testFightOrcFromPreStartBook = Approach(
-    'pre_start_book',
-    'test_fight_orc',
-    'Playtest >> one-on-one test fight >> with an orc', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
-      wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightOrc = Approach(
-    'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
 final Room startAdventure = Room('start_adventure', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1430,50 +1368,6 @@ final Room startAdventure = Room('start_adventure', (ActionContext c) {
       wholeSentence: true);
   w.actors.removeWhere((actor) => !actor.isPlayer && actor.id != brianaId);
 }, null, generateAgruthFight, null);
-final Approach startAdventureFromPreStartBook = Approach(
-    'pre_start_book', 'start_adventure', 'DEBUG >> Smoke test \'Vermin\'',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room testFightOrcAndGoblin =
-    Room('test_fight_orc_and_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAn orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithOrcAndGoblin, null);
-final Approach testFightOrcAndGoblinFromPreStartBook = Approach(
-    'pre_start_book',
-    'test_fight_orc_and_goblin',
-    'Playtest >> one-on-two test fight >> with an orc and goblin',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
-      wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightOrcAndGoblin =
-    Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
 final Room warForgeAfterIronMonster = Room('war_forge_after_iron_monster',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2775,9 +2669,10 @@ final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
       'She motions toward the bush. I look in the direction and see a figure with a short, rusty sword.\n\nThis place. Why does everything need to be so difficult around here?\n\n"You think you could help me with this one?" She hands me a long dagger.\n',
       wholeSentence: true);
 }, null, null, null);
-final Approach startFromPreStartBook = Approach(
-    'pre_start_book', 'start', 'DEBUG >> Play ‘Knights of San Francisco’',
-    (ActionContext c) {
+final Approach startFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'start',
+    'Explore >> a set piece >> from the start of the game', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2970,8 +2865,10 @@ final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
       'The fight begins. The goblin before us is especially feral. He\'s gnawing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
       wholeSentence: true);
 }, null, generateStartFight, null);
-final Approach bleedsMainFromPreStartBook = Approach('pre_start_book',
-    'bleeds_main', 'DEBUG >> Play ‘Knights of San Francisco’ from The Bleeds',
+final Approach bleedsMainFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'bleeds_main',
+    'Explore >> a set piece >> from the start of the game, skipping the first fight',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3716,18 +3613,130 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nA goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
+      wholeSentence: true);
+}, null, generateTestFightWithGoblin, null);
+final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'test_fight_goblin',
+    'Fight >> one-on-one >> with a goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You get transported to the development testing arena.\n',
+      wholeSentence: true);
+});
+final Approach endOfRoamFromTestFightGoblin = Approach(
+    'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room testFightOrcAndGoblin =
+    Room('test_fight_orc_and_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAn orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
+      wholeSentence: true);
+}, null, generateTestFightWithOrcAndGoblin, null);
+final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'test_fight_orc_and_goblin',
+    'Fight >> one-on-two >> with an orc and goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You get transported to the development testing arena.\n',
+      wholeSentence: true);
+});
+final Approach endOfRoamFromTestFightOrcAndGoblin =
+    Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'This is a development-only test fight. If you still see this in a production\nbuild, it\'s a bug.\n\nAgruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
+      wholeSentence: true);
+}, null, generateTestFightWithOrc, null);
+final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'test_fight_orc',
+    'Fight >> one-on-one >> with an orc', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You get transported to the development testing arena.\n',
+      wholeSentence: true);
+});
+final Approach endOfRoamFromTestFightOrc = Approach(
+    'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach startRoguelikeCelebFromPreStartBook = Approach(
+    'pre_start_book', 'start_roguelike_celeb', r'$IMPLICIT', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startRoguelikeCeleb =
+    Room('start_roguelike_celeb', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'Welcome to the Roguelike Celebration demo of this game. Here are the things you can try.\n',
+      wholeSentence: true);
+}, null, null, null);
 final allRooms = <Room>[
   undergroundChurchAltarAfterCeremony,
   orcthornRoom,
   smelter,
   slaveQuartersPassage,
   slaveQuarters,
-  testFightGoblin,
   undergroundChurch,
   undergroundChurchAltar,
-  testFightOrc,
   startAdventure,
-  testFightOrcAndGoblin,
   warForgeAfterIronMonster,
   guardpostAboveChurch,
   tunnel,
@@ -3749,7 +3758,11 @@ final allRooms = <Room>[
   startCoward,
   startBeginFight,
   bleedsMain,
-  bleedsTraderHut
+  bleedsTraderHut,
+  testFightGoblin,
+  testFightOrcAndGoblin,
+  testFightOrc,
+  startRoguelikeCeleb
 ];
 final allApproaches = <Approach>[
   orcthornRoomFromSlaveQuartersPassage,
@@ -3759,17 +3772,10 @@ final allApproaches = <Approach>[
   slaveQuartersPassageFromSlaveQuarters,
   slaveQuartersPassageFromOrcthornRoom,
   slaveQuartersFromSlaveQuartersPassage,
-  testFightGoblinFromPreStartBook,
-  endOfRoamFromTestFightGoblin,
   undergroundChurchFromCaveWithAgruth,
   undergroundChurchFromGuardpostAboveChurch,
   undergroundChurchFromUndergroundChurchAltar,
   undergroundChurchAltarFromUndergroundChurch,
-  testFightOrcFromPreStartBook,
-  endOfRoamFromTestFightOrc,
-  startAdventureFromPreStartBook,
-  testFightOrcAndGoblinFromPreStartBook,
-  endOfRoamFromTestFightOrcAndGoblin,
   guardpostAboveChurchFromUndergroundChurch,
   guardpostAboveChurchFromTunnelCancelChance,
   guardpostAboveChurchFromSmelter,
@@ -3790,16 +3796,23 @@ final allApproaches = <Approach>[
   startPostFightFromStartBeginFight,
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
-  startFromPreStartBook,
+  startFromStartRoguelikeCeleb,
   startRaccoonFromStart,
   startCowardFromStart,
-  bleedsMainFromPreStartBook,
+  bleedsMainFromStartRoguelikeCeleb,
   bleedsMainFromStartPostFight,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromGoblinSkirmishMain,
   endOfRoamFromBleedsMain,
-  bleedsTraderHutFromBleedsMain
+  bleedsTraderHutFromBleedsMain,
+  testFightGoblinFromStartRoguelikeCeleb,
+  endOfRoamFromTestFightGoblin,
+  testFightOrcAndGoblinFromStartRoguelikeCeleb,
+  endOfRoamFromTestFightOrcAndGoblin,
+  testFightOrcFromStartRoguelikeCeleb,
+  endOfRoamFromTestFightOrc,
+  startRoguelikeCelebFromPreStartBook
 ];
 final allActions = <RoamingAction>[
   TalkToBriana1.singleton,

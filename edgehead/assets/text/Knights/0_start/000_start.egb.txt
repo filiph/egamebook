@@ -1,10 +1,9 @@
 // ---
-APPROACH: $start FROM $pre_start_book
-COMMAND: DEBUG >> Play ‘Knights of San Francisco’
+APPROACH: $start FROM $start_roguelike_celeb
+COMMAND: Explore >> a set piece >> from the start of the game
 DESCRIPTION: $NONE
 
 // ---
-
 ROOM: $start
 
 FIRST_DESCRIPTION:
