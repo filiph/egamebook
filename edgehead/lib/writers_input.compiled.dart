@@ -2409,7 +2409,11 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      'There is no path in the direction of the smoke. $weSubstitutionCapitalized go through the brush and step over logs and ancient rubble.\n',
+      wholeSentence: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -2424,19 +2428,11 @@ final Room goblinSkirmishPatrol =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      '$weSubstitutionCapitalized meet a patrol. A lone goblin with a spear.\n',
+      'When $weSubstitution come out of a particularly nasty shrub, $weSubstitution hear a show, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasants?"\n',
       wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('Nothing here, just death.\n', wholeSentence: true);
-}, generateBleedsGoblinSkirmishPatrol, null);
+}, null, generateBleedsGoblinSkirmishPatrol, null);
 final Approach goblinSkirmishMainFromBleedsMain = Approach(
     'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
     (ActionContext c) {
@@ -2488,7 +2484,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
 final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
     'goblin_skirmish_patrol',
     'goblin_skirmish_sneak',
-    'Go >> towards the goblin outpost', (ActionContext c) {
+    'Go >> towards the smoke', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;

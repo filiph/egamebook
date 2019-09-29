@@ -1,6 +1,6 @@
 // ---
 APPROACH: $goblin_skirmish_sneak FROM $goblin_skirmish_patrol
-COMMAND: Go >> towards the goblin outpost
+COMMAND: Go >> towards the smoke
 DESCRIPTION: $NONE
 
 // ---

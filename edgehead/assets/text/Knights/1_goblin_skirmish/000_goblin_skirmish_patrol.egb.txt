@@ -1,7 +1,7 @@
 // ---
 APPROACH: $goblin_skirmish_patrol FROM $bleeds_main
 COMMAND: Go >> to the west
-DESCRIPTION: $NONE
+DESCRIPTION: There is no path in the direction of the smoke. [We] go through the brush and step over logs and ancient rubble.
 PREREQUISITES:
 $(c).hasLearnedAbout(kbGoblinCampSmoke)
 &&
@@ -11,10 +11,9 @@ $(c).hasLearnedAbout(kbGoblinCampSmoke)
 ROOM: $goblin_skirmish_patrol
 
 FIRST_DESCRIPTION:
-[We] meet a patrol. A lone goblin with a spear.
+When [we] come out of a particularly nasty shrub, [we] hear a show, guttural sound. I look up and see a lone goblin with a spear.
+
+"You lost, peasants?"
 
 FIGHT_SITUATION:
 generateBleedsGoblinSkirmishPatrol
-
-DESCRIPTION:
-Nothing here, just death.
