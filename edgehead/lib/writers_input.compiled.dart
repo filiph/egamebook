@@ -2277,6 +2277,102 @@ class NameAgruthSwordNothing extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'A goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
+      wholeSentence: true);
+}, null, generateTestFightWithGoblin, null);
+final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'test_fight_goblin',
+    'Fight >> one-on-one >> with a goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You get transported to the development testing arena.\n',
+      wholeSentence: true);
+});
+final Approach endOfRoamFromTestFightGoblin = Approach(
+    'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'Agruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
+      wholeSentence: true);
+}, null, generateTestFightWithOrc, null);
+final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'test_fight_orc',
+    'Fight >> one-on-one >> with an orc', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You get transported to the development testing arena.\n',
+      wholeSentence: true);
+});
+final Approach endOfRoamFromTestFightOrc = Approach(
+    'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room testFightOrcAndGoblin =
+    Room('test_fight_orc_and_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'An orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
+      wholeSentence: true);
+}, null, generateTestFightWithOrcAndGoblin, null);
+final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb',
+    'test_fight_orc_and_goblin',
+    'Fight >> one-on-two >> with an orc and goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You get transported to the development testing arena.\n',
+      wholeSentence: true);
+});
+final Approach endOfRoamFromTestFightOrcAndGoblin =
+    Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+
 class ReadLetterFromFather extends RoamingAction {
   @override
   final String name = 'read_letter_from_father';
@@ -2430,7 +2526,7 @@ final Room goblinSkirmishPatrol =
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'When $weSubstitution come out of a particularly nasty shrub, $weSubstitution hear a show, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasants?"\n',
+      'When $weSubstitution come out of a particularly nasty shrub, $weSubstitution hear a show, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasant?"\n',
       wholeSentence: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null);
 final Approach goblinSkirmishMainFromBleedsMain = Approach(
@@ -2500,7 +2596,9 @@ final Approach goblinSkirmishSneakFromBleedsMain = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add('$weSubstitutionCapitalized carry on.\n', wholeSentence: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -2515,10 +2613,9 @@ final Room goblinSkirmishSneak =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      '$weSubstitutionCapitalized sneak around. It\'s only 3 goblins. They are speaking loudly.\n',
+      'Suddenly, $weSubstitution hear voices ahead. Two goblins are arguing about something.\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2528,6 +2625,273 @@ final Room goblinSkirmishSneak =
   final Storyline s = c.outputStoryline;
   s.add('The goblins are still here.\n', wholeSentence: true);
 }, null, null);
+
+class ListenToThemArguing extends RoamingAction {
+  @override
+  final String name = 'listen_to_them_arguing';
+
+  static final ListenToThemArguing singleton = ListenToThemArguing();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Environment', 'listen to the arguing'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'goblin_skirmish_sneak') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Why not go now?" a goblin says in a screetching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw now guards!" \n\n"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go there."\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs ListenToThemArguing';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ObserveGoblinCamp extends RoamingAction {
+  @override
+  final String name = 'observe_goblin_camp';
+
+  static final ObserveGoblinCamp singleton = ObserveGoblinCamp();
+
+  @override
+  List<String> get commandPathTemplate => ['Environment', 'observe'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'goblin_skirmish_sneak') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    s.add(
+        '$weSubstitutionCapitalized find a hiding spot behind a tree stump and gingerly look over it. $weSubstitutionCapitalized see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that $weSubstitution don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs ObserveGoblinCamp';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ListenContinue extends RoamingAction {
+  @override
+  final String name = 'listen_continue';
+
+  static final ListenContinue singleton = ListenContinue();
+
+  @override
+  List<String> get commandPathTemplate => ['Environment', 'continue listening'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'goblin_skirmish_sneak') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) &&
+        w.actionHasBeenPerformed("listen_to_them_arguing"))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The higher ranked goblin takes something out of a leather bag and shoves it into the other\'s face.\n\n"The only reason we are here, shithead, is the graytower. Look at the device."\n\nThe lower ranked goblin\'s face wrinkles, almost showing his teeth but not quite.\n\n"The kh\'ompakh is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."\n\n"Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs ListenContinue';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ListenMore extends RoamingAction {
+  @override
+  final String name = 'listen_more';
+
+  static final ListenMore singleton = ListenMore();
+
+  @override
+  List<String> get commandPathTemplate => ['Environment', 'continue listening'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'goblin_skirmish_sneak') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) &&
+        w.actionHasBeenPerformed("listen_continue"))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The two goblins don\'t speak anymore. They each look into the fire.\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs ListenMore';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Approach startPostFightFromStartBeginFight = Approach(
     'start_begin_fight', 'start_post_fight', 'End fight', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2851,6 +3215,26 @@ class StartDeclineDagger extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Approach startRoguelikeCelebFromPreStartBook = Approach(
+    'pre_start_book', 'start_roguelike_celeb', r'$IMPLICIT', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startRoguelikeCeleb =
+    Room('start_roguelike_celeb', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'Welcome to the Roguelike Celebration demo of this game. Here are the things you can try.\n',
+      wholeSentence: true);
+}, null, null, null);
 final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3674,121 +4058,6 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'A goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithGoblin, null);
-final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb',
-    'test_fight_goblin',
-    'Fight >> one-on-one >> with a goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
-      wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightGoblin = Approach(
-    'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room testFightOrcAndGoblin =
-    Room('test_fight_orc_and_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'An orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithOrcAndGoblin, null);
-final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb',
-    'test_fight_orc_and_goblin',
-    'Fight >> one-on-two >> with an orc and goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
-      wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightOrcAndGoblin =
-    Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'Agruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithOrc, null);
-final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb',
-    'test_fight_orc',
-    'Fight >> one-on-one >> with an orc', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
-      wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightOrc = Approach(
-    'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach startRoguelikeCelebFromPreStartBook = Approach(
-    'pre_start_book', 'start_roguelike_celeb', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startRoguelikeCeleb =
-    Room('start_roguelike_celeb', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'Welcome to the Roguelike Celebration demo of this game. Here are the things you can try.\n',
-      wholeSentence: true);
-}, null, null, null);
 final allRooms = <Room>[
   undergroundChurchAltarAfterCeremony,
   orcthornRoom,
@@ -3806,6 +4075,9 @@ final allRooms = <Room>[
   warForge,
   caveWithAgruth,
   justAfterAgruthFight,
+  testFightGoblin,
+  testFightOrc,
+  testFightOrcAndGoblin,
   goblinSkirmishPatrol,
   goblinSkirmishMain,
   goblinSkirmishSneak,
@@ -3817,13 +4089,10 @@ final allRooms = <Room>[
   start,
   startRaccoon,
   startCoward,
+  startRoguelikeCeleb,
   startBeginFight,
   bleedsMain,
-  bleedsTraderHut,
-  testFightGoblin,
-  testFightOrcAndGoblin,
-  testFightOrc,
-  startRoguelikeCeleb
+  bleedsTraderHut
 ];
 final allApproaches = <Approach>[
   orcthornRoomFromSlaveQuartersPassage,
@@ -3849,6 +4118,12 @@ final allApproaches = <Approach>[
   caveWithAgruthFromSlaveQuartersPassage,
   caveWithAgruthFromWarForge,
   justAfterAgruthFightFromStartAdventure,
+  testFightGoblinFromStartRoguelikeCeleb,
+  endOfRoamFromTestFightGoblin,
+  testFightOrcFromStartRoguelikeCeleb,
+  endOfRoamFromTestFightOrc,
+  testFightOrcAndGoblinFromStartRoguelikeCeleb,
+  endOfRoamFromTestFightOrcAndGoblin,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishMainFromBleedsMain,
   goblinSkirmishMainFromGoblinSkirmishSneak,
@@ -3860,20 +4135,14 @@ final allApproaches = <Approach>[
   startFromStartRoguelikeCeleb,
   startRaccoonFromStart,
   startCowardFromStart,
+  startRoguelikeCelebFromPreStartBook,
   bleedsMainFromStartRoguelikeCeleb,
   bleedsMainFromStartPostFight,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromGoblinSkirmishMain,
   endOfRoamFromBleedsMain,
-  bleedsTraderHutFromBleedsMain,
-  testFightGoblinFromStartRoguelikeCeleb,
-  endOfRoamFromTestFightGoblin,
-  testFightOrcAndGoblinFromStartRoguelikeCeleb,
-  endOfRoamFromTestFightOrcAndGoblin,
-  testFightOrcFromStartRoguelikeCeleb,
-  endOfRoamFromTestFightOrc,
-  startRoguelikeCelebFromPreStartBook
+  bleedsTraderHutFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   TalkToBriana1.singleton,
@@ -3897,6 +4166,10 @@ final allActions = <RoamingAction>[
   NameAgruthSwordNothing.singleton,
   ReadLetterFromFather.singleton,
   ReadLetterFromMentor.singleton,
+  ListenToThemArguing.singleton,
+  ObserveGoblinCamp.singleton,
+  ListenContinue.singleton,
+  ListenMore.singleton,
   StartTakeDagger.singleton,
   StartDeclineDagger.singleton,
   BleedsMainObserveVillage.singleton,

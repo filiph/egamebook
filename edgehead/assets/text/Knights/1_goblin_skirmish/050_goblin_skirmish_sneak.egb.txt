@@ -6,17 +6,87 @@ DESCRIPTION: $NONE
 // ---
 APPROACH: $goblin_skirmish_sneak FROM $bleeds_main
 COMMAND: Go >> towards the goblin outpost
-DESCRIPTION: $NONE
+DESCRIPTION: [We] carry on.
 PREREQUISITES:
 $(c).playerHasVisited("goblin_skirmish_sneak")
 &&
 !$(c).hasHappened(evGoblinCampCleared)
 
-// ---
-ROOM: $goblin_skirmish_sneak
+// Goal: Tell player what they should expect if they attack.
+// Optional: 
+//   - learn about kh'ompakh (compass device)
+//   - learn about goblin rank through voice
+//   - learn that the patrol goblin was Amak
+// State: 
+//   - one_of_the_goblins_higher_ranked - If player doesn't listen to their chat, they don't know it. We need to describe it at the start of attack.
 
+ROOM: $goblin_skirmish_sneak
 FIRST_DESCRIPTION:
-[We] sneak around. It's only 3 goblins. They are speaking loudly.
+Suddenly, [we] hear voices ahead. Two goblins are arguing about something.
 
 DESCRIPTION:
 The goblins are still here.
+
+// ---
+ACTION: $listen_to_them_arguing
+COMMAND: Environment >> listen to the arguing
+FOR_LOCATION: $goblin_skirmish_sneak
+PREREQUISITES:
+w.actionNeverUsed(name)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+COMPLETE_SUCCESS_DESCRIPTION:
+"Why not go now?" a goblin says in a screetching voice. "They are weak. It will be an easy take."
+
+"How do you know they are weak?" This other goblin's voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."
+
+"Amak was there. He saw now guards!" 
+
+"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.
+
+"Another reason why not to go there."
+
+// ---
+ACTION: $observe_goblin_camp
+COMMAND: Environment >> observe
+FOR_LOCATION: $goblin_skirmish_sneak
+PREREQUISITES:
+w.actionNeverUsed(name)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+COMPLETE_SUCCESS_DESCRIPTION:
+[We] find a hiding spot behind a tree stump and gingerly look over it. [We] see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that [we] don't see, but looking at the size of the camp ground, it's not likely.
+
+// --
+ACTION: $listen_continue
+COMMAND: Environment >> continue listening
+FOR_LOCATION: $goblin_skirmish_sneak
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+w.actionHasBeenPerformed("listen_to_them_arguing")
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+COMPLETE_SUCCESS_DESCRIPTION:
+The higher ranked goblin takes something out of a leather bag and shoves it into the other's face.
+
+"The only reason we are here, shithead, is the graytower. Look at the device."
+
+The lower ranked goblin's face wrinkles, almost showing his teeth but not quite.
+
+"The kh'ompakh is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."
+
+"Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.
+
+// ---
+ACTION: $listen_more
+COMMAND: Environment >> continue listening
+FOR_LOCATION: $goblin_skirmish_sneak
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+w.actionHasBeenPerformed("listen_continue")
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+COMPLETE_SUCCESS_DESCRIPTION:
+The two goblins don't speak anymore. They each look into the fire.
