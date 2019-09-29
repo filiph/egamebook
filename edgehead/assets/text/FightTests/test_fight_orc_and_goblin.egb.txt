@@ -2,10 +2,10 @@ ROOM: $test_fight_orc_and_goblin
 
 
 FIRST_DESCRIPTION:
-An orc and a goblin stand in front of you. The orc is wielding a sword,
+An orc and a goblin stand in front of me. The orc is wielding a sword,
 the goblin is holding a spear.
 
-You are wielding a short sword.
+I am wielding a short sword.
 
 FIGHT_SITUATION:
 generateTestFightWithOrcAndGoblin
@@ -14,7 +14,7 @@ generateTestFightWithOrcAndGoblin
 // ---
 APPROACH: $test_fight_orc_and_goblin FROM $start_roguelike_celeb
 COMMAND: Fight >> one-on-two >> with an orc and goblin
-DESCRIPTION: You get transported to the development testing arena.
+DESCRIPTION: I get transported to the development testing arena. Whoosh.
 
 
 // ---

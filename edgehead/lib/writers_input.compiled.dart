@@ -2284,7 +2284,7 @@ final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A goblin stands in front of you, wielding a spear. Between the two of you,\na plain dagger lies on the ground. You also notice a nice, solid rock in the\nrubble.\n\nYou are barehanded.\n',
+      'A goblin stands in front of me, wielding a spear. Between the two of us,\na plain dagger lies on the ground. I also notice a nice, solid rock in the\nrubble.\n\nI am barehanded.\n',
       wholeSentence: true);
 }, null, generateTestFightWithGoblin, null);
 final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
@@ -2296,7 +2296,7 @@ final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
+  s.add('I get transported to the development testing arena. Whoosh.\n',
       wholeSentence: true);
 });
 final Approach endOfRoamFromTestFightGoblin = Approach(
@@ -2315,7 +2315,7 @@ final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'Agruth the orc stands in front of you, wielding a sword. Between the two of you,\na plain dagger lies on the ground.\n\nYou are wielding a short sword.\n',
+      'Agruth the orc stands in front of me, wielding a sword. Between the two of us,\na plain dagger lies on the ground.\n\nI am wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrc, null);
 final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
@@ -2327,7 +2327,7 @@ final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
+  s.add('I get transported to the development testing arena. Whoosh.\n',
       wholeSentence: true);
 });
 final Approach endOfRoamFromTestFightOrc = Approach(
@@ -2347,7 +2347,7 @@ final Room testFightOrcAndGoblin =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'An orc and a goblin stand in front of you. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nYou are wielding a short sword.\n',
+      'An orc and a goblin stand in front of me. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nI am wielding a short sword.\n',
       wholeSentence: true);
 }, null, generateTestFightWithOrcAndGoblin, null);
 final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
@@ -2359,7 +2359,7 @@ final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('You get transported to the development testing arena.\n',
+  s.add('I get transported to the development testing arena. Whoosh.\n',
       wholeSentence: true);
 });
 final Approach endOfRoamFromTestFightOrcAndGoblin =

@@ -2,10 +2,10 @@ ROOM: $test_fight_orc
 
 
 FIRST_DESCRIPTION:
-Agruth the orc stands in front of you, wielding a sword. Between the two of you,
+Agruth the orc stands in front of me, wielding a sword. Between the two of us,
 a plain dagger lies on the ground.
 
-You are wielding a short sword.
+I am wielding a short sword.
 
 FIGHT_SITUATION:
 generateTestFightWithOrc
@@ -14,7 +14,7 @@ generateTestFightWithOrc
 // ---
 APPROACH: $test_fight_orc FROM $start_roguelike_celeb
 COMMAND: Fight >> one-on-one >> with an orc
-DESCRIPTION: You get transported to the development testing arena.
+DESCRIPTION: I get transported to the development testing arena. Whoosh.
 
 
 // ---

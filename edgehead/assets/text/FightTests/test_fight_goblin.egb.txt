@@ -2,11 +2,11 @@ ROOM: $test_fight_goblin
 
 
 FIRST_DESCRIPTION:
-A goblin stands in front of you, wielding a spear. Between the two of you,
-a plain dagger lies on the ground. You also notice a nice, solid rock in the
+A goblin stands in front of me, wielding a spear. Between the two of us,
+a plain dagger lies on the ground. I also notice a nice, solid rock in the
 rubble.
 
-You are barehanded.
+I am barehanded.
 
 FIGHT_SITUATION:
 generateTestFightWithGoblin
@@ -15,7 +15,7 @@ generateTestFightWithGoblin
 // ---
 APPROACH: $test_fight_goblin FROM $start_roguelike_celeb
 COMMAND: Fight >> one-on-one >> with a goblin
-DESCRIPTION: You get transported to the development testing arena.
+DESCRIPTION: I get transported to the development testing arena. Whoosh.
 
 
 // ---
