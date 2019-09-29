@@ -2933,8 +2933,11 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\n',
+      'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
       wholeSentence: true);
+  $(c).learnAbout(kbTrader);
+  $(c).learnAbout(kbGoblinCampSmoke);
+
   w.updateActorById(tamaraId, (b) => b.isActive = false);
   if (w.actors.build().any((a) => a.id == brianaId)) {
     w.updateActorById(brianaId, (b) => b.isActive = false);
@@ -2948,14 +2951,14 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   s.add('', wholeSentence: true);
 }, null, null, isIdle: true);
 
-class BleedsMainObserve extends RoamingAction {
+class BleedsMainObserveVillage extends RoamingAction {
   @override
-  final String name = 'bleeds_main_observe';
+  final String name = 'bleeds_main_observe_village';
 
-  static final BleedsMainObserve singleton = BleedsMainObserve();
+  static final BleedsMainObserveVillage singleton = BleedsMainObserveVillage();
 
   @override
-  List<String> get commandPathTemplate => ['Environment', 'Observe'];
+  List<String> get commandPathTemplate => ['Environment', 'village', 'observe'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -2977,19 +2980,76 @@ class BleedsMainObserve extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into a trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
+        'At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
         wholeSentence: true);
-    $(c).learnAbout(kbTrader);
     $(c).learnAbout(kbBlindGuide);
 
-    assert(!$(c).hasHappened(evGoblinCampCleared));
+    return '${a.name} successfully performs BleedsMainObserveVillage';
+  }
 
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsMainObserveSmoke extends RoamingAction {
+  @override
+  final String name = 'bleeds_main_observe_smoke';
+
+  static final BleedsMainObserveSmoke singleton = BleedsMainObserveSmoke();
+
+  @override
+  List<String> get commandPathTemplate => ['Environment', 'smoke', 'observe'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'bleeds_main') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) && !$(c).hasHappened(evGoblinCampCleared))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
     s.add(
-        '\nI see a pillar of smoke to the west of here. Looks like nothing more than a camp fire.\n\n',
+        'The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire.\n\nSomeone is not afraid to be found.\n',
         wholeSentence: true);
-    $(c).learnAbout(kbGoblinCampSmoke);
-
-    return '${a.name} successfully performs BleedsMainObserve';
+    return '${a.name} successfully performs BleedsMainObserveSmoke';
   }
 
   @override
@@ -3843,7 +3903,8 @@ final allActions = <RoamingAction>[
   ReadLetterFromMentor.singleton,
   StartTakeDagger.singleton,
   StartDeclineDagger.singleton,
-  BleedsMainObserve.singleton,
+  BleedsMainObserveVillage.singleton,
+  BleedsMainObserveSmoke.singleton,
   BleedsBlindGuideGreet.singleton,
   BleedsBlindGuideTerribleIdea.singleton,
   BleedsBlindGuideGoblins.singleton,

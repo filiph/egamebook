@@ -36,6 +36,13 @@ I finally see it. The Pyramid.
 
 Below the Pyramid there's a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.
 
+There is a trader's shop here. A mile to the west, I see a pillar of black smoke rising to the sky.
+
+[[CODE]]
+$(c).learnAbout(kbTrader);
+$(c).learnAbout(kbGoblinCampSmoke);
+[[ENDCODE]]
+
 [[CODE]]
 // Making sure that Tamara & Briana are not active by now, in case we skip
 // the initial fight during debug.
@@ -49,8 +56,8 @@ DESCRIPTION: $NONE
 
 
 // ---
-ACTION: $bleeds_main_observe
-COMMAND: Environment >> Observe
+ACTION: $bleeds_main_observe_village
+COMMAND: Environment >> village >> observe
 
 FOR_LOCATION: $bleeds_main
 
@@ -62,21 +69,26 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.
 
-Every door is shut except for two. One is the entrance into a trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
+Every door is shut except for two. One is the entrance into the trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
 
 [[CODE]]
-$(c).learnAbout(kbTrader);
 $(c).learnAbout(kbBlindGuide);
 [[ENDCODE]]
 
-[[CODE]]
-// We can assert this because player cannot go to the camp
-// before first seeing the smoke stack.
-assert(!$(c).hasHappened(evGoblinCampCleared));
-[[ENDCODE]]
+// ---
+ACTION: $bleeds_main_observe_smoke
+COMMAND: Environment >> smoke >> observe
 
-I see a pillar of smoke to the west of here. Looks like nothing more than a camp fire.
+FOR_LOCATION: $bleeds_main
 
-[[CODE]]
-$(c).learnAbout(kbGoblinCampSmoke);
-[[ENDCODE]]
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+!$(c).hasHappened(evGoblinCampCleared)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire.
+
+Someone is not afraid to be found.
