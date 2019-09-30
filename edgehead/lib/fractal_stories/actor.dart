@@ -442,16 +442,16 @@ abstract class Actor extends Object
     int deathRecency =
         w.timeSinceLastCustomRecord(name: CustomEvent.actorDeath, actorId: id);
     if (deathRecency != null && deathRecency <= recency) {
-      // Actor died between the last attack by [other] and now. They don't
-      // remember.
+      // Actor died between the last attack by [other] and now. (Then they
+      // were presumably turned undead.) They don't remember.
       return false;
     }
 
     int turnUndeadRecency = w.timeSinceLastCustomRecord(
-        name: CustomEvent.actorTurningUndead, actorId: id);
+        name: CustomEvent.actorTurningUndead, actorId: other.id);
 
     if (turnUndeadRecency != null && turnUndeadRecency <= recency) {
-      // This actor turned the other actor undead since the last time they hurt
+      // The other actor turned undead since the last time they hurt
       // this actor. The necromancer shouldn't be mad at her minions.
       return false;
     }
