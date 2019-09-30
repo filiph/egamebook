@@ -22,7 +22,7 @@ $(c).playerHasVisited("goblin_skirmish_sneak")
 
 ROOM: $goblin_skirmish_sneak
 FIRST_DESCRIPTION:
-Suddenly, [we] hear voices ahead. Two goblins are arguing about something.
+Suddenly, I hear voices ahead. Two goblins are arguing about something.
 
 DESCRIPTION:
 The goblins are still here.
@@ -55,7 +55,7 @@ w.actionNeverUsed(name)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
-[We] find a hiding spot behind a tree stump and gingerly look over it. [We] see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that [we] don't see, but looking at the size of the camp ground, it's not likely.
+[We] find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don't see, but looking at the size of the camp ground, it's not likely.
 
 // --
 ACTION: $listen_continue

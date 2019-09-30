@@ -2526,7 +2526,7 @@ final Room goblinSkirmishPatrol =
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'When $weSubstitution come out of a particularly nasty shrub, $weSubstitution hear a short, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasant?"\n',
+      'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasant?"\n',
       wholeSentence: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null);
 final Approach goblinSkirmishMainFromBleedsMain = Approach(
@@ -2613,9 +2613,8 @@ final Room goblinSkirmishSneak =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'Suddenly, $weSubstitution hear voices ahead. Two goblins are arguing about something.\n',
+      'Suddenly, I hear voices ahead. Two goblins are arguing about something.\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2720,11 +2719,10 @@ class ObserveGoblinCamp extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
     final weSubstitutionCapitalized =
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '$weSubstitutionCapitalized find a hiding spot behind a tree stump and gingerly look over it. $weSubstitutionCapitalized see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that $weSubstitution don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
+        '$weSubstitutionCapitalized find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
         wholeSentence: true);
     return '${a.name} successfully performs ObserveGoblinCamp';
   }
