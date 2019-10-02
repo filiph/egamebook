@@ -22,15 +22,18 @@ ReasonedSuccessChance computeThrowThrustingWeaponPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   final hasSpear =
       a.currentWeapon?.damageCapability?.type == WeaponType.spear ?? false;
-  return getCombatMoveChance(a, enemy, hasSpear ? 0.3 : 0.1, [
-    const Modifier(20, CombatReason.dexterity),
+  final hasDagger =
+      a.currentWeapon?.damageCapability?.type == WeaponType.dagger ?? false;
+  final hasThrowingWeapon = hasSpear || hasDagger;
+  return getCombatMoveChance(a, enemy, hasThrowingWeapon ? 0.3 : 0.01, [
+    Modifier(hasThrowingWeapon ? 20 : 10, CombatReason.dexterity),
     const Penalty(20, CombatReason.targetHasShield),
-    const Modifier(20, CombatReason.balance),
-    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
+    Modifier(hasThrowingWeapon ? 20 : 10, CombatReason.balance),
+    const Bonus(10, CombatReason.targetHasSecondaryArmDisabled),
+    const Bonus(10, CombatReason.targetHasPrimaryArmDisabled),
+    const Bonus(20, CombatReason.targetHasOneLegDisabled),
     const Bonus(50, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(20, CombatReason.targetHasOneEyeDisabled),
     const Bonus(80, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
