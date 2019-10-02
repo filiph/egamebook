@@ -23,8 +23,7 @@ class CatchProjectile extends OtherActorAction {
   static const String className = "CatchProjectile";
 
   @override
-  final String helpMessage =
-      "Catching a missile as it flies at me is not only "
+  final String helpMessage = "Catching a missile as it flies at me is not only "
       "a neat trick. It also lets me immediately use it.";
 
   @override
