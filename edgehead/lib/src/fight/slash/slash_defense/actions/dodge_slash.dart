@@ -29,10 +29,10 @@ class DodgeSlash extends OtherActorAction {
   static const String className = "DodgeSlash";
 
   @override
-  final String helpMessage = "Dodging means moving your body out of harm's "
-      "way. When done correctly, it will throw your opponent off balance and "
+  final String helpMessage = "Dodging means moving my body out of harm's "
+      "way. When done correctly, it will throw my opponent off balance and "
       "it will open an opportunity for a counter attack. When botched, it "
-      "can get you killed.";
+      "could get me killed.";
 
   @override
   final bool isAggressive = false;

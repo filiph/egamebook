@@ -36,11 +36,11 @@ class StartClash extends StartDefensibleActionBase {
 
   @override
   String get helpMessage =>
-      "This is a powerful slash directed at the enemy's weapon"
+      "This is a powerful slash directed at the enemy's weapon "
       "in order to force them off balance. "
       "The goal is not to deal damage but to "
-      "force the opponent to lose control of their combat stance. It can also "
-      "give members of your party an opportunity to strike.";
+      "force the opponent to lose their combat stance. It can also "
+      "give members of my party an opportunity to strike.";
 
   @override
   String get name => className;

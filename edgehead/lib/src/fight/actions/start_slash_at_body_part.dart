@@ -15,7 +15,8 @@ import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.d
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 const String startSlashHelpMessage =
-    "Slashing at a specific body part is really hard to pull off. ";
+    "Slashing at a specific body part is really hard to pull off. Then again, "
+    "disabling that particular body part might be worth the risk.";
 
 /// There are several ways to defend against a slash. But, for simplicity,
 /// _player's_ slash will assume an average effort from the defender,

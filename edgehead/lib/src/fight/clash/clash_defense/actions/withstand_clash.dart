@@ -14,9 +14,9 @@ class WithstandClash extends OtherActorAction {
   static const String className = "WithstandClash";
 
   @override
-  final String helpMessage = "The attack is targetted at your weapon, "
-      "not your body. The strong slash is intended to force you off balance. "
-      "By playing along with the bluff, it's easier to keep your stance.";
+  final String helpMessage = "The attack is targetted at my weapon, "
+      "not my body. The strong slash is intended to force me off balance. "
+      "By playing along with the bluff, it's easier to keep my stance.";
 
   @override
   final bool isAggressive = false;

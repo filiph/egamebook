@@ -24,8 +24,8 @@ class CatchProjectile extends OtherActorAction {
 
   @override
   final String helpMessage =
-      "Catching a missile as it flies at you is not only "
-      "a net trick. It also lets you immediately use it.";
+      "Catching a missile as it flies at me is not only "
+      "a neat trick. It also lets me immediately use it.";
 
   @override
   final bool isAggressive = false;

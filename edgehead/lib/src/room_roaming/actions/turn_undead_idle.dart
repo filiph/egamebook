@@ -19,7 +19,7 @@ class TurnUndeadIdle extends OtherActorActionBase {
 
   @override
   String get helpMessage =>
-      "Turning corpses undead will make them fight for you.";
+      "Turning corpses undead will make them fight for me.";
 
   @override
   bool get isAggressive => false;

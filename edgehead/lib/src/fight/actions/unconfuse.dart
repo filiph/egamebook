@@ -12,7 +12,7 @@ class Unconfuse extends Action<Nothing> {
   static const String className = "Unconfuse";
 
   @override
-  final String helpMessage = "";
+  final String helpMessage = null;
 
   @override
   final bool rerollable = true;

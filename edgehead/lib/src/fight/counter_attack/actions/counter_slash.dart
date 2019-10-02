@@ -13,9 +13,9 @@ import 'package:edgehead/src/fight/slash/slash_defense/slash_defense_situation.d
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 
 const String counterSlashHelpMessage =
-    "You can deal serious damage when countering "
-    "because your opponent is often caught off guard. On the other hand, "
-    "counters require fast reaction and could throw you out of balance.";
+    "I can deal serious damage when countering "
+    "because my opponent is caught off guard. On the other hand, "
+    "counters require fast reaction and could throw me out of balance.";
 
 /// Will the actor be able to even execute the counter slash?
 ///

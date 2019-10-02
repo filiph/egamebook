@@ -14,9 +14,9 @@ class WithstandFeint extends OtherActorAction {
   static const String className = "WithstandFeint";
 
   @override
-  final String helpMessage = "The weak attack is clearly meant to throw you "
+  final String helpMessage = "The weak attack is clearly meant to throw me "
       "off balance, and isn't actually a threat. By playing along with "
-      "the bluff, it's easier to keep your stance.";
+      "the bluff, it's easier to keep my stance.";
 
   @override
   final bool isAggressive = false;

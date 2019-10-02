@@ -16,7 +16,7 @@ class DodgePunch extends OtherActorAction {
   static const String className = "DodgePunch";
 
   @override
-  final String helpMessage = "Dodging means moving your body out of harm's "
+  final String helpMessage = "Dodging means moving my body out of harm's "
       "way.";
 
   @override

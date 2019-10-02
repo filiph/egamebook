@@ -18,7 +18,7 @@ class RegainBalance extends Action<Nothing> {
 
   @override
   final String helpMessage = "Most moves are easier and more effective when "
-      "you are firmly in balance.";
+      "I am firmly in balance.";
 
   @override
   final bool isAggressive = false;

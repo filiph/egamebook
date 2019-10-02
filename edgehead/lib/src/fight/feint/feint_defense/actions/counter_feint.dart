@@ -27,7 +27,7 @@ class CounterAttackFeint extends OtherActorAction {
   static const String className = "CounterAttackFeint";
 
   @override
-  final String helpMessage = "By calling the bluff, you can try and steal "
+  final String helpMessage = "By calling the bluff, I can try and steal "
       "the initiative.";
 
   @override

@@ -23,7 +23,9 @@ class TakeDroppedWeapon extends ItemAction {
       const ["environment", "<object>", "pick up"];
 
   @override
-  String get helpMessage => "A different weapon might change the battle.";
+  String get helpMessage => "A different weapon might change "
+      "the tide of battle. If I pick it up, it also means "
+      "the enemy won't be picking it up instead.";
 
   @override
   bool get isAggressive => false;

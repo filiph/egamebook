@@ -23,8 +23,8 @@ class KickItemOutOfReach extends ItemAction {
 
   @override
   String get helpMessage => "Denies anyone to pick up the weapon. "
-      "If you're worried that the item on the ground might spell trouble "
-      "for you if it was picked up by the enemy, you can prevent it.";
+      "When I'm worried that the item on the ground might spell trouble "
+      "for me if it was picked up by the enemy, I can prevent it.";
 
   @override
   bool get isAggressive => false;

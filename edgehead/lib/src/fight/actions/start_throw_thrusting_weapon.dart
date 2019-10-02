@@ -15,7 +15,7 @@ import 'package:edgehead/src/fight/throw/throw_situation.dart';
 
 const String startThrowThrustingWeaponHelpMessage =
     "Successfully hitting with a thrusting weapon is generally harder than "
-    "if you thrust with it, but it does have the advantage of keeping you "
+    "if I thrust with it, but it does have the advantage of keeping me "
     "at a distance.";
 
 ReasonedSuccessChance computeThrowThrustingWeaponPlayer(

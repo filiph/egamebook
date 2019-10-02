@@ -16,9 +16,9 @@ class DodgeLeap extends OtherActorAction {
   static final DodgeLeap singleton = DodgeLeap();
 
   @override
-  final String helpMessage = "Dodging means moving your body out of harm's "
-      "way. When successful, your opponent will miss and will hit "
-      "the ground beside you.";
+  final String helpMessage = "Dodging means moving my body out of harm's "
+      "way. When successful, my opponent will miss and will hit "
+      "the ground beside me.";
 
   @override
   final bool isAggressive = false;

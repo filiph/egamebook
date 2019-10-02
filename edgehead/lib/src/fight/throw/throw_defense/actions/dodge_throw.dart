@@ -26,9 +26,9 @@ class DodgeThrow extends OtherActorAction {
   static const String className = "DodgeThrow";
 
   @override
-  final String helpMessage = "Dodging means moving your body out of harm's "
-      "way. When done correctly, the projectile will fly past you and you will "
-      "keep your balance.";
+  final String helpMessage = "Dodging means moving my body out of harm's "
+      "way. When done correctly, the projectile will fly past me and I will "
+      "keep my balance.";
 
   @override
   final bool isAggressive = false;

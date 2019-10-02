@@ -30,7 +30,7 @@ class WrestleWeaponOnGround extends EnemyTargetAction with CombatCommandPath {
   final bool isProactive = true;
 
   @override
-  final String helpMessage = "When enemies are on the ground, you can try to "
+  final String helpMessage = "When enemies are on the ground, I can try to "
       "wrestle their weapon from them.";
 
   @override

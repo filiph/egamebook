@@ -18,7 +18,7 @@ class ImpaleLeaper extends EnemyTargetAction {
   static const String className = "ImpaleLeaper";
 
   @override
-  final String helpMessage = "You can move your weapon to point at "
+  final String helpMessage = "I can move my weapon to point at "
       "the attacker. If successful, the weapon will pierce the attacker "
       "with the force of his own leap.";
 

@@ -30,10 +30,10 @@ class DodgeBite extends OtherActorAction {
   static const String className = "DodgeBite";
 
   @override
-  final String helpMessage = "Dodging means moving your body out of harm's "
+  final String helpMessage = "Dodging means moving my body out of harm's "
       "way. When done correctly, the enemy's momentum will carry them "
-      "right past you, and you'll have a chance to counter attack. "
-      "When botched, you will get bitten.";
+      "right past me, and I'll have a chance to counter attack. "
+      "When botched, I will get bitten.";
 
   @override
   final bool isAggressive = false;

@@ -36,7 +36,7 @@ class OnGroundParry extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  final String helpMessage = "Why would you move? Just put your weapon up.";
+  final String helpMessage = "Why move? I'll just put my weapon up.";
 
   @override
   List<String> get commandPathTemplate => ["parry it"];

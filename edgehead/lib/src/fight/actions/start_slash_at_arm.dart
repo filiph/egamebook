@@ -26,7 +26,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
   @override
   String get helpMessage => "Arms tend to be important in fight, and they "
       "are often exposed. A disabled arm cannot hold a sword that would later "
-      "slash your neck.";
+      "slash my neck.";
 
   @override
   String get name => className;

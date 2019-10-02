@@ -12,7 +12,7 @@ class Cower extends Action<Nothing> {
 
   @override
   final String helpMessage =
-      "Let's face it. Not much else you can do at this point.";
+      "Let's face it. Not much else I can do at this point.";
 
   @override
   final bool isAggressive = false;

@@ -31,9 +31,9 @@ class CounterSweepFeet extends OtherActorAction {
   static const String className = "CounterSweepFeet";
 
   @override
-  final String helpMessage = "That's an extended leg down there. You can try "
-      "attacking. Beware, though: this move is a bit more complicated than "
-      "just staying away.";
+  final String helpMessage = "That's an extended leg down there. I can try "
+      "attacking. I should beware, though: this move is a bit more complicated"
+      " than just staying away.";
 
   @override
   final bool isAggressive = true;

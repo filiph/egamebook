@@ -30,7 +30,7 @@ class ShieldBlockBite extends OtherActorAction {
   static const String className = "ShieldBlockBite";
 
   @override
-  final String helpMessage = "Putting a shield between you and someone's "
+  final String helpMessage = "Putting a shield between me and someone's "
       "theeth seems like a good idea.";
 
   @override

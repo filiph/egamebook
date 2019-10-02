@@ -27,7 +27,7 @@ class CounterTackle extends EnemyTargetAction {
   static final CounterTackle singleton = CounterTackle();
 
   @override
-  final String helpMessage = "When an opponent misses you like that, it's "
+  final String helpMessage = "When an opponent misses me like that, it's "
       "a rare (though still dangerous) opportunity to bring them down.";
 
   @override

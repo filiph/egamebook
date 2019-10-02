@@ -30,10 +30,10 @@ class ParrySlash extends OtherActorAction {
   static const String className = "ParrySlash";
 
   @override
-  final String helpMessage = "Parrying means deflecting your opponent's move "
-      "with your weapon. When successful, "
-      "it will give you an opportunity for a counter attack. It won't "
-      "throw your opponent off balance like dodging does, but it's also "
+  final String helpMessage = "Parrying means deflecting my opponent's move "
+      "with my weapon. When successful, "
+      "it will give me an opportunity for a counter attack. It won't "
+      "throw my opponent off balance like dodging does, but it's also "
       "slightly easier to do.";
 
   @override

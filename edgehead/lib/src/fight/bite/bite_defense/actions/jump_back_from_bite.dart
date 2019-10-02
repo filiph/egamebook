@@ -27,7 +27,7 @@ class JumpBackFromBite extends OtherActorAction {
   static const String className = "JumpBackFromBite";
 
   @override
-  final String helpMessage = "Jump back and the teeth can't reach you.";
+  final String helpMessage = "Jump back and the teeth can't reach me.";
 
   @override
   final bool isAggressive = false;

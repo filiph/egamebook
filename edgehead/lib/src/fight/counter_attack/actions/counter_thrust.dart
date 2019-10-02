@@ -14,7 +14,7 @@ import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
 const String counterThrustHelpMessage =
     "The opponent is briefly vulnerable to a devastating, precise strike. "
-    "If it doesn't succeed, though, it will throw you off balance.";
+    "If it doesn't succeed, though, it will throw me off balance.";
 
 ReasonedSuccessChance computeCounterThrust(
     Actor a, Simulation sim, WorldState w, Actor enemy) {

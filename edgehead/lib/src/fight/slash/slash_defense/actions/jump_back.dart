@@ -25,7 +25,7 @@ class JumpBackFromSlash extends OtherActorAction {
   static const String className = "JumpBackFromSlash";
 
   @override
-  final String helpMessage = "Jump back and the weapon can't reach you.";
+  final String helpMessage = "Jump back and the weapon can't reach me.";
 
   @override
   final bool isAggressive = false;

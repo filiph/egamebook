@@ -14,7 +14,7 @@ class PassWhileBlind extends OtherActorAction {
   static const String className = "PassWhileBlind";
 
   @override
-  final String helpMessage = "When you don't see, there's not much to do.";
+  final String helpMessage = "When I don't see, there's not much to do.";
 
   @override
   final bool isAggressive = false;
