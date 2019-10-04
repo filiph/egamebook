@@ -15,7 +15,7 @@ generateTestFightWithGoblin
 // ---
 APPROACH: $test_fight_goblin FROM $start_roguelike_celeb
 COMMAND: Fight >> one-on-one >> with a goblin
-DESCRIPTION: I get transported to the development testing arena. Whoosh.
+DESCRIPTION: $NONE
 
 
 // ---

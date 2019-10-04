@@ -14,7 +14,7 @@ generateTestFightWithOrc
 // ---
 APPROACH: $test_fight_orc FROM $start_roguelike_celeb
 COMMAND: Fight >> one-on-one >> with an orc
-DESCRIPTION: I get transported to the development testing arena. Whoosh.
+DESCRIPTION: $NONE
 
 
 // ---

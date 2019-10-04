@@ -2296,8 +2296,7 @@ final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I get transported to the development testing arena. Whoosh.\n',
-      wholeSentence: true);
+  s.add('', wholeSentence: true);
 });
 final Approach endOfRoamFromTestFightGoblin = Approach(
     'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
@@ -2327,8 +2326,7 @@ final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I get transported to the development testing arena. Whoosh.\n',
-      wholeSentence: true);
+  s.add('', wholeSentence: true);
 });
 final Approach endOfRoamFromTestFightOrc = Approach(
     'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
@@ -2359,8 +2357,7 @@ final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I get transported to the development testing arena. Whoosh.\n',
-      wholeSentence: true);
+  s.add('', wholeSentence: true);
 });
 final Approach endOfRoamFromTestFightOrcAndGoblin =
     Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
