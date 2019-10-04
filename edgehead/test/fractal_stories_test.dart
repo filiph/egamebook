@@ -182,7 +182,7 @@ void main() {
 
         test("uses default if no variant is applicable", () {
           final actionContext = ActionContext(null, aren, simulation, world,
-              null, world.toBuilder(), null, sureSuccess);
+              world.toBuilder(), null, sureSuccess);
 
           initialSituation.moveActor(actionContext, _forgeName, silent: true);
           final result = actionContext.outputWorld.build();
@@ -192,7 +192,7 @@ void main() {
 
         test("uses variant if applicable", () {
           final actionContext = ActionContext(null, aren, simulation, world,
-              null, world.toBuilder(), null, sureSuccess);
+              world.toBuilder(), null, sureSuccess);
           forgeIsAfterFire = true;
 
           expect(world.visitHistory.getLatestOnly(aren)?.roomName,
@@ -207,7 +207,7 @@ void main() {
 
         test("actor's currentRoom is always the parent", () {
           final actionContext = ActionContext(null, aren, simulation, world,
-              null, world.toBuilder(), null, sureSuccess);
+              world.toBuilder(), null, sureSuccess);
           forgeIsAfterFire = true;
 
           initialSituation.moveActor(actionContext, _forgeName, silent: true);

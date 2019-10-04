@@ -3,7 +3,6 @@ library stranded.planner;
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
@@ -40,8 +39,6 @@ class ActorPlanner {
 
   bool _resultsReady = false;
 
-  final PubSub _pubsub;
-
   final Simulation simulation;
 
   /// Maps from each performance (that is to be chosen) to a score.
@@ -51,8 +48,7 @@ class ActorPlanner {
   /// by different players.
   final Map<Performance, ActorScoreChange> _firstActionScores = {};
 
-  ActorPlanner(
-      Actor actor, this.simulation, WorldState initialWorld, this._pubsub)
+  ActorPlanner(Actor actor, this.simulation, WorldState initialWorld)
       : actorId = actor?.id,
         _initial = PlanConsequence.initial(initialWorld) {
     if (actor == null) {
@@ -212,7 +208,7 @@ class ActorPlanner {
 
     var initialWorldHash = initial.world.hashCode;
     for (final firstConsequence in firstPerformance.action.apply(startTurn, 1,
-        initial, simulation, initial.world, _pubsub, firstPerformance.object)) {
+        initial, simulation, initial.world, firstPerformance.object)) {
       if (initial.world.hashCode != initialWorldHash) {
         throw StateError("Action $firstPerformance modified world state when "
             "producing $firstConsequence.");
@@ -337,7 +333,6 @@ class ActorPlanner {
             current,
             simulation,
             current.world,
-            _pubsub,
             performance.object);
 
         for (final next in consequences) {

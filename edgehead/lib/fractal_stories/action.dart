@@ -1,6 +1,5 @@
 library stranded.action;
 
-import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
@@ -125,7 +124,6 @@ abstract class Action<T> {
       PlanConsequence current,
       Simulation sim,
       WorldState world,
-      PubSub pubsub,
       T object) sync* {
     var successChance =
         getSuccessChance(turn.actor, sim, current.world, object);
@@ -143,7 +141,7 @@ abstract class Action<T> {
     if (successChance.value > 0) {
       final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          turn, sim, worldOutput, applySuccess, pubsub, object, successChance,
+          turn, sim, worldOutput, applySuccess, object, successChance,
           isSuccess: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
@@ -153,7 +151,7 @@ abstract class Action<T> {
     if (successChance.value < 1) {
       final worldOutput = world.toBuilder();
       Storyline storyline = _applyToWorldCopy(
-          turn, sim, worldOutput, applyFailure, pubsub, object, successChance,
+          turn, sim, worldOutput, applyFailure, object, successChance,
           isFailure: true);
 
       yield PlanConsequence(worldOutput.build(), current, performance,
@@ -276,7 +274,6 @@ abstract class Action<T> {
       Simulation sim,
       WorldStateBuilder output,
       ApplyFunction<T> applyFunction,
-      PubSub pubsub,
       T object,
       ReasonedSuccessChance successChance,
       {bool isSuccess = false,
@@ -289,8 +286,8 @@ abstract class Action<T> {
     final situationId = initialWorld.currentSituation.id;
     initialWorld.currentSituation
         .onBeforeAction(sim, initialWorld, outputStoryline);
-    final context = ActionContext(this, turn.actor, sim, initialWorld, pubsub,
-        output, outputStoryline, successChance);
+    final context = ActionContext(this, turn.actor, sim, initialWorld, output,
+        outputStoryline, successChance);
     _description = applyFunction(context, object);
 
     // The current situation could have been removed by [applyFunction].

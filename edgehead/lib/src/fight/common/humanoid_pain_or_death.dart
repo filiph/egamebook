@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -15,10 +14,9 @@ final Random _random = Random();
 /// Takes care of the "rendering" and the effects of pain to actor with
 /// [actorId].
 ///
-/// Reports pain to [context]'s [Storyline], publishes an
-/// [ActorLostHitpointsEvent] to [PubSub], and (if the pain is extreme enough)
-/// puts the actor out of play (changing [Actor.recoveringUntil]) and
-/// out of balance.
+/// Reports pain to [context]'s [Storyline] and (if the pain is extreme enough)
+/// puts the actor out of play for a while(changing [Actor.recoveringUntil])
+/// and out of balance.
 ///
 /// For actors that are [Actor.isUndead], the reporting and effects of pain
 /// are much diminished (since the undead don't feel pain).
@@ -104,9 +102,6 @@ void killHumanoid(ActionContext context, int actorId) {
       !actor.isInvincible,
       "Invincible actors cannot die. Never call killHumanoid "
       "with them as actor.");
-
-  context.pubSub
-      .publishActorKilled(ActorKilledEvent(context, actor, context.actor));
 
   w.recordCustom(CustomEvent.actorDeath, actor: actor);
 

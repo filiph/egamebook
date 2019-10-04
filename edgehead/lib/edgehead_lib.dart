@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;
 import 'package:edgehead/edgehead_simulation.dart';
@@ -55,8 +54,8 @@ class EdgeheadGame extends Book {
   /// that's game over).
   Actor playerCharacter;
 
-  final PubSub _pubsub = PubSub();
   Situation initialSituation;
+
   WorldState world;
 
   Simulation simulation;
@@ -91,13 +90,6 @@ class EdgeheadGame extends Book {
           "Either provide randomSeed or saveGameSerialized, never both.");
     }
     _setup(saveGameSerialized, randomSeed);
-    _pubsub.seal();
-  }
-
-  @override
-  void close() {
-    _pubsub.close();
-    super.close();
   }
 
   @override
@@ -168,7 +160,7 @@ class EdgeheadGame extends Book {
   Future<void> _applySelected(Performance performance, ActorTurn turn,
       int choiceCount, Storyline storyline) async {
     var consequences = performance.action
-        .apply(turn, choiceCount, consequence, simulation, world, _pubsub,
+        .apply(turn, choiceCount, consequence, simulation, world,
             performance.object)
         .toList();
 
@@ -299,7 +291,7 @@ class EdgeheadGame extends Book {
     }
 
     var actor = actorTurn.actor;
-    var planner = ActorPlanner(actor, simulation, world, _pubsub);
+    var planner = ActorPlanner(actor, simulation, world);
     await planner.plan(
       maxOrder: actor.isPlayer ? 0 : 5,
       maxConsequences: 10000,
@@ -342,7 +334,6 @@ class EdgeheadGame extends Book {
             consequence,
             simulation,
             world,
-            _pubsub,
             performance.object)) {
           logAndPrint("- consequence with probability "
               "${consequence.probability}");

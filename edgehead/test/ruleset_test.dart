@@ -18,7 +18,7 @@ void main() {
       Rule(42, 1, false, (c) => c.actor.isPlayer, (_) => triggered = true),
     );
     final context =
-        ActionContext(null, aren, null, null, null, null, null, sureSuccess);
+        ActionContext(null, aren, null, null, null, null, sureSuccess);
     ruleset.apply(context);
     expect(triggered, isTrue);
   });
@@ -28,7 +28,7 @@ void main() {
       Rule(42, 1, false, (c) => c.actor.isPlayer, (_) {}),
     );
     final context =
-        ActionContext(null, orc, null, null, null, null, null, sureSuccess);
+        ActionContext(null, orc, null, null, null, null, sureSuccess);
     expect(() => ruleset.apply(context),
         throwsA(const TypeMatcher<NoRuleApplicableException>()));
   });
@@ -42,11 +42,11 @@ void main() {
       Rule(44, 0, false, (_) => true, (_) => outcome = 44),
     ]);
     final orcContext =
-        ActionContext(null, orc, null, null, null, null, null, sureSuccess);
+        ActionContext(null, orc, null, null, null, null, sureSuccess);
     ruleset.apply(orcContext);
     expect(outcome, 44);
     final arenContext =
-        ActionContext(null, aren, null, null, null, null, null, sureSuccess);
+        ActionContext(null, aren, null, null, null, null, sureSuccess);
     ruleset.apply(arenContext);
     expect(outcome, 43);
   });
@@ -62,7 +62,7 @@ void main() {
       ..statefulRandomState = 1337
       ..time = DateTime.utc(1000);
     final context = ActionContext(
-        null, aren, null, world.build(), null, world, null, sureSuccess);
+        null, aren, null, world.build(), world, null, sureSuccess);
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isFalse);
     ruleset.apply(context);
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isTrue);
@@ -80,12 +80,12 @@ void main() {
       ..statefulRandomState = 1337
       ..time = DateTime.utc(1000);
     final context = ActionContext(
-        null, aren, null, world.build(), null, world, null, sureSuccess);
+        null, aren, null, world.build(), world, null, sureSuccess);
     ruleset.apply(context);
     expect(state, 1);
     final nextWorld = context.outputWorld;
-    final nextContext = ActionContext(null, aren, null, nextWorld.build(), null,
-        nextWorld, null, sureSuccess);
+    final nextContext = ActionContext(
+        null, aren, null, nextWorld.build(), nextWorld, null, sureSuccess);
     ruleset.apply(nextContext);
     expect(state, 2);
   });

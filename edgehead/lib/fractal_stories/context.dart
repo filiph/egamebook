@@ -1,6 +1,5 @@
 library stranded.context;
 
-import 'package:edgehead/ecs/pubsub.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -13,8 +12,7 @@ import 'package:meta/meta.dart';
 /// in general).
 ///
 /// [outputStoryline] should only be used to
-/// add new reports ([Storyline.add] and [Actor.report]). [pubSub] should
-/// only be used to publish events.
+/// add new reports ([Storyline.add] and [Actor.report]).
 ///
 /// [actor] is the perpetrator of the action. The [target] is the entity that
 /// the action is directed to. It can be `null`.
@@ -35,8 +33,6 @@ class ActionContext extends ApplicabilityContext {
   /// or [Action.applyFailure].
   final ReasonedSuccessChance successChance;
 
-  final PubSub pubSub;
-
   final Storyline outputStoryline;
 
   const ActionContext(
@@ -44,7 +40,6 @@ class ActionContext extends ApplicabilityContext {
       Actor actor,
       Simulation simulation,
       WorldState world,
-      this.pubSub,
       this.outputWorld,
       this.outputStoryline,
       this.successChance)
