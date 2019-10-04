@@ -1,6 +1,6 @@
 // ---
 APPROACH: $start FROM $start_roguelike_celeb
-COMMAND: Explore >> a set piece >> from the start of the game
+COMMAND: Set piece >> from the start of the game
 DESCRIPTION: $NONE
 
 // ---

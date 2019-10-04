@@ -7,4 +7,4 @@ DESCRIPTION: $NONE
 ROOM: $start_roguelike_celeb
 
 FIRST_DESCRIPTION:
-Welcome to the Roguelike Celebration demo of this game. Here are the things you can try.
+Welcome to the Roguelike Celebration demo of this game.

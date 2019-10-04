@@ -2277,99 +2277,6 @@ class NameAgruthSwordNothing extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room testFightGoblin = Room('test_fight_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'A goblin stands in front of me, wielding a spear. Between the two of us,\na plain dagger lies on the ground. I also notice a nice, solid rock in the\nrubble.\n\nI am barehanded.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithGoblin, null);
-final Approach testFightGoblinFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb',
-    'test_fight_goblin',
-    'Fight >> one-on-one >> with a goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightGoblin = Approach(
-    'test_fight_goblin', '__END_OF_ROAM__', 'End game', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room testFightOrc = Room('test_fight_orc', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'Agruth the orc stands in front of me, wielding a sword. Between the two of us,\na plain dagger lies on the ground.\n\nI am wielding a short sword.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithOrc, null);
-final Approach testFightOrcFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb',
-    'test_fight_orc',
-    'Fight >> one-on-one >> with an orc', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightOrc = Approach(
-    'test_fight_orc', '__END_OF_ROAM__', 'End game', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room testFightOrcAndGoblin =
-    Room('test_fight_orc_and_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'An orc and a goblin stand in front of me. The orc is wielding a sword,\nthe goblin is holding a spear.\n\nI am wielding a short sword.\n',
-      wholeSentence: true);
-}, null, generateTestFightWithOrcAndGoblin, null);
-final Approach testFightOrcAndGoblinFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb',
-    'test_fight_orc_and_goblin',
-    'Fight >> one-on-two >> with an orc and goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach endOfRoamFromTestFightOrcAndGoblin =
-    Approach('test_fight_orc_and_goblin', '__END_OF_ROAM__', 'End game',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-
 class ReadLetterFromFather extends RoamingAction {
   @override
   final String name = 'read_letter_from_father';
@@ -3025,9 +2932,8 @@ final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
       wholeSentence: true);
 }, null, null, null);
 final Approach startFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb',
-    'start',
-    'Explore >> a set piece >> from the start of the game', (ActionContext c) {
+    'start_roguelike_celeb', 'start', 'Set piece >> from the start of the game',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3226,8 +3132,7 @@ final Room startRoguelikeCeleb =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add(
-      'Welcome to the Roguelike Celebration demo of this game. Here are the things you can try.\n',
+  s.add('Welcome to the Roguelike Celebration demo of this game.\n',
       wholeSentence: true);
 }, null, null, null);
 final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
@@ -3243,7 +3148,7 @@ final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
 final Approach bleedsMainFromStartRoguelikeCeleb = Approach(
     'start_roguelike_celeb',
     'bleeds_main',
-    'Explore >> a set piece >> from the start of the game, skipping the first fight',
+    'Set piece >> from the start of the game, skipping the first fight',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -4053,6 +3958,35 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Room testRandomEncounter =
+    Room('test_random_encounter', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, null, generateRandomEncounter, null);
+final Approach testRandomEncounterFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb', 'test_random_encounter', 'Random encounter',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach endOfRoamFromTestRandomEncounter =
+    Approach('test_random_encounter', '__END_OF_ROAM__', 'End encounter',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final allRooms = <Room>[
   undergroundChurchAltarAfterCeremony,
   orcthornRoom,
@@ -4070,9 +4004,6 @@ final allRooms = <Room>[
   warForge,
   caveWithAgruth,
   justAfterAgruthFight,
-  testFightGoblin,
-  testFightOrc,
-  testFightOrcAndGoblin,
   goblinSkirmishPatrol,
   goblinSkirmishMain,
   goblinSkirmishSneak,
@@ -4087,7 +4018,8 @@ final allRooms = <Room>[
   startRoguelikeCeleb,
   startBeginFight,
   bleedsMain,
-  bleedsTraderHut
+  bleedsTraderHut,
+  testRandomEncounter
 ];
 final allApproaches = <Approach>[
   orcthornRoomFromSlaveQuartersPassage,
@@ -4113,12 +4045,6 @@ final allApproaches = <Approach>[
   caveWithAgruthFromSlaveQuartersPassage,
   caveWithAgruthFromWarForge,
   justAfterAgruthFightFromStartAdventure,
-  testFightGoblinFromStartRoguelikeCeleb,
-  endOfRoamFromTestFightGoblin,
-  testFightOrcFromStartRoguelikeCeleb,
-  endOfRoamFromTestFightOrc,
-  testFightOrcAndGoblinFromStartRoguelikeCeleb,
-  endOfRoamFromTestFightOrcAndGoblin,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishMainFromBleedsMain,
   goblinSkirmishMainFromGoblinSkirmishSneak,
@@ -4137,7 +4063,9 @@ final allApproaches = <Approach>[
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromGoblinSkirmishMain,
   endOfRoamFromBleedsMain,
-  bleedsTraderHutFromBleedsMain
+  bleedsTraderHutFromBleedsMain,
+  testRandomEncounterFromStartRoguelikeCeleb,
+  endOfRoamFromTestRandomEncounter
 ];
 final allActions = <RoamingAction>[
   TalkToBriana1.singleton,

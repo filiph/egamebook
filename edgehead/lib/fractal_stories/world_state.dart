@@ -322,6 +322,9 @@ abstract class WorldStateBuilder
     return result;
   }
 
+  /// Returns a number from `0` (inclusive) to [max] (exclusive).
+  ///
+  /// If [max] is undefined, the maximum int will be used.
   int randomInt([int max]) {
     _rnd.loadState(statefulRandomState);
     final result = max == null ? _rnd.next() : _rnd.nextInt(max);

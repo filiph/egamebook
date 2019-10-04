@@ -327,6 +327,118 @@ FightSituation generateTestFightWithOrc(ActionContext c,
   );
 }
 
+/// "Random encounter"
+FightSituation generateRandomEncounter(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  final s = c.outputStoryline;
+  final initialPlayer = c.actor;
+
+  final isInside = w.randomBool();
+  final groundMaterial = isInside ? "{cold|gray} floor" : "{wet|muddy} ground";
+
+  final enemies = <Actor>[];
+
+  switch (w.randomInt(3)) {
+    case 0:
+      final hasSpear = w.randomBool();
+      enemies.add(_makeGoblin(w, spear: hasSpear));
+      s.add(
+          "A goblin stands in front of me, "
+          "wielding a ${hasSpear ? 'spear' : 'rusty sword'}.",
+          wholeSentence: true);
+      break;
+    case 1:
+      enemies.add(_makeOrc(w));
+      s.add("An orc stands in front of me, wielding a sword.",
+          wholeSentence: true);
+      break;
+    case 2:
+      final orc = Actor.initialized(agruthId, "orc",
+          pronoun: Pronoun.HE,
+          constitution: 2,
+          team: defaultEnemyTeam,
+          initiative: 100,
+          foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+      final equippedOrc = orc.rebuild((b) => b.inventory
+          .equip(Item.weapon(w.randomInt(), WeaponType.sword), orc.anatomy));
+      enemies.add(equippedOrc);
+      final goblin = _makeGoblin(w, spear: true);
+      enemies.add(goblin);
+      s.add(
+          "An orc and a goblin stand in front of me. "
+          "The orc is wielding a sword, the goblin is holding a spear.",
+          wholeSentence: true);
+      break;
+    default:
+      throw UnimplementedError();
+  }
+  w.actors.addAll(enemies);
+
+  final items = <Item>[];
+  if (w.randomBool()) {
+    final name = w.randomBool() ? "dagger" : "knife";
+    items.add(Item.weapon(w.randomInt(), WeaponType.dagger, name: name));
+    final numberOfUs = enemies.length == 1 ? " the two of " : " ";
+    s.add(
+        "Between $numberOfUs us, "
+        "{a|a plain|an ordinary} $name lies on the $groundMaterial.",
+        wholeSentence: true);
+  }
+
+  if (w.randomBool()) {
+    final name = w.randomBool() ? "rock" : "brick";
+    items.add(Item.weapon(w.randomInt(), WeaponType.rock, name: name));
+    s.add(
+        "I ${items.isNotEmpty ? 'also' : ''} notice "
+        "a nice, solid $name in the ${isInside ? 'rubble' : 'puddle'} "
+        "on the ground.",
+        wholeSentence: true);
+  }
+
+  if (items.isEmpty) {
+    s.add("A quick glance reveals there's nothing useful on the ground.",
+        wholeSentence: true);
+  }
+
+  s.addParagraph();
+
+  switch (w.randomInt(4)) {
+    case 0:
+      initialPlayer.report(s, "<subject> <is> barehanded");
+      break;
+    case 1:
+    case 2:
+      final name = w.randomBool() ? "sword" : "scimitar";
+      final sword = Item.weapon(w.randomInt(), WeaponType.sword, name: name);
+      w.updateActorById(
+          playerId, (b) => b.inventory.equip(sword, initialPlayer.anatomy));
+      initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
+      break;
+    case 3:
+      final name = w.randomBool() ? "spear" : "pike";
+      final spear = Item.weapon(w.randomInt(), WeaponType.spear, name: name);
+      w.updateActorById(
+          playerId, (b) => b.inventory.equip(spear, initialPlayer.anatomy));
+      initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
+      break;
+    default:
+      throw UnimplementedError();
+  }
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party.where((a) => a.isPlayer),
+    enemies,
+    groundMaterial,
+    roomRoamingSituation,
+    {
+      // TODO: optional reinforcement
+    },
+    items: items,
+  );
+}
+
 /// Test fight. Do not use in production.
 FightSituation generateTestFightWithOrcAndGoblin(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {

@@ -1,6 +1,6 @@
 // ---
 APPROACH: $bleeds_main FROM $start_roguelike_celeb
-COMMAND: Explore >> a set piece >> from the start of the game, skipping the first fight
+COMMAND: Set piece >> from the start of the game, skipping the first fight
 DESCRIPTION: $NONE
 
 // ---

@@ -1,0 +1,18 @@
+ROOM: $test_random_encounter
+FIRST_DESCRIPTION: $NONE
+
+FIGHT_SITUATION:
+generateRandomEncounter
+
+// ---
+APPROACH: $test_random_encounter FROM $start_roguelike_celeb
+COMMAND: Random encounter
+DESCRIPTION: $NONE
+
+
+// ---
+APPROACH: $__END_OF_ROAM__ FROM $test_random_encounter
+COMMAND: End encounter
+DESCRIPTION: $NONE
+
+
