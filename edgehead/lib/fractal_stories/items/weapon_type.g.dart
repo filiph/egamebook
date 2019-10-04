@@ -13,6 +13,7 @@ const WeaponType _$fist = const WeaponType._('fist');
 const WeaponType _$spear = const WeaponType._('spear');
 const WeaponType _$sword = const WeaponType._('sword');
 const WeaponType _$dagger = const WeaponType._('dagger');
+const WeaponType _$axe = const WeaponType._('axe');
 const WeaponType _$rock = const WeaponType._('rock');
 const WeaponType _$shield = const WeaponType._('shield');
 
@@ -32,6 +33,8 @@ WeaponType _$valueOf(String name) {
       return _$sword;
     case 'dagger':
       return _$dagger;
+    case 'axe':
+      return _$axe;
     case 'rock':
       return _$rock;
     case 'shield':
@@ -50,6 +53,7 @@ final BuiltSet<WeaponType> _$values =
   _$spear,
   _$sword,
   _$dagger,
+  _$axe,
   _$rock,
   _$shield,
 ]);

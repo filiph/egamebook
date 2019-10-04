@@ -377,8 +377,15 @@ FightSituation generateRandomEncounter(ActionContext c,
 
   final items = <Item>[];
   if (w.randomBool()) {
-    final name = w.randomBool() ? "dagger" : "knife";
-    items.add(Item.weapon(w.randomInt(), WeaponType.dagger, name: name));
+    String name;
+    if (w.randomBool()) {
+      name = w.randomBool() ? "dagger" : "knife";
+      items.add(Item.weapon(w.randomInt(), WeaponType.dagger, name: name));
+    } else {
+      name = w.randomBool() ? "axe" : "hatchet";
+      items.add(Item.weapon(w.randomInt(), WeaponType.axe, name: name));
+    }
+
     final numberOfUs = enemies.length == 1 ? " the two of " : " ";
     s.add(
         "Between $numberOfUs us, "

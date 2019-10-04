@@ -32,9 +32,11 @@ class WeaponType extends EnumClass {
 
   /// A humanoid fist.
   static const WeaponType fist = _$fist;
+
   static const WeaponType spear = _$spear;
   static const WeaponType sword = _$sword;
   static const WeaponType dagger = _$dagger;
+  static const WeaponType axe = _$axe;
 
   /// A throwable piece of something hard and small. A rock, a brick,
   /// a golden nugget.
@@ -67,7 +69,7 @@ class WeaponType extends EnumClass {
   /// are swords and reinforced blunt weapons. Knives and non-reinforced staffs
   /// cannot parry slashes.
   bool get canParrySlash {
-    if (this == sword) return true;
+    if (this == sword || this == axe) return true;
     return false;
   }
 
@@ -92,6 +94,7 @@ class WeaponType extends EnumClass {
     if (this == shield) return 1;
     if (this == dagger) return 1;
     if (this == sword) return 2;
+    if (this == axe) return 2;
     if (this == spear) return 3;
     throw UnimplementedError('No length for $this');
   }
@@ -99,6 +102,7 @@ class WeaponType extends EnumClass {
   int get defaultSlashingDamage {
     switch (this) {
       case sword:
+      case axe:
         return 1;
       default:
         return 0;
