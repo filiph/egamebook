@@ -1,6 +1,7 @@
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_simulation.dart';
+import 'package:edgehead/egamebook/elements/stat_update_element.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -558,6 +559,8 @@ class _HelperAccessor {
 
   void giveStaminaToPlayer(int amount) {
     final w = _actionContext.outputWorld;
+    final s = _actionContext.outputStoryline;
+    s.addCustomElement(StatUpdate.stamina(player.stamina, amount));
     w.updateActorById(playerId, (b) => b..stamina += amount);
   }
 

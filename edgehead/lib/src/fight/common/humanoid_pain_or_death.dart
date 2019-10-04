@@ -28,9 +28,9 @@ void inflictPain(
   final s = context.outputStoryline;
   final actor = context.outputWorld.getActorById(actorId);
 
-  if (damage > 0) {
-    context.pubSub.publishActorLostHitpoints(
-        ActorLostHitpointsEvent(context, actor, damage));
+  if (damage > 0 && actor.isPlayer) {
+    // TODO: decide if we want to show hitpoints changes to player
+    //       via StatUpdate, otherwise delete this
   }
 
   if (actor.isInvincible && !actor.isAnimated) {

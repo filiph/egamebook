@@ -24,6 +24,8 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
         isUnderspecified ? FullType.object : specifiedType.parameters[0];
 
     final result = <Object>[
+      'change',
+      serializers.serialize(object.change, specifiedType: parameterT),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'newValue',
@@ -52,6 +54,10 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'change':
+          result.change =
+              serializers.deserialize(value, specifiedType: parameterT);
+          break;
         case 'name':
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -69,6 +75,8 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
 
 class _$StatUpdate<T> extends StatUpdate<T> {
   @override
+  final T change;
+  @override
   final String name;
   @override
   final T newValue;
@@ -76,7 +84,10 @@ class _$StatUpdate<T> extends StatUpdate<T> {
   factory _$StatUpdate([void Function(StatUpdateBuilder<T>) updates]) =>
       (new StatUpdateBuilder<T>()..update(updates)).build();
 
-  _$StatUpdate._({this.name, this.newValue}) : super._() {
+  _$StatUpdate._({this.change, this.name, this.newValue}) : super._() {
+    if (change == null) {
+      throw new BuiltValueNullFieldError('StatUpdate', 'change');
+    }
     if (name == null) {
       throw new BuiltValueNullFieldError('StatUpdate', 'name');
     }
@@ -99,18 +110,21 @@ class _$StatUpdate<T> extends StatUpdate<T> {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is StatUpdate &&
+        change == other.change &&
         name == other.name &&
         newValue == other.newValue;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, name.hashCode), newValue.hashCode));
+    return $jf(
+        $jc($jc($jc(0, change.hashCode), name.hashCode), newValue.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('StatUpdate')
+          ..add('change', change)
           ..add('name', name)
           ..add('newValue', newValue))
         .toString();
@@ -120,6 +134,10 @@ class _$StatUpdate<T> extends StatUpdate<T> {
 class StatUpdateBuilder<T>
     implements Builder<StatUpdate<T>, StatUpdateBuilder<T>> {
   _$StatUpdate<T> _$v;
+
+  T _change;
+  T get change => _$this._change;
+  set change(T change) => _$this._change = change;
 
   String _name;
   String get name => _$this._name;
@@ -133,6 +151,7 @@ class StatUpdateBuilder<T>
 
   StatUpdateBuilder<T> get _$this {
     if (_$v != null) {
+      _change = _$v.change;
       _name = _$v.name;
       _newValue = _$v.newValue;
       _$v = null;
@@ -155,8 +174,8 @@ class StatUpdateBuilder<T>
 
   @override
   _$StatUpdate<T> build() {
-    final _$result =
-        _$v ?? new _$StatUpdate<T>._(name: name, newValue: newValue);
+    final _$result = _$v ??
+        new _$StatUpdate<T>._(change: change, name: name, newValue: newValue);
     replace(_$result);
     return _$result;
   }

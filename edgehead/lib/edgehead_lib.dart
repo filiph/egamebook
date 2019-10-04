@@ -91,7 +91,6 @@ class EdgeheadGame extends Book {
           "Either provide randomSeed or saveGameSerialized, never both.");
     }
     _setup(saveGameSerialized, randomSeed);
-    _pubsub.actorLostHitpoints.listen(_actorLostHitpointsHandler);
     _pubsub.seal();
   }
 
@@ -119,16 +118,8 @@ class EdgeheadGame extends Book {
     }
   }
 
-  void _actorLostHitpointsHandler(ActorLostHitpointsEvent event) {
-    if (event.actor.isPlayer) {
-      event.context.outputStoryline.addCustomElement(StatUpdate<int>((b) => b
-        ..name = hitpointsSetting.name
-        ..newValue = event.actor.hitpoints));
-    }
-  }
-
   Future _applyPlayerAction(Performance<dynamic> performance, Actor actor,
-      List<PlanConsequence> consequences) async {
+      List<PlanConsequence> consequences, Storyline storyline) async {
     num chance = performance.action
         .getSuccessChance(actor, simulation, world, performance.object)
         .value;
@@ -163,9 +154,10 @@ class EdgeheadGame extends Book {
             "Only stamina is supported as reroll resource right now.");
         assert(consequence.world.getActorById(actor.id).stamina > 0,
             "Tried using stamina when ${actor.name} had none left.");
-        // TODO: find out if we can do away without modifying world outside
-        //       planner
+        // It would be better to do without modifying world outside planner,
+        // but I can think of no other way.
         final builder = consequence.world.toBuilder();
+        storyline.addCustomElement(StatUpdate.stamina(actor.stamina, -1));
         builder.updateActorById(actor.id, (b) => b..stamina -= 1);
         world = builder.build();
         consequence = PlanConsequence.withUpdatedWorld(consequence, world);
@@ -181,7 +173,8 @@ class EdgeheadGame extends Book {
         .toList();
 
     if (turn.actor.isPlayer) {
-      await _applyPlayerAction(performance, turn.actor, consequences);
+      await _applyPlayerAction(
+          performance, turn.actor, consequences, storyline);
     } else {
       // This initializes the random state based on current
       // [WorldState.statefulRandomState]. We don't save the state after use

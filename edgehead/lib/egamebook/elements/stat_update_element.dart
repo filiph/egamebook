@@ -16,9 +16,20 @@ abstract class StatUpdate<T> extends ElementBase
 
   StatUpdate._();
 
+  /// The change of the value, e.g. `-1`.
+  T get change;
+
   /// Name of the stat. Corresponds to [Stat.name].
   String get name;
 
-  /// The value of the stat after the update.
+  /// The value of the stat after the update, e.g. `2`.
   T get newValue;
+
+  /// Creates a stamina update.
+  static StatUpdate stamina(int initial, int change) {
+    return StatUpdate<int>((b) => b
+      ..name = "stamina"
+      ..change = change
+      ..newValue = initial + change);
+  }
 }
