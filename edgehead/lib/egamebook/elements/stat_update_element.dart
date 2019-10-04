@@ -25,6 +25,16 @@ abstract class StatUpdate<T> extends ElementBase
   /// The value of the stat after the update, e.g. `2`.
   T get newValue;
 
+  /// The kind of stat that this update is changing.
+  ///
+  /// This is a safety/convenience getter to prevent string-checking
+  /// (`name == "stamina"`) in client code.
+  StatUpdateType get type {
+    // The book currently only ever changes stamina.
+    assert(name == "stamina");
+    return StatUpdateType.stamina;
+  }
+
   /// Creates a stamina update.
   static StatUpdate stamina(int initial, int change) {
     return StatUpdate<int>((b) => b
@@ -32,4 +42,8 @@ abstract class StatUpdate<T> extends ElementBase
       ..change = change
       ..newValue = initial + change);
   }
+}
+
+enum StatUpdateType {
+  stamina,
 }
