@@ -89,13 +89,16 @@ class DodgeBite extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, biteSituationName);
 
-    final dodgeDescription = a.isOnGround
-        ? '{dodge<s>|roll<s> out of the way}'
-        : '{dodge<s>|sidestep<s>}';
-    a.report(s, "<subject> $dodgeDescription <objectPronoun>",
-        object: MoveEntity.getFromAttackerSituation(context.world),
-        positive: true,
-        actionThread: thread);
+    if (a.isOnGround) {
+      a.report(s, "<subject> roll<s> out of the way",
+          positive: true,
+          actionThread: thread);
+    } else {
+      a.report(s, "<subject> {dodge<s>|sidestep<s>} <objectPronoun>",
+          object: MoveEntity.getFromAttackerSituation(context.world),
+          positive: true,
+          actionThread: thread);
+    }
 
     assert(enemy.anatomy.isHumanoid,
         "Not prepared for non-humanoids. They should fall to ground.");
