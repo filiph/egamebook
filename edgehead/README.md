@@ -61,7 +61,7 @@ Here are some additional "philosophical" pillars:
 5. Install Dart packages (`pub get`)
 
 Now you can try running tests (`pub run test`) or play the game on the command
-line (`dart -c bin/play.dart --log`).
+line (`dart --enable-asserts bin/play.dart --log`).
 
 ### Playtesting
 
@@ -87,7 +87,7 @@ To playtest the current version of the game, install it
 go to the `egamebook/edgehead` sub-directory, then run:
 
 ```bash
-dart -c bin/play.dart --log
+dart --enable-asserts bin/play.dart --log
 ```
 
 You will be able to choose from options by using the arrow keys and hitting
@@ -167,7 +167,7 @@ Most behavior and game-related code is in the other files in `lib/`. You
 might want to start with `lib/edgehead_lib.dart`.  
 
 To test, run `pub run test`, and to include long-running fuzzy tests,
-run `pub run -c test --run-skipped`.
+run `pub run --enable-asserts test --run-skipped`.
 
 #### Debug play-testing
 
@@ -234,7 +234,7 @@ This is not meant to be pretty, but it's faster than in the browser.
 Run `dart bin/play.dart` if you just want to play. But consider using the
 following command to also log progress and catch more bugs through checked mode:
 
-    dart -c bin/play.dart --log
+    dart --enable-asserts bin/play.dart --log
 
 The log is in `edgehead.log`. Remove `--log` for better performance.
 
@@ -250,7 +250,7 @@ in `lib/src/fight/actions/`._
 
 When you are ready to play-test your new action, run this command:
 
-    dart -c bin/play.dart --log --automated --action example
+    dart --enable-asserts bin/play.dart --log --automated --action example
     
 This will play automatically (randomly) until the player character reaches
 a point in which he can choose an action which name includes `example`. Then,
