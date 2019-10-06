@@ -91,8 +91,7 @@ class DodgeBite extends OtherActorAction {
 
     if (a.isOnGround) {
       a.report(s, "<subject> roll<s> out of the way",
-          positive: true,
-          actionThread: thread);
+          positive: true, actionThread: thread);
     } else {
       a.report(s, "<subject> {dodge<s>|sidestep<s>} <objectPronoun>",
           object: MoveEntity.getFromAttackerSituation(context.world),
