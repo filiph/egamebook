@@ -3,6 +3,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
 
@@ -49,27 +50,10 @@ class RaiseDeadIdle extends OtherActorActionBase {
     final s = context.outputStoryline;
     final w = context.outputWorld;
 
-    final preposition =
-        a.anatomy.isBlind ? "in the general direction of" : "over";
-
-    a.report(s, "<subject> raise<s> <subject's> hands $preposition <object>",
-        object: corpse);
-    bool reportedSomething = false;
-    if (!corpse.anatomy.isBlind) {
-      corpse.report(s, "<subject> open<s> <subject's> eyes");
-      reportedSomething = true;
-    }
-    if (!corpse.anatomy.hasCrippledLegs) {
-      corpse.report(s, "<subject> stand<s> up");
-      reportedSomething = true;
-    }
-    if (!reportedSomething) {
-      corpse.report(s, "<subject> jolt<s> with sudden muscle movement");
-    }
-
+    reportRaiseDead(a, s, corpse);
     w.recordCustom(CustomEvent.actorTurningUndead, actor: corpse);
 
-    final raisedCorpse = turnUndead(a, corpse);
+    final raisedCorpse = raiseDead(a, corpse);
     w.updateActorById(corpse.id, (b) => b.replace(raisedCorpse));
 
     return "${a.name} turned ${corpse.name} undead (while roaming)";

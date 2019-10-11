@@ -117,8 +117,12 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// [BodyPartFunction.vision]) are dead.
   @memoized
   bool get isBlind {
-    assert(torso.isAnimatedAndActive,
-        "Finding out if an actor is blind when they're dead.");
+    assert(
+        torso.isAnimatedAndActive,
+        "Finding out if an actor is blind when they're dead. This won't work "
+        "with _hasPartWithFunction, because that one will assume every body "
+        "part beneath a dead body part is also dead. For example, a humanoid "
+        "with a dead neck is also blind.");
     return !_hasPartWithFunction(torso, BodyPartFunction.vision);
   }
 

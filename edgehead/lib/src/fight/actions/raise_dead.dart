@@ -56,19 +56,11 @@ class RaiseDead extends OtherActorActionBase {
     final w = context.outputWorld;
     final situation = context.world.currentSituation as FightSituation;
 
-    final preposition =
-        a.anatomy.isBlind ? "in the general direction of" : "over";
-
-    a.report(s, "<subject> raise<s> <subject's> hands $preposition <object>",
-        object: corpse);
-    corpse.report(s, "<subject> open<s> <subject's> eyes");
-    if (!corpse.anatomy.hasCrippledLegs) {
-      corpse.report(s, "<subject> stand<s> up");
-    }
+    reportRaiseDead(a, s, corpse);
 
     w.recordCustom(CustomEvent.actorTurningUndead, actor: corpse);
 
-    final raisedCorpse = turnUndead(a, corpse);
+    final raisedCorpse = raiseDead(a, corpse);
     w.updateActorById(corpse.id, (b) => b.replace(raisedCorpse));
 
     // Place actor in the correct team.
