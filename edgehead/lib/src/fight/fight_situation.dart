@@ -43,7 +43,7 @@ import 'package:edgehead/src/fight/actions/start_thrust_down.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_on_ground.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
-import 'package:edgehead/src/fight/actions/turn_undead.dart';
+import 'package:edgehead/src/fight/actions/raise_dead.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/actions/wait.dart';
 import 'package:edgehead/src/fight/actions/wrestle_weapon_on_ground.dart';
@@ -130,7 +130,7 @@ abstract class FightSituation extends Object
         RegainBalance.singleton,
         StandUp.singleton,
         Scramble.singleton,
-        TurnUndead.singleton,
+        RaiseDead.singleton,
         Unconfuse.singleton,
         Wait.singleton,
         WrestleWeaponOnGround.singleton,
