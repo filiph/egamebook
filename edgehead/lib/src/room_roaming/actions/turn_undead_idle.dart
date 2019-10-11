@@ -15,7 +15,7 @@ class TurnUndeadIdle extends OtherActorActionBase {
 
   @override
   List<String> get commandPathTemplate =>
-      ["environment", "<object's> copse", "turn undead"];
+      ["environment", "<object's> corpse", "raise the dead"];
 
   @override
   String get helpMessage =>
