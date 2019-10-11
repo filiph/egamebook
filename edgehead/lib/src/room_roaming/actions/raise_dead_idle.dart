@@ -54,9 +54,17 @@ class RaiseDeadIdle extends OtherActorActionBase {
 
     a.report(s, "<subject> raise<s> <subject's> hands $preposition <object>",
         object: corpse);
-    corpse.report(s, "<subject> open<s> <subject's> eyes");
+    bool reportedSomething = false;
+    if (!corpse.anatomy.isBlind) {
+      corpse.report(s, "<subject> open<s> <subject's> eyes");
+      reportedSomething = true;
+    }
     if (!corpse.anatomy.hasCrippledLegs) {
       corpse.report(s, "<subject> stand<s> up");
+      reportedSomething = true;
+    }
+    if (!reportedSomething) {
+      corpse.report(s, "<subject> jolt<s> with sudden muscle movement");
     }
 
     w.recordCustom(CustomEvent.actorTurningUndead, actor: corpse);
