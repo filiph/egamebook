@@ -2277,6 +2277,36 @@ class NameAgruthSwordNothing extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Room testRandomEncounter =
+    Room('test_random_encounter', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, null, generateRandomEncounter, null);
+final Approach testRandomEncounterFromStartRoguelikeCeleb = Approach(
+    'start_roguelike_celeb', 'test_random_encounter', 'Random encounter',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach endOfRoamFromTestRandomEncounter =
+    Approach('test_random_encounter', '__END_OF_ROAM__', 'End encounter',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+
 class ReadLetterFromFather extends RoamingAction {
   @override
   final String name = 'read_letter_from_father';
@@ -3958,35 +3988,6 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room testRandomEncounter =
-    Room('test_random_encounter', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-}, null, generateRandomEncounter, null);
-final Approach testRandomEncounterFromStartRoguelikeCeleb = Approach(
-    'start_roguelike_celeb', 'test_random_encounter', 'Random encounter',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach endOfRoamFromTestRandomEncounter =
-    Approach('test_random_encounter', '__END_OF_ROAM__', 'End encounter',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
 final allRooms = <Room>[
   undergroundChurchAltarAfterCeremony,
   orcthornRoom,
@@ -4004,6 +4005,7 @@ final allRooms = <Room>[
   warForge,
   caveWithAgruth,
   justAfterAgruthFight,
+  testRandomEncounter,
   goblinSkirmishPatrol,
   goblinSkirmishMain,
   goblinSkirmishSneak,
@@ -4018,8 +4020,7 @@ final allRooms = <Room>[
   startRoguelikeCeleb,
   startBeginFight,
   bleedsMain,
-  bleedsTraderHut,
-  testRandomEncounter
+  bleedsTraderHut
 ];
 final allApproaches = <Approach>[
   orcthornRoomFromSlaveQuartersPassage,
@@ -4045,6 +4046,8 @@ final allApproaches = <Approach>[
   caveWithAgruthFromSlaveQuartersPassage,
   caveWithAgruthFromWarForge,
   justAfterAgruthFightFromStartAdventure,
+  testRandomEncounterFromStartRoguelikeCeleb,
+  endOfRoamFromTestRandomEncounter,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishMainFromBleedsMain,
   goblinSkirmishMainFromGoblinSkirmishSneak,
@@ -4063,9 +4066,7 @@ final allApproaches = <Approach>[
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromGoblinSkirmishMain,
   endOfRoamFromBleedsMain,
-  bleedsTraderHutFromBleedsMain,
-  testRandomEncounterFromStartRoguelikeCeleb,
-  endOfRoamFromTestRandomEncounter
+  bleedsTraderHutFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   TalkToBriana1.singleton,
