@@ -49,26 +49,31 @@ Actor raiseDead(Actor necromancer, Actor corpse) {
 }
 
 void reportRaiseDead(Actor a, Storyline s, Actor corpse) {
-  // We cannot use Actor.isBlind because that only works for animated actors.
-  // See Actor.isBlind for more info.
-  final hadDestroyedEyesWhenKilled = corpse.anatomy.allParts
-      .where((part) => part.function == BodyPartFunction.vision)
-      .every((eye) => !eye.isAnimatedAndActive);
-
   final preposition =
-      hadDestroyedEyesWhenKilled ? "in the general direction of" : "over";
+      a.anatomy.isBlind ? "in the general direction of" : "over";
 
   a.report(s, "<subject> raise<s> <subject's> hands $preposition <object>",
       object: corpse);
+
   bool reportedSomething = false;
-  if (!corpse.anatomy.isBlind) {
-    corpse.report(s, "<subject> open<s> <subject's>\ eyes");
+
+  // We cannot use Actor.isBlind because that only works for animated actors,
+  // not corpses. See Actor.isBlind for more info.
+  final functioningEyesBeforeDeath = corpse.anatomy.allParts
+      .where((part) =>
+          part.function == BodyPartFunction.vision && part.isAnimatedAndActive)
+      .length;
+  if (functioningEyesBeforeDeath > 0) {
+    final eyeOrEyes = functioningEyesBeforeDeath > 1 ? "eyes" : "eye";
+    corpse.report(s, "<subject> open<s> <subject's> $eyeOrEyes");
     reportedSomething = true;
   }
+
   if (!corpse.anatomy.hasCrippledLegs) {
     corpse.report(s, "<subject> stand<s> up");
     reportedSomething = true;
   }
+
   if (!reportedSomething) {
     corpse.report(s, "<subject> jolt<s> with sudden muscle movement");
   }
