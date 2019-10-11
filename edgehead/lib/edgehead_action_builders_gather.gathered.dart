@@ -16,8 +16,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   // From lib/src/fight/strike_down/actions/finish_strike_down.dart:
   'FinishSlashGroundedEnemy.singleton': FinishSlashGroundedEnemy.singleton,
   // From lib/src/fight/strike_down/actions/finish_thrust_spear_down.dart:
-  'FinishThrustSpearAtGroundedEnemy.singleton':
-      FinishThrustSpearAtGroundedEnemy.singleton,
+  'FinishThrustAtGroundedEnemy.singleton':
+      FinishThrustAtGroundedEnemy.singleton,
   // From lib/src/fight/feint/actions/finish_feint.dart:
   'FinishFeint.singleton': FinishFeint.singleton,
   // From lib/src/fight/feint/feint_defense/actions/counter_feint.dart:

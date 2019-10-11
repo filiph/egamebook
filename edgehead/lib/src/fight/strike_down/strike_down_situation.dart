@@ -8,16 +8,30 @@ import 'package:edgehead/src/fight/strike_down/actions/finish_thrust_spear_down.
 
 const String strikeDownSituationName = "StrikeDownSituation";
 
-Situation createStrikeDownSituation(int id, Actor attacker, Actor target) =>
+Situation createStrikeSlashDownSituation(
+        int id, Actor attacker, Actor target) =>
     AttackerSituation.initialized(
       id,
       strikeDownSituationName,
       [
         FinishSlashGroundedEnemy.singleton,
-        FinishThrustSpearAtGroundedEnemy.singleton,
       ],
       [],
       attacker,
       target,
       "swing",
+    );
+
+Situation createStrikeThrustDownSituation(
+        int id, Actor attacker, Actor target) =>
+    AttackerSituation.initialized(
+      id,
+      strikeDownSituationName,
+      [
+        FinishThrustAtGroundedEnemy.singleton,
+      ],
+      [],
+      attacker,
+      target,
+      "thrust",
     );

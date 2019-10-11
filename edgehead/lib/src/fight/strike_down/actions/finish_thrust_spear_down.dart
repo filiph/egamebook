@@ -8,9 +8,9 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 
-class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
-  static final FinishThrustSpearAtGroundedEnemy singleton =
-      FinishThrustSpearAtGroundedEnemy();
+class FinishThrustAtGroundedEnemy extends OtherActorAction {
+  static final FinishThrustAtGroundedEnemy singleton =
+      FinishThrustAtGroundedEnemy();
 
   static const String className = "FinishThrustSpearAtGroundedEnemy";
 
@@ -80,5 +80,5 @@ class FinishThrustSpearAtGroundedEnemy extends OtherActorAction {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, Actor enemy) =>
       enemy.isOnGround &&
-      a.currentWeapon?.damageCapability?.type == WeaponType.spear;
+      (a.currentWeapon?.damageCapability?.isThrusting ?? false);
 }

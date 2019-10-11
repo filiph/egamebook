@@ -73,7 +73,7 @@ void main() {
             createOnGroundDefenseSituation(1, a, b, Predetermination.none));
       });
       test("StrikeDownSituation", () {
-        checkSituationBuild(() => createStrikeDownSituation(1, a, b));
+        checkSituationBuild(() => createStrikeSlashDownSituation(1, a, b));
       });
       test("CounterAttackSituation", () {
         checkSituationBuild(() => CounterAttackSituation.initialized(1, a, b));

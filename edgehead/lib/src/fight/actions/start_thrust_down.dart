@@ -11,23 +11,26 @@ import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_defense/on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/strike_down/strike_down_situation.dart';
 
-const String startThrustSpearDownHelpMessage =
+const String startThrustDownHelpMessage =
     "Opponents on the ground are often the most "
     "vulnerable.";
 
-EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
-      name: "StartThrustSpearDown",
+EnemyTargetAction startThrustDownBuilder() => StartDefensibleAction(
+      name: "StartThrustDown",
       combatCommandType: CombatCommandType.body,
       commandPathTail: "thrust at <objectPronoun> from above",
-      helpMessage: startThrustSpearDownHelpMessage,
-      applyStart: startThrustSpearDownReportStart,
+      helpMessage: startThrustDownHelpMessage,
+      applyStart: startThrustDownReportStart,
       isApplicable: (a, sim, w, enemy) =>
           enemy.isOnGround &&
           !a.isOnGround &&
           !a.anatomy.isBlind &&
-          a.currentWeapon?.damageCapability?.type == WeaponType.spear,
+          // For weapons that are as long as a sword or longer.
+          (a.currentWeapon?.damageCapability?.length ?? 0) >=
+              WeaponType.sword.defaultLength &&
+          (a.currentWeapon?.damageCapability?.isThrusting ?? false),
       mainSituationBuilder: (a, sim, w, enemy) =>
-          createStrikeDownSituation(w.randomInt(), a, enemy),
+          createStrikeThrustDownSituation(w.randomInt(), a, enemy),
       defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
           createOnGroundDefenseSituation(
               w.randomInt(), a, enemy, predetermination),
@@ -37,8 +40,8 @@ EnemyTargetAction startThrustSpearDownBuilder() => StartDefensibleAction(
       rollReasonTemplate: "will <subject> hit?",
     );
 
-void startThrustSpearDownReportStart(Actor a, Simulation sim,
-        WorldStateBuilder w, Storyline s, Actor enemy, Situation situation) =>
+void startThrustDownReportStart(Actor a, Simulation sim, WorldStateBuilder w,
+        Storyline s, Actor enemy, Situation situation) =>
     a.report(
         s,
         "<subject> thrust<s> down "
