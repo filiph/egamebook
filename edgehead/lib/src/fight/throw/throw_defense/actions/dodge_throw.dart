@@ -83,6 +83,8 @@ class DodgeThrow extends OtherActorAction {
         "{{dodge<s>|avoid<s>} <object>|move<s> out of <object's> way}",
         object: projectile,
         positive: true);
+    projectile.report(s, "<subject> fl<ies> past <object> and out of reach",
+        object: a, endSentence: true);
     moveProjectileToGround(w, enemy, projectile, true);
     w.popSituationsUntil("FightSituation", sim);
     return "${a.name} dodges ${enemy.name}'s throw";
