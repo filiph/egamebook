@@ -13,6 +13,7 @@ import 'package:edgehead/src/fight/actions/pass_while_blind.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_slash.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 import 'package:edgehead/src/fight/counter_attack/actions/counter_thrust.dart';
+import 'package:edgehead/src/fight/counter_attack/actions/counter_thrust_on_ground.dart';
 
 part 'counter_attack_situation.g.dart';
 
@@ -42,6 +43,7 @@ abstract class CounterAttackSituation extends Object
         counterSlashBuilder(),
         counterThrustBuilder(),
         CounterTackle.singleton,
+        counterThrustOnGroundBuilder(),
       ];
 
   int get counterAttacker;
