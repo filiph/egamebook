@@ -1,33 +1,38 @@
-# Created with https://github.com/dart-lang/mono_repo
+# Created with package:mono_repo v2.3.0
 language: dart
 
 jobs:
   include:
     - stage: smoke_test
-      name: "SDK: stable - DIR: edgehead - TASKS: dartfmt && dartanalyzer"
+      name: "SDK: stable; PKG: edgehead; TASKS: dartfmt && dartanalyzer"
+      dart: stable
+      os: linux
+      env: PKGS="edgehead"
       script: ./tool/travis.sh dartfmt dartanalyzer
-      env: PKG="edgehead"
-      dart: stable
-    - stage: build
-      name: "SDK: stable - DIR: edgehead - TASKS: pub run build_runner build --delete-conflicting-outputs"
-      script: ./tool/travis.sh command_0
-      env: PKG="edgehead"
-      dart: stable
-    - stage: unit_test
-      name: "SDK: stable - DIR: edgehead - TASKS: [pub run test, pub run test -t long-running --run-skipped]"
-      script: ./tool/travis.sh command_1 command_2
-      env: PKG="edgehead"
-      dart: stable
     - stage: smoke_test
-      name: "SDK: stable - DIR: egamebook_builder - TASKS: dartfmt && dartanalyzer"
+      name: "SDK: stable; PKG: egamebook_builder; TASKS: dartfmt && dartanalyzer"
+      dart: stable
+      os: linux
+      env: PKGS="egamebook_builder"
       script: ./tool/travis.sh dartfmt dartanalyzer
-      env: PKG="egamebook_builder"
+    - stage: build
+      name: "SDK: stable; PKG: edgehead; TASKS: `pub run build_runner build --delete-conflicting-outputs`"
       dart: stable
+      os: linux
+      env: PKGS="edgehead"
+      script: ./tool/travis.sh command_0
     - stage: unit_test
-      name: "SDK: stable - DIR: egamebook_builder - TASKS: pub run test"
-      script: ./tool/travis.sh command_1
-      env: PKG="egamebook_builder"
+      name: "SDK: stable; PKG: edgehead; TASKS: [`pub run test`, `pub run test -t long-running --run-skipped`]"
       dart: stable
+      os: linux
+      env: PKGS="edgehead"
+      script: ./tool/travis.sh command_1 command_2
+    - stage: unit_test
+      name: "SDK: stable; PKG: egamebook_builder; TASKS: `pub run test`"
+      dart: stable
+      os: linux
+      env: PKGS="egamebook_builder"
+      script: ./tool/travis.sh command_1
 
 stages:
   - smoke_test
