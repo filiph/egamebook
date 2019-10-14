@@ -8,6 +8,8 @@ import 'package:edgehead/src/fight/strike_down/actions/finish_thrust_spear_down.
 
 const String strikeDownSituationName = "StrikeDownSituation";
 
+const String thrustDownSituationName = "ThrustDownSituation";
+
 Situation createStrikeSlashDownSituation(
         int id, Actor attacker, Actor target) =>
     AttackerSituation.initialized(
@@ -26,7 +28,7 @@ Situation createStrikeThrustDownSituation(
         int id, Actor attacker, Actor target) =>
     AttackerSituation.initialized(
       id,
-      strikeDownSituationName,
+      thrustDownSituationName,
       [
         FinishThrustAtGroundedEnemy.singleton,
       ],
