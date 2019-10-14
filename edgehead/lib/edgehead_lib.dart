@@ -293,16 +293,28 @@ class EdgeheadGame extends Book {
     var actor = actorTurn.actor;
     var planner = ActorPlanner(actor, simulation, world);
     await planner.plan(
+      // Don't plan ahead for the player, we are showing
+      // all possibilities anyway.
       maxOrder: actor.isPlayer ? 0 : 5,
       maxConsequences: 10000,
     );
     var recs = planner.getRecommendations();
 
-    // Fail fast for no recommendations.
-    assert(!recs.isEmpty, "No recommendations for ${actor.name} in $situation");
     if (recs.isEmpty) {
-      // Hacky. Not sure this will work. Try to always have some action to do.
-      // TODO: maybe this should remove the currentSituation from stack?
+      // Fail fast for no recommendations in debug mode.
+      String serializeWorldState() =>
+          json.encode(edgehead_serializer.serializers
+              .serializeWith(WorldState.serializer, world));
+      assert(
+          false,
+          "No recommendations for ${actor.name} in $situation.\n"
+          "How we got here: ${world.actionHistory.describe()}\n"
+          "Savegame: ${serializeWorldState()}");
+
+      // Try to recover when in production. Hacky. Not sure this will work
+      // and could lead into an infinite loop.
+      // TODO: maybe this should remove the currentSituation from stack once
+      //       a counter of failures reaches some number.
       log.severe("No recommendation for ${actor.name}");
       log.severe(() {
         String path = world.actionHistory.describe();
