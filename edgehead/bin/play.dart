@@ -138,7 +138,8 @@ class CliRunner extends Presenter<EdgeheadGame> {
             '[${record.loggerName}] - '
             '[${record.level.name}] - '
             '${record.message}\n',
-            mode: FileMode.append);
+            mode: FileMode.append,
+            flush: true);
       });
     }
   }
@@ -147,7 +148,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
   void addChoiceBlock(ChoiceBlock element) {
     final saveGameJson = element.saveGame.saveGameSerialized;
     latestSaveGame = saveGameJson;
-    _log.info("savegame = $saveGameJson");
+    _log.fine("savegame = $saveGameJson");
 
     if (element.choices.length == 1 && element.choices.single.isImplicit) {
       // Implicit choice.
@@ -200,6 +201,8 @@ class CliRunner extends Presenter<EdgeheadGame> {
   @override
   void addError(ErrorElement error) {
     _log.severe(error.message);
+    _log.severe(error.stackTrace);
+    _log.severe('latestSavegame: $latestSaveGame');
     throw StateError("Egamebook error: ${error.message}\n"
         "Stacktrace: ${error.stackTrace}");
   }
@@ -265,7 +268,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
   }
 
   void _hijackedPrint(Object msg) {
-    _log.info(msg);
+    _log.fine(msg);
     if (!_silent) print(msg);
   }
 
