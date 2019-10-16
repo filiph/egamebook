@@ -5,7 +5,7 @@ FIGHT_SITUATION:
 generateRandomEncounter
 
 // ---
-APPROACH: $test_random_encounter FROM $start_roguelike_celeb
+APPROACH: $test_random_encounter FROM $start_tester_build
 COMMAND: Random encounter
 DESCRIPTION: $NONE
 
