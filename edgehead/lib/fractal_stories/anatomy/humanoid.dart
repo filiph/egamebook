@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 /// Provide a unique seed (probably the actor's ID) so we can create
 /// random ids for each body part.
 Anatomy buildHumanoid(int seed,
-    {@required bool isUndead, int constitution = 1}) {
+    {@required bool isUndead, int constitution = 1, bool isBlind = false}) {
   assert(constitution >= 1, "Cannot have creature with constitution below 1");
 
   final random = StatefulRandom(seed);
@@ -75,6 +75,7 @@ Anatomy buildHumanoid(int seed,
     function: BodyPartFunction.vision,
     swingSurfaceLeft: 0,
     thrustSurface: 1,
+    hitpoints: isBlind ? 0 : 1,
   );
 
   final rightEye = BodyPart(
@@ -84,6 +85,7 @@ Anatomy buildHumanoid(int seed,
     function: BodyPartFunction.vision,
     swingSurfaceRight: 0,
     thrustSurface: 1,
+    hitpoints: isBlind ? 0 : 1,
   );
 
   final teeth = BodyPart(

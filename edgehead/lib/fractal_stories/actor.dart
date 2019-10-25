@@ -71,11 +71,13 @@ abstract class Actor extends Object
     Pose poseMax = Pose.standing,
     bool isConfused = false,
     bool isUndead = false,
+    bool isBlind = false,
     String foldFunctionHandle = "normal",
     bool isDirector = false,
   }) {
     Anatomy currentAnatomy = anatomy ??
-        buildHumanoid(id, constitution: constitution, isUndead: isUndead);
+        buildHumanoid(id,
+            constitution: constitution, isUndead: isUndead, isBlind: isBlind);
     Item weapon = currentWeapon;
 
     return _$Actor((b) => b
