@@ -48,7 +48,7 @@ class DodgeLeap extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, "LeapSituation");
-    a.report(s, "<subject> tr<ies> to {dodge|sidestep}", actionThread: thread);
+    a.report(s, "<subject> tr<ies> to dodge", actionThread: thread);
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance",
           but: true, actionThread: thread);
@@ -73,7 +73,7 @@ class DodgeLeap extends OtherActorAction {
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, "LeapSituation");
     final ground = getGroundMaterial(w);
-    a.report(s, "<subject> {dodge<s>|sidestep<s>} <object>",
+    a.report(s, "<subject> dodge<s> <object>",
         object: enemy, positive: true, actionThread: thread);
     enemy.report(s, "<subject> {crash<es> to|fall<s> to|hit<s>} the $ground",
         negative: true);
@@ -93,5 +93,5 @@ class DodgeLeap extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      !a.isOnGround && !a.anatomy.isBlind;
+      !a.anatomy.isBlind;
 }

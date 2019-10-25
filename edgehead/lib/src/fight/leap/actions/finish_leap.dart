@@ -58,12 +58,17 @@ class FinishLeap extends OtherActorAction {
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     final thread = getThreadId(sim, w, "LeapSituation");
     final ground = getGroundMaterial(w);
-    a.report(s, "<subject> {ram<s>|smash<es>} into <object>",
-        object: enemy, positive: true, actionThread: thread);
-    s.add(
-        "both ${a.isPlayer || enemy.isPlayer ? 'of us' : ''} "
-        "{land on|fall to} the $ground",
-        actionThread: thread);
+    if (enemy.pose > Pose.onGround) {
+      a.report(s, "<subject> {ram<s>|smash<es>} into <object>",
+          object: enemy, positive: true, actionThread: thread);
+      s.add(
+          "both ${a.isPlayer || enemy.isPlayer ? 'of us' : ''} "
+          "{land on|fall to} the $ground",
+          actionThread: thread);
+    } else {
+      a.report(s, "<subject> smash<es> down on <object>",
+          object: enemy, positive: true, actionThread: thread);
+    }
     if (enemy.hitpoints > 1) {
       s.add(
           "the impact almost "

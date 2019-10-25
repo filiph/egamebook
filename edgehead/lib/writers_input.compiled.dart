@@ -2933,6 +2933,23 @@ final Room startPostFightTamaraAnimated = Room(
       return w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead;
     }),
     isIdle: true);
+final Approach startTesterBuildFromPreStartBook = Approach(
+    'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('Welcome to the test build of this game.\n', wholeSentence: true);
+}, null, null, null);
 final Approach startEnterGoblinFromStartRaccoon = Approach(
     'start_raccoon', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3969,23 +3986,6 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach startTesterBuildFromPreStartBook = Approach(
-    'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('Welcome to the test build of this game.\n', wholeSentence: true);
-}, null, null, null);
 final allRooms = <Room>[
   undergroundChurchAltarAfterCeremony,
   orcthornRoom,
@@ -4011,14 +4011,14 @@ final allRooms = <Room>[
   startPostFightTamaraAlive,
   startPostFightTamaraDead,
   startPostFightTamaraAnimated,
+  startTesterBuild,
   startEnterGoblin,
   start,
   startRaccoon,
   startCoward,
   startBeginFight,
   bleedsMain,
-  bleedsTraderHut,
-  startTesterBuild
+  bleedsTraderHut
 ];
 final allApproaches = <Approach>[
   orcthornRoomFromSlaveQuartersPassage,
@@ -4052,6 +4052,7 @@ final allApproaches = <Approach>[
   goblinSkirmishSneakFromGoblinSkirmishPatrol,
   goblinSkirmishSneakFromBleedsMain,
   startPostFightFromStartBeginFight,
+  startTesterBuildFromPreStartBook,
   startEnterGoblinFromStartRaccoon,
   startEnterGoblinFromStartCoward,
   startFromStartTesterBuild,
@@ -4063,8 +4064,7 @@ final allApproaches = <Approach>[
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromGoblinSkirmishMain,
   endOfRoamFromBleedsMain,
-  bleedsTraderHutFromBleedsMain,
-  startTesterBuildFromPreStartBook
+  bleedsTraderHutFromBleedsMain
 ];
 final allActions = <RoamingAction>[
   TalkToBriana1.singleton,
