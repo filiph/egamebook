@@ -2589,7 +2589,7 @@ class ListenToThemArguing extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Why not go now?" a goblin says in a screetching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw now guards!" \n\n"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go there."\n',
+        '"Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw no guards!" \n\n"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go there."\n',
         wholeSentence: true);
     return '${a.name} successfully performs ListenToThemArguing';
   }
@@ -3170,7 +3170,7 @@ final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The fight begins. The goblin before us is especially feral. He\'s gnawing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
+      'The fight begins. The goblin before us is especially feral. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
       wholeSentence: true);
 }, null, generateStartFight, null);
 final Approach bleedsMainFromStartTesterBuild = Approach(
@@ -3288,7 +3288,7 @@ class BleedsMainObserveVillage extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
+        'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
         wholeSentence: true);
     $(c).learnAbout(kbBlindGuide);
 

@@ -29,7 +29,7 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
 
   @override
   final String helpMessage = "When enemies are on the ground, I can try to "
-      "kick their weapon off to disarm them.";
+      "kick their weapon out of their hand to disarm them.";
 
   @override
   CombatCommandType get combatCommandType => CombatCommandType.gear;
@@ -39,7 +39,7 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
 
   @override
   String get rollReasonTemplate => "will <subject> kick "
-      "the weapon off?";
+      "the weapon out of <object's> hand?";
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {
@@ -64,7 +64,7 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
     Randomly.run(() {
       a.report(
           s,
-          "<subject> kick<s> <objectOwner's> <object> off "
+          "<subject> kick<s> <objectOwner's> <object> out of "
           "<objectOwner's> hand",
           objectOwner: enemy,
           object: enemy.currentWeapon,

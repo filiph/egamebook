@@ -36,11 +36,11 @@ w.actionNeverUsed(name)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
-"Why not go now?" a goblin says in a screetching voice. "They are weak. It will be an easy take."
+"Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."
 
 "How do you know they are weak?" This other goblin's voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."
 
-"Amak was there. He saw now guards!" 
+"Amak was there. He saw no guards!" 
 
 "Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.
 

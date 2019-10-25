@@ -1,7 +1,7 @@
 ROOM: $start_begin_fight
 
 FIRST_DESCRIPTION:
-The fight begins. The goblin before us is especially feral. He's gnawing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.
+The fight begins. The goblin before us is especially feral. He's gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.
 
 FIGHT_SITUATION:
 generateStartFight

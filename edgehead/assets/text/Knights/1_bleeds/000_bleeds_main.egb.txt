@@ -67,7 +67,7 @@ w.actionNeverUsed(name)
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
-At any point I can see at least a few villagers going about their business. Their pace is fast and long, and they seldom talk to each other. Something bad is happening.
+At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. Something bad is happening.
 
 Every door is shut except for two. One is the entrance into the trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
 

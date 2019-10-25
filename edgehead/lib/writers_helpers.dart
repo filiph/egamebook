@@ -386,10 +386,10 @@ FightSituation generateRandomEncounter(ActionContext c,
       items.add(Item.weapon(w.randomInt(), WeaponType.axe, name: name));
     }
 
-    final numberOfUs = enemies.length == 1 ? " the two of " : " ";
+    final numberOfUs = enemies.length == 1 ? "the two of " : "";
     s.add(
-        "Between $numberOfUs us, "
-        "{a|a plain|an ordinary} $name lies on the $groundMaterial.",
+        "Between ${numberOfUs}us, "
+        "{a plain|an ordinary} $name lies on the $groundMaterial.",
         wholeSentence: true);
   }
 
