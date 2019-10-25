@@ -5,10 +5,10 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class Cower extends Action<Nothing> {
-  static final Cower singleton = Cower();
+class ThrashAroundBlind extends Action<Nothing> {
+  static final ThrashAroundBlind singleton = ThrashAroundBlind();
 
-  static const String className = "Cower";
+  static const String className = "ThrashAroundBlind";
 
   @override
   final String helpMessage =
@@ -41,14 +41,12 @@ class Cower extends Action<Nothing> {
   String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
-    if (a.isPlayer) {
-      a.report(s, "<subject> cower<s>");
-    }
-    return "${a.name} cowers";
+    a.report(s, "<subject> {blindly|} thrash<es> around");
+    return "${a.name} thrashes around";
   }
 
   @override
-  List<String> get commandPathTemplate => ["Cower"];
+  List<String> get commandPathTemplate => ["Thrash around"];
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
@@ -63,5 +61,5 @@ class Cower extends Action<Nothing> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, void _) =>
-      a.currentDamageCapability.isNone || a.anatomy.hasCrippledLegs;
+      a.anatomy.isBlind;
 }
