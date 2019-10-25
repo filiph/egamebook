@@ -431,10 +431,15 @@ class EdgeheadGame extends Book {
       final choiceBlock = ChoiceBlock((b) => b
         ..choices = choices
         ..saveGame = savegame);
-      final picked = await showChoices(choiceBlock);
+      try {
+        final picked = await showChoices(choiceBlock);
 
-      // Execute the picked option.
-      await callbacks[picked]();
+        // Execute the picked option.
+        await callbacks[picked]();
+      } on CancelledInteraction catch (e) {
+        log.info("The choice-picking was interrupted: $e");
+        return;
+      }
     } else {
       // NPC
       // TODO - if more than one action, remove the one that was just made

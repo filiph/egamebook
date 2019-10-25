@@ -29,8 +29,7 @@ abstract class Book {
 
   Book() : _elementsController = StreamController<ElementBase>();
 
-  /// The build identifier. This should probably be autopopulated
-  /// from the commit hash.
+  /// The build identifier.
   String get buildId;
 
   Stream<ElementBase> get elements => _elementsController.stream;
@@ -62,6 +61,7 @@ abstract class Book {
     assert(isWaitingForInput);
 
     if (command is PickChoice) {
+      assert(_showSlotMachineCompleter == null);
       assert(_showChoicesCompleter != null);
       _showChoicesCompleter.complete(command.choice);
       _showChoicesCompleter = null;
@@ -70,6 +70,7 @@ abstract class Book {
     }
 
     if (command is ResolveSlotMachine) {
+      assert(_showChoicesCompleter == null);
       assert(_showSlotMachineCompleter != null);
       _showSlotMachineCompleter
           .complete(slot.SessionResult(command.result, command.wasRerolled));
@@ -79,13 +80,15 @@ abstract class Book {
     }
 
     if (command is LoadGame) {
-      _showChoicesCompleter.completeError("cancelled");
-      _showSlotMachineCompleter.completeError("cancelled");
+      _showChoicesCompleter?.completeError(const CancelledInteraction.load());
+      _showSlotMachineCompleter
+          ?.completeError(const CancelledInteraction.load());
       _showChoicesCompleter = null;
       _showSlotMachineCompleter = null;
 
       load(command.saveGameSerialized);
       isWaitingForInput = false;
+      return;
     }
 
     // else
@@ -142,4 +145,19 @@ abstract class Book {
 
   /// Sets the book in motion. Either from the start, or from a saved position.
   void start();
+}
+
+/// An exception that interrupts the usual wait for a player action.
+///
+/// For example, when the book is waiting for a choice, and at that time
+/// the player loads a savegame instead, the wait will be interrupted.
+class CancelledInteraction implements Exception {
+  final String reason;
+
+  const CancelledInteraction(this.reason);
+
+  const CancelledInteraction.load() : reason = "Player loaded another state";
+
+  @override
+  String toString() => "CancelledInteraction: $reason";
 }
