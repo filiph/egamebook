@@ -92,6 +92,22 @@ class EdgeheadGame extends Book {
     _setup(saveGameSerialized, randomSeed);
   }
 
+  /// Load existing game from [saveGameSerialized].
+  @override
+  void load(String saveGameSerialized) {
+    try {
+      world = edgehead_serializer.serializers.deserializeWith(
+          WorldState.serializer, json.decode(saveGameSerialized));
+      // ignore: avoid_catching_errors
+    } on ArgumentError {
+      const message = "Error when parsing savegame. Maybe the savegame needs "
+          "to be updated to the newest version of the runtime?";
+      log.severe(message);
+      print("ERROR: $message");
+      rethrow;
+    }
+  }
+
   @override
   void start() {
     update();
@@ -106,7 +122,7 @@ class EdgeheadGame extends Book {
       elementsSink.add(ErrorElement((b) => b
         ..message = e.toString()
         ..stackTrace = s.toString()));
-      return;
+      rethrow;
     }
   }
 
@@ -206,18 +222,7 @@ class EdgeheadGame extends Book {
     var global = EdgeheadGlobalState();
 
     if (saveGameSerialized != null) {
-      // Load existing game from [saveGameSerialized].
-      try {
-        world = edgehead_serializer.serializers.deserializeWith(
-            WorldState.serializer, json.decode(saveGameSerialized));
-        // ignore: avoid_catching_errors
-      } on ArgumentError {
-        const message = "Error when parsing savegame. Maybe the savegame needs "
-            "to be updated to the newest version of the runtime?";
-        log.severe(message);
-        print("ERROR: $message");
-        rethrow;
-      }
+      load(saveGameSerialized);
     } else {
       // Creating a new game from start.
       world = WorldState((b) => b

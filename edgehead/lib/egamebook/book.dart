@@ -50,7 +50,8 @@ abstract class Book {
   /// The version in semver form (e.g. "1.0.2").
   String get semver;
 
-  /// A string uniquely identifying this egamebook.
+  /// A string uniquely identifying this egamebook. Consider this something
+  /// like ISBN.
   String get uid;
 
   /// Major player events are sent through this function. For example, player
@@ -77,6 +78,16 @@ abstract class Book {
       return;
     }
 
+    if (command is LoadGame) {
+      _showChoicesCompleter.completeError("cancelled");
+      _showSlotMachineCompleter.completeError("cancelled");
+      _showChoicesCompleter = null;
+      _showSlotMachineCompleter = null;
+
+      load(command.saveGameSerialized);
+      isWaitingForInput = false;
+    }
+
     // else
     acceptCustom(command);
   }
@@ -96,6 +107,12 @@ abstract class Book {
   void close() {
     _elementsController.close();
   }
+
+  /// Loads the game from [saveGameSerialized].
+  ///
+  /// This is normally called from [accept].
+  @protected
+  void load(String saveGameSerialized);
 
   /// Show a block of choices. This method returns with a [Future] of the
   /// picked [Choice].
