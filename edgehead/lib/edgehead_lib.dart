@@ -29,14 +29,15 @@ class EdgeheadGame extends Book {
   static final StatSetting<int> staminaSetting = StatSetting<int>(
       "stamina", "The physical energy that the player can use.", (v) => "$v S");
 
-  final Logger log = Logger('EdgeheadGame');
+  final Logger log = Logger('KnightsGame');
 
   @override
-  final String uid = "edgehead";
+  final String uid = "kosf";
 
   @override
-  final String semver = "2.0.0-alpha";
+  final String semver = "1.0.0";
 
+  /// TODO: This should probably be auto-populated from somewhere.
   @override
   final String buildId = "deadbeef";
 
