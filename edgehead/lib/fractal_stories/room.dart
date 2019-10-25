@@ -103,6 +103,11 @@ class Room {
   /// talk to NPCs, etc.).
   final bool isIdle;
 
+  /// The room should not allow normal actions, such as healing
+  /// or talking. The only actions here should be implicit, such as
+  /// TakeImplicitApproach.
+  final bool isSynthetic;
+
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
   const Room(
     this.name,
@@ -114,6 +119,7 @@ class Room {
     this.parent,
     this.prerequisite,
     this.isIdle = false,
+    this.isSynthetic = false,
   })  : assert(name != null),
         assert(
             describe != null || firstDescribe != null,

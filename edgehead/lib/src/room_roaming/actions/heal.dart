@@ -93,7 +93,12 @@ class HealAction extends Action<Actor> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, Actor patient) {
-    if ((w.currentSituation as RoomRoamingSituation).monstersAlive) {
+    final situation = w.currentSituation as RoomRoamingSituation;
+    final room = sim.getRoomByName(situation.currentRoomName);
+
+    if (room.isSynthetic) return false;
+
+    if (situation.monstersAlive) {
       // Don't allow healing when monsters in this room are still alive.
       return false;
     }

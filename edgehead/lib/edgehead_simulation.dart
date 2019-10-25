@@ -94,12 +94,14 @@ final Map<String, FoldFunction> _foldFunctions = {
 ///     COMMAND: <implicit>
 ///     DESCRIPTION: N/A
 final _preStartBook = Room(
-    "pre_start_book",
-    (c) => throw StateError("pre_start_book is never visited, only used for "
-        "approaching other rooms"),
-    (c) => throw StateError("pre_start_book isn't to be revisited"),
-    null,
-    null);
+  "pre_start_book",
+  (c) => throw StateError("pre_start_book is never visited, only used for "
+      "approaching other rooms"),
+  (c) => throw StateError("pre_start_book isn't to be revisited"),
+  null,
+  null,
+  isSynthetic: true,
+);
 
 final List<Room> _rooms = List<Room>.from(allRooms)
   ..addAll([_preStartBook, endOfRoam]);
