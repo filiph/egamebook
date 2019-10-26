@@ -2333,7 +2333,7 @@ class ReadLetterFromFather extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and plentiful.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your brother back from the dead.\n\n- Father\n',
+        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and bountiful.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your brother back from the dead.\n\n- Father\n',
         wholeSentence: true);
     return '${a.name} successfully performs ReadLetterFromFather';
   }
