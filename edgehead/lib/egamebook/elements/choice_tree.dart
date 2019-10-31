@@ -1,4 +1,5 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
 import 'package:edgehead/egamebook/elements/choice_block_element.dart';
 import 'package:edgehead/egamebook/elements/choice_element.dart';
 
@@ -92,7 +93,7 @@ ChoiceTreeNode _makeTree(int order, String prefix, Iterable<_Choice> choices) {
 class ChoiceTree {
   final ChoiceBlock choiceBlock;
 
-  ChoiceTreeNode root;
+  final ChoiceTreeNode root;
 
   ChoiceTree(this.choiceBlock)
       : root = _makeTree(0, '', _choicesFromBlock(choiceBlock));
