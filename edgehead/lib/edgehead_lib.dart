@@ -4,10 +4,12 @@ import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/edgehead_global.dart';
+import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/book.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
+import 'package:edgehead/egamebook/elements/stat_initialization_element.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
@@ -54,8 +56,6 @@ class EdgeheadGame extends Book {
   /// (if the character with [playerCharacter]'s [Actor.id] is dead, then
   /// that's game over).
   Actor playerCharacter;
-
-  Situation initialSituation;
 
   WorldState world;
 
@@ -111,6 +111,9 @@ class EdgeheadGame extends Book {
 
   @override
   void start() {
+    // Send initial state.
+    elementsSink.add(StatInitialization.stamina(stamina.value));
+
     update();
   }
 
@@ -211,34 +214,34 @@ class EdgeheadGame extends Book {
   /// Sets up the game, either as a load from [saveGameSerialized] or
   /// as a new game from scratch.
   void _setup(String saveGameSerialized, int randomSeed) {
-    playerCharacter = edgeheadPlayer;
-
-    hitpoints.value = playerCharacter.hitpoints / playerCharacter.maxHitpoints;
-    stamina.value = playerCharacter.stamina;
-
-    initialSituation = edgeheadInitialSituation;
-
-    final startingTime = DateTime.utc(1294, 5, 9, 10, 0);
-
     var global = EdgeheadGlobalState();
 
     if (saveGameSerialized != null) {
+      // Updates [world] from savegame.
       load(saveGameSerialized);
     } else {
       // Creating a new game from start.
+      final startingTime = DateTime.utc(1294, 5, 9, 10, 0);
+
       world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(<Actor>[
-          playerCharacter,
+          edgeheadPlayer,
           edgeheadBriana,
           edgeheadTamara,
           edgeheadLeroy
         ])
         ..director = edgeheadDirector.toBuilder()
-        ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
+        ..situations =
+            ListBuilder<Situation>(<Situation>[edgeheadInitialSituation])
         ..global = global
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)
         ..time = startingTime);
     }
+
+    playerCharacter = world.getActorById(playerId);
+
+    hitpoints.value = playerCharacter.hitpoints / playerCharacter.maxHitpoints;
+    stamina.value = playerCharacter.stamina;
 
     simulation = edgeheadSimulation;
 

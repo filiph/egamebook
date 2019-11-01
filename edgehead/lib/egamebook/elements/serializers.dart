@@ -9,10 +9,10 @@ import 'package:edgehead/egamebook/elements/log_element.dart';
 import 'package:edgehead/egamebook/elements/lose_element.dart';
 import 'package:edgehead/egamebook/elements/save_element.dart';
 import 'package:edgehead/egamebook/elements/slot_machine_element.dart';
+import 'package:edgehead/egamebook/elements/stat_initialization_element.dart';
+import 'package:edgehead/egamebook/elements/stat_update_element.dart';
+import 'package:edgehead/egamebook/elements/text_element.dart';
 import 'package:edgehead/egamebook/elements/win_element.dart';
-
-import 'stat_update_element.dart';
-import 'text_element.dart';
 
 part 'serializers.g.dart';
 
@@ -24,6 +24,7 @@ part 'serializers.g.dart';
   LoseGame,
   SaveGame,
   SlotMachine,
+  StatInitialization,
   StatUpdate,
   TextOutput,
   WinGame,

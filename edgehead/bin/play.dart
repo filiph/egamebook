@@ -190,9 +190,14 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   @override
   void addCustomElement(ElementBase element) {
+    if (element is StatInitialization) {
+      _hijackedPrint("=== Stat(${element.name}) initialized "
+          "to ${element.initialValue} ===");
+      return;
+    }
     if (element is StatUpdate) {
-      _hijackedPrint(
-          "=== Stat(${element.name}) updated to ${element.newValue} ===");
+      _hijackedPrint("=== Stat(${element.name}) updated "
+          "to ${element.newValue} ===");
       return;
     }
     super.addCustomElement(element);
