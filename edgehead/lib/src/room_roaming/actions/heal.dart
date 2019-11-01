@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -62,9 +63,8 @@ class HealAction extends Action<Actor> {
     deepReplaceBodyPart(
       patient,
       patientBuilder,
-      (part) => part.hitpoints < part.maxHitpoints,
+      (part) => part.designation == BodyPartDesignation.torso,
       (b, isDescendant) {
-        if (isDescendant) return;
         b.hitpoints = b.maxHitpoints;
       },
     );

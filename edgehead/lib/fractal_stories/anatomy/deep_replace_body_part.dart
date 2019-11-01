@@ -25,6 +25,7 @@ void _updateWalker(
     bool whereFilter(BodyPart bodyPart),
     BodyPartUpdater update,
     bool afflictedDescendant) {
+  // ListBuilder.map updates the list in place.
   builder.children.map((child) {
     final afflicted = whereFilter(child);
     final updated = child.toBuilder();
