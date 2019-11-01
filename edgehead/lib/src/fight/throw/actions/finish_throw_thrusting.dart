@@ -92,7 +92,7 @@ class FinishThrowThrusting extends OtherActorAction {
             object: weapon, negative: true, actionThread: thread);
       }
       if (result.willFall) {
-        result.victim.report(s, "<subject> fall<s> {|down|to the ground}",
+        result.victim.report(s, "<subject> fall<s>{| down| to the ground}",
             negative: true, actionThread: thread);
         w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
         w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
