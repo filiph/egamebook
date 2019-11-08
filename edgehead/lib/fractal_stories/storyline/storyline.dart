@@ -131,7 +131,11 @@ class Report {
         if (i == j) continue;
         final a = nonNulls[i];
         final b = nonNulls[j];
-        if (a.name == b.name && a.adjective == b.adjective) return false;
+        if (a.id == b.id) continue;
+        if (a.name == b.name && a.adjective == b.adjective) {
+          print("$a and $b aren't differentiated enough");
+          return false;
+        }
       }
     }
     return true;
@@ -1253,7 +1257,10 @@ class Storyline {
 
     /// Returns `true` if the [NOUN] (i.e. '<subject>') needs to be prepended
     /// with an adjective because some other noun in the vicinity is confusable.
+    ///
+    /// Returns `false` for `null` and for entities with proper nouns.
     bool neededForNoun(String NOUN, Entity entity) {
+      if (entity == null) return false;
       if (entity.nameIsProperNoun) return false;
       return _isConfusable(entity, subject(i)) ||
           _isConfusable(entity, subject(i - 1)) ||
