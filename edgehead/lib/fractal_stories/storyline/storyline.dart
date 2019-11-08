@@ -174,6 +174,8 @@ class Storyline {
   static const String SUBJECT_NOUN_WITH_ADJECTIVE =
       "<subjectNounWithAdjective>";
   static const String OBJECT_NOUN_WITH_ADJECTIVE = "<objectNounWithAdjective>";
+  static const String OBJECT2_NOUN_WITH_ADJECTIVE =
+      "<object2NounWithAdjective>";
 
   /// e.g. in "goes"
   static const String VERB_ES = "<es>";
@@ -590,7 +592,8 @@ class Storyline {
         String OBJECT_PRONOUN,
         String OBJECT_PRONOUN_NOMINATIVE,
         String OBJECT_PRONOUN_ACCUSATIVE,
-        String OBJECT_PRONOUN_POSSESIVE) {
+        String OBJECT_PRONOUN_POSSESIVE,
+        String OBJECT_NOUN_WITH_ADJECTIVE) {
       if (object.nameIsProperNoun) {
         // Disallow "you unleash your Buster".
         // We must do this before we auto-change <OBJECT> to object.name below.
@@ -642,7 +645,8 @@ class Storyline {
           OBJECT_PRONOUN,
           OBJECT_PRONOUN_NOMINATIVE,
           OBJECT_PRONOUN_ACCUSATIVE,
-          OBJECT_PRONOUN_POSSESSIVE);
+          OBJECT_PRONOUN_POSSESSIVE,
+          OBJECT_NOUN_WITH_ADJECTIVE);
     }
 
     if (object2 != null) {
@@ -653,7 +657,8 @@ class Storyline {
           OBJECT2_PRONOUN,
           OBJECT2_PRONOUN_NOMINATIVE,
           OBJECT2_PRONOUN_ACCUSATIVE,
-          OBJECT2_PRONOUN_POSSESSIVE);
+          OBJECT2_PRONOUN_POSSESSIVE,
+          OBJECT2_NOUN_WITH_ADJECTIVE);
     }
 
     if (subject != null) {
@@ -1228,16 +1233,53 @@ class Storyline {
     }
   }
 
+  /// Returns `true` if the two entities [a] and [b] are liable to create
+  /// confusing sentences when used together. For example, two swords
+  /// with [Item.name] == "sword" are going to be confusable.
+  ///
+  /// Returns `false` if [a] equals [b] (the [Entity.id] is the same, meaning
+  /// that we are comparing the same entity to each other) or
+  /// if either of them is `null`.
+  bool _isConfusable(Entity a, Entity b) {
+    if (a == null || b == null) return false;
+    if (a.id == b.id) return false;
+    // We only check [Entity.name]. Even if we have entities with different
+    // pronouns and the same name, that's still confusable in most cases.
+    return a.name == b.name;
+  }
+
   String _maybeAddAdjectives(int i, String report) {
     String result = report;
-    // TODO: do this to other than just subject and object
-    final a = subject(i);
-    final b = object(i);
-    if (a != null && b != null && a.name == b.name) {
-      assert(a.adjective != null && b.adjective != null);
+
+    /// Returns `true` if the [NOUN] (i.e. '<subject>') needs to be prepended
+    /// with an adjective because some other noun in the vicinity is confusable.
+    bool neededForNoun(String NOUN, Entity entity) {
+      if (entity.nameIsProperNoun) return false;
+      return _isConfusable(entity, subject(i)) ||
+          _isConfusable(entity, subject(i - 1)) ||
+          _isConfusable(entity, subject(i + 1)) ||
+          _isConfusable(entity, object(i)) ||
+          _isConfusable(entity, object(i - 1)) ||
+          _isConfusable(entity, object(i + 1)) ||
+          _isConfusable(entity, object2(i)) ||
+          _isConfusable(entity, object2(i - 1)) ||
+          _isConfusable(entity, object2(i + 1));
+    }
+
+    if (neededForNoun(SUBJECT, subject(i))) {
       result = result.replaceAll(SUBJECT, SUBJECT_NOUN_WITH_ADJECTIVE);
+    }
+
+    if (neededForNoun(OBJECT, subject(i))) {
       result = result.replaceAll(OBJECT, OBJECT_NOUN_WITH_ADJECTIVE);
     }
+
+    if (neededForNoun(OBJECT2, subject(i))) {
+      result = result.replaceAll(OBJECT2, OBJECT2_NOUN_WITH_ADJECTIVE);
+    }
+
+    // Possibly do this with OWNER / OBJECT_OWNER?
+
     return result;
   }
 }

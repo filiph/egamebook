@@ -756,64 +756,116 @@ void main() {
       expect(
           () => storyline.add('<subject> lie<s> next to <object>',
               subject: apple, object: anotherApple),
-          throwsA(AssertionError));
-    }, skip: "until https://github.com/dart-lang/sdk/issues/39305 is fixed");
+          throwsA(isA<AssertionError>()));
+    });
 
     group('does not use adjectives when not needed', () {
-      test('items in one sentence', () {
-        var shinySword = Item(1, name: 'sword', adjective: 'shiny');
-        var rustyKnife = Item(2, name: 'knife', adjective: 'rusty');
+      group('items', () {
+        test('in one sentence', () {
+          var shinySword = Item(1, name: 'sword', adjective: 'shiny');
+          var rustyKnife = Item(2, name: 'knife', adjective: 'rusty');
 
-        storyline.add('<subject> lie<s> next to <object>',
-            subject: shinySword, object: rustyKnife);
+          storyline.add('<subject> lie<s> next to <object>',
+              subject: shinySword, object: rustyKnife);
 
-        expect(
-            storyline.realizeAsString(), 'The sword lies next to the knife.');
+          expect(
+              storyline.realizeAsString(), 'The sword lies next to the knife.');
+        });
+
+        test('in neighboring sentences', () {
+          var shinySword = Item(1, name: 'sword', adjective: 'shiny');
+          var rustyKnife = Item(2, name: 'knife', adjective: 'rusty');
+
+          storyline.add('<subject> lie<s> on the ground', subject: shinySword);
+          storyline.add('<subject> <is> on the table', subject: rustyKnife);
+
+          expect(storyline.realizeAsString(),
+              'The sword lies on the ground. The knife is on the table.');
+        });
       });
 
-      test('items in neighboring sentences', () {
-        var shinySword = Item(1, name: 'sword', adjective: 'shiny');
-        var rustyKnife = Item(2, name: 'knife', adjective: 'rusty');
+      group('actors', () {
+        test('in one sentence', () {
+          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
+          var paleOrc = Actor.initialized(2, "orc", adjective: "pale");
 
-        storyline.add('<subject> lie<s> on the ground', subject: shinySword);
-        storyline.add('<subject> <is> on the table', subject: rustyKnife);
+          storyline.add('<subject> stand<s> next to <object>',
+              subject: oldGoblin, object: paleOrc);
 
-        expect(storyline.realizeAsString(),
-            'The sword lies on the ground. The knife is on the table.');
+          expect(storyline.realizeAsString(),
+              'The goblin stands next to the orc.');
+        });
+
+        test('in neighboring sentences', () {
+          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
+          var paleOrc = Actor.initialized(2, "orc", adjective: "pale");
+
+          storyline.add('<subject> lie<s> on the ground', subject: oldGoblin);
+          storyline.add('<subject> sit<s> at the table', subject: paleOrc);
+
+          expect(storyline.realizeAsString(),
+              'The goblin lies on the ground. The orc sits at the table.');
+        });
       });
     });
 
     group('uses adjectives when needed', () {
-      test('items in one sentence', () {
-        var shinySword = Item(1, name: 'sword', adjective: 'shiny');
-        var rustySword = Item(2, name: 'sword', adjective: 'rusty');
+      group('items', () {
+        test('in one sentence', () {
+          var shinySword = Item(1, name: 'sword', adjective: 'shiny');
+          var rustySword = Item(2, name: 'sword', adjective: 'rusty');
 
-        storyline.add('<subject> lie<s> next to <object>',
-            subject: shinySword, object: rustySword);
+          storyline.add('<subject> lie<s> next to <object>',
+              subject: shinySword, object: rustySword);
 
-        expect(storyline.realizeAsString(),
-            'The shiny sword lies next to the rusty sword.');
+          expect(storyline.realizeAsString(),
+              'The shiny sword lies next to the rusty sword.');
+        });
+
+        test('in neighboring sentences', () {
+          var shinySword = Item(1, name: 'sword', adjective: 'shiny');
+          var rustySword = Item(2, name: 'sword', adjective: 'rusty');
+
+          storyline.add('<subject> lie<s> on the ground', subject: shinySword);
+          storyline.add('<subject> <is> on the table', subject: rustySword);
+
+          expect(
+              storyline.realizeAsString(),
+              'The shiny sword lies on the ground. '
+              'The rusty sword is on the table.');
+        });
       });
 
-      test('items in neighboring sentences', () {
-        var shinySword = Item(1, name: 'sword', adjective: 'shiny');
-        var rustySword = Item(2, name: 'sword', adjective: 'rusty');
+      group('actors', () {
+        test('in one sentence', () {
+          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
+          var paleGoblin = Actor.initialized(2, "goblin", adjective: "pale");
 
-        storyline.add('<subject> lie<s> on the ground', subject: shinySword);
-        storyline.add('<subject> <is> on the table', subject: rustySword);
+          storyline.add('<subject> stand<s> next to <object>',
+              subject: oldGoblin, object: paleGoblin);
 
-        expect(
-            storyline.realizeAsString(),
-            'The shiny sword lies on the ground. '
-            'The rusty sword is on the table.');
+          expect(storyline.realizeAsString(),
+              'The old goblin stands next to the pale goblin.');
+        });
+
+        test('in neighboring sentences', () {
+          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
+          var paleGoblin = Actor.initialized(2, "goblin", adjective: "pale");
+
+          storyline.add('<subject> lie<s> on the ground', subject: oldGoblin);
+          storyline.add('<subject> sit<s> at the table', subject: paleGoblin);
+
+          expect(
+              storyline.realizeAsString(),
+              'The old goblin lies on the ground. '
+              'The pale goblin sits at the table.');
+        });
       });
 
-      test('actors', () {
-        fail('unimplemented');
-      });
-
-      test('body parts', () {
-        fail('unimplemented');
+      group('body parts', () {
+        test('xxx', () {
+          fail('unimplemented');
+        });
         // TODO: test "injured arm" and "disabled leg"
       });
     });

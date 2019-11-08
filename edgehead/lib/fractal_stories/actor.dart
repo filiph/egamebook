@@ -44,8 +44,6 @@ abstract class Actor extends Object
 
   static Serializer<Actor> get serializer => _$actorSerializer;
 
-  factory Actor([void updates(ActorBuilder b)]) = _$Actor;
-
   factory Actor.initialized(
     int id,
     String name, {
@@ -54,6 +52,7 @@ abstract class Actor extends Object
     bool isSurvivor = false,
     bool nameIsProperNoun = false,
     Pronoun pronoun,
+    String adjective,
     Item currentWeapon,
     Item currentShield,
     int hitpoints,
@@ -88,6 +87,7 @@ abstract class Actor extends Object
       ..isSurvivor = isSurvivor
       ..nameIsProperNoun = nameIsProperNoun
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
+      ..adjective = adjective
       ..inventory = (InventoryBuilder()
         ..currentWeapon = weapon
         ..weapons.addAll([
