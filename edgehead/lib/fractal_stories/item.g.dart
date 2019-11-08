@@ -26,6 +26,12 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       serializers.serialize(object.nameIsProperNoun,
           specifiedType: const FullType(bool)),
     ];
+    if (object.adjective != null) {
+      result
+        ..add('adjective')
+        ..add(serializers.serialize(object.adjective,
+            specifiedType: const FullType(String)));
+    }
     if (object.damageCapability != null) {
       result
         ..add('damageCapability')
@@ -46,6 +52,10 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'adjective':
+          result.adjective = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'damageCapability':
           result.damageCapability.replace(serializers.deserialize(value,
                   specifiedType: const FullType(DamageCapability))
@@ -72,6 +82,8 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
 
 class _$Item extends Item {
   @override
+  final String adjective;
+  @override
   final DamageCapability damageCapability;
   @override
   final int id;
@@ -83,7 +95,12 @@ class _$Item extends Item {
   factory _$Item([void Function(ItemBuilder) updates]) =>
       (new ItemBuilder()..update(updates)).build();
 
-  _$Item._({this.damageCapability, this.id, this.name, this.nameIsProperNoun})
+  _$Item._(
+      {this.adjective,
+      this.damageCapability,
+      this.id,
+      this.name,
+      this.nameIsProperNoun})
       : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('Item', 'id');
@@ -107,6 +124,7 @@ class _$Item extends Item {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Item &&
+        adjective == other.adjective &&
         damageCapability == other.damageCapability &&
         id == other.id &&
         name == other.name &&
@@ -116,13 +134,17 @@ class _$Item extends Item {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, damageCapability.hashCode), id.hashCode), name.hashCode),
+        $jc(
+            $jc($jc($jc(0, adjective.hashCode), damageCapability.hashCode),
+                id.hashCode),
+            name.hashCode),
         nameIsProperNoun.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Item')
+          ..add('adjective', adjective)
           ..add('damageCapability', damageCapability)
           ..add('id', id)
           ..add('name', name)
@@ -133,6 +155,10 @@ class _$Item extends Item {
 
 class ItemBuilder implements Builder<Item, ItemBuilder> {
   _$Item _$v;
+
+  String _adjective;
+  String get adjective => _$this._adjective;
+  set adjective(String adjective) => _$this._adjective = adjective;
 
   DamageCapabilityBuilder _damageCapability;
   DamageCapabilityBuilder get damageCapability =>
@@ -157,6 +183,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
 
   ItemBuilder get _$this {
     if (_$v != null) {
+      _adjective = _$v.adjective;
       _damageCapability = _$v.damageCapability?.toBuilder();
       _id = _$v.id;
       _name = _$v.name;
@@ -185,6 +212,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
     try {
       _$result = _$v ??
           new _$Item._(
+              adjective: adjective,
               damageCapability: _damageCapability?.build(),
               id: id,
               name: name,

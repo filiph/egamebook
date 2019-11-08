@@ -13,6 +13,11 @@ abstract class Entity {
       bool nameIsProperNoun,
       bool isPlayer}) = _NonserializableEntity;
 
+  /// A way to specify the entity more concretely than with just the [name].
+  ///
+  /// For example, "young goblin" or "wiry warrior".
+  String get adjective;
+
   /// An entity's [id] is the only constant thing. All other things, including
   /// [name] can change during play. ID cannot.
   ///
@@ -120,6 +125,9 @@ class _NonserializableEntity extends Object
   final String name;
 
   @override
+  final String adjective;
+
+  @override
   final bool nameIsProperNoun;
 
   @override
@@ -133,6 +141,7 @@ class _NonserializableEntity extends Object
 
   _NonserializableEntity(
       {@required this.name,
+      this.adjective,
       Pronoun pronoun,
       Team team,
       this.nameIsProperNoun = false,

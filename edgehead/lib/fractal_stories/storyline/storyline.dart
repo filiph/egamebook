@@ -87,7 +87,9 @@ class Report {
       this.actionThread,
       this.startsThread = false,
       this.replacesThread = false,
-      this.time}) {
+      this.time})
+      : assert(_checkDifferentiated(
+            [subject, object, object2, owner, objectOwner])) {
     if (actionThread == null) {
       assert(startsThread == false, "actionThread is null");
       assert(replacesThread == false, "actionThread is null");
@@ -117,6 +119,23 @@ class Report {
   String toString() => "Report"
       "<${string.substring(0, min(string.length, 20))}...,"
       "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
+
+  /// This asserts that all entities in the report are able to be referred to
+  /// in different ways. In other words, "An apple lies next to an apple." is
+  /// forbidden.
+  static bool _checkDifferentiated(List<Entity> entities) {
+    final nonNulls =
+        entities.where((entity) => entity != null).toList(growable: false);
+    for (int i = 0; i < nonNulls.length; i++) {
+      for (int j = 0; j < nonNulls.length; j++) {
+        if (i == j) continue;
+        final a = nonNulls[i];
+        final b = nonNulls[j];
+        if (a.name == b.name && a.adjective == b.adjective) return false;
+      }
+    }
+    return true;
+  }
 }
 
 /// Class for reporting a sequence of events in 'natural' language.
@@ -151,6 +170,10 @@ class Storyline {
   static const String OBJECT2_PRONOUN_POSSESSIVE = "<object2Pronoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
+
+  static const String SUBJECT_NOUN_WITH_ADJECTIVE =
+      "<subjectNounWithAdjective>";
+  static const String OBJECT_NOUN_WITH_ADJECTIVE = "<objectNounWithAdjective>";
 
   /// e.g. in "goes"
   static const String VERB_ES = "<es>";
@@ -539,6 +562,12 @@ class Storyline {
           result, SUBJECT_NOUN, subject, owner, report.time);
       result = result.replaceFirst(SUBJECT_NOUN, subject.name);
 
+      // Solve particles for subject that needs an adjective.
+      result = addParticleToFirstOccurrence(
+          result, SUBJECT_NOUN_WITH_ADJECTIVE, subject, owner, report.time);
+      result = result.replaceFirst(
+          SUBJECT_NOUN_WITH_ADJECTIVE, '${subject.adjective} ${subject.name}');
+
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
       if (str.contains(RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
         // "actor takes his weapon"
@@ -577,6 +606,13 @@ class Storyline {
         result = addParticleToFirstOccurrence(
             result, OBJECT, object, objectOwner, report.time);
         result = result.replaceFirst(OBJECT, object.name);
+
+        // Solve particles for object that needs an adjective.
+        result = addParticleToFirstOccurrence(result,
+            OBJECT_NOUN_WITH_ADJECTIVE, object, objectOwner, report.time);
+        result = result.replaceFirst(
+            OBJECT_NOUN_WITH_ADJECTIVE, '${object.adjective} ${object.name}');
+
         // Replace the rest with pronouns.
         result = result.replaceAll(OBJECT, object.pronoun.accusative);
       }
@@ -857,6 +893,7 @@ class Storyline {
         report = report.replaceFirst("$SUBJECT ", "");
       }
 
+      report = _maybeAddAdjectives(i, report);
       report = _fixFlowWithPrevious(i, report);
       report = _substituteStopwords(report, _reports[i]);
 
@@ -1189,6 +1226,19 @@ class Storyline {
     } else {
       return "$firstLetter${result.substring(1)}";
     }
+  }
+
+  String _maybeAddAdjectives(int i, String report) {
+    String result = report;
+    // TODO: do this to other than just subject and object
+    final a = subject(i);
+    final b = object(i);
+    if (a != null && b != null && a.name == b.name) {
+      assert(a.adjective != null && b.adjective != null);
+      result = result.replaceAll(SUBJECT, SUBJECT_NOUN_WITH_ADJECTIVE);
+      result = result.replaceAll(OBJECT, OBJECT_NOUN_WITH_ADJECTIVE);
+    }
+    return result;
   }
 }
 

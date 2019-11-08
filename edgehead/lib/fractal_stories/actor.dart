@@ -124,6 +124,10 @@ abstract class Actor extends Object
 
   Actor._();
 
+  @override
+  @nullable
+  String get adjective;
+
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
 

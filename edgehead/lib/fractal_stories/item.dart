@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
+import 'package:meta/meta.dart';
 
 part 'item.g.dart';
 
@@ -18,14 +19,16 @@ abstract class Item extends Object
   ///
   /// For weapons, use [Item.weapon] instead.
   factory Item(int id,
-          {String name,
+          {@required String name,
+          String adjective,
           bool nameIsProperNoun = false,
           DamageCapabilityBuilder damageCapability}) =>
       _$Item((b) => b
         ..id = id
         ..damageCapability = damageCapability
         ..name = name
-        ..nameIsProperNoun = nameIsProperNoun);
+        ..nameIsProperNoun = nameIsProperNoun
+        ..adjective = adjective);
 
   factory Item.weapon(int id, WeaponType type,
       {String name,
@@ -41,6 +44,10 @@ abstract class Item extends Object
   }
 
   Item._();
+
+  @override
+  @nullable
+  String get adjective;
 
   @nullable
   DamageCapability get damageCapability;

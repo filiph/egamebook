@@ -244,6 +244,10 @@ abstract class MoveEntity extends Object
 
   MoveEntity._();
 
+  /// Moves should not have adjectives.
+  @override
+  String get adjective => null;
+
   @override
   int get id;
 

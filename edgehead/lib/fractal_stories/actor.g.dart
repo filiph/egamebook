@@ -85,6 +85,12 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'team',
       serializers.serialize(object.team, specifiedType: const FullType(Team)),
     ];
+    if (object.adjective != null) {
+      result
+        ..add('adjective')
+        ..add(serializers.serialize(object.adjective,
+            specifiedType: const FullType(String)));
+    }
     if (object.currentRoomName != null) {
       result
         ..add('currentRoomName')
@@ -111,6 +117,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'adjective':
+          result.adjective = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'anatomy':
           result.anatomy.replace(serializers.deserialize(value,
               specifiedType: const FullType(Anatomy)) as Anatomy);
@@ -225,6 +235,8 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
 
 class _$Actor extends Actor {
   @override
+  final String adjective;
+  @override
   final Anatomy anatomy;
   @override
   final int constitution;
@@ -281,7 +293,8 @@ class _$Actor extends Actor {
       (new ActorBuilder()..update(updates)).build();
 
   _$Actor._(
-      {this.anatomy,
+      {this.adjective,
+      this.anatomy,
       this.constitution,
       this.currentRoomName,
       this.dexterity,
@@ -393,6 +406,7 @@ class _$Actor extends Actor {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Actor &&
+        adjective == other.adjective &&
         anatomy == other.anatomy &&
         constitution == other.constitution &&
         currentRoomName == other.currentRoomName &&
@@ -441,7 +455,7 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc(0, anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), director.hashCode), foldFunctionHandle.hashCode), gold.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc(0, adjective.hashCode), anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), director.hashCode), foldFunctionHandle.hashCode), gold.hashCode),
                                                                                 hitpoints.hashCode),
                                                                             id.hashCode),
                                                                         initiative.hashCode),
@@ -466,6 +480,7 @@ class _$Actor extends Actor {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Actor')
+          ..add('adjective', adjective)
           ..add('anatomy', anatomy)
           ..add('constitution', constitution)
           ..add('currentRoomName', currentRoomName)
@@ -498,6 +513,10 @@ class _$Actor extends Actor {
 
 class ActorBuilder implements Builder<Actor, ActorBuilder> {
   _$Actor _$v;
+
+  String _adjective;
+  String get adjective => _$this._adjective;
+  set adjective(String adjective) => _$this._adjective = adjective;
 
   AnatomyBuilder _anatomy;
   AnatomyBuilder get anatomy => _$this._anatomy ??= new AnatomyBuilder();
@@ -614,6 +633,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
   ActorBuilder get _$this {
     if (_$v != null) {
+      _adjective = _$v.adjective;
       _anatomy = _$v.anatomy?.toBuilder();
       _constitution = _$v.constitution;
       _currentRoomName = _$v.currentRoomName;
@@ -664,6 +684,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
     try {
       _$result = _$v ??
           new _$Actor._(
+              adjective: adjective,
               anatomy: anatomy.build(),
               constitution: constitution,
               currentRoomName: currentRoomName,

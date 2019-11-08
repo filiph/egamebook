@@ -61,6 +61,18 @@ abstract class BodyPart extends Object
 
   BodyPart._();
 
+  @override
+  String get adjective {
+    if (hitpoints == 0) {
+      // TODO: probably won't work on things like eyes and head.
+      return 'disabled';
+    }
+    if (hitpoints < maxHitpoints) {
+      return 'injured';
+    }
+    return null;
+  }
+
   /// The number of blunt hits (from fists, clubs, falls, etc.) that the
   /// body part received.
   int get bluntHitsCount;
