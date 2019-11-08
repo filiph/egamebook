@@ -61,17 +61,15 @@ abstract class BodyPart extends Object
 
   BodyPart._();
 
+  /// Body parts don't have adjectives. The assumption is that you won't have
+  /// situations when this would be helpful.
+  ///
+  /// For example, 'left eye' and 'right eye' are already distinct. If we add
+  /// something like 'injured left eye', that's going to be _only_ used
+  /// when there is another 'left eye' in the discourse. And in that case,
+  /// it's much better to use something like "the goblin's left eye".
   @override
-  String get adjective {
-    if (hitpoints == 0) {
-      // TODO: probably won't work on things like eyes and head.
-      return 'disabled';
-    }
-    if (hitpoints < maxHitpoints) {
-      return 'injured';
-    }
-    return null;
-  }
+  String get adjective => null;
 
   /// The number of blunt hits (from fists, clubs, falls, etc.) that the
   /// body part received.

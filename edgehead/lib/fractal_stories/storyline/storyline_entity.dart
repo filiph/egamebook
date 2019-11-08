@@ -15,7 +15,11 @@ abstract class Entity {
 
   /// A way to specify the entity more concretely than with just the [name].
   ///
-  /// For example, "young goblin" or "wiry warrior".
+  /// For example, "young goblin" or "wiry goblin".
+  ///
+  /// Note that this is really just for specificity (when there are two entities
+  /// of the same name). To add flavor ("I look into his dreamy eyes")
+  /// or information ("I hit the already injured arm") is still on the writer.
   String get adjective;
 
   /// An entity's [id] is the only constant thing. All other things, including

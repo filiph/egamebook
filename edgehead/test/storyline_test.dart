@@ -861,13 +861,6 @@ void main() {
               'The pale goblin sits at the table.');
         });
       });
-
-      group('body parts', () {
-        test('xxx', () {
-          fail('unimplemented');
-        });
-        // TODO: test "injured arm" and "disabled leg"
-      });
     });
   });
 }
