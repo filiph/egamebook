@@ -476,39 +476,6 @@ class _$Actor extends Actor {
             stamina.hashCode),
         team.hashCode));
   }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper('Actor')
-          ..add('adjective', adjective)
-          ..add('anatomy', anatomy)
-          ..add('constitution', constitution)
-          ..add('currentRoomName', currentRoomName)
-          ..add('dexterity', dexterity)
-          ..add('director', director)
-          ..add('foldFunctionHandle', foldFunctionHandle)
-          ..add('gold', gold)
-          ..add('hitpoints', hitpoints)
-          ..add('id', id)
-          ..add('initiative', initiative)
-          ..add('inventory', inventory)
-          ..add('isActive', isActive)
-          ..add('isConfused', isConfused)
-          ..add('isInvincible', isInvincible)
-          ..add('isPlayer', isPlayer)
-          ..add('isSurvivor', isSurvivor)
-          ..add('maxHitpoints', maxHitpoints)
-          ..add('name', name)
-          ..add('nameIsProperNoun', nameIsProperNoun)
-          ..add('npc', npc)
-          ..add('pose', pose)
-          ..add('poseMax', poseMax)
-          ..add('pronoun', pronoun)
-          ..add('recoveringUntil', recoveringUntil)
-          ..add('stamina', stamina)
-          ..add('team', team))
-        .toString();
-  }
 }
 
 class ActorBuilder implements Builder<Actor, ActorBuilder> {

@@ -438,6 +438,45 @@ abstract class Actor extends Object
         selfPreservation, teamPreservation, enemy, varietyOfAction);
   }
 
+  @override
+  String toString() {
+    final buf = StringBuffer('Actor<');
+    buf.write(name);
+    buf.write(' (');
+    if (isUndead) {
+      buf.write('undead,');
+    }
+    if (anatomy.isBlind) {
+      buf.write('blind,');
+    }
+    if (anatomy.hasCrippledLegs) {
+      buf.write('crippled legs,');
+    }
+    if (!anatomy.anyWeaponAppendageAvailable) {
+      buf.write('crippled weapon appendages,');
+    }
+    buf.write(pose.toHumanString());
+    buf.write(',');
+    for (final part in anatomy.woundedParts) {
+      buf.write(part.name);
+      buf.write(' wounded,');
+    }
+    if (isInvincible) {
+      buf.write('invincible,');
+    }
+    if (isSurvivor) {
+      buf.write('survivor,');
+    }
+    if (isDirector) {
+      buf.write('director,');
+    }
+    if (isBarehanded) {
+      buf.write('barehanded,');
+    }
+    buf.write(')>');
+    return buf.toString();
+  }
+
   /// Returns true if this actor was attacked by [actor] in the past
   /// [maxTime] seconds.
   bool _hasBeenAttackedBy(Actor other, WorldState w, int maxTime) {
