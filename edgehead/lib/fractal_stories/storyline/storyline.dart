@@ -487,7 +487,7 @@ class Storyline {
   }
 
   /// Takes care of substitution of stopwords. Called by substitute().
-  String getString(String str, Report report) {
+  String _substituteStopwords(String str, Report report) {
     Entity subject = report.subject;
     Entity object = report.object;
     Entity object2 = report.object2;
@@ -857,7 +857,8 @@ class Storyline {
         report = report.replaceFirst("$SUBJECT ", "");
       }
 
-      report = substitute(i, report);
+      report = _fixFlowWithPrevious(i, report);
+      report = _substituteStopwords(report, _reports[i]);
 
       if ((endPreviousSentence || i == 0) && !but) report = capitalize(report);
 
@@ -977,15 +978,15 @@ class Storyline {
 
   /// makes sure the sentence flows well with the previous sentence(s), then
   /// calls getString to do in-sentence substitution
-  String substitute(int i, String str) {
+  String _fixFlowWithPrevious(int i, String str) {
     String result = str.replaceAll(ACTION, string(i));
+
+    // If doing something to someone in succession, use pronoun
     if (_sameObject(i, i - 1) &&
+        // But not if the pronoun is "it" for both subject and object.
+        // Avoids sentences like "it makes it" (contrast with "he makes him").
         !(object(i).pronoun == Pronoun.IT &&
             subject(i).pronoun == Pronoun.IT)) {
-      // if doing something to someone in succession, use pronoun
-      // but not if the pronoun is "it" for both subject and object,
-      // that makes sentences like "it makes it" (contrast with "he makes him")
-
       // Never show "the guard's it".
       result = result.replaceAll(
           "$OBJECT_OWNER_POSSESIVE $OBJECT", OBJECT_PRONOUN_ACCUSATIVE);
@@ -1051,7 +1052,7 @@ class Storyline {
           result.replaceAll(OBJECT2_POSSESSIVE, OBJECT2_PRONOUN_POSSESSIVE);
     }
 
-    return getString(result, _reports[i]);
+    return result;
   }
 
   int timeSincePrevious(int i) {
