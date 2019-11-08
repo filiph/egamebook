@@ -9,7 +9,7 @@ ROOM: $start
 FIRST_DESCRIPTION:
 We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.
 
-"[Young sir], I quit." The guard says this as she unsheathes her sword. "This is the last and then I turn back."
+"[Young sir], I quit." The guard says this as she unsheathes her slender sword. "This is the last and then I turn back."
 
 [[CODE]]
 w.actors.removeWhere((actor) => actor.id == brianaId);

@@ -257,9 +257,10 @@ final start_tamara_bellows = EventCallback((c, sim, w, s) {
 
 final youre_dead_slave = EventCallback((c, sim, w, s) {
   var agruth = w.getActorById(agruthId);
-  var sword = Item.weapon(w.randomInt(), WeaponType.sword);
+  var sword = Item.weapon(w.randomInt(), WeaponType.sword, adjective: "curved");
   agruth.report(s, "<subject> {drop<s>|let<s> go of} the whip");
-  agruth.report(s, "<subject> draw<s> <subject's> <object>", object: sword);
+  agruth.report(s, "<subject> draw<s> <subject's> <objectNounWithAdjective>",
+      object: sword);
   w.updateActorById(agruthId, (b) => b..inventory.equip(sword, agruth.anatomy));
   agruth.report(
       s,

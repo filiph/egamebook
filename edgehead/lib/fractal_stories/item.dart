@@ -33,6 +33,7 @@ abstract class Item extends Object
   factory Item.weapon(int id, WeaponType type,
       {String name,
       bool nameIsProperNoun = false,
+      String adjective,
       int slashingDamage,
       int thrustingDamage}) {
     final damageCapability = DamageCapability(type,
@@ -40,6 +41,7 @@ abstract class Item extends Object
     return Item(id,
         name: name ?? type.name,
         nameIsProperNoun: nameIsProperNoun,
+        adjective: adjective,
         damageCapability: damageCapability.toBuilder());
   }
 

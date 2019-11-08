@@ -401,7 +401,7 @@ class Storyline {
     // Make sure we don't add particles to "your car" etc.
     // The following if statement checks whether we have a string such as
     // `<owner's> <object>` while also having [entityOwner] defined.
-    // (When [entityOwner] is `null`, Storyline ignores it.
+    // (When [entityOwner] is `null`, Storyline ignores it.)
     if (entityOwner != null &&
         containsOneOfPrefixes(string, [
           OWNER_POSSESIVE,

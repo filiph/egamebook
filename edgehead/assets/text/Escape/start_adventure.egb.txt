@@ -1,4 +1,4 @@
-﻿ROOM: $start_adventure
+﻿ROOM: $start_insignificant_little_vermin
 
 
 FIRST_DESCRIPTION:
@@ -26,6 +26,6 @@ generateAgruthFight
 
 
 // ---
-//APPROACH: $start_adventure FROM $pre_start_book
-//COMMAND: DEBUG >> Smoke test 'Vermin'
-//DESCRIPTION: $NONE
+APPROACH: $start_insignificant_little_vermin FROM $start_tester_build
+COMMAND: Set piece >> Insignificant Little Vermin
+DESCRIPTION: $NONE

@@ -11,7 +11,7 @@ $(c).hasLearnedAbout(kbGoblinCampSmoke)
 ROOM: $goblin_skirmish_patrol
 
 FIRST_DESCRIPTION:
-When [we] come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a spear.
+When [we] come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.
 
 "You lost, peasant?"
 

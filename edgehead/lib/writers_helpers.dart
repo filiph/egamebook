@@ -49,10 +49,12 @@ final Item orcthorn = Item.weapon(orcthornId, WeaponType.sword,
     slashingDamage: 2,
     thrustingDamage: 2);
 
-final Item sleepingGoblinsSpear =
-    Item.weapon(sleepingGoblinsSpearId, WeaponType.spear);
+final Item sleepingGoblinsSpear = Item.weapon(
+    sleepingGoblinsSpearId, WeaponType.spear,
+    name: "spear", adjective: "sturdy");
 
-final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger);
+final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger,
+    name: "dagger", adjective: "long");
 
 /// Ruleset created from [_brianaQuotes]. All quotes are `onlyOnce`. The last
 /// quote is `"END"`, which will not print, and is there as the terminal
@@ -191,7 +193,8 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
   var goblin = Actor.initialized(w.randomInt(), "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear),
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.spear, adjective: "gray"),
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   w.actors.add(goblin);
@@ -239,8 +242,9 @@ FightSituation generateMadGuardianFight(ActionContext c,
 FightSituation generateSlaveQuartersPassageFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
-  var orc = _makeOrc(w, id: slaveQuartersOrcId);
-  var goblin = _makeGoblin(w, id: slaveQuartersGoblinId, spear: true);
+  var orc = _makeOrc(w, id: slaveQuartersOrcId, swordAdjective: 'bluish');
+  var goblin = _makeGoblin(w,
+      id: slaveQuartersGoblinId, spear: true, spearAdjective: 'bent');
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
   return FightSituation.initialized(w.randomInt(), party, monsters,
@@ -257,8 +261,8 @@ FightSituation generateStartFight(ActionContext c,
   var firstGoblin = Actor.initialized(firstGoblinId, "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
+          name: "sword", adjective: "rusty"),
       dexterity: 150,
       // The goblin starts the fight.
       initiative: 2000,
@@ -360,14 +364,15 @@ FightSituation generateRandomEncounter(ActionContext c,
           team: defaultEnemyTeam,
           initiative: 100,
           foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-      final equippedOrc = orc.rebuild((b) => b.inventory
-          .equip(Item.weapon(w.randomInt(), WeaponType.sword), orc.anatomy));
+      final equippedOrc = orc.rebuild((b) => b.inventory.equip(
+          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'crude'),
+          orc.anatomy));
       enemies.add(equippedOrc);
       final goblin = _makeGoblin(w, spear: true);
       enemies.add(goblin);
       s.add(
           "An orc and a goblin stand in front of me. "
-          "The orc is wielding a sword, the goblin is holding a spear.",
+          "The orc is wielding a crude sword, the goblin is holding a spear.",
           wholeSentence: true);
       break;
     default:
@@ -601,7 +606,7 @@ Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
       madGuardianId, playerKnowsAboutGuardian ? "guardian" : "orc",
       pronoun: Pronoun.HE,
       currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
+          Item.weapon(w.randomInt(), WeaponType.sword, adjective: "heavy"),
       constitution: 3,
       team: defaultEnemyTeam,
       initiative: 100,
@@ -609,22 +614,28 @@ Actor _generateMadGuardian(WorldStateBuilder w, bool playerKnowsAboutGuardian) {
 }
 
 Actor _makeGoblin(WorldStateBuilder w,
-        {int id, bool spear = false, String currentRoomName}) =>
+        {int id,
+        bool spear = false,
+        String spearAdjective = 'crude',
+        String currentRoomName}) =>
     Actor.initialized(id ?? w.randomInt(), "goblin",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
         currentWeapon: spear
-            ? Item.weapon(w.randomInt(), WeaponType.spear)
-            : Item.weapon(w.randomInt(), WeaponType.sword, name: "rusty sword"),
+            ? Item.weapon(w.randomInt(), WeaponType.spear,
+                adjective: spearAdjective)
+            : Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'rusty'),
         team: defaultEnemyTeam,
         currentRoomName: currentRoomName,
         foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
-Actor _makeOrc(WorldStateBuilder w, {int id, int constitution = 2}) =>
+Actor _makeOrc(WorldStateBuilder w,
+        {int id, int constitution = 2, String swordAdjective = 'orcish'}) =>
     Actor.initialized(id ?? w.randomInt(), "orc",
         nameIsProperNoun: false,
         pronoun: Pronoun.HE,
-        currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword),
+        currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
+            adjective: swordAdjective),
         constitution: constitution,
         team: defaultEnemyTeam,
         foldFunctionHandle: carelessMonsterFoldFunctionHandle);

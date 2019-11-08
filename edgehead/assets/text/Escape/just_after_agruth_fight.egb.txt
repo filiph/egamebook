@@ -36,7 +36,7 @@ She turns her attention to the sword. "We should name it. Named weapons please t
 
 
 // ---
-APPROACH: $just_after_agruth_fight FROM $start_adventure
+APPROACH: $just_after_agruth_fight FROM $start_insignificant_little_vermin
 COMMAND: End fight
 DESCRIPTION: You look around. Fortunately, there’s no one in sight.
 

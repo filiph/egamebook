@@ -1357,7 +1357,8 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room startAdventure = Room('start_adventure', (ActionContext c) {
+final Room startInsignificantLittleVermin =
+    Room('start_insignificant_little_vermin', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1368,6 +1369,17 @@ final Room startAdventure = Room('start_adventure', (ActionContext c) {
       wholeSentence: true);
   w.actors.removeWhere((actor) => !actor.isPlayer && actor.id != brianaId);
 }, null, generateAgruthFight, null);
+final Approach startInsignificantLittleVerminFromStartTesterBuild = Approach(
+    'start_tester_build',
+    'start_insignificant_little_vermin',
+    'Set piece >> Insignificant Little Vermin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Room warForgeAfterIronMonster = Room('war_forge_after_iron_monster',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2072,9 +2084,9 @@ final Room justAfterAgruthFight =
       'You are Aren, a slave. You have spent three painful years inside this mountain, surrounded by the foul-smelling cave walls, and under the whip of the orcs and the goblins that live here.\n\n\nBriana stands towering over Agruth\'s corpse. She smooths her hair back and looks down into the expanding pool of Agruth\'s blood, using it as a mirror.\n\n\n"What?" she says when she notices you\'re looking.\n\n\n_"We either go now, or die."_\n\n\nBriana spits down at the body. "He wasn\'t even the worst of them, you know."\n\n\n_"I know."_\n\n\n"They _all_ deserve to die, or worse. And I think it will be satisfying to kill them with their own swords." She kicks the dead slaver in the hip.\n\n\n_"That one is already dead."_\n\n\n"Just making sure," she says.\n\n\n![Agruth\'s sword](https://egamebook.com/vermin/v/latest/img/agruth-sword.jpg)\n\n\nShe turns her attention to the sword. "We should name it. Named weapons please the gods. And I refuse to have this thing around thinking of it as _Agruth\'s sword_." She makes a pained grimace when she says the orc\'s name.\n',
       wholeSentence: true);
 }, null, null, null);
-final Approach justAfterAgruthFightFromStartAdventure =
-    Approach('start_adventure', 'just_after_agruth_fight', 'End fight',
-        (ActionContext c) {
+final Approach justAfterAgruthFightFromStartInsignificantLittleVermin =
+    Approach('start_insignificant_little_vermin', 'just_after_agruth_fight',
+        'End fight', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2460,7 +2472,7 @@ final Room goblinSkirmishPatrol =
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a spear.\n\n"You lost, peasant?"\n',
+      'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
       wholeSentence: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null);
 final Approach goblinSkirmishMainFromBleedsMain = Approach(
@@ -2995,7 +3007,7 @@ final Room start = Room('start', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her sword. "This is the last and then I turn back."\n\n',
+      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her slender sword. "This is the last and then I turn back."\n\n',
       wholeSentence: true);
   w.actors.removeWhere((actor) => actor.id == brianaId);
 }, null, null, null);
@@ -3994,7 +4006,7 @@ final allRooms = <Room>[
   slaveQuarters,
   undergroundChurch,
   undergroundChurchAltar,
-  startAdventure,
+  startInsignificantLittleVermin,
   warForgeAfterIronMonster,
   guardpostAboveChurch,
   tunnel,
@@ -4032,6 +4044,7 @@ final allApproaches = <Approach>[
   undergroundChurchFromGuardpostAboveChurch,
   undergroundChurchFromUndergroundChurchAltar,
   undergroundChurchAltarFromUndergroundChurch,
+  startInsignificantLittleVerminFromStartTesterBuild,
   guardpostAboveChurchFromUndergroundChurch,
   guardpostAboveChurchFromTunnelCancelChance,
   guardpostAboveChurchFromSmelter,
@@ -4043,7 +4056,7 @@ final allApproaches = <Approach>[
   caveWithAgruthFromUndergroundChurch,
   caveWithAgruthFromSlaveQuartersPassage,
   caveWithAgruthFromWarForge,
-  justAfterAgruthFightFromStartAdventure,
+  justAfterAgruthFightFromStartInsignificantLittleVermin,
   testRandomEncounterFromStartTesterBuild,
   endOfRoamFromTestRandomEncounter,
   goblinSkirmishPatrolFromBleedsMain,

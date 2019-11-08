@@ -47,7 +47,7 @@ final Actor edgeheadLeroy = Actor.initialized(
   pronoun: Pronoun.HE,
   currentRoomName: 'bleeds_trader_hut',
   currentWeapon: Item.weapon(234234, WeaponType.dagger, name: "long dagger"),
-  currentShield: Item.weapon(1188984, WeaponType.shield),
+  currentShield: Item.weapon(1188984, WeaponType.shield, adjective: "peasant"),
 );
 
 final Actor edgeheadPlayer = Actor.initialized(
@@ -77,7 +77,7 @@ final Actor edgeheadTamara = Actor.initialized(
   initiative: 1500,
   currentRoomName: _preStartBook.name,
   followingActorId: playerId,
-  currentWeapon: Item.weapon(2342341, WeaponType.sword),
+  currentWeapon: Item.weapon(2342341, WeaponType.sword, adjective: "slender"),
 );
 
 final Map<String, FoldFunction> _foldFunctions = {
