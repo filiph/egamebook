@@ -589,80 +589,94 @@ class Storyline {
       result = result.replaceAll(SUBJECT_PRONOUN_SELF, subject.pronoun.self);
     }
 
+    // Replaces stopwords for objects (but not possessive stopwords yet).
     void substituteObject(
         Entity object,
-        String OBJECT,
-        String OBJECT_POSSESSIVE,
-        String OBJECT_PRONOUN,
-        String OBJECT_PRONOUN_NOMINATIVE,
-        String OBJECT_PRONOUN_ACCUSATIVE,
-        String OBJECT_PRONOUN_POSSESIVE,
-        String OBJECT_NOUN_WITH_ADJECTIVE) {
+        String X,
+        String X_POSSESSIVE,
+        String X_PRONOUN,
+        String X_PRONOUN_POSSESIVE,
+        String X_NOUN_WITH_ADJECTIVE) {
       if (object.nameIsProperNoun) {
         // Disallow "you unleash your Buster".
         // We must do this before we auto-change <OBJECT> to object.name below.
-        result = result.replaceAll("$SUBJECT_POSSESIVE $OBJECT", OBJECT);
-        result =
-            result.replaceAll("$SUBJECT_PRONOUN_POSSESIVE $OBJECT", OBJECT);
+        result = result.replaceAll("$SUBJECT_POSSESIVE $X", X);
+        result = result.replaceAll("$SUBJECT_PRONOUN_POSSESIVE $X", X);
       }
 
       if (object.isPlayer) {
-        result = result.replaceAll(OBJECT, OBJECT_PRONOUN);
-        result = result.replaceAll(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESIVE);
+        result = result.replaceAll(X, X_PRONOUN);
+        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESIVE);
       } else {
         result = addParticleToFirstOccurrence(
-            result, OBJECT, object, objectOwner, report.time);
-        result = result.replaceFirst(OBJECT, object.name);
+            result, X, object, objectOwner, report.time);
+        result = result.replaceFirst(X, object.name);
 
         // Solve particles for object that needs an adjective.
-        result = addParticleToFirstOccurrence(result,
-            OBJECT_NOUN_WITH_ADJECTIVE, object, objectOwner, report.time);
+        result = addParticleToFirstOccurrence(
+            result, X_NOUN_WITH_ADJECTIVE, object, objectOwner, report.time);
         result = result.replaceFirst(
-            OBJECT_NOUN_WITH_ADJECTIVE, '${object.adjective} ${object.name}');
+            X_NOUN_WITH_ADJECTIVE, '${object.adjective} ${object.name}');
 
         // Replace the rest with pronouns.
-        result = result.replaceAll(OBJECT, object.pronoun.accusative);
+        result = result.replaceAll(X, object.pronoun.accusative);
       }
 
-      result = result.replaceAll(OBJECT_PRONOUN, object.pronoun.accusative);
-      if (str.contains(RegExp("$OBJECT.+$OBJECT_POSSESSIVE"))) {
+      result = result.replaceAll(X_PRONOUN, object.pronoun.accusative);
+      if (str.contains(RegExp("$X.+$X_POSSESSIVE"))) {
         // "actor takes his weapon"
-        result = result.replaceAll(OBJECT_POSSESSIVE, object.pronoun.genitive);
+        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESIVE);
       }
-      result = addParticleToFirstOccurrence(
-          result, OBJECT_POSSESSIVE, object, objectOwner, report.time);
-      result = result.replaceFirst(OBJECT_POSSESSIVE, "${object.name}'s");
-      result = result.replaceAll(OBJECT_POSSESSIVE, object.pronoun.genitive);
-      result =
-          result.replaceAll(OBJECT_PRONOUN_POSSESIVE, object.pronoun.genitive);
-      result = result.replaceAll(
-          OBJECT_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
-      result = result.replaceAll(
-          OBJECT_PRONOUN_NOMINATIVE, object.pronoun.nominative);
     }
 
     if (object != null) {
-      substituteObject(
-          object,
-          OBJECT,
-          OBJECT_POSSESSIVE,
-          OBJECT_PRONOUN,
-          OBJECT_PRONOUN_NOMINATIVE,
-          OBJECT_PRONOUN_ACCUSATIVE,
-          OBJECT_PRONOUN_POSSESSIVE,
-          OBJECT_NOUN_WITH_ADJECTIVE);
+      substituteObject(object, OBJECT, OBJECT_POSSESSIVE, OBJECT_PRONOUN,
+          OBJECT_PRONOUN_POSSESSIVE, OBJECT_NOUN_WITH_ADJECTIVE);
     }
 
     if (object2 != null) {
-      substituteObject(
+      substituteObject(object2, OBJECT2, OBJECT2_POSSESSIVE, OBJECT2_PRONOUN,
+          OBJECT2_PRONOUN_POSSESSIVE, OBJECT2_NOUN_WITH_ADJECTIVE);
+    }
+
+    // Second pass after [substituteObject], now with possessives.
+    // We need to do this in two parts because otherwise the
+    // "<object's> <object2>" pairs will get realized too soon, which breaks
+    // the logic in [addParticleToFirstOccurrence] that prevents sentences
+    // like "his the left hand".
+    void substituteObjectPossessive(
+        Entity object,
+        String X_POSSESSIVE,
+        String X_PRONOUN_NOMINATIVE,
+        String X_PRONOUN_ACCUSATIVE,
+        String X_PRONOUN_POSSESIVE) {
+      result = addParticleToFirstOccurrence(
+          result, X_POSSESSIVE, object, objectOwner, report.time);
+      result = result.replaceFirst(X_POSSESSIVE, "${object.name}'s");
+      result = result.replaceAll(X_POSSESSIVE, object.pronoun.genitive);
+      result = result.replaceAll(X_PRONOUN_POSSESIVE, object.pronoun.genitive);
+      result =
+          result.replaceAll(X_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
+      result =
+          result.replaceAll(X_PRONOUN_NOMINATIVE, object.pronoun.nominative);
+    }
+
+    if (object != null) {
+      substituteObjectPossessive(
+          object,
+          OBJECT_POSSESSIVE,
+          OBJECT_PRONOUN_NOMINATIVE,
+          OBJECT_PRONOUN_ACCUSATIVE,
+          OBJECT_PRONOUN_POSSESSIVE);
+    }
+
+    if (object2 != null) {
+      substituteObjectPossessive(
           object2,
-          OBJECT2,
           OBJECT2_POSSESSIVE,
-          OBJECT2_PRONOUN,
           OBJECT2_PRONOUN_NOMINATIVE,
           OBJECT2_PRONOUN_ACCUSATIVE,
-          OBJECT2_PRONOUN_POSSESSIVE,
-          OBJECT2_NOUN_WITH_ADJECTIVE);
+          OBJECT2_PRONOUN_POSSESSIVE);
     }
 
     if (subject != null) {

@@ -322,6 +322,16 @@ void main() {
       expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
     });
 
+    test("for grab <object> by <object's> <object2>", () {
+      var goblin = Actor.initialized(4123, "goblin", pronoun: Pronoun.HE);
+      assert(goblin.anatomy.weaponAppendage.name == 'right hand');
+
+      orc.report(
+          storyline, "<subject> grab<s> <object> by <object's> <object2>",
+          object: goblin, object2: goblin.anatomy.weaponAppendage);
+      expect(storyline.realizeAsString(), isNot(matches("his the right hand")));
+    });
+
     test("for <object's> <object2>", () {
       var goblin = Entity(name: "goblin");
       orc.report(storyline, "<subject> draw<s> <object's> <object2>",
