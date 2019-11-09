@@ -288,11 +288,8 @@ FightSituation generateStartFight(ActionContext c,
 FightSituation generateTestFightWithGoblin(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
-  final goblin = _makeGoblin(w, spear: true);
+  final goblin = _makeGoblin(w, spear: true, spearAdjective: 'goblin');
   w.actors.add(goblin);
-  // final playersSword = Item.weapon(89892133, WeaponType.sword);
-  // w.updateActorById(playerId,
-  //   (b) => b.inventory.equip(playersSword, getPlayer(w.build()).anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
@@ -346,10 +343,10 @@ FightSituation generateRandomEncounter(ActionContext c,
   switch (w.randomInt(3)) {
     case 0:
       final hasSpear = w.randomBool();
-      enemies.add(_makeGoblin(w, spear: hasSpear));
+      enemies.add(_makeGoblin(w, spear: hasSpear, spearAdjective: 'black'));
       s.add(
           "A goblin stands in front of me, "
-          "wielding a ${hasSpear ? 'spear' : 'rusty sword'}.",
+          "wielding a ${hasSpear ? 'black spear' : 'rusty sword'}.",
           wholeSentence: true);
       break;
     case 1:
