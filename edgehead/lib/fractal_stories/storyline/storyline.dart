@@ -145,17 +145,17 @@ class Report {
 /// Class for reporting a sequence of events in 'natural' language.
 class Storyline {
   static const String SUBJECT = "<subject>";
-  static const String SUBJECT_POSSESIVE = "<subject's>";
+  static const String SUBJECT_POSSESSIVE = "<subject's>";
 
   static const String OWNER = "<owner>";
-  static const String OWNER_POSSESIVE = "<owner's>";
+  static const String OWNER_POSSESSIVE = "<owner's>";
   static const String OBJECT_OWNER = "<objectOwner>";
-  static const String OBJECT_OWNER_POSSESIVE = "<objectOwner's>";
+  static const String OBJECT_OWNER_POSSESSIVE = "<objectOwner's>";
   static const String OBJECT = "<object>";
   static const String OBJECT_POSSESSIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
   static const String SUBJECT_PRONOUN_ACCUSATIVE = "<subjectPronounAccusative>";
-  static const String SUBJECT_PRONOUN_POSSESIVE = "<subjectPronoun's>";
+  static const String SUBJECT_PRONOUN_POSSESSIVE = "<subjectPronoun's>";
   static const String SUBJECT_PRONOUN_SELF = "<subjectPronounSelf>";
   static const String SUBJECT_NOUN = "<subjectNoun>";
   static const String OBJECT_PRONOUN = "<objectPronoun>";
@@ -163,9 +163,10 @@ class Storyline {
   static const String OBJECT_PRONOUN_ACCUSATIVE = "<objectPronounAccusative>";
   static const String OBJECT_PRONOUN_POSSESSIVE = "<objectPronoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
-  static const String OWNER_PRONOUN_POSSESIVE = "<ownerPronoun's>";
+  static const String OWNER_PRONOUN_POSSESSIVE = "<ownerPronoun's>";
   static const String OBJECT_OWNER_PRONOUN = "<objectOwnerPronoun>";
-  static const String OBJECT_OWNER_PRONOUN_POSSESIVE = "<objectOwnerPronoun's>";
+  static const String OBJECT_OWNER_PRONOUN_POSSESSIVE =
+      "<objectOwnerPronoun's>";
   static const String OBJECT2 = "<object2>";
   static const String OBJECT2_POSSESSIVE = "<object2's>";
   static const String OBJECT2_PRONOUN = "<object2Pronoun>";
@@ -183,6 +184,8 @@ class Storyline {
 
   /// e.g. in "goes"
   static const String VERB_ES = "<es>";
+
+  /// e.g. "possesses"
   static const String VERB_SSES = "<sses>";
 
   /// e.g. in "tries", "flies"
@@ -191,7 +194,7 @@ class Storyline {
   static const String VERB_BE = "<is>";
   static const String VERB_BE_NOT = "<isn't>";
   static const String VERB_HAVE = "<has>";
-  static final RegExp QUOTE_INTERPUNCTION_DUPLICATION =
+  static final RegExp QUOTE_INTERPUNCTUATION_DUPLICATION =
       RegExp(r'''(\w)([\.\?\!])(["'])\.(?=$|\s)''');
   static const String PARAGRAPH_NEWLINES = "\n\n";
 
@@ -338,7 +341,7 @@ class Storyline {
       }
 
       // Adds 'the', 'a', or nothing. TODO: instead of using the
-      // addParticleToFirstOccurence method (designed for longer texts), use
+      // addParticleToFirstOccurrence method (designed for longer texts), use
       // something smaller.
       String articleWithParticle = addParticleToFirstOccurrence(
           article.name, article.name, article, null, time);
@@ -404,10 +407,10 @@ class Storyline {
     // (When [entityOwner] is `null`, Storyline ignores it.)
     if (entityOwner != null &&
         containsOneOfPrefixes(string, [
-          OWNER_POSSESIVE,
-          OWNER_PRONOUN_POSSESIVE,
-          OBJECT_OWNER_POSSESIVE,
-          OBJECT_OWNER_PRONOUN_POSSESIVE
+          OWNER_POSSESSIVE,
+          OWNER_PRONOUN_POSSESSIVE,
+          OBJECT_OWNER_POSSESSIVE,
+          OBJECT_OWNER_PRONOUN_POSSESSIVE
         ])) {
       return string;
     }
@@ -415,8 +418,8 @@ class Storyline {
     // `<subject's>`. Here we don't ignore when subject or object aren't
     // defined.
     if (containsOneOfPrefixes(string, [
-      SUBJECT_POSSESIVE,
-      SUBJECT_PRONOUN_POSSESIVE,
+      SUBJECT_POSSESSIVE,
+      SUBJECT_PRONOUN_POSSESSIVE,
       OBJECT_POSSESSIVE,
       OBJECT_PRONOUN_POSSESSIVE
     ])) {
@@ -532,7 +535,7 @@ class Storyline {
         // don't talk like a robot: "player attack wolf" -> "you attack wolf"
         result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
         result =
-            result.replaceAll(SUBJECT_POSSESIVE, SUBJECT_PRONOUN_POSSESIVE);
+            result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
       }
 
       if (subject.pronoun == Pronoun.I ||
@@ -575,15 +578,15 @@ class Storyline {
           SUBJECT_NOUN_WITH_ADJECTIVE, '${subject.adjective} ${subject.name}');
 
       result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
-      if (str.contains(RegExp("$SUBJECT.+$SUBJECT_POSSESIVE"))) {
+      if (str.contains(RegExp("$SUBJECT.+$SUBJECT_POSSESSIVE"))) {
         // "actor takes his weapon"
         result =
-            result.replaceAll(SUBJECT_POSSESIVE, SUBJECT_PRONOUN_POSSESIVE);
+            result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
       }
       result = addParticleToFirstOccurrence(
-          result, SUBJECT_POSSESIVE, subject, owner, report.time);
-      result = result.replaceFirst(SUBJECT_POSSESIVE, "${subject.name}'s");
-      result = result.replaceAll(SUBJECT_POSSESIVE, subject.pronoun.genitive);
+          result, SUBJECT_POSSESSIVE, subject, owner, report.time);
+      result = result.replaceFirst(SUBJECT_POSSESSIVE, "${subject.name}'s");
+      result = result.replaceAll(SUBJECT_POSSESSIVE, subject.pronoun.genitive);
       result = result.replaceAll(
           SUBJECT_PRONOUN_ACCUSATIVE, subject.pronoun.accusative);
       result = result.replaceAll(SUBJECT_PRONOUN_SELF, subject.pronoun.self);
@@ -595,18 +598,18 @@ class Storyline {
         String X,
         String X_POSSESSIVE,
         String X_PRONOUN,
-        String X_PRONOUN_POSSESIVE,
+        String X_PRONOUN_POSSESSIVE,
         String X_NOUN_WITH_ADJECTIVE) {
       if (object.nameIsProperNoun) {
         // Disallow "you unleash your Buster".
         // We must do this before we auto-change <OBJECT> to object.name below.
-        result = result.replaceAll("$SUBJECT_POSSESIVE $X", X);
-        result = result.replaceAll("$SUBJECT_PRONOUN_POSSESIVE $X", X);
+        result = result.replaceAll("$SUBJECT_POSSESSIVE $X", X);
+        result = result.replaceAll("$SUBJECT_PRONOUN_POSSESSIVE $X", X);
       }
 
       if (object.isPlayer) {
         result = result.replaceAll(X, X_PRONOUN);
-        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESIVE);
+        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESSIVE);
       } else {
         result = addParticleToFirstOccurrence(
             result, X, object, objectOwner, report.time);
@@ -625,7 +628,7 @@ class Storyline {
       result = result.replaceAll(X_PRONOUN, object.pronoun.accusative);
       if (str.contains(RegExp("$X.+$X_POSSESSIVE"))) {
         // "actor takes his weapon"
-        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESIVE);
+        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESSIVE);
       }
     }
 
@@ -649,12 +652,12 @@ class Storyline {
         String X_POSSESSIVE,
         String X_PRONOUN_NOMINATIVE,
         String X_PRONOUN_ACCUSATIVE,
-        String X_PRONOUN_POSSESIVE) {
+        String X_PRONOUN_POSSESSIVE) {
       result = addParticleToFirstOccurrence(
           result, X_POSSESSIVE, object, objectOwner, report.time);
       result = result.replaceFirst(X_POSSESSIVE, "${object.name}'s");
       result = result.replaceAll(X_POSSESSIVE, object.pronoun.genitive);
-      result = result.replaceAll(X_PRONOUN_POSSESIVE, object.pronoun.genitive);
+      result = result.replaceAll(X_PRONOUN_POSSESSIVE, object.pronoun.genitive);
       result =
           result.replaceAll(X_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
       result =
@@ -681,19 +684,19 @@ class Storyline {
 
     if (subject != null) {
       result = result.replaceAll(
-          SUBJECT_PRONOUN_POSSESIVE, subject.pronoun.genitive);
+          SUBJECT_PRONOUN_POSSESSIVE, subject.pronoun.genitive);
     }
 
-    result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESIVE,
-        OWNER_PRONOUN, OWNER_PRONOUN_POSSESIVE, report.time);
+    result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESSIVE,
+        OWNER_PRONOUN, OWNER_PRONOUN_POSSESSIVE, report.time);
     result = _realizeOwner(
         objectOwner,
         result,
         str,
         OBJECT_OWNER,
-        OBJECT_OWNER_POSSESIVE,
+        OBJECT_OWNER_POSSESSIVE,
         OBJECT_OWNER_PRONOUN,
-        OBJECT_OWNER_PRONOUN_POSSESIVE,
+        OBJECT_OWNER_PRONOUN_POSSESSIVE,
         report.time);
 
     return result;
@@ -939,7 +942,7 @@ class Storyline {
     //
     //     He said: "Don't go!".
     //                         ^
-    s = s.replaceAllMapped(QUOTE_INTERPUNCTION_DUPLICATION, (Match m) {
+    s = s.replaceAllMapped(QUOTE_INTERPUNCTUATION_DUPLICATION, (Match m) {
       return "${m[1]}${m[2]}${m[3]}";
     });
 
@@ -1049,19 +1052,20 @@ class Storyline {
             subject(i).pronoun == Pronoun.IT)) {
       // Never show "the guard's it".
       result = result.replaceAll(
-          "$OBJECT_OWNER_POSSESIVE $OBJECT", OBJECT_PRONOUN_ACCUSATIVE);
-      result = result.replaceAll(
-          "$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", OBJECT_PRONOUN_ACCUSATIVE);
+          "$OBJECT_OWNER_POSSESSIVE $OBJECT", OBJECT_PRONOUN_ACCUSATIVE);
+      result = result.replaceAll("$OBJECT_OWNER_PRONOUN_POSSESSIVE $OBJECT",
+          OBJECT_PRONOUN_ACCUSATIVE);
       result = result.replaceAll(OBJECT, OBJECT_PRONOUN_ACCUSATIVE);
       result = result.replaceAll(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESSIVE);
     }
     if (_sameSubject(i, i - 1)) {
       // Never show "the guard's it".
-      result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT", SUBJECT_PRONOUN);
+      result = result.replaceAll("$OWNER_POSSESSIVE $SUBJECT", SUBJECT_PRONOUN);
       result = result.replaceAll(
-          "$OWNER_PRONOUN_POSSESIVE $SUBJECT", SUBJECT_PRONOUN);
+          "$OWNER_PRONOUN_POSSESSIVE $SUBJECT", SUBJECT_PRONOUN);
       result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
-      result = result.replaceAll(SUBJECT_POSSESIVE, SUBJECT_PRONOUN_POSSESIVE);
+      result =
+          result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
     }
     // if someone who was object last sentence is now subject
     // (and it's not misleading), use pronoun
@@ -1071,11 +1075,12 @@ class Storyline {
         object(i - 1)?.id == subject(i)?.id &&
         subject(i - 1)?.pronoun != subject(i)?.pronoun) {
       // Never show "the guard's it".
-      result = result.replaceAll("$OWNER_POSSESIVE $SUBJECT", SUBJECT_PRONOUN);
+      result = result.replaceAll("$OWNER_POSSESSIVE $SUBJECT", SUBJECT_PRONOUN);
       result = result.replaceAll(
-          "$OWNER_PRONOUN_POSSESIVE $SUBJECT", SUBJECT_PRONOUN);
+          "$OWNER_PRONOUN_POSSESSIVE $SUBJECT", SUBJECT_PRONOUN);
       result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
-      result = result.replaceAll(SUBJECT_POSSESIVE, SUBJECT_PRONOUN_POSSESIVE);
+      result =
+          result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
     }
     // same as previous, but with object-subject reversed
     if (subject(i - 1) != null &&
@@ -1084,9 +1089,9 @@ class Storyline {
         subject(i - 1)?.pronoun != subject(i)?.pronoun) {
       // Never show "the guard's it".
       result =
-          result.replaceAll("$OBJECT_OWNER_POSSESIVE $OBJECT", OBJECT_PRONOUN);
+          result.replaceAll("$OBJECT_OWNER_POSSESSIVE $OBJECT", OBJECT_PRONOUN);
       result = result.replaceAll(
-          "$OBJECT_OWNER_PRONOUN_POSSESIVE $OBJECT", OBJECT_PRONOUN);
+          "$OBJECT_OWNER_PRONOUN_POSSESSIVE $OBJECT", OBJECT_PRONOUN);
       result = result.replaceAll(OBJECT, OBJECT_PRONOUN_ACCUSATIVE);
       result = result.replaceAll(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESSIVE);
     }
