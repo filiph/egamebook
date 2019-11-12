@@ -1,6 +1,4 @@
-# Main characters
-
-#ref
+# Main characters #ref
 
 ## Big O (Ossiris)
 
@@ -27,7 +25,10 @@ Torn between duty and rationality (keep Knights alive by retreating) and interna
 
 ## Darg
 
-An orc. Wants most things. But most of all, wants to please his horde. Literally crowdsourcing leadership. Does not go well. 
+An orc. Wants to please his horde. Literally crowdsourcing leadership. Does not go well because following the lowest common denominator is not leadership.
+
+* "I'm just doing what the Crowd wants. Who am I to tell them anything else."
+
 
 ## Jisad (Blind Guide)
 

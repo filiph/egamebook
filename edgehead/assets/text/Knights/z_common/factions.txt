@@ -1,6 +1,4 @@
-# Factions
-
-#ref
+# Factions #ref
 
 ## Blessed
 The people below the elevator shaft. Cannibals.

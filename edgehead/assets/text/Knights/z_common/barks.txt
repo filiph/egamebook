@@ -16,3 +16,6 @@ By default, barks apply for everyone except the player (i.e. when warging, we do
 - "I'm doing it!" <subject> exclam<s>.
 - "Take that, s- scum." <subject> somehow manage<s> to look both triumphant and awkward.
 
+## goblin after unsuccessful action
+
+- subject grind<s> subject's teeth

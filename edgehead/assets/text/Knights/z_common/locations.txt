@@ -1,6 +1,40 @@
-# Locations
+# Locations #ref
 
-#ref
+## From [grid map](https://docs.google.com/spreadsheets/d/1JXKO3x--8mfdlXMrkz8yM4nVTpbNFD9GFETuQwhqyvM/)
+
+### Start
+
+### Bleeds
+
+### Goblin camp
+
+### Entrance
+
+### Farmer village
+
+### The fields / slope
+
+### Oracle's observatory
+
+### Jungle
+
+### Cockroach farm
+
+### Cesspool / Reservoir
+
+### God's Lair
+
+### Orc barracks
+
+### Orc's temple (Crowdsource)
+
+### Big O's laboratory
+
+### Big O's quarters
+
+-----
+
+## Old ideas from [Pyramid](https://docs.google.com/document/d/1xp0q903tnf099vvRsELrTfoxApN6KAUtWIU828r4cSY/edit) 
 
 * The wizard's temple (at the very top)
 * The orc commune
