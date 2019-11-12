@@ -1,0 +1,18 @@
+# Barks
+
+By default, barks apply for everyone except the player (i.e. when warging, we don't want the player to automatically say something).
+
+## Orc/goblin, just after successful aggressive action, not confused, not undead
+
+- <subject> grin<s>
+- <subject> chuckle<s>
+- "You seem surprised," <subject> say<s>.
+ 
+## Player, not warging, just after getting hit
+- _Ouch._
+- It hurts like a mother.
+ 
+## Leroy, Joe's son, after successfully dealing damage
+- "I'm doing it!" <subject> exclam<s>.
+- "Take that, s- scum." <subject> somehow manage<s> to look both triumphant and awkward.
+

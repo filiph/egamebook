@@ -1,0 +1,74 @@
+// ROOM: pyramid_entrance
+
+// FIRST_DESCRIPTION:
+// // majestic
+// As [we] approach, I can't stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building.
+
+// Two knights, a man and a woman, are guarding the entrance.
+
+// DESCRIPTION:
+// The two knights are still here.
+
+// // --
+// ACTION: observe_knights
+// DESCRIPTION:
+// Both are wearing the same livery and a similar helmet. They don't speak, opting instead to look directly at [us].
+
+// // ---
+// ACTION: speak_with_knights
+// DESCRIPTION:
+// // Subtext: The knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.
+// The male knight raises an eyebrow. "What brings you here?"
+
+// I simply tell them I came to the Pyramid and would like to get in.
+
+// "Oh," the man says, "you would _not_ like to get in. You would like to get out."
+
+// The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.
+
+// "This is no longer safe. Unless you have business with one of the farmers, you cannot go in."
+
+// (This is the geographical end of the demo. There is no way to get past these knights at this time.)
+
+// // ---
+// ACTION: persuade_to_enter_pyramid
+// INK:
+// "Why wouldn't you let me in?"
+
+// "Oh, she told you already. Not safe."
+
+// * "Why do you care if it's safe?"
+
+// * "I can take care of myself."
+
+// * "That doesn't matter. Just let me in."
+
+// -
+
+// <> We have a responsibility. You wouldn't understand."
+
+// Once again, the woman looks at him. But this time she says nothing.
+
+// * "I understand danger."
+// * "Who is the higher ranked of you two?"
+
+// "Does that matter?" the woman says. That's how I know she is the higher ranked, even if maybe not formally. She is definitely the smarter one.
+
+// "Yeah," the man says. "Why does that matter? Rules are rules and even if I was the lowest of the knights, they would still apply." He grunts and puts his boot down. It would almost be adorable, if he wasn't armed.
+
+// * "Look, just let me in."
+
+// -
+
+// "Oh, we don't like it the same as you," the knight continues. "No glory in being a glorified fence, if you know what I mean."
+
+// "_Yes_ glory in being a glorified fence, Miguel. Glory in protecting innocents from harm." She turns to me. "I am sorry, we should introduce ourselves. I am Kat. This is Miguel."
+
+// * "I am [Aren]."
+// * "Nice to meet you, Kat and Miguel. I am [Aren]."
+
+// "Nice to meet you, too. <>
+
+// -
+
+// <> As you have probably understood, we are under orders not to let anyone in. That is the end of this conversation, but happy to discuss anything else." She smiles professionally and makes a little nod, an attempt to put in my mind the conviction that this really is the end of the discussion. She's really good.
