@@ -31,18 +31,18 @@ class Pose extends EnumClass implements Comparable<Pose> {
   /// insta-kill.
   static const Pose onGround = _$onGround;
 
-  /// A sequence of poses from worst to best.
-  static const List<Pose> _sequence = [
-    onGround,
-    offBalance,
-    extended,
-    standing,
-    combat
-  ];
-
   static Serializer<Pose> get serializer => _$poseSerializer;
 
   static BuiltSet<Pose> get values => _$values;
+
+  /// A sequence of poses from worst to best.
+  static List<Pose> get _sequence => const [
+        onGround,
+        offBalance,
+        extended,
+        standing,
+        combat,
+      ];
 
   const Pose._(String name) : super(name);
 

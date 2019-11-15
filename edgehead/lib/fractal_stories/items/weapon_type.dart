@@ -15,12 +15,6 @@ part 'weapon_type.g.dart';
 ///
 /// Note that [fist] and [claw] and [teeth] are also weapons.
 class WeaponType extends EnumClass {
-  /// The weapons that are not actual holdable weapons, but actually
-  /// body parts.
-  ///
-  /// Use this for asserts, nothing more. The set may not be updated.
-  static const Set<WeaponType> bodyPartWeapons = {claw, teeth, fist};
-
   /// This is only used in [DamageCapability.none].
   static const WeaponType none = _$none;
 
@@ -34,6 +28,7 @@ class WeaponType extends EnumClass {
   static const WeaponType fist = _$fist;
 
   static const WeaponType spear = _$spear;
+
   static const WeaponType sword = _$sword;
   static const WeaponType dagger = _$dagger;
   static const WeaponType axe = _$axe;
@@ -44,6 +39,12 @@ class WeaponType extends EnumClass {
 
   /// A shield.
   static const WeaponType shield = _$shield;
+
+  /// The weapons that are not actual holdable weapons, but actually
+  /// body parts.
+  ///
+  /// Use this for asserts, nothing more. The set may not be updated.
+  static Set<WeaponType> get bodyPartWeapons => const {claw, teeth, fist};
 
   static Serializer<WeaponType> get serializer => _$weaponTypeSerializer;
 
