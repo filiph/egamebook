@@ -1,0 +1,32 @@
+# player_narrative
+
+I learn that the Knights, who are holding peace in the area, are retreating. I try to find the reason, and everyone directs me to the Corporal. I find him in the HQ. I talk to him and he tells me the cause is lost. He asks me to help him persuade the farmers to evacuate. He also mentions that quest (help X secure Y to allow Z make retreat).
+
+I decide to go to Y. Z is there. I talk to him ("Zee") and he tells me that a pre-emptive counter attack might get people some time.
+
+I prepare myself:
+
+* I use my "long distance animation" power. I hear terrible screams from above. I also lose one sanity, and I know the only way to get it back is through human warmth. (Someone thanks me, someone loves me.)
+* I ask Zee to join me. He says he will only follow me upwards. I say okay.
+
+I go upwards and we meet some orcs, but they are decimated. There is one on the floor asphyxiated by his own hand. We kill them.
+
+I deal with the consequences of a brutal fight:
+
+* I set bones, reattach limbs and join detachments for myself and Zee. This costs nothing. The scars remain (a form of XP? A memento of life lived to the fullest?).
+
+Zee thanks me. He says he doesn't want to retreat, and that he will rather die defending. I can send him do his duty (retreat) or encourage him to stay.
+
+I come back to the Knights' Corporal. He says that whatever he thinks of the situation, his duty is to keep the Knights alive -- they can lose a battle, they must not lose the war. He tells me, though, that he might come with me if need him for something worthy of his strength. The corporal also "barks" (short sentence) about hating spiders.
+
+## Part 2 (with retreat?)
+
+I see that, on the map, the Oracle node has a "notification" on it (added by the Director? Or automatically by diffing? Or maybe it's not there at all but the director "tells" me: e.g. "I have a feeling I might want to visit the Oracle."). I go to the Oracle. 
+
+Oracle tells me about one of the ancient weapons: the Dragon's egg. Apparently, it is somewhere around the jungle. To get it, I need to plant a tree there (theme: legacy). Can be a small tree. Whichever. Iss will then show me the way.
+
+I go to the Bleeds and a new environment action appears (there should be a "mark" next to environment): unroot a small tree. But before I do that, since I'm back outside, this gives Director an option to show some change (DungeonWorld backtracking - your actions have consequences, and the world is living and breathing). Anyway. I dig a tree from the ground and it appears in my inventory. I can now try to plant it anywhere (most places will fail at that).
+
+I go up to the Jungle. I have a surprise fight with a proud Tahir. A random encounter made by Director (who senses that I had X moves without any fight, and the last one was quite tough). An easy win that gives me some coin.
+
+I plant the tree. As I dig in the ground to make space for the roots, I touch something. It's an ancient military crate for grenades. Only one inside: the dragon's egg. I finish planting the tree. "At least something will stay in this world after I die."
