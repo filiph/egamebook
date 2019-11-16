@@ -206,7 +206,8 @@ FightSituation generateEscapeTunnelFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
   var orc = _makeOrc(w, id: escapeTunnelOrcId);
-  var goblin = _makeGoblin(w, id: escapeTunnelGoblinId);
+  var goblin =
+      _makeGoblin(w, id: escapeTunnelGoblinId, swordAdjective: 'goblin');
   var monsters = [orc, goblin];
   w.actors.addAll(monsters);
   return FightSituation.initialized(w.randomInt(), party, monsters,
@@ -614,6 +615,7 @@ Actor _makeGoblin(WorldStateBuilder w,
         {int id,
         bool spear = false,
         String spearAdjective = 'crude',
+        String swordAdjective = 'rusty',
         String currentRoomName}) =>
     Actor.initialized(id ?? w.randomInt(), "goblin",
         nameIsProperNoun: false,
@@ -621,7 +623,8 @@ Actor _makeGoblin(WorldStateBuilder w,
         currentWeapon: spear
             ? Item.weapon(w.randomInt(), WeaponType.spear,
                 adjective: spearAdjective)
-            : Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'rusty'),
+            : Item.weapon(w.randomInt(), WeaponType.sword,
+                adjective: swordAdjective),
         team: defaultEnemyTeam,
         currentRoomName: currentRoomName,
         foldFunctionHandle: carelessMonsterFoldFunctionHandle);
