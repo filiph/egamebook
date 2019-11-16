@@ -18,7 +18,7 @@ import '../parse_writers_input/types.dart';
 /// Generator for FunctionSerializer.
 class WritersInputGenerator extends Generator {
   // Allow creating via `const` as well as enforces immutability here.
-  static const List<String> validExtensions = [".txt"];
+  static const List<String> validExtensions = [".egb.txt"];
 
   const WritersInputGenerator();
 
@@ -55,7 +55,7 @@ class WritersInputGenerator extends Generator {
       final assetIds = buildStep.findAssets(Glob(glob, recursive: true));
       await for (final id in assetIds) {
         log.finer('Compiling $id');
-        if (!validExtensions.contains(id.extension)) continue;
+        if (!validExtensions.any((ext) => id.path.endsWith(ext))) continue;
         final path = id.uri.toString();
         final List<String> lines =
             (await buildStep.readAsString(id)).split("\n");
