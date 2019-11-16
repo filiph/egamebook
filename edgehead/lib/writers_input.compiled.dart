@@ -3917,6 +3917,17 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, null, isIdle: true);
+final Approach endOfRoamFromKnightsHqMain = Approach(
+    'knights_hq_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You realize this adventuring life is not for you.\n',
+      wholeSentence: true);
+});
 final Approach oracleMainFromKnightsHqMain = Approach(
     'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -4143,6 +4154,7 @@ final allApproaches = <Approach>[
   goblinSkirmishMainFromGoblinSkirmishSneak,
   knightsHqMainFromOracleMain,
   knightsHqMainFromStartTesterBuild,
+  endOfRoamFromKnightsHqMain,
   oracleMainFromKnightsHqMain
 ];
 final allActions = <RoamingAction>[
