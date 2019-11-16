@@ -1,0 +1,12 @@
+// ---
+APPROACH: $oracle_main FROM $knights_hq_main
+COMMAND: Go >> to the Oracle
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $oracle_main
+
+FLAGS: $IDLE
+
+DESCRIPTION: 
+The Oracle is here.
