@@ -106,6 +106,12 @@ class WritersInputGenerator extends Generator {
       room.registerReachableRooms(rooms.map((r) => r.writersName));
     }
 
+    // Generates a string useful for sorting the objects.
+    String getSortable(GeneratedGameObject o) =>
+        '${o.path}>>${o.type}>>${o.writersName}';
+
+    objects.sort((a, b) => getSortable(a).compareTo(getSortable(b)));
+
     for (final object in objects) {
       lib.body.addAll(object.finalizeAst());
     }
