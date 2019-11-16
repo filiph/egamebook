@@ -76,9 +76,18 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
 
     currentKey = keyMatch.group(1);
 
+    if (currentKey == "NOTES") {
+      if (result.isNotEmpty) {
+        // Send the last result.
+        yield result;
+      }
+      // Ignores everything else.
+      return;
+    }
+
     if (objectTypes.contains(currentKey) && result.isNotEmpty) {
-      // We have encountered a new object (ROOM, ACTION, etc.). Finalize the
-      // last one.
+      // We have encountered a new object (ROOM, ACTION, etc.).
+      // Send the last one.
       yield result;
       result.clear();
     }

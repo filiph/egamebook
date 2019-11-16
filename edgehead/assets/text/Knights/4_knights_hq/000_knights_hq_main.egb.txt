@@ -28,3 +28,10 @@ if (w.actors.build().any((a) => a.id == brianaId)) {
 [[ENDCODE]]
 
 DESCRIPTION: $NONE
+
+
+NOTES:
+
+ACTION: $talk_to_corporal
+DESCRIPTION:
+The corporal says there's not much the Knights can do. They are retreating in any case. But he does feel responsible. Maybe if I go and help Zee (a knight) with a counter attack, that could give everyone more time to evacuate. I could also help by persuading the Farmers to evacuate. They don't want to.

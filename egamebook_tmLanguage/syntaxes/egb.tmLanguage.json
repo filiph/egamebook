@@ -145,6 +145,14 @@
 					"match": "\\bTODO\\b",
 					"name": "keyword.todo"
 				}]
+			},{
+				"name": "comment.block.notes",
+				"begin": "^NOTES:",
+				"end": "NOT_IMPLEMENTED",
+				"patterns": [{
+					"match": "\\bTODO\\b",
+					"name": "keyword.todo"
+				}]
 			}]
 		},
 		"markdown": {
