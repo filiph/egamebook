@@ -2320,27 +2320,6 @@ final Room testRandomEncounter =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, generateRandomEncounter, null);
-final Approach startFromStartTesterBuild = Approach(
-    'start_tester_build', 'start', 'Set piece >> from the start of the game',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room start = Room('start', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her slender sword. "This is the last and then I turn back."\n\n',
-      wholeSentence: true);
-  w.actors.removeWhere((actor) => actor.id == brianaId);
-}, null, null, null);
 final Approach startTesterBuildFromPreStartBook = Approach(
     'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2358,317 +2337,6 @@ final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('Welcome to the test build of this game.\n', wholeSentence: true);
 }, null, null, null);
-final Approach startCowardFromStart =
-    Approach('start', 'start_coward', '“Coward.”', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
-    '“It is just a rustle in the bush, Tamara. Probably a raccoon.”',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startCoward = Room('start_coward', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '"Look, you paid me for the journey, not for babysitting you around the freaking Pyramid."\n',
-      wholeSentence: true);
-}, null, null, null);
-final Room startRaccoon = Room('start_raccoon', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('"I\'m tired. And _that_ is definitely not a raccoon."\n',
-      wholeSentence: true);
-}, null, null, null);
-final Approach startEnterGoblinFromStartCoward = Approach(
-    'start_coward', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach startEnterGoblinFromStartRaccoon = Approach(
-    'start_raccoon', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'She motions toward the bush. I look in the direction and see a figure with a short, rusty sword.\n\nThis place. Why does everything need to be so difficult around here?\n\n"You think you could help me with this one?" She hands me a long dagger.\n',
-      wholeSentence: true);
-}, null, null, null);
-
-class StartDeclineDagger extends RoamingAction {
-  @override
-  final String name = 'start_decline_dagger';
-
-  static final StartDeclineDagger singleton = StartDeclineDagger();
-
-  @override
-  List<String> get commandPathTemplate => ['“You are going to be fine.”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'start_enter_goblin') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('Tamara shrugs and puts the dagger in her belt.\n',
-        wholeSentence: true);
-    w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
-    $(c).movePlayer("start_begin_fight");
-    return '${a.name} successfully performs StartDeclineDagger';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class StartTakeDagger extends RoamingAction {
-  @override
-  final String name = 'start_take_dagger';
-
-  static final StartTakeDagger singleton = StartTakeDagger();
-
-  @override
-  List<String> get commandPathTemplate => ['Take dagger'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'start_enter_goblin') {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('I take the dagger.\n', wholeSentence: true);
-    w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
-    $(c).movePlayer("start_begin_fight");
-    return '${a.name} successfully performs StartTakeDagger';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'The fight begins. The goblin before us is especially feral. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
-      wholeSentence: true);
-}, null, generateStartFight, null);
-final Approach startPostFightFromStartBeginFight = Approach(
-    'start_begin_fight', 'start_post_fight', 'End fight', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startPostFight = Room('start_post_fight', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  throw StateError(
-      "Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
-}, null, null, null);
-final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final ifBlock_3a12b716b = $(c).isHurt(tamaraId)
-      ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
-      : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
-  s.add('The fight is over.\n\n', wholeSentence: true);
-  Ruleset(
-      Rule(225876590, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return $(c).playerHasVisited("start_raccoon");
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add('"Raccoon my ass."\n\n', wholeSentence: true);
-      }),
-      Rule(633100163, 0, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return true;
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n\n',
-            wholeSentence: true);
-      })).apply(c);
-  s.add(
-      '\n$ifBlock_3a12b716b "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
-      wholeSentence: true);
-  w.updateActorById(tamaraId, (b) => b.isActive = false);
-}, null, null, null,
-    parent: 'start_post_fight',
-    prerequisite: Prerequisite(284371720, 1, true, (ApplicabilityContext c) {
-      final WorldState w = c.world;
-      final Simulation sim = c.simulation;
-      final Actor a = c.actor;
-      return !w.wasKilled(tamaraId);
-    }),
-    isIdle: true);
-final Room startPostFightTamaraAnimated = Room(
-    'start_post_fight_tamara_animated', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
-      wholeSentence: true);
-}, null, null, null,
-    parent: 'start_post_fight',
-    prerequisite: Prerequisite(640676048, 2, true, (ApplicabilityContext c) {
-      final WorldState w = c.world;
-      final Simulation sim = c.simulation;
-      final Actor a = c.actor;
-      return w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead;
-    }),
-    isIdle: true);
-final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n',
-      wholeSentence: true);
-}, null, null, null,
-    parent: 'start_post_fight',
-    prerequisite: Prerequisite(996731518, 2, true, (ApplicabilityContext c) {
-      final WorldState w = c.world;
-      final Simulation sim = c.simulation;
-      final Actor a = c.actor;
-      return w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated;
-    }),
-    isIdle: true);
 final Approach bleedsMainFromBleedsTraderHut = Approach(
     'bleeds_trader_hut', 'bleeds_main', 'Go >> outside', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3483,6 +3151,123 @@ final Approach endOfRoamFromBleedsMain =
   final Actor a = c.actor;
   return $(c).hasHappened(evGoblinCampCleared);
 });
+final Approach goblinSkirmishMainFromBleedsMain = Approach(
+    'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return $(c).hasHappened(evGoblinCampCleared);
+});
+final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
+    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> attack the camp',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return !$(c).hasHappened(evGoblinCampCleared);
+});
+final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('(To be done: actual battle. Assume you won.)\n\n',
+      wholeSentence: true);
+  w.recordCustom(evGoblinCampCleared);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
+  w.recordCustom(evGoblinCampCleared);
+}, null, null);
+final Approach knightsHqMainFromOracleMain =
+    Approach('oracle_main', 'knights_hq_main', 'Go to >> the Knights HQ',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach knightsHqMainFromStartTesterBuild = Approach(
+    'start_tester_build', 'knights_hq_main', 'Set piece >> in medias res',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '(NOTE FOR TESTERS: This area is very much in development.)\n\nI come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.\n\n',
+      wholeSentence: true);
+  w.updateActorById(tamaraId, (b) => b.isActive = false);
+  if (w.actors.build().any((a) => a.id == brianaId)) {
+    w.updateActorById(brianaId, (b) => b.isActive = false);
+  }
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, null, null, isIdle: true);
+final Approach endOfRoamFromKnightsHqMain = Approach(
+    'knights_hq_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You realize this adventuring life is not for you.\n',
+      wholeSentence: true);
+});
+final Approach oracleMainFromKnightsHqMain = Approach(
+    'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The Oracle is here.\n', wholeSentence: true);
+}, null, null, isIdle: true);
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
         (ActionContext c) {
@@ -3828,66 +3613,8 @@ final Room goblinSkirmishSneak =
   final Storyline s = c.outputStoryline;
   s.add('The goblins are still here.\n', wholeSentence: true);
 }, null, null);
-final Approach goblinSkirmishMainFromBleedsMain = Approach(
-    'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return $(c).hasHappened(evGoblinCampCleared);
-});
-final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
-    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> attack the camp',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return !$(c).hasHappened(evGoblinCampCleared);
-});
-final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('(To be done: actual battle. Assume you won.)\n\n',
-      wholeSentence: true);
-  w.recordCustom(evGoblinCampCleared);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
-  w.recordCustom(evGoblinCampCleared);
-}, null, null);
-final Approach knightsHqMainFromOracleMain =
-    Approach('oracle_main', 'knights_hq_main', 'Go to >> the Knights HQ',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach knightsHqMainFromStartTesterBuild = Approach(
-    'start_tester_build', 'knights_hq_main', 'Set piece >> in medias res',
+final Approach startFromStartTesterBuild = Approach(
+    'start_tester_build', 'start', 'Set piece >> from the start of the game',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3896,40 +3623,57 @@ final Approach knightsHqMainFromStartTesterBuild = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
+final Room start = Room('start', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '(NOTE FOR TESTERS: This area is very much in development.)\n\nI come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.\n\n',
+      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her slender sword. "This is the last and then I turn back."\n\n',
       wholeSentence: true);
-  w.updateActorById(tamaraId, (b) => b.isActive = false);
-  if (w.actors.build().any((a) => a.id == brianaId)) {
-    w.updateActorById(brianaId, (b) => b.isActive = false);
-  }
-}, (ActionContext c) {
+  w.actors.removeWhere((actor) => actor.id == brianaId);
+}, null, null, null);
+final Approach startCowardFromStart =
+    Approach('start', 'start_coward', '“Coward.”', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
-}, null, null, isIdle: true);
-final Approach endOfRoamFromKnightsHqMain = Approach(
-    'knights_hq_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
+});
+final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
+    '“It is just a rustle in the bush, Tamara. Probably a raccoon.”',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('You realize this adventuring life is not for you.\n',
-      wholeSentence: true);
+  s.add('', wholeSentence: true);
 });
-final Approach oracleMainFromKnightsHqMain = Approach(
-    'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
+final Room startCoward = Room('start_coward', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '"Look, you paid me for the journey, not for babysitting you around the freaking Pyramid."\n',
+      wholeSentence: true);
+}, null, null, null);
+final Room startRaccoon = Room('start_raccoon', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('"I\'m tired. And _that_ is definitely not a raccoon."\n',
+      wholeSentence: true);
+}, null, null, null);
+final Approach startEnterGoblinFromStartCoward = Approach(
+    'start_coward', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3937,14 +3681,270 @@ final Approach oracleMainFromKnightsHqMain = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
+final Approach startEnterGoblinFromStartRaccoon = Approach(
+    'start_raccoon', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The Oracle is here.\n', wholeSentence: true);
-}, null, null, isIdle: true);
+  s.add('', wholeSentence: true);
+});
+final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'She motions toward the bush. I look in the direction and see a figure with a short, rusty sword.\n\nThis place. Why does everything need to be so difficult around here?\n\n"You think you could help me with this one?" She hands me a long dagger.\n',
+      wholeSentence: true);
+}, null, null, null);
+
+class StartDeclineDagger extends RoamingAction {
+  @override
+  final String name = 'start_decline_dagger';
+
+  static final StartDeclineDagger singleton = StartDeclineDagger();
+
+  @override
+  List<String> get commandPathTemplate => ['“You are going to be fine.”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'start_enter_goblin') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Tamara shrugs and puts the dagger in her belt.\n',
+        wholeSentence: true);
+    w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
+    $(c).movePlayer("start_begin_fight");
+    return '${a.name} successfully performs StartDeclineDagger';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class StartTakeDagger extends RoamingAction {
+  @override
+  final String name = 'start_take_dagger';
+
+  static final StartTakeDagger singleton = StartTakeDagger();
+
+  @override
+  List<String> get commandPathTemplate => ['Take dagger'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'start_enter_goblin') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the dagger.\n', wholeSentence: true);
+    w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
+    $(c).movePlayer("start_begin_fight");
+    return '${a.name} successfully performs StartTakeDagger';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room startBeginFight = Room('start_begin_fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'The fight begins. The goblin before us is especially feral. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
+      wholeSentence: true);
+}, null, generateStartFight, null);
+final Approach startPostFightFromStartBeginFight = Approach(
+    'start_begin_fight', 'start_post_fight', 'End fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room startPostFight = Room('start_post_fight', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  throw StateError(
+      "Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
+}, null, null, null);
+final Room startPostFightTamaraAlive = Room('start_post_fight_tamara_alive',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final ifBlock_3a12b716b = $(c).isHurt(tamaraId)
+      ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
+      : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
+  s.add('The fight is over.\n\n', wholeSentence: true);
+  Ruleset(
+      Rule(225876590, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return $(c).playerHasVisited("start_raccoon");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('"Raccoon my ass."\n\n', wholeSentence: true);
+      }),
+      Rule(633100163, 0, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n\n',
+            wholeSentence: true);
+      })).apply(c);
+  s.add(
+      '\n$ifBlock_3a12b716b "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+      wholeSentence: true);
+  w.updateActorById(tamaraId, (b) => b.isActive = false);
+}, null, null, null,
+    parent: 'start_post_fight',
+    prerequisite: Prerequisite(284371720, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return !w.wasKilled(tamaraId);
+    }),
+    isIdle: true);
+final Room startPostFightTamaraAnimated = Room(
+    'start_post_fight_tamara_animated', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
+      wholeSentence: true);
+}, null, null, null,
+    parent: 'start_post_fight',
+    prerequisite: Prerequisite(640676048, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead;
+    }),
+    isIdle: true);
+final Room startPostFightTamaraDead = Room('start_post_fight_tamara_dead',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n',
+      wholeSentence: true);
+}, null, null, null,
+    parent: 'start_post_fight',
+    prerequisite: Prerequisite(996731518, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated;
+    }),
+    isIdle: true);
 
 class ReadLetterFromFather extends RoamingAction {
   @override
@@ -4088,8 +4088,15 @@ final allRooms = <Room>[
   warForge,
   warForgeAfterIronMonster,
   testRandomEncounter,
-  start,
   startTesterBuild,
+  bleedsMain,
+  bleedsTraderHut,
+  goblinSkirmishMain,
+  knightsHqMain,
+  oracleMain,
+  goblinSkirmishPatrol,
+  goblinSkirmishSneak,
+  start,
   startCoward,
   startRaccoon,
   startEnterGoblin,
@@ -4097,14 +4104,7 @@ final allRooms = <Room>[
   startPostFight,
   startPostFightTamaraAlive,
   startPostFightTamaraAnimated,
-  startPostFightTamaraDead,
-  bleedsMain,
-  bleedsTraderHut,
-  goblinSkirmishPatrol,
-  goblinSkirmishSneak,
-  goblinSkirmishMain,
-  knightsHqMain,
-  oracleMain
+  startPostFightTamaraDead
 ];
 final allApproaches = <Approach>[
   caveWithAgruthFromSlaveQuartersPassage,
@@ -4133,13 +4133,7 @@ final allApproaches = <Approach>[
   warForgeFromSmelter,
   endOfRoamFromTestRandomEncounter,
   testRandomEncounterFromStartTesterBuild,
-  startFromStartTesterBuild,
   startTesterBuildFromPreStartBook,
-  startCowardFromStart,
-  startRaccoonFromStart,
-  startEnterGoblinFromStartCoward,
-  startEnterGoblinFromStartRaccoon,
-  startPostFightFromStartBeginFight,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishMain,
   bleedsMainFromGoblinSkirmishSneak,
@@ -4147,15 +4141,21 @@ final allApproaches = <Approach>[
   bleedsMainFromStartTesterBuild,
   bleedsTraderHutFromBleedsMain,
   endOfRoamFromBleedsMain,
-  goblinSkirmishPatrolFromBleedsMain,
-  goblinSkirmishSneakFromBleedsMain,
-  goblinSkirmishSneakFromGoblinSkirmishPatrol,
   goblinSkirmishMainFromBleedsMain,
   goblinSkirmishMainFromGoblinSkirmishSneak,
   knightsHqMainFromOracleMain,
   knightsHqMainFromStartTesterBuild,
   endOfRoamFromKnightsHqMain,
-  oracleMainFromKnightsHqMain
+  oracleMainFromKnightsHqMain,
+  goblinSkirmishPatrolFromBleedsMain,
+  goblinSkirmishSneakFromBleedsMain,
+  goblinSkirmishSneakFromGoblinSkirmishPatrol,
+  startFromStartTesterBuild,
+  startCowardFromStart,
+  startRaccoonFromStart,
+  startEnterGoblinFromStartCoward,
+  startEnterGoblinFromStartRaccoon,
+  startPostFightFromStartBeginFight
 ];
 final allActions = <RoamingAction>[
   SearchAgruth.singleton,
@@ -4177,8 +4177,6 @@ final allActions = <RoamingAction>[
   WaitForRitual.singleton,
   WarForgeLookAround.singleton,
   WarForgeWatchWorkers.singleton,
-  StartDeclineDagger.singleton,
-  StartTakeDagger.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
   BleedsBlindGuideGoblins.singleton,
@@ -4192,6 +4190,8 @@ final allActions = <RoamingAction>[
   ListenMore.singleton,
   ListenToThemArguing.singleton,
   ObserveGoblinCamp.singleton,
+  StartDeclineDagger.singleton,
+  StartTakeDagger.singleton,
   ReadLetterFromFather.singleton,
   ReadLetterFromMentor.singleton
 ];

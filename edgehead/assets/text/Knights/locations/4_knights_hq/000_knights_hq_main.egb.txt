@@ -32,6 +32,47 @@ DESCRIPTION: $NONE
 
 NOTES:
 
+TODO: move to a quest file
+
 ACTION: $talk_to_corporal
 DESCRIPTION:
 The corporal says there's not much the Knights can do. They are retreating in any case. But he does feel responsible. Maybe if I go and help Zee (a knight) with a counter attack, that could give everyone more time to evacuate. I could also help by persuading the Farmers to evacuate. They don't want to.
+
+ACTION: $talk_to_zee
+DESCRIPTION:
+// Zee wants revenge. His comrade was killed. Zee wants to leave this world with justice served.
+The knight called Zee is sitting on a piece of ancient rubble, polishing his sword.
+
+"What can I do for you, friend?"
+
+_"I was told you are planning a counter attack."_
+
+"Yes. That I am."
+
+* _"Where is your unit?"_
+* _"That is very brave."_
+* _"Good."_
+
+-
+
+<> All I want is justice. And if there is no justice, then what's the point? I don't want to be living in an unjust world. Do you?"
+
+* _"Depends on who the world is unjust_ towards, _no?"_
+* _"I don't."_
+* _"Doesn't matter what I want. Let's kill some orcs."_
+
+-
+
+The knight nods upwards. "Just let me know. I'll follow you."
+
+// ---
+ACTION: $hire_zee
+DESCRIPTION:
+Zee sheathes his sword, stands up, and nods.
+
+// ---
+ROOM: $battlefield
+
+[...]
+
+POST_CLEARANCE_FIGHT_DESCRIPTION:
