@@ -329,6 +329,42 @@ FightSituation generateTestFightWithOrc(ActionContext c,
   );
 }
 
+/// Battlefield fight.
+FightSituation generateBattlefieldFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  final redOrc = Actor.initialized(w.randomInt(), "orc",
+      nameIsProperNoun: false,
+      adjective: 'red',
+      pronoun: Pronoun.HE,
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'serrated'),
+      constitution: 2,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  final leatherJerkinOrc = Actor.initialized(w.randomInt(), "orc",
+      nameIsProperNoun: false,
+      adjective: 'ordinary',
+      pronoun: Pronoun.HE,
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.axe, adjective: 'battle'),
+      constitution: 1,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+
+  w.actors.addAll([redOrc, leatherJerkinOrc]);
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [redOrc, leatherJerkinOrc],
+    "{battlefield|concrete} floor",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 /// "Random encounter"
 FightSituation generateRandomEncounter(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {

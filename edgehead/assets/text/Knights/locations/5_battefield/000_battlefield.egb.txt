@@ -1,0 +1,31 @@
+APPROACH: $battlefield FROM $knights_hq_main
+COMMAND: Go >> to the battlefield
+DESCRIPTION: [We] climb up the stairs to thirty third floor.
+
+// ---
+ROOM: $battlefield
+
+WHERE: among the columns
+
+FIRST_DESCRIPTION:
+It's very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can't quite place.
+
+As soon as [we] climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.
+
+"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."
+
+"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."
+
+The two orcs attack.
+
+FIGHT_SITUATION:
+generateBattlefieldFight
+
+DESCRIPTION: $NONE
+
+AFTER_MONSTERS_CLEARED:
+[We] stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
+
+A glorious battle this was, I'm sure. It became a scab.
+
+Whatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.

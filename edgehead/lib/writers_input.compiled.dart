@@ -3199,6 +3199,16 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
   w.recordCustom(evGoblinCampCleared);
 }, null, null);
+final Approach knightsHqMainFromBattlefield =
+    Approach('battlefield', 'knights_hq_main', 'Go to >> the Knights HQ',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Approach knightsHqMainFromOracleMain =
     Approach('oracle_main', 'knights_hq_main', 'Go to >> the Knights HQ',
         (ActionContext c) {
@@ -3251,6 +3261,57 @@ final Approach endOfRoamFromKnightsHqMain = Approach(
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
+final Approach battlefieldFromKnightsHqMain =
+    Approach('knights_hq_main', 'battlefield', 'Go >> to the battlefield',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized climb up the stairs to thirty third floor.\n',
+      wholeSentence: true);
+});
+final Room battlefield = Room(
+    'battlefield',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final weSubstitution =
+          getWeOrI(a, sim, originalWorld, capitalized: false);
+      s.add(
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."\n\nThe two orcs attack.\n',
+          wholeSentence: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', wholeSentence: true);
+    },
+    generateBattlefieldFight,
+    null,
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
+      s.add(
+          '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n',
+          wholeSentence: true);
+    },
+    whereDescription: 'among the columns');
 final Approach oracleMainFromKnightsHqMain = Approach(
     'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -4094,6 +4155,7 @@ final allRooms = <Room>[
   bleedsTraderHut,
   goblinSkirmishMain,
   knightsHqMain,
+  battlefield,
   oracleMain,
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
@@ -4140,9 +4202,11 @@ final allApproaches = <Approach>[
   endOfRoamFromBleedsMain,
   goblinSkirmishMainFromBleedsMain,
   goblinSkirmishMainFromGoblinSkirmishSneak,
+  knightsHqMainFromBattlefield,
   knightsHqMainFromOracleMain,
   knightsHqMainFromStartTesterBuild,
   endOfRoamFromKnightsHqMain,
+  battlefieldFromKnightsHqMain,
   oracleMainFromKnightsHqMain,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishSneakFromBleedsMain,
