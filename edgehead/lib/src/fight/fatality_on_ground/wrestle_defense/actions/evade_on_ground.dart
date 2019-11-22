@@ -48,7 +48,6 @@ class EvadeOnGround extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to {dodge|evade|break free}");
@@ -56,18 +55,17 @@ class EvadeOnGround extends OtherActorAction {
         () => a.report(s, "<subject> {can't|fail<s>}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to evade ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {evade<s>|break<s> free}", positive: true);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} evades ${enemy.name}";
   }
 

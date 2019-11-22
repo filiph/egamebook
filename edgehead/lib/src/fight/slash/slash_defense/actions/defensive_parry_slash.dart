@@ -55,7 +55,6 @@ class DefensiveParrySlash extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Randomly.run(
@@ -78,14 +77,13 @@ class DefensiveParrySlash extends OtherActorAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to parry ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     if (a.isPlayer) {
@@ -110,7 +108,7 @@ class DefensiveParrySlash extends OtherActorAction {
         a.report(s, "<subject> regain<s> some balance");
       }
     }
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} steps back and parries ${enemy.name}";
   }
 

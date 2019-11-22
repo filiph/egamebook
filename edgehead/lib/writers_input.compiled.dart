@@ -522,7 +522,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
             s.add(
                 'You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.\n\n\n<p class="toast">Your stamina decreases by 1.</p>\n\n\nFortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.\n\n\nYou deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.',
                 wholeSentence: true);
-            w.popSituation(sim);
+            w.popSituation(c);
             w.updateActorById(a.id, (b) => b..stamina -= 1);
             setUpStealShield(c, true);
             return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Stay perfectly still)';
@@ -542,7 +542,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
         s.add(
             'You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.\n\n\nYou look at Briana. Both of you are ready to fight.',
             wholeSentence: true);
-        w.popSituation(sim);
+        w.popSituation(c);
         setUpStealShield(c, false);
         return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
       }, 'You can quickly snatch the shield, jump back and prepare for a fight.')
@@ -936,7 +936,7 @@ class SlaveQuartersContinue extends RoamingAction {
         '_"Do you not want to kill some more orcs?"_\n\n\n"I do, trust me. I just don\'t want to get killed first."\n\n\nYou shake your head and start walking. Briana reluctantly follows, her eyes darting around the familiar tunnel. You\'re close to where the orcs had kept you during sleeping hours.\n\n\nSoon, you see an orc patrol appear from behind a bend. Here, it\'s impossible to hide. The orcs spot you immediatelly. \n\n\nThere are three of them, one has a longsword, the second has a spear, and the third holds a large battle axe.\n\n\nThe orc with the spear hurls it, and it pierces Briana\'s shoulder. She screams in pain. \n\n\nThe orc with the sword makes three fast leaps toward you, and swings his weapon. You have no time to react, and the blade slits your throat. You gurgle and your arms flail in surprise.\n\n\nYou look at Briana. As the battle axe cleaves her stomach, the two of you hold eye contact.\n',
         wholeSentence: true);
     w.updateActorById(a.id, (b) => b..hitpoints = 0);
-    w.popSituation(sim);
+    w.popSituation(c);
     return '${a.name} successfully performs SlaveQuartersContinue';
   }
 

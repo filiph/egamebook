@@ -54,7 +54,6 @@ class DodgeThrow extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
@@ -66,14 +65,13 @@ class DodgeThrow extends OtherActorAction {
     } else {
       projectile.report(s, "<subject> fl<ies> too fast", but: true);
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to dodge ${enemy.name}'s throw";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
@@ -86,7 +84,7 @@ class DodgeThrow extends OtherActorAction {
     projectile.report(s, "<subject> fl<ies> past <object> and out of reach",
         object: a, endSentence: true);
     moveProjectileToGround(w, enemy, projectile, true);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} dodges ${enemy.name}'s throw";
   }
 

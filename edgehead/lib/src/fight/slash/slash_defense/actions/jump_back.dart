@@ -51,7 +51,6 @@ class JumpBackFromSlash extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(
@@ -59,21 +58,20 @@ class JumpBackFromSlash extends OtherActorAction {
         "<subject> {jump<s>|leap<s>} {back|backward} "
         "but <subject> <is> {not fast enough|too slow}.",
         wholeSentence: true);
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to jump back from ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
         positive: true);
     s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",
         subject: enemy.currentWeaponOrBodyPart, owner: enemy);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} jumps back from ${enemy.name}'s attack";
   }
 

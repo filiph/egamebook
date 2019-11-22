@@ -47,8 +47,8 @@ final escape_pursuers_reach = EventCallback((c, sim, w, s) {
       "with formidable power.",
       wholeSentence: true);
   w.updateActorById(playerId, (b) => b..hitpoints = 0);
-  w.popSituationsUntil(RoomRoamingSituation.className, sim);
-  w.popSituation(sim);
+  w.popSituationsUntil(RoomRoamingSituation.className, c);
+  w.popSituation(c);
 });
 
 final escape_tunnel_earsplitting = EventCallback((c, sim, w, s) {

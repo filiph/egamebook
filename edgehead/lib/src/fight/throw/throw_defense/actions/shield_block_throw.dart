@@ -55,7 +55,6 @@ class ShieldBlockThrow extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
@@ -78,14 +77,13 @@ class ShieldBlockThrow extends OtherActorAction {
               object: projectile,
               but: true));
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to block ${enemy.name}'s throw with shield";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
@@ -99,7 +97,7 @@ class ShieldBlockThrow extends OtherActorAction {
     projectile.report(s, "<subject> bounce<s> off the shield");
     projectile.report(s, "<subject> fall<s> to ground");
     moveProjectileToGround(w, enemy, projectile, false);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} blocks ${enemy.name} with a shield";
   }
 

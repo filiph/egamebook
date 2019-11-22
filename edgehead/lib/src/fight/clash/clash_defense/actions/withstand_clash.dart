@@ -43,10 +43,9 @@ class WithstandClash extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
 
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to withstands a clash from ${enemy.name}";
   }
 
@@ -64,7 +63,7 @@ class WithstandClash extends OtherActorAction {
         positive: true,
         actionThread: thread);
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} withstands a clash from ${enemy.name}";
   }
 

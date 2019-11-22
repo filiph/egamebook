@@ -225,7 +225,9 @@ abstract class FightSituation extends Object
   }
 
   @override
-  void onPop(Simulation sim, WorldStateBuilder world) {
+  void onPop(ActionContext context) {
+    final sim = context.simulation;
+    final world = context.outputWorld;
     if (roomRoamingSituationId != null &&
         !canFight(sim, world, enemyTeamIds) &&
         canFight(sim, world, playerTeamIds)) {
@@ -241,6 +243,12 @@ abstract class FightSituation extends Object
           world.updateActorById(id, (b) => b..pose = b.poseMax);
         }
       }
+
+      final room = sim.getRoomByName(situation.currentRoomName);
+      if (room.afterMonstersCleared != null) {
+        room.afterMonstersCleared(context);
+      }
+
 
       // Allow player to take and distribute loot.
       world.pushSituation(LootSituation.initialized(

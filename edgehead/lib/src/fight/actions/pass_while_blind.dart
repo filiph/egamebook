@@ -58,7 +58,6 @@ class PassWhileBlind extends OtherActorAction {
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
 
@@ -69,7 +68,7 @@ class PassWhileBlind extends OtherActorAction {
         negative: true,
         wholeSentence: true);
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} avoid a move by pure chance";
   }
 

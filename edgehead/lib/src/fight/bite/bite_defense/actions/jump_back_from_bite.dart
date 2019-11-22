@@ -64,14 +64,13 @@ class JumpBackFromBite extends OtherActorAction {
         wholeSentence: true,
         actionThread: thread);
 
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to jump back from ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final situation =
@@ -84,7 +83,7 @@ class JumpBackFromBite extends OtherActorAction {
         owner: enemy,
         actionThread: thread);
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} jumps back from ${enemy.name}'s attack";
   }
 

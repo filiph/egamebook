@@ -53,7 +53,6 @@ class DodgeThrustOnGround extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to move <subject's> body out of the way");
@@ -62,14 +61,13 @@ class DodgeThrustOnGround extends OtherActorAction {
             but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to dodge ${enemy.name}'s thrust on ground";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(
@@ -78,7 +76,7 @@ class DodgeThrustOnGround extends OtherActorAction {
       object: MoveEntity.getFromAttackerSituation(context.world),
       positive: true,
     );
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }

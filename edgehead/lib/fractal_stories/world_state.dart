@@ -5,12 +5,12 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/history/rule_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
-import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
@@ -273,20 +273,20 @@ abstract class WorldStateBuilder
   S getSituationByName<S extends Situation>(String situationName) =>
       build().getSituationByName<S>(situationName);
 
-  void popSituation(Simulation sim) {
+  void popSituation(ActionContext context) {
     var removal = situations.build().last;
-    removal.onPop(sim, this);
+    removal.onPop(context);
     // The onPop function could have added another situation to the stack,
     // so we can't use `situations.removeLast()`.
     situations.remove(removal);
   }
 
-  void popSituationsUntil(String situationName, Simulation sim) {
+  void popSituationsUntil(String situationName, ActionContext context) {
     var built = situations.build();
     final originalLength = built.length;
     assert(built.isNotEmpty, "Tried popping situations from an empty stack.");
     while (built.isNotEmpty && built.last.name != situationName) {
-      popSituation(sim);
+      popSituation(context);
       built = situations.build();
     }
     assert(

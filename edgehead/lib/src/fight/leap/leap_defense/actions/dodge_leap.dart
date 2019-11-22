@@ -61,7 +61,7 @@ class DodgeLeap extends OtherActorAction {
           () => a.report(s, "<subject> {<is> too slow|<isn't> fast enough}",
               but: true, actionThread: thread));
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to dodge ${enemy.name}";
   }
 
@@ -78,7 +78,7 @@ class DodgeLeap extends OtherActorAction {
     enemy.report(s, "<subject> {crash<es> to|fall<s> to|hit<s>} the $ground",
         negative: true);
     w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} dodges ${enemy.name}";
   }
 

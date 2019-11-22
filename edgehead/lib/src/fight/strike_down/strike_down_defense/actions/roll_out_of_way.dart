@@ -64,19 +64,17 @@ class RollOutOfWay extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tr<ies> to roll out of the way");
     a.report(s, "<subject> can't", but: true);
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to roll out of the way";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> <is> able to roll out of the way",
@@ -85,7 +83,7 @@ class RollOutOfWay extends OtherActorAction {
       w.updateActorById(a.id, (b) => b..pose = Pose.standing);
       a.report(s, "<subject> jump<s> up on <subject's> feet", positive: true);
     }
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} rolls out of the way of ${enemy.name}'s strike";
   }
 

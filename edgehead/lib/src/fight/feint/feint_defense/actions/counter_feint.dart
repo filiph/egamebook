@@ -60,7 +60,7 @@ class CounterAttackFeint extends OtherActorAction {
     final thread = getThreadId(sim, w, feintSituationName);
     a.report(s, "<subject's> attempt to counter <object's> feint fails",
         object: enemy, negative: true, actionThread: thread);
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to counter a feint from ${enemy.name}";
   }
 
@@ -78,7 +78,7 @@ class CounterAttackFeint extends OtherActorAction {
         "<subject's> {stance|footing}",
         positive: true,
         actionThread: thread);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
 
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");

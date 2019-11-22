@@ -100,7 +100,7 @@ abstract class Situation {
   /// [Simulation.situations] stack, either manually (by using
   /// [Simulation.popSituation]) or automatically (when [shouldContinue] is
   /// no longer true or [getNextTurn] returns `null`).
-  void onPop(Simulation sim, WorldStateBuilder world);
+  void onPop(ActionContext context);
 
   /// Return `false` when this [Situation] should no longer continue.
   ///
@@ -138,7 +138,7 @@ mixin SituationBaseBehavior implements Situation {
   }
 
   @override
-  void onPop(Simulation sim, WorldStateBuilder world) {
+  void onPop(ActionContext context) {
     // No-op by default.
   }
 

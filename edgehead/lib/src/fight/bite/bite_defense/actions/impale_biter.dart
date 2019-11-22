@@ -77,14 +77,13 @@ class ImpaleBiter extends OtherActorAction {
           () => a.report(s, "<subject> {<is> too slow|<isn't> fast enough}",
               but: true, actionThread: thread));
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to impale ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final situation =
@@ -208,7 +207,7 @@ class ImpaleBiter extends OtherActorAction {
       killHumanoid(context, enemy.id);
     }
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} impales ${enemy.name}";
   }
 

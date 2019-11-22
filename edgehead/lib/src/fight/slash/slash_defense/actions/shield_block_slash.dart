@@ -58,7 +58,6 @@ class ShieldBlockSlash extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(
@@ -75,14 +74,13 @@ class ShieldBlockSlash extends OtherActorAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true));
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to block ${enemy.name} with shield";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     if (enemy.pose == Pose.offBalance) {
@@ -106,7 +104,7 @@ class ShieldBlockSlash extends OtherActorAction {
           object2: a.currentShield,
           positive: true);
     }
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
 
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");

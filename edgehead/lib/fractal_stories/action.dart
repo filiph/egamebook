@@ -316,7 +316,7 @@ abstract class Action<T> {
         builtOutput.currentSituation?.shouldContinue(sim, builtOutput) !=
             true) {
       if (builtOutput.currentSituation == null) break;
-      output.popSituation(sim);
+      output.popSituation(context);
       builtOutput = output.build();
     }
 

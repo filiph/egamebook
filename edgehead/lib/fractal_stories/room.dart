@@ -12,7 +12,8 @@ import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 /// Describer that doesn't output any text at all.
-// ignore: prefer_function_declarations_over_variables
+///
+/// ignore: prefer_function_declarations_over_variables
 final RoomDescriber emptyRoomDescription = (c) {};
 
 /// This is the magic [Room] that, when reached, makes
@@ -108,6 +109,15 @@ class Room {
   /// TakeImplicitApproach.
   final bool isSynthetic;
 
+  /// Called just after the first batch of monsters (defined
+  /// in [fightGenerator]) have been killed. This is often the first time
+  /// the player character has the peace to explore the room some more.
+  final RoomDescriber afterMonstersCleared;
+
+  /// This is a short string to be used to form messages like "the orc still
+  /// stands in the rubble" or "there is no one among the pillars".
+  final String whereDescription;
+
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
   const Room(
     this.name,
@@ -118,6 +128,8 @@ class Room {
     this.groundMaterial = "ground",
     this.parent,
     this.prerequisite,
+    this.afterMonstersCleared,
+    this.whereDescription,
     this.isIdle = false,
     this.isSynthetic = false,
   })  : assert(name != null),

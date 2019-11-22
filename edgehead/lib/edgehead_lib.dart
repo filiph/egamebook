@@ -293,7 +293,7 @@ class EdgeheadGame extends Book {
     if (actorTurn.isNever) {
       // In prod, silently remove the Situation and continue.
       final builder = world.toBuilder();
-      builder.popSituation(simulation);
+      builder.situations.removeLast();
       world = builder.build();
       Timer.run(update);
       return;

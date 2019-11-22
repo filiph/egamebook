@@ -68,7 +68,7 @@ class CounterSweepFeet extends OtherActorAction {
         object: enemy, actionThread: thread);
     a.report(s, "<subject> fail<s> to slash <object's> leg",
         object: enemy, but: true, negative: true, actionThread: thread);
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to counter sweep feet from ${enemy.name}";
   }
 
@@ -130,7 +130,7 @@ class CounterSweepFeet extends OtherActorAction {
     }
     inflictPain(context, enemy.id, damage, result.touchedPart);
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
 
     return "${a.name} successfully counters a sweep feet from ${enemy.name}";
   }

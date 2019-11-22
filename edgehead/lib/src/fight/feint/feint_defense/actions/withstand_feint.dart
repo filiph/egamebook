@@ -42,9 +42,8 @@ class WithstandFeint extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to withstands a feint from ${enemy.name}";
   }
 
@@ -62,7 +61,7 @@ class WithstandFeint extends OtherActorAction {
         "<subject's> {stance|footing}",
         positive: true,
         actionThread: thread);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} withstands a feint from ${enemy.name}";
   }
 

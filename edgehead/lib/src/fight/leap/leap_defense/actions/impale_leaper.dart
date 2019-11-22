@@ -70,7 +70,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           () => a.report(s, "<subject> {<is> too slow|<isn't> fast enough}",
               but: true, actionThread: thread));
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to impale ${enemy.name}";
   }
 
@@ -119,7 +119,7 @@ class ImpaleLeaper extends EnemyTargetAction {
       killHumanoid(context, enemy.id);
     }
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} impales ${enemy.name}";
   }
 

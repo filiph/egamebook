@@ -50,7 +50,6 @@ class CatchProjectile extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
@@ -61,14 +60,13 @@ class CatchProjectile extends OtherActorAction {
         "but <subject> <is> {not fast enough|too slow}.",
         object: projectile,
         wholeSentence: true);
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to catch projectile from ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Item projectile = enemy.currentWeapon;
@@ -87,7 +85,7 @@ class CatchProjectile extends OtherActorAction {
           ..inventory.goBarehanded(enemy.anatomy));
     w.updateActorById(a.id, (b) => b..inventory.equip(projectile, a.anatomy));
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} catches ${enemy.name}'s projectile in air";
   }
 

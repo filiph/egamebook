@@ -25,7 +25,7 @@ Expression generateSimpleAction(
       [literal(escapeWritersText(description))],
       {'wholeSentence': literalTrue}));
   successClosure.block
-      .addExpression(refer('w').property('popSituation').call([refer('sim')]));
+      .addExpression(refer('w').property('popSituation').call([refer('c')]));
 
   if (effect != null) {
     addStatements(effect, successClosure.block);

@@ -50,7 +50,6 @@ class OnGroundParry extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(
@@ -61,14 +60,13 @@ class OnGroundParry extends OtherActorAction {
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to parry ${enemy.name}";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Randomly.run(
@@ -76,7 +74,7 @@ class OnGroundParry extends OtherActorAction {
       () => a.report(s, "<subject> stop<s> it with <object2>",
           object2: a.currentWeaponOrBodyPart, positive: true),
     );
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} parries ${enemy.name}";
   }
 

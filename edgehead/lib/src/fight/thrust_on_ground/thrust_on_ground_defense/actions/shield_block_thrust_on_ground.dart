@@ -54,7 +54,6 @@ class ShieldBlockThrustOnGround extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(
@@ -67,14 +66,13 @@ class ShieldBlockThrustOnGround extends OtherActorAction {
         () => a.report(s, "<subject> <is> too slow", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true));
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to block ${enemy.name} with shield while on ground";
   }
 
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
 
@@ -85,7 +83,7 @@ class ShieldBlockThrustOnGround extends OtherActorAction {
         object2: a.currentShield,
         positive: true);
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }

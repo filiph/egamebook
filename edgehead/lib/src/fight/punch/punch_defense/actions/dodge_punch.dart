@@ -54,7 +54,7 @@ class DodgePunch extends OtherActorAction {
             but: true, actionThread: thread),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
             object: a, but: true, actionThread: thread));
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to dodge ${enemy.name}";
   }
 
@@ -76,7 +76,7 @@ class DodgePunch extends OtherActorAction {
         actionThread: thread,
         replacesThread: true);
 
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");
     }

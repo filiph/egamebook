@@ -51,9 +51,8 @@ class AvoidSweepFeet extends OtherActorAction {
   @override
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to avoid a sweep from ${enemy.name}";
   }
 
@@ -67,7 +66,7 @@ class AvoidSweepFeet extends OtherActorAction {
     a.report(s, "<subject> avoid<s> the foot sweep", actionThread: thread);
     a.report(s, "<subject> {keep<s> standing|stay<s> upright}",
         positive: true, actionThread: thread);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
     return "${a.name} avoid a sweep from ${enemy.name}";
   }
 

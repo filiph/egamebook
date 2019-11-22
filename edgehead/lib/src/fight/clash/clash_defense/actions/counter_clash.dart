@@ -63,7 +63,7 @@ class CounterAttackClash extends OtherActorAction {
         object: MoveEntity.getFromAttackerSituation(context.world),
         negative: true,
         actionThread: thread);
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to counter a clash from ${enemy.name}";
   }
 
@@ -81,7 +81,7 @@ class CounterAttackClash extends OtherActorAction {
         "<subject's> {stance|footing}",
         positive: true,
         actionThread: thread);
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
 
     if (a.isPlayer) {
       s.add("this opens an opportunity for a counter attack");

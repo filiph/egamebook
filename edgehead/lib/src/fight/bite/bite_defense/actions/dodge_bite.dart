@@ -77,7 +77,7 @@ class DodgeBite extends OtherActorAction {
           () => enemy.report(s, "<subject> <is> too quick for <object>",
               object: a, but: true, actionThread: thread));
     }
-    w.popSituation(sim);
+    w.popSituation(context);
     return "${a.name} fails to dodge ${enemy.name}";
   }
 
@@ -112,7 +112,7 @@ class DodgeBite extends OtherActorAction {
           actionThread: thread);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
     }
-    w.popSituationsUntil("FightSituation", sim);
+    w.popSituationsUntil("FightSituation", context);
 
     if (a.isOnGround) {
       // No counter attack from ground.
