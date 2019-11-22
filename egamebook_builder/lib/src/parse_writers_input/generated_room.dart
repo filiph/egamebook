@@ -42,7 +42,6 @@ class GeneratedRoom extends GeneratedGameObject {
     }
 
     final Map<String, Expression> namedArguments = {};
-    // TODO: add named argument for groundMaterial
 
     if (_map.containsKey('VARIANT_OF')) {
       if (!_map.containsKey('RULE')) {
@@ -79,6 +78,19 @@ class GeneratedRoom extends GeneratedGameObject {
                 'Unknown flag "$flag" in $writersName ($path).');
         }
       }
+    }
+
+    if (_map.containsKey('AFTER_MONSTERS_CLEARED')) {
+      namedArguments['afterMonstersCleared'] =
+          createDescriber(_map['AFTER_MONSTERS_CLEARED']);
+    }
+
+    if (_map.containsKey('WHERE')) {
+      namedArguments['whereDescription'] = literal(_map['WHERE']);
+    }
+
+    if (_map.containsKey('GROUND_MATERIAL')) {
+      namedArguments['groundMaterial'] = literal(_map['GROUND_MATERIAL']);
     }
 
     var newInstance = roomType.newInstance([
