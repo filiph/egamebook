@@ -249,7 +249,6 @@ abstract class FightSituation extends Object
         room.afterMonstersCleared(context);
       }
 
-
       // Allow player to take and distribute loot.
       world.pushSituation(LootSituation.initialized(
           world.randomInt(),

@@ -123,4 +123,45 @@ void main() {
     var firstConsequence = firstRule.children.last;
     expect(firstConsequence.children.single.type, BlockType.ruleset);
   });
+
+  test("ruleset within a ruleset, with code", () {
+    var text = r"""
+    [[RULESET]]
+    [[RULE]]
+      currentRoom == orcthornRoom
+    [[THEN]]
+      [[RULESET]]
+      [[RULE]]
+        currentRoom == slaveQuartersPassage
+        !w.actorHasVisited(orcthornRoom)
+      [[THEN]]
+      Briana looks at the door, eyes wide.
+      
+      [[CODE]]
+      print("hello");
+      [[ENDCODE]]
+      
+      [[ENDRULE]]
+      [[ENDRULESET]]
+    [[ENDRULE]]
+    [[ENDRULESET]]
+    """;
+
+    var result = parseBlocks(text).children;
+    expect(result.length, 1);
+    var ruleset = result.single;
+    expect(ruleset.type, BlockType.ruleset);
+    expect(ruleset.children.length, 1);
+    var firstRule = ruleset.children.single;
+    var firstCondition = firstRule.children.first;
+    expect(firstCondition.content.trim(), "currentRoom == orcthornRoom");
+    var firstConsequence = firstRule.children.last;
+    var nestedRuleset = firstConsequence.children.single;
+    expect(nestedRuleset.type, BlockType.ruleset);
+    var nestedRule = nestedRuleset.children.single;
+    expect(nestedRule.type, BlockType.rule);
+    var nestedConsequence = nestedRule.children.last;
+    expect(nestedConsequence.children.length, 2);
+    expect(nestedConsequence.children.last.type, BlockType.code);
+  });
 }

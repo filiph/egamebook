@@ -151,31 +151,45 @@ Block _parseSequence(String text) {
   final typeStack = Queue<BlockType>();
   typeStack.add(BlockType.text);
   final currentContent = StringBuffer();
+  int lineNumber = -1;
   for (var line in text.split('\n')) {
+    lineNumber += 1;
     if (codeOpenTag.hasMatch(line)) {
       if (typeStack.last == BlockType.code) {
         throw FormatException("A [[CODE]] open tag found in a code block. "
             "Cannot make a code block inside a code block.\n"
+            "lineNumber: $lineNumber\n"
             "$text");
+      }
+      if (typeStack.last == BlockType.ruleset) {
+        // Ignore code blocks inside rulesets, they will be parsed
+        // [_parseRuleset].
+        currentContent.writeln(line);
+        continue;
       }
       final currentText = currentContent.toString();
       if (_isNotEmpty(currentText)) {
         children.add(Block.textContent(currentText));
       }
       currentContent.clear();
-      typeStack.removeLast();
       typeStack.add(BlockType.code);
       continue;
     } else if (codeCloseTag.hasMatch(line)) {
       if (typeStack.last == BlockType.text) {
         throw FormatException("An [[ENDCODE]] close tag found in a text "
             "block. Cannot exit a code block when there is none.\n"
+            "lineNumber: $lineNumber\n"
             "$text");
+      }
+      if (typeStack.last == BlockType.ruleset) {
+        // Ignore code blocks inside rulesets, they will be parsed
+        // [_parseRuleset].
+        currentContent.writeln(line);
+        continue;
       }
       children.add(Block(BlockType.code, currentContent.toString()));
       currentContent.clear();
       typeStack.removeLast();
-      typeStack.add(BlockType.text);
       continue;
     } else if (rulesetOpenTag.hasMatch(line)) {
       if (typeStack.contains(BlockType.ruleset)) {
@@ -188,6 +202,7 @@ Block _parseSequence(String text) {
       if (typeStack.last != BlockType.text) {
         throw FormatException("A RULESET was found in a code block. "
             "Rulesets must be always in a text block.\n"
+            "lineNumber: $lineNumber\n"
             "$text");
       }
 
@@ -201,8 +216,10 @@ Block _parseSequence(String text) {
       continue;
     } else if (rulesetCloseTag.hasMatch(line)) {
       if (typeStack.last != BlockType.ruleset) {
-        throw FormatException("An END RULESET tag was found in a block "
+        throw FormatException("An ENDRULESET tag was found in a block "
             "that isn't a ruleset.\n"
+            "lineNumber: $lineNumber\n"
+            "typeStack: $typeStack\n"
             "$text");
       }
 
@@ -343,7 +360,7 @@ class SequenceBlockVisitor {
     final isApplicable = createApplicabilityContextMethod()
       ..block.statements.add(Code('return $conditionCode;'));
 
-    final consequenceVisitor = SequenceBlockVisitor(const []);
+    final consequenceVisitor = SequenceBlockVisitor(_ifBlocks);
     rule.children.last.accept(consequenceVisitor);
 
     final applyClosure = createActionContextMethod()
