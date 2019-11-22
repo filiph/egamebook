@@ -24,5 +24,11 @@
         ["(", ")"],
         ["\"", "\""],
         ["'", "'"]
-    ]
+    ],
+    "folding": {
+        "markers": {
+            "start": "^\\[\\[(RULESET|RULE|CODE)",
+            "end": "^\\[\\[END(RULESET|RULE|CODE)"
+        }
+    }
 }
