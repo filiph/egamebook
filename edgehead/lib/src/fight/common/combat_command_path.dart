@@ -42,7 +42,7 @@ mixin CombatCommandPath on EnemyTargetAction {
       commandPathTemplate = [command];
     } else {
       commandPathTemplate = [
-        target.name,
+        '${target.adjective ?? ''} ${target.name}'.trim(),
         _getSecondCommand(context, target),
         command,
       ];
