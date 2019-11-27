@@ -161,4 +161,7 @@ class _NonserializableEntity extends Object
 
   @override
   bool get isAnimated => true;
+
+  @override
+  String toString() => "_NonserializableEntity<$id,$name>";
 }

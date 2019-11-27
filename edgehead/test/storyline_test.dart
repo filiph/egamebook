@@ -817,6 +817,27 @@ void main() {
               'The goblin lies on the ground. The orc sits at the table.');
         });
       });
+
+      test('after something before needed an adjective', () {
+        // Avoid: "The red orc hits the concrete floor. The ordinary orc
+        // swings at my null leg."
+
+        var aren = _createPlayer('Aren');
+        var redOrc =
+            Actor.initialized(60, "orc", adjective: "red", pronoun: Pronoun.HE);
+        var ordinaryOrc = Actor.initialized(61, "orc",
+            adjective: "ordinary", pronoun: Pronoun.HE);
+        storyline.add('<subject> hit<s> the concrete floor', subject: redOrc);
+        storyline.add(
+          "<subject> swing<s> at <objectOwner's> <object>",
+          subject: ordinaryOrc,
+          objectOwner: aren,
+          object: BodyPart(1001, "leg"),
+        );
+
+        final result = storyline.realizeAsString();
+        expect(result, isNot(contains('null leg')));
+      });
     });
 
     group('uses adjectives when needed', () {
@@ -869,6 +890,26 @@ void main() {
               storyline.realizeAsString(),
               'The old goblin lies on the ground. '
               'The pale goblin sits at the table.');
+        });
+      });
+
+      group('sequence', () {
+        test('put the adjective to the first occurence', () {
+          // Avoid "I dodge the orc and the red orc hits the concrete floor."
+
+          var aren = _createPlayer('Aren');
+          var redOrc = Actor.initialized(60, "orc",
+              adjective: "red", pronoun: Pronoun.HE);
+          var ordinaryOrc = Actor.initialized(61, "orc",
+              adjective: "ordinary", pronoun: Pronoun.HE);
+          storyline.add('<subject> dodge<s> <object>',
+              subject: aren, object: redOrc);
+          storyline.add('<subject> hit<s> the concrete floor', subject: redOrc);
+          storyline.add('<subject> yawn<s>', subject: ordinaryOrc);
+
+          final result = storyline.realizeAsString();
+          expect(result, contains('I dodge the red orc'));
+          expect(result, contains('he hits'));
         });
       });
     });

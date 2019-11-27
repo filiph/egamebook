@@ -120,6 +120,14 @@ class Report {
       "<${string.substring(0, min(string.length, 20))}...,"
       "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
 
+  Iterable<Entity> get _allEntities sync* {
+    if (subject != null) yield subject;
+    if (object != null) yield object;
+    if (object2 != null) yield object2;
+    if (owner != null) yield owner;
+    if (objectOwner != null) yield objectOwner;
+  }
+
   /// This asserts that all entities in the report are able to be referred to
   /// in different ways. In other words, "An apple lies next to an apple." is
   /// forbidden.
@@ -361,7 +369,7 @@ class Storyline {
         // An entity for the articles themselves, so that the writer can
         // write <is> and so on.
         var articlesEntity = Entity(
-          name: '<NEVER SHOWN>',
+          name: '<NEVER SHOWN $i>',
           pronoun: (article == articles.last && i % maxPerSentence == 1)
               ? article.pronoun
               : Pronoun.THEY,
@@ -499,10 +507,12 @@ class Storyline {
 
   /// Like [generateFinishedOutput], but doesn't stop before the last paragraph
   /// and goes until the end.
+  ///
+  /// This also clears the [Storyline].
   Iterable<ElementBase> generateOutput() sync* {
     yield* generateFinishedOutput();
     yield* realize();
-    _records.clear();
+    clear();
   }
 
   /// Returns an iterable of all the entities present in given report.
@@ -824,7 +834,6 @@ class Storyline {
     final cleanedReports = _collapseThreads(_reports).toList(growable: false);
     _reports.retainWhere(cleanedReports.contains);
 
-    final hasManyParagraphs = this.hasManyParagraphs;
     final int length = onlyFirstParagraph && hasManyParagraphs
         ? _reports.indexOf(
                 _reports.firstWhere((r) => r.string == PARAGRAPH_NEWLINES)) +
@@ -837,6 +846,10 @@ class Storyline {
       if (rec.isReport && rec.report.string == PARAGRAPH_NEWLINES) break;
     }
     if (length < 1) return const [];
+
+    final Set<Entity> entitiesNeedingAdjectives =
+        _findEntitiesNeedingAdjectives(_reports.take(length)).toSet();
+
     const int MAX_SENTENCE_LENGTH = 3;
     int lastEndSentence = -1;
     bool endPreviousSentence = true; // previous sentence was ended
@@ -919,7 +932,7 @@ class Storyline {
         report = report.replaceFirst("$SUBJECT ", "");
       }
 
-      report = _maybeAddAdjectives(i, report);
+      report = _maybeAddAdjectives(i, report, entitiesNeedingAdjectives);
       report = _fixFlowWithPrevious(i, report);
       report = _substituteStopwords(report, _reports[i]);
 
@@ -1256,57 +1269,78 @@ class Storyline {
     }
   }
 
-  /// Returns `true` if the two entities [a] and [b] are liable to create
-  /// confusing sentences when used together. For example, two swords
-  /// with [Item.name] == "sword" are going to be confusable.
-  ///
-  /// Returns `false` if [a] equals [b] (the [Entity.id] is the same, meaning
-  /// that we are comparing the same entity to each other) or
-  /// if either of them is `null`.
-  bool _isConfusable(Entity a, Entity b) {
-    if (a == null || b == null) return false;
-    if (a.id == b.id) return false;
-    // We only check [Entity.name]. Even if we have entities with different
-    // pronouns and the same name, that's still confusable in most cases.
-    return a.name == b.name;
-  }
+  String _maybeAddAdjectives(
+      int i, String string, Set<Entity> entitiesNeedingAdjectives) {
+    final Report report = _reports[i];
+    String result = string;
 
-  String _maybeAddAdjectives(int i, String report) {
-    String result = report;
-
-    /// Returns `true` if the [NOUN] (i.e. '<subject>') needs to be prepended
+    /// Returns `true` if the entity needs to be prepended
     /// with an adjective because some other noun in the vicinity is confusable.
     ///
-    /// Returns `false` for `null` and for entities with proper nouns.
-    bool neededForNoun(String NOUN, Entity entity) {
+    /// Automatically returns `false` for `null` and for entities
+    /// with proper nouns.
+    bool neededForNoun(Entity entity) {
       if (entity == null) return false;
       if (entity.nameIsProperNoun) return false;
-      return _isConfusable(entity, subject(i)) ||
-          _isConfusable(entity, subject(i - 1)) ||
-          _isConfusable(entity, subject(i + 1)) ||
-          _isConfusable(entity, object(i)) ||
-          _isConfusable(entity, object(i - 1)) ||
-          _isConfusable(entity, object(i + 1)) ||
-          _isConfusable(entity, object2(i)) ||
-          _isConfusable(entity, object2(i - 1)) ||
-          _isConfusable(entity, object2(i + 1));
+
+      if (valid(i - 1) &&
+          _reports[i - 1]._allEntities.any((e) => e.id == entity.id)) {
+        // This was mentioned before. Don't required adjective again.
+        return false;
+      }
+
+      return entitiesNeedingAdjectives.contains(entity);
     }
 
-    if (neededForNoun(SUBJECT, subject(i))) {
+    if (neededForNoun(report.subject)) {
       result = result.replaceAll(SUBJECT, SUBJECT_NOUN_WITH_ADJECTIVE);
     }
 
-    if (neededForNoun(OBJECT, subject(i))) {
+    if (neededForNoun(report.object)) {
       result = result.replaceAll(OBJECT, OBJECT_NOUN_WITH_ADJECTIVE);
     }
 
-    if (neededForNoun(OBJECT2, subject(i))) {
+    if (neededForNoun(report.object2)) {
       result = result.replaceAll(OBJECT2, OBJECT2_NOUN_WITH_ADJECTIVE);
     }
 
     // Possibly do this with OWNER / OBJECT_OWNER?
 
     return result;
+  }
+
+  /// Returns an iterable of entities that need an adjective.
+  ///
+  /// Entities need an adjective when some other entity in the storyline
+  /// has the exact same name.
+  ///
+  /// For example, when there are two objects, `a` and `b`, and both are named
+  /// "sword", then Storyline will need to use adjectives for both.
+  Iterable<Entity> _findEntitiesNeedingAdjectives(
+      Iterable<Report> reports) sync* {
+    final Map<String, Set<Entity>> nameToIds = {};
+
+    for (final report in reports) {
+      for (final entity in report._allEntities) {
+        nameToIds
+            // Create a new set under entity name in case it doesn't
+            // already exist.
+            .putIfAbsent(entity.name, () => {})
+            // Add the entity there.
+            .add(entity);
+      }
+    }
+
+    for (final idSet in nameToIds.values) {
+      if (idSet.length > 1) {
+        // Duplicate name shared among entities in this set.
+        yield* idSet;
+        assert(
+            idSet.every((entity) => entity.adjective != null),
+            "Storyline has to report about $idSet "
+            "but one of the entities doesn't have adjectives.");
+      }
+    }
   }
 }
 
