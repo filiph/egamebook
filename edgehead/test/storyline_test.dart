@@ -752,6 +752,74 @@ void main() {
     });
   });
 
+  group('pronouns, nouns, adjectives', () {
+    Storyline storyline;
+    Entity a;
+    Entity aBodyPart;
+    Entity b;
+    Entity bItem;
+    Entity c;
+
+    setUp(() {
+      storyline = Storyline();
+      a = Entity(name: 'goblin', adjective: 'red', pronoun: Pronoun.HE);
+      aBodyPart = Entity(name: 'fist', pronoun: Pronoun.IT);
+      b = Entity(name: 'goblin', adjective: 'blue', pronoun: Pronoun.HE);
+      bItem = Entity(name: 'sword', pronoun: Pronoun.IT);
+      c = Entity(name: 'orc', adjective: 'large', pronoun: Pronoun.HE);
+    });
+
+    test('A leaps at B. B dodges A.', () {
+      storyline.add('<subject> leap<s> at <object>', subject: a, object: b);
+      storyline.add('<subject> dodge<s> <object>', subject: b, object: a);
+
+      final result = storyline.realizeAsString();
+      expect(result, contains('The red goblin leaps at the blue'));
+      expect(result, contains('blue goblin dodges him'));
+    });
+
+    test('A dodges B and swings at C.', () {
+      storyline.add('<subject> dodge<s> <object>', subject: a, object: b);
+      storyline.add('<subject> swing<s> at <object>', subject: a, object: c);
+
+      final result = storyline.realizeAsString();
+      expect(result, contains('The red goblin dodges the blue'));
+      expect(result, isNot(contains('goblin swings at')));
+      expect(result, contains('swings at the orc'));
+    });
+
+    test('A swings at B. A kills B.', () {
+      storyline.add('<subject> swing<s> at <object>', subject: a, object: b);
+      storyline.add('<subject> kill<s> <object>', subject: a, object: b);
+
+      final result = storyline.realizeAsString();
+      expect(result, contains('The red goblin swings at the blue'));
+      expect(result, isNot(contains('goblin kills')));
+      expect(
+          result, contains(RegExp(r'(he|and) kills him', caseSensitive: true)));
+    });
+
+    test('A dodges B. B picks up C.', () {
+      storyline.add('<subject> dodge<s> <object>', subject: a, object: b);
+      storyline.add('<subject> pick<s> up <object>', subject: b, object: bItem);
+
+      final result = storyline.realizeAsString();
+      expect(result, contains('The red goblin dodges the blue'));
+      expect(result,
+          isNot(contains(RegExp(r'he picks up', caseSensitive: false))));
+    });
+
+    test('A swings at B. B deflects A\'s C.', () {
+      storyline.add('<subject> swing<s> at <object>', subject: a, object: b);
+      storyline.add('<subject> deflect<s> <objectOwner\'s> <object>',
+          subject: b, objectOwner: a, object: aBodyPart);
+
+      final result = storyline.realizeAsString();
+      expect(result, contains('blue goblin deflects'));
+      expect(result, contains('his fist'));
+    });
+  });
+
   group('two objects of same name', () {
     Storyline storyline;
 

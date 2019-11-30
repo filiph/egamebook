@@ -9,6 +9,7 @@ abstract class Entity {
   factory Entity(
       {@required String name,
       Pronoun pronoun,
+      String adjective,
       Team team,
       bool nameIsProperNoun,
       bool isPlayer}) = _NonserializableEntity;
