@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/storyline/shadow_graph.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:test/test.dart';
@@ -749,6 +750,74 @@ void main() {
       var realized = storyline.realizeAsString();
       expect(realized, contains("I examine the statue"));
       expect(realized, contains("hit it with the rock"));
+    });
+  });
+
+  group('shadow graph', () {
+    test('full 9-report story', () {
+      // r 123456789
+      // A -- --  --
+      // B ---     -
+      // C     -----
+      // D    -
+      //
+      // The goblin captain kicks the orcish captain in the shin. (1)
+      // The orcish captain avoids him and (he) regains balance. (2 + 3)
+      // The goblin captain whistles at the giant and engages the warlock.
+      //   (4 + 5)
+      // The warlock prepares a spell and makes a clicking sound with
+      //   his tongue. (6 + 7)
+      // He lifts the goblin captain via telekinesis, and hurls him at
+      //   the orcish one. (8 + 9)
+
+      final a =
+          Entity(name: 'captain', adjective: 'goblin', pronoun: Pronoun.HE);
+      final b =
+          Entity(name: 'captain', adjective: 'orcish', pronoun: Pronoun.HE);
+      final c = Entity(name: 'warlock', pronoun: Pronoun.HE);
+      final d = Entity(name: 'giant', pronoun: Pronoun.HE);
+
+      final storyline = Storyline();
+      storyline.add('<subject> kick<s> <object> in the shin',
+          subject: a, object: b); // 1
+      storyline.add('<subject> avoid<s> <object>', subject: b, object: a); // 2
+      storyline.add('<subject> regain<s> balance', subject: b); // 3
+      storyline.add('<subject> whistle<s> the <object>',
+          subject: a, object: d); // 4
+      storyline.add('<subject> engage<s> <object>', subject: a, object: c); // 5
+      storyline.add('<subject> prepare<s> a spell', subject: c); // 6
+      storyline.add('<subject> make<s> a clicking sound with his tongue',
+          subject: c); // 7
+      storyline.add('<subject> lifts<s> <object> via telekinesis',
+          subject: c, object: a); // 8
+      storyline.add('<subject> hurl<s> <object> at <object2>',
+          subject: c, object: a, object2: b); // 9
+
+      // Make sure Storyline has [Storyline.reports].
+      storyline.realize();
+
+      final graph = ShadowGraph.from(storyline);
+
+      print(graph.describe());
+
+      expect(graph.qualifications, hasLength(9));
+      expect(graph.joiners, hasLength(9));
+      expect(
+          graph.qualifications.first.subject, QualificationLevel.adjectiveNoun);
+      expect(
+          graph.qualifications.first.object, QualificationLevel.adjectiveNoun);
+      expect(graph.joiners.first, SentenceJoinType.period);
+      // Sentences 2 + 3.
+      expect(graph.qualifications[1].subject, QualificationLevel.adjectiveOne);
+      expect(graph.joiners[2], SentenceJoinType.and);
+      expect(graph.qualifications[2].subject, QualificationLevel.omitted);
+      // Last sentence.
+      expect(graph.joiners.last, SentenceJoinType.and);
+      expect(graph.qualifications.last.subject, QualificationLevel.omitted);
+      expect(graph.qualifications.last.object,
+          anyOf(QualificationLevel.pronoun, QualificationLevel.adjectiveOne));
+      expect(
+          graph.qualifications.last.object2, QualificationLevel.adjectiveOne);
     });
   });
 

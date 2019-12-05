@@ -120,7 +120,9 @@ class Report {
       "<${string.substring(0, min(string.length, 20))}...,"
       "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
 
-  Iterable<Entity> get _allEntities sync* {
+  /// Returns all non-null entities (like [subject], [object] etc.)
+  /// mentioned in the report.
+  Iterable<Entity> get allEntities sync* {
     if (subject != null) yield subject;
     if (object != null) yield object;
     if (object2 != null) yield object2;
@@ -219,6 +221,9 @@ class Storyline {
 
   /// Internal list of reports. This is constructed by filtering [_records].
   List<Report> _reports;
+
+  /// A list of reports (see [_reports]).
+  UnmodifiableListView<Report> get reports => UnmodifiableListView(_reports);
 
   /// Internal queue of records, mixing [Report] instances with custom
   /// elements (such as images, maps, stat updates, what have you).
@@ -1284,7 +1289,7 @@ class Storyline {
       if (entity.nameIsProperNoun) return false;
 
       if (valid(i - 1) &&
-          _reports[i - 1]._allEntities.any((e) => e.id == entity.id)) {
+          _reports[i - 1].allEntities.any((e) => e.id == entity.id)) {
         // This was mentioned before. Don't required adjective again.
         return false;
       }
@@ -1321,7 +1326,7 @@ class Storyline {
     final Map<String, Set<Entity>> nameToIds = {};
 
     for (final report in reports) {
-      for (final entity in report._allEntities) {
+      for (final entity in report.allEntities) {
         nameToIds
             // Create a new set under entity name in case it doesn't
             // already exist.
