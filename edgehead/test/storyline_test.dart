@@ -803,21 +803,21 @@ void main() {
       expect(graph.qualifications, hasLength(9));
       expect(graph.joiners, hasLength(9));
       expect(
-          graph.qualifications.first.subject, QualificationLevel.adjectiveNoun);
+          graph.qualifications.first.subject, IdentifierLevel.adjectiveNoun);
       expect(
-          graph.qualifications.first.object, QualificationLevel.adjectiveNoun);
+          graph.qualifications.first.object, IdentifierLevel.adjectiveNoun);
       expect(graph.joiners.first, SentenceJoinType.period);
       // Sentences 2 + 3.
-      expect(graph.qualifications[1].subject, QualificationLevel.adjectiveOne);
+      expect(graph.qualifications[1].subject, IdentifierLevel.adjectiveOne);
       expect(graph.joiners[2], SentenceJoinType.and);
-      expect(graph.qualifications[2].subject, QualificationLevel.omitted);
+      expect(graph.qualifications[2].subject, IdentifierLevel.omitted);
       // Last sentence.
       expect(graph.joiners.last, SentenceJoinType.and);
-      expect(graph.qualifications.last.subject, QualificationLevel.omitted);
+      expect(graph.qualifications.last.subject, IdentifierLevel.omitted);
       expect(graph.qualifications.last.object,
-          anyOf(QualificationLevel.pronoun, QualificationLevel.adjectiveOne));
+          anyOf(IdentifierLevel.pronoun, IdentifierLevel.adjectiveOne));
       expect(
-          graph.qualifications.last.object2, QualificationLevel.adjectiveOne);
+          graph.qualifications.last.object2, IdentifierLevel.adjectiveOne);
     });
   });
 

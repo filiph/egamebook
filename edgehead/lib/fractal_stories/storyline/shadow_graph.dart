@@ -2,193 +2,94 @@ import 'dart:collection';
 
 import 'package:built_value/built_value.dart' show $jf, $jc;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/team.dart';
 import 'package:meta/meta.dart';
 
-/// A list of [QualificationLevel], going from most specific to least specific.
-const List<QualificationLevel> orderedQualificationLevels = [
-  QualificationLevel.pronoun,
-  QualificationLevel.adjectiveNoun,
-  QualificationLevel.theOtherNoun,
-  QualificationLevel.noun,
-  QualificationLevel.adjectiveOne,
-  QualificationLevel.theOther,
-  QualificationLevel.pronoun,
-  QualificationLevel.omitted,
+/// A list of [IdentifierLevel]s, going from most verbose to least.
+///
+/// We generally want to use the least verbose qualifications, such as
+/// "he" or "she". But often we are forced to be more specific (e.g. when
+/// there are two male actors, so "he" is too vague).
+const List<IdentifierLevel> orderedQualificationLevels = [
+  IdentifierLevel.properNoun,
+  IdentifierLevel.adjectiveNoun,
+  IdentifierLevel.theOtherNoun,
+  IdentifierLevel.noun,
+  IdentifierLevel.adjectiveOne,
+  IdentifierLevel.pronoun,
+  IdentifierLevel.omitted,
 ];
 
 /// The way an [Entity] can be referred to. These are things like "he"
 /// or "the other goblin".
 class Identifier {
-  final bool omitted;
+  final IdentifierLevel level;
+
+  final String string;
 
   final Pronoun pronoun;
 
-  final String adjectiveOne;
+  const Identifier.adjectiveNoun(this.string)
+      : level = IdentifierLevel.adjectiveNoun,
+        pronoun = null;
 
-  final String noun;
+  const Identifier.adjectiveOne(this.string)
+      : level = IdentifierLevel.adjectiveOne,
+        pronoun = null;
 
-  final String theOtherNoun;
-
-  final String adjectiveNoun;
-
-  final String properNoun;
-
-  const Identifier.adjectiveNoun(this.adjectiveNoun)
-      : omitted = null,
-        pronoun = null,
-        adjectiveOne = null,
-        noun = null,
-        theOtherNoun = null,
-        properNoun = null;
-
-  const Identifier.adjectiveOne(this.adjectiveOne)
-      : omitted = null,
-        pronoun = null,
-        noun = null,
-        theOtherNoun = null,
-        adjectiveNoun = null,
-        properNoun = null;
-
-  const Identifier.noun(this.noun)
-      : omitted = null,
-        pronoun = null,
-        adjectiveOne = null,
-        theOtherNoun = null,
-        adjectiveNoun = null,
-        properNoun = null;
+  const Identifier.noun(this.string)
+      : level = IdentifierLevel.noun,
+        pronoun = null;
 
   const Identifier.omitted()
-      : omitted = true,
+      : level = IdentifierLevel.omitted,
         pronoun = null,
-        adjectiveOne = null,
-        noun = null,
-        theOtherNoun = null,
-        adjectiveNoun = null,
-        properNoun = null;
+        string = null;
 
   const Identifier.pronoun(this.pronoun)
-      : omitted = null,
-        adjectiveOne = null,
-        noun = null,
-        theOtherNoun = null,
-        adjectiveNoun = null,
-        properNoun = null;
+      : level = IdentifierLevel.pronoun,
+        string = null;
 
-  const Identifier.properNoun(this.properNoun)
-      : omitted = null,
-        pronoun = null,
-        adjectiveOne = null,
-        noun = null,
-        theOtherNoun = null,
-        adjectiveNoun = null;
+  const Identifier.properNoun(this.string)
+      : level = IdentifierLevel.properNoun,
+        pronoun = null;
 
-  const Identifier.theOther()
-      : omitted = null,
-        pronoun = null,
-        adjectiveOne = null,
-        noun = null,
-        theOtherNoun = null,
-        adjectiveNoun = null,
-        properNoun = null,
-        assert(false, 'Only use named constructors such as Identifier.pronoun');
-
-  const Identifier.theOtherNoun(this.theOtherNoun)
-      : omitted = null,
-        pronoun = null,
-        adjectiveOne = null,
-        noun = null,
-        adjectiveNoun = null,
-        properNoun = null;
+  const Identifier.theOtherNoun(this.string)
+      : level = IdentifierLevel.theOtherNoun,
+        pronoun = null;
 
   const Identifier._()
-      : omitted = null,
+      : level = null,
         pronoun = null,
-        adjectiveOne = null,
-        noun = null,
-        theOtherNoun = null,
-        adjectiveNoun = null,
-        properNoun = null,
+        string = null,
         assert(false, 'Only use named constructors such as Identifier.pronoun');
 
   @override
-  int get hashCode => $jf(
-        $jc(
-          $jc(
-            $jc(
-              $jc(
-                $jc(
-                  $jc(
-                    $jc(
-                      0,
-                      omitted.hashCode,
-                    ),
-                    pronoun.hashCode,
-                  ),
-                  adjectiveOne.hashCode,
-                ),
-                noun.hashCode,
-              ),
-              theOtherNoun.hashCode,
-            ),
-            adjectiveNoun.hashCode,
-          ),
-          properNoun.hashCode,
-        ),
-      );
+  int get hashCode =>
+      $jf($jc($jc($jc(0, string.hashCode), pronoun.hashCode), level.hashCode));
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Identifier &&
-        omitted == other.omitted &&
+        level == other.level &&
         pronoun == other.pronoun &&
-        adjectiveOne == other.adjectiveOne &&
-        noun == other.noun &&
-        theOtherNoun == other.theOtherNoun &&
-        adjectiveNoun == other.adjectiveNoun &&
-        properNoun == other.properNoun;
+        string == other.string;
   }
 
-  bool satisfiedBy(QualificationLevel level) {
-    if (omitted == true) {
-      return level == QualificationLevel.omitted;
-    }
-    if (pronoun != null) {
-      return level == QualificationLevel.pronoun;
-    }
-    if (adjectiveOne != null) {
-      return level == QualificationLevel.adjectiveOne;
-    }
-    if (noun != null) {
-      return level == QualificationLevel.noun;
-    }
-    if (theOtherNoun != null) {
-      return level == QualificationLevel.theOtherNoun;
-    }
-    if (adjectiveNoun != null) {
-      return level == QualificationLevel.adjectiveNoun;
-    }
-    if (properNoun != null) {
-      return level == QualificationLevel.properNoun;
-    }
-    throw StateError('Wrong state of $this');
+  bool satisfiedBy(IdentifierLevel level) {
+    return level == this.level;
   }
 
   @override
-  String toString() => "Identifier<${omitted == true ? 'omitted' : 'no'}, "
-      "$pronoun, $adjectiveOne one, $noun, "
-      "other $theOtherNoun, $adjectiveNoun, $properNoun>";
+  String toString() => "Identifier<$level, $string, $pronoun>";
 }
 
-enum QualificationLevel {
+enum IdentifierLevel {
   /// Like [pronoun], but so close that it can be omitted.
   omitted,
 
   pronoun,
-
-  @Deprecated('This might not be needed at all. It\'s hard to know when '
-      'we can use "the other". Use `theOtherNoun` instead.')
-  theOther,
 
   adjectiveOne,
 
@@ -201,34 +102,37 @@ enum QualificationLevel {
   properNoun,
 }
 
+/// A set of options for each entity in a given report.
 @visibleForTesting
-class ReportQualifications {
-  final Set<QualificationLevel> _subjectRange =
-      QualificationLevel.values.toSet();
+class ReportIdentifiers {
+  final Set<IdentifierLevel> _subjectRange = IdentifierLevel.values.toSet();
 
-  final Set<QualificationLevel> _objectRange =
-      QualificationLevel.values.toSet();
+  final Set<IdentifierLevel> _objectRange = IdentifierLevel.values.toSet();
 
-  final Set<QualificationLevel> _object2Range =
-      QualificationLevel.values.toSet();
+  final Set<IdentifierLevel> _object2Range = IdentifierLevel.values.toSet();
 
-  QualificationLevel get object {
+  IdentifierLevel get object {
     assert(_objectRange.length == 1, "Too many options: $_objectRange");
     return _objectRange.single;
   }
 
-  QualificationLevel get object2 {
+  IdentifierLevel get object2 {
     assert(_object2Range.length == 1, "Too many options: $_object2Range");
     return _object2Range.single;
   }
 
-  QualificationLevel get subject {
+  IdentifierLevel get subject {
     assert(_subjectRange.length == 1, "Too many options: $_subjectRange");
     return _subjectRange.single;
   }
 
+  /// Runs [callback] for every entity in [report].
+  ///
+  /// The callback has two parameters: the [Entity], and its current
+  /// set of possible [IdentifierLevel]s. It is possible (and expected)
+  /// to modify the set.
   void forEachEntityIn(
-      Report report, void Function(Entity, Set<QualificationLevel>) callback) {
+      Report report, void Function(Entity, Set<IdentifierLevel>) callback) {
     if (report.subject != null) {
       callback(report.subject, _subjectRange);
     }
@@ -241,17 +145,26 @@ class ReportQualifications {
   }
 }
 
+/// Different ways to join _this_ sentence to the previous one.
 enum SentenceJoinType {
+  /// Just plain period, without any "But" or "And".
   period,
 
+  /// Comma, as in "The goblin picks up the sword, runs it through me."
   comma,
 
+  /// A period followed by an "And".
   periodAnd,
 
+  /// A period followed by a "But".
   periodBut,
 
+  /// A simple "and" in a sentence, such as "The goblin picks up the sword
+  /// and runs it through me."
   and,
 
+  /// A "but" in a sentence, like "The goblin tries to pick up the sword
+  /// but falls to the ground instead."
   but,
 }
 
@@ -312,7 +225,7 @@ class ShadowGraph {
   /// cannot be used because two of the entities use it.
   static final Entity noEntity = Entity(name: 'NO ENTITY');
 
-  List<ReportQualifications> _qualifications;
+  List<ReportIdentifiers> _reportIdentifiers;
 
   /// The way sentences are stringed together.
   ///
@@ -320,13 +233,15 @@ class ShadowGraph {
   /// from report at index `i - 1`.
   List<Set<SentenceJoinType>> _joiners;
 
+  /// For each report, this maps from different concrete identifiers
+  /// (such as "he" or "the goblin") to entities in that report.
   List<Map<Identifier, Entity>> _identifiers;
 
   ShadowGraph.from(Storyline storyline) {
     // At first, all qualifications and all joiners are possible.
-    _qualifications = List.generate(
+    _reportIdentifiers = List.generate(
       storyline.reports.length,
-      (_) => ReportQualifications(),
+      (_) => ReportIdentifiers(),
       growable: false,
     );
     _joiners = List.generate(
@@ -351,14 +266,14 @@ class ShadowGraph {
   UnmodifiableListView<SentenceJoinType> get joiners =>
       UnmodifiableListView(_joiners.map((set) => set.single));
 
-  UnmodifiableListView<ReportQualifications> get qualifications =>
-      UnmodifiableListView(_qualifications);
+  UnmodifiableListView<ReportIdentifiers> get qualifications =>
+      UnmodifiableListView(_reportIdentifiers);
 
   String describe() {
     final buf = StringBuffer();
 
-    for (int i = 0; i < _qualifications.length; i++) {
-      final qual = _qualifications[i];
+    for (int i = 0; i < _reportIdentifiers.length; i++) {
+      final qual = _reportIdentifiers[i];
       buf.writeln('=== ${i + 1} ===');
       buf.writeln('subject: ${qual._subjectRange}');
       buf.writeln('object: ${qual._objectRange}');
@@ -382,15 +297,14 @@ class ShadowGraph {
     final Map<int, int> lastMentionedTimes = {};
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _qualifications[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
         if (!everMentionedIds.contains(entity.id)) {
           // If this is the first time we mention this entity, call it by
           // at least the noun.
           set.removeAll([
-            QualificationLevel.omitted,
-            QualificationLevel.pronoun,
-            QualificationLevel.theOther,
-            QualificationLevel.adjectiveOne,
+            IdentifierLevel.omitted,
+            IdentifierLevel.pronoun,
+            IdentifierLevel.adjectiveOne,
           ]);
 
           everMentionedIds.add(entity.id);
@@ -422,16 +336,14 @@ class ShadowGraph {
   }
 
   /// Detects entities that have [Entity.adjective] == `null`, and removes
-  /// the relevant [QualificationLevel]s.
+  /// the relevant [IdentifierLevel]s.
   void _detectMissingAdjectives(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _qualifications[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
         if (entity.adjective == null) {
-          set.removeAll([
-            QualificationLevel.adjectiveOne,
-            QualificationLevel.adjectiveNoun
-          ]);
+          set.removeAll(
+              [IdentifierLevel.adjectiveOne, IdentifierLevel.adjectiveNoun]);
         }
       });
     }
@@ -442,9 +354,9 @@ class ShadowGraph {
   void _detectMissingProperNouns(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _qualifications[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
         if (!entity.nameIsProperNoun) {
-          set.remove(QualificationLevel.properNoun);
+          set.remove(IdentifierLevel.properNoun);
         }
       });
     }
@@ -517,7 +429,7 @@ class ShadowGraph {
     return result;
   }
 
-  /// Returns a set of [QualificationLevel] where [entity] clashes with
+  /// Returns a set of [IdentifierLevel] where [entity] clashes with
   /// any other entity in [allEntities].
   ///
   /// [allEntities] can include the [entity] itself. This method will
@@ -530,26 +442,26 @@ class ShadowGraph {
   ///   * A burly man
   ///   * A burly boy
   ///
-  /// The output of this method would be [QualificationLevel.pronoun] (because
+  /// The output of this method would be [IdentifierLevel.pronoun] (because
   /// both the burly man and the burly boy are "he") and
-  /// [QualificationLevel.adjectiveOne] (because both are "the burly one").
-  Iterable<QualificationLevel> _getConflictingQualificationLevels(
+  /// [IdentifierLevel.adjectiveOne] (because both are "the burly one").
+  Iterable<IdentifierLevel> _getConflictingQualificationLevels(
       Entity entity, Set<Entity> allEntities) sync* {
     final others = Set<Entity>.from(allEntities.where((e) => e != entity));
 
     if (others.any((e) => e.pronoun == entity.pronoun)) {
-      yield QualificationLevel.pronoun;
+      yield IdentifierLevel.pronoun;
     }
 
     // skipping "theOther" - don't know
 
     if (entity.adjective != null &&
         others.any((e) => e.adjective == entity.adjective)) {
-      yield QualificationLevel.adjectiveOne;
+      yield IdentifierLevel.adjectiveOne;
     }
 
     if (others.any((e) => e.name == entity.name)) {
-      yield QualificationLevel.noun;
+      yield IdentifierLevel.noun;
     }
 
     // skipping theOtherNoun - don't know
@@ -558,11 +470,11 @@ class ShadowGraph {
         others.any((e) =>
             '${e.adjective} ${e.name}' ==
             '${entity.adjective} ${entity.name}')) {
-      yield QualificationLevel.adjectiveNoun;
+      yield IdentifierLevel.adjectiveNoun;
     }
 
     if (entity.nameIsProperNoun && others.any((e) => e.name == entity.name)) {
-      yield QualificationLevel.properNoun;
+      yield IdentifierLevel.properNoun;
     }
   }
 
@@ -675,10 +587,10 @@ class ShadowGraph {
   }
 
   void _limitSubjectToPronoun(int i) {
-    if (i < 0 || i >= _qualifications.length) return;
-    _qualifications[i]
+    if (i < 0 || i >= _reportIdentifiers.length) return;
+    _reportIdentifiers[i]
         ._subjectRange
-        .retainWhere((qual) => qual == QualificationLevel.pronoun);
+        .retainWhere((qual) => qual == IdentifierLevel.pronoun);
   }
 
   /// Use the data in [identifiers] to remove qualifications levels
@@ -687,14 +599,14 @@ class ShadowGraph {
   /// Most of the work has already been done -- we know which identifiers
   /// (such as "he" or "the goblin") can potentially refer to which
   /// entity in each report. Now we just need to update
-  /// the [ReportQualifications] accordingly.
+  /// the [ReportIdentifiers] accordingly.
   void _removeQualificationsWhereUnavailable(
       UnmodifiableListView<Report> reports,
       List<Map<Identifier, Entity>> identifiers) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       final current = identifiers[i];
-      _qualifications[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
         // Take the identifiers that refer to the entity.
         final relevantIdentifiers = current.entries
             .where((entry) => entry.value == entity)
@@ -713,9 +625,9 @@ class ShadowGraph {
   /// Only retain the lowest (i.e., least specific) qualification level
   /// for each entity in each report.
   void _retainTheLowestPossible(UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < _qualifications.length; i++) {
+    for (int i = 0; i < _reportIdentifiers.length; i++) {
       final report = reports[i];
-      _qualifications[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
         assert(set.isNotEmpty,
             "We have an empty range ($set) for $entity in $report.");
         int j = 0;
