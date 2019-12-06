@@ -222,8 +222,8 @@ void main() {
         subject: player, object: ship, time: 10);
     expect(
         storyline.realizeAsString(),
-        matches("I take hold of the front laser's controls,? "
-            "and begin to aim at the Haijing\..+"));
+        matches(r".+I begin to aim at the Haijing,? "
+            "and go wide of.+"));
   });
 
   test("possessive", () {

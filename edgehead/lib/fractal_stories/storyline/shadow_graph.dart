@@ -2,8 +2,6 @@ import 'dart:collection';
 
 import 'package:built_value/built_value.dart' show $jf, $jc;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
-import 'package:edgehead/fractal_stories/team.dart';
-import 'package:meta/meta.dart';
 
 /// A list of [IdentifierLevel]s, going from most verbose to least.
 ///
@@ -103,7 +101,6 @@ enum IdentifierLevel {
 }
 
 /// A set of options for each entity in a given report.
-@visibleForTesting
 class ReportIdentifiers {
   final Set<IdentifierLevel> _subjectRange = IdentifierLevel.values.toSet();
 
@@ -147,6 +144,10 @@ class ReportIdentifiers {
 
 /// Different ways to join _this_ sentence to the previous one.
 enum SentenceJoinType {
+  /// Nothing. The previous sentence may already end with something,
+  /// or maybe this is the first sentence in a paragraph.
+  none,
+
   /// Just plain period, without any "But" or "And".
   period,
 
@@ -158,6 +159,16 @@ enum SentenceJoinType {
 
   /// A period followed by a "But".
   periodBut,
+
+  /// A new sentence starting with "And". The previous sentence either
+  /// doesn't exist, or it took care of its own ending (e.g. it's a whole
+  /// sentence ending with an exclamation mark).
+  noneAnd,
+
+  /// A new sentence starting with "But". The previous sentence either
+  /// doesn't exist, or it took care of its own ending (e.g. it's a whole
+  /// sentence ending with an exclamation mark).
+  noneBut,
 
   /// A simple "and" in a sentence, such as "The goblin picks up the sword
   /// and runs it through me."
@@ -218,7 +229,6 @@ enum SentenceJoinType {
 /// each entity * use the least qualified level (e.g. omit / pronoun when
 /// possible) * Assert that there is no place where we have nothing to choose
 /// from.
-@visibleForTesting
 class ShadowGraph {
   /// An [Entity] used to signify that no entity can be referred to by
   /// an identifier. This usually means that, for example, [Pronoun.HE]
@@ -252,6 +262,7 @@ class ShadowGraph {
 
     final entities = _getAllMentionedEntities(storyline.reports);
     _fillForcedJoiners(storyline.reports);
+    __assertAtLeastOneJoiner(storyline.reports);
     _detectForcedPronouns(storyline.reports);
     _detectMissingProperNouns(storyline.reports);
     _detectMissingAdjectives(storyline.reports);
@@ -259,7 +270,10 @@ class ShadowGraph {
     _identifiers = _getIdentifiersThroughoutStory(storyline.reports, entities);
     _removeQualificationsWhereUnavailable(storyline.reports, _identifiers);
     _find2JoinerOpportunities(storyline.reports);
-    // TODO: _fillOtherJoiners(storyline.reports);
+    __assertAtLeastOneJoiner(storyline.reports);
+    _fillOtherJoiners(storyline.reports);
+    _assertExactlyOnePossibleJoiner(storyline.reports);
+    _removeOmittedAtStartsOfSentences(storyline.reports);
     _retainTheLowestPossible(storyline.reports);
   }
 
@@ -288,6 +302,25 @@ class ShadowGraph {
     return buf.toString();
   }
 
+  void __assertAtLeastOneJoiner(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < _joiners.length; i++) {
+      assert(
+          _joiners[i].isNotEmpty,
+          "There should be at least one joiner "
+          "for ${reports[i]} at this point "
+          "but instead there is: ${_joiners[i]}.");
+    }
+  }
+
+  void _assertExactlyOnePossibleJoiner(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < _joiners.length; i++) {
+      assert(
+          _joiners[i].length == 1,
+          "There should be a single joiner "
+          "for ${reports[i]} but instead there is: ${_joiners[i]}.");
+    }
+  }
+
   /// In any storyline, the first time we mention anyone after a while,
   /// we cannot use pronouns or any other confusing identifiers.
   void _detectFirstMentions(
@@ -298,7 +331,11 @@ class ShadowGraph {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
-        if (!everMentionedIds.contains(entity.id)) {
+        // Detect if the entity is "you" or "I".
+        final isPlayer =
+            entity.pronoun == Pronoun.I || entity.pronoun == Pronoun.YOU;
+
+        if (!isPlayer && !everMentionedIds.contains(entity.id)) {
           // If this is the first time we mention this entity, call it by
           // at least the noun.
           set.removeAll([
@@ -368,19 +405,42 @@ class ShadowGraph {
   /// * but == but
   void _fillForcedJoiners(UnmodifiableListView<Report> reports) {
     // Always start with new sentence (no ", and").
-    _limitJoinerToPeriod(0);
+    _joiners[0].retainWhere((joiner) => const [
+          SentenceJoinType.none,
+        ].contains(joiner));
 
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       if (report.wholeSentence) {
-        _limitJoinerToPeriod(i);
-        _limitJoinerToPeriodAllowButOrAnd(i + 1);
+        _limitJoinerToPeriodOrNone(i);
+        _limitJoinerToNoneAllowButOrAnd(i + 1);
       }
       if (report.endSentence) {
         _limitJoinerToPeriodAllowButOrAnd(i + 1);
       }
       if (report.but) {
         _limitJoinerToBut(i);
+      }
+    }
+  }
+
+  void _fillOtherJoiners(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < reports.length; i++) {
+      final set = _joiners[i];
+      if (set.length > 1) {
+        if (set.contains(SentenceJoinType.period)) {
+          set.retainAll([SentenceJoinType.period]);
+        } else if (set.contains(SentenceJoinType.none)) {
+          set.retainAll([SentenceJoinType.none]);
+        } else if (set.contains(SentenceJoinType.periodBut)) {
+          // It is possible to use ". But " here. Let's do it.
+          set.retainAll([SentenceJoinType.periodBut]);
+        } else if (set.contains(SentenceJoinType.noneBut)) {
+          // It is possible to use " But " here. Let's do it.
+          set.retainAll([SentenceJoinType.noneBut]);
+        } else {
+          throw StateError("Set: $set");
+        }
       }
     }
   }
@@ -393,7 +453,7 @@ class ShadowGraph {
           pair.second.object == null &&
           _joiners[pair.index].contains(SentenceJoinType.period) &&
           _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
-        _limitJoinerToPeriod(pair.index);
+        _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToAnd(pair.index + 1);
         continue;
       }
@@ -404,7 +464,7 @@ class ShadowGraph {
           pair.hasSameObject &&
           _joiners[pair.index].contains(SentenceJoinType.period) &&
           _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
-        _limitJoinerToPeriod(pair.index);
+        _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToAnd(pair.index + 1);
       }
     }
@@ -434,7 +494,7 @@ class ShadowGraph {
   ///
   /// [allEntities] can include the [entity] itself. This method will
   /// automatically discard it (because obviously, an entity will clash
-  /// with itself.
+  /// with itself).
   ///
   /// For an example of a "clashing" qualification level, let's have two
   /// entities:
@@ -566,14 +626,17 @@ class ShadowGraph {
     if (i < 0 || i >= _joiners.length) return;
     _joiners[i].retainWhere((joiner) => const [
           SentenceJoinType.but,
-          SentenceJoinType.periodBut
+          SentenceJoinType.noneBut,
+          SentenceJoinType.periodBut,
         ].contains(joiner));
   }
 
-  void _limitJoinerToPeriod(int i) {
+  void _limitJoinerToNoneAllowButOrAnd(int i) {
     if (i < 0 || i >= _joiners.length) return;
     _joiners[i].retainWhere((joiner) => const [
-          SentenceJoinType.period,
+          SentenceJoinType.none,
+          SentenceJoinType.noneAnd,
+          SentenceJoinType.noneBut
         ].contains(joiner));
   }
 
@@ -584,6 +647,14 @@ class ShadowGraph {
           SentenceJoinType.periodAnd,
           SentenceJoinType.periodBut
         ].contains(joiner));
+  }
+
+  void _limitJoinerToPeriodOrNone(int i) {
+    if (i < 0 || i >= _joiners.length) return;
+    _joiners[i].retainAll(const [
+      SentenceJoinType.none,
+      SentenceJoinType.period,
+    ]);
   }
 
   void _limitSubjectToPronoun(int i) {
@@ -637,6 +708,27 @@ class ShadowGraph {
         }
         assert(set.length == 1);
       });
+    }
+  }
+
+  void _removeOmittedAtStartsOfSentences(UnmodifiableListView<Report> reports) {
+    const startNewSentenceJoiners = [
+      SentenceJoinType.period,
+      SentenceJoinType.periodAnd,
+      SentenceJoinType.periodBut,
+      SentenceJoinType.none,
+      SentenceJoinType.noneAnd,
+      SentenceJoinType.noneBut,
+    ];
+
+    for (int i = 0; i < _reportIdentifiers.length; i++ ) {
+      // At this point, the final joiner must have been selected.
+      final joiner = joiners[i];
+      if (startNewSentenceJoiners.contains(joiner)) {
+        _reportIdentifiers[i].forEachEntityIn(reports[i], (entity, set) {
+          set.remove(IdentifierLevel.omitted);
+        });
+      }
     }
   }
 }

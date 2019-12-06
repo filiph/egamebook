@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
+import 'package:edgehead/fractal_stories/storyline/shadow_graph.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:logging/logging.dart';
@@ -164,20 +165,26 @@ class Storyline {
   static const String OBJECT = "<object>";
   static const String OBJECT_POSSESSIVE = "<object's>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
+  static const String SUBJECT_ADJECTIVE_ONE = "<subjectAdjectiveOne>";
   static const String SUBJECT_PRONOUN_ACCUSATIVE = "<subjectPronounAccusative>";
   static const String SUBJECT_PRONOUN_POSSESSIVE = "<subjectPronoun's>";
   static const String SUBJECT_PRONOUN_SELF = "<subjectPronounSelf>";
   static const String SUBJECT_NOUN = "<subjectNoun>";
+  static const String SUBJECT_THE_OTHER_NOUN = "<subjectTheOtherNoun>";
   static const String OBJECT_PRONOUN = "<objectPronoun>";
+  static const String OBJECT_NOUN = "<objectNoun>";
+  static const String OBJECT_ADJECTIVE_ONE = "<objectAdjectiveOne>";
   static const String OBJECT_PRONOUN_NOMINATIVE = "<objectPronounNominative>";
   static const String OBJECT_PRONOUN_ACCUSATIVE = "<objectPronounAccusative>";
   static const String OBJECT_PRONOUN_POSSESSIVE = "<objectPronoun's>";
+  static const String OBJECT_THE_OTHER_NOUN = "<objectTheOtherNoun>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
   static const String OWNER_PRONOUN_POSSESSIVE = "<ownerPronoun's>";
   static const String OBJECT_OWNER_PRONOUN = "<objectOwnerPronoun>";
   static const String OBJECT_OWNER_PRONOUN_POSSESSIVE =
       "<objectOwnerPronoun's>";
   static const String OBJECT2 = "<object2>";
+  static const String OBJECT2_NOUN = "<object2Noun>";
   static const String OBJECT2_POSSESSIVE = "<object2's>";
   static const String OBJECT2_PRONOUN = "<object2Pronoun>";
   static const String OBJECT2_PRONOUN_NOMINATIVE = "<object2PronounNominative>";
@@ -533,8 +540,10 @@ class Storyline {
     if (report.objectOwner != null) yield report.objectOwner;
   }
 
-  /// Takes care of substitution of stopwords. Called by substitute().
-  String _substituteStopwords(String str, Report report) {
+  /// Takes care of substitution of stopwords for actual text.
+  ///
+  /// For example, `<subject>` becomes `the goblin` or `she`.
+  String _realizeStopwords(String str, Report report) {
     Entity subject = report.subject;
     Entity object = report.object;
     Entity object2 = report.object2;
@@ -611,24 +620,32 @@ class Storyline {
     void substituteObject(
         Entity object,
         String X,
+        String X_NOUN,
         String X_POSSESSIVE,
         String X_PRONOUN,
         String X_PRONOUN_POSSESSIVE,
         String X_NOUN_WITH_ADJECTIVE) {
+      assert(
+          !result.contains(X),
+          "By this time, $X should have been substituted "
+          "by alternatives in $result.");
+
       if (object.nameIsProperNoun) {
         // Disallow "you unleash your Buster".
         // We must do this before we auto-change <OBJECT> to object.name below.
-        result = result.replaceAll("$SUBJECT_POSSESSIVE $X", X);
-        result = result.replaceAll("$SUBJECT_PRONOUN_POSSESSIVE $X", X);
+        result = result.replaceAll("$SUBJECT_POSSESSIVE $X_NOUN", X_NOUN);
+        result =
+            result.replaceAll("$SUBJECT_PRONOUN_POSSESSIVE $X_NOUN", X_NOUN);
       }
 
       if (object.isPlayer) {
+        // TODO: remove - this should be covered already
         result = result.replaceAll(X, X_PRONOUN);
         result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESSIVE);
       } else {
         result = addParticleToFirstOccurrence(
-            result, X, object, objectOwner, report.time);
-        result = result.replaceFirst(X, object.name);
+            result, X_NOUN, object, objectOwner, report.time);
+        result = result.replaceFirst(X_NOUN, object.name);
 
         // Solve particles for object that needs an adjective.
         result = addParticleToFirstOccurrence(
@@ -637,7 +654,7 @@ class Storyline {
             X_NOUN_WITH_ADJECTIVE, '${object.adjective} ${object.name}');
 
         // Replace the rest with pronouns.
-        result = result.replaceAll(X, object.pronoun.accusative);
+        result = result.replaceAll(X_NOUN, object.pronoun.accusative);
       }
 
       result = result.replaceAll(X_PRONOUN, object.pronoun.accusative);
@@ -648,13 +665,25 @@ class Storyline {
     }
 
     if (object != null) {
-      substituteObject(object, OBJECT, OBJECT_POSSESSIVE, OBJECT_PRONOUN,
-          OBJECT_PRONOUN_POSSESSIVE, OBJECT_NOUN_WITH_ADJECTIVE);
+      substituteObject(
+          object,
+          OBJECT,
+          OBJECT_NOUN,
+          OBJECT_POSSESSIVE,
+          OBJECT_PRONOUN,
+          OBJECT_PRONOUN_POSSESSIVE,
+          OBJECT_NOUN_WITH_ADJECTIVE);
     }
 
     if (object2 != null) {
-      substituteObject(object2, OBJECT2, OBJECT2_POSSESSIVE, OBJECT2_PRONOUN,
-          OBJECT2_PRONOUN_POSSESSIVE, OBJECT2_NOUN_WITH_ADJECTIVE);
+      substituteObject(
+          object2,
+          OBJECT2,
+          OBJECT2_NOUN,
+          OBJECT2_POSSESSIVE,
+          OBJECT2_PRONOUN,
+          OBJECT2_PRONOUN_POSSESSIVE,
+          OBJECT2_NOUN_WITH_ADJECTIVE);
     }
 
     // Second pass after [substituteObject], now with possessives.
@@ -852,66 +881,47 @@ class Storyline {
     }
     if (length < 1) return const [];
 
-    final Set<Entity> entitiesNeedingAdjectives =
-        _findEntitiesNeedingAdjectives(_reports.take(length)).toSet();
+    final shadowGraph = ShadowGraph.from(this);
 
-    const int MAX_SENTENCE_LENGTH = 3;
-    int lastEndSentence = -1;
-    bool endPreviousSentence = true; // previous sentence was ended
-    bool endThisSentence = false; // this sentence needs to be ended
-    bool but = false; // this next sentence needs to start with but
     for (int i = 0; i < length; i++) {
-      // TODO: look into future - make sentences like "Although __, __"
-      // TODO: ^^ can be done by 2 for loops
-      // TODO: add "while you're still sweeping your legs" when it's been
-      //       a long time since we said that
-      // TODO: glue sentences together first (look ahead, optimize)
-      if (i != 0) {
-        // solve flow with previous sentence
-        bool objectSubjectSwitch = exchangedSubjectObject(i - 1, i);
-        bool objectSubjectSwitchImperfect =
-            exchangedSubjectObjectImperfect(i - 1, i);
-        but = (_reports[i].but ||
-                (oppositeSentiment(i, i - 1) && someActorsSame(i, i - 1))) &&
-            !_reports[i - 1].but;
-        _reports[i].but = but;
-        endPreviousSentence = (i - lastEndSentence >= MAX_SENTENCE_LENGTH) ||
-            endThisSentence ||
-            _reports[i].startSentence ||
-            _reports[i - 1].endSentence ||
-            _reports[i].wholeSentence ||
-            !(_sameSubject(i, i - 1) ||
-                objectSubjectSwitch ||
-                objectSubjectSwitchImperfect) ||
-            (but && (i - lastEndSentence > 1)) ||
-            (but && _reports[i - 1].but) ||
-            (timeSincePrevious(i) > SHORT_TIME);
-        endThisSentence = false;
+      final joiner = shadowGraph.joiners[i];
+      final qualifications = shadowGraph.qualifications[i];
 
-        if (endPreviousSentence) {
-          if (_reports[i - 1].wholeSentence) {
-            // don't write period after "Boom!"
-            strBuf.write(" ");
-          } else {
-            strBuf.write(". ");
-          }
-          if (but && !_reports[i].wholeSentence) strBuf.write("But ");
-        } else {
-          // let's try and glue [i-1] and [i] into one sentence
-          if (but) {
-            strBuf.write(Randomly.choose(
-                <String>[" but ", " but ", /*" yet ",*/ ", but "]));
-            if (!sameSentiment(i, i + 1)) endThisSentence = true;
-          } else {
-            // TODO: add ", " but only when we can be sure
-            //       it's not in the end of the sentence
-            strBuf.write(Randomly.choose(<String>[" and ", " and ", ", and "]));
-            endThisSentence = true;
-          }
-        }
+      switch (joiner) {
+        case SentenceJoinType.none:
+          if (i > 0) strBuf.write(' ');
+          break;
+        case SentenceJoinType.and:
+          strBuf.write(' and ');
+          break;
+        case SentenceJoinType.but:
+          strBuf.write(' but ');
+          break;
+        case SentenceJoinType.comma:
+          strBuf.write(', ');
+          break;
+        case SentenceJoinType.period:
+          strBuf.write('. ');
+          break;
+        case SentenceJoinType.noneAnd:
+          strBuf.write(' And ');
+          break;
+        case SentenceJoinType.noneBut:
+          strBuf.write(' But ');
+          break;
+        case SentenceJoinType.periodAnd:
+          strBuf.write('. And ');
+          break;
+        case SentenceJoinType.periodBut:
+          strBuf.write('. But ');
+          break;
       }
+      // TODO: Don't write period after "Boom!"
+      // TODO: But for opposite sentiment
+      // TODO: No two buts after each other
+      // TODO: No joined sentence when things happen a while apart? SHORT_TIME
 
-      String randomReport = string(i);
+      String randomReport = _reports[i].string;
 
       // Resolve randomness first.
       String report = Randomly.parseAndPick(randomReport);
@@ -921,34 +931,25 @@ class Storyline {
             'Input = """$randomReport""" Output = """$report"""');
       }
 
-      // clear subject and verb ("He has his sword and his shield.")
-      if (!endPreviousSentence &&
-          _sameSubject(i, i - 1) &&
-          string(i - 1).startsWith("$SUBJECT ") &&
+      // Clear verb "to have" if pronoun is omitted.
+      // ("He has his sword and his shield.")
+      if (_reports[i].subject != null &&
+          qualifications.subject == IdentifierLevel.omitted &&
+          (string(i - 1)?.startsWith("$SUBJECT $VERB_HAVE ") ?? false) &&
           report.startsWith("$SUBJECT $VERB_HAVE ")) {
         report = report.replaceFirst("$SUBJECT $VERB_HAVE ", "");
       }
 
-      // clear subjects when e.g. "Wolf hits you, it growls, it strikes again."
-      if (!endPreviousSentence &&
-          _sameSubject(i, i - 1) &&
-          string(i - 1).startsWith("$SUBJECT ") &&
-          report.startsWith("$SUBJECT ")) {
-        report = report.replaceFirst("$SUBJECT ", "");
+      report = _modifyStopwords(report, _reports[i], qualifications);
+      report = _realizeStopwords(report, _reports[i]);
+
+      if (joiner == SentenceJoinType.period ||
+          joiner == SentenceJoinType.none) {
+        report = capitalize(report);
       }
-
-      report = _maybeAddAdjectives(i, report, entitiesNeedingAdjectives);
-      report = _fixFlowWithPrevious(i, report);
-      report = _substituteStopwords(report, _reports[i]);
-
-      if ((endPreviousSentence || i == 0) && !but) report = capitalize(report);
 
       // add the actual report
       strBuf.write(report);
-
-      // set variables for next iteration
-      if (endPreviousSentence) lastEndSentence = i;
-      if (_reports[i].wholeSentence) endThisSentence = true;
     }
 
     // add last dot
@@ -970,7 +971,7 @@ class Storyline {
     if (length == lengthInRecords) {
       // No records other than of type [Report] found. Safe to just output
       // the text.
-      return <ElementBase>[text];
+      return [text];
     }
 
     // We have elements other than text.
@@ -1057,8 +1058,7 @@ class Storyline {
     }
   }
 
-  /// makes sure the sentence flows well with the previous sentence(s), then
-  /// calls getString to do in-sentence substitution
+  /// makes sure the sentence flows well with the previous sentence(s)
   String _fixFlowWithPrevious(int i, String str) {
     String result = str.replaceAll(ACTION, string(i));
 
@@ -1274,78 +1274,69 @@ class Storyline {
     }
   }
 
-  String _maybeAddAdjectives(
-      int i, String string, Set<Entity> entitiesNeedingAdjectives) {
-    final Report report = _reports[i];
-    String result = string;
+  /// Modifies stopwords in [string] according to [qualifications].
+  ///
+  /// For example, if [qualifications] say that the subject should be omitted,
+  /// this method will remove the string `"<subject>"` from [string].
+  String _modifyStopwords(
+      String string, Report report, ReportIdentifiers qualifications) {
+    var result = string;
 
-    /// Returns `true` if the entity needs to be prepended
-    /// with an adjective because some other noun in the vicinity is confusable.
-    ///
-    /// Automatically returns `false` for `null` and for entities
-    /// with proper nouns.
-    bool neededForNoun(Entity entity) {
-      if (entity == null) return false;
-      if (entity.nameIsProperNoun) return false;
-
-      if (valid(i - 1) &&
-          _reports[i - 1].allEntities.any((e) => e.id == entity.id)) {
-        // This was mentioned before. Don't required adjective again.
-        return false;
+    if (report.subject != null) {
+      switch (qualifications.subject) {
+        case IdentifierLevel.omitted:
+          result = result.replaceFirst('$SUBJECT ', '');
+          break;
+        case IdentifierLevel.pronoun:
+          result = result.replaceFirst(SUBJECT, SUBJECT_PRONOUN);
+          break;
+        case IdentifierLevel.adjectiveOne:
+          result = result.replaceFirst(SUBJECT, SUBJECT_ADJECTIVE_ONE);
+          break;
+        case IdentifierLevel.noun:
+          result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
+          break;
+        case IdentifierLevel.theOtherNoun:
+          result = result.replaceFirst(SUBJECT, SUBJECT_THE_OTHER_NOUN);
+          break;
+        case IdentifierLevel.adjectiveNoun:
+          result = result.replaceFirst(SUBJECT, SUBJECT_NOUN_WITH_ADJECTIVE);
+          break;
+        case IdentifierLevel.properNoun:
+          result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
+          break;
       }
-
-      return entitiesNeedingAdjectives.contains(entity);
     }
 
-    if (neededForNoun(report.subject)) {
-      result = result.replaceAll(SUBJECT, SUBJECT_NOUN_WITH_ADJECTIVE);
+    if (report.object != null) {
+      switch (qualifications.object) {
+        case IdentifierLevel.omitted:
+          result = result.replaceFirst(OBJECT, '');
+          break;
+        case IdentifierLevel.pronoun:
+          result = result.replaceFirst(OBJECT, OBJECT_PRONOUN);
+          break;
+        case IdentifierLevel.adjectiveOne:
+          result = result.replaceFirst(OBJECT, OBJECT_ADJECTIVE_ONE);
+          break;
+        case IdentifierLevel.noun:
+          result = result.replaceFirst(OBJECT, OBJECT_NOUN);
+          break;
+        case IdentifierLevel.theOtherNoun:
+          result = result.replaceFirst(OBJECT, OBJECT_THE_OTHER_NOUN);
+          break;
+        case IdentifierLevel.adjectiveNoun:
+          result = result.replaceFirst(OBJECT, OBJECT_NOUN_WITH_ADJECTIVE);
+          break;
+        case IdentifierLevel.properNoun:
+          result = result.replaceFirst(OBJECT, OBJECT_NOUN);
+          break;
+      }
     }
 
-    if (neededForNoun(report.object)) {
-      result = result.replaceAll(OBJECT, OBJECT_NOUN_WITH_ADJECTIVE);
-    }
-
-    if (neededForNoun(report.object2)) {
-      result = result.replaceAll(OBJECT2, OBJECT2_NOUN_WITH_ADJECTIVE);
-    }
-
-    // Possibly do this with OWNER / OBJECT_OWNER?
+    // TODO: object2
 
     return result;
-  }
-
-  /// Returns an iterable of entities that need an adjective.
-  ///
-  /// Entities need an adjective when some other entity in the storyline
-  /// has the exact same name.
-  ///
-  /// For example, when there are two objects, `a` and `b`, and both are named
-  /// "sword", then Storyline will need to use adjectives for both.
-  Iterable<Entity> _findEntitiesNeedingAdjectives(
-      Iterable<Report> reports) sync* {
-    final Map<String, Set<Entity>> nameToIds = {};
-
-    for (final report in reports) {
-      for (final entity in report.allEntities) {
-        nameToIds
-            // Create a new set under entity name in case it doesn't
-            // already exist.
-            .putIfAbsent(entity.name, () => {})
-            // Add the entity there.
-            .add(entity);
-      }
-    }
-
-    for (final idSet in nameToIds.values) {
-      if (idSet.length > 1) {
-        // Duplicate name shared among entities in this set.
-        yield* idSet;
-        assert(
-            idSet.every((entity) => entity.adjective != null),
-            "Storyline has to report about $idSet "
-            "but one of the entities doesn't have adjectives.");
-      }
-    }
   }
 }
 
