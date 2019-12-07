@@ -1105,6 +1105,19 @@ void main() {
     expect(result, contains('thrust the sword'));
     expect(result, contains('turns to the goblin'));
   });
+
+  test('sentence verb type (is something vs do something)', () {
+    final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
+
+    final storyline = Storyline();
+    storyline.add("<subject> leap<s> backwards",
+        subject: goblin);
+    storyline.add("<subject> <is> too slow", subject: goblin, but: true);
+
+    final result = storyline.realizeAsString();
+    expect(result, contains('goblin leaps'));
+    expect(result, contains('he is too slow'));
+  });
 }
 
 Entity _createPlayer(String name) =>

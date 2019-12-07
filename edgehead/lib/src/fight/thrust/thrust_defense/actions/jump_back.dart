@@ -53,11 +53,8 @@ class JumpBackFromThrust extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(
-        s,
-        "<subject> {jump<s>|leap<s>} {back|backward} "
-        "but <subject> <is> {not fast enough|too slow}.",
-        wholeSentence: true);
+    a.report(s, "<subject> {jump<s>|leap<s>} {back|backward}");
+    a.report(s, "<subject> <is> {not fast enough|too slow}", but: true);
     w.popSituation(context);
     return "${a.name} fails to jump back from ${enemy.name}";
   }
