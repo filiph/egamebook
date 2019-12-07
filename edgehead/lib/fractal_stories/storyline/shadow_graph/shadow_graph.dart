@@ -465,8 +465,10 @@ class ShadowGraph {
           // else in the preceding report.
           return;
         }
-        if (current.containsKey(id)) {
-          // Duplicate identifiers (e.g. 2 "he" pronouns).
+        if (current.containsKey(id) && current[id].id != entity.id) {
+          // The identifier already points to an entity. Also, that entity
+          // isn't _this_ [entity] (which might happen when an entity is both
+          // the subject and the object of a report).
           current[id] = noEntity;
         } else {
           current[id] = entity;
@@ -492,7 +494,7 @@ class ShadowGraph {
           final commonNameId = Identifier.commonNoun(entity.name, entity.id);
           assign(commonNameId, entity);
         }
-        
+
         final pronounId = Identifier.pronoun(entity.pronoun);
         assign(pronounId, entity);
 
