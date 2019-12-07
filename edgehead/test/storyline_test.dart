@@ -894,8 +894,8 @@ void main() {
           subject: b, objectOwner: a, object: aBodyPart);
 
       final result = storyline.realizeAsString();
-      expect(result, contains('blue goblin deflects'));
-      expect(result, contains('his fist'));
+      // expect(result, contains('blue goblin deflects'));
+      // expect(result, contains('his fist'));
     }, skip: "this needs some more thought");
   });
 
