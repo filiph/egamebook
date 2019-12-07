@@ -487,6 +487,12 @@ class ShadowGraph {
       for (final entityInReport in reportEntities) {
         final entity = entities.singleWhere((e) => e.id == entityInReport.id);
 
+        if (entity.isCommon) {
+          // Can share a storyline with entities of same name, like "thrust".
+          final commonNameId = Identifier.commonNoun(entity.name, entity.id);
+          assign(commonNameId, entity);
+        }
+        
         final pronounId = Identifier.pronoun(entity.pronoun);
         assign(pronounId, entity);
 

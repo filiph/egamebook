@@ -6,13 +6,15 @@ part of storyline;
 /// They have a [name], they are referred to by a [pronoun] and more often
 /// than not they are at a [location].
 abstract class Entity {
-  factory Entity(
-      {@required String name,
-      Pronoun pronoun,
-      String adjective,
-      Team team,
-      bool nameIsProperNoun,
-      bool isPlayer}) = _NonserializableEntity;
+  factory Entity({
+    @required String name,
+    Pronoun pronoun,
+    String adjective,
+    Team team,
+    bool nameIsProperNoun,
+    bool isPlayer,
+    bool isCommon,
+  }) = _NonserializableEntity;
 
   /// A way to specify the entity more concretely than with just the [name].
   ///
@@ -38,6 +40,20 @@ abstract class Entity {
 
   /// True if Actor is alive, i.e. not destroyed or dead.
   bool get isAnimated => true;
+
+  /// If `true`, this entity represents something very common, such
+  /// as a move ("the thrust", "the punch") or a "decal" (such as "the bruise"
+  /// or "the elbow").
+  ///
+  /// [Storyline] can use this to allow multiple such entities to be referred to
+  /// by the same identifier ("thrust"). This means a combat scenario
+  /// can have two different thrusts in one paragraph.
+  ///
+  /// On the other hand, unique entities (such as individual swords or goblins,
+  /// which return `false` for [isCommon]) cannot share the exact same
+  /// identifiers because it would be confusing ("the goblin hits the goblin").
+  /// See [ShadowGraph], which exists to prevent such issues.
+  bool get isCommon => false;
 
   bool get isPlayer;
 
@@ -139,19 +155,23 @@ class _NonserializableEntity extends Object
   final Pronoun pronoun;
 
   @override
+  final bool isCommon;
+
+  @override
   final Team team;
 
   @override
   final bool isPlayer;
 
-  _NonserializableEntity(
-      {@required this.name,
-      this.adjective,
-      Pronoun pronoun,
-      Team team,
-      this.nameIsProperNoun = false,
-      this.isPlayer = false})
-      : team = team ?? neutralTeam,
+  _NonserializableEntity({
+    @required this.name,
+    this.adjective,
+    Pronoun pronoun,
+    Team team,
+    this.nameIsProperNoun = false,
+    this.isPlayer = false,
+    this.isCommon = false,
+  })  : team = team ?? neutralTeam,
         pronoun = pronoun ?? Pronoun.IT;
 
   @override

@@ -86,7 +86,8 @@ class FinishThrowBlunt extends OtherActorAction {
   }
 
   Entity _createBodyPartEntity(Actor a, String name) {
-    return Entity(name: Randomly.parseAndPick(name), team: a.team);
+    return Entity(
+        name: Randomly.parseAndPick(name), team: a.team, isCommon: true);
   }
 
   @override

@@ -66,6 +66,9 @@ abstract class Item extends Object
   bool get isAnimated => false;
 
   @override
+  bool get isCommon => false;
+
+  @override
   bool get isPlayer => false;
 
   bool get isShield =>

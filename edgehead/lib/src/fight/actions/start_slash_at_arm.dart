@@ -56,7 +56,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
         s,
         "<subject> swing<s> <subject's> <object2> at "
         "<objectOwner's> <object>",
-        object: Entity(name: 'arm'),
+        object: Entity(name: 'arm', isCommon: true),
         objectOwner: enemy,
         object2: a.currentWeaponOrBodyPart,
         actionThread: mainSituation.id,

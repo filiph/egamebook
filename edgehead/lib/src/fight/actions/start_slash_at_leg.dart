@@ -57,7 +57,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
           s,
           "<subject> {swing<s>|slash<es>} at "
           "<objectOwner's> <object>",
-          object: Entity(name: 'leg'),
+          object: Entity(name: 'leg', isCommon: true),
           objectOwner: enemy,
           actionThread: mainSituation.id,
           startsThread: true),
@@ -65,7 +65,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
           s,
           "<subject> swing<s> <object2> at "
           "<objectOwner's> <object>",
-          object: Entity(name: 'leg'),
+          object: Entity(name: 'leg', isCommon: true),
           objectOwner: enemy,
           object2: a.currentWeaponOrBodyPart,
           actionThread: mainSituation.id,

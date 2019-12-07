@@ -248,6 +248,9 @@ abstract class Actor extends Object
         anatomy.bodyPartWeapon?.damageCapability?.type == WeaponType.fist;
   }
 
+  @override
+  bool get isCommon => false;
+
   bool get isConfused;
 
   /// If `true`, this actor has special powers over the game world. They should

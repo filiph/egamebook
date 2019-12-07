@@ -18,8 +18,11 @@ class FinishClash extends OtherActorAction {
 
   static const String className = "FinishClash";
 
-  static final Entity _balance =
-      Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
+  static final Entity _balance = Entity(
+      name: "balance",
+      team: neutralTeam,
+      nameIsProperNoun: true,
+      isCommon: true);
 
   @override
   final String helpMessage = null;

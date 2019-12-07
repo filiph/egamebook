@@ -113,6 +113,9 @@ abstract class BodyPart extends Object
   bool get isAnimated => hitpoints > 0;
 
   @override
+  bool get isCommon => false;
+
+  @override
   bool get isPlayer => false;
 
   /// Can a slashing swing sever the body part?

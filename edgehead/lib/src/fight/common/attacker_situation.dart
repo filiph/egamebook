@@ -251,6 +251,10 @@ abstract class MoveEntity extends Object
   @override
   int get id;
 
+  /// Moves are abstract entities.
+  @override
+  bool get isCommon => true;
+
   @override
   bool get isActive => true;
 

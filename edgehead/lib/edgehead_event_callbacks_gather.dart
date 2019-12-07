@@ -93,7 +93,7 @@ final escape_tunnel_insignificant = EventCallback((c, sim, w, s) {
       "That last blow hits your $target hard"
       "${player.isOnGround ? '' : ' and sends you a couple of steps back'}.",
       wholeSentence: true);
-  final eyes = Entity(name: "eyes", pronoun: Pronoun.THEY);
+  final eyes = Entity(name: "eyes", pronoun: Pronoun.THEY, isCommon: true);
   s.add("<owner's> <subject> glint<s> with intensity",
       owner: actor, subject: eyes);
 });

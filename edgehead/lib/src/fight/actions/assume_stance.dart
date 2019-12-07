@@ -13,8 +13,11 @@ class AssumeStance extends Action<Nothing> {
 
   static const String className = "AssumeStance";
 
-  static final Entity _stance =
-      Entity(name: "stance", team: neutralTeam, nameIsProperNoun: true);
+  static final Entity _stance = Entity(
+      name: "stance",
+      team: neutralTeam,
+      nameIsProperNoun: true,
+      isCommon: true);
 
   @override
   final String helpMessage = "When in proper combat stance, the enemy has "

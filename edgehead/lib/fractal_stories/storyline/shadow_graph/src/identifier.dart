@@ -32,6 +32,11 @@ class Identifier {
       : level = IdentifierLevel.adjectiveOne,
         pronoun = null;
 
+  const Identifier.commonNoun(String string, int id)
+      : string = "$string ($id)",
+        level = IdentifierLevel.noun,
+        pronoun = null;
+
   const Identifier.noun(this.string)
       : level = IdentifierLevel.noun,
         pronoun = null;

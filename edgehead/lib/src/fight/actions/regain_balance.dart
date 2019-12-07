@@ -13,8 +13,11 @@ class RegainBalance extends Action<Nothing> {
 
   static const String className = "RegainBalance";
 
-  static final Entity _balance =
-      Entity(name: "balance", team: neutralTeam, nameIsProperNoun: true);
+  static final Entity _balance = Entity(
+      name: "balance",
+      team: neutralTeam,
+      nameIsProperNoun: true,
+      isCommon: true);
 
   @override
   final String helpMessage = "Most moves are easier and more effective when "
