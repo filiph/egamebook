@@ -93,19 +93,28 @@ class ShadowGraph {
     final entities = _getAllMentionedEntities(storyline.reports);
     _fillForcedJoiners(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
-    _detectForcedPronouns(storyline.reports);
     _detectMissingProperNouns(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _detectMissingAdjectives(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _detectFirstMentions(storyline.reports, entities);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _identifiers = _getIdentifiersThroughoutStory(storyline.reports, entities);
     _removeQualificationsWhereUnavailable(storyline.reports, _identifiers);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _find2JoinerOpportunitiesP0(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
     _find2JoinerOpportunitiesP1(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
     _fillOtherJoiners(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _assertExactlyOnePossibleJoiner(storyline.reports);
     _removeOmittedAtStartsOfSentences(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
+    _detectForcedPronouns(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _retainTheLowestPossible(storyline.reports);
   }
 
@@ -132,6 +141,20 @@ class ShadowGraph {
       buf.writeln();
     }
     return buf.toString();
+  }
+
+  void __assertAtLeastOneIdentifier(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < _reportIdentifiers.length; i++) {
+      final report = reports[i];
+      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
+        assert(
+            set.isNotEmpty,
+            "We have an empty range ($set) for $entity in $report (#$i).\n"
+            "Reports: $reports\n\n"
+            "Identifiers: $_identifiers\n\n"
+            "ReportIdentifiers: $_reportIdentifiers");
+      });
+    }
   }
 
   void __assertAtLeastOneJoiner(UnmodifiableListView<Report> reports) {
@@ -202,15 +225,21 @@ class ShadowGraph {
       final report = reports[i];
       if (report.string.contains(Storyline.SUBJECT_PRONOUN) &&
           !report.string.contains(Storyline.SUBJECT)) {
-        _limitSubjectToPronoun(i);
+        _reportIdentifiers[i]._subjectRange
+          ..clear()
+          ..add(IdentifierLevel.pronoun);
       }
       if (report.string.contains(Storyline.OBJECT_PRONOUN) &&
           !report.string.contains(Storyline.OBJECT)) {
-        _limitObjectToPronoun(i);
+        _reportIdentifiers[i]._objectRange
+          ..clear()
+          ..add(IdentifierLevel.pronoun);
       }
       if (report.string.contains(Storyline.OBJECT2_PRONOUN) &&
           !report.string.contains(Storyline.OBJECT2)) {
-        _limitObject2ToPronoun(i);
+        _reportIdentifiers[i]._object2Range
+          ..clear()
+          ..add(IdentifierLevel.pronoun);
       }
     }
   }
@@ -384,7 +413,8 @@ class ShadowGraph {
   /// [IdentifierLevel.adjectiveOne] (because both are "the burly one").
   Iterable<IdentifierLevel> _getConflictingQualificationLevels(
       Entity entity, Set<Entity> allEntities) sync* {
-    final others = Set<Entity>.from(allEntities.where((e) => e != entity));
+    final others =
+        Set<Entity>.from(allEntities.where((e) => e.id != entity.id));
 
     if (others.any((e) => e.pronoun == entity.pronoun)) {
       yield IdentifierLevel.pronoun;
@@ -446,7 +476,8 @@ class ShadowGraph {
       // Mark the previous report's subject as the omitted one in this report.
       if (i >= 1) {
         final previousSubject = reports[i - 1].subject;
-        if (previousSubject != null && reports[i].subject == previousSubject) {
+        if (previousSubject != null &&
+            reports[i].subject?.id == previousSubject.id) {
           current[const Identifier.omitted()] = previousSubject;
         }
       }
@@ -534,27 +565,6 @@ class ShadowGraph {
     ]);
   }
 
-  void _limitObject2ToPronoun(int i) {
-    if (i < 0 || i >= _reportIdentifiers.length) return;
-    _reportIdentifiers[i]
-        ._object2Range
-        .retainWhere((qual) => qual == IdentifierLevel.pronoun);
-  }
-
-  void _limitObjectToPronoun(int i) {
-    if (i < 0 || i >= _reportIdentifiers.length) return;
-    _reportIdentifiers[i]
-        ._objectRange
-        .retainWhere((qual) => qual == IdentifierLevel.pronoun);
-  }
-
-  void _limitSubjectToPronoun(int i) {
-    if (i < 0 || i >= _reportIdentifiers.length) return;
-    _reportIdentifiers[i]
-        ._subjectRange
-        .retainWhere((qual) => qual == IdentifierLevel.pronoun);
-  }
-
   void _removeOmittedAtStartsOfSentences(UnmodifiableListView<Report> reports) {
     const startNewSentenceJoiners = [
       SentenceJoinType.period,
@@ -591,10 +601,17 @@ class ShadowGraph {
       final current = identifiers[i];
       _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
         // Take the identifiers that refer to the entity.
+        // For example, in a particular sentence, "he" and "Aren" can
+        // both be relevant identifiers for the actor named Aren.
         final relevantIdentifiers = current.entries
-            .where((entry) => entry.value == entity)
+            .where((entry) => entry.value.id == entity.id)
             .map((entry) => entry.key)
             .toList(growable: false);
+
+        assert(
+            relevantIdentifiers.isNotEmpty,
+            "relevantIdentifiers for $entity are empty in $report: "
+            "$current");
 
         // Retain only the part of the entity's current range
         // (`Set<QualificationLevel>`) that is supported by one of

@@ -137,4 +137,8 @@ class ReportIdentifiers {
       callback(report.object2, _object2Range);
     }
   }
+
+  @override
+  String toString() => "$runtimeType<subject=$_subjectRange, "
+      "object=$_objectRange, object2=$_object2Range>";
 }

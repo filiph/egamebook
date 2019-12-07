@@ -893,7 +893,7 @@ void main() {
       storyline.add('<subject> deflect<s> <objectOwner\'s> <object>',
           subject: b, objectOwner: a, object: aBodyPart);
 
-      final result = storyline.realizeAsString();
+      // final result = storyline.realizeAsString();
       // expect(result, contains('blue goblin deflects'));
       // expect(result, contains('his fist'));
     }, skip: "this needs some more thought");
@@ -1060,6 +1060,36 @@ void main() {
         });
       });
     });
+  });
+
+  test('longer storyline', () {
+    final aren = Entity(name: "Aren", pronoun: Pronoun.I, isPlayer: true);
+    final arenSword = Entity(name: "sword");
+    final orc = Entity(name: "orc");
+    final orcTorso = Entity(name: "torso", pronoun: Pronoun.IT);
+    final goblin = Entity(name: "goblin");
+
+    final storyline = Storyline();
+    storyline.add("<subject> thrust<s> <object2> at <objectOwner's> <object>",
+        subject: aren, object2: arenSword, objectOwner: orc, object: orcTorso);
+
+    storyline.add(
+        "<subject> {jump<s>|leap<s>} {back|backward} "
+        "but <subject> <is> {not fast enough|too slow}",
+        subject: orc);
+
+    storyline.add(
+        "<subject> {pierce<s>|stab<s>|bore<s> through} "
+        "<object's> {abdomen|belly|chest|upper body}",
+        subject: aren,
+        object: orc);
+
+    storyline.add("<subject> turn<s> to <object>",
+        subject: orc, object: goblin);
+
+    final result = storyline.realizeAsString();
+    expect(result, contains('thrust the sword'));
+    expect(result, contains('turns to the goblin'));
   });
 }
 

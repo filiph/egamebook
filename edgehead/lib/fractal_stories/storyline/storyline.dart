@@ -118,7 +118,7 @@ class Report {
 
   @override
   String toString() => "Report"
-      "<${string.substring(0, min(string.length, 20))}...,"
+      "<${string.substring(0, min(string.length, 90))}...,"
       "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
 
   /// Returns all non-null entities (like [subject], [object] etc.)
