@@ -53,7 +53,8 @@ abstract class RoomRoamingSituation extends Object
         HireNpcAction.singleton,
         HealAction.singleton,
         RaiseDeadIdle.singleton,
-      ]..addAll(writers_input.allActions);
+        ...writers_input.allActions,
+      ];
 
   String get currentRoomName;
 
