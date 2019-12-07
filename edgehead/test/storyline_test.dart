@@ -1111,8 +1111,7 @@ void main() {
     final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
 
     final storyline = Storyline();
-    storyline.add("<subject> leap<s> backwards",
-        subject: goblin);
+    storyline.add("<subject> leap<s> backwards", subject: goblin);
     storyline.add("<subject> <is> too slow", subject: goblin, but: true);
 
     final result = storyline.realizeAsString();
