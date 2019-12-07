@@ -1068,7 +1068,8 @@ void main() {
     final storyline = Storyline();
 
     storyline.add(
-        "<subject> catch<es> <object> as <object> flies towards <subject>",
+        "<subject> catch<es> <object> as <object> flies "
+        "towards <subjectPronounAccusative>",
         subject: aren,
         object: sword);
 
