@@ -1209,6 +1209,8 @@ class Storyline {
       switch (qualifications.subject) {
         case IdentifierLevel.omitted:
           result = result.replaceFirst('$SUBJECT ', '');
+          result = result.replaceFirst(
+              SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
           break;
         case IdentifierLevel.pronoun:
           result = result.replaceFirst(SUBJECT, SUBJECT_PRONOUN);
@@ -1231,6 +1233,8 @@ class Storyline {
           result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
           break;
       }
+      // Mark the rest (after the first occurrence) with pronoun.
+      result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
     }
 
     if (report.object != null) {
@@ -1259,7 +1263,7 @@ class Storyline {
           result = result.replaceFirst(OBJECT, OBJECT_NOUN);
           break;
       }
-      // Everything after the first one can be a pronoun.
+      // Mark the rest (after the first occurrence) with pronoun.
       result = result.replaceAll(OBJECT, OBJECT_PRONOUN);
     }
 
@@ -1289,6 +1293,8 @@ class Storyline {
           result = result.replaceFirst(OBJECT2, OBJECT2_NOUN);
           break;
       }
+      // Mark the rest (after the first occurrence) with pronoun.
+      result = result.replaceAll(OBJECT2, OBJECT2_PRONOUN);
     }
 
     return result;
