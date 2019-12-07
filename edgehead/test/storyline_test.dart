@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -1060,6 +1062,20 @@ void main() {
         });
       });
     });
+  });
+
+  test('second <object> is a pronoun', () {
+    final aren = _createPlayer('Aren');
+    final sword = Entity(name: 'sword');
+    final storyline = Storyline();
+
+    storyline.add(
+        "<subject> catch<es> <object> as <object> flies towards <subject>",
+        subject: aren,
+        object: sword);
+
+    final result = storyline.realizeAsString();
+    expect(result, contains('as it flies'));
   });
 
   test('longer storyline', () {

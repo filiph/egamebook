@@ -1259,6 +1259,8 @@ class Storyline {
           result = result.replaceFirst(OBJECT, OBJECT_NOUN);
           break;
       }
+      // Everything after the first one can be a pronoun.
+      result = result.replaceAll(OBJECT, OBJECT_PRONOUN);
     }
 
     if (report.object2 != null) {
