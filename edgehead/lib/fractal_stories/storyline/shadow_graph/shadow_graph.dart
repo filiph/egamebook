@@ -277,9 +277,10 @@ class ShadowGraph {
   /// * but == but
   void _fillForcedJoiners(UnmodifiableListView<Report> reports) {
     // Always start with new sentence (no ", and").
-    _joiners[0].retainWhere((joiner) => const [
-          SentenceJoinType.none,
-        ].contains(joiner));
+    _joiners[0].retainAll(const [
+      SentenceJoinType.none,
+      SentenceJoinType.noneBut,
+    ]);
 
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
@@ -533,36 +534,36 @@ class ShadowGraph {
 
   void _limitJoinerToAnd(int i) {
     if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainWhere((joiner) => const [
-          SentenceJoinType.and,
-        ].contains(joiner));
+    _joiners[i].retainAll(const [
+      SentenceJoinType.and,
+    ]);
   }
 
   void _limitJoinerToBut(int i) {
     if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainWhere((joiner) => const [
-          SentenceJoinType.but,
-          SentenceJoinType.noneBut,
-          SentenceJoinType.periodBut,
-        ].contains(joiner));
+    _joiners[i].retainAll(const [
+      SentenceJoinType.but,
+      SentenceJoinType.noneBut,
+      SentenceJoinType.periodBut,
+    ]);
   }
 
   void _limitJoinerToNoneAllowButOrAnd(int i) {
     if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainWhere((joiner) => const [
-          SentenceJoinType.none,
-          SentenceJoinType.noneAnd,
-          SentenceJoinType.noneBut
-        ].contains(joiner));
+    _joiners[i].retainAll(const [
+      SentenceJoinType.none,
+      SentenceJoinType.noneAnd,
+      SentenceJoinType.noneBut
+    ]);
   }
 
   void _limitJoinerToPeriodAllowButOrAnd(int i) {
     if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainWhere((joiner) => const [
-          SentenceJoinType.period,
-          SentenceJoinType.periodAnd,
-          SentenceJoinType.periodBut
-        ].contains(joiner));
+    _joiners[i].retainAll(const [
+      SentenceJoinType.period,
+      SentenceJoinType.periodAnd,
+      SentenceJoinType.periodBut
+    ]);
   }
 
   void _limitJoinerToPeriodOrNone(int i) {
