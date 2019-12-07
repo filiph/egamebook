@@ -1,183 +1,13 @@
+library storyline.shadow_graph;
+
 import 'dart:collection';
 
 import 'package:built_value/built_value.dart' show $jf, $jc;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 
-/// A list of [IdentifierLevel]s, going from most verbose to least.
-///
-/// We generally want to use the least verbose qualifications, such as
-/// "he" or "she". But often we are forced to be more specific (e.g. when
-/// there are two male actors, so "he" is too vague).
-const List<IdentifierLevel> orderedQualificationLevels = [
-  IdentifierLevel.properNoun,
-  IdentifierLevel.adjectiveNoun,
-  IdentifierLevel.theOtherNoun,
-  IdentifierLevel.noun,
-  IdentifierLevel.adjectiveOne,
-  IdentifierLevel.pronoun,
-  IdentifierLevel.omitted,
-];
-
-/// The way an [Entity] can be referred to. These are things like "he"
-/// or "the other goblin".
-class Identifier {
-  final IdentifierLevel level;
-
-  final String string;
-
-  final Pronoun pronoun;
-
-  const Identifier.adjectiveNoun(this.string)
-      : level = IdentifierLevel.adjectiveNoun,
-        pronoun = null;
-
-  const Identifier.adjectiveOne(this.string)
-      : level = IdentifierLevel.adjectiveOne,
-        pronoun = null;
-
-  const Identifier.noun(this.string)
-      : level = IdentifierLevel.noun,
-        pronoun = null;
-
-  const Identifier.omitted()
-      : level = IdentifierLevel.omitted,
-        pronoun = null,
-        string = null;
-
-  const Identifier.pronoun(this.pronoun)
-      : level = IdentifierLevel.pronoun,
-        string = null;
-
-  const Identifier.properNoun(this.string)
-      : level = IdentifierLevel.properNoun,
-        pronoun = null;
-
-  const Identifier.theOtherNoun(this.string)
-      : level = IdentifierLevel.theOtherNoun,
-        pronoun = null;
-
-  const Identifier._()
-      : level = null,
-        pronoun = null,
-        string = null,
-        assert(false, 'Only use named constructors such as Identifier.pronoun');
-
-  @override
-  int get hashCode =>
-      $jf($jc($jc($jc(0, string.hashCode), pronoun.hashCode), level.hashCode));
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    return other is Identifier &&
-        level == other.level &&
-        pronoun == other.pronoun &&
-        string == other.string;
-  }
-
-  bool satisfiedBy(IdentifierLevel level) {
-    return level == this.level;
-  }
-
-  @override
-  String toString() => "Identifier<$level, $string, $pronoun>";
-}
-
-enum IdentifierLevel {
-  /// Like [pronoun], but so close that it can be omitted.
-  omitted,
-
-  pronoun,
-
-  adjectiveOne,
-
-  noun,
-
-  theOtherNoun,
-
-  adjectiveNoun,
-
-  properNoun,
-}
-
-/// A set of options for each entity in a given report.
-class ReportIdentifiers {
-  final Set<IdentifierLevel> _subjectRange = IdentifierLevel.values.toSet();
-
-  final Set<IdentifierLevel> _objectRange = IdentifierLevel.values.toSet();
-
-  final Set<IdentifierLevel> _object2Range = IdentifierLevel.values.toSet();
-
-  IdentifierLevel get object {
-    assert(_objectRange.length == 1, "Too many options: $_objectRange");
-    return _objectRange.single;
-  }
-
-  IdentifierLevel get object2 {
-    assert(_object2Range.length == 1, "Too many options: $_object2Range");
-    return _object2Range.single;
-  }
-
-  IdentifierLevel get subject {
-    assert(_subjectRange.length == 1, "Too many options: $_subjectRange");
-    return _subjectRange.single;
-  }
-
-  /// Runs [callback] for every entity in [report].
-  ///
-  /// The callback has two parameters: the [Entity], and its current
-  /// set of possible [IdentifierLevel]s. It is possible (and expected)
-  /// to modify the set.
-  void forEachEntityIn(
-      Report report, void Function(Entity, Set<IdentifierLevel>) callback) {
-    if (report.subject != null) {
-      callback(report.subject, _subjectRange);
-    }
-    if (report.object != null) {
-      callback(report.object, _objectRange);
-    }
-    if (report.object2 != null) {
-      callback(report.object2, _object2Range);
-    }
-  }
-}
-
-/// Different ways to join _this_ sentence to the previous one.
-enum SentenceJoinType {
-  /// Nothing. The previous sentence may already end with something,
-  /// or maybe this is the first sentence in a paragraph.
-  none,
-
-  /// Just plain period, without any "But" or "And".
-  period,
-
-  /// Comma, as in "The goblin picks up the sword, runs it through me."
-  comma,
-
-  /// A period followed by an "And".
-  periodAnd,
-
-  /// A period followed by a "But".
-  periodBut,
-
-  /// A new sentence starting with "And". The previous sentence either
-  /// doesn't exist, or it took care of its own ending (e.g. it's a whole
-  /// sentence ending with an exclamation mark).
-  noneAnd,
-
-  /// A new sentence starting with "But". The previous sentence either
-  /// doesn't exist, or it took care of its own ending (e.g. it's a whole
-  /// sentence ending with an exclamation mark).
-  noneBut,
-
-  /// A simple "and" in a sentence, such as "The goblin picks up the sword
-  /// and runs it through me."
-  and,
-
-  /// A "but" in a sentence, like "The goblin tries to pick up the sword
-  /// but falls to the ground instead."
-  but,
-}
+part 'src/identifier.dart';
+part 'src/report_pair.dart';
+part 'src/sentence_join_type.dart';
 
 /// A graph that tells [Storyline] where to use what qualification (e.g. "he" or
 /// "the goblin" or "the red goblin") and how to join sentences (e.g. "and" or
@@ -269,7 +99,9 @@ class ShadowGraph {
     _detectFirstMentions(storyline.reports, entities);
     _identifiers = _getIdentifiersThroughoutStory(storyline.reports, entities);
     _removeQualificationsWhereUnavailable(storyline.reports, _identifiers);
-    _find2JoinerOpportunities(storyline.reports);
+    _find2JoinerOpportunitiesP0(storyline.reports);
+    __assertAtLeastOneJoiner(storyline.reports);
+    _find2JoinerOpportunitiesP1(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
     _fillOtherJoiners(storyline.reports);
     _assertExactlyOnePossibleJoiner(storyline.reports);
@@ -310,6 +142,10 @@ class ShadowGraph {
           "for ${reports[i]} at this point "
           "but instead there is: ${_joiners[i]}.");
     }
+  }
+
+  void _allowObjectPronoun(int i) {
+    _reportIdentifiers[i]._objectRange.add(IdentifierLevel.pronoun);
   }
 
   void _assertExactlyOnePossibleJoiner(UnmodifiableListView<Report> reports) {
@@ -364,11 +200,18 @@ class ShadowGraph {
   void _detectForcedPronouns(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      if (report.string.contains('<subjectPronoun>') &&
-          !report.string.contains('<subject>')) {
+      if (report.string.contains(Storyline.SUBJECT_PRONOUN) &&
+          !report.string.contains(Storyline.SUBJECT)) {
         _limitSubjectToPronoun(i);
       }
-      // TODO: same thing with object, object2
+      if (report.string.contains(Storyline.OBJECT_PRONOUN) &&
+          !report.string.contains(Storyline.OBJECT)) {
+        _limitObjectToPronoun(i);
+      }
+      if (report.string.contains(Storyline.OBJECT2_PRONOUN) &&
+          !report.string.contains(Storyline.OBJECT2)) {
+        _limitObject2ToPronoun(i);
+      }
     }
   }
 
@@ -446,12 +289,15 @@ class ShadowGraph {
   }
 
   /// Find opportunities to join two sentences in one.
-  void _find2JoinerOpportunities(UnmodifiableListView<Report> reports) {
+  ///
+  /// P0 means these are the best ones, we should definitely go for them.
+  void _find2JoinerOpportunitiesP0(UnmodifiableListView<Report> reports) {
     for (final pair in _ReportPair.getPairs(reports)) {
       // The orcish captain avoids the goblin and regains balance.
-      if (pair.hasSameSubject &&
+      if (pair.hasSameVerbType &&
+          pair.hasSameSubject &&
           pair.second.object == null &&
-          _joiners[pair.index].contains(SentenceJoinType.period) &&
+          _joiners[pair.index].hasPeriodOrNone &&
           _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
         _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToAnd(pair.index + 1);
@@ -460,12 +306,43 @@ class ShadowGraph {
 
       // He lifts the goblin captain via telekinesis,
       // and hurls him at the orcish one.
-      if (pair.hasSameSubject &&
+      if (pair.hasSameVerbType &&
+          pair.hasSameSubject &&
           pair.hasSameObject &&
-          _joiners[pair.index].contains(SentenceJoinType.period) &&
+          _joiners[pair.index].hasPeriodOrNone &&
           _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
         _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToAnd(pair.index + 1);
+        _allowObjectPronoun(pair.index + 1);
+        continue;
+      }
+    }
+  }
+
+  /// Find opportunities to join two sentences in one.
+  ///
+  /// P1 means these are not as great at [_find2JoinerOpportunitiesP0].
+  void _find2JoinerOpportunitiesP1(UnmodifiableListView<Report> reports) {
+    for (final pair in _ReportPair.getPairs(reports)) {
+      // He has his dagger and his shield.
+      if (pair.hasSameVerbType &&
+          pair.hasSameSubject &&
+          _joiners[pair.index].hasPeriodOrNone &&
+          _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
+        _limitJoinerToPeriodOrNone(pair.index);
+        _limitJoinerToAnd(pair.index + 1);
+        continue;
+      }
+
+      // I dodge the red orc and he hits the concrete floor.
+      if (pair.hasSameVerbType &&
+          pair.first.object != null &&
+          pair.second.subject == pair.first.object &&
+          _joiners[pair.index].hasPeriodOrNone &&
+          _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
+        _limitJoinerToPeriodOrNone(pair.index);
+        _limitJoinerToAnd(pair.index + 1);
+        continue;
       }
     }
   }
@@ -657,11 +534,46 @@ class ShadowGraph {
     ]);
   }
 
+  void _limitObject2ToPronoun(int i) {
+    if (i < 0 || i >= _reportIdentifiers.length) return;
+    _reportIdentifiers[i]
+        ._object2Range
+        .retainWhere((qual) => qual == IdentifierLevel.pronoun);
+  }
+
+  void _limitObjectToPronoun(int i) {
+    if (i < 0 || i >= _reportIdentifiers.length) return;
+    _reportIdentifiers[i]
+        ._objectRange
+        .retainWhere((qual) => qual == IdentifierLevel.pronoun);
+  }
+
   void _limitSubjectToPronoun(int i) {
     if (i < 0 || i >= _reportIdentifiers.length) return;
     _reportIdentifiers[i]
         ._subjectRange
         .retainWhere((qual) => qual == IdentifierLevel.pronoun);
+  }
+
+  void _removeOmittedAtStartsOfSentences(UnmodifiableListView<Report> reports) {
+    const startNewSentenceJoiners = [
+      SentenceJoinType.period,
+      SentenceJoinType.periodAnd,
+      SentenceJoinType.periodBut,
+      SentenceJoinType.none,
+      SentenceJoinType.noneAnd,
+      SentenceJoinType.noneBut,
+    ];
+
+    for (int i = 0; i < _reportIdentifiers.length; i++) {
+      // At this point, the final joiner must have been selected.
+      final joiner = joiners[i];
+      if (startNewSentenceJoiners.contains(joiner)) {
+        _reportIdentifiers[i].forEachEntityIn(reports[i], (entity, set) {
+          set.remove(IdentifierLevel.omitted);
+        });
+      }
+    }
   }
 
   /// Use the data in [identifiers] to remove qualifications levels
@@ -708,54 +620,6 @@ class ShadowGraph {
         }
         assert(set.length == 1);
       });
-    }
-  }
-
-  void _removeOmittedAtStartsOfSentences(UnmodifiableListView<Report> reports) {
-    const startNewSentenceJoiners = [
-      SentenceJoinType.period,
-      SentenceJoinType.periodAnd,
-      SentenceJoinType.periodBut,
-      SentenceJoinType.none,
-      SentenceJoinType.noneAnd,
-      SentenceJoinType.noneBut,
-    ];
-
-    for (int i = 0; i < _reportIdentifiers.length; i++ ) {
-      // At this point, the final joiner must have been selected.
-      final joiner = joiners[i];
-      if (startNewSentenceJoiners.contains(joiner)) {
-        _reportIdentifiers[i].forEachEntityIn(reports[i], (entity, set) {
-          set.remove(IdentifierLevel.omitted);
-        });
-      }
-    }
-  }
-}
-
-class _ReportPair {
-  final int index;
-
-  final Report first;
-  final Report second;
-  const _ReportPair(this.index, this.first, this.second)
-      : assert(index != null),
-        assert(first != null),
-        assert(second != null);
-
-  bool get bothHaveObjects => first.object != null && second.object != null;
-
-  bool get bothHaveSubjects => first.subject != null && second.subject != null;
-
-  bool get hasSameObject =>
-      bothHaveObjects && first.object.id == second.object.id;
-
-  bool get hasSameSubject =>
-      bothHaveSubjects && first.subject.id == second.subject.id;
-
-  static Iterable<_ReportPair> getPairs(List<Report> reports) sync* {
-    for (int i = 0; i < reports.length - 1; i++) {
-      yield _ReportPair(i, reports[i], reports[i + 1]);
     }
   }
 }

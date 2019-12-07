@@ -2,7 +2,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
-import 'package:edgehead/fractal_stories/storyline/shadow_graph.dart';
+import 'package:edgehead/fractal_stories/storyline/shadow_graph/shadow_graph.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:test/test.dart';
@@ -206,7 +206,8 @@ void main() {
     storyline.add("<subject> hit<s> <object>", subject: player, object: part);
     storyline.add("<owner's> <subject> <is> damaged heavily",
         subject: part, owner: ship);
-    expect(storyline.realizeAsString().indexOf("Haijing's it"), -1);
+    final result = storyline.realizeAsString();
+    expect(result, isNot(contains("Haijing's it")));
   });
 
   test("put 'and' between two sentences in a complex sentence", () {
@@ -224,6 +225,16 @@ void main() {
         storyline.realizeAsString(),
         matches(r".+I begin to aim at the Haijing,? "
             "and go wide of.+"));
+  });
+
+  test("don't omit in second sentence if first one has <is>", () {
+    var storyline = Storyline();
+    var player = _createPlayer("Filip");
+    storyline.add("<subject> <is> ready to attack", subject: player);
+    storyline.add("<subject> fire<s>", subject: player);
+    final result = storyline.realizeAsString();
+    expect(result, isNot(contains("and fire")));
+    expect(result, contains("I fire"));
   });
 
   test("possessive", () {
@@ -340,9 +351,10 @@ void main() {
       expect(storyline.realizeAsString(), isNot(matches("his the scimitar")));
     });
 
-    test("for <object2> pronoun ('verbs the it')", () {
-      var goblin = Entity(name: "goblin");
-      var vees = Entity(name: "Vees", nameIsProperNoun: true);
+    test("for <object2> pronoun (no 'the it')", () {
+      var goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
+      var vees =
+          Entity(name: "Vees", pronoun: Pronoun.HE, nameIsProperNoun: true);
       var spear = Entity(name: "spear");
       var shield = Entity(name: "shield");
       goblin.report(storyline, "<subject> cast<s> <object2> at <object>",
@@ -798,15 +810,14 @@ void main() {
 
       final graph = ShadowGraph.from(storyline);
 
-      print(graph.describe());
+      // print(graph.describe());
+      // print(storyline.realizeAsString());
 
       expect(graph.qualifications, hasLength(9));
       expect(graph.joiners, hasLength(9));
-      expect(
-          graph.qualifications.first.subject, IdentifierLevel.adjectiveNoun);
-      expect(
-          graph.qualifications.first.object, IdentifierLevel.adjectiveNoun);
-      expect(graph.joiners.first, SentenceJoinType.period);
+      expect(graph.qualifications.first.subject, IdentifierLevel.adjectiveNoun);
+      expect(graph.qualifications.first.object, IdentifierLevel.adjectiveNoun);
+      expect(graph.joiners.first, SentenceJoinType.none);
       // Sentences 2 + 3.
       expect(graph.qualifications[1].subject, IdentifierLevel.adjectiveOne);
       expect(graph.joiners[2], SentenceJoinType.and);
@@ -816,8 +827,7 @@ void main() {
       expect(graph.qualifications.last.subject, IdentifierLevel.omitted);
       expect(graph.qualifications.last.object,
           anyOf(IdentifierLevel.pronoun, IdentifierLevel.adjectiveOne));
-      expect(
-          graph.qualifications.last.object2, IdentifierLevel.adjectiveOne);
+      expect(graph.qualifications.last.object2, IdentifierLevel.adjectiveOne);
     });
   });
 
@@ -844,7 +854,7 @@ void main() {
 
       final result = storyline.realizeAsString();
       expect(result, contains('The red goblin leaps at the blue'));
-      expect(result, contains('blue goblin dodges him'));
+      expect(result, contains('dodges the red'));
     });
 
     test('A dodges B and swings at C.', () {
@@ -886,7 +896,7 @@ void main() {
       final result = storyline.realizeAsString();
       expect(result, contains('blue goblin deflects'));
       expect(result, contains('his fist'));
-    });
+    }, skip: "this needs some more thought");
   });
 
   group('two objects of same name', () {
