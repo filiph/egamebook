@@ -427,7 +427,7 @@ class ShadowGraph {
       yield IdentifierLevel.adjectiveOne;
     }
 
-    if (others.any((e) => e.name == entity.name)) {
+    if (!entity.isCommon && others.any((e) => e.name == entity.name)) {
       yield IdentifierLevel.noun;
     }
 
