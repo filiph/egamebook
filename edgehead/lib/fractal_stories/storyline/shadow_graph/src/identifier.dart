@@ -110,20 +110,11 @@ class ReportIdentifiers {
 
   final Set<IdentifierLevel> _object2Range = IdentifierLevel.values.toSet();
 
-  IdentifierLevel get object {
-    assert(_objectRange.length == 1, "Too many options: $_objectRange");
-    return _objectRange.single;
-  }
+  IdentifierLevel get object => _ensureSingle(_objectRange, "_objectRange");
 
-  IdentifierLevel get object2 {
-    assert(_object2Range.length == 1, "Too many options: $_object2Range");
-    return _object2Range.single;
-  }
+  IdentifierLevel get object2 => _ensureSingle(_object2Range, "_object2Range");
 
-  IdentifierLevel get subject {
-    assert(_subjectRange.length == 1, "Too many options: $_subjectRange");
-    return _subjectRange.single;
-  }
+  IdentifierLevel get subject => _ensureSingle(_subjectRange, "_subjectRange");
 
   /// Runs [callback] for every entity in [report].
   ///
@@ -146,4 +137,21 @@ class ReportIdentifiers {
   @override
   String toString() => "$runtimeType<subject=$_subjectRange, "
       "object=$_objectRange, object2=$_object2Range>";
+
+  static IdentifierLevel _ensureSingle(
+      Set<IdentifierLevel> set, String debugLabel) {
+    assert(set.length <= 1, "Too many options for $debugLabel: $set");
+    assert(set.isNotEmpty, "No options for $debugLabel: $set");
+    if (set.length == 1) {
+      return set.single;
+    }
+    // This shouldn't ever happen (in debug, we throw above). But for
+    // robustness, we pick the least qualified.
+    int j = 0;
+    while (set.length > 1) {
+      set.remove(orderedQualificationLevels[j]);
+      j += 1;
+    }
+    return set.single;
+  }
 }
