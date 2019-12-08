@@ -18,11 +18,31 @@ bool isFollowedByAnUndead(ApplicabilityContext context, Actor necromancer) {
 Actor raiseDead(Actor necromancer, Actor corpse) {
   final corpseBuilder = corpse.toBuilder();
 
+  String adjective, name;
+
+  if (corpse.nameIsProperNoun) {
+    // Tamara become "undead Tamara" (but since we mostly don't use adjectives
+    // unless necessary, she will be reported as "Tamara").
+    adjective = 'undead';
+    name = corpse.name;
+  } else {
+    if (corpse.adjective != null) {
+      // The "goblin captain" will become "the goblin captain undead".
+      adjective = '${corpse.adjective} ${corpse.name}';
+      name = 'undead';
+    } else {
+      // A goblin will become "the goblin undead".
+      adjective = corpse.name;
+      name = 'undead';
+    }
+  }
+
+  assert(name != null);
+  assert(adjective != null);
+
   corpseBuilder
-    // TODO: Fix this in Storyline because otherwise all actors that have
-    //       been turned undead at any point will have the same name.
-    ..name = 'undead'
-    ..nameIsProperNoun = false
+    ..name = name
+    ..adjective = adjective
     ..anatomy.isUndead = true
     ..hitpoints = 1
     ..pose = corpse.anatomy.hasCrippledLegs ? Pose.onGround : corpse.poseMax
