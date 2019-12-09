@@ -40,4 +40,7 @@ enum SentenceJoinType {
 extension JoinerSetHelper on Set<SentenceJoinType> {
   bool get hasPeriodOrNone =>
       contains(SentenceJoinType.period) || contains(SentenceJoinType.none);
+
+  bool get hasAndOrBut =>
+      contains(SentenceJoinType.and) || contains(SentenceJoinType.but);
 }

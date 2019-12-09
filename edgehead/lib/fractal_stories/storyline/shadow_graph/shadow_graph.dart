@@ -323,6 +323,17 @@ class ShadowGraph {
   /// P0 means these are the best ones, we should definitely go for them.
   void _find2JoinerOpportunitiesP0(UnmodifiableListView<Report> reports) {
     for (final pair in _ReportPair.getPairs(reports)) {
+      // The goblin tries to dodge but fails.
+      if (pair.hasSameVerbType &&
+          pair.hasSameSubject &&
+          pair.first.object == null &&
+          pair.second.object == null &&
+          _joiners[pair.index].hasPeriodOrNone &&
+          _joiners[pair.index + 1].hasAndOrBut) {
+        _limitJoinerToPeriodOrNone(pair.index);
+        _limitJoinerToAndOrBut(pair.index + 1);
+      }
+
       // The orcish captain avoids the goblin and regains balance.
       if (pair.hasSameVerbType &&
           pair.hasSameSubject &&
@@ -536,6 +547,14 @@ class ShadowGraph {
     if (i < 0 || i >= _joiners.length) return;
     _joiners[i].retainAll(const [
       SentenceJoinType.and,
+    ]);
+  }
+
+  void _limitJoinerToAndOrBut(int i) {
+    if (i < 0 || i >= _joiners.length) return;
+    _joiners[i].retainAll(const [
+      SentenceJoinType.and,
+      SentenceJoinType.but,
     ]);
   }
 
