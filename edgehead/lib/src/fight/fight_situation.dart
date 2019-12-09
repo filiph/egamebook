@@ -14,15 +14,16 @@ import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/assume_stance.dart';
-import 'package:edgehead/src/fight/actions/start_bite.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/equip_weapon.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
+import 'package:edgehead/src/fight/actions/raise_dead.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/stand_up.dart';
+import 'package:edgehead/src/fight/actions/start_bite.dart';
 import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_clash.dart';
 import 'package:edgehead/src/fight/actions/start_crack_skull_on_ground.dart';
@@ -43,7 +44,6 @@ import 'package:edgehead/src/fight/actions/start_thrust_down.dart';
 import 'package:edgehead/src/fight/actions/start_thrust_on_ground.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
-import 'package:edgehead/src/fight/actions/raise_dead.dart';
 import 'package:edgehead/src/fight/actions/thrash_around_blind.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/actions/wait.dart';
@@ -222,6 +222,8 @@ abstract class FightSituation extends Object
       callback.run(context, context.simulation, context.outputWorld,
           context.outputStoryline);
     }
+
+    _ensureUniqueIds(context.world);
   }
 
   @override
@@ -278,5 +280,27 @@ abstract class FightSituation extends Object
     return canFight(sim, built, playerTeamIds) &&
         canFight(sim, built, enemyTeamIds) &&
         playerTeamIds.any(isPlayerAndAlive);
+  }
+
+  void _ensureUniqueIds(WorldState world) {
+    assert(() {
+      final ids = <int>{};
+      for (final actor in getActors(null, world)) {
+        if (ids.contains(actor.id)) {
+          return false;
+        }
+        ids.add(actor.id);
+        for (final item in actor.inventory.items.followedBy([
+          actor.currentWeapon,
+          actor.currentShield
+        ].where((el) => el != null))) {
+          if (ids.contains(item.id)) {
+            return false;
+          }
+          ids.add(item.id);
+        }
+      }
+      return true;
+    }());
   }
 }

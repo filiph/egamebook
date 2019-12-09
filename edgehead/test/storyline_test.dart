@@ -1118,6 +1118,32 @@ void main() {
     expect(result, contains('goblin leaps'));
     expect(result, contains('he is too slow'));
   });
+
+  test("using object2 doesn't report 'it' without explaining what it is", () {
+    // I have seen the following during a playthrough. It turned out to be
+    // a case of the goblin and his spear having the same id. Still, it's safer
+    // to test this.
+    //
+    //     The goblin falls and screams in pain. The undead thrusts down
+    //     with it at him and he tries to roll out of the way.
+
+    final goblinRightLeg = Entity(name: "right leg", isCommon: true);
+    final undead = Entity(name: "undead", pronoun: Pronoun.HE);
+    final spear = Entity(name: "spear", isCommon: true);
+    final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
+
+    final storyline = Storyline();
+
+    storyline.add("<subject> go<es> limp", subject: goblinRightLeg);
+    storyline.add("<subject> fall<s>", subject: goblin);
+    storyline.add("<subject> scream<s> in pain", subject: goblin);
+    storyline.add("<subject> thrust<s> down with <object2> at <object>",
+        subject: undead, object: goblin, object2: spear);
+
+    final result = storyline.realizeAsString();
+    expect(result, isNot(contains("with it")));
+    expect(result, contains("with the spear at"));
+  });
 }
 
 Entity _createPlayer(String name) =>
