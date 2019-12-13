@@ -14,8 +14,20 @@ class _ReportPair {
 
   bool get bothHaveSubjects => first.subject != null && second.subject != null;
 
+  /// A role reversal. The object of the second report is the same entity
+  /// as the subject of the first one. For example:
+  ///
+  ///     I stand up. The goblin hits me.
+  bool get firstSubjectIsSecondObject =>
+      first.subject != null &&
+      second.object != null &&
+      first.subject.id == second.object.id;
+
   bool get hasSameObject =>
       bothHaveObjects && first.object.id == second.object.id;
+
+  bool get hasSameSubject =>
+      bothHaveSubjects && first.subject.id == second.subject.id;
 
   /// Returns `true` if both [first] and [second] have either "is" verbs
   /// ("I am strong" and "I am powerful") or any other verb
@@ -32,8 +44,26 @@ class _ReportPair {
           !first.string.contains(Storyline.VERB_BE_NOT) &&
           !second.string.contains(Storyline.VERB_BE_NOT));
 
-  bool get hasSameSubject =>
-      bothHaveSubjects && first.subject.id == second.subject.id;
+  bool get positiveNegativeAreSwitched =>
+      (first.positive && second.negative) ||
+      (second.positive && first.negative);
+
+  bool get positiveNegativeAreSame =>
+      (first.positive && second.positive) ||
+      (first.negative && second.negative);
+
+  /// The opposite of [firstSubjectIsSecondObject].
+  bool get secondSubjectIsFirstObject =>
+      second.subject != null &&
+      first.object != null &&
+      second.subject.id == first.object.id;
+
+  /// Returns `true` if both reports have a non-null subject, and they
+  /// are enemies (via [Entity.team]).
+  bool get subjectsAreEnemies {
+    if (first.subject == null || second.subject == null) return false;
+    return first.subject.team.isEnemyWith(second.subject.team);
+  }
 
   static Iterable<_ReportPair> getPairs(List<Report> reports) sync* {
     for (int i = 0; i < reports.length - 1; i++) {

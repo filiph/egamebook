@@ -116,11 +116,6 @@ class Report {
         replacesThread = false,
         time = null;
 
-  @override
-  String toString() => "Report"
-      "<${string.substring(0, min(string.length, 90))}...,"
-      "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
-
   /// Returns all non-null entities (like [subject], [object] etc.)
   /// mentioned in the report.
   Iterable<Entity> get allEntities sync* {
@@ -130,6 +125,11 @@ class Report {
     if (owner != null) yield owner;
     if (objectOwner != null) yield objectOwner;
   }
+
+  @override
+  String toString() => "Report"
+      "<${string.substring(0, min(string.length, 90))}...,"
+      "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
 
   /// This asserts that all entities in the report are able to be referred to
   /// in different ways. In other words, "An apple lies next to an apple." is
@@ -156,7 +156,19 @@ class Report {
 /// Class for reporting a sequence of events in 'natural' language.
 class Storyline {
   static const String SUBJECT = "<subject>";
+  static const String SUBJECT_PRONOUN = "<subjectPronoun>";
+  static const String SUBJECT_ADJECTIVE_ONE = "<subjectAdjectiveOne>";
+  static const String SUBJECT_PRONOUN_ACCUSATIVE = "<subjectPronounAccusative>";
+  static const String SUBJECT_PRONOUN_SELF = "<subjectPronounSelf>";
+  static const String SUBJECT_NOUN = "<subjectNoun>";
+  static const String SUBJECT_THE_OTHER_NOUN = "<subjectTheOtherNoun>";
   static const String SUBJECT_POSSESSIVE = "<subject's>";
+  static const String SUBJECT_PRONOUN_POSSESSIVE = "<subjectPronoun's>";
+  static const String SUBJECT_NOUN_POSSESSIVE = "<subjectNoun's>";
+  static const String SUBJECT_THE_OTHER_NOUN_POSSESSIVE =
+      "<subjectTheOtherNoun's>";
+  static const String SUBJECT_ADJECTIVE_ONE_POSSESSIVE =
+      "<subjectAdjectiveOne's>";
 
   static const String OWNER = "<owner>";
   static const String OWNER_POSSESSIVE = "<owner's>";
@@ -164,20 +176,19 @@ class Storyline {
   static const String OBJECT_OWNER_POSSESSIVE = "<objectOwner's>";
   static const String OBJECT = "<object>";
   static const String OBJECT_POSSESSIVE = "<object's>";
-  static const String SUBJECT_PRONOUN = "<subjectPronoun>";
-  static const String SUBJECT_ADJECTIVE_ONE = "<subjectAdjectiveOne>";
-  static const String SUBJECT_PRONOUN_ACCUSATIVE = "<subjectPronounAccusative>";
-  static const String SUBJECT_PRONOUN_POSSESSIVE = "<subjectPronoun's>";
-  static const String SUBJECT_PRONOUN_SELF = "<subjectPronounSelf>";
-  static const String SUBJECT_NOUN = "<subjectNoun>";
-  static const String SUBJECT_THE_OTHER_NOUN = "<subjectTheOtherNoun>";
   static const String OBJECT_PRONOUN = "<objectPronoun>";
+  static const String OBJECT_PRONOUN_SELF = "<objectPronounSelf>";
   static const String OBJECT_NOUN = "<objectNoun>";
   static const String OBJECT_ADJECTIVE_ONE = "<objectAdjectiveOne>";
   static const String OBJECT_PRONOUN_NOMINATIVE = "<objectPronounNominative>";
   static const String OBJECT_PRONOUN_ACCUSATIVE = "<objectPronounAccusative>";
-  static const String OBJECT_PRONOUN_POSSESSIVE = "<objectPronoun's>";
   static const String OBJECT_THE_OTHER_NOUN = "<objectTheOtherNoun>";
+  static const String OBJECT_NOUN_POSSESSIVE = "<objectNoun's>";
+  static const String OBJECT_PRONOUN_POSSESSIVE = "<objectPronoun's>";
+  static const String OBJECT_ADJECTIVE_ONE_POSSESSIVE =
+      "<objectAdjectiveOne's>";
+  static const String OBJECT_THE_OTHER_NOUN_POSSESSIVE =
+      "<objectTheOtherNoun's>";
   static const String OWNER_PRONOUN = "<ownerPronoun>";
   static const String OWNER_PRONOUN_POSSESSIVE = "<ownerPronoun's>";
   static const String OBJECT_OWNER_PRONOUN = "<objectOwnerPronoun>";
@@ -186,12 +197,18 @@ class Storyline {
   static const String OBJECT2 = "<object2>";
   static const String OBJECT2_NOUN = "<object2Noun>";
   static const String OBJECT2_ADJECTIVE_ONE = "<object2AdjectiveOne>";
-  static const String OBJECT2_POSSESSIVE = "<object2's>";
   static const String OBJECT2_PRONOUN = "<object2Pronoun>";
+  static const String OBJECT2_PRONOUN_SELF = "<object2PronounSelf>";
   static const String OBJECT2_PRONOUN_NOMINATIVE = "<object2PronounNominative>";
   static const String OBJECT2_PRONOUN_ACCUSATIVE = "<object2PronounAccusative>";
-  static const String OBJECT2_PRONOUN_POSSESSIVE = "<object2Pronoun's>";
   static const String OBJECT2_THE_OTHER_NOUN = "<object2TheOtherNoun>";
+  static const String OBJECT2_POSSESSIVE = "<object2's>";
+  static const String OBJECT2_NOUN_POSSESSIVE = "<object2Noun's>";
+  static const String OBJECT2_PRONOUN_POSSESSIVE = "<object2Pronoun's>";
+  static const String OBJECT2_ADJECTIVE_ONE_POSSESSIVE =
+      "<objectAdjectiveOne's>";
+  static const String OBJECT2_THE_OTHER_NOUN_POSSESSIVE =
+      "<objectTheOtherNoun's>";
   static const String ACTION = "<action>";
   static const String VERB_S = "<s>";
 
@@ -200,6 +217,34 @@ class Storyline {
   static const String OBJECT_NOUN_WITH_ADJECTIVE = "<objectNounWithAdjective>";
   static const String OBJECT2_NOUN_WITH_ADJECTIVE =
       "<object2NounWithAdjective>";
+
+  static const String SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE =
+      "<subjectNounWithAdjective's>";
+  static const String OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE =
+      "<objectNounWithAdjective's>";
+  static const String OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE =
+      "<object2NounWithAdjective's>";
+
+  static const List<String> _allPossessives = [
+    SUBJECT_POSSESSIVE,
+    SUBJECT_NOUN_POSSESSIVE,
+    SUBJECT_PRONOUN_POSSESSIVE,
+    SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
+    SUBJECT_THE_OTHER_NOUN_POSSESSIVE,
+    SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    OBJECT_POSSESSIVE,
+    OBJECT_NOUN_POSSESSIVE,
+    OBJECT_PRONOUN_POSSESSIVE,
+    OBJECT_ADJECTIVE_ONE_POSSESSIVE,
+    OBJECT_THE_OTHER_NOUN_POSSESSIVE,
+    OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    OBJECT2_POSSESSIVE,
+    OBJECT2_NOUN_POSSESSIVE,
+    OBJECT2_PRONOUN_POSSESSIVE,
+    OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
+    OBJECT2_THE_OTHER_NOUN_POSSESSIVE,
+    OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+  ];
 
   /// e.g. in "goes"
   static const String VERB_ES = "<es>";
@@ -231,9 +276,6 @@ class Storyline {
   /// Internal list of reports. This is constructed by filtering [_records].
   List<Report> _reports;
 
-  /// A list of reports (see [_reports]).
-  UnmodifiableListView<Report> get reports => UnmodifiableListView(_reports);
-
   /// Internal queue of records, mixing [Report] instances with custom
   /// elements (such as images, maps, stat updates, what have you).
   ///
@@ -260,6 +302,9 @@ class Storyline {
   bool get hasManyParagraphs =>
       _records.any((rec) => rec.report?.string == PARAGRAPH_NEWLINES);
 
+  /// A list of reports (see [_reports]).
+  UnmodifiableListView<Report> get reports => UnmodifiableListView(_reports);
+
   /// Add another event to the story.
   ///
   /// When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
@@ -268,8 +313,8 @@ class Storyline {
       {Entity subject,
       Entity object,
       Entity object2,
-      Entity owner,
-      Entity objectOwner,
+      @Deprecated('use object2 instead') Entity owner,
+      @Deprecated('use object2 instead') Entity objectOwner,
       bool but = false,
       bool positive = false,
       bool negative = false,
@@ -362,11 +407,20 @@ class Storyline {
         buf.write(" ");
       }
 
-      // Adds 'the', 'a', or nothing. TODO: instead of using the
-      // addParticleToFirstOccurrence method (designed for longer texts), use
-      // something smaller.
-      String articleWithParticle = addParticleToFirstOccurrence(
-          article.name, article.name, article, null, time);
+      // Adds 'the', 'a', or nothing.
+      // Code mostly copy-pasted from [_addParticles].
+      String articleWithParticle;
+      if (_hasBeenMentioned(article, time)) {
+        articleWithParticle = "the ${article.name}";
+      } else {
+        _firstMentions[article.id] = time;
+        if (article.name.startsWith(_vowelsRegExp)) {
+          articleWithParticle = "an ${article.name}";
+        } else {
+          articleWithParticle = "a ${article.name}";
+        }
+      }
+
       buf.write(articleWithParticle);
       i++;
       if (i >= maxPerSentence || article == articles.last) {
@@ -412,8 +466,10 @@ class Storyline {
   /// The [reportTime] should correspond to the time this report is being said.
   /// Storyline tracks when different entities were first mentioned so it
   /// can apply either definitive (the) or indefinite (a) article.
+  @Deprecated('use _addParticles instead')
   String addParticleToFirstOccurrence(String string, String SUB_STRING,
       Entity entity, Entity entityOwner, int reportTime) {
+    return string;
     // Returns true if [str] contains at least one of the stopwords
     // as prefixes to [SUB_STRING].
     bool containsOneOfPrefixes(String str, List<String> stopwords) {
@@ -441,9 +497,23 @@ class Storyline {
     // defined.
     if (containsOneOfPrefixes(string, [
       SUBJECT_POSSESSIVE,
+      SUBJECT_NOUN_POSSESSIVE,
       SUBJECT_PRONOUN_POSSESSIVE,
+      SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
+      SUBJECT_THE_OTHER_NOUN_POSSESSIVE,
+      SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
       OBJECT_POSSESSIVE,
-      OBJECT_PRONOUN_POSSESSIVE
+      OBJECT_NOUN_POSSESSIVE,
+      OBJECT_PRONOUN_POSSESSIVE,
+      OBJECT_ADJECTIVE_ONE_POSSESSIVE,
+      OBJECT_THE_OTHER_NOUN_POSSESSIVE,
+      OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+      OBJECT2_POSSESSIVE,
+      OBJECT2_NOUN_POSSESSIVE,
+      OBJECT2_PRONOUN_POSSESSIVE,
+      OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
+      OBJECT2_THE_OTHER_NOUN_POSSESSIVE,
+      OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
     ])) {
       return string;
     }
@@ -542,229 +612,6 @@ class Storyline {
     if (report.objectOwner != null) yield report.objectOwner;
   }
 
-  /// Takes care of substitution of stopwords for actual text.
-  ///
-  /// For example, `<subject>` becomes `the goblin` or `she`.
-  String _realizeStopwords(String str, Report report) {
-    Entity subject = report.subject;
-    Entity object = report.object;
-    Entity object2 = report.object2;
-    Entity owner = report.owner;
-    Entity objectOwner = report.objectOwner;
-
-    String result = str;
-
-    assert(!str.contains("<is>n't"), "Please use <isn't> instead.");
-
-    if (subject != null) {
-      if (subject.isPlayer) {
-        // don't talk like a robot: "player attack wolf" -> "you attack wolf"
-        result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
-        result =
-            result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
-      }
-
-      if (subject.pronoun == Pronoun.I ||
-          subject.pronoun == Pronoun.YOU ||
-          subject.pronoun == Pronoun.THEY) {
-        // "you fly there", "they pick up the bananas" ...
-        result = result.replaceAll(VERB_S, "");
-        result = result.replaceAll(VERB_ES, "");
-        result = result.replaceAll(VERB_SSES, "ss");
-        result = result.replaceAll(VERB_IES, "y");
-        result = result.replaceAll(VERB_DO, "do");
-        result = result.replaceAll(
-            VERB_BE, subject.pronoun == Pronoun.I ? "am" : "are");
-        result = result.replaceAll(
-            VERB_BE_NOT, subject.pronoun == Pronoun.I ? "am not" : "aren't");
-        result = result.replaceAll(VERB_HAVE, "have");
-      } else {
-        // "he flies there", "it picks up the bananas" ...
-        result = result.replaceAll(VERB_S, "s");
-        result = result.replaceAll(VERB_ES, "es");
-        result = result.replaceAll(VERB_SSES, "sses");
-        result = result.replaceAll(VERB_IES, "ies");
-        result = result.replaceAll(VERB_DO, "does");
-        result = result.replaceAll(VERB_BE, "is");
-        result = result.replaceAll(VERB_BE_NOT, "isn't");
-        result = result.replaceAll(VERB_HAVE, "has");
-      }
-
-      if ((str.contains(SUBJECT) ||
-              str.contains(SUBJECT_PRONOUN) ||
-              str.contains(SUBJECT_NOUN)) &&
-          str.contains(SUBJECT_POSSESSIVE)) {
-        // "actor takes his weapon" (not "actor takes actor's weapon")
-        result =
-            result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
-      }
-
-      result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
-      result = result.replaceAll(SUBJECT, subject.pronoun.nominative);
-
-      result = addParticleToFirstOccurrence(
-          result, SUBJECT_NOUN, subject, owner, report.time);
-      result = result.replaceFirst(SUBJECT_NOUN, subject.name);
-
-      // Solve particles for subject that needs an adjective.
-      result = addParticleToFirstOccurrence(
-          result, SUBJECT_NOUN_WITH_ADJECTIVE, subject, owner, report.time);
-      result = result.replaceFirst(
-          SUBJECT_NOUN_WITH_ADJECTIVE, '${subject.adjective} ${subject.name}');
-
-      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
-
-      result = addParticleToFirstOccurrence(
-          result, SUBJECT_POSSESSIVE, subject, owner, report.time);
-      result = result.replaceFirst(SUBJECT_POSSESSIVE, "${subject.name}'s");
-      result = result.replaceAll(SUBJECT_POSSESSIVE, subject.pronoun.genitive);
-      result = result.replaceAll(
-          SUBJECT_PRONOUN_ACCUSATIVE, subject.pronoun.accusative);
-      result = result.replaceAll(SUBJECT_PRONOUN_SELF, subject.pronoun.self);
-
-      result = result.replaceAll(
-          SUBJECT_ADJECTIVE_ONE, "the ${subject.adjective} one");
-    }
-
-    // Replaces stopwords for objects (but not possessive stopwords yet).
-    void substituteObject(
-      Entity object,
-      String X,
-      String X_NOUN,
-      String X_POSSESSIVE,
-      String X_PRONOUN,
-      String X_PRONOUN_POSSESSIVE,
-      String X_NOUN_WITH_ADJECTIVE,
-      String X_ADJECTIVE_ONE,
-    ) {
-      assert(
-          !result.contains(X),
-          "By this time, $X should have been substituted "
-          "by alternatives in $result.");
-
-      if (object.nameIsProperNoun) {
-        // Disallow "you unleash your Buster".
-        // We must do this before we auto-change <OBJECT> to object.name below.
-        result = result.replaceAll("$SUBJECT_POSSESSIVE $X_NOUN", X_NOUN);
-        result =
-            result.replaceAll("$SUBJECT_PRONOUN_POSSESSIVE $X_NOUN", X_NOUN);
-      }
-
-      if (object.isPlayer) {
-        // TODO: remove - this should be covered already
-        result = result.replaceAll(X, X_PRONOUN);
-        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESSIVE);
-      } else {
-        result = addParticleToFirstOccurrence(
-            result, X_NOUN, object, objectOwner, report.time);
-        result = result.replaceFirst(X_NOUN, object.name);
-
-        // Solve particles for object that needs an adjective.
-        result = addParticleToFirstOccurrence(
-            result, X_NOUN_WITH_ADJECTIVE, object, objectOwner, report.time);
-        result = result.replaceFirst(
-            X_NOUN_WITH_ADJECTIVE, '${object.adjective} ${object.name}');
-
-        // Replace the rest with pronouns.
-        result = result.replaceAll(X_NOUN, object.pronoun.accusative);
-      }
-
-      result = result.replaceAll(X_PRONOUN, object.pronoun.accusative);
-      if (str.contains(RegExp("$X.+$X_POSSESSIVE"))) {
-        // "actor takes his weapon"
-        result = result.replaceAll(X_POSSESSIVE, X_PRONOUN_POSSESSIVE);
-      }
-
-      result =
-          result.replaceAll(X_ADJECTIVE_ONE, "the ${object.adjective} one");
-    }
-
-    if (object != null) {
-      substituteObject(
-        object,
-        OBJECT,
-        OBJECT_NOUN,
-        OBJECT_POSSESSIVE,
-        OBJECT_PRONOUN,
-        OBJECT_PRONOUN_POSSESSIVE,
-        OBJECT_NOUN_WITH_ADJECTIVE,
-        OBJECT_ADJECTIVE_ONE,
-      );
-    }
-
-    if (object2 != null) {
-      substituteObject(
-        object2,
-        OBJECT2,
-        OBJECT2_NOUN,
-        OBJECT2_POSSESSIVE,
-        OBJECT2_PRONOUN,
-        OBJECT2_PRONOUN_POSSESSIVE,
-        OBJECT2_NOUN_WITH_ADJECTIVE,
-        OBJECT2_ADJECTIVE_ONE,
-      );
-    }
-
-    // Second pass after [substituteObject], now with possessives.
-    // We need to do this in two parts because otherwise the
-    // "<object's> <object2>" pairs will get realized too soon, which breaks
-    // the logic in [addParticleToFirstOccurrence] that prevents sentences
-    // like "his the left hand".
-    void substituteObjectPossessive(
-        Entity object,
-        String X_POSSESSIVE,
-        String X_PRONOUN_NOMINATIVE,
-        String X_PRONOUN_ACCUSATIVE,
-        String X_PRONOUN_POSSESSIVE) {
-      result = addParticleToFirstOccurrence(
-          result, X_POSSESSIVE, object, objectOwner, report.time);
-      result = result.replaceFirst(X_POSSESSIVE, "${object.name}'s");
-      result = result.replaceAll(X_POSSESSIVE, object.pronoun.genitive);
-      result = result.replaceAll(X_PRONOUN_POSSESSIVE, object.pronoun.genitive);
-      result =
-          result.replaceAll(X_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
-      result =
-          result.replaceAll(X_PRONOUN_NOMINATIVE, object.pronoun.nominative);
-    }
-
-    if (object != null) {
-      substituteObjectPossessive(
-          object,
-          OBJECT_POSSESSIVE,
-          OBJECT_PRONOUN_NOMINATIVE,
-          OBJECT_PRONOUN_ACCUSATIVE,
-          OBJECT_PRONOUN_POSSESSIVE);
-    }
-
-    if (object2 != null) {
-      substituteObjectPossessive(
-          object2,
-          OBJECT2_POSSESSIVE,
-          OBJECT2_PRONOUN_NOMINATIVE,
-          OBJECT2_PRONOUN_ACCUSATIVE,
-          OBJECT2_PRONOUN_POSSESSIVE);
-    }
-
-    if (subject != null) {
-      result = result.replaceAll(
-          SUBJECT_PRONOUN_POSSESSIVE, subject.pronoun.genitive);
-    }
-
-    result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESSIVE,
-        OWNER_PRONOUN, OWNER_PRONOUN_POSSESSIVE, report.time);
-    result = _realizeOwner(
-        objectOwner,
-        result,
-        str,
-        OBJECT_OWNER,
-        OBJECT_OWNER_POSSESSIVE,
-        OBJECT_OWNER_PRONOUN,
-        OBJECT_OWNER_PRONOUN_POSSESSIVE,
-        report.time);
-
-    return result;
-  }
-
   /// When an entity should start the storyline as unmentioned, call this
   /// method.
   ///
@@ -812,64 +659,6 @@ class Storyline {
     return false;
   }
 
-  /// Detect unbroken chains of actionThread from start to summary, remove
-  /// everything except summary.
-  Iterable<Report> _collapseThreads(List<Report> reports) sync* {
-    for (int i = 0; i < reports.length; i++) {
-      final report = reports[i];
-      if (report.actionThread == null) {
-        // Just copy over non-thread reports.
-        yield report;
-        continue;
-      }
-      if (report.replacesThread) {
-        // A lone summary we should just ignore.
-        continue;
-      }
-      if (report.startsThread) {
-        bool continuousChain = false;
-        // Walk the report chain until a (potential) summary.
-        for (int j = i + 1; j < reports.length; j++) {
-          final next = reports[j];
-          if (next.actionThread != report.actionThread) {
-            // A null or a different actionThread. Stop collapsing.
-            break;
-          }
-          if (next.startsThread) {
-            throw StateError('Cannot start thread several times: $reports.');
-          }
-          if (next.replacesThread) {
-            // Bingo. We have an unbroken chain from [report] to [next].
-            // Yield just [next] instead of the whole chain.
-            yield next;
-            // Put the index to [next] (it will be incremented by the for loop).
-            i = j;
-            continuousChain = true;
-            // Add any following summaries.
-            for (int z = j + 1; z < reports.length; z++) {
-              final followUp = reports[z];
-              if (followUp.actionThread == report.actionThread &&
-                  followUp.replacesThread) {
-                // A following summary exists.
-                yield followUp;
-                continue;
-              }
-              // Broken thread of follow-up summaries.
-              break;
-            }
-            break;
-          }
-        }
-        if (continuousChain) {
-          // We already got rid of [report] and the chain after it.
-          continue;
-        }
-      }
-      // A report with an actionThread id but a part of a broken chain.
-      yield report;
-    }
-  }
-
   /// The main function that strings reports together into a coherent story.
   ///
   /// When [onlyFirstParagraph] is `true`, this will only realize the first
@@ -904,40 +693,53 @@ class Storyline {
 
     for (int i = 0; i < length; i++) {
       final joiner = shadowGraph.joiners[i];
+      final conjunction = shadowGraph.conjunctions[i];
       final qualifications = shadowGraph.qualifications[i];
 
+      bool needsCapitalization = false;
       switch (joiner) {
         case SentenceJoinType.none:
           if (i > 0) strBuf.write(' ');
-          break;
-        case SentenceJoinType.and:
-          strBuf.write(' and ');
-          break;
-        case SentenceJoinType.but:
-          strBuf.write(' but ');
-          break;
-        case SentenceJoinType.comma:
-          strBuf.write(', ');
+          switch (conjunction) {
+            case SentenceConjunction.nothing:
+              needsCapitalization = true;
+              break;
+            case SentenceConjunction.and:
+              strBuf.write('And ');
+              break;
+            case SentenceConjunction.but:
+              strBuf.write('But ');
+              break;
+          }
           break;
         case SentenceJoinType.period:
           strBuf.write('. ');
+          switch (conjunction) {
+            case SentenceConjunction.nothing:
+              needsCapitalization = true;
+              break;
+            case SentenceConjunction.and:
+              strBuf.write('And ');
+              break;
+            case SentenceConjunction.but:
+              strBuf.write('But ');
+              break;
+          }
           break;
-        case SentenceJoinType.noneAnd:
-          strBuf.write(' And ');
-          break;
-        case SentenceJoinType.noneBut:
-          strBuf.write(' But ');
-          break;
-        case SentenceJoinType.periodAnd:
-          strBuf.write('. And ');
-          break;
-        case SentenceJoinType.periodBut:
-          strBuf.write('. But ');
+        case SentenceJoinType.comma:
+          switch (conjunction) {
+            case SentenceConjunction.nothing:
+              strBuf.write(', ');
+              break;
+            case SentenceConjunction.and:
+              strBuf.write(' and ');
+              break;
+            case SentenceConjunction.but:
+              strBuf.write(' but ');
+              break;
+          }
           break;
       }
-      // TODO: But for opposite sentiment
-      // TODO: No two buts after each other
-      // TODO: No joined sentence when things happen a while apart? SHORT_TIME
 
       String randomReport = _reports[i].string;
 
@@ -959,13 +761,16 @@ class Storyline {
       }
 
       report = _modifyStopwords(report, _reports[i], qualifications);
-      report = _fixOwnerStopwords(report, _reports[i]);
+      report = _preventPossessivesBeforeProperNouns(report, _reports[i]);
+      report = _addParticles(report, _reports[i]);
       report = _realizeStopwords(report, _reports[i]);
 
-      if (joiner == SentenceJoinType.period ||
-          joiner == SentenceJoinType.none) {
+      if (needsCapitalization) {
         report = capitalize(report);
       }
+
+      assert(!report.contains("<subject"), "Contains stopwords: $report");
+      assert(!report.contains("<object"), "Contains stopwords: $report");
 
       // add the actual report
       strBuf.write(report);
@@ -1095,6 +900,64 @@ class Storyline {
     }
   }
 
+  /// Detect unbroken chains of actionThread from start to summary, remove
+  /// everything except summary.
+  Iterable<Report> _collapseThreads(List<Report> reports) sync* {
+    for (int i = 0; i < reports.length; i++) {
+      final report = reports[i];
+      if (report.actionThread == null) {
+        // Just copy over non-thread reports.
+        yield report;
+        continue;
+      }
+      if (report.replacesThread) {
+        // A lone summary we should just ignore.
+        continue;
+      }
+      if (report.startsThread) {
+        bool continuousChain = false;
+        // Walk the report chain until a (potential) summary.
+        for (int j = i + 1; j < reports.length; j++) {
+          final next = reports[j];
+          if (next.actionThread != report.actionThread) {
+            // A null or a different actionThread. Stop collapsing.
+            break;
+          }
+          if (next.startsThread) {
+            throw StateError('Cannot start thread several times: $reports.');
+          }
+          if (next.replacesThread) {
+            // Bingo. We have an unbroken chain from [report] to [next].
+            // Yield just [next] instead of the whole chain.
+            yield next;
+            // Put the index to [next] (it will be incremented by the for loop).
+            i = j;
+            continuousChain = true;
+            // Add any following summaries.
+            for (int z = j + 1; z < reports.length; z++) {
+              final followUp = reports[z];
+              if (followUp.actionThread == report.actionThread &&
+                  followUp.replacesThread) {
+                // A following summary exists.
+                yield followUp;
+                continue;
+              }
+              // Broken thread of follow-up summaries.
+              break;
+            }
+            break;
+          }
+        }
+        if (continuousChain) {
+          // We already got rid of [report] and the chain after it.
+          continue;
+        }
+      }
+      // A report with an actionThread id but a part of a broken chain.
+      yield report;
+    }
+  }
+
   /// If [entity] is non-null, then _every_ variant of [str] must contain
   /// [pattern]. If [entity] is `null`, then _no_ variant of [str]
   /// can contain [pattern].
@@ -1116,10 +979,355 @@ class Storyline {
     return true;
   }
 
+  /// A special case for things like "Bilbo swings Sting at the orc." In this
+  /// case, we don't want to say "his Sting", since "Sting" is a proper noun
+  /// and it sounds weird.
+  String _preventPossessivesBeforeProperNouns(String string, Report report) {
+    String result = string;
+
+    void maybeRemovePossessive(Entity entity, List<String> stopwords) {
+      if (entity == null) return;
+      if (!entity.nameIsProperNoun) return;
+      for (final stopword in stopwords) {
+        for (final possessive in _allPossessives) {
+          result = result.replaceAll("$possessive $stopword", stopword);
+        }
+      }
+    }
+
+    maybeRemovePossessive(report.subject, [
+      SUBJECT_NOUN,
+      SUBJECT_NOUN_POSSESSIVE,
+      SUBJECT_NOUN_WITH_ADJECTIVE,
+      SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    ]);
+    maybeRemovePossessive(report.object, [
+      OBJECT_NOUN,
+      OBJECT_NOUN_POSSESSIVE,
+      OBJECT_NOUN_WITH_ADJECTIVE,
+      OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    ]);
+    maybeRemovePossessive(report.object2, [
+      OBJECT2_NOUN,
+      OBJECT2_NOUN_POSSESSIVE,
+      OBJECT2_NOUN_WITH_ADJECTIVE,
+      OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    ]);
+
+    return result;
+  }
+
   /// Returns whether or not the [entity] has been mentioned by time of the
   /// report ([reportTime]).
   bool _hasBeenMentioned(Entity entity, int reportTime) {
     return (_firstMentions[entity.id] ?? _beginningOfTime) < reportTime;
+  }
+
+  /// Modifies stopwords in [string] according to [qualifications].
+  ///
+  /// For example, if [qualifications] say that the subject should be omitted,
+  /// this method will remove the string `"<subject>"` from [string].
+  String _modifyStopwords(
+      String string, Report report, ReportIdentifiers qualifications) {
+    var result = string;
+
+    if (report.subject != null) {
+      switch (qualifications.subject) {
+        case IdentifierLevel.omitted:
+          assert(
+              !result.contains(SUBJECT) || result.startsWith(SUBJECT),
+              'Should either start with $SUBJECT or not have it, but instead: '
+              '$result');
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              '$SUBJECT ': '',
+              SUBJECT: '',
+            },
+            following: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.pronoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+            following: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.adjectiveOne:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              SUBJECT: SUBJECT_ADJECTIVE_ONE,
+              SUBJECT_POSSESSIVE: SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
+            },
+            following: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.noun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              SUBJECT: SUBJECT_NOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_NOUN_POSSESSIVE,
+            },
+            following: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.theOtherNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              SUBJECT: SUBJECT_THE_OTHER_NOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_THE_OTHER_NOUN_POSSESSIVE,
+            },
+            following: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.adjectiveNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              SUBJECT: SUBJECT_NOUN_WITH_ADJECTIVE,
+              SUBJECT_POSSESSIVE: SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+            },
+            following: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.properNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              SUBJECT: SUBJECT_NOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_NOUN_POSSESSIVE,
+            },
+            following: {
+              SUBJECT: SUBJECT_PRONOUN,
+              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+      }
+    }
+
+    assert(!result.contains(SUBJECT), "Still contains $SUBJECT: $result");
+
+    if (report.object != null) {
+      switch (qualifications.object) {
+        case IdentifierLevel.omitted:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT: '',
+            },
+            following: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.pronoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.adjectiveOne:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT: OBJECT_ADJECTIVE_ONE,
+              OBJECT_POSSESSIVE: OBJECT_ADJECTIVE_ONE_POSSESSIVE,
+            },
+            following: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.noun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT: OBJECT_NOUN,
+              OBJECT_POSSESSIVE: OBJECT_NOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.theOtherNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT: OBJECT_THE_OTHER_NOUN,
+              OBJECT_POSSESSIVE: OBJECT_THE_OTHER_NOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.adjectiveNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT: OBJECT_NOUN_WITH_ADJECTIVE,
+              OBJECT_POSSESSIVE: OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+            },
+            following: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.properNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT: OBJECT_NOUN,
+              OBJECT_POSSESSIVE: OBJECT_NOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT: OBJECT_PRONOUN,
+              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+      }
+    }
+
+    assert(!result.contains(OBJECT), "Still contains $OBJECT: $result");
+
+    if (report.object2 != null) {
+      switch (qualifications.object2) {
+        case IdentifierLevel.omitted:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT2: '',
+            },
+            following: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.pronoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.adjectiveOne:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT2: OBJECT2_ADJECTIVE_ONE,
+              OBJECT2_POSSESSIVE: OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
+            },
+            following: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.noun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT2: OBJECT2_NOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_NOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.theOtherNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT2: OBJECT2_THE_OTHER_NOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_THE_OTHER_NOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.adjectiveNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT2: OBJECT2_NOUN_WITH_ADJECTIVE,
+              OBJECT2_POSSESSIVE: OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+            },
+            following: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+        case IdentifierLevel.properNoun:
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              OBJECT2: OBJECT2_NOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_NOUN_POSSESSIVE,
+            },
+            following: {
+              OBJECT2: OBJECT2_PRONOUN,
+              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
+            },
+          );
+          break;
+      }
+    }
+
+    assert(!result.contains(OBJECT2), "Still contains $OBJECT2: $result");
+
+    return result;
   }
 
   /// Applies the logic of needed for `<owner>` and `<owner's>` to work.
@@ -1173,6 +1381,231 @@ class Storyline {
     return result;
   }
 
+  /// Takes care of substitution of stopwords for actual text.
+  ///
+  /// For example, `<subject>` becomes `the goblin` or `she`.
+  String _realizeStopwords(String str, Report report) {
+    Entity subject = report.subject;
+    Entity object = report.object;
+    Entity object2 = report.object2;
+    Entity owner = report.owner;
+    Entity objectOwner = report.objectOwner;
+
+    String result = str;
+
+    assert(!str.contains("<is>n't"), "Please use <isn't> instead.");
+
+    if (subject != null) {
+      if (subject.isPlayer) {
+        // don't talk like a robot: "player attack wolf" -> "you attack wolf"
+        result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
+        result =
+            result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
+      }
+
+      if (subject.pronoun == Pronoun.I ||
+          subject.pronoun == Pronoun.YOU ||
+          subject.pronoun == Pronoun.THEY) {
+        // "you fly there", "they pick up the bananas" ...
+        result = result.replaceAll(VERB_S, "");
+        result = result.replaceAll(VERB_ES, "");
+        result = result.replaceAll(VERB_SSES, "ss");
+        result = result.replaceAll(VERB_IES, "y");
+        result = result.replaceAll(VERB_DO, "do");
+        result = result.replaceAll(
+            VERB_BE, subject.pronoun == Pronoun.I ? "am" : "are");
+        result = result.replaceAll(
+            VERB_BE_NOT, subject.pronoun == Pronoun.I ? "am not" : "aren't");
+        result = result.replaceAll(VERB_HAVE, "have");
+      } else {
+        // "he flies there", "it picks up the bananas" ...
+        result = result.replaceAll(VERB_S, "s");
+        result = result.replaceAll(VERB_ES, "es");
+        result = result.replaceAll(VERB_SSES, "sses");
+        result = result.replaceAll(VERB_IES, "ies");
+        result = result.replaceAll(VERB_DO, "does");
+        result = result.replaceAll(VERB_BE, "is");
+        result = result.replaceAll(VERB_BE_NOT, "isn't");
+        result = result.replaceAll(VERB_HAVE, "has");
+      }
+
+      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
+    }
+
+    // Replaces stopwords for objects (but not possessive stopwords yet).
+    void substituteObject(
+      Entity object,
+      String X,
+      String X_NOUN,
+      String X_NOUN_POSSESSIVE,
+      String X_POSSESSIVE,
+      String X_PRONOUN,
+      String X_PRONOUN_SELF,
+      String X_PRONOUN_POSSESSIVE,
+      String X_PRONOUN_ACCUSATIVE,
+      String X_NOUN_WITH_ADJECTIVE,
+      String X_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+      String X_ADJECTIVE_ONE,
+      String X_ADJECTIVE_ONE_POSSESSIVE,
+    ) {
+      assert(
+          !result.contains(X),
+          "By this time, $X should have been substituted "
+          "by alternatives in $result.");
+      assert(
+          !result.contains(X_POSSESSIVE),
+          "By this time, $X_POSSESSIVE should have been substituted "
+          "by alternatives in $result.");
+
+      if (object.nameIsProperNoun) {
+        // Disallow "you unleash your Buster".
+        // We must do this before we auto-change <OBJECT> to object.name below.
+        result = result.replaceAll("$SUBJECT_POSSESSIVE $X_NOUN", X_NOUN);
+        result =
+            result.replaceAll("$SUBJECT_PRONOUN_POSSESSIVE $X_NOUN", X_NOUN);
+      }
+
+      result = addParticleToFirstOccurrence(
+          result, X_NOUN, object, objectOwner, report.time);
+      result = result.replaceFirst(X_NOUN, object.name);
+
+      // Solve particles for object that needs an adjective.
+      result = addParticleToFirstOccurrence(
+          result, X_NOUN_WITH_ADJECTIVE, object, objectOwner, report.time);
+      result = result.replaceFirst(
+          X_NOUN_WITH_ADJECTIVE, '${object.adjective} ${object.name}');
+
+      // Replace the rest.
+      result = result.replaceAll(X_NOUN, object.pronoun.accusative);
+      result = result.replaceAll(X_PRONOUN, object.pronoun.accusative);
+      result =
+          result.replaceAll(X_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
+      result = result.replaceAll(X_PRONOUN_SELF, object.pronoun.self);
+      result =
+          result.replaceAll(X_ADJECTIVE_ONE, "the ${object.adjective} one");
+
+      result = result.replaceAll(X_NOUN_POSSESSIVE, "${object.name}'s");
+      result = result.replaceAll(X_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+          "${object.adjective} ${object.name}'s");
+      result = result.replaceAll(X_PRONOUN_POSSESSIVE, object.pronoun.genitive);
+      result = result.replaceAll(
+          X_ADJECTIVE_ONE_POSSESSIVE, "the ${object.adjective} one's");
+    }
+
+    if (subject != null) {
+      substituteObject(
+        subject,
+        SUBJECT,
+        SUBJECT_NOUN,
+        SUBJECT_NOUN_POSSESSIVE,
+        SUBJECT_POSSESSIVE,
+        SUBJECT_PRONOUN,
+        SUBJECT_PRONOUN_SELF,
+        SUBJECT_PRONOUN_POSSESSIVE,
+        SUBJECT_PRONOUN_ACCUSATIVE,
+        SUBJECT_NOUN_WITH_ADJECTIVE,
+        SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+        SUBJECT_ADJECTIVE_ONE,
+        SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
+      );
+    }
+
+    if (object != null) {
+      substituteObject(
+        object,
+        OBJECT,
+        OBJECT_NOUN,
+        OBJECT_NOUN_POSSESSIVE,
+        OBJECT_POSSESSIVE,
+        OBJECT_PRONOUN,
+        OBJECT_PRONOUN_SELF,
+        OBJECT_PRONOUN_POSSESSIVE,
+        OBJECT_PRONOUN_ACCUSATIVE,
+        OBJECT_NOUN_WITH_ADJECTIVE,
+        OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+        OBJECT_ADJECTIVE_ONE,
+        OBJECT_ADJECTIVE_ONE_POSSESSIVE,
+      );
+    }
+
+    if (object2 != null) {
+      substituteObject(
+        object2,
+        OBJECT2,
+        OBJECT2_NOUN,
+        OBJECT2_NOUN_POSSESSIVE,
+        OBJECT2_POSSESSIVE,
+        OBJECT2_PRONOUN,
+        OBJECT2_PRONOUN_SELF,
+        OBJECT2_PRONOUN_POSSESSIVE,
+        OBJECT2_PRONOUN_ACCUSATIVE,
+        OBJECT2_NOUN_WITH_ADJECTIVE,
+        OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+        OBJECT2_ADJECTIVE_ONE,
+        OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
+      );
+    }
+
+    // Second pass after [substituteObject], now with possessives.
+    // We need to do this in two parts because otherwise the
+    // "<object's> <object2>" pairs will get realized too soon, which breaks
+    // the logic in [addParticleToFirstOccurrence] that prevents sentences
+    // like "his the left hand".
+    void substituteObjectPossessive(
+        Entity object,
+        String X_POSSESSIVE,
+        String X_PRONOUN_NOMINATIVE,
+        String X_PRONOUN_ACCUSATIVE,
+        String X_PRONOUN_POSSESSIVE) {
+      result = addParticleToFirstOccurrence(
+          result, X_POSSESSIVE, object, objectOwner, report.time);
+      result = result.replaceFirst(X_POSSESSIVE, "${object.name}'s");
+      result = result.replaceAll(X_POSSESSIVE, object.pronoun.genitive);
+      result = result.replaceAll(X_PRONOUN_POSSESSIVE, object.pronoun.genitive);
+      result =
+          result.replaceAll(X_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
+      result =
+          result.replaceAll(X_PRONOUN_NOMINATIVE, object.pronoun.nominative);
+    }
+
+    if (object != null) {
+      substituteObjectPossessive(
+          object,
+          OBJECT_POSSESSIVE,
+          OBJECT_PRONOUN_NOMINATIVE,
+          OBJECT_PRONOUN_ACCUSATIVE,
+          OBJECT_PRONOUN_POSSESSIVE);
+    }
+
+    if (object2 != null) {
+      substituteObjectPossessive(
+          object2,
+          OBJECT2_POSSESSIVE,
+          OBJECT2_PRONOUN_NOMINATIVE,
+          OBJECT2_PRONOUN_ACCUSATIVE,
+          OBJECT2_PRONOUN_POSSESSIVE);
+    }
+
+    if (subject != null) {
+      result = result.replaceAll(
+          SUBJECT_PRONOUN_POSSESSIVE, subject.pronoun.genitive);
+    }
+
+    result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESSIVE,
+        OWNER_PRONOUN, OWNER_PRONOUN_POSSESSIVE, report.time);
+    result = _realizeOwner(
+        objectOwner,
+        result,
+        str,
+        OBJECT_OWNER,
+        OBJECT_OWNER_POSSESSIVE,
+        OBJECT_OWNER_PRONOUN,
+        OBJECT_OWNER_PRONOUN_POSSESSIVE,
+        report.time);
+
+    return result;
+  }
+
   /// Taking care of all the exceptions and rules when comparing
   /// different reports call: [: sameSubject(i, i+1) ... :]
   bool _sameSubject(int i, int j) {
@@ -1197,130 +1630,117 @@ class Storyline {
     }
   }
 
-  /// Modifies stopwords in [string] according to [qualifications].
+  // Never show "the guard's it".
+  /// Takes the string, and first searches for keys in [first]. Once that is
+  /// found, the corresponding value in [first] is used as replacement.
   ///
-  /// For example, if [qualifications] say that the subject should be omitted,
-  /// this method will remove the string `"<subject>"` from [string].
-  String _modifyStopwords(
-      String string, Report report, ReportIdentifiers qualifications) {
+  /// After that, all keys in [following] are used, and they are all replaced
+  /// with the corresponding values in [following].
+  ///
+  /// Example:
+  ///
+  ///   string: <subject> fall<s> into <object's> <object2>
+  ///   first:
+  ///     - "<subject>": "<subjectNoun>"
+  ///     - "<subject's>": "<subjectNoun's>"
+  ///   following:
+  ///     - "<subject>": "<subjectPronoun>"
+  ///     - "<subject's>": "<subjectPronoun's>"
+  static String _replaceFirstThenAll(
+    String string, {
+    @required Map<Pattern, String> first,
+    @required Map<Pattern, String> following,
+  }) {
     var result = string;
 
-    if (report.subject != null) {
-      switch (qualifications.subject) {
-        case IdentifierLevel.omitted:
-          result = result.replaceFirst('$SUBJECT ', '');
-          result = result.replaceFirst(
-              SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
-          break;
-        case IdentifierLevel.pronoun:
-          result = result.replaceFirst(SUBJECT, SUBJECT_PRONOUN);
-          result = result.replaceFirst(
-              SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
-          break;
-        case IdentifierLevel.adjectiveOne:
-          result = result.replaceFirst(SUBJECT, SUBJECT_ADJECTIVE_ONE);
-          break;
-        case IdentifierLevel.noun:
-          result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
-          break;
-        case IdentifierLevel.theOtherNoun:
-          result = result.replaceFirst(SUBJECT, SUBJECT_THE_OTHER_NOUN);
-          break;
-        case IdentifierLevel.adjectiveNoun:
-          result = result.replaceFirst(SUBJECT, SUBJECT_NOUN_WITH_ADJECTIVE);
-          break;
-        case IdentifierLevel.properNoun:
-          result = result.replaceFirst(SUBJECT, SUBJECT_NOUN);
-          break;
+    // Find the pattern in [first] that has the earliest match.
+    Pattern winner;
+    int winnerIndex;
+    for (final key in first.keys) {
+      final index = string.indexOf(key);
+      if (index == -1) {
+        continue;
       }
-      // Mark the rest (after the first occurrence) with pronoun.
-      result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
+      if (winner == null || index < winnerIndex) {
+        winner = key;
+        winnerIndex = index;
+      }
     }
 
-    if (report.object != null) {
-      switch (qualifications.object) {
-        case IdentifierLevel.omitted:
-          result = result.replaceFirst(OBJECT, '');
-          break;
-        case IdentifierLevel.pronoun:
-          result = result.replaceFirst(OBJECT, OBJECT_PRONOUN);
-          result =
-              result.replaceFirst(OBJECT_POSSESSIVE, OBJECT_PRONOUN_POSSESSIVE);
-          break;
-        case IdentifierLevel.adjectiveOne:
-          result = result.replaceFirst(OBJECT, OBJECT_ADJECTIVE_ONE);
-          break;
-        case IdentifierLevel.noun:
-          result = result.replaceFirst(OBJECT, OBJECT_NOUN);
-          break;
-        case IdentifierLevel.theOtherNoun:
-          result = result.replaceFirst(OBJECT, OBJECT_THE_OTHER_NOUN);
-          break;
-        case IdentifierLevel.adjectiveNoun:
-          result = result.replaceFirst(OBJECT, OBJECT_NOUN_WITH_ADJECTIVE);
-          break;
-        case IdentifierLevel.properNoun:
-          result = result.replaceFirst(OBJECT, OBJECT_NOUN);
-          break;
-      }
-      // Mark the rest (after the first occurrence) with pronoun.
-      result = result.replaceAll(OBJECT, OBJECT_PRONOUN);
+    if (winner != null) {
+      result = result.replaceFirst(winner, first[winner]);
     }
 
-    if (report.object2 != null) {
-      switch (qualifications.object2) {
-        case IdentifierLevel.omitted:
-          result = result.replaceFirst(OBJECT2, '');
-          break;
-        case IdentifierLevel.pronoun:
-          result = result.replaceFirst(OBJECT2, OBJECT2_PRONOUN);
-          result = result.replaceFirst(
-              OBJECT2_POSSESSIVE, OBJECT2_PRONOUN_POSSESSIVE);
-          break;
-        case IdentifierLevel.adjectiveOne:
-          result = result.replaceFirst(OBJECT2, OBJECT2_ADJECTIVE_ONE);
-          break;
-        case IdentifierLevel.noun:
-          result = result.replaceFirst(OBJECT2, OBJECT2_NOUN);
-          break;
-        case IdentifierLevel.theOtherNoun:
-          result = result.replaceFirst(OBJECT2, OBJECT2_THE_OTHER_NOUN);
-          break;
-        case IdentifierLevel.adjectiveNoun:
-          result = result.replaceFirst(OBJECT2, OBJECT2_NOUN_WITH_ADJECTIVE);
-          break;
-        case IdentifierLevel.properNoun:
-          result = result.replaceFirst(OBJECT2, OBJECT2_NOUN);
-          break;
-      }
-      // Mark the rest (after the first occurrence) with pronoun.
-      result = result.replaceAll(OBJECT2, OBJECT2_PRONOUN);
+    for (final key in following.keys) {
+      result = result.replaceAll(key, following[key]);
     }
-
     return result;
   }
 
-  // Never show "the guard's it".
-  String _fixOwnerStopwords(String string, Report report) {
-    String result = string;
+  static final _vowelsRegExp = RegExp(r"[aeiouy]", caseSensitive: false);
 
-    result = result.replaceAll(
-        "$OBJECT_OWNER_POSSESSIVE $OBJECT", OBJECT_PRONOUN_ACCUSATIVE);
-    result = result.replaceAll(
-        "$OBJECT_OWNER_POSSESSIVE $OBJECT_PRONOUN", OBJECT_PRONOUN_ACCUSATIVE);
-    result = result.replaceAll(
-        "$OBJECT_OWNER_PRONOUN_POSSESSIVE $OBJECT", OBJECT_PRONOUN_ACCUSATIVE);
-    result = result.replaceAll(
-        "$OBJECT_OWNER_PRONOUN_POSSESSIVE $OBJECT_PRONOUN",
-        OBJECT_PRONOUN_ACCUSATIVE);
+  /// Given [str] which still has stopwords (such as [Storyline.SUBJECT_NOUN])
+  /// in it, add particles where appropriate.
+  String _addParticles(String str, Report report) {
+    String result = str;
 
-    result = result.replaceAll("$OWNER_POSSESSIVE $SUBJECT", SUBJECT_PRONOUN);
-    result = result.replaceAll(
-        "$OWNER_POSSESSIVE $SUBJECT_PRONOUN", SUBJECT_PRONOUN);
-    result = result.replaceAll(
-        "$OWNER_PRONOUN_POSSESSIVE $SUBJECT", SUBJECT_PRONOUN);
-    result = result.replaceAll(
-        "$OWNER_PRONOUN_POSSESSIVE $SUBJECT_PRONOUN", SUBJECT_PRONOUN);
+    // Searches in [result] for [stopword]. Adds article if applicable.
+    void maybeAddArticleToOne(Entity entity, String stopword) {
+      result = result.replaceAllMapped(stopword, (m) {
+        for (final possessive in _allPossessives) {
+          final possessiveIndex = result.indexOf(possessive);
+          if (possessiveIndex == -1) continue;
+          if (possessiveIndex == m.start - possessive.length - 1) {
+            // The possessive (such as `<subject's>`) is just before
+            // the [stopword]. The -1 is there for a space character.
+            // Ignore this replacement.
+            return stopword;
+          }
+        }
+
+        if (_hasBeenMentioned(entity, report.time)) {
+          return "the $stopword";
+        } else {
+          _firstMentions[entity.id] = report.time;
+          if (entity.name.startsWith(_vowelsRegExp)) {
+            return "an $stopword";
+          } else {
+            return "a $stopword";
+          }
+        }
+      });
+    }
+
+    // Searches for any of the [stopwords] in [result]. Defers to
+    // [maybeAddArticleToOne].
+    void maybeAddArticleToAny(Entity entity, List<String> stopwords) {
+      if (entity == null) return;
+      if (entity.nameIsProperNoun) return;
+
+      for (final stopword in stopwords) {
+        maybeAddArticleToOne(entity, stopword);
+      }
+    }
+
+    // Only nouns need particles (i.e. not pronouns or "the other nouns").
+    maybeAddArticleToAny(report.subject, [
+      SUBJECT_NOUN,
+      SUBJECT_NOUN_POSSESSIVE,
+      SUBJECT_NOUN_WITH_ADJECTIVE,
+      SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    ]);
+    maybeAddArticleToAny(report.object, [
+      OBJECT_NOUN,
+      OBJECT_NOUN_POSSESSIVE,
+      OBJECT_NOUN_WITH_ADJECTIVE,
+      OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    ]);
+    maybeAddArticleToAny(report.object2, [
+      OBJECT2_NOUN,
+      OBJECT2_NOUN_POSSESSIVE,
+      OBJECT2_NOUN_WITH_ADJECTIVE,
+      OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+    ]);
 
     return result;
   }

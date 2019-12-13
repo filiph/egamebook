@@ -1,35 +1,10 @@
 part of storyline.shadow_graph;
 
-/// Different ways to join _this_ sentence to the previous one.
-enum SentenceJoinType {
-  /// Nothing. The previous sentence may already end with something,
-  /// or maybe this is the first sentence in a paragraph.
-  none,
+enum SentenceConjunction {
+  /// Just straight nothing (after a [SentenceJoinType.period], for example).
+  nothing,
 
-  /// Just plain period, without any "But" or "And".
-  period,
-
-  /// Comma, as in "The goblin picks up the sword, runs it through me."
-  comma,
-
-  /// A period followed by an "And".
-  periodAnd,
-
-  /// A period followed by a "But".
-  periodBut,
-
-  /// A new sentence starting with "And". The previous sentence either
-  /// doesn't exist, or it took care of its own ending (e.g. it's a whole
-  /// sentence ending with an exclamation mark).
-  noneAnd,
-
-  /// A new sentence starting with "But". The previous sentence either
-  /// doesn't exist, or it took care of its own ending (e.g. it's a whole
-  /// sentence ending with an exclamation mark).
-  noneBut,
-
-  /// A simple "and" in a sentence, such as "The goblin picks up the sword
-  /// and runs it through me."
+  /// "And" or "and".
   and,
 
   /// A "but" in a sentence, like "The goblin tries to pick up the sword
@@ -37,10 +12,33 @@ enum SentenceJoinType {
   but,
 }
 
+/// Different ways to join _this_ sentence to the previous one.
+enum SentenceJoinType {
+  /// Nothing. The previous sentence may already end with something,
+  /// or maybe this is the first sentence in a paragraph.
+  ///
+  /// In combination with [SentenceConjunction.but] or
+  /// [SentenceConjunction.and], this becomes "But" or "And".
+  none,
+
+  /// Just plain period.
+  ///
+  /// In combination with [SentenceConjunction.but] or
+  /// [SentenceConjunction.and], this becomes ". But" or ". And".
+  ///
+  /// This is the default starting point.
+  period,
+
+  /// Comma, as in "The goblin picks up the sword, runs it through me."
+  ///
+  /// In combination with [SentenceConjunction.but] or
+  /// [SentenceConjunction.and], this becomes "but" or "and".
+  comma,
+}
+
 extension JoinerSetHelper on Set<SentenceJoinType> {
   bool get hasPeriodOrNone =>
       contains(SentenceJoinType.period) || contains(SentenceJoinType.none);
 
-  bool get hasAndOrBut =>
-      contains(SentenceJoinType.and) || contains(SentenceJoinType.but);
+  bool get hasComma => contains(SentenceJoinType.comma);
 }

@@ -116,8 +116,8 @@ void main() {
         subject: enemy, object: player, positive: true, time: 4);
     expect(
         storyline.realizeAsString(),
-        matches("I try to hit the enemy in the stomach.+ he dodges my strike. "
-            "He hits back.+ breaks my nose."));
+        matches("I try to hit the enemy in the stomach.+ he dodges my strike"
+            ".+ hits back.+ breaks my nose."));
   });
 
   test("substitute pronouns where proper ('he gives him the money')", () {
@@ -163,7 +163,7 @@ void main() {
     storyline.add("<subject> start<s> programming <owner's> <object> to fire",
         subject: player, object: gun);
     expect(storyline.realizeAsString(), isNot(matches("<owner's>")));
-  });
+  }, skip: "owner");
 
   test(
       "ignoring <owner's> at start of sentence doesn't screw up capitalization",
@@ -173,7 +173,7 @@ void main() {
 
     storyline.add("<owner's> <subject> explode<s>", subject: hull);
     expect(storyline.realizeAsString(), matches("The hull.+"));
-  });
+  }, skip: "owner");
 
   test("don't substitute pronoun when it was used in the same form", () {
     var storyline = Storyline();
@@ -208,7 +208,7 @@ void main() {
         subject: part, owner: ship);
     final result = storyline.realizeAsString();
     expect(result, isNot(contains("Haijing's it")));
-  });
+  }, skip: "owner");
 
   test("put 'and' between two sentences in a complex sentence", () {
     var storyline = Storyline();
@@ -243,8 +243,8 @@ void main() {
     var gun = Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
     var enemy =
         Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
-    storyline.add("<owner's> <subject> <is> pointed at <object>",
-        owner: player, subject: gun, object: enemy, time: 1);
+    storyline.add("<object2's> <subject> <is> pointed at <object>",
+        object2: player, subject: gun, object: enemy, time: 1);
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
     expect(storyline.realizeAsString(),
         matches("My gun is pointed at the enemy.+t fires."));
@@ -252,10 +252,10 @@ void main() {
     storyline.clear();
     var ship =
         Entity(name: "ship", team: defaultEnemyTeam, pronoun: Pronoun.SHE);
-    storyline.add("<owner's> <subject> aim<s> <subject's> guns at <object>",
-        owner: enemy, subject: ship, object: player);
-    storyline.add("<owner's> <subject> <is> faster",
-        owner: player, subject: gun, but: true);
+    storyline.add("<object2's> <subject> aim<s> <subject's> guns at <object>",
+        object2: enemy, subject: ship, object: player);
+    storyline.add("<object2's> <subject> <is> faster",
+        object2: player, subject: gun, but: true);
     expect(storyline.realizeAsString(),
         matches("The enemy's ship aims her guns at me.+ my gun is faster."));
   });
@@ -276,15 +276,15 @@ void main() {
     storyline.add("<subject> fire<s>", subject: gun, time: 2);
     expect(storyline.realizeAsString(),
         matches("My gun is pointed at *the enemy.+t fires."));
-  });
+  }, skip: "owner");
 
   test("we don't show 'my the sword' even if Randomly is involved", () {
     var storyline = Storyline();
     var player = _createPlayer("Filip");
     var sword = Entity(name: "sword", pronoun: Pronoun.IT);
     var orc = Entity(name: "orc", team: defaultEnemyTeam, pronoun: Pronoun.HE);
-    storyline.add("<subject> pound<s> on <objectOwner's> {<object>|<object>!}",
-        subject: orc, objectOwner: player, object: sword);
+    storyline.add("<subject> pound<s> on <object2's> {<object>|<object>!}",
+        subject: orc, object2: player, object: sword);
     expect(storyline.realizeAsString(), matches("The orc pounds on my sword."));
   });
 
@@ -443,9 +443,9 @@ void main() {
     var storyline = Storyline();
     var enemy = Actor.initialized(42, "Tamara", nameIsProperNoun: true);
 
-    storyline.add("<owner's> <subject> {snap<s> at|bite<s>} empty air",
+    storyline.add("<object2's> <subject> {snap<s> at|bite<s>} empty air",
         subject: enemy.anatomy.findByDesignation(BodyPartDesignation.teeth),
-        owner: enemy);
+        object2: enemy);
     expect(
         storyline.realizeAsString(),
         isIn([
@@ -820,10 +820,11 @@ void main() {
       expect(graph.joiners.first, SentenceJoinType.none);
       // Sentences 2 + 3.
       expect(graph.qualifications[1].subject, IdentifierLevel.adjectiveOne);
-      expect(graph.joiners[2], SentenceJoinType.and);
+      expect(graph.joiners[2], SentenceJoinType.comma);
+      expect(graph.conjunctions[2], SentenceConjunction.and);
       expect(graph.qualifications[2].subject, IdentifierLevel.omitted);
       // Last sentence.
-      expect(graph.joiners.last, SentenceJoinType.and);
+      expect(graph.conjunctions.last, SentenceConjunction.and);
       expect(graph.qualifications.last.subject, IdentifierLevel.omitted);
       expect(graph.qualifications.last.object,
           anyOf(IdentifierLevel.pronoun, IdentifierLevel.adjectiveOne));
@@ -890,13 +891,31 @@ void main() {
 
     test('A swings at B. B deflects A\'s C.', () {
       storyline.add('<subject> swing<s> at <object>', subject: a, object: b);
-      storyline.add('<subject> deflect<s> <objectOwner\'s> <object>',
-          subject: b, objectOwner: a, object: aBodyPart);
+      storyline.add('<subject> deflect<s> <object\'s> <object2>',
+          subject: b, object: a, object2: aBodyPart);
 
-      // final result = storyline.realizeAsString();
-      // expect(result, contains('blue goblin deflects'));
-      // expect(result, contains('his fist'));
-    }, skip: "this needs some more thought");
+      final result = storyline.realizeAsString();
+      expect(result, matches(r'blue (goblin|one) deflects'));
+      expect(result, contains("red one's fist"));
+    });
+
+    test("A swings at B's C. A cuts across B's D.", () {
+      final bBodyPart = Entity(name: 'neck');
+      final bBodyPart2 = Entity(name: 'throat');
+      storyline.add("<subject> swing<s> at <object's> <object2>",
+          subject: a, object: b, object2: bBodyPart);
+      storyline.add("<subject> cut<s> accross <object's> <object2>",
+          subject: a, object: b, object2: bBodyPart2);
+
+      final result = storyline.realizeAsString();
+
+      final graph = ShadowGraph.from(storyline);
+      expect(graph.qualifications.first.object, IdentifierLevel.adjectiveNoun);
+
+      expect(
+          result, matches(r"The red goblin swings at the blue goblin's neck"));
+      expect(result, contains('his throat'));
+    });
   });
 
   group('two objects of same name', () {
@@ -1080,9 +1099,9 @@ void main() {
   test('longer storyline', () {
     final aren = Entity(name: "Aren", pronoun: Pronoun.I, isPlayer: true);
     final arenSword = Entity(name: "sword");
-    final orc = Entity(name: "orc");
+    final orc = Entity(name: "orc", pronoun: Pronoun.HE);
     final orcTorso = Entity(name: "torso", pronoun: Pronoun.IT);
-    final goblin = Entity(name: "goblin");
+    final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
 
     final storyline = Storyline();
     storyline.add("<subject> thrust<s> <object2> at <objectOwner's> <object>",

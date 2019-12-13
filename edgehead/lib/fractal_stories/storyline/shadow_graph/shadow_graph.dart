@@ -65,13 +65,34 @@ class ShadowGraph {
   /// cannot be used because two of the entities use it.
   static final Entity noEntity = Entity(name: 'NO ENTITY');
 
+  /// For each report, this lists the possible identifiers to use.
+  ///
+  /// For example, the second sentence might be able to refer to its
+  /// subject with a pronoun or with the name (but not with "the other one").
+  ///
+  /// [ReportIdentifiers] for each report starts with everything allowed,
+  /// and the algorithm removes impossibilities.
   List<ReportIdentifiers> _reportIdentifiers;
 
-  /// The way sentences are stringed together.
+  /// The way sentences are stringed together (with period, with comma,
+  /// or without anything).
   ///
   /// A [_joiner] for index `i` describes how a [Report] at index `i` flows
   /// from report at index `i - 1`.
+  ///
+  /// [_joiners] starts with everything allowed, and the algorithm removes
+  /// impossibilities (so that at the end, only a few or just one possibility
+  /// survives).
   List<Set<SentenceJoinType>> _joiners;
+
+  /// The conjunction between two sentences (but or and).
+  ///
+  /// A [_conjunctions] for index `i` describes how a [Report] at
+  /// index `i` flows from report at index `i - 1`.
+  ///
+  /// [_conjunctions] starts as an empty set. The algorithm may add
+  /// [SentenceConjunction.and] or [SentenceConjunction.but].
+  List<Set<SentenceConjunction>> _conjunctions;
 
   /// For each report, this maps from different concrete identifiers
   /// (such as "he" or "the goblin") to entities in that report.
@@ -89,9 +110,15 @@ class ShadowGraph {
       (_) => SentenceJoinType.values.toSet(),
       growable: false,
     );
+    _conjunctions = List.generate(
+      storyline.reports.length,
+      (_) => <SentenceConjunction>{SentenceConjunction.nothing},
+      growable: false,
+    );
 
     final entities = _getAllMentionedEntities(storyline.reports);
-    _fillForcedJoiners(storyline.reports);
+    // TODO: allow pronouns for player
+    _fillForcedJoinersAndConjunctions(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
     _detectMissingProperNouns(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
@@ -102,6 +129,9 @@ class ShadowGraph {
     _identifiers = _getIdentifiersThroughoutStory(storyline.reports, entities);
     _removeQualificationsWhereUnavailable(storyline.reports, _identifiers);
     __assertAtLeastOneIdentifier(storyline.reports);
+    _findPositiveNegativeButConjunctions(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
+    __assertAtLeastOneJoiner(storyline.reports);
     _find2JoinerOpportunitiesP0(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
@@ -110,13 +140,18 @@ class ShadowGraph {
     __assertAtLeastOneJoiner(storyline.reports);
     _fillOtherJoiners(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
-    _assertExactlyOnePossibleJoiner(storyline.reports);
+    __assertExactlyOnePossibleJoiner(storyline.reports);
     _removeOmittedAtStartsOfSentences(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
     _detectForcedPronouns(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
-    _retainTheLowestPossible(storyline.reports);
+    _removeButsTooClose(storyline.reports);
+    _retainTheLowestPossibleIdentifiers(storyline.reports);
+    _retainTheHighestPossibleConjunction(storyline.reports);
   }
+
+  UnmodifiableListView<SentenceConjunction> get conjunctions =>
+      UnmodifiableListView(_conjunctions.map((set) => set.single));
 
   UnmodifiableListView<SentenceJoinType> get joiners =>
       UnmodifiableListView(_joiners.map((set) => set.single));
@@ -138,6 +173,7 @@ class ShadowGraph {
       buf.writeln('identifiers: $ids');
 
       buf.writeln(_joiners[i]);
+      buf.writeln(_conjunctions[i]);
       buf.writeln();
     }
     return buf.toString();
@@ -167,17 +203,27 @@ class ShadowGraph {
     }
   }
 
-  void _allowObjectPronoun(int i) {
-    _reportIdentifiers[i]._objectRange.add(IdentifierLevel.pronoun);
-  }
-
-  void _assertExactlyOnePossibleJoiner(UnmodifiableListView<Report> reports) {
+  void __assertExactlyOnePossibleJoiner(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < _joiners.length; i++) {
       assert(
           _joiners[i].length == 1,
           "There should be a single joiner "
           "for ${reports[i]} but instead there is: ${_joiners[i]}.");
     }
+  }
+
+  void _allowAnd(int i) {
+    if (i < 0 || i >= _conjunctions.length) return;
+    _conjunctions[i].add(SentenceConjunction.and);
+  }
+
+  void _allowBut(int i) {
+    if (i < 0 || i >= _conjunctions.length) return;
+    _conjunctions[i].add(SentenceConjunction.but);
+  }
+
+  void _allowObjectPronoun(int i) {
+    _reportIdentifiers[i]._objectRange.add(IdentifierLevel.pronoun);
   }
 
   /// In any storyline, the first time we mention anyone after a while,
@@ -190,11 +236,7 @@ class ShadowGraph {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
-        // Detect if the entity is "you" or "I".
-        final isPlayer =
-            entity.pronoun == Pronoun.I || entity.pronoun == Pronoun.YOU;
-
-        if (!isPlayer && !everMentionedIds.contains(entity.id)) {
+        if (!entity.isPlayer && !everMentionedIds.contains(entity.id)) {
           // If this is the first time we mention this entity, call it by
           // at least the noun.
           set.removeAll([
@@ -273,26 +315,24 @@ class ShadowGraph {
 
   /// Fill the joiner graph with obvious / forced stuff, such as:
   ///
-  /// * wholeSentence == period
-  /// * but == but
-  void _fillForcedJoiners(UnmodifiableListView<Report> reports) {
-    // Always start with new sentence (no ", and").
-    _joiners[0].retainAll(const [
-      SentenceJoinType.none,
-      SentenceJoinType.noneBut,
-    ]);
+  /// * wholeSentence == none
+  void _fillForcedJoinersAndConjunctions(UnmodifiableListView<Report> reports) {
+    // Always start with new sentence (no ", and" or period).
+    _joiners[0]
+      ..clear()
+      ..add(SentenceJoinType.none);
 
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       if (report.wholeSentence) {
         _limitJoinerToPeriodOrNone(i);
-        _limitJoinerToNoneAllowButOrAnd(i + 1);
+        _limitJoinerToNone(i + 1);
       }
       if (report.endSentence) {
-        _limitJoinerToPeriodAllowButOrAnd(i + 1);
+        _limitJoinerToPeriod(i + 1);
       }
       if (report.but) {
-        _limitJoinerToBut(i);
+        _allowBut(i);
       }
     }
   }
@@ -305,12 +345,6 @@ class ShadowGraph {
           set.retainAll([SentenceJoinType.period]);
         } else if (set.contains(SentenceJoinType.none)) {
           set.retainAll([SentenceJoinType.none]);
-        } else if (set.contains(SentenceJoinType.periodBut)) {
-          // It is possible to use ". But " here. Let's do it.
-          set.retainAll([SentenceJoinType.periodBut]);
-        } else if (set.contains(SentenceJoinType.noneBut)) {
-          // It is possible to use " But " here. Let's do it.
-          set.retainAll([SentenceJoinType.noneBut]);
         } else {
           throw StateError("Set: $set");
         }
@@ -323,15 +357,16 @@ class ShadowGraph {
   /// P0 means these are the best ones, we should definitely go for them.
   void _find2JoinerOpportunitiesP0(UnmodifiableListView<Report> reports) {
     for (final pair in _ReportPair.getPairs(reports)) {
-      // The goblin tries to dodge but fails.
+      // The goblin tries to dodge and/but fails.
       if (pair.hasSameVerbType &&
           pair.hasSameSubject &&
           pair.first.object == null &&
           pair.second.object == null &&
           _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].hasAndOrBut) {
+          _joiners[pair.index + 1].hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
-        _limitJoinerToAndOrBut(pair.index + 1);
+        _limitJoinerToComma(pair.index + 1);
+        _allowAnd(pair.index + 1);
       }
 
       // The orcish captain avoids the goblin and regains balance.
@@ -339,9 +374,10 @@ class ShadowGraph {
           pair.hasSameSubject &&
           pair.second.object == null &&
           _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
+          _joiners[pair.index + 1].hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
-        _limitJoinerToAnd(pair.index + 1);
+        _limitJoinerToComma(pair.index + 1);
+        _allowAnd(pair.index + 1);
         continue;
       }
 
@@ -351,10 +387,11 @@ class ShadowGraph {
           pair.hasSameSubject &&
           pair.hasSameObject &&
           _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
+          _joiners[pair.index + 1].hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
-        _limitJoinerToAnd(pair.index + 1);
+        _limitJoinerToComma(pair.index + 1);
         _allowObjectPronoun(pair.index + 1);
+        _allowAnd(pair.index + 1);
         continue;
       }
     }
@@ -369,9 +406,10 @@ class ShadowGraph {
       if (pair.hasSameVerbType &&
           pair.hasSameSubject &&
           _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
+          _joiners[pair.index + 1].hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
-        _limitJoinerToAnd(pair.index + 1);
+        _limitJoinerToComma(pair.index + 1);
+        _allowAnd(pair.index + 1);
         continue;
       }
 
@@ -380,10 +418,35 @@ class ShadowGraph {
           pair.first.object != null &&
           pair.second.subject == pair.first.object &&
           _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].contains(SentenceJoinType.and)) {
+          _joiners[pair.index + 1].hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
-        _limitJoinerToAnd(pair.index + 1);
+        _limitJoinerToComma(pair.index + 1);
+        _allowAnd(pair.index + 1);
         continue;
+      }
+    }
+  }
+
+  /// Finds pairs of sentences that should be joined by "but" because
+  /// they are "opposite sentiments". For example:
+  ///
+  ///     The goblin stands up but doesn't regain full balance.
+  void _findPositiveNegativeButConjunctions(
+      UnmodifiableListView<Report> reports) {
+    for (final pair in _ReportPair.getPairs(reports)) {
+      // The goblin stands up but doesn't regain full balance.
+      if (pair.hasSameSubject && pair.positiveNegativeAreSwitched) {
+        _allowBut(pair.index + 1);
+      }
+
+      // I stand up but the goblin slashes me again.
+      if (pair.hasSameVerbType &&
+          pair.subjectsAreEnemies &&
+          ((pair.first.object == null || pair.secondSubjectIsFirstObject) ||
+              (pair.second.object == null ||
+                  pair.firstSubjectIsSecondObject)) &&
+          pair.positiveNegativeAreSame) {
+        _allowBut(pair.index + 1);
       }
     }
   }
@@ -543,64 +606,62 @@ class ShadowGraph {
     return result;
   }
 
-  void _limitJoinerToAnd(int i) {
+  void _limitJoinerToComma(int i) {
     if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const [
-      SentenceJoinType.and,
-    ]);
+    _joiners[i].retainAll(const {
+      SentenceJoinType.comma,
+    });
   }
 
-  void _limitJoinerToAndOrBut(int i) {
+  void _limitJoinerToPeriod(int i) {
     if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const [
-      SentenceJoinType.and,
-      SentenceJoinType.but,
-    ]);
-  }
-
-  void _limitJoinerToBut(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const [
-      SentenceJoinType.but,
-      SentenceJoinType.noneBut,
-      SentenceJoinType.periodBut,
-    ]);
-  }
-
-  void _limitJoinerToNoneAllowButOrAnd(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const [
-      SentenceJoinType.none,
-      SentenceJoinType.noneAnd,
-      SentenceJoinType.noneBut
-    ]);
-  }
-
-  void _limitJoinerToPeriodAllowButOrAnd(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const [
-      SentenceJoinType.period,
-      SentenceJoinType.periodAnd,
-      SentenceJoinType.periodBut
-    ]);
+    _joiners[i]
+      ..clear()
+      ..addAll(const {
+        SentenceJoinType.period,
+      });
   }
 
   void _limitJoinerToPeriodOrNone(int i) {
     if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const [
+    _joiners[i].retainAll(const {
       SentenceJoinType.none,
       SentenceJoinType.period,
-    ]);
+    });
+  }
+
+  void _limitJoinerToNone(int i) {
+    if (i < 0 || i >= _joiners.length) return;
+    _joiners[i].retainAll(const {
+      SentenceJoinType.none,
+    });
+  }
+
+  /// Removes buts when two of them are next to each other.
+  void _removeButsTooClose(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < _conjunctions.length - 1; i++) {
+      if (_conjunctions[i].contains(SentenceConjunction.but) &&
+          _conjunctions[i + 1].contains(SentenceConjunction.but)) {
+        // Favor the forced "but".
+        if (reports[i].but) {
+          _conjunctions[i + 1].removeAll(const {SentenceConjunction.but});
+          continue;
+        }
+        if (reports[i + 1].but) {
+          _conjunctions[i].removeAll(const {SentenceConjunction.but});
+          continue;
+        }
+
+        // Otherwise, go with the first "but" and remove the second.
+        _conjunctions[i + 1].removeAll(const {SentenceConjunction.but});
+      }
+    }
   }
 
   void _removeOmittedAtStartsOfSentences(UnmodifiableListView<Report> reports) {
     const startNewSentenceJoiners = [
       SentenceJoinType.period,
-      SentenceJoinType.periodAnd,
-      SentenceJoinType.periodBut,
       SentenceJoinType.none,
-      SentenceJoinType.noneAnd,
-      SentenceJoinType.noneBut,
     ];
 
     for (int i = 0; i < _reportIdentifiers.length; i++) {
@@ -650,9 +711,26 @@ class ShadowGraph {
     }
   }
 
+  void _retainTheHighestPossibleConjunction(
+      UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < _conjunctions.length; i++) {
+      final report = reports[i];
+      final conjunctions = _conjunctions[i];
+      assert(conjunctions.isNotEmpty, "Missing conjunction for $report (#$i).");
+      if (conjunctions.contains(SentenceConjunction.but)) {
+        conjunctions.retainAll({SentenceConjunction.but});
+      } else if (conjunctions.contains(SentenceConjunction.and)) {
+        conjunctions.retainAll({SentenceConjunction.and});
+      } else {
+        conjunctions.retainAll({SentenceConjunction.nothing});
+      }
+    }
+  }
+
   /// Only retain the lowest (i.e., least specific) qualification level
   /// for each entity in each report.
-  void _retainTheLowestPossible(UnmodifiableListView<Report> reports) {
+  void _retainTheLowestPossibleIdentifiers(
+      UnmodifiableListView<Report> reports) {
     for (int i = 0; i < _reportIdentifiers.length; i++) {
       final report = reports[i];
       _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
