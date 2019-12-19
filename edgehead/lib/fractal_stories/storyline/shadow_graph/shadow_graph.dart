@@ -110,6 +110,8 @@ class ShadowGraph {
       (_) => SentenceJoinType.values.toSet(),
       growable: false,
     );
+    // No conjunction is possible at the start, we add possibilities
+    // as we go.
     _conjunctions = List.generate(
       storyline.reports.length,
       (_) => <SentenceConjunction>{SentenceConjunction.nothing},
@@ -121,6 +123,8 @@ class ShadowGraph {
     _fillForcedJoinersAndConjunctions(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
     _detectMissingProperNouns(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
+    _detectReportsNotStartingWithSubject(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
     _detectMissingAdjectives(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
@@ -310,6 +314,21 @@ class ShadowGraph {
           set.remove(IdentifierLevel.properNoun);
         }
       });
+    }
+  }
+
+  /// Detect sentences which don't start with "<subject>", and therefore
+  /// cannot omit subject.
+  ///
+  /// For example, a sentence like "in the meantime, <subject> take<s> <object>"
+  /// does not start with "<subject>", and so subject cannot be omitted.
+  void _detectReportsNotStartingWithSubject(
+      UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < reports.length; i++) {
+      final report = reports[i];
+      if (!report.string.startsWith(ComplementType.SUBJECT.generic)) {
+        _reportIdentifiers[i]._subjectRange.remove(IdentifierLevel.omitted);
+      }
     }
   }
 
@@ -613,6 +632,13 @@ class ShadowGraph {
     });
   }
 
+  void _limitJoinerToNone(int i) {
+    if (i < 0 || i >= _joiners.length) return;
+    _joiners[i].retainAll(const {
+      SentenceJoinType.none,
+    });
+  }
+
   void _limitJoinerToPeriod(int i) {
     if (i < 0 || i >= _joiners.length) return;
     _joiners[i]
@@ -627,13 +653,6 @@ class ShadowGraph {
     _joiners[i].retainAll(const {
       SentenceJoinType.none,
       SentenceJoinType.period,
-    });
-  }
-
-  void _limitJoinerToNone(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const {
-      SentenceJoinType.none,
     });
   }
 

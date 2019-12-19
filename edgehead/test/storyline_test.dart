@@ -1099,6 +1099,23 @@ void main() {
     expect(result, contains('he is too slow'));
   });
 
+  test("don't omit when a sentence doesn't start with <subject>", () {
+    final leroy =
+        Entity(name: "Leroy", nameIsProperNoun: true, pronoun: Pronoun.HE);
+
+    final storyline1 = Storyline();
+    storyline1.add("<subject> raise<s> from <subject's> chair", subject: leroy);
+    storyline1.add("<subject> join<s> me", subject: leroy);
+
+    expect(storyline1.realizeAsString(), contains("and joins me"));
+
+    final storyline2 = Storyline();
+    storyline2.add("<subject> raise<s> from <subject's> chair", subject: leroy);
+    storyline2.add("in a few minutes, <subject> join<s> me", subject: leroy);
+
+    expect(storyline2.realizeAsString(), contains("he joins me"));
+  });
+
   test("using object2 doesn't report 'it' without explaining what it is", () {
     // I have seen the following during a playthrough. It turned out to be
     // a case of the goblin and his spear having the same id. Still, it's safer
