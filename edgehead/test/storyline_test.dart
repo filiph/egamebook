@@ -1116,6 +1116,19 @@ void main() {
     expect(storyline2.realizeAsString(), contains("he joins me"));
   });
 
+  test("add definitive articles before possessives", () {
+    final undead = Entity(name: "undead", pronoun: Pronoun.HE);
+    final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
+    final goblinNeck = Entity(name: "neck");
+
+    final storyline = Storyline();
+    storyline.add("<subject> swing<s> at <objectOwner's> <object>",
+        subject: undead, objectOwner: goblin, object: goblinNeck);
+
+    final result = storyline.realizeAsString();
+    expect(result, contains("the goblin's neck"));
+  });
+
   test("using object2 doesn't report 'it' without explaining what it is", () {
     // I have seen the following during a playthrough. It turned out to be
     // a case of the goblin and his spear having the same id. Still, it's safer

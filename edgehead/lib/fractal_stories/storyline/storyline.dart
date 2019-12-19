@@ -1360,35 +1360,24 @@ class Storyline {
 
     // Searches for any of the [stopwords] in [result]. Defers to
     // [maybeAddArticleToOne].
-    void maybeAddArticleToAny(Entity entity, List<String> stopwords) {
+    void maybeAddArticleToAny(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+
       if (entity == null) return;
       if (entity.nameIsProperNoun) return;
 
-      for (final stopword in stopwords) {
-        maybeAddArticleToOne(entity, stopword);
-      }
+      // Only nouns need particles (i.e. not pronouns or "the other nouns").
+      maybeAddArticleToOne(entity, complement.noun);
+      maybeAddArticleToOne(entity, complement.nounPossessive);
+      maybeAddArticleToOne(entity, complement.nounWithAdjective);
+      maybeAddArticleToOne(entity, complement.nounWithAdjectivePossessive);
     }
 
-    // Only nouns need particles (i.e. not pronouns or "the other nouns").
-    // TODO: use ComplementType
-    maybeAddArticleToAny(report.subject, [
-      SUBJECT_NOUN,
-      SUBJECT_NOUN_POSSESSIVE,
-      SUBJECT_NOUN_WITH_ADJECTIVE,
-      SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    ]);
-    maybeAddArticleToAny(report.object, [
-      OBJECT_NOUN,
-      OBJECT_NOUN_POSSESSIVE,
-      OBJECT_NOUN_WITH_ADJECTIVE,
-      OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    ]);
-    maybeAddArticleToAny(report.object2, [
-      OBJECT2_NOUN,
-      OBJECT2_NOUN_POSSESSIVE,
-      OBJECT2_NOUN_WITH_ADJECTIVE,
-      OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    ]);
+    maybeAddArticleToAny(ComplementType.SUBJECT);
+    maybeAddArticleToAny(ComplementType.OBJECT);
+    maybeAddArticleToAny(ComplementType.OBJECT2);
+    maybeAddArticleToAny(ComplementType.OWNER);
+    maybeAddArticleToAny(ComplementType.OBJECT_OWNER);
 
     return result;
   }
