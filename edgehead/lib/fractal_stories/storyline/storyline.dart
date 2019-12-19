@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 
 export 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 
+part 'storyline_complement.dart';
 part 'storyline_entity.dart';
 
 // ignore_for_file: constant_identifier_names
@@ -126,6 +127,29 @@ class Report {
     if (objectOwner != null) yield objectOwner;
   }
 
+  /// Returns the [Entity] corresponding to [type].
+  ///
+  /// For example, when called with [OBJECT2], this method will return
+  /// [object2].
+  ///
+  /// The returned value can be `null`.
+  Entity getEntityByType(ComplementType type) {
+    switch (type) {
+      case ComplementType.SUBJECT:
+        return subject;
+      case ComplementType.OBJECT:
+        return object;
+      case ComplementType.OBJECT2:
+        return object2;
+      case ComplementType.OWNER:
+        return owner;
+      case ComplementType.OBJECT_OWNER:
+        return objectOwner;
+      default:
+        throw UnimplementedError('No entity for $type');
+    }
+  }
+
   @override
   String toString() => "Report"
       "<${string.substring(0, min(string.length, 90))}...,"
@@ -225,27 +249,6 @@ class Storyline {
   static const String OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE =
       "<object2NounWithAdjective's>";
 
-  static const List<String> _allPossessives = [
-    SUBJECT_POSSESSIVE,
-    SUBJECT_NOUN_POSSESSIVE,
-    SUBJECT_PRONOUN_POSSESSIVE,
-    SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
-    SUBJECT_THE_OTHER_NOUN_POSSESSIVE,
-    SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    OBJECT_POSSESSIVE,
-    OBJECT_NOUN_POSSESSIVE,
-    OBJECT_PRONOUN_POSSESSIVE,
-    OBJECT_ADJECTIVE_ONE_POSSESSIVE,
-    OBJECT_THE_OTHER_NOUN_POSSESSIVE,
-    OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    OBJECT2_POSSESSIVE,
-    OBJECT2_NOUN_POSSESSIVE,
-    OBJECT2_PRONOUN_POSSESSIVE,
-    OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
-    OBJECT2_THE_OTHER_NOUN_POSSESSIVE,
-    OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-  ];
-
   /// e.g. in "goes"
   static const String VERB_ES = "<es>";
 
@@ -313,8 +316,8 @@ class Storyline {
       {Entity subject,
       Entity object,
       Entity object2,
-      @Deprecated('use object2 instead') Entity owner,
-      @Deprecated('use object2 instead') Entity objectOwner,
+      Entity owner,
+      Entity objectOwner,
       bool but = false,
       bool positive = false,
       bool negative = false,
@@ -377,7 +380,6 @@ class Storyline {
       {Entity subject,
       Entity object,
       Entity object2,
-      Entity owner,
       int maxPerSentence = 3,
       String conjunction = "and"}) {
     assert(start != null);
@@ -446,7 +448,6 @@ class Storyline {
             subject: subject ?? articlesEntity,
             object: object,
             object2: object2,
-            owner: owner,
             wholeSentence: true);
         sentenceCount++;
         i = 0;
@@ -458,83 +459,6 @@ class Storyline {
   }
 
   void addParagraph() => add(PARAGRAPH_NEWLINES, wholeSentence: true);
-
-  /// Adds [:the:] or [:a:] to first occurrence of [SUB_STRING] (like
-  /// [:<subject>:]) in [string]. The next occurrences will be automatically
-  /// converted to pronouns elsewhere.
-  ///
-  /// The [reportTime] should correspond to the time this report is being said.
-  /// Storyline tracks when different entities were first mentioned so it
-  /// can apply either definitive (the) or indefinite (a) article.
-  @Deprecated('use _addParticles instead')
-  String addParticleToFirstOccurrence(String string, String SUB_STRING,
-      Entity entity, Entity entityOwner, int reportTime) {
-    return string;
-    // Returns true if [str] contains at least one of the stopwords
-    // as prefixes to [SUB_STRING].
-    bool containsOneOfPrefixes(String str, List<String> stopwords) {
-      for (final stopword in stopwords) {
-        if (str.contains("$stopword $SUB_STRING")) return true;
-      }
-      return false;
-    }
-
-    // Make sure we don't add particles to "your car" etc.
-    // The following if statement checks whether we have a string such as
-    // `<owner's> <object>` while also having [entityOwner] defined.
-    // (When [entityOwner] is `null`, Storyline ignores it.)
-    if (entityOwner != null &&
-        containsOneOfPrefixes(string, [
-          OWNER_POSSESSIVE,
-          OWNER_PRONOUN_POSSESSIVE,
-          OBJECT_OWNER_POSSESSIVE,
-          OBJECT_OWNER_PRONOUN_POSSESSIVE
-        ])) {
-      return string;
-    }
-    // Matches all the other possible possessive stopwords, such as
-    // `<subject's>`. Here we don't ignore when subject or object aren't
-    // defined.
-    if (containsOneOfPrefixes(string, [
-      SUBJECT_POSSESSIVE,
-      SUBJECT_NOUN_POSSESSIVE,
-      SUBJECT_PRONOUN_POSSESSIVE,
-      SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
-      SUBJECT_THE_OTHER_NOUN_POSSESSIVE,
-      SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-      OBJECT_POSSESSIVE,
-      OBJECT_NOUN_POSSESSIVE,
-      OBJECT_PRONOUN_POSSESSIVE,
-      OBJECT_ADJECTIVE_ONE_POSSESSIVE,
-      OBJECT_THE_OTHER_NOUN_POSSESSIVE,
-      OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-      OBJECT2_POSSESSIVE,
-      OBJECT2_NOUN_POSSESSIVE,
-      OBJECT2_PRONOUN_POSSESSIVE,
-      OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
-      OBJECT2_THE_OTHER_NOUN_POSSESSIVE,
-      OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    ])) {
-      return string;
-    }
-
-    String stringWithParticle;
-
-    if (!entity.nameIsProperNoun) {
-      if (_hasBeenMentioned(entity, reportTime)) {
-        stringWithParticle = string.replaceFirst(SUB_STRING, "the $SUB_STRING");
-      } else {
-        if (entity.name.startsWith(RegExp(r"[aeiouy]", caseSensitive: false))) {
-          stringWithParticle =
-              string.replaceFirst(SUB_STRING, "an $SUB_STRING");
-        } else {
-          stringWithParticle = string.replaceFirst(SUB_STRING, "a $SUB_STRING");
-        }
-        _firstMentions[entity.id] = reportTime;
-      }
-    }
-    return stringWithParticle ?? string;
-  }
 
   void clear() {
     _records.clear();
@@ -761,6 +685,7 @@ class Storyline {
       }
 
       report = _modifyStopwords(report, _reports[i], qualifications);
+      report = _preventPossessivesBeforePronouns(report, _reports[i]);
       report = _preventPossessivesBeforeProperNouns(report, _reports[i]);
       report = _addParticles(report, _reports[i]);
       report = _realizeStopwords(report, _reports[i]);
@@ -979,6 +904,31 @@ class Storyline {
     return true;
   }
 
+  /// A special case for things like "Haijing's it" or "wolf's they". In this
+  /// case, we just want to drop the possessive.
+  String _preventPossessivesBeforePronouns(String string, Report report) {
+    String result = string;
+
+    void maybeRemovePossessive(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+      if (entity == null) return;
+
+      for (final pronoun in complement.allPronouns) {
+        for (final possessive in ComplementType.allPossessives) {
+          result = result.replaceAll("$possessive $pronoun", pronoun);
+        }
+      }
+    }
+
+    maybeRemovePossessive(ComplementType.SUBJECT);
+    maybeRemovePossessive(ComplementType.OBJECT);
+    maybeRemovePossessive(ComplementType.OBJECT2);
+    maybeRemovePossessive(ComplementType.OWNER);
+    maybeRemovePossessive(ComplementType.OBJECT_OWNER);
+
+    return result;
+  }
+
   /// A special case for things like "Bilbo swings Sting at the orc." In this
   /// case, we don't want to say "his Sting", since "Sting" is a proper noun
   /// and it sounds weird.
@@ -989,7 +939,7 @@ class Storyline {
       if (entity == null) return;
       if (!entity.nameIsProperNoun) return;
       for (final stopword in stopwords) {
-        for (final possessive in _allPossessives) {
+        for (final possessive in ComplementType.allPossessives) {
           result = result.replaceAll("$possessive $stopword", stopword);
         }
       }
@@ -1026,40 +976,66 @@ class Storyline {
   /// Modifies stopwords in [string] according to [qualifications].
   ///
   /// For example, if [qualifications] say that the subject should be omitted,
-  /// this method will remove the string `"<subject>"` from [string].
+  /// this method will remove the string `"<subject>"` from [string]. If it
+  /// says the subject can be referred to by a pronoun, this method will
+  /// replace all `"<subject>"` with `"<subjectPronoun>"`, and all
+  /// `"<subject's>"` to `"<subjectPronoun's>"`.
   String _modifyStopwords(
       String string, Report report, ReportIdentifiers qualifications) {
     var result = string;
 
-    if (report.subject != null) {
-      switch (qualifications.subject) {
+    void modifyForComplement(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+
+      if (entity == null) {
+        assert(
+            !result.contains(complement.generic),
+            "Stopword ${complement.generic} present when entity is null: "
+            "$result");
+        assert(
+            !result.contains(complement.genericPossessive),
+            "Stopword ${complement.genericPossessive} present when "
+            "entity is null: $result");
+        return;
+      }
+
+      switch (qualifications.getByType(complement)) {
         case IdentifierLevel.omitted:
-          assert(
-              !result.contains(SUBJECT) || result.startsWith(SUBJECT),
-              'Should either start with $SUBJECT or not have it, but instead: '
-              '$result');
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              '$SUBJECT ': '',
-              SUBJECT: '',
-            },
-            following: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
+          if (complement.isSubject) {
+            assert(
+                !result.contains(complement.generic) ||
+                    result.startsWith(complement.generic),
+                'Should either start with ${complement.generic} '
+                'or not have it, but instead: $result');
+
+            result = _replaceFirstThenAll(
+              result,
+              first: {
+                '${complement.generic} ': '',
+                complement.generic: '',
+              },
+              following: {
+                complement.generic: complement.pronoun,
+                complement.genericPossessive: complement.pronounPossessive,
+              },
+            );
+          } else {
+            // Not subject.
+            throw UnimplementedError('Only subjects can be omitted in $result, '
+                'but $qualifications show it for $complement');
+          }
           break;
+
         case IdentifierLevel.pronoun:
           result = _replaceFirstThenAll(
             result,
             first: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
             },
             following: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
             },
           );
           break;
@@ -1067,12 +1043,12 @@ class Storyline {
           result = _replaceFirstThenAll(
             result,
             first: {
-              SUBJECT: SUBJECT_ADJECTIVE_ONE,
-              SUBJECT_POSSESSIVE: SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
+              complement.generic: complement.adjectiveOne,
+              complement.genericPossessive: complement.adjectiveOnePossessive,
             },
             following: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
             },
           );
           break;
@@ -1080,12 +1056,12 @@ class Storyline {
           result = _replaceFirstThenAll(
             result,
             first: {
-              SUBJECT: SUBJECT_NOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_NOUN_POSSESSIVE,
+              complement.generic: complement.noun,
+              complement.genericPossessive: complement.nounPossessive,
             },
             following: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
             },
           );
           break;
@@ -1093,12 +1069,12 @@ class Storyline {
           result = _replaceFirstThenAll(
             result,
             first: {
-              SUBJECT: SUBJECT_THE_OTHER_NOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_THE_OTHER_NOUN_POSSESSIVE,
+              complement.generic: complement.theOtherNoun,
+              complement.genericPossessive: complement.theOtherNounPossessive,
             },
             following: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
             },
           );
           break;
@@ -1106,12 +1082,13 @@ class Storyline {
           result = _replaceFirstThenAll(
             result,
             first: {
-              SUBJECT: SUBJECT_NOUN_WITH_ADJECTIVE,
-              SUBJECT_POSSESSIVE: SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+              complement.generic: complement.nounWithAdjective,
+              complement.genericPossessive:
+                  complement.nounWithAdjectivePossessive,
             },
             following: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
             },
           );
           break;
@@ -1119,265 +1096,30 @@ class Storyline {
           result = _replaceFirstThenAll(
             result,
             first: {
-              SUBJECT: SUBJECT_NOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_NOUN_POSSESSIVE,
+              complement.generic: complement.noun,
+              complement.genericPossessive: complement.nounPossessive,
             },
             following: {
-              SUBJECT: SUBJECT_PRONOUN,
-              SUBJECT_POSSESSIVE: SUBJECT_PRONOUN_POSSESSIVE,
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
             },
           );
           break;
       }
+
+      assert(!result.contains(complement.generic),
+          "Still contains ${complement.generic}: $result");
+
+      assert(!result.contains(complement.genericPossessive),
+          "Still contains ${complement.genericPossessive}: $result");
     }
 
-    assert(!result.contains(SUBJECT), "Still contains $SUBJECT: $result");
+    modifyForComplement(ComplementType.SUBJECT);
+    modifyForComplement(ComplementType.OBJECT);
+    modifyForComplement(ComplementType.OBJECT2);
+    modifyForComplement(ComplementType.OWNER);
+    modifyForComplement(ComplementType.OBJECT_OWNER);
 
-    if (report.object != null) {
-      switch (qualifications.object) {
-        case IdentifierLevel.omitted:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT: '',
-            },
-            following: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.pronoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.adjectiveOne:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT: OBJECT_ADJECTIVE_ONE,
-              OBJECT_POSSESSIVE: OBJECT_ADJECTIVE_ONE_POSSESSIVE,
-            },
-            following: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.noun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT: OBJECT_NOUN,
-              OBJECT_POSSESSIVE: OBJECT_NOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.theOtherNoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT: OBJECT_THE_OTHER_NOUN,
-              OBJECT_POSSESSIVE: OBJECT_THE_OTHER_NOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.adjectiveNoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT: OBJECT_NOUN_WITH_ADJECTIVE,
-              OBJECT_POSSESSIVE: OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-            },
-            following: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.properNoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT: OBJECT_NOUN,
-              OBJECT_POSSESSIVE: OBJECT_NOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT: OBJECT_PRONOUN,
-              OBJECT_POSSESSIVE: OBJECT_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-      }
-    }
-
-    assert(!result.contains(OBJECT), "Still contains $OBJECT: $result");
-
-    if (report.object2 != null) {
-      switch (qualifications.object2) {
-        case IdentifierLevel.omitted:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT2: '',
-            },
-            following: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.pronoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.adjectiveOne:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT2: OBJECT2_ADJECTIVE_ONE,
-              OBJECT2_POSSESSIVE: OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
-            },
-            following: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.noun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT2: OBJECT2_NOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_NOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.theOtherNoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT2: OBJECT2_THE_OTHER_NOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_THE_OTHER_NOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.adjectiveNoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT2: OBJECT2_NOUN_WITH_ADJECTIVE,
-              OBJECT2_POSSESSIVE: OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-            },
-            following: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-        case IdentifierLevel.properNoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              OBJECT2: OBJECT2_NOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_NOUN_POSSESSIVE,
-            },
-            following: {
-              OBJECT2: OBJECT2_PRONOUN,
-              OBJECT2_POSSESSIVE: OBJECT2_PRONOUN_POSSESSIVE,
-            },
-          );
-          break;
-      }
-    }
-
-    assert(!result.contains(OBJECT2), "Still contains $OBJECT2: $result");
-
-    return result;
-  }
-
-  /// Applies the logic of needed for `<owner>` and `<owner's>` to work.
-  ///
-  /// While [resultSoFar] is the text (with stopwords) to work on, [str] is the
-  /// original text (with all the stopwords still in).
-  String _realizeOwner(
-      Entity owner,
-      String resultSoFar,
-      String str,
-      String OWNER_OR_OBJECT_OWNER,
-      String OWNER_OR_OBJECT_OWNER_POSSESSIVE,
-      String OWNER_OR_OBJECT_OWNER_PRONOUN,
-      String OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE,
-      int reportTime) {
-    var result = resultSoFar;
-    if (owner != null) {
-      if (owner.isPlayer) {
-        result = result.replaceAll(OWNER_OR_OBJECT_OWNER, Pronoun.I.accusative);
-        result = result.replaceAll(
-            OWNER_OR_OBJECT_OWNER_POSSESSIVE, Pronoun.I.genitive);
-      } else {
-        result = addParticleToFirstOccurrence(
-            result, OWNER_OR_OBJECT_OWNER, owner, null, reportTime);
-        result = result.replaceAll(OWNER_OR_OBJECT_OWNER, owner.name);
-      }
-      result = result.replaceAll(
-          OWNER_OR_OBJECT_OWNER_PRONOUN, owner.pronoun.nominative);
-      if (str.contains(RegExp("$OWNER_OR_OBJECT_OWNER.+"
-          "$OWNER_OR_OBJECT_OWNER_POSSESSIVE"))) {
-        // "the ship and her gun"
-        result = result.replaceAll(
-            OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner.pronoun.genitive);
-      }
-      result = addParticleToFirstOccurrence(
-          result, OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner, null, reportTime);
-      result = result.replaceFirst(
-          OWNER_OR_OBJECT_OWNER_POSSESSIVE, "${owner.name}'s");
-      result = result.replaceAll(
-          OWNER_OR_OBJECT_OWNER_POSSESSIVE, owner.pronoun.genitive);
-      result = result.replaceAll(
-          OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE, owner.pronoun.genitive);
-    } else {
-      // owner == null
-      // Get rid of <owner's> and <owner> when none is set up.
-      result = result.replaceAll(OWNER_OR_OBJECT_OWNER, "");
-      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_POSSESSIVE, "");
-      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN, "");
-      result = result.replaceAll(OWNER_OR_OBJECT_OWNER_PRONOUN_POSSESSIVE, "");
-    }
     return result;
   }
 
@@ -1386,11 +1128,6 @@ class Storyline {
   /// For example, `<subject>` becomes `the goblin` or `she`.
   String _realizeStopwords(String str, Report report) {
     Entity subject = report.subject;
-    Entity object = report.object;
-    Entity object2 = report.object2;
-    Entity owner = report.owner;
-    Entity objectOwner = report.objectOwner;
-
     String result = str;
 
     assert(!str.contains("<is>n't"), "Please use <isn't> instead.");
@@ -1433,175 +1170,85 @@ class Storyline {
     }
 
     // Replaces stopwords for objects (but not possessive stopwords yet).
-    void substituteObject(
-      Entity object,
-      String X,
-      String X_NOUN,
-      String X_NOUN_POSSESSIVE,
-      String X_POSSESSIVE,
-      String X_PRONOUN,
-      String X_PRONOUN_SELF,
-      String X_PRONOUN_POSSESSIVE,
-      String X_PRONOUN_ACCUSATIVE,
-      String X_NOUN_WITH_ADJECTIVE,
-      String X_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-      String X_ADJECTIVE_ONE,
-      String X_ADJECTIVE_ONE_POSSESSIVE,
-    ) {
+    void substituteForType(ComplementType x) {
       assert(
-          !result.contains(X),
-          "By this time, $X should have been substituted "
+          !result.contains(x.generic),
+          "By this time, ${x.generic} should have been substituted "
           "by alternatives in $result.");
       assert(
-          !result.contains(X_POSSESSIVE),
-          "By this time, $X_POSSESSIVE should have been substituted "
+          !result.contains(x.genericPossessive),
+          "By this time, ${x.genericPossessive} should have been substituted "
           "by alternatives in $result.");
+
+      final object = report.getEntityByType(x);
+
+      if (object == null) return;
 
       if (object.nameIsProperNoun) {
         // Disallow "you unleash your Buster".
         // We must do this before we auto-change <OBJECT> to object.name below.
-        result = result.replaceAll("$SUBJECT_POSSESSIVE $X_NOUN", X_NOUN);
-        result =
-            result.replaceAll("$SUBJECT_PRONOUN_POSSESSIVE $X_NOUN", X_NOUN);
+        result = result.replaceAll(
+            "${ComplementType.SUBJECT.genericPossessive} ${x.noun}", x.noun);
+        result = result.replaceAll(
+            "${ComplementType.SUBJECT.pronounPossessive} ${x.noun}", x.noun);
       }
 
-      result = addParticleToFirstOccurrence(
-          result, X_NOUN, object, objectOwner, report.time);
-      result = result.replaceFirst(X_NOUN, object.name);
+      result = result.replaceFirst(x.noun, object.name);
 
       // Solve particles for object that needs an adjective.
-      result = addParticleToFirstOccurrence(
-          result, X_NOUN_WITH_ADJECTIVE, object, objectOwner, report.time);
       result = result.replaceFirst(
-          X_NOUN_WITH_ADJECTIVE, '${object.adjective} ${object.name}');
+          x.nounWithAdjective, '${object.adjective} ${object.name}');
 
       // Replace the rest.
-      result = result.replaceAll(X_NOUN, object.pronoun.accusative);
-      result = result.replaceAll(X_PRONOUN, object.pronoun.accusative);
+      result = result.replaceAll(x.noun, object.pronoun.accusative);
+      result = result.replaceAll(x.pronoun, object.pronoun.accusative);
       result =
-          result.replaceAll(X_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
-      result = result.replaceAll(X_PRONOUN_SELF, object.pronoun.self);
-      result =
-          result.replaceAll(X_ADJECTIVE_ONE, "the ${object.adjective} one");
+          result.replaceAll(x.pronounAccusative, object.pronoun.accusative);
+      result = result.replaceAll(x.pronounSelf, object.pronoun.self);
+      result = result.replaceAll(x.adjectiveOne, "the ${object.adjective} one");
 
-      result = result.replaceAll(X_NOUN_POSSESSIVE, "${object.name}'s");
-      result = result.replaceAll(X_NOUN_WITH_ADJECTIVE_POSSESSIVE,
+      result = result.replaceAll(x.nounPossessive, "${object.name}'s");
+      result = result.replaceAll(x.nounWithAdjectivePossessive,
           "${object.adjective} ${object.name}'s");
-      result = result.replaceAll(X_PRONOUN_POSSESSIVE, object.pronoun.genitive);
+      result = result.replaceAll(x.pronounPossessive, object.pronoun.genitive);
       result = result.replaceAll(
-          X_ADJECTIVE_ONE_POSSESSIVE, "the ${object.adjective} one's");
+          x.adjectiveOnePossessive, "the ${object.adjective} one's");
     }
 
-    if (subject != null) {
-      substituteObject(
-        subject,
-        SUBJECT,
-        SUBJECT_NOUN,
-        SUBJECT_NOUN_POSSESSIVE,
-        SUBJECT_POSSESSIVE,
-        SUBJECT_PRONOUN,
-        SUBJECT_PRONOUN_SELF,
-        SUBJECT_PRONOUN_POSSESSIVE,
-        SUBJECT_PRONOUN_ACCUSATIVE,
-        SUBJECT_NOUN_WITH_ADJECTIVE,
-        SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-        SUBJECT_ADJECTIVE_ONE,
-        SUBJECT_ADJECTIVE_ONE_POSSESSIVE,
-      );
-    }
-
-    if (object != null) {
-      substituteObject(
-        object,
-        OBJECT,
-        OBJECT_NOUN,
-        OBJECT_NOUN_POSSESSIVE,
-        OBJECT_POSSESSIVE,
-        OBJECT_PRONOUN,
-        OBJECT_PRONOUN_SELF,
-        OBJECT_PRONOUN_POSSESSIVE,
-        OBJECT_PRONOUN_ACCUSATIVE,
-        OBJECT_NOUN_WITH_ADJECTIVE,
-        OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-        OBJECT_ADJECTIVE_ONE,
-        OBJECT_ADJECTIVE_ONE_POSSESSIVE,
-      );
-    }
-
-    if (object2 != null) {
-      substituteObject(
-        object2,
-        OBJECT2,
-        OBJECT2_NOUN,
-        OBJECT2_NOUN_POSSESSIVE,
-        OBJECT2_POSSESSIVE,
-        OBJECT2_PRONOUN,
-        OBJECT2_PRONOUN_SELF,
-        OBJECT2_PRONOUN_POSSESSIVE,
-        OBJECT2_PRONOUN_ACCUSATIVE,
-        OBJECT2_NOUN_WITH_ADJECTIVE,
-        OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-        OBJECT2_ADJECTIVE_ONE,
-        OBJECT2_ADJECTIVE_ONE_POSSESSIVE,
-      );
-    }
+    substituteForType(ComplementType.SUBJECT);
+    substituteForType(ComplementType.OBJECT);
+    substituteForType(ComplementType.OBJECT2);
+    substituteForType(ComplementType.OWNER);
+    substituteForType(ComplementType.OBJECT_OWNER);
 
     // Second pass after [substituteObject], now with possessives.
     // We need to do this in two parts because otherwise the
     // "<object's> <object2>" pairs will get realized too soon, which breaks
     // the logic in [addParticleToFirstOccurrence] that prevents sentences
     // like "his the left hand".
-    void substituteObjectPossessive(
-        Entity object,
-        String X_POSSESSIVE,
-        String X_PRONOUN_NOMINATIVE,
-        String X_PRONOUN_ACCUSATIVE,
-        String X_PRONOUN_POSSESSIVE) {
-      result = addParticleToFirstOccurrence(
-          result, X_POSSESSIVE, object, objectOwner, report.time);
-      result = result.replaceFirst(X_POSSESSIVE, "${object.name}'s");
-      result = result.replaceAll(X_POSSESSIVE, object.pronoun.genitive);
-      result = result.replaceAll(X_PRONOUN_POSSESSIVE, object.pronoun.genitive);
+    void substituteObjectPossessive(ComplementType x) {
+      final object = report.getEntityByType(x);
+
+      if (object == null) return;
+
+      result = result.replaceFirst(x.genericPossessive, "${object.name}'s");
+      result = result.replaceAll(x.genericPossessive, object.pronoun.genitive);
+      result = result.replaceAll(x.pronounPossessive, object.pronoun.genitive);
       result =
-          result.replaceAll(X_PRONOUN_ACCUSATIVE, object.pronoun.accusative);
+          result.replaceAll(x.pronounAccusative, object.pronoun.accusative);
       result =
-          result.replaceAll(X_PRONOUN_NOMINATIVE, object.pronoun.nominative);
+          result.replaceAll(x.pronounNominative, object.pronoun.nominative);
     }
 
-    if (object != null) {
-      substituteObjectPossessive(
-          object,
-          OBJECT_POSSESSIVE,
-          OBJECT_PRONOUN_NOMINATIVE,
-          OBJECT_PRONOUN_ACCUSATIVE,
-          OBJECT_PRONOUN_POSSESSIVE);
-    }
-
-    if (object2 != null) {
-      substituteObjectPossessive(
-          object2,
-          OBJECT2_POSSESSIVE,
-          OBJECT2_PRONOUN_NOMINATIVE,
-          OBJECT2_PRONOUN_ACCUSATIVE,
-          OBJECT2_PRONOUN_POSSESSIVE);
-    }
+    substituteObjectPossessive(ComplementType.OBJECT);
+    substituteObjectPossessive(ComplementType.OBJECT2);
+    substituteObjectPossessive(ComplementType.OWNER);
+    substituteObjectPossessive(ComplementType.OBJECT_OWNER);
 
     if (subject != null) {
       result = result.replaceAll(
-          SUBJECT_PRONOUN_POSSESSIVE, subject.pronoun.genitive);
+          ComplementType.SUBJECT.pronounPossessive, subject.pronoun.genitive);
     }
-
-    result = _realizeOwner(owner, result, str, OWNER, OWNER_POSSESSIVE,
-        OWNER_PRONOUN, OWNER_PRONOUN_POSSESSIVE, report.time);
-    result = _realizeOwner(
-        objectOwner,
-        result,
-        str,
-        OBJECT_OWNER,
-        OBJECT_OWNER_POSSESSIVE,
-        OBJECT_OWNER_PRONOUN,
-        OBJECT_OWNER_PRONOUN_POSSESSIVE,
-        report.time);
 
     return result;
   }
@@ -1687,7 +1334,7 @@ class Storyline {
     // Searches in [result] for [stopword]. Adds article if applicable.
     void maybeAddArticleToOne(Entity entity, String stopword) {
       result = result.replaceAllMapped(stopword, (m) {
-        for (final possessive in _allPossessives) {
+        for (final possessive in ComplementType.allPossessives) {
           final possessiveIndex = result.indexOf(possessive);
           if (possessiveIndex == -1) continue;
           if (possessiveIndex == m.start - possessive.length - 1) {
@@ -1723,6 +1370,7 @@ class Storyline {
     }
 
     // Only nouns need particles (i.e. not pronouns or "the other nouns").
+    // TODO: use ComplementType
     maybeAddArticleToAny(report.subject, [
       SUBJECT_NOUN,
       SUBJECT_NOUN_POSSESSIVE,

@@ -154,27 +154,6 @@ void main() {
     expect(storyline.realizeAsString().indexOf("it loses it"), -1);
   });
 
-  test("ignore <owner's> when owner is null", () {
-    var storyline = Storyline();
-    var player = _createPlayer("Filip");
-    var gun =
-        Entity(name: "front laser", team: playerTeam, pronoun: Pronoun.IT);
-
-    storyline.add("<subject> start<s> programming <owner's> <object> to fire",
-        subject: player, object: gun);
-    expect(storyline.realizeAsString(), isNot(matches("<owner's>")));
-  }, skip: "owner");
-
-  test(
-      "ignoring <owner's> at start of sentence doesn't screw up capitalization",
-      () {
-    var storyline = Storyline();
-    var hull = Entity(name: "hull", team: playerTeam, pronoun: Pronoun.IT);
-
-    storyline.add("<owner's> <subject> explode<s>", subject: hull);
-    expect(storyline.realizeAsString(), matches("The hull.+"));
-  }, skip: "owner");
-
   test("don't substitute pronoun when it was used in the same form", () {
     var storyline = Storyline();
     var player = _createPlayer("Filip");
@@ -208,7 +187,7 @@ void main() {
         subject: part, owner: ship);
     final result = storyline.realizeAsString();
     expect(result, isNot(contains("Haijing's it")));
-  }, skip: "owner");
+  });
 
   test("put 'and' between two sentences in a complex sentence", () {
     var storyline = Storyline();
@@ -259,24 +238,6 @@ void main() {
     expect(storyline.realizeAsString(),
         matches("The enemy's ship aims her guns at me.+ my gun is faster."));
   });
-
-  test("possesive particles works even with <objectOwner's> <object>", () {
-    var storyline = Storyline();
-    var player = _createPlayer("Filip");
-    var gun = Entity(name: "gun", team: playerTeam, pronoun: Pronoun.IT);
-    var enemy =
-        Entity(name: "enemy", team: defaultEnemyTeam, pronoun: Pronoun.HE);
-    storyline.add(
-        "<owner's> <subject> <is> pointed at <objectOwner's> "
-        "<object>",
-        owner: player,
-        subject: gun,
-        object: enemy,
-        time: 1);
-    storyline.add("<subject> fire<s>", subject: gun, time: 2);
-    expect(storyline.realizeAsString(),
-        matches("My gun is pointed at *the enemy.+t fires."));
-  }, skip: "owner");
 
   test("we don't show 'my the sword' even if Randomly is involved", () {
     var storyline = Storyline();

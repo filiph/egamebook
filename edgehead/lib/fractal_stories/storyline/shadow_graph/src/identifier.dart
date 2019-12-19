@@ -110,9 +110,18 @@ class ReportIdentifiers {
 
   final Set<IdentifierLevel> _object2Range = IdentifierLevel.values.toSet();
 
+  final Set<IdentifierLevel> _ownerRange = IdentifierLevel.values.toSet();
+
+  final Set<IdentifierLevel> _objectOwnerRange = IdentifierLevel.values.toSet();
+
   IdentifierLevel get object => _ensureSingle(_objectRange, "_objectRange");
 
   IdentifierLevel get object2 => _ensureSingle(_object2Range, "_object2Range");
+
+  IdentifierLevel get objectOwner =>
+      _ensureSingle(_objectOwnerRange, "_objectOwnerRange");
+
+  IdentifierLevel get owner => _ensureSingle(_ownerRange, "_ownerRange");
 
   IdentifierLevel get subject => _ensureSingle(_subjectRange, "_subjectRange");
 
@@ -131,6 +140,30 @@ class ReportIdentifiers {
     }
     if (report.object2 != null) {
       callback(report.object2, _object2Range);
+    }
+    if (report.owner != null) {
+      callback(report.owner, _ownerRange);
+    }
+    if (report.objectOwner != null) {
+      callback(report.objectOwner, _objectOwnerRange);
+    }
+  }
+
+  /// Given [type], return the [IdentifierLevel] assigned to it.
+  IdentifierLevel getByType(ComplementType type) {
+    switch (type) {
+      case ComplementType.SUBJECT:
+        return subject;
+      case ComplementType.OBJECT:
+        return object;
+      case ComplementType.OBJECT2:
+        return object2;
+      case ComplementType.OWNER:
+        return owner;
+      case ComplementType.OBJECT_OWNER:
+        return objectOwner;
+      default:
+        throw UnimplementedError('No entity for $type');
     }
   }
 

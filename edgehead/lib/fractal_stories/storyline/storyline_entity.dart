@@ -121,9 +121,9 @@ mixin EntityBehavior {
       bool replacesThread = false}) {
     storyline.add(text,
         subject: this as Entity,
-        owner: owner,
         object: object,
         object2: object2,
+        owner: owner,
         objectOwner: objectOwner,
         positive: positive,
         negative: negative,
