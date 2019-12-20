@@ -1129,6 +1129,23 @@ void main() {
     expect(result, contains("the goblin's neck"));
   });
 
+  test("a sentence with clashing name throws", () {
+    final sword = Entity(name: "sword");
+    final rustySword = Entity(name: "sword", adjective: "rusty");
+    final aren = _createPlayer("Aren");
+    final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
+
+    // This second name has an adjective, but the first one doesn't.
+    // There is no way to resolve this sentence.
+    final storyline = Storyline();
+    storyline.add("<subject> throw<s> <object2> at <object>",
+        subject: aren, object: goblin, object2: sword);
+    storyline.add("<subject> deflect<s> it with <subject's> <object>",
+        subject: goblin, object: rustySword);
+
+    expect(storyline.realizeAsString, throwsA(anything));
+  });
+
   test("using object2 doesn't report 'it' without explaining what it is", () {
     // I have seen the following during a playthrough. It turned out to be
     // a case of the goblin and his spear having the same id. Still, it's safer
