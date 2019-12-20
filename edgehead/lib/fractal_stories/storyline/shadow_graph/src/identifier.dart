@@ -8,7 +8,6 @@ part of storyline.shadow_graph;
 const List<IdentifierLevel> orderedQualificationLevels = [
   IdentifierLevel.properNoun,
   IdentifierLevel.adjectiveNoun,
-  IdentifierLevel.theOtherNoun,
   IdentifierLevel.noun,
   IdentifierLevel.adjectiveOne,
   IdentifierLevel.pronoun,
@@ -54,10 +53,6 @@ class Identifier {
       : level = IdentifierLevel.properNoun,
         pronoun = null;
 
-  const Identifier.theOtherNoun(this.string)
-      : level = IdentifierLevel.theOtherNoun,
-        pronoun = null;
-
   const Identifier._()
       : level = null,
         pronoun = null,
@@ -94,8 +89,6 @@ enum IdentifierLevel {
   adjectiveOne,
 
   noun,
-
-  theOtherNoun,
 
   adjectiveNoun,
 

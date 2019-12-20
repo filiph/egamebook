@@ -33,7 +33,6 @@ class ComplementType {
             complement.nounPossessive,
             complement.pronounPossessive,
             complement.adjectiveOnePossessive,
-            complement.theOtherNounPossessive,
             complement.nounWithAdjectivePossessive,
           ])
       .toList(growable: false);
@@ -155,7 +154,14 @@ class ComplementType {
   final String pronounNominative;
   final String pronounPossessive;
   final String pronounSelf;
+
+  /// "The other noun" is currently unused.
+  @Deprecated('Do not use, or make sure we actually solve for this.')
   final String theOtherNoun;
+
+  /// "The other noun's" is currently unused.
+  @Deprecated('Do not use, or make sure we actually solve for this. '
+      "If you start using it, don't forget to add it to allPossessives.")
   final String theOtherNounPossessive;
 
   const ComplementType._({

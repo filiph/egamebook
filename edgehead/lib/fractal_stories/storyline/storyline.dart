@@ -1065,19 +1065,6 @@ class Storyline {
             },
           );
           break;
-        case IdentifierLevel.theOtherNoun:
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              complement.generic: complement.theOtherNoun,
-              complement.genericPossessive: complement.theOtherNounPossessive,
-            },
-            following: {
-              complement.generic: complement.pronoun,
-              complement.genericPossessive: complement.pronounPossessive,
-            },
-          );
-          break;
         case IdentifierLevel.adjectiveNoun:
           result = _replaceFirstThenAll(
             result,

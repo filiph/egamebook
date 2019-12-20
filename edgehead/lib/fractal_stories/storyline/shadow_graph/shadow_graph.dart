@@ -514,8 +514,6 @@ class ShadowGraph {
       yield IdentifierLevel.pronoun;
     }
 
-    // skipping "theOther" - don't know
-
     if (entity.adjective != null &&
         others.any((e) => e.adjective == entity.adjective)) {
       yield IdentifierLevel.adjectiveOne;
@@ -524,8 +522,6 @@ class ShadowGraph {
     if (!entity.isCommon && others.any((e) => e.name == entity.name)) {
       yield IdentifierLevel.noun;
     }
-
-    // skipping theOtherNoun - don't know
 
     if (entity.adjective != null &&
         others.any((e) =>
