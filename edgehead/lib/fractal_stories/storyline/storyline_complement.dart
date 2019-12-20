@@ -15,7 +15,7 @@ part of storyline;
 /// https://en.wikipedia.org/wiki/Complement_(linguistics).
 class ComplementType {
   /// Lists all the complement types.
-  static const _all = [
+  static const all = [
     SUBJECT,
     OBJECT,
     OBJECT2,
@@ -27,7 +27,7 @@ class ComplementType {
   ///
   /// Basically, this is all the `"<subject's>"` and `"<objectPronoun's>"` and
   /// others.
-  static final List<String> allPossessives = _all
+  static final List<String> allPossessives = all
       .expand<String>((complement) => [
             complement.genericPossessive,
             complement.nounPossessive,

@@ -269,23 +269,14 @@ class ShadowGraph {
   void _detectForcedPronouns(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      if (report.string.contains(Storyline.SUBJECT_PRONOUN) &&
-          !report.string.contains(Storyline.SUBJECT)) {
-        _reportIdentifiers[i]._subjectRange
-          ..clear()
-          ..add(IdentifierLevel.pronoun);
-      }
-      if (report.string.contains(Storyline.OBJECT_PRONOUN) &&
-          !report.string.contains(Storyline.OBJECT)) {
-        _reportIdentifiers[i]._objectRange
-          ..clear()
-          ..add(IdentifierLevel.pronoun);
-      }
-      if (report.string.contains(Storyline.OBJECT2_PRONOUN) &&
-          !report.string.contains(Storyline.OBJECT2)) {
-        _reportIdentifiers[i]._object2Range
-          ..clear()
-          ..add(IdentifierLevel.pronoun);
+
+      for (final complement in ComplementType.all) {
+        if (report.string.contains(complement.pronoun) &&
+            !report.string.contains(complement.generic)) {
+          _reportIdentifiers[i].getRangeByType(complement)
+            ..clear()
+            ..add(IdentifierLevel.pronoun);
+        }
       }
     }
   }

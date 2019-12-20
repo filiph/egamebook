@@ -160,6 +160,23 @@ class ReportIdentifiers {
     }
   }
 
+  Set<IdentifierLevel> getRangeByType(ComplementType type) {
+    switch (type) {
+      case ComplementType.SUBJECT:
+        return _subjectRange;
+      case ComplementType.OBJECT:
+        return _objectRange;
+      case ComplementType.OBJECT2:
+        return _object2Range;
+      case ComplementType.OWNER:
+        return _ownerRange;
+      case ComplementType.OBJECT_OWNER:
+        return _objectOwnerRange;
+      default:
+        throw UnimplementedError('No entity for $type');
+    }
+  }
+
   @override
   String toString() => "$runtimeType<subject=$_subjectRange, "
       "object=$_objectRange, object2=$_object2Range>";
