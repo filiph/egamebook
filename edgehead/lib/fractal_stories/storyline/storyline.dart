@@ -181,59 +181,20 @@ class Report {
 class Storyline {
   static const String SUBJECT = "<subject>";
   static const String SUBJECT_PRONOUN = "<subjectPronoun>";
-  static const String SUBJECT_ADJECTIVE_ONE = "<subjectAdjectiveOne>";
-  static const String SUBJECT_PRONOUN_ACCUSATIVE = "<subjectPronounAccusative>";
-  static const String SUBJECT_PRONOUN_SELF = "<subjectPronounSelf>";
   static const String SUBJECT_NOUN = "<subjectNoun>";
-  static const String SUBJECT_THE_OTHER_NOUN = "<subjectTheOtherNoun>";
   static const String SUBJECT_POSSESSIVE = "<subject's>";
   static const String SUBJECT_PRONOUN_POSSESSIVE = "<subjectPronoun's>";
   static const String SUBJECT_NOUN_POSSESSIVE = "<subjectNoun's>";
-  static const String SUBJECT_THE_OTHER_NOUN_POSSESSIVE =
-      "<subjectTheOtherNoun's>";
-  static const String SUBJECT_ADJECTIVE_ONE_POSSESSIVE =
-      "<subjectAdjectiveOne's>";
 
-  static const String OWNER = "<owner>";
-  static const String OWNER_POSSESSIVE = "<owner's>";
-  static const String OBJECT_OWNER = "<objectOwner>";
-  static const String OBJECT_OWNER_POSSESSIVE = "<objectOwner's>";
   static const String OBJECT = "<object>";
-  static const String OBJECT_POSSESSIVE = "<object's>";
   static const String OBJECT_PRONOUN = "<objectPronoun>";
-  static const String OBJECT_PRONOUN_SELF = "<objectPronounSelf>";
   static const String OBJECT_NOUN = "<objectNoun>";
-  static const String OBJECT_ADJECTIVE_ONE = "<objectAdjectiveOne>";
-  static const String OBJECT_PRONOUN_NOMINATIVE = "<objectPronounNominative>";
-  static const String OBJECT_PRONOUN_ACCUSATIVE = "<objectPronounAccusative>";
-  static const String OBJECT_THE_OTHER_NOUN = "<objectTheOtherNoun>";
   static const String OBJECT_NOUN_POSSESSIVE = "<objectNoun's>";
-  static const String OBJECT_PRONOUN_POSSESSIVE = "<objectPronoun's>";
-  static const String OBJECT_ADJECTIVE_ONE_POSSESSIVE =
-      "<objectAdjectiveOne's>";
-  static const String OBJECT_THE_OTHER_NOUN_POSSESSIVE =
-      "<objectTheOtherNoun's>";
-  static const String OWNER_PRONOUN = "<ownerPronoun>";
-  static const String OWNER_PRONOUN_POSSESSIVE = "<ownerPronoun's>";
-  static const String OBJECT_OWNER_PRONOUN = "<objectOwnerPronoun>";
-  static const String OBJECT_OWNER_PRONOUN_POSSESSIVE =
-      "<objectOwnerPronoun's>";
   static const String OBJECT2 = "<object2>";
   static const String OBJECT2_NOUN = "<object2Noun>";
-  static const String OBJECT2_ADJECTIVE_ONE = "<object2AdjectiveOne>";
   static const String OBJECT2_PRONOUN = "<object2Pronoun>";
-  static const String OBJECT2_PRONOUN_SELF = "<object2PronounSelf>";
-  static const String OBJECT2_PRONOUN_NOMINATIVE = "<object2PronounNominative>";
-  static const String OBJECT2_PRONOUN_ACCUSATIVE = "<object2PronounAccusative>";
-  static const String OBJECT2_THE_OTHER_NOUN = "<object2TheOtherNoun>";
-  static const String OBJECT2_POSSESSIVE = "<object2's>";
   static const String OBJECT2_NOUN_POSSESSIVE = "<object2Noun's>";
-  static const String OBJECT2_PRONOUN_POSSESSIVE = "<object2Pronoun's>";
-  static const String OBJECT2_ADJECTIVE_ONE_POSSESSIVE =
-      "<objectAdjectiveOne's>";
-  static const String OBJECT2_THE_OTHER_NOUN_POSSESSIVE =
-      "<objectTheOtherNoun's>";
-  static const String ACTION = "<action>";
+
   static const String VERB_S = "<s>";
 
   static const String SUBJECT_NOUN_WITH_ADJECTIVE =
@@ -267,8 +228,6 @@ class Storyline {
 
   /// Matches occurrences of `<object` that aren't `<object2`.
   static final RegExp OBJECT_NOT_OBJECT2_REGEXP = RegExp(r'''<object[^2]''');
-
-  static const int SHORT_TIME = 4;
 
   static const int VERY_LONG_TIME = 1000;
 
