@@ -22,6 +22,11 @@ Future<void> main(List<String> args) async {
         defaultsTo: false,
         negatable: false,
         help: 'Autoselect options for the player.')
+    ..addFlag('forever',
+        defaultsTo: false,
+        negatable: false,
+        help: "Play the game in an infinite loop. Handy if you're trying to "
+            'find a bug. Assumes --automated.')
     ..addFlag('log',
         defaultsTo: false,
         negatable: false,
@@ -58,6 +63,7 @@ Future<void> main(List<String> args) async {
   }
 
   final automated = results['automated'] as bool;
+  final forever = results['forever'] as bool;
   final logged = results['log'] as bool;
   RegExp actionPattern;
   if (results.wasParsed('action')) {
@@ -71,17 +77,29 @@ Future<void> main(List<String> args) async {
   if (logged) {
     file = File("edgehead.log");
   }
-  final runner = CliRunner(automated, automated, logged ? file : null,
-      logLevel: Level.FINE, actionPattern: actionPattern);
-  await runner.initialize(EdgeheadGame(
-    actionPattern: actionPattern,
-    saveGameSerialized: savegame,
-  ));
-  try {
-    runner.startBook();
-    await runner.bookEnd;
-  } finally {
-    runner.close();
+
+  Future<void> play() async {
+    final runner = CliRunner(automated, automated, logged ? file : null,
+        logLevel: Level.FINE, actionPattern: actionPattern);
+    await runner.initialize(EdgeheadGame(
+      actionPattern: actionPattern,
+      saveGameSerialized: savegame,
+    ));
+    try {
+      runner.startBook();
+      await runner.bookEnd;
+    } finally {
+      runner.close();
+    }
+  }
+
+  if (forever) {
+    // ignore: literal_only_boolean_expressions
+    while (true) {
+      await play();
+    }
+  } else {
+    await play();
   }
 }
 
