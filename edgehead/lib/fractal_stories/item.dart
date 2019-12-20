@@ -114,4 +114,9 @@ abstract class Item extends Object
     }
     return score;
   }
+
+  @override
+  String toString() =>
+      'Item<$name, $id, adj=$adjective,${isCommon ? ' common,' : ''} '
+      'dmg=$damageCapability>';
 }

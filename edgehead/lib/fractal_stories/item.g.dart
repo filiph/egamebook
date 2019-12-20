@@ -140,17 +140,6 @@ class _$Item extends Item {
             name.hashCode),
         nameIsProperNoun.hashCode));
   }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper('Item')
-          ..add('adjective', adjective)
-          ..add('damageCapability', damageCapability)
-          ..add('id', id)
-          ..add('name', name)
-          ..add('nameIsProperNoun', nameIsProperNoun))
-        .toString();
-  }
 }
 
 class ItemBuilder implements Builder<Item, ItemBuilder> {

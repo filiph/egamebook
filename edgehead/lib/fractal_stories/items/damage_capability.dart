@@ -56,20 +56,25 @@ abstract class DamageCapability
 
   bool get isSlashing => slashingDamage > 0;
 
-  bool get isThrusting => thrustingDamage > 0;
-
   /// Tearing damage is something done by teeth or claws. It's different
   /// from slashing damage because it _chomps_ on its target. It tears
   /// skin and muscle.
   bool get isTearing => tearingDamage > 0;
 
+  bool get isThrusting => thrustingDamage > 0;
+
   int get length;
 
   int get slashingDamage;
 
-  int get thrustingDamage;
-
   int get tearingDamage;
 
+  int get thrustingDamage;
+
   WeaponType get type;
+
+  @override
+  String toString() => 'DamageCapability<${type.name}, len=$length, '
+      'blunt=$bluntDamage, slash=$slashingDamage, tear=$tearingDamage, '
+      'thrust=$thrustingDamage>';
 }
