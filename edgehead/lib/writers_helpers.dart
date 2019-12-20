@@ -456,7 +456,9 @@ FightSituation generateRandomEncounter(ActionContext c,
     case 1:
     case 2:
       final name = w.randomBool() ? "sword" : "scimitar";
-      final sword = Item.weapon(w.randomInt(), WeaponType.sword, name: name);
+      final adjective = w.randomBool() ? "shiny" : "family";
+      final sword = Item.weapon(w.randomInt(), WeaponType.sword,
+          name: name, adjective: adjective);
       w.updateActorById(
           playerId, (b) => b.inventory.equip(sword, initialPlayer.anatomy));
       initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
@@ -489,8 +491,10 @@ FightSituation generateRandomEncounter(ActionContext c,
 FightSituation generateTestFightWithOrcAndGoblin(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
-  final orcsSword = Item.weapon(898921730, WeaponType.sword);
-  final playersSword = Item.weapon(898921731, WeaponType.sword);
+  final orcsSword = Item.weapon(898921730, WeaponType.sword,
+      name: 'sword', adjective: 'orcish');
+  final playersSword =
+      Item.weapon(898921731, WeaponType.sword, adjective: 'heirloom');
   final orc = Actor.initialized(agruthId, "orc",
       pronoun: Pronoun.HE,
       constitution: 2,
