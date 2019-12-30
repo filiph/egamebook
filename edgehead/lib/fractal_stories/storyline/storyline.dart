@@ -179,36 +179,7 @@ class Report {
 
 /// Class for reporting a sequence of events in 'natural' language.
 class Storyline {
-  static const String SUBJECT = "<subject>";
-  static const String SUBJECT_PRONOUN = "<subjectPronoun>";
-  static const String SUBJECT_NOUN = "<subjectNoun>";
-  static const String SUBJECT_POSSESSIVE = "<subject's>";
-  static const String SUBJECT_PRONOUN_POSSESSIVE = "<subjectPronoun's>";
-  static const String SUBJECT_NOUN_POSSESSIVE = "<subjectNoun's>";
-
-  static const String OBJECT = "<object>";
-  static const String OBJECT_PRONOUN = "<objectPronoun>";
-  static const String OBJECT_NOUN = "<objectNoun>";
-  static const String OBJECT_NOUN_POSSESSIVE = "<objectNoun's>";
-  static const String OBJECT2 = "<object2>";
-  static const String OBJECT2_NOUN = "<object2Noun>";
-  static const String OBJECT2_PRONOUN = "<object2Pronoun>";
-  static const String OBJECT2_NOUN_POSSESSIVE = "<object2Noun's>";
-
   static const String VERB_S = "<s>";
-
-  static const String SUBJECT_NOUN_WITH_ADJECTIVE =
-      "<subjectNounWithAdjective>";
-  static const String OBJECT_NOUN_WITH_ADJECTIVE = "<objectNounWithAdjective>";
-  static const String OBJECT2_NOUN_WITH_ADJECTIVE =
-      "<object2NounWithAdjective>";
-
-  static const String SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE =
-      "<subjectNounWithAdjective's>";
-  static const String OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE =
-      "<objectNounWithAdjective's>";
-  static const String OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE =
-      "<object2NounWithAdjective's>";
 
   /// e.g. in "goes"
   static const String VERB_ES = "<es>";
@@ -638,9 +609,12 @@ class Storyline {
       // ("He has his sword and his shield.")
       if (_reports[i].subject != null &&
           qualifications.subject == IdentifierLevel.omitted &&
-          (string(i - 1)?.startsWith("$SUBJECT $VERB_HAVE ") ?? false) &&
-          report.startsWith("$SUBJECT $VERB_HAVE ")) {
-        report = report.replaceFirst("$SUBJECT $VERB_HAVE ", "");
+          (string(i - 1)?.startsWith(
+                  "${ComplementType.SUBJECT.generic} $VERB_HAVE ") ??
+              false) &&
+          report.startsWith("${ComplementType.SUBJECT.generic} $VERB_HAVE ")) {
+        report = report.replaceFirst(
+            "${ComplementType.SUBJECT.generic} $VERB_HAVE ", "");
       }
 
       report = _modifyStopwords(report, _reports[i], qualifications);
@@ -894,34 +868,24 @@ class Storyline {
   String _preventPossessivesBeforeProperNouns(String string, Report report) {
     String result = string;
 
-    void maybeRemovePossessive(Entity entity, List<String> stopwords) {
+    void maybeRemovePossessive(Entity entity, ComplementType complement) {
       if (entity == null) return;
       if (!entity.nameIsProperNoun) return;
-      for (final stopword in stopwords) {
+      for (final stopword in [
+        complement.noun,
+        complement.nounPossessive,
+        complement.nounWithAdjective,
+        complement.nounWithAdjectivePossessive,
+      ]) {
         for (final possessive in ComplementType.allPossessives) {
           result = result.replaceAll("$possessive $stopword", stopword);
         }
       }
     }
 
-    maybeRemovePossessive(report.subject, [
-      SUBJECT_NOUN,
-      SUBJECT_NOUN_POSSESSIVE,
-      SUBJECT_NOUN_WITH_ADJECTIVE,
-      SUBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    ]);
-    maybeRemovePossessive(report.object, [
-      OBJECT_NOUN,
-      OBJECT_NOUN_POSSESSIVE,
-      OBJECT_NOUN_WITH_ADJECTIVE,
-      OBJECT_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    ]);
-    maybeRemovePossessive(report.object2, [
-      OBJECT2_NOUN,
-      OBJECT2_NOUN_POSSESSIVE,
-      OBJECT2_NOUN_WITH_ADJECTIVE,
-      OBJECT2_NOUN_WITH_ADJECTIVE_POSSESSIVE,
-    ]);
+    maybeRemovePossessive(report.subject, ComplementType.SUBJECT);
+    maybeRemovePossessive(report.object, ComplementType.OBJECT);
+    maybeRemovePossessive(report.object2, ComplementType.OBJECT2);
 
     return result;
   }
@@ -1081,9 +1045,10 @@ class Storyline {
     if (subject != null) {
       if (subject.isPlayer) {
         // don't talk like a robot: "player attack wolf" -> "you attack wolf"
-        result = result.replaceAll(SUBJECT, SUBJECT_PRONOUN);
-        result =
-            result.replaceAll(SUBJECT_POSSESSIVE, SUBJECT_PRONOUN_POSSESSIVE);
+        result = result.replaceAll(
+            ComplementType.SUBJECT.generic, ComplementType.SUBJECT.pronoun);
+        result = result.replaceAll(ComplementType.SUBJECT.genericPossessive,
+            ComplementType.SUBJECT.pronounPossessive);
       }
 
       if (subject.pronoun == Pronoun.I ||
@@ -1112,7 +1077,8 @@ class Storyline {
         result = result.replaceAll(VERB_HAVE, "has");
       }
 
-      result = result.replaceAll(SUBJECT_PRONOUN, subject.pronoun.nominative);
+      result = result.replaceAll(
+          ComplementType.SUBJECT.pronoun, subject.pronoun.nominative);
     }
 
     // Replaces stopwords for objects (but not possessive stopwords yet).
@@ -1272,8 +1238,8 @@ class Storyline {
 
   static final _vowelsRegExp = RegExp(r"[aeiouy]", caseSensitive: false);
 
-  /// Given [str] which still has stopwords (such as [Storyline.SUBJECT_NOUN])
-  /// in it, add particles where appropriate.
+  /// Given [str] which still has stopwords (such as
+  /// [ComplementType.SUBJECT.noun]) in it, add particles where appropriate.
   String _addParticles(String str, Report report) {
     String result = str;
 
