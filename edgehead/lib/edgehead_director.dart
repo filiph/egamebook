@@ -15,6 +15,21 @@ final _default = Rule(_id++, 0, false, (ApplicabilityContext c) {
 
 int _id = 100000;
 
+final _karlHeardFirstTime = Rule(_id++, 1, true, (ApplicabilityContext c) {
+  // Only heard from within the Pyramid.
+  return $(c).playerDistanceTo('gods_lair') < 45 &&
+      // Must be way below God's lair.
+      $(c).playerRoom.positionY > 50;
+}, (ActionContext c) {
+  final Storyline s = c.outputStoryline;
+  s.addParagraph();
+  s.add(
+      'Somewhere way above, something large groans. '
+      'The sound is guttural, low, as rolling thunder.',
+      wholeSentence: true);
+  c.outputWorld.recordCustom(evKarlHeardFirstTime);
+});
+
 final _leroyQuits = Rule(_id++, 2, false, (ApplicabilityContext c) {
   final leroy = c.world.getActorById(leroyId);
   if (!leroy.isAnimatedAndActive) return false;
@@ -53,6 +68,7 @@ Ruleset get edgeheadDirectorRuleset {
   return Ruleset.unordered([
     _playerHurt,
     _leroyQuits,
+    _karlHeardFirstTime,
     _default,
   ]);
 }

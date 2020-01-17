@@ -1,0 +1,9 @@
+// ---
+ROOM: $gods_lair
+
+FLAGS: $IDLE
+
+POS: 35, 42
+
+DESCRIPTION: 
+This is God's lair.

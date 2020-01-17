@@ -3331,6 +3331,14 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The Oracle is here.\n', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 15, positionY: 57);
+final Room godsLair = Room('gods_lair', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('This is God\'s lair.\n', wholeSentence: true);
+}, null, null, isIdle: true, positionX: 35, positionY: 42);
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
         (ActionContext c) {
@@ -4162,6 +4170,7 @@ final allRooms = <Room>[
   knightsHqMain,
   battlefield,
   oracleMain,
+  godsLair,
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
   start,

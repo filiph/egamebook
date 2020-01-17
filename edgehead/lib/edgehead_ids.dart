@@ -17,6 +17,8 @@ const evGoblinCampCleared = "evGoblinCampCleared";
 
 const evJisadSeesUndeadLeroy = "evJisadSeesUndeadLeroy";
 
+const evKarlHeardFirstTime = "evKarlHeardFirstTime";
+
 const kbBlindGuide = "kbBlindGuide";
 
 const kbGoblinCampSmoke = "kbGoblinCampSmoke";
