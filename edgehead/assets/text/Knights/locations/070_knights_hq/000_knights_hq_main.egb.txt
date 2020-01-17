@@ -14,6 +14,11 @@ COMMAND: Go to >> the Knights HQ
 DESCRIPTION: $NONE
 
 // ---
+APPROACH: $knights_hq_main FROM $elevator_12
+COMMAND: Go to >> the Knights HQ
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $knights_hq_main
 
 FLAGS: $IDLE

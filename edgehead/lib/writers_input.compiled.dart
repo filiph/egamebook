@@ -2636,6 +2636,16 @@ final Approach knightsHqMainFromBattlefield =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Approach knightsHqMainFromElevator12 =
+    Approach('elevator_12', 'knights_hq_main', 'Go to >> the Knights HQ',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Approach knightsHqMainFromOracleMain =
     Approach('oracle_main', 'knights_hq_main', 'Go to >> the Knights HQ',
         (ActionContext c) {
@@ -4447,6 +4457,7 @@ final allApproaches = <Approach>[
   elevator12FromElevator28,
   elevator12FromKnightsHqMain,
   knightsHqMainFromBattlefield,
+  knightsHqMainFromElevator12,
   knightsHqMainFromOracleMain,
   knightsHqMainFromStartTesterBuild,
   endOfRoamFromKnightsHqMain,
