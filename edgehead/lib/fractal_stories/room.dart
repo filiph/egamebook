@@ -41,10 +41,10 @@ typedef RoomDescriber = void Function(ActionContext context);
 // TODO: add noItemsInRoom and noMonstersInRoom to be used instead of `null`
 //       similar to emptyRoomDescription
 
-/// Rooms are mostly closed-off places that don't allow free roaming.
+/// Rooms are places where the player and other NPCs can explore.
 ///
-/// In that, they differ from [Location], which is a place on a map that
-/// allows the player to go to any other location on that map.
+/// They can sometimes be metaphorical (like "memory of mother")
+/// but it's best if they are concrete, physical places.
 @immutable
 class Room {
   final String name;
@@ -118,6 +118,12 @@ class Room {
   /// stands in the rubble" or "there is no one among the pillars".
   final String whereDescription;
 
+  /// The physical coordinate of the room on the X axis.
+  final int positionX;
+
+  /// The physical coordinate of the room on the Y axis.
+  final int positionY;
+
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
   const Room(
     this.name,
@@ -132,6 +138,8 @@ class Room {
     this.whereDescription,
     this.isIdle = false,
     this.isSynthetic = false,
+    this.positionX,
+    this.positionY,
   })  : assert(name != null),
         assert(
             describe != null || firstDescribe != null,

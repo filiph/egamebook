@@ -80,6 +80,14 @@ class GeneratedRoom extends GeneratedGameObject {
       }
     }
 
+    if (_map.containsKey('POS')) {
+      final posStrings = _map['POS'].split(',').map((s) => s.trim()).toList();
+      assert(posStrings.length == 2,
+          'Position of a room must be given as "X, Y" (e.g. POS: 5, 7).');
+      namedArguments['positionX'] = literalNum(int.parse(posStrings[0]));
+      namedArguments['positionY'] = literalNum(int.parse(posStrings[1]));
+    }
+
     if (_map.containsKey('AFTER_MONSTERS_CLEARED')) {
       namedArguments['afterMonstersCleared'] =
           createDescriber(_map['AFTER_MONSTERS_CLEARED']);
