@@ -22,12 +22,9 @@ FIRST_DESCRIPTION:
 (To be done: actual battle. Assume you won.)
 
 [[CODE]]
-w.recordCustom(evGoblinCampCleared);
+$(c).markHappened(evGoblinCampCleared);
 [[ENDCODE]]
+
 
 DESCRIPTION:
 The goblin camp is deserted.
-
-[[CODE]]
-w.recordCustom(evGoblinCampCleared);
-[[ENDCODE]]

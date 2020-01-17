@@ -1,0 +1,22 @@
+// ---
+APPROACH: $elevator_28 FROM $elevator_12
+COMMAND: Go >> climb up
+DESCRIPTION: [We] climb up using an ancient rusty ladder.
+
+// ---
+APPROACH: $elevator_28 FROM $maintenance_shaft
+COMMAND: Go >> to the elevator
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $elevator_28 FROM $gods_lair
+COMMAND: Go >> to the elevator
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $elevator_28
+
+POS: 32, 72
+
+DESCRIPTION: 
+Orc noises from all around, but thankfully no orc in sight. [[IF !$(c).hasHappened(evKarlGuardsKilled)]]Brutal laughter from the east.[[ENDIF]]

@@ -1,0 +1,20 @@
+// ---
+APPROACH: $elevator_12 FROM $knights_hq_main
+COMMAND: Go >> to Floor 12 elevator
+DESCRIPTION: $NONE
+// TODO: PREREQUISITES - only after someone tells me
+
+// ---
+APPROACH: $elevator_12 FROM $elevator_28
+COMMAND: Go >> climb down
+DESCRIPTION: [We] climb down using an ancient rusty ladder.
+
+// ---
+ROOM: $elevator_12
+
+FLAGS: $IDLE
+
+POS: 32, 72
+
+DESCRIPTION: 
+A rare access to the ancient elevator shaft.

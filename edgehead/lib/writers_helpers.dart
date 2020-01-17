@@ -260,6 +260,42 @@ FightSituation generateEscapeTunnelFight(ActionContext c,
   });
 }
 
+/// God's lair fight.
+FightSituation generateGodsLairFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  final orcBerserker = Actor.initialized(w.randomInt(), "berserker",
+      nameIsProperNoun: false,
+      adjective: 'orc',
+      pronoun: Pronoun.HE,
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
+          name: 'battle axe', adjective: 'berserker'),
+      constitution: 3,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  final orcCaptain = Actor.initialized(w.randomInt(), 'captain',
+      nameIsProperNoun: false,
+      adjective: 'orc',
+      pronoun: Pronoun.HE,
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'labelled'),
+      constitution: 2,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+
+  w.actors.addAll([orcBerserker, orcCaptain]);
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [orcBerserker, orcCaptain],
+    "{|concrete} floor",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 FightSituation generateMadGuardianFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
@@ -815,6 +851,10 @@ class _HelperAccessor {
     // When someone learns about something, they automatically
     // also _hear_ about it.
     hearAbout(topic);
+  }
+
+  void markHappened(String eventId) {
+    _actionContext.outputWorld.recordCustom(eventId);
   }
 
   void movePlayer(String locationName, {bool silent = false}) {

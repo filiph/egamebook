@@ -1,9 +1,42 @@
 // ---
+APPROACH: $gods_lair FROM $elevator_28
+COMMAND: Go >> east
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $gods_lair
 
 FLAGS: $IDLE
 
 POS: 35, 42
 
-DESCRIPTION: 
-This is God's lair.
+FIRST_DESCRIPTION: 
+Two orcs, a berserker and a captain, watch you approach in amazement.
+
+"You!" the captain bellows. "Stand still so I can chop off your head."
+
+DESCRIPTION:
+The gate to God's lair.
+
+FIGHT_SITUATION:
+generateGodsLairFight
+
+AFTER_MONSTERS_CLEARED:
+A grumbling from behind the gate.
+
+[[CODE]]
+$(c).markHappened(evKarlGuardsKilled);
+[[ENDCODE]]
+
+
+// ---
+ROOM: $gods_lair_after_necromancy
+
+VARIANT_OF: $gods_lair
+
+RULE: $(c).hasHappened(evKarlKilledViaNecromancy)
+
+DESCRIPTION:
+The gate is open. Inside, a giant's carcass lies. It's belly is teared open from the inside, by a large beaked bird.
+
+Two dead orcs lie next to a wall.

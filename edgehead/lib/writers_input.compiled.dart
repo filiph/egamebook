@@ -2320,14 +2320,211 @@ final Room testRandomEncounter =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, generateRandomEncounter, null);
-final Room godsLair = Room('gods_lair', null, (ActionContext c) {
+final Approach elevator28FromElevator12 =
+    Approach('elevator_12', 'elevator_28', 'Go >> climb up', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('This is God\'s lair.\n', wholeSentence: true);
-}, null, null, isIdle: true, positionX: 35, positionY: 42);
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add('$weSubstitutionCapitalized climb up using an ancient rusty ladder.\n',
+      wholeSentence: true);
+});
+final Approach elevator28FromGodsLair = Approach(
+    'gods_lair', 'elevator_28', 'Go >> to the elevator', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach elevator28FromMaintenanceShaft =
+    Approach('maintenance_shaft', 'elevator_28', 'Go >> to the elevator',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final ifBlock_96e567fe = !$(c).hasHappened(evKarlGuardsKilled)
+      ? '''Brutal laughter from the east.'''
+      : '''''';
+  s.add(
+      'Orc noises from all around, but thankfully no orc in sight. $ifBlock_96e567fe\n',
+      wholeSentence: true);
+}, null, null, positionX: 32, positionY: 72);
+final Approach godsLairFromElevator28 =
+    Approach('elevator_28', 'gods_lair', 'Go >> east', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room godsLair = Room(
+    'gods_lair',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Two orcs, a berserker and a captain, watch you approach in amazement.\n\n"You!" the captain bellows. "Stand still so I can chop off your head."\n',
+          wholeSentence: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The gate to God\'s lair.\n', wholeSentence: true);
+    },
+    generateGodsLairFight,
+    null,
+    isIdle: true,
+    positionX: 35,
+    positionY: 42,
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('A grumbling from behind the gate.\n\n', wholeSentence: true);
+      $(c).markHappened(evKarlGuardsKilled);
+    });
+final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'The gate is open. Inside, a giant\'s carcass lies. It\'s belly is teared open from the inside, by a large beaked bird.\n\nTwo dead orcs lie next to a wall.\n',
+      wholeSentence: true);
+}, null, null,
+    parent: 'gods_lair',
+    prerequisite: Prerequisite(727361369, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return $(c).hasHappened(evKarlKilledViaNecromancy);
+    }));
+final Approach maintenanceShaftFromElevator28 =
+    Approach('elevator_28', 'maintenance_shaft', 'Go >> climb into the shaft',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+
+class KarlUseNecromancy extends RoamingAction {
+  @override
+  final String name = 'karl_use_necromancy';
+
+  static final KarlUseNecromancy singleton = KarlUseNecromancy();
+
+  @override
+  List<String> get commandPathTemplate => ['Use', 'Necromancy'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'maintenance_shaft') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) && !$(c).hasHappened(evKarlKilled))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Terrible roar and thrashing comes from beyond the gate.\n\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s goind on with Karl?"\n\nThey go in, and are killed. Then, some more thrashing, then silence.\n\n',
+        wholeSentence: true);
+    $(c).markHappened(evKarlKilled);
+    $(c).markHappened(evKarlGuardsKilled);
+    $(c).markHappened(evKarlKilledViaNecromancy);
+
+    return '${a.name} successfully performs KarlUseNecromancy';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final ifBlock_39559ba3c = !$(c).hasHappened(evKarlGuardsKilled)
+      ? '''Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.'''
+      : '''''';
+  s.add(
+      'Musty, dark place. Through cracks, I can see rooms under me.\n\n$ifBlock_39559ba3c\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('Musty, dark place.\n', wholeSentence: true);
+}, null, null, positionX: 34, positionY: 40);
 final Approach oracleMainFromKnightsHqMain = Approach(
     'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2398,6 +2595,37 @@ final Room battlefield = Room(
           wholeSentence: true);
     },
     whereDescription: 'among the columns');
+final Approach elevator12FromElevator28 = Approach(
+    'elevator_28', 'elevator_12', 'Go >> climb down', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized climb down using an ancient rusty ladder.\n',
+      wholeSentence: true);
+});
+final Approach elevator12FromKnightsHqMain =
+    Approach('knights_hq_main', 'elevator_12', 'Go >> to Floor 12 elevator',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room elevator12 = Room('elevator_12', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('A rare access to the ancient elevator shaft.\n', wholeSentence: true);
+}, null, null, isIdle: true, positionX: 32, positionY: 72);
 final Approach knightsHqMainFromBattlefield =
     Approach('battlefield', 'knights_hq_main', 'Go to >> the Knights HQ',
         (ActionContext c) {
@@ -3312,15 +3540,14 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('(To be done: actual battle. Assume you won.)\n\n',
       wholeSentence: true);
-  w.recordCustom(evGoblinCampCleared);
+  $(c).markHappened(evGoblinCampCleared);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
-  w.recordCustom(evGoblinCampCleared);
+  s.add('The goblin camp is deserted.\n', wholeSentence: true);
 }, null, null, positionX: 11, positionY: 97);
 final Approach startTesterBuildFromPreStartBook = Approach(
     'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
@@ -4163,9 +4390,13 @@ final allRooms = <Room>[
   warForge,
   warForgeAfterIronMonster,
   testRandomEncounter,
+  elevator28,
   godsLair,
+  godsLairAfterNecromancy,
+  maintenanceShaft,
   oracleMain,
   battlefield,
+  elevator12,
   knightsHqMain,
   bleedsMain,
   bleedsTraderHut,
@@ -4206,8 +4437,15 @@ final allApproaches = <Approach>[
   warForgeFromSmelter,
   endOfRoamFromTestRandomEncounter,
   testRandomEncounterFromStartTesterBuild,
+  elevator28FromElevator12,
+  elevator28FromGodsLair,
+  elevator28FromMaintenanceShaft,
+  godsLairFromElevator28,
+  maintenanceShaftFromElevator28,
   oracleMainFromKnightsHqMain,
   battlefieldFromKnightsHqMain,
+  elevator12FromElevator28,
+  elevator12FromKnightsHqMain,
   knightsHqMainFromBattlefield,
   knightsHqMainFromOracleMain,
   knightsHqMainFromStartTesterBuild,
@@ -4251,6 +4489,7 @@ final allActions = <RoamingAction>[
   WaitForRitual.singleton,
   WarForgeLookAround.singleton,
   WarForgeWatchWorkers.singleton,
+  KarlUseNecromancy.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
   BleedsBlindGuideGoblins.singleton,
