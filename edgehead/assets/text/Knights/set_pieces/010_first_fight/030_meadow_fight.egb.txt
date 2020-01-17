@@ -1,5 +1,7 @@
 ROOM: $meadow_fight
 
+POS: 37, 99
+
 FIRST_DESCRIPTION:
 The fight begins. The goblin before us is especially feral. He's gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.
 

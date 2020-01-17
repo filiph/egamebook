@@ -2554,7 +2554,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
-}, null, null, isIdle: true);
+}, null, null, isIdle: true, positionX: 37, positionY: 98);
 
 class BleedsBlindGuideGoblins extends RoamingAction {
   @override
@@ -3198,7 +3198,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The goblin camp is deserted.\n\n', wholeSentence: true);
   w.recordCustom(evGoblinCampCleared);
-}, null, null);
+}, null, null, positionX: 11, positionY: 97);
 final Approach knightsHqMainFromBattlefield =
     Approach('battlefield', 'knights_hq_main', 'Go to >> the Knights HQ',
         (ActionContext c) {
@@ -3249,7 +3249,7 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
-}, null, null, isIdle: true);
+}, null, null, isIdle: true, positionX: 37, positionY: 70);
 final Approach endOfRoamFromKnightsHqMain = Approach(
     'knights_hq_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
     (ActionContext c) {
@@ -3299,6 +3299,8 @@ final Room battlefield = Room(
     },
     generateBattlefieldFight,
     null,
+    positionX: 28,
+    positionY: 64,
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -3328,7 +3330,7 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('The Oracle is here.\n', wholeSentence: true);
-}, null, null, isIdle: true);
+}, null, null, isIdle: true, positionX: 15, positionY: 57);
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
         (ActionContext c) {
@@ -3349,8 +3351,8 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
   return $(c).hasLearnedAbout(kbGoblinCampSmoke) &&
       !$(c).playerHasVisited("goblin_skirmish_patrol");
 });
-final Room goblinSkirmishPatrol =
-    Room('goblin_skirmish_patrol', (ActionContext c) {
+final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3360,7 +3362,8 @@ final Room goblinSkirmishPatrol =
   s.add(
       'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
       wholeSentence: true);
-}, null, generateBleedsGoblinSkirmishPatrol, null);
+}, null, generateBleedsGoblinSkirmishPatrol, null,
+    positionX: 15, positionY: 97);
 final Approach goblinSkirmishSneakFromBleedsMain = Approach(
     'bleeds_main', 'goblin_skirmish_sneak', 'Go >> towards the goblin outpost',
     (ActionContext c) {
@@ -3673,7 +3676,7 @@ final Room goblinSkirmishSneak =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('The goblins are still here.\n', wholeSentence: true);
-}, null, null);
+}, null, null, positionX: 13, positionY: 98);
 final Approach startFromStartTesterBuild = Approach(
     'start_tester_build', 'start', 'Set piece >> from the start of the game',
     (ActionContext c) {
@@ -3902,6 +3905,8 @@ final Room meadowFight = Room(
     null,
     generateStartFight,
     null,
+    positionX: 37,
+    positionY: 99,
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;

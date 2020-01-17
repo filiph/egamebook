@@ -21,6 +21,9 @@ $(c).playerHasVisited("goblin_skirmish_sneak")
 //   - one_of_the_goblins_higher_ranked - If player doesn't listen to their chat, they don't know it. We need to describe it at the start of attack.
 
 ROOM: $goblin_skirmish_sneak
+
+POS: 13, 98
+
 FIRST_DESCRIPTION:
 Suddenly, I hear voices ahead. Two goblins are arguing about something.
 

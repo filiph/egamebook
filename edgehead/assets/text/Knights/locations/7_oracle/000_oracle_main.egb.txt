@@ -8,5 +8,7 @@ ROOM: $oracle_main
 
 FLAGS: $IDLE
 
+POS: 15, 57
+
 DESCRIPTION: 
 The Oracle is here.

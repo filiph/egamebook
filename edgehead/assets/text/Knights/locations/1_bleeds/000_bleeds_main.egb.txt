@@ -29,6 +29,8 @@ ROOM: $bleeds_main
 
 FLAGS: $IDLE
 
+POS: 37, 98
+
 FIRST_DESCRIPTION:
 I finally see it. The Pyramid.
 

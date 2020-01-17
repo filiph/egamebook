@@ -10,6 +10,8 @@ $(c).hasLearnedAbout(kbGoblinCampSmoke)
 // ---
 ROOM: $goblin_skirmish_patrol
 
+POS: 15, 97
+
 FIRST_DESCRIPTION:
 When [we] come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.
 

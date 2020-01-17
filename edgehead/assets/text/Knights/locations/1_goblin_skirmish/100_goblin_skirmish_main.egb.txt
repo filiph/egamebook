@@ -15,6 +15,8 @@ PREREQUISITES:
 // ---
 ROOM: $goblin_skirmish_main
 
+POS: 11, 97
+
 FIRST_DESCRIPTION:
 // TODO -- an actual battle with the goblins.
 (To be done: actual battle. Assume you won.)

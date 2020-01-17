@@ -5,6 +5,8 @@ DESCRIPTION: [We] climb up the stairs to thirty third floor.
 // ---
 ROOM: $battlefield
 
+POS: 28, 64
+
 WHERE: among the columns
 
 FIRST_DESCRIPTION:
