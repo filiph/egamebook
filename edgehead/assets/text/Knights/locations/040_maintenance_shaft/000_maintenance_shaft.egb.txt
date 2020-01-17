@@ -39,3 +39,28 @@ $(c).markHappened(evKarlKilled);
 $(c).markHappened(evKarlGuardsKilled);
 $(c).markHappened(evKarlKilledViaNecromancy);
 [[ENDCODE]]
+
+// --
+ACTION: $karl_listen_to_guards
+COMMAND: Environment >> Listen to the guards
+FOR_LOCATION: $maintenance_shaft
+PREREQUISITES:
+w.actionNeverUsed(name)
+&&
+!$(c).hasHappened(evKarlKilled)
+&&
+!$(c).hasHappened(evKarlGuardsKilled)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+COMPLETE_SUCCESS_DESCRIPTION:
+The two are laughing.
+
+"He at it whole, didn't he?" the orc captain says. "I've never seen Karl do that."
+
+"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."
+
+"Get a horse carcass up here and we'll do it. The fucker is sleeping like a baby, and I think it's because of the size of the food."
+
+The berserker nods. "Even better, it looks like we don't need to worry about chopping the carcasses from now on."
+
+"Yah. A whole taheen in one swallow." The captain shakes his head. "Karl is full of surprises, isn't he."

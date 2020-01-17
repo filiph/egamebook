@@ -2373,6 +2373,71 @@ final Approach godsLairFromElevator28 =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+
+class KarlTakeStar extends RoamingAction {
+  @override
+  final String name = 'karl_take_star';
+
+  static final KarlTakeStar singleton = KarlTakeStar();
+
+  @override
+  List<String> get commandPathTemplate => ['Environment', 'Take star'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'gods_lair') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the star. It fits into my palm. It says "Lair of God".\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs KarlTakeStar';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room godsLair = Room(
     'gods_lair',
     (ActionContext c) {
@@ -2404,7 +2469,9 @@ final Room godsLair = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('A grumbling from behind the gate.\n\n', wholeSentence: true);
+      s.add(
+          'A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
+          wholeSentence: true);
       $(c).markHappened(evKarlGuardsKilled);
     });
 final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
@@ -2415,7 +2482,7 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The gate is open. Inside, a giant\'s carcass lies. It\'s belly is teared open from the inside, by a large beaked bird.\n\nTwo dead orcs lie next to a wall.\n',
+      'The gate is open. On it, there is a small star decoration.\n\nBeyond the gate, a giant\'s carcass lies. It\'s belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.\n',
       wholeSentence: true);
 }, null, null,
     parent: 'gods_lair',
@@ -2435,6 +2502,74 @@ final Approach maintenanceShaftFromElevator28 =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+
+class KarlListenToGuards extends RoamingAction {
+  @override
+  final String name = 'karl_listen_to_guards';
+
+  static final KarlListenToGuards singleton = KarlListenToGuards();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Environment', 'Listen to the guards'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
+        'maintenance_shaft') {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name) &&
+        !$(c).hasHappened(evKarlKilled) &&
+        !$(c).hasHappened(evKarlGuardsKilled))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The two are laughing.\n\n"He at it whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole taheen in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
+        wholeSentence: true);
+    return '${a.name} successfully performs KarlListenToGuards';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
 
 class KarlUseNecromancy extends RoamingAction {
   @override
@@ -4500,6 +4635,8 @@ final allActions = <RoamingAction>[
   WaitForRitual.singleton,
   WarForgeLookAround.singleton,
   WarForgeWatchWorkers.singleton,
+  KarlTakeStar.singleton,
+  KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,

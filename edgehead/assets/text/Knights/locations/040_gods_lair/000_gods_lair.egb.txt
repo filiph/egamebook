@@ -22,7 +22,7 @@ FIGHT_SITUATION:
 generateGodsLairFight
 
 AFTER_MONSTERS_CLEARED:
-A grumbling from behind the gate.
+A grumbling from behind the gate. On the gate, a little star decoration.
 
 [[CODE]]
 $(c).markHappened(evKarlGuardsKilled);
@@ -37,6 +37,21 @@ VARIANT_OF: $gods_lair
 RULE: $(c).hasHappened(evKarlKilledViaNecromancy)
 
 DESCRIPTION:
-The gate is open. Inside, a giant's carcass lies. It's belly is teared open from the inside, by a large beaked bird.
+The gate is open. On it, there is a small star decoration.
 
-Two dead orcs lie next to a wall.
+Beyond the gate, a giant's carcass lies. It's belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.
+
+// ---
+
+ACTION: $karl_take_star
+COMMAND: Environment >> Take star
+FOR_LOCATION: $gods_lair
+PREREQUISITES:
+w.actionNeverUsed(name)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the star. It fits into my palm. It says "Lair of God".
+
+// TODO: image of "Lamb of God"
+// TODO: add item to inventory
