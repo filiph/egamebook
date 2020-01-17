@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_simulation.dart';
@@ -6,6 +8,7 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
+import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
@@ -186,6 +189,42 @@ FightSituation generateAgruthFight(ActionContext c,
       });
 }
 
+/// Battlefield fight.
+FightSituation generateBattlefieldFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  final redOrc = Actor.initialized(w.randomInt(), "orc",
+      nameIsProperNoun: false,
+      adjective: 'red',
+      pronoun: Pronoun.HE,
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'serrated'),
+      constitution: 2,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  final leatherJerkinOrc = Actor.initialized(w.randomInt(), "orc",
+      nameIsProperNoun: false,
+      adjective: 'ordinary',
+      pronoun: Pronoun.HE,
+      currentWeapon:
+          Item.weapon(w.randomInt(), WeaponType.axe, adjective: 'battle'),
+      constitution: 1,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+
+  w.actors.addAll([redOrc, leatherJerkinOrc]);
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [redOrc, leatherJerkinOrc],
+    "{battlefield|concrete} floor",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 /// The fight west of The Bleeds.
 FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
@@ -238,131 +277,6 @@ FightSituation generateMadGuardianFight(ActionContext c,
         3: mad_guardian_pain,
         5: mad_guardian_shut_up,
       });
-}
-
-FightSituation generateSlaveQuartersPassageFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final w = c.outputWorld;
-  var orc = _makeOrc(w, id: slaveQuartersOrcId, swordAdjective: 'bluish');
-  var goblin = _makeGoblin(w,
-      id: slaveQuartersGoblinId, spear: true, spearAdjective: 'bent');
-  var monsters = [orc, goblin];
-  w.actors.addAll(monsters);
-  return FightSituation.initialized(w.randomInt(), party, monsters,
-      "{rough|stone} floor", roomRoamingSituation, {
-    1: slave_quarters_orc_looks,
-    3: slave_quarters_mean_nothing,
-  });
-}
-
-/// The fight at the start of Knights of San Francisco, with Tamara.
-FightSituation generateStartFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final w = c.outputWorld;
-  var firstGoblin = Actor.initialized(firstGoblinId, "goblin",
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
-          name: "sword", adjective: "rusty"),
-      dexterity: 150,
-      // The goblin starts the fight.
-      initiative: 2000,
-      // For the first 2 rounds, the goblin is invincible. We don't want
-      // Tamara to kill him before the player has any chance to do something.
-      isInvincible: true,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  w.actors.add(firstGoblin);
-  return FightSituation.initialized(
-      w.randomInt(),
-      party,
-      [firstGoblin],
-      "{muddy |wet |}ground",
-      roomRoamingSituation,
-      {
-        1: start_make_goblin_not_invincible,
-        2: start_tamara_bellows,
-      });
-}
-
-/// Test fight. Do not use in production.
-FightSituation generateTestFightWithGoblin(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final w = c.outputWorld;
-  final goblin = _makeGoblin(w, spear: true, spearAdjective: 'goblin');
-  w.actors.add(goblin);
-  return FightSituation.initialized(
-    w.randomInt(),
-    party.where((a) => a.isPlayer),
-    [goblin],
-    "{rock|cavern} floor",
-    roomRoamingSituation,
-    {},
-    items: [
-      Item.weapon(89892141, WeaponType.dagger),
-      Item.weapon(89892142, WeaponType.rock),
-    ],
-  );
-}
-
-/// Test fight. Do not use in production.
-FightSituation generateTestFightWithOrc(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final w = c.outputWorld;
-  final aguthsSword = Item.weapon(89892130, WeaponType.sword);
-  final playersSword = Item.weapon(89892131, WeaponType.sword);
-  // TODO: add dagger to player's inventory (instead of on ground)
-  final agruth = _generateAgruth();
-  final equippedAgruth =
-      agruth.rebuild((b) => b.inventory.equip(aguthsSword, agruth.anatomy));
-  w.actors.add(equippedAgruth);
-  w.updateActorById(
-      playerId, (b) => b.inventory.equip(playersSword, $(c).player.anatomy));
-  return FightSituation.initialized(
-    w.randomInt(),
-    party.where((a) => a.isPlayer),
-    [equippedAgruth],
-    "{rock|cavern} floor",
-    roomRoamingSituation,
-    {},
-    items: [Item.weapon(89892140, WeaponType.dagger)],
-  );
-}
-
-/// Battlefield fight.
-FightSituation generateBattlefieldFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final w = c.outputWorld;
-  final redOrc = Actor.initialized(w.randomInt(), "orc",
-      nameIsProperNoun: false,
-      adjective: 'red',
-      pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'serrated'),
-      constitution: 2,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  final leatherJerkinOrc = Actor.initialized(w.randomInt(), "orc",
-      nameIsProperNoun: false,
-      adjective: 'ordinary',
-      pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.axe, adjective: 'battle'),
-      constitution: 1,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-
-  w.actors.addAll([redOrc, leatherJerkinOrc]);
-
-  return FightSituation.initialized(
-    w.randomInt(),
-    party,
-    [redOrc, leatherJerkinOrc],
-    "{battlefield|concrete} floor",
-    roomRoamingSituation,
-    {},
-    items: const [],
-  );
 }
 
 /// "Random encounter"
@@ -484,6 +398,95 @@ FightSituation generateRandomEncounter(ActionContext c,
       // TODO: optional reinforcement
     },
     items: items,
+  );
+}
+
+FightSituation generateSlaveQuartersPassageFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  var orc = _makeOrc(w, id: slaveQuartersOrcId, swordAdjective: 'bluish');
+  var goblin = _makeGoblin(w,
+      id: slaveQuartersGoblinId, spear: true, spearAdjective: 'bent');
+  var monsters = [orc, goblin];
+  w.actors.addAll(monsters);
+  return FightSituation.initialized(w.randomInt(), party, monsters,
+      "{rough|stone} floor", roomRoamingSituation, {
+    1: slave_quarters_orc_looks,
+    3: slave_quarters_mean_nothing,
+  });
+}
+
+/// The fight at the start of Knights of San Francisco, with Tamara.
+FightSituation generateStartFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  var firstGoblin = Actor.initialized(firstGoblinId, "goblin",
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
+          name: "sword", adjective: "rusty"),
+      dexterity: 150,
+      // The goblin starts the fight.
+      initiative: 2000,
+      // For the first 2 rounds, the goblin is invincible. We don't want
+      // Tamara to kill him before the player has any chance to do something.
+      isInvincible: true,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+  w.actors.add(firstGoblin);
+  return FightSituation.initialized(
+      w.randomInt(),
+      party,
+      [firstGoblin],
+      "{muddy |wet |}ground",
+      roomRoamingSituation,
+      {
+        1: start_make_goblin_not_invincible,
+        2: start_tamara_bellows,
+      });
+}
+
+/// Test fight. Do not use in production.
+FightSituation generateTestFightWithGoblin(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  final goblin = _makeGoblin(w, spear: true, spearAdjective: 'goblin');
+  w.actors.add(goblin);
+  return FightSituation.initialized(
+    w.randomInt(),
+    party.where((a) => a.isPlayer),
+    [goblin],
+    "{rock|cavern} floor",
+    roomRoamingSituation,
+    {},
+    items: [
+      Item.weapon(89892141, WeaponType.dagger),
+      Item.weapon(89892142, WeaponType.rock),
+    ],
+  );
+}
+
+/// Test fight. Do not use in production.
+FightSituation generateTestFightWithOrc(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+  final w = c.outputWorld;
+  final aguthsSword = Item.weapon(89892130, WeaponType.sword);
+  final playersSword = Item.weapon(89892131, WeaponType.sword);
+  // TODO: add dagger to player's inventory (instead of on ground)
+  final agruth = _generateAgruth();
+  final equippedAgruth =
+      agruth.rebuild((b) => b.inventory.equip(aguthsSword, agruth.anatomy));
+  w.actors.add(equippedAgruth);
+  w.updateActorById(
+      playerId, (b) => b.inventory.equip(playersSword, $(c).player.anatomy));
+  return FightSituation.initialized(
+    w.randomInt(),
+    party.where((a) => a.isPlayer),
+    [equippedAgruth],
+    "{rock|cavern} floor",
+    roomRoamingSituation,
+    {},
+    items: [Item.weapon(89892140, WeaponType.dagger)],
   );
 }
 
@@ -714,6 +717,11 @@ class _HelperAccessor {
     return _applicabilityContext.world.getActorById(playerId);
   }
 
+  Room get playerRoom {
+    final sim = _applicabilityContext.simulation;
+    return sim.getRoomByName(player.currentRoomName);
+  }
+
   ActionContext get _actionContext {
     if (!_isActionContext) {
       throw StateError('Tried to use ApplicabilityContext (read-only) '
@@ -811,6 +819,22 @@ class _HelperAccessor {
 
   void movePlayer(String locationName, {bool silent = false}) {
     getRoomRoaming().moveActor(_actionContext, locationName, silent: silent);
+  }
+
+  double playerDistanceTo(String roomName) {
+    final sim = _applicabilityContext.simulation;
+    final otherRoom = sim.getRoomByName(roomName);
+    assert(
+        otherRoom.positionX != null && otherRoom.positionY != null,
+        'Trying to learn player distance to $roomName, '
+        'which doesn\'t have position.');
+    final currentRoom = playerRoom;
+    if (currentRoom.positionX == null || currentRoom.positionY == null) {
+      // Fail silently. The player is in a room with no position.
+      return double.infinity;
+    }
+    return sqrt(pow(otherRoom.positionX - currentRoom.positionX, 2) +
+        pow(otherRoom.positionY - currentRoom.positionY, 2));
   }
 
   /// Returns `true` if player has ever visited [roomName].
