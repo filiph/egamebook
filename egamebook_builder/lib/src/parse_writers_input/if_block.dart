@@ -7,7 +7,7 @@ class IfBlock {
   static final RegExp _ifBlockStart = RegExp(r"\[\[IF (.+)\]\]");
 
   static final RegExp _ifBlock =
-      RegExp(r"\[\[IF (.+?)\]\](.+?)(\[\[ELSE\]\](.+))\[\[ENDIF\]\]");
+      RegExp(r"\[\[IF (.+?)\]\](.+?)(\[\[ELSE\]\](.+))?\[\[ENDIF\]\]");
 
   final String fullString;
 
@@ -29,7 +29,7 @@ class IfBlock {
     assert(!text.contains(_ifBlockStart) || text.contains(_ifBlockEnd),
         "Text contains start of [[IF]] but not end: '$text'");
     for (final match in _ifBlock.allMatches(text)) {
-      final elseBlock = match.groupCount > 2 ? match.group(4) : '';
+      final elseBlock = match.group(4) ?? '';
       yield IfBlock(match.group(0), match.group(1), match.group(2), elseBlock);
     }
   }
