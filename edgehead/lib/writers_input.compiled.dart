@@ -96,8 +96,7 @@ class SearchAgruth extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'cave_with_agruth') {
+    if (c.inRoomParent('cave_with_agruth') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name))) {
@@ -116,7 +115,7 @@ class SearchAgruth extends RoamingAction {
     s.add(
         'You search his pockets but turn up with nothing. Just then, you realize that if Agruth had something valuable on him, he would have hidden it well. You run your hand inside his vest and find a _troma_ herb. This boosts your energy right when you need it – very handy. \n\n\n<p class="toast">Your stamina increases by 1.</p>\n',
         wholeSentence: true);
-    $(c).giveStaminaToPlayer(1);
+    c.giveStaminaToPlayer(1);
     return '${a.name} successfully performs SearchAgruth';
   }
 
@@ -278,8 +277,7 @@ class GuardpostAboveChurchEnterTunnelWithCancel extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'guardpost_above_church') {
+    if (c.inRoomParent('guardpost_above_church') != true) {
       return false;
     }
     return true;
@@ -340,11 +338,11 @@ final Room guardpostAboveChurch =
       'You enter a small circular room. You see three openings that lead to passages, each marked with crude writing.\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(1066693326, 1, false, (ApplicabilityContext c) {
+      Rule(490739913, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("smelter");
+        return c.justCameFrom("smelter");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -355,11 +353,11 @@ final Room guardpostAboveChurch =
             'The passage you came from is marked with the words "Hot iron", which must mean "smelter" in the orcs\' vocabulary. Another one has the words "Unholy Church" above it. Both of these passages slope downwards.\n\n',
             wholeSentence: true);
       }),
-      Rule(666999442, 1, false, (ApplicabilityContext c) {
+      Rule(100751156, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("underground_church");
+        return c.justCameFrom("underground_church");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -424,8 +422,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'guardpost_above_church') {
+    if (c.inRoomParent('guardpost_above_church') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name))) {
@@ -602,8 +599,7 @@ class NameAgruthSwordNothing extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'just_after_agruth_fight') {
+    if (c.inRoomParent('just_after_agruth_fight') != true) {
       return false;
     }
     return true;
@@ -619,7 +615,7 @@ class NameAgruthSwordNothing extends RoamingAction {
     s.add(
         '_"That is foolish. It is just a sword, after all."_\n\n\nBriana shrugs. "Whatever, just don\'t ever call it _Agruth\'s sword._ I already have more respect to this piece of iron than to that worthless animal. Now, you\'re right, let\'s just get out of here as quickly as possible."\n',
         wholeSentence: true);
-    $(c).movePlayer("cave_with_agruth");
+    c.movePlayer("cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordNothing';
   }
 
@@ -666,8 +662,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'just_after_agruth_fight') {
+    if (c.inRoomParent('just_after_agruth_fight') != true) {
       return false;
     }
     return true;
@@ -684,7 +679,7 @@ class NameAgruthSwordOpportunity extends RoamingAction {
         '_"We will call it Luck Bringer. We got lucky with Arguth, and luck is our only chance to get out of this place."_\n\n\nBriana nods. "Luck Bringer it is. Now, you\'re right, let\'s just get out of here as quickly as possible."\n',
         wholeSentence: true);
     nameAgruthSword(w, "Luck Bringer");
-    $(c).movePlayer("cave_with_agruth");
+    c.movePlayer("cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordOpportunity';
   }
 
@@ -731,8 +726,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'just_after_agruth_fight') {
+    if (c.inRoomParent('just_after_agruth_fight') != true) {
       return false;
     }
     return true;
@@ -749,7 +743,7 @@ class NameAgruthSwordRedemption extends RoamingAction {
         '_"We will call it Savior. Getting it was our first step toward freedom. The sword should have killed us, and instead it set us free."_\n\n\nBriana nods. "Savior it is. Now, you\'re right, let\'s just get out of here as quickly as possible."\n',
         wholeSentence: true);
     nameAgruthSword(w, "Savior");
-    $(c).movePlayer("cave_with_agruth");
+    c.movePlayer("cave_with_agruth");
     return '${a.name} successfully performs NameAgruthSwordRedemption';
   }
 
@@ -836,8 +830,7 @@ class TakeOrcthorn extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'orcthorn_room') {
+    if (c.inRoomParent('orcthorn_room') != true) {
       return false;
     }
     if (!(w.actionHasBeenPerformed("talk_to_briana_3") &&
@@ -918,8 +911,7 @@ class SlaveQuartersContinue extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'slave_quarters') {
+    if (c.inRoomParent('slave_quarters') != true) {
       return false;
     }
     return true;
@@ -1035,13 +1027,12 @@ class SlaveQuartersPassageExamineDoor extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'slave_quarters_passage') {
+    if (c.inRoomParent('slave_quarters_passage') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name) &&
         !(w.currentSituation as RoomRoamingSituation).monstersAlive &&
-        !$(c).playerHasVisited("orcthorn_room"))) {
+        !c.playerHasVisited("orcthorn_room"))) {
       return false;
     }
     return true;
@@ -1117,12 +1108,12 @@ final Room slaveQuartersPassage =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   Ruleset(
-      Rule(46934531, 2, false, (ApplicabilityContext c) {
+      Rule(749097967, 2, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).playerHasVisited("orcthorn_room") &&
-            !$(c).justCameFrom("orcthorn_room");
+        return c.playerHasVisited("orcthorn_room") &&
+            !c.justCameFrom("orcthorn_room");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1132,11 +1123,11 @@ final Room slaveQuartersPassage =
         s.add('  The reinforced door on the side of the corridor is silent.\n',
             wholeSentence: true);
       }),
-      Rule(847105853, 1, false, (ApplicabilityContext c) {
+      Rule(252668110, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).playerHasVisited("orcthorn_room");
+        return c.playerHasVisited("orcthorn_room");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1144,11 +1135,11 @@ final Room slaveQuartersPassage =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
       }),
-      Rule(729288676, 1, false, (ApplicabilityContext c) {
+      Rule(522886128, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return !$(c).playerHasVisited("orcthorn_room");
+        return !c.playerHasVisited("orcthorn_room");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1195,8 +1186,7 @@ class SmelterLookAround extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'smelter') {
+    if (c.inRoomParent('smelter') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name))) {
@@ -1259,11 +1249,11 @@ final Room smelter = Room('smelter', (ActionContext c) {
       'A blast of smoke and heat greets you as you step into the room. A roaring fire draws your attention to the far wall, where thousands of orcs shovel coal into a giant furnace. They tilt huge kettles of molten steel into white-hot flowing rivers. This is the smelter.\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(716584229, 1, false, (ApplicabilityContext c) {
+      Rule(1042419564, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("war_forge");
+        return c.justCameFrom("war_forge");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1274,11 +1264,11 @@ final Room smelter = Room('smelter', (ActionContext c) {
             'You notice a smooth passage leading up and out of the smelter. You\'ll be able to go there unnoticed.\n',
             wholeSentence: true);
       }),
-      Rule(488993248, 1, false, (ApplicabilityContext c) {
+      Rule(748023121, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("guardpost_above_church");
+        return c.justCameFrom("guardpost_above_church");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1340,14 +1330,13 @@ class SmelterThrowSpear extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'smelter') {
+    if (c.inRoomParent('smelter') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name) &&
         w.actionHasBeenPerformed("war_forge_watch_workers") &&
         w.actionHasBeenPerformed("smelter_look_around") &&
-        $(c).player.inventory.hasWeapon(WeaponType.spear))) {
+        c.player.inventory.hasWeapon(WeaponType.spear))) {
       return false;
     }
     return true;
@@ -1576,12 +1565,12 @@ class TalkToBriana3 extends RoamingAction {
         '_"What is Orcthorn?"_\n\n\n"A sword. It’s killed hundreds of orcs, wielded by a half dozen legendary knights. The orcs have been trying to get Orcthorn for decades, almost to no avail."\n\n\n_"Almost."_\n\n\n"Yes. Last full moon, an orcish captain and a company of warriors ambushed Lord Glencot. He wielded Orcthorn at the time, and they knew it. They slaughtered his company and brought the sword here, to Bloodrock. Since then, the orcs have been bolder."\n\n\n_"The Mad Guardian."_\n\n\n"The mad who?"\n\n\n_"That is what Agruth and the other slavers were talking about a couple of weeks back. One orc was supposed to guard a sword. That seemed weird enough to me. Guarding a sword? Stranger yet, that orc went mad after only a few days. Now they keep him in a cell, and call him_ grach kamkorr _– The Mad Guardian. That sword is still with him. Hidden there in the cell."_\n\n\n"Where is that cell?"\n\n\n',
         wholeSentence: true);
     Ruleset(
-        Rule(54901828, 2, false, (ApplicabilityContext c) {
+        Rule(261559069, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
           return a.currentRoomName == "slave_quarters_passage" &&
-              !$(c).playerHasVisited("orcthorn_room");
+              !c.playerHasVisited("orcthorn_room");
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -1592,11 +1581,11 @@ class TalkToBriana3 extends RoamingAction {
               '_"Somewhere here in the slave quarters."_\n\nBriana\'s eyes go wide and nods towards the door.\n\n\n',
               wholeSentence: true);
         }),
-        Rule(149905314, 2, false, (ApplicabilityContext c) {
+        Rule(47726813, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
-          return $(c).playerHasVisited("orcthorn_room") &&
+          return c.playerHasVisited("orcthorn_room") &&
               a.currentRoomName != "orcthorn_room";
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -1608,12 +1597,12 @@ class TalkToBriana3 extends RoamingAction {
               '_"Down the slave quarters."_\n\nBriana\'s eyes go wide. "The mad orc behind that door."\n\n\n',
               wholeSentence: true);
         }),
-        Rule(764008120, 2, false, (ApplicabilityContext c) {
+        Rule(158505448, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
-          return $(c).playerHasVisited("slave_quarters_passage") &&
-              !$(c).playerHasVisited("orcthorn_room");
+          return c.playerHasVisited("slave_quarters_passage") &&
+              !c.playerHasVisited("orcthorn_room");
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -1765,8 +1754,7 @@ class ExamineUndergroundChurch extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'underground_church') {
+    if (c.inRoomParent('underground_church') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name))) {
@@ -1839,11 +1827,11 @@ final Room undergroundChurch = Room('underground_church', (ActionContext c) {
       'You enter a room that at first looks like a large, twisting cave. But then it opens into a high-ceilinged space with many columns. This must be what the orcs call the Underground Church. Dim light shines from the far end of the room, where you’d expect the altar to be, but you can\'t quite see it. There are no torches here. And it’s eerily quiet. \n\n\nYour bare footsteps reverberate in the room, so you slow down to quiet them. \n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(513393440, 1, false, (ApplicabilityContext c) {
+      Rule(622073349, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("cave_with_agruth");
+        return c.justCameFrom("cave_with_agruth");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1854,11 +1842,11 @@ final Room undergroundChurch = Room('underground_church', (ActionContext c) {
             'After a bit of searching, you also notice a twisting passage going from the right side of the Church and sloping upward. That must be the way out.\n\n',
             wholeSentence: true);
       }),
-      Rule(449655042, 1, false, (ApplicabilityContext c) {
+      Rule(619682789, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("guardpost_above_church");
+        return c.justCameFrom("guardpost_above_church");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -1904,8 +1892,7 @@ class TakeSpearInUndergroundChurch extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'underground_church_altar') {
+    if (c.inRoomParent('underground_church_altar') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name))) {
@@ -1970,8 +1957,7 @@ class WaitForRitual extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'underground_church_altar') {
+    if (c.inRoomParent('underground_church_altar') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name))) {
@@ -1990,7 +1976,7 @@ class WaitForRitual extends RoamingAction {
     s.add(
         'You move into the shadows and wait. After a few heartbeats, there is a scraping sound — stone against stone. You lean out from your hiding place and see a section of the wall to the right of the altar opening.\n\n\nAn orc priest, tall and pale, enters through the stone door. Suddenly, the whole temple reverberates with a strong, dissonant tone that is both sickening and powerful. As if the whole mountain were groaning. \n\n\nFollowing the orc priest, a huge creature enters through the door, crouching below its frame. It\'s unclear what the creature is, exactly, but it could be some large breed of ogre. Judging by the braided hair, it\'s a female. Her sword — attached to her hip with a rope — is as long as you are tall. \n\n\nWhen she enters the temple and stands upright, you can see that she is leading someone in by a chain. An orc. Despite being a strong one, probably a captain or even a chieftain, he is dwarfed by the creature before him, and he visibly shakes in horror.\n\n\nThe three of them — the priest, the ogre and the orc — walk to the front of the altar and stand before it, facing the symbol of the octopus, their backs facing you and Briana.\n\n\nThe dissonant tone stops. You lean a little further out from your hiding place to have a better view.\n\n\nWithout words, the priest beckons the orc to lie at the altar. The orc is now shaking uncontrollably, but he obeys. You can hear his fitful breath, the rustle of his body against the stone as he glides into position, and nothing else.\n\n\nWhen the orc lies on the altar, the female ogre walks up to him and places her hands on his shoulders, pinning him down.\n\n\nSomehow, you know.\n\n\n_"Maggots."_\n\n\nBriana gives you a puzzled look, then turns back to the ritual. From the shadows in the base of the altar, a swarm of large black insects starts to make its way up toward the terrified orc. The priest lifts his arms in silent worship.\n\n\n![Picture of the sadistic slavers](https://egamebook.com/vermin/v/latest/img/altar.jpg)\n\n\nThe ogre pushes down on the orc, preparing for the inevitable struggle. The orc knows what’s coming, and he opens his mouth to scream.\n\n\nBut the scream doesn\'t come. Instead, the dissonant tone sounds again, more powerful than before.\n\n\nThe maggots crawl over the edge of the altar\'s surface, onto the orc\'s body, and move straight toward his face. They move faster now.\n\n\nThe orc\'s eyes go wide. He struggles against the ogre\'s grip, to no avail. The dissonant tone gets even louder. The whole temple quivers. You feel like your ear drums will collapse. The sound permeates everything.\n\n\nSuddenly, the terror of the moment is fully replaced by an invigorating feeling of power. You take a breath and feel stronger, refreshed.\n\n\n<p class="toast">Your stamina increases by 1.</p>\n\n\nYou notice that the priest inhales deeply as well.\n\n\nThen, the sound stops and the orc\'s body collapses into itself. The invigorating feeling is gone. You realize the maggots have eaten through the orc\'s eyes and cheeks, and that they are now scuttling back to the base of the altar.\n\n\nThe priest puts his arms down again and — without saying anything — heads back to the stone door. The ogre takes the orc\'s dead body, throws it over her shoulder, and follows the priest. In a few heartbeats, they are all gone and the door closes. A new pool of blood on the altar is the only reminder of what happened.\n\n\nBriana stares ahead. "How did you know it would be maggots?"\n\n\n_"I do not know."_\n\n\n"I _felt_ that sound, somehow. I _felt_ it."\n\n\n_"This place does something weird to people."_\n\n\n"And if that orc was meant to be an offering, why did they not leave the body?" Briana shakes her head. "Let\'s… let\'s just get out of here."\n',
         wholeSentence: true);
-    $(c).giveStaminaToPlayer(1);
+    c.giveStaminaToPlayer(1);
     return '${a.name} successfully performs WaitForRitual';
   }
 
@@ -2096,8 +2082,7 @@ class WarForgeLookAround extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'war_forge') {
+    if (c.inRoomParent('war_forge') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name))) {
@@ -2161,8 +2146,7 @@ class WarForgeWatchWorkers extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'war_forge') {
+    if (c.inRoomParent('war_forge') != true) {
       return false;
     }
     if (!(!w.actionHasBeenPerformed(name) &&
@@ -2226,11 +2210,11 @@ final Room warForge = Room('war_forge', (ActionContext c) {
       'You enter the enormous cave that houses Mount Bloodrock\'s war forges. This space is so vast that it has its own climate, with dark clouds covering most of the ceiling, and what looks like black rain falling in the distance. Large crooked  bats circle just below the clouds, their shrieks mixing with the clangs of steel and constant angry shouts from below.\n\n\n',
       wholeSentence: true);
   Ruleset(
-      Rule(411943067, 1, false, (ApplicabilityContext c) {
+      Rule(12631604, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("cave_with_agruth");
+        return c.justCameFrom("cave_with_agruth");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -2241,11 +2225,11 @@ final Room warForge = Room('war_forge', (ActionContext c) {
             'You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.\n\n',
             wholeSentence: true);
       }),
-      Rule(1054440166, 1, false, (ApplicabilityContext c) {
+      Rule(205825889, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return $(c).justCameFrom("smelter");
+        return c.justCameFrom("smelter");
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -2357,11 +2341,11 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final ifBlock_96e567fe = !$(c).hasHappened(evKarlGuardsKilled)
+  final ifBlock_753ddd0b = !c.hasHappened(evKarlGuardsKilled)
       ? '''Brutal laughter from the east.'''
       : '''''';
   s.add(
-      'Orc noises from all around, but thankfully no orc in sight. $ifBlock_96e567fe\n',
+      'Orc noises from all around, but thankfully no orc in sight. $ifBlock_753ddd0b\n',
       wholeSentence: true);
 }, null, null, positionX: 32, positionY: 72);
 final Approach godsLairFromElevator28 =
@@ -2385,11 +2369,10 @@ class KarlTakeStar extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'gods_lair') {
+    if (c.inRoomParent('gods_lair') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
+    if (!(w.actionNeverUsed(name) && c.isInIdleRoom)) {
       return false;
     }
     return true;
@@ -2402,8 +2385,10 @@ class KarlTakeStar extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I take the star. It fits into my palm. It says "Lair of God".\n',
+    s.add('I take the star. It fits into my palm. It says "Lair of God".\n\n\n',
         wholeSentence: true);
+    w.updateActorById(playerId, (b) => b..inventory.items.add(lairOfGodStar));
+
     return '${a.name} successfully performs KarlTakeStar';
   }
 
@@ -2472,7 +2457,7 @@ final Room godsLair = Room(
       s.add(
           'A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
           wholeSentence: true);
-      $(c).markHappened(evKarlGuardsKilled);
+      c.markHappened(evKarlGuardsKilled);
     });
 final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
     (ActionContext c) {
@@ -2490,7 +2475,7 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
       final WorldState w = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
-      return $(c).hasHappened(evKarlKilledViaNecromancy);
+      return c.hasHappened(evKarlKilledViaNecromancy);
     }));
 final Approach maintenanceShaftFromElevator28 =
     Approach('elevator_28', 'maintenance_shaft', 'Go >> climb into the shaft',
@@ -2515,13 +2500,12 @@ class KarlListenToGuards extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'maintenance_shaft') {
+    if (c.inRoomParent('maintenance_shaft') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
-        !$(c).hasHappened(evKarlKilled) &&
-        !$(c).hasHappened(evKarlGuardsKilled))) {
+        !c.hasHappened(evKarlKilled) &&
+        !c.hasHappened(evKarlGuardsKilled))) {
       return false;
     }
     return true;
@@ -2582,11 +2566,10 @@ class KarlUseNecromancy extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'maintenance_shaft') {
+    if (c.inRoomParent('maintenance_shaft') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && !$(c).hasHappened(evKarlKilled))) {
+    if (!(w.actionNeverUsed(name) && !c.hasHappened(evKarlKilled))) {
       return false;
     }
     return true;
@@ -2602,9 +2585,9 @@ class KarlUseNecromancy extends RoamingAction {
     s.add(
         'Terrible roar and thrashing comes from beyond the gate.\n\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s goind on with Karl?"\n\nThey go in, and are killed. Then, some more thrashing, then silence.\n\n',
         wholeSentence: true);
-    $(c).markHappened(evKarlKilled);
-    $(c).markHappened(evKarlGuardsKilled);
-    $(c).markHappened(evKarlKilledViaNecromancy);
+    c.markHappened(evKarlKilled);
+    c.markHappened(evKarlGuardsKilled);
+    c.markHappened(evKarlKilledViaNecromancy);
 
     return '${a.name} successfully performs KarlUseNecromancy';
   }
@@ -2646,11 +2629,11 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final ifBlock_39559ba3c = !$(c).hasHappened(evKarlGuardsKilled)
+  final ifBlock_373b22f49 = !c.hasHappened(evKarlGuardsKilled)
       ? '''Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.'''
       : '''''';
   s.add(
-      'Musty, dark place. Through cracks, I can see rooms under me.\n\n$ifBlock_39559ba3c\n',
+      'Musty, dark place. Through cracks, I can see rooms under me.\n\n$ifBlock_373b22f49\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2906,11 +2889,10 @@ class BleedsMainObserveSmoke extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
+    if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && !$(c).hasHappened(evGoblinCampCleared))) {
+    if (!(w.actionNeverUsed(name) && !c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
     return true;
@@ -2971,8 +2953,7 @@ class BleedsMainObserveVillage extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
+    if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name))) {
@@ -2991,7 +2972,7 @@ class BleedsMainObserveVillage extends RoamingAction {
     s.add(
         'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
         wholeSentence: true);
-    $(c).learnAbout(kbBlindGuide);
+    c.learnAbout(kbBlindGuide);
 
     return '${a.name} successfully performs BleedsMainObserveVillage';
   }
@@ -3036,8 +3017,8 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   s.add(
       'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
       wholeSentence: true);
-  $(c).learnAbout(kbTrader);
-  $(c).learnAbout(kbGoblinCampSmoke);
+  c.learnAbout(kbTrader);
+  c.learnAbout(kbGoblinCampSmoke);
 
   w.updateActorById(tamaraId, (b) => b.isActive = false);
   if (w.actors.build().any((a) => a.id == brianaId)) {
@@ -3064,8 +3045,7 @@ class BleedsBlindGuideGoblins extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
+    if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
@@ -3086,11 +3066,11 @@ class BleedsBlindGuideGoblins extends RoamingAction {
         '"Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It\'s like the goblins are being drawn here."\n\n_"What do they want?"_\n\n"They\'re goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it\'s strange. They come in larger numbers than you would think makes sense. They\'d get more slaves and more steel elsewhere."\n\n_"They want into the Pyramid, perhaps?"_\n\n"Nonsense. Goblins fear these kinds of things. Even if they didn\'t, they\'d probably get slaughtered by the orcs. Oh, that\'s something I\'d like to see." He absentmindedly touches his face just under the left eye.\n\n',
         wholeSentence: true);
     Ruleset(
-        Rule(258032518, 1, false, (ApplicabilityContext c) {
+        Rule(126964403, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
-          return !$(c).hasHappened(evGoblinCampCleared);
+          return !c.hasHappened(evGoblinCampCleared);
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -3158,11 +3138,10 @@ class BleedsBlindGuideGreet extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
+    if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && $(c).hasLearnedAbout(kbBlindGuide))) {
+    if (!(w.actionNeverUsed(name) && c.hasLearnedAbout(kbBlindGuide))) {
       return false;
     }
     return true;
@@ -3178,7 +3157,7 @@ class BleedsBlindGuideGreet extends RoamingAction {
     s.add(
         'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n\n',
         wholeSentence: true);
-    $(c).learnAbout(kbBlindGuide);
+    c.learnAbout(kbBlindGuide);
 
     return '${a.name} successfully performs BleedsBlindGuideGreet';
   }
@@ -3229,8 +3208,7 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_main') {
+    if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
@@ -3250,13 +3228,13 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
     s.add(
         '"So you want to explore the Pyramid."\n\n_"I need something that\'s in there."_\n\n"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n\nI don\'t want to reveal more than needed. But "magic" is vague enough. So I just say yes.\n\nThe man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n\n',
         wholeSentence: true);
-    $(c).hearAbout(kbJisadHatesMagic);
+    c.hearAbout(kbJisadHatesMagic);
 
     s.add(
         '\n_"What about it?"_\n\n"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."\n\n',
         wholeSentence: true);
-    $(c).hearAbout(kbOrcsInPyramid);
-    $(c).hearAbout(kbKnightsLeaving);
+    c.hearAbout(kbOrcsInPyramid);
+    c.hearAbout(kbKnightsLeaving);
 
     s.add(
         '\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
@@ -3308,7 +3286,7 @@ final Approach bleedsTraderHutFromBleedsMain = Approach(
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return $(c).hasLearnedAbout(kbTrader);
+  return c.hasLearnedAbout(kbTrader);
 });
 
 class BleedsTraderGoblinSmoke extends RoamingAction {
@@ -3323,14 +3301,13 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_trader_hut') {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
-        $(c).hasLearnedAbout(kbLeroy) &&
-        $(c).hasLearnedAbout(kbLeroyKnowsGoblinSmoke) &&
-        !$(c).hasHappened(evGoblinCampCleared))) {
+        c.hasLearnedAbout(kbLeroy) &&
+        c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke) &&
+        !c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
     return true;
@@ -3343,12 +3320,12 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    assert($(c).inRoomWith(leroyId));
+    assert(c.inRoomWith(leroyId));
 
     s.add(
         '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
         wholeSentence: true);
-    $(c).hearAbout(kbKnightsLeaving);
+    c.hearAbout(kbKnightsLeaving);
 
     s.add(
         '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! Sir, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
@@ -3404,8 +3381,7 @@ class BleedsTraderGoblins extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_trader_hut') {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
@@ -3425,12 +3401,12 @@ class BleedsTraderGoblins extends RoamingAction {
     s.add(
         'The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they\'re the worst. I fear we won\'t get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."\n\n',
         wholeSentence: true);
-    assert($(c).inRoomWith(leroyId));
+    assert(c.inRoomWith(leroyId));
 
     s.add(
         '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
         wholeSentence: true);
-    $(c).learnAbout(kbLeroyKnowsGoblinSmoke);
+    c.learnAbout(kbLeroyKnowsGoblinSmoke);
 
     return '${a.name} successfully performs BleedsTraderGoblins';
   }
@@ -3477,8 +3453,7 @@ class BleedsTraderGreet extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_trader_hut') {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name))) {
@@ -3497,7 +3472,7 @@ class BleedsTraderGreet extends RoamingAction {
     s.add(
         'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
         wholeSentence: true);
-    $(c).learnAbout(kbLeroy);
+    c.learnAbout(kbLeroy);
 
     return '${a.name} successfully performs BleedsTraderGreet';
   }
@@ -3546,13 +3521,12 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'bleeds_trader_hut') {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
         w.actionHasBeenPerformed("bleeds_trader_greet") &&
-        $(c).hasHappened(evGoblinCampCleared))) {
+        c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
     return true;
@@ -3622,9 +3596,9 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   s.add(
       'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n\n',
       wholeSentence: true);
-  if ($(c).inRoomWith(leroyId) &&
+  if (c.inRoomWith(leroyId) &&
       w.getActorById(leroyId).anatomy.isUndead &&
-      !$(c).hasHappened(evJisadSeesUndeadLeroy)) {
+      !c.hasHappened(evJisadSeesUndeadLeroy)) {
     s.add(
         'He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Sir," he says, his eyes wet, "please have mercy on the soul of this young boy. Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.',
         wholeSentence: true);
@@ -3645,7 +3619,7 @@ final Approach endOfRoamFromBleedsMain =
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return $(c).hasHappened(evGoblinCampCleared);
+  return c.hasHappened(evGoblinCampCleared);
 });
 final Approach goblinSkirmishMainFromBleedsMain = Approach(
     'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
@@ -3660,7 +3634,7 @@ final Approach goblinSkirmishMainFromBleedsMain = Approach(
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return $(c).hasHappened(evGoblinCampCleared);
+  return c.hasHappened(evGoblinCampCleared);
 });
 final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
     'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> attack the camp',
@@ -3675,7 +3649,7 @@ final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return !$(c).hasHappened(evGoblinCampCleared);
+  return !c.hasHappened(evGoblinCampCleared);
 });
 final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3685,7 +3659,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('(To be done: actual battle. Assume you won.)\n\n',
       wholeSentence: true);
-  $(c).markHappened(evGoblinCampCleared);
+  c.markHappened(evGoblinCampCleared);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3728,8 +3702,8 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return $(c).hasLearnedAbout(kbGoblinCampSmoke) &&
-      !$(c).playerHasVisited("goblin_skirmish_patrol");
+  return c.hasLearnedAbout(kbGoblinCampSmoke) &&
+      !c.playerHasVisited("goblin_skirmish_patrol");
 });
 final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
     (ActionContext c) {
@@ -3759,8 +3733,8 @@ final Approach goblinSkirmishSneakFromBleedsMain = Approach(
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return $(c).playerHasVisited("goblin_skirmish_sneak") &&
-      !$(c).hasHappened(evGoblinCampCleared);
+  return c.playerHasVisited("goblin_skirmish_sneak") &&
+      !c.hasHappened(evGoblinCampCleared);
 });
 final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
     'goblin_skirmish_patrol',
@@ -3785,8 +3759,7 @@ class ListenContinue extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'goblin_skirmish_sneak') {
+    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
@@ -3851,8 +3824,7 @@ class ListenMore extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'goblin_skirmish_sneak') {
+    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name) &&
@@ -3918,8 +3890,7 @@ class ListenToThemArguing extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'goblin_skirmish_sneak') {
+    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name))) {
@@ -3983,8 +3954,7 @@ class ObserveGoblinCamp extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'goblin_skirmish_sneak') {
+    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
     if (!(w.actionNeverUsed(name))) {
@@ -4156,8 +4126,7 @@ class StartDeclineDagger extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'start_enter_goblin') {
+    if (c.inRoomParent('start_enter_goblin') != true) {
       return false;
     }
     return true;
@@ -4173,7 +4142,7 @@ class StartDeclineDagger extends RoamingAction {
     s.add('Tamara shrugs and puts the dagger in her belt.\n',
         wholeSentence: true);
     w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
-    $(c).movePlayer("meadow_fight");
+    c.movePlayer("meadow_fight");
     return '${a.name} successfully performs StartDeclineDagger';
   }
 
@@ -4219,8 +4188,7 @@ class StartTakeDagger extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if ((w.currentSituation as RoomRoamingSituation).currentRoomName !=
-        'start_enter_goblin') {
+    if (c.inRoomParent('start_enter_goblin') != true) {
       return false;
     }
     return true;
@@ -4235,7 +4203,7 @@ class StartTakeDagger extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add('I take the dagger.\n', wholeSentence: true);
     w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
-    $(c).movePlayer("meadow_fight");
+    c.movePlayer("meadow_fight");
     return '${a.name} successfully performs StartTakeDagger';
   }
 
@@ -4293,7 +4261,7 @@ final Room meadowFight = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      final ifBlock_3a12b716b = $(c).isHurt(tamaraId)
+      final ifBlock_3c0f034e2 = c.isHurt(tamaraId)
           ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
       Ruleset(
@@ -4329,7 +4297,7 @@ final Room meadowFight = Room(
                 'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
                 wholeSentence: true);
           }),
-          Rule(443431711, 1, false, (ApplicabilityContext c) {
+          Rule(469897863, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -4342,11 +4310,11 @@ final Room meadowFight = Room(
             final Storyline s = c.outputStoryline;
             s.add('\nThe fight is over.\n\n', wholeSentence: true);
             Ruleset(
-                Rule(225876590, 1, false, (ApplicabilityContext c) {
+                Rule(230873140, 1, false, (ApplicabilityContext c) {
                   final WorldState w = c.world;
                   final Simulation sim = c.simulation;
                   final Actor a = c.actor;
-                  return $(c).playerHasVisited("start_raccoon");
+                  return c.playerHasVisited("start_raccoon");
                 }, (ActionContext c) {
                   final WorldState originalWorld = c.world;
                   final Simulation sim = c.simulation;
@@ -4371,7 +4339,7 @@ final Room meadowFight = Room(
                       wholeSentence: true);
                 })).apply(c);
             s.add(
-                '\n$ifBlock_3a12b716b "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+                '\n$ifBlock_3c0f034e2 "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
                 wholeSentence: true);
             w.updateActorById(tamaraId, (b) => b.isActive = false);
           }),
@@ -4405,7 +4373,7 @@ class ReadLetterFromFather extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(w.actionNeverUsed(name) && $(c).isInIdleRoom)) {
+    if (!(w.actionNeverUsed(name) && c.isInIdleRoom)) {
       return false;
     }
     return true;
@@ -4467,7 +4435,7 @@ class ReadLetterFromMentor extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(w.actionNeverUsed(name) && $(c).isInIdleRoom)) {
+    if (!(w.actionNeverUsed(name) && c.isInIdleRoom)) {
       return false;
     }
     return true;

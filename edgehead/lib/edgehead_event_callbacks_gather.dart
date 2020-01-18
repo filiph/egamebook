@@ -68,7 +68,7 @@ final escape_tunnel_insignificant = EventCallback((c, sim, w, s) {
   final orc = getEscapeTunnelOrc(built);
   final goblin = getEscapeTunnelGoblin(built);
   final actor = orc.isAnimatedAndActive ? orc : goblin;
-  final player = $(c).player;
+  final player = c.player;
   assert(actor.isAnimatedAndActive);
   assert(player.isAnimatedAndActive);
   final kicking = actor.currentWeapon == null ||
@@ -102,7 +102,7 @@ final escape_tunnel_look = EventCallback((c, sim, w, s) {
   final built = w.build();
   final orc = getEscapeTunnelOrc(built);
   final goblin = getEscapeTunnelGoblin(built);
-  final player = $(c).player;
+  final player = c.player;
   if (bothAreAlive(orc, goblin)) {
     final actor = orc.isConfused ? goblin : orc;
     final otherActor = actor == orc ? goblin : orc;
@@ -156,7 +156,7 @@ final mad_guardian_good = EventCallback((c, sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
   guardian.report(
       s, "\"Good good good,\" <subject> whisper<s>, eyeing <object>.",
-      object: $(c).player, wholeSentence: true);
+      object: c.player, wholeSentence: true);
 });
 
 final mad_guardian_pain = EventCallback((c, sim, w, s) {
@@ -175,7 +175,7 @@ final mad_guardian_pain = EventCallback((c, sim, w, s) {
 
 final mad_guardian_shut_up = EventCallback((c, sim, w, s) {
   var guardian = w.getActorById(madGuardianId);
-  var player = $(c).player;
+  var player = c.player;
   s.addParagraph();
   guardian.report(
       s,
@@ -225,7 +225,7 @@ final slave_quarters_orc_looks = EventCallback((c, sim, w, s) {
 
 final sleeping_goblin_thief = EventCallback((c, sim, w, s) {
   final goblin = w.getActorById(sleepingGoblinId);
-  final player = $(c).player;
+  final player = c.player;
   final tookSpear =
       w.actionHasBeenPerformedSuccessfully("take_spear_in_underground_church");
   if (tookSpear) {
@@ -266,6 +266,6 @@ final youre_dead_slave = EventCallback((c, sim, w, s) {
       s,
       "\"You're dead, slave,\" <subject> growl<s> at <object> "
       "with hatred.",
-      object: $(c).player,
+      object: c.player,
       wholeSentence: true);
 });

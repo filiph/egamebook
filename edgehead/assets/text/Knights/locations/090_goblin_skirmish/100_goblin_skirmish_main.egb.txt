@@ -3,14 +3,14 @@ APPROACH: $goblin_skirmish_main FROM $bleeds_main
 COMMAND: Go >> to the goblin outpost
 DESCRIPTION: $NONE
 PREREQUISITES:
-$(c).hasHappened(evGoblinCampCleared)
+c.hasHappened(evGoblinCampCleared)
 
 // ---
 APPROACH: $goblin_skirmish_main FROM $goblin_skirmish_sneak
 COMMAND: Go >> attack the camp
 DESCRIPTION: $NONE
 PREREQUISITES:
-!$(c).hasHappened(evGoblinCampCleared)
+!c.hasHappened(evGoblinCampCleared)
 
 // ---
 ROOM: $goblin_skirmish_main
@@ -22,7 +22,7 @@ FIRST_DESCRIPTION:
 (To be done: actual battle. Assume you won.)
 
 [[CODE]]
-$(c).markHappened(evGoblinCampCleared);
+c.markHappened(evGoblinCampCleared);
 [[ENDCODE]]
 
 

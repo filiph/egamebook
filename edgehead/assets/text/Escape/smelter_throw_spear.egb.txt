@@ -12,7 +12,7 @@ w.actionHasBeenPerformed("war_forge_watch_workers")
 &&
 w.actionHasBeenPerformed("smelter_look_around") 
 &&
-$(c).player.inventory.hasWeapon(WeaponType.spear)
+c.player.inventory.hasWeapon(WeaponType.spear)
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%

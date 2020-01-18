@@ -3,7 +3,7 @@ APPROACH: $bleeds_trader_hut FROM $bleeds_main
 COMMAND: Go >> inside the trader's shop
 DESCRIPTION: $NONE
 PREREQUISITES:
-$(c).hasLearnedAbout(kbTrader)
+c.hasLearnedAbout(kbTrader)
 
 // ---
 ROOM: $bleeds_trader_hut
@@ -22,9 +22,9 @@ DESCRIPTION:
 The trader {nods|pretends to smile} as [we] enter his shop.
 
 [[CODE]]
-if ($(c).inRoomWith(leroyId) && 
+if (c.inRoomWith(leroyId) &&
     w.getActorById(leroyId).anatomy.isUndead && 
-    !$(c).hasHappened(evJisadSeesUndeadLeroy)) {
+    !c.hasHappened(evJisadSeesUndeadLeroy)) {
   s.add('He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Sir," he says, his eyes wet, "please have mercy on the soul of this young boy. Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.', wholeSentence: true);
   w.recordCustom(evJisadSeesUndeadLeroy);
 }
@@ -59,7 +59,7 @@ The trader shakes his head and interjects: "What awaits us anywhere else?"
 "Death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
 
 [[CODE]]
-$(c).learnAbout(kbLeroy);
+c.learnAbout(kbLeroy);
 [[ENDCODE]]
 
 
@@ -80,7 +80,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they're the worst. I fear we won't get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."
 
 [[CODE]]
-assert($(c).inRoomWith(leroyId));
+assert(c.inRoomWith(leroyId));
 [[ENDCODE]]
 
 Leroy smiles wryly. "No trade means no money."
@@ -102,7 +102,7 @@ The trader, obviously satisfied, turns back to me. "The suckers are closing in f
 Leroy seems genuinely surprised. "I thought you knew. Everyone knows."
 
 [[CODE]]
-$(c).learnAbout(kbLeroyKnowsGoblinSmoke);
+c.learnAbout(kbLeroyKnowsGoblinSmoke);
 [[ENDCODE]]
 
 
@@ -117,7 +117,7 @@ w.actionNeverUsed(name)
 &&
 w.actionHasBeenPerformed("bleeds_trader_greet")
 &&
-$(c).hasHappened(evGoblinCampCleared)
+c.hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -136,17 +136,17 @@ FOR_LOCATION: $bleeds_trader_hut
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasLearnedAbout(kbLeroy)
+c.hasLearnedAbout(kbLeroy)
 &&
-$(c).hasLearnedAbout(kbLeroyKnowsGoblinSmoke)
+c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke)
 &&
-!$(c).hasHappened(evGoblinCampCleared)
+!c.hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
-assert($(c).inRoomWith(leroyId));
+assert(c.inRoomWith(leroyId));
 [[ENDCODE]]
 
 "They are to the west. It doesn't seem like there is a lot of them. We thought the Knights would get rid of them for sure."
@@ -154,7 +154,7 @@ assert($(c).inRoomWith(leroyId));
 "But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 
 [[CODE]]
-$(c).hearAbout(kbKnightsLeaving);
+c.hearAbout(kbKnightsLeaving);
 [[ENDCODE]]
 
 "Well, if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."

@@ -46,6 +46,11 @@ const _brianaQuotes = [
   '''END''',
 ];
 
+final Item lairOfGodStar = Item(
+  lairOfGodStarId,
+  name: "Lair of God Star",
+);
+
 final Item orcthorn = Item.weapon(orcthornId, WeaponType.sword,
     name: "Orcthorn",
     nameIsProperNoun: true,
@@ -69,12 +74,6 @@ final _brianaQuotesRuleset = Ruleset.unordered(_brianaQuotes.map((quote) {
   });
 }));
 
-/// A helper wrapper around ActionContext which provides the writer with
-/// many helper methods.
-///
-/// Yes, the name of the function is `$`.
-_HelperAccessor $(ApplicabilityContext c) => _HelperAccessor(c);
-
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
 }
@@ -88,7 +87,7 @@ void describeSuccessRate(ActionContext c) {
 
   bool hasOrcthorn = w.actionHasBeenPerformedSuccessfully("take_orcthorn");
   bool destroyed = w.actionHasBeenPerformedSuccessfully("smelter_throw_spear");
-  final player = $(c).player;
+  final player = c.player;
 
   player.report(
       s, "<subject> ${hasOrcthorn ? 'took' : 'didn\'t find'} Orcthorn");
@@ -138,15 +137,15 @@ void enterTunnelWithCancel(ActionContext c) {
       "guardpost_above_church_enter_tunnel_with_cancel");
 
   if (hasOrcthorn || destroyedIronMonster || hasHadChanceToCancel) {
-    $(c).movePlayer("tunnel");
+    c.movePlayer("tunnel");
     return;
   }
 
-  $(c).movePlayer("tunnel_cancel_chance");
+  c.movePlayer("tunnel_cancel_chance");
 }
 
 void executeSpearThrowAtOgre(ActionContext c) {
-  final player = $(c).player;
+  final player = c.player;
   final inventorySpears = player.inventory.weapons
       .where((item) => item.damageCapability.type == WeaponType.spear)
       .toList(growable: false);
@@ -166,7 +165,7 @@ void executeSpearThrowAtOgre(ActionContext c) {
         player.id, (b) => b.inventory.remove(inventorySpears.first));
   }
 
-  $(c).movePlayer("war_forge", silent: true);
+  c.movePlayer("war_forge", silent: true);
 }
 
 FightSituation generateAgruthFight(ActionContext c,
@@ -514,7 +513,7 @@ FightSituation generateTestFightWithOrc(ActionContext c,
       agruth.rebuild((b) => b.inventory.equip(aguthsSword, agruth.anatomy));
   w.actors.add(equippedAgruth);
   w.updateActorById(
-      playerId, (b) => b.inventory.equip(playersSword, $(c).player.anatomy));
+      playerId, (b) => b.inventory.equip(playersSword, c.player.anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
@@ -547,7 +546,7 @@ FightSituation generateTestFightWithOrcAndGoblin(ActionContext c,
   w.actors.add(goblin);
 
   w.updateActorById(
-      playerId, (b) => b.inventory.equip(playersSword, $(c).player.anatomy));
+      playerId, (b) => b.inventory.equip(playersSword, c.player.anatomy));
   return FightSituation.initialized(
     w.randomInt(),
     party.where((a) => a.isPlayer),
@@ -647,7 +646,7 @@ void setUpStealShield(ActionContext c, bool wasSuccess) {
   if (!wasSuccess) {
     final built = w.build();
     final playerParty = built.actors.where((a) => a.team == playerTeam);
-    final roomRoamingSituation = $(c).getRoomRoaming();
+    final roomRoamingSituation = c.getRoomRoaming();
     final goblin = _makeGoblin(w,
         id: sleepingGoblinId,
         currentRoomName: roomRoamingSituation.currentRoomName);
@@ -719,83 +718,22 @@ Actor _makeOrc(WorldStateBuilder w,
         team: defaultEnemyTeam,
         foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
-/// The class behind [$].
-///
-/// This can be rewritten into a set of extension methods on [ActionContext]
-/// and another set on [ApplicabilityContext].
-class _HelperAccessor {
-  /// The provided context. This could actually be an [ActionContext].
-  ///
-  /// At runtime, the helper can cast this to [ActionContext] or fail.
-  final ApplicabilityContext _applicabilityContext;
-
-  /// Whether we received an action context.
-  final bool _isActionContext;
-
-  _HelperAccessor(this._applicabilityContext)
-      : _isActionContext = _applicabilityContext is ActionContext;
-
-  /// Returns `true` while player is roaming through Knights and is in an idle
-  /// room (i.e. can do things like chatting or reading).
-  bool get isInIdleRoom {
-    final w = _applicabilityContext.world;
-    final sim = _applicabilityContext.simulation;
-    if (w.currentSituation is! RoomRoamingSituation) return false;
-    final situation = w.currentSituation as RoomRoamingSituation;
-    if (situation.monstersAlive) return false;
-    return sim.getRoomByName(situation.currentRoomName).isIdle;
+extension ActionContextHelpers on ActionContext {
+  void movePlayer(String locationName, {bool silent = false}) {
+    getRoomRoaming().moveActor(this, locationName, silent: silent);
   }
 
-  Actor get player {
-    if (_isActionContext) {
-      return _actionContext.outputWorld.getActorById(playerId);
-    }
-    return _applicabilityContext.world.getActorById(playerId);
+  /// _Learning_ about something means that someone has already .
+  void learnAbout(String topic) {
+    outputWorld.recordCustom("learns_about_$topic", actor: player);
+
+    // When someone learns about something, they automatically
+    // also _hear_ about it.
+    hearAbout(topic);
   }
 
-  Room get playerRoom {
-    final sim = _applicabilityContext.simulation;
-    return sim.getRoomByName(player.currentRoomName);
-  }
-
-  ActionContext get _actionContext {
-    if (!_isActionContext) {
-      throw StateError('Tried to use ApplicabilityContext (read-only) '
-          'as ActionContext (read/write)');
-    }
-    return _applicabilityContext as ActionContext;
-  }
-
-  RoomRoamingSituation getRoomRoaming() {
-    return _applicabilityContext.world.getSituationByName<RoomRoamingSituation>(
-        RoomRoamingSituation.className);
-  }
-
-  void giveStaminaToPlayer(int amount) {
-    final w = _actionContext.outputWorld;
-    final s = _actionContext.outputStoryline;
-    s.addCustomElement(StatUpdate.stamina(player.stamina, amount));
-    w.updateActorById(playerId, (b) => b..stamina += amount);
-  }
-
-  bool hasHappened(String eventId, {int actorId}) {
-    return _applicabilityContext.world.customHistory
-        .query(name: eventId, actorId: actorId)
-        .hasHappened;
-  }
-
-  /// Queries the history of [hearAbout].
-  bool hasHeardAbout(String topic) {
-    return _applicabilityContext.world.customHistory
-        .query(name: "hears_about_$topic", actorId: playerId)
-        .hasHappened;
-  }
-
-  /// Queries the history of [learnAbout].
-  bool hasLearnedAbout(String topic) {
-    return _applicabilityContext.world.customHistory
-        .query(name: "learns_about_$topic", actorId: playerId)
-        .hasHappened;
+  void markHappened(String eventId) {
+    outputWorld.recordCustom(eventId);
   }
 
   /// _Hearing_ about something means we have heard it mentioned, but
@@ -805,8 +743,68 @@ class _HelperAccessor {
   /// and nothing else. Then we have just heard about the wizard, and we might
   /// want to [learnAbout] him.
   void hearAbout(String topic) {
-    _actionContext.outputWorld
-        .recordCustom("hears_about_$topic", actor: player);
+    outputWorld.recordCustom("hears_about_$topic", actor: player);
+  }
+
+  void giveStaminaToPlayer(int amount) {
+    outputStoryline
+        .addCustomElement(StatUpdate.stamina(player.stamina, amount));
+    outputWorld.updateActorById(playerId, (b) => b..stamina += amount);
+  }
+
+  Actor get player {
+    return outputWorld.getActorById(playerId);
+  }
+}
+
+extension ApplicabilityContextHelpers on ApplicabilityContext {
+  /// Returns `true` while player is roaming through Knights and is in an idle
+  /// room (i.e. can do things like chatting or reading).
+  bool get isInIdleRoom {
+    if (world.currentSituation is! RoomRoamingSituation) return false;
+    final situation = world.currentSituation as RoomRoamingSituation;
+    if (situation.monstersAlive) return false;
+    return simulation.getRoomByName(situation.currentRoomName).isIdle;
+  }
+
+  Actor get player {
+    return world.getActorById(playerId);
+  }
+
+  Room get playerRoom {
+    return simulation.getRoomByName(player.currentRoomName);
+  }
+
+  RoomRoamingSituation getRoomRoaming() {
+    return world.getSituationByName<RoomRoamingSituation>(
+        RoomRoamingSituation.className);
+  }
+
+  bool hasHappened(String eventId, {int actorId}) {
+    return world.customHistory
+        .query(name: eventId, actorId: actorId)
+        .hasHappened;
+  }
+
+  /// Queries the history of [hearAbout].
+  bool hasHeardAbout(String topic) {
+    return world.customHistory
+        .query(name: "hears_about_$topic", actorId: playerId)
+        .hasHappened;
+  }
+
+  /// Queries the history of [learnAbout].
+  bool hasLearnedAbout(String topic) {
+    return world.customHistory
+        .query(name: "learns_about_$topic", actorId: playerId)
+        .hasHappened;
+  }
+
+  /// Returns `true` if player currently is in a room with [roomName],
+  /// or a variant of that room.
+  bool inRoomParent(String roomName) {
+    final parentRoom = simulation.getRoomParent(playerRoom);
+    return parentRoom.name == roomName;
   }
 
   /// Returns `true` if the player is currently in the same room as [actorId].
@@ -814,19 +812,17 @@ class _HelperAccessor {
   /// Ignores variants, so it's safe even if one of the actors is in
   /// a different "variant".
   bool inRoomWith(int actorId) {
-    final sim = _applicabilityContext.simulation;
-    final w = _applicabilityContext.world;
-    final playerRoom = sim.getRoomByName(player.currentRoomName);
+    final playerRoom = simulation.getRoomByName(player.currentRoomName);
     assert(playerRoom.parent == null, "Player is in a variant room.");
-    final actor = w.getActorById(actorId);
-    final actorRoom = sim.getRoomByName(actor.currentRoomName);
+    final actor = world.getActorById(actorId);
+    final actorRoom = simulation.getRoomByName(actor.currentRoomName);
     assert(actorRoom.parent == null, "Actor is in a variant room.");
     return playerRoom == actorRoom;
   }
 
   /// Returns `true` if [actorId] is currently hurt.
   bool isHurt(int actorId) {
-    final actor = _applicabilityContext.world.getActorById(actorId);
+    final actor = world.getActorById(actorId);
     return actor.anatomy.woundedParts.isNotEmpty;
   }
 
@@ -836,34 +832,14 @@ class _HelperAccessor {
   ///
   /// If player was in a variant of [fromRoomName], then that counts as well.
   bool justCameFrom(String fromRoomName) {
-    final latest =
-        _applicabilityContext.world.visitHistory.getLatestOnly(player);
+    final latest = world.visitHistory.getLatestOnly(player);
     if (latest == null) return false;
     return latest.roomName == fromRoomName ||
         latest.parentRoomName == fromRoomName;
   }
 
-  /// _Learning_ about something means that someone has already .
-  void learnAbout(String topic) {
-    _actionContext.outputWorld
-        .recordCustom("learns_about_$topic", actor: player);
-
-    // When someone learns about something, they automatically
-    // also _hear_ about it.
-    hearAbout(topic);
-  }
-
-  void markHappened(String eventId) {
-    _actionContext.outputWorld.recordCustom(eventId);
-  }
-
-  void movePlayer(String locationName, {bool silent = false}) {
-    getRoomRoaming().moveActor(_actionContext, locationName, silent: silent);
-  }
-
   double playerDistanceTo(String roomName) {
-    final sim = _applicabilityContext.simulation;
-    final otherRoom = sim.getRoomByName(roomName);
+    final otherRoom = simulation.getRoomByName(roomName);
     assert(
         otherRoom.positionX != null && otherRoom.positionY != null,
         'Trying to learn player distance to $roomName, '
@@ -879,9 +855,7 @@ class _HelperAccessor {
 
   /// Returns `true` if player has ever visited [roomName].
   bool playerHasVisited(String roomName) {
-    final room = _applicabilityContext.simulation.getRoomByName(roomName);
-    return _applicabilityContext.world.visitHistory
-        .query(player, room)
-        .hasHappened;
+    final room = simulation.getRoomByName(roomName);
+    return world.visitHistory.query(player, room).hasHappened;
   }
 }

@@ -13,6 +13,8 @@ const int escapeTunnelOrcId = 6002;
 /// The goblin at the start of Knights.
 const int firstGoblinId = 6003;
 
+const int lairOfGodStarId = 77003;
+
 const int leroyId = 101;
 
 const int madGuardianId = 6004;

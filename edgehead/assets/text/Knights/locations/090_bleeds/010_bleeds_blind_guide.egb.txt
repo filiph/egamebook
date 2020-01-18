@@ -15,7 +15,7 @@ FOR_LOCATION: $bleeds_main
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).hasLearnedAbout(kbBlindGuide)
+c.hasLearnedAbout(kbBlindGuide)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
@@ -37,7 +37,7 @@ _"I seek treasure."_
 "Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."
 
 [[CODE]]
-$(c).learnAbout(kbBlindGuide);
+c.learnAbout(kbBlindGuide);
 [[ENDCODE]]
 
 
@@ -66,7 +66,7 @@ I don't want to reveal more than needed. But "magic" is vague enough. So I just 
 The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.
 
 [[CODE]]
-$(c).hearAbout(kbJisadHatesMagic);
+c.hearAbout(kbJisadHatesMagic);
 [[ENDCODE]]
 
 _"What about it?"_
@@ -74,8 +74,8 @@ _"What about it?"_
 "I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."
 
 [[CODE]]
-$(c).hearAbout(kbOrcsInPyramid);
-$(c).hearAbout(kbKnightsLeaving);
+c.hearAbout(kbOrcsInPyramid);
+c.hearAbout(kbKnightsLeaving);
 [[ENDCODE]]
 
 _"And this is because of magic?"_
@@ -111,7 +111,7 @@ _"They want into the Pyramid, perhaps?"_
 
 [[RULESET]]
 [[RULE]]
-  !$(c).hasHappened(evGoblinCampCleared)
+  !c.hasHappened(evGoblinCampCleared)
 [[THEN]]
 
 "Anyway. The goblins aren't stupid, but they _are_ getting awfully bold. I've heard a band has made their camp not far from here. So close that people can see their campfire's smoke sometimes." He shudders. "Can you see it?"

@@ -17,9 +17,9 @@ int _id = 100000;
 
 final _karlHeardFirstTime = Rule(_id++, 1, true, (ApplicabilityContext c) {
   // Only heard from within the Pyramid.
-  return $(c).playerDistanceTo('gods_lair') < 45 &&
+  return c.playerDistanceTo('gods_lair') < 45 &&
       // Must be way below God's lair.
-      $(c).playerRoom.positionY > 50;
+      c.playerRoom.positionY > 50;
 }, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.addParagraph();
@@ -35,7 +35,7 @@ final _leroyQuits = Rule(_id++, 2, false, (ApplicabilityContext c) {
   if (!leroy.isAnimatedAndActive) return false;
   if (leroy.anatomy.isUndead) return false;
   if (leroy.npc.followingActorId != playerId) return false;
-  assert($(c).inRoomWith(leroyId));
+  assert(c.inRoomWith(leroyId));
   return c.world.customHistory.query(name: evGoblinCampCleared).hasHappened;
 }, (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
@@ -55,7 +55,7 @@ final _leroyQuits = Rule(_id++, 2, false, (ApplicabilityContext c) {
 });
 
 final _playerHurt = Rule(_id++, 1, false, (ApplicabilityContext c) {
-  return $(c).isHurt(playerId);
+  return c.isHurt(playerId);
 }, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.addParagraph();

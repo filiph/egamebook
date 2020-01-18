@@ -13,7 +13,7 @@ I take the dagger.
 
 SUCCESS_EFFECT:
 w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
-$(c).movePlayer("meadow_fight");
+c.movePlayer("meadow_fight");
 
 
 // ---
@@ -29,5 +29,5 @@ Tamara shrugs and puts the dagger in her belt.
 
 SUCCESS_EFFECT:
 w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
-$(c).movePlayer("meadow_fight");
+c.movePlayer("meadow_fight");
 

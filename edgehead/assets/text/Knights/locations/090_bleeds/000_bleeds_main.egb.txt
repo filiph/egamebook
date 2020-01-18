@@ -41,8 +41,8 @@ Below the Pyramid there's a small village. It huddles around the entrance to the
 There is a trader's shop here. A mile to the west, I see a pillar of black smoke rising to the sky.
 
 [[CODE]]
-$(c).learnAbout(kbTrader);
-$(c).learnAbout(kbGoblinCampSmoke);
+c.learnAbout(kbTrader);
+c.learnAbout(kbGoblinCampSmoke);
 [[ENDCODE]]
 
 [[CODE]]
@@ -74,7 +74,7 @@ At any point I can see at least a few villagers going about their business. They
 Every door is shut except for two. One is the entrance into the trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
 
 [[CODE]]
-$(c).learnAbout(kbBlindGuide);
+c.learnAbout(kbBlindGuide);
 [[ENDCODE]]
 
 // ---
@@ -86,7 +86,7 @@ FOR_LOCATION: $bleeds_main
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-!$(c).hasHappened(evGoblinCampCleared)
+!c.hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 

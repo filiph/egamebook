@@ -8,9 +8,9 @@ APPROACH: $goblin_skirmish_sneak FROM $bleeds_main
 COMMAND: Go >> towards the goblin outpost
 DESCRIPTION: [We] carry on.
 PREREQUISITES:
-$(c).playerHasVisited("goblin_skirmish_sneak")
+c.playerHasVisited("goblin_skirmish_sneak")
 &&
-!$(c).hasHappened(evGoblinCampCleared)
+!c.hasHappened(evGoblinCampCleared)
 
 // Goal: Tell player what they should expect if they attack.
 // Optional: 

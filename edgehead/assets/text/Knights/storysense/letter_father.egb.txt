@@ -4,7 +4,7 @@ COMMAND: inventory >> letter from father >> read
 PREREQUISITES:
 w.actionNeverUsed(name)
 &&
-$(c).isInIdleRoom
+c.isInIdleRoom
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 

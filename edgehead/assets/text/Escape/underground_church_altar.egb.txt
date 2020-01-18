@@ -121,7 +121,7 @@ _"This place does something weird to people."_
 
 
 SUCCESS_EFFECT:
-$(c).giveStaminaToPlayer(1);
+c.giveStaminaToPlayer(1);
 
 
 // ---------------

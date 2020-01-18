@@ -237,11 +237,9 @@ class GeneratedAction extends GeneratedGameObject {
     var isApplicableBuilder =
         createContextActorSimWorldVoidMethod("isApplicable", boolType);
     if (forLocation != null) {
-      final locationCondition = (refer(worldParameter.name)
-              .property("currentSituation")
-              .asA(roomRoamingSituationType))
-          .property("currentRoomName")
-          .notEqualTo(literal(forLocation));
+      final locationCondition = refer(applicabilityContextParameter.name)
+          .property('inRoomParent')
+          .call([literal(forLocation)]).notEqualTo(literalTrue);
       isApplicableBuilder.block.statements
           .add(_createIfGuard(locationCondition, false));
     }

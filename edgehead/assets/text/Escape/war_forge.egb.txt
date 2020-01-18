@@ -7,13 +7,13 @@ You enter the enormous cave that houses Mount Bloodrock's war forges. This space
 
 [[RULESET]]
 [[RULE]]
-  $(c).justCameFrom("cave_with_agruth")
+  c.justCameFrom("cave_with_agruth")
 [[THEN]]
 You and Briana duck behind two carts on a walkway that leads up above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and follows a large stone wall. This must be the way through the smelter, and towards the Upper Door. Thankfully, there’s no one in the way.
 
 [[ENDRULE]]
 [[RULE]]
-  $(c).justCameFrom("smelter")
+  c.justCameFrom("smelter")
 [[THEN]]
 You and Briana stand on a walkway high above the cave’s floor. You can see a flight of stairs ahead that hugs one side of the cave, and leads toward the bottom. Down there, you recognize a passage in the rock that you know must descend deeper into the mountain, toward the slave quarters, and where you slayed Agruth. There’s no one in the way.
 

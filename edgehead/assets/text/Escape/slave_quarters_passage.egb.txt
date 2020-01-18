@@ -39,18 +39,18 @@ DESCRIPTION:
 
 [[RULESET]]
 [[RULE]]
-  $(c).playerHasVisited("orcthorn_room") &&
-  !$(c).justCameFrom("orcthorn_room")
+  c.playerHasVisited("orcthorn_room") &&
+  !c.justCameFrom("orcthorn_room")
 [[THEN]]
   The reinforced door on the side of the corridor is silent.
 [[ENDRULE]]
 [[RULE]]
-  $(c).playerHasVisited("orcthorn_room")
+  c.playerHasVisited("orcthorn_room")
 [[THEN]]
 // Intentionally left blank.
 [[ENDRULE]]
 [[RULE]]
-  !$(c).playerHasVisited("orcthorn_room")
+  !c.playerHasVisited("orcthorn_room")
 [[THEN]]
   The reinforced door on the side of the corridor is closed.
 [[ENDRULE]]
@@ -97,7 +97,7 @@ PREREQUISITES:
 &&
 !(w.currentSituation as RoomRoamingSituation).monstersAlive
 &&
-!$(c).playerHasVisited("orcthorn_room")
+!c.playerHasVisited("orcthorn_room")
 
 
 COMPLETE_SUCCESS_PROBABILITY: 100%

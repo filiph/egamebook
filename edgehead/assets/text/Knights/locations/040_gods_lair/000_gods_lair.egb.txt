@@ -25,7 +25,7 @@ AFTER_MONSTERS_CLEARED:
 A grumbling from behind the gate. On the gate, a little star decoration.
 
 [[CODE]]
-$(c).markHappened(evKarlGuardsKilled);
+c.markHappened(evKarlGuardsKilled);
 [[ENDCODE]]
 
 
@@ -34,7 +34,7 @@ ROOM: $gods_lair_after_necromancy
 
 VARIANT_OF: $gods_lair
 
-RULE: $(c).hasHappened(evKarlKilledViaNecromancy)
+RULE: c.hasHappened(evKarlKilledViaNecromancy)
 
 DESCRIPTION:
 The gate is open. On it, there is a small star decoration.
@@ -48,6 +48,8 @@ COMMAND: Environment >> Take star
 FOR_LOCATION: $gods_lair
 PREREQUISITES:
 w.actionNeverUsed(name)
+&&
+c.isInIdleRoom
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -55,3 +57,7 @@ I take the star. It fits into my palm. It says "Lair of God".
 
 // TODO: image of "Lamb of God"
 // TODO: add item to inventory
+
+[[CODE]]
+w.updateActorById(playerId, (b) => b..inventory.items.add(lairOfGodStar));
+[[ENDCODE]]
