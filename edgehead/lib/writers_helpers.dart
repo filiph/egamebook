@@ -771,8 +771,16 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return world.getActorById(playerId);
   }
 
+  /// The room the player is currently in. If they are in a variant,
+  /// then this reports the variant.
   Room get playerRoom {
     return simulation.getRoomByName(player.currentRoomName);
+  }
+
+  /// Same as [playerRoom] if the player is in a "base" room. If they are in
+  /// a variant room, then this getter returns the base (i.e. parent) room.
+  Room get playerParentRoom {
+    return simulation.getRoomParent(playerRoom);
   }
 
   RoomRoamingSituation getRoomRoaming() {
@@ -844,13 +852,13 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
         otherRoom.positionX != null && otherRoom.positionY != null,
         'Trying to learn player distance to $roomName, '
         'which doesn\'t have position.');
-    final currentRoom = playerRoom;
-    if (currentRoom.positionX == null || currentRoom.positionY == null) {
+    final room = playerParentRoom;
+    if (room.positionX == null || room.positionY == null) {
       // Fail silently. The player is in a room with no position.
       return double.infinity;
     }
-    return sqrt(pow(otherRoom.positionX - currentRoom.positionX, 2) +
-        pow(otherRoom.positionY - currentRoom.positionY, 2));
+    return sqrt(pow(otherRoom.positionX - room.positionX, 2) +
+        pow(otherRoom.positionY - room.positionY, 2));
   }
 
   /// Returns `true` if player has ever visited [roomName].
