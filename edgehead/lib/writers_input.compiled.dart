@@ -2745,7 +2745,7 @@ final Room elevator12 = Room('elevator_12', null, (ActionContext c) {
   s.add('A rare access to the ancient elevator shaft.\n', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 32, positionY: 72);
 final Approach knightsHqMainFromBattlefield =
-    Approach('battlefield', 'knights_hq_main', 'Go to >> the Knights HQ',
+    Approach('battlefield', 'knights_hq_main', 'Go >> the Knights HQ',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2755,7 +2755,7 @@ final Approach knightsHqMainFromBattlefield =
   s.add('', wholeSentence: true);
 });
 final Approach knightsHqMainFromElevator12 =
-    Approach('elevator_12', 'knights_hq_main', 'Go to >> the Knights HQ',
+    Approach('elevator_12', 'knights_hq_main', 'Go >> the Knights HQ',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2765,7 +2765,7 @@ final Approach knightsHqMainFromElevator12 =
   s.add('', wholeSentence: true);
 });
 final Approach knightsHqMainFromOracleMain =
-    Approach('oracle_main', 'knights_hq_main', 'Go to >> the Knights HQ',
+    Approach('oracle_main', 'knights_hq_main', 'Go >> the Knights HQ',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
