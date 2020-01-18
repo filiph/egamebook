@@ -34,6 +34,8 @@ ROOM: $gods_lair_after_necromancy
 
 VARIANT_OF: $gods_lair
 
+FLAGS: $IDLE
+
 RULE: c.hasHappened(evKarlKilledViaNecromancy)
 
 DESCRIPTION:

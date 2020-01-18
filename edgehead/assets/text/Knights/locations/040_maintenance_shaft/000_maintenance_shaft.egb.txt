@@ -55,7 +55,7 @@ COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 The two are laughing.
 
-"He at it whole, didn't he?" the orc captain says. "I've never seen Karl do that."
+"He ate it whole, didn't he?" the orc captain says. "I've never seen Karl do that."
 
 "We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."
 

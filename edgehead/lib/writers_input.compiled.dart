@@ -2476,7 +2476,8 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
       return c.hasHappened(evKarlKilledViaNecromancy);
-    }));
+    }),
+    isIdle: true);
 final Approach maintenanceShaftFromElevator28 =
     Approach('elevator_28', 'maintenance_shaft', 'Go >> climb into the shaft',
         (ActionContext c) {
@@ -2519,7 +2520,7 @@ class KarlListenToGuards extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The two are laughing.\n\n"He at it whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole taheen in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
+        'The two are laughing.\n\n"He ate it whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole taheen in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
         wholeSentence: true);
     return '${a.name} successfully performs KarlListenToGuards';
   }
