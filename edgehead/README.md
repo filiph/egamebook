@@ -153,7 +153,7 @@ to Trello cards by dragging and dropping them.
 
 Run the following when developing:
 
-    pub run build_runner watch
+    pub run build_runner watch --delete-conflicting-outputs
     
 This will make sure that generated files (`*.g.dart`) are regenerated when
 needed.
@@ -162,6 +162,21 @@ Most writing is in text files in the `assets/text/` directory.
 When the `pub run build_runner watch` watcher is running, it will, among other
 things, watch for changes of the text files. It will compile the texts into the 
 `lib/writers_input.compiled.dart` file, which is then used by the game itself.
+
+It is sometimes possible to get the source generation in a bad state. This
+might manifest in build failures such as:
+
+    Error in BuiltValueGenerator for /edgehead/lib/edgehead_serializers.dart.
+    Broken @SerializersFor annotation. Are all the types imported?
+
+This is often caused by an earlier problem (for example, hitting save while
+your `egb.txt` files are in some in-between state), which makes the source
+generator build the files in the wrong order. The remedy is to run:
+
+    pub run build_runner clear
+
+After this, run the `pub run build_runner watch` command again and all should
+be good. 
 
 Most behavior and game-related code is in the other files in `lib/`. You
 might want to start with `lib/edgehead_lib.dart`.  
