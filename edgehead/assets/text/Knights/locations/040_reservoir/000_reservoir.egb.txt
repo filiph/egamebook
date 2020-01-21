@@ -1,0 +1,20 @@
+// ---
+APPROACH: $reservoir FROM $junction
+COMMAND: Go >> down
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $reservoir
+
+POS: 25, 48
+
+FLAGS: $IDLE
+
+DESCRIPTION:
+A filthy pool covered with a layer of green sludge.
+
+
+
+NOTES:
+TODO: write the action that describes the dam
+TODO: write the action that opens the dam

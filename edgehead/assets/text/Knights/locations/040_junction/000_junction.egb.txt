@@ -1,0 +1,17 @@
+// ---
+APPROACH: $junction FROM $elevator_28
+COMMAND: Go >> west
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $junction FROM $reservoir
+COMMAND: Go >> up
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $junction
+
+POS: 27, 45
+
+DESCRIPTION:
+A place of increased orc foot traffic. [We] stay hidden.

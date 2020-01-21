@@ -2325,6 +2325,15 @@ final Approach elevator28FromGodsLair = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Approach elevator28FromJunction = Approach(
+    'junction', 'elevator_28', 'Go >> to the elevator', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Approach elevator28FromMaintenanceShaft =
     Approach('maintenance_shaft', 'elevator_28', 'Go >> to the elevator',
         (ActionContext c) {
@@ -2478,6 +2487,36 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
       return c.hasHappened(evKarlKilledViaNecromancy);
     }),
     isIdle: true);
+final Approach junctionFromElevator28 =
+    Approach('elevator_28', 'junction', 'Go >> west', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Approach junctionFromReservoir =
+    Approach('reservoir', 'junction', 'Go >> up', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room junction = Room('junction', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      'A place of increased orc foot traffic. $weSubstitutionCapitalized stay hidden.\n',
+      wholeSentence: true);
+}, null, null, positionX: 27, positionY: 45);
 final Approach maintenanceShaftFromElevator28 =
     Approach('elevator_28', 'maintenance_shaft', 'Go >> climb into the shaft',
         (ActionContext c) {
@@ -2644,6 +2683,24 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('Musty, dark place.\n', wholeSentence: true);
 }, null, null, positionX: 34, positionY: 40);
+final Approach reservoirFromJunction =
+    Approach('junction', 'reservoir', 'Go >> down', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room reservoir = Room('reservoir', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('A filthy pool covered with a layer of green sludge.\n',
+      wholeSentence: true);
+}, null, null, isIdle: true, positionX: 25, positionY: 48);
 final Approach oracleMainFromKnightsHqMain = Approach(
     'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -4507,7 +4564,9 @@ final allRooms = <Room>[
   elevator28,
   godsLair,
   godsLairAfterNecromancy,
+  junction,
   maintenanceShaft,
+  reservoir,
   oracleMain,
   battlefield,
   elevator12,
@@ -4553,9 +4612,13 @@ final allApproaches = <Approach>[
   testRandomEncounterFromStartTesterBuild,
   elevator28FromElevator12,
   elevator28FromGodsLair,
+  elevator28FromJunction,
   elevator28FromMaintenanceShaft,
   godsLairFromElevator28,
+  junctionFromElevator28,
+  junctionFromReservoir,
   maintenanceShaftFromElevator28,
+  reservoirFromJunction,
   oracleMainFromKnightsHqMain,
   battlefieldFromKnightsHqMain,
   elevator12FromElevator28,

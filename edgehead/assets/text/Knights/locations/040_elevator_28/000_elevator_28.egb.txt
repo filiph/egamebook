@@ -14,6 +14,11 @@ COMMAND: Go >> to the elevator
 DESCRIPTION: $NONE
 
 // ---
+APPROACH: $elevator_28 FROM $junction
+COMMAND: Go >> to the elevator
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $elevator_28
 
 POS: 32, 72
