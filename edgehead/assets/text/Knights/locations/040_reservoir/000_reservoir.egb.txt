@@ -18,3 +18,4 @@ A filthy pool covered with a layer of green sludge.
 NOTES:
 TODO: write the action that describes the dam
 TODO: write the action that opens the dam
+TODO: write VARIANT for released dam

@@ -2729,7 +2729,7 @@ final Approach battlefieldFromKnightsHqMain =
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      '$weSubstitutionCapitalized climb up the stairs to thirty third floor.\n',
+      '$weSubstitutionCapitalized climb up the stairs to the sixteenth floor.\n',
       wholeSentence: true);
 });
 final Room battlefield = Room(
