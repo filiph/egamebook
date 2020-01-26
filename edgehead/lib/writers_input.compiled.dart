@@ -2374,7 +2374,7 @@ class KarlTakeStar extends RoamingAction {
   static final KarlTakeStar singleton = KarlTakeStar();
 
   @override
-  List<String> get commandPathTemplate => ['Environment', 'Take star'];
+  List<String> get commandPathTemplate => ['Star', 'Take'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -2535,8 +2535,7 @@ class KarlListenToGuards extends RoamingAction {
   static final KarlListenToGuards singleton = KarlListenToGuards();
 
   @override
-  List<String> get commandPathTemplate =>
-      ['Environment', 'Listen to the guards'];
+  List<String> get commandPathTemplate => ['Guards', 'Listen'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -2602,7 +2601,7 @@ class KarlUseNecromancy extends RoamingAction {
   static final KarlUseNecromancy singleton = KarlUseNecromancy();
 
   @override
-  List<String> get commandPathTemplate => ['Use', 'Necromancy'];
+  List<String> get commandPathTemplate => ['Skills', 'Necromancy'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -2943,7 +2942,7 @@ class BleedsMainObserveSmoke extends RoamingAction {
   static final BleedsMainObserveSmoke singleton = BleedsMainObserveSmoke();
 
   @override
-  List<String> get commandPathTemplate => ['Environment', 'smoke', 'observe'];
+  List<String> get commandPathTemplate => ['Smoke', 'observe'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -3007,7 +3006,7 @@ class BleedsMainObserveVillage extends RoamingAction {
   static final BleedsMainObserveVillage singleton = BleedsMainObserveVillage();
 
   @override
-  List<String> get commandPathTemplate => ['Environment', 'village', 'observe'];
+  List<String> get commandPathTemplate => ['Village', 'observe'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -3813,7 +3812,7 @@ class ListenContinue extends RoamingAction {
   static final ListenContinue singleton = ListenContinue();
 
   @override
-  List<String> get commandPathTemplate => ['Environment', 'continue listening'];
+  List<String> get commandPathTemplate => ['Goblins', 'Continue listening'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -3878,7 +3877,7 @@ class ListenMore extends RoamingAction {
   static final ListenMore singleton = ListenMore();
 
   @override
-  List<String> get commandPathTemplate => ['Environment', 'continue listening'];
+  List<String> get commandPathTemplate => ['Goblins', 'Continue listening'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -3943,8 +3942,7 @@ class ListenToThemArguing extends RoamingAction {
   static final ListenToThemArguing singleton = ListenToThemArguing();
 
   @override
-  List<String> get commandPathTemplate =>
-      ['Environment', 'listen to the arguing'];
+  List<String> get commandPathTemplate => ['Goblins', 'Listen'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -4008,7 +4006,7 @@ class ObserveGoblinCamp extends RoamingAction {
   static final ObserveGoblinCamp singleton = ObserveGoblinCamp();
 
   @override
-  List<String> get commandPathTemplate => ['Environment', 'observe'];
+  List<String> get commandPathTemplate => ['Camp', 'Observe'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {

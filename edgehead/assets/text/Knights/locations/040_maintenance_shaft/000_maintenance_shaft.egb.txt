@@ -19,7 +19,7 @@ Musty, dark place.
 
 // --
 ACTION: $karl_use_necromancy
-COMMAND: Use >> Necromancy
+COMMAND: Skills >> Necromancy
 FOR_LOCATION: $maintenance_shaft
 PREREQUISITES:
 w.actionNeverUsed(name)
@@ -42,7 +42,7 @@ c.markHappened(evKarlKilledViaNecromancy);
 
 // --
 ACTION: $karl_listen_to_guards
-COMMAND: Environment >> Listen to the guards
+COMMAND: Guards >> Listen
 FOR_LOCATION: $maintenance_shaft
 PREREQUISITES:
 w.actionNeverUsed(name)

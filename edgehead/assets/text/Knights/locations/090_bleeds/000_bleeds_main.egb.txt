@@ -59,7 +59,7 @@ DESCRIPTION: $NONE
 
 // ---
 ACTION: $bleeds_main_observe_village
-COMMAND: Environment >> village >> observe
+COMMAND: Village >> observe
 
 FOR_LOCATION: $bleeds_main
 
@@ -79,7 +79,7 @@ c.learnAbout(kbBlindGuide);
 
 // ---
 ACTION: $bleeds_main_observe_smoke
-COMMAND: Environment >> smoke >> observe
+COMMAND: Smoke >> observe
 
 FOR_LOCATION: $bleeds_main
 

@@ -46,7 +46,7 @@ Beyond the gate, a giant's carcass lies. It's belly is teared open from the insi
 // ---
 
 ACTION: $karl_take_star
-COMMAND: Environment >> Take star
+COMMAND: Star >> Take
 FOR_LOCATION: $gods_lair
 PREREQUISITES:
 w.actionNeverUsed(name)
