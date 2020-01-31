@@ -3740,7 +3740,9 @@ final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Welcome to the test build of this game.\n', wholeSentence: true);
+  s.add(
+      'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
+      wholeSentence: true);
 }, null, null, null);
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
