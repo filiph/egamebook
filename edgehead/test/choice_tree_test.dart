@@ -9,7 +9,9 @@ Choice _buildChoice(String commandWithCarets, {bool isImplicit = false}) {
   return Choice((b) => b
     ..commandPath = ListBuilder<String>(commandWithCarets.split('>>'))
     ..isImplicit = isImplicit
-    ..successChance = 100);
+    ..successChance = 100
+    ..actionName = 'Dummy'
+    ..additionalData = ListBuilder<int>());
 }
 
 void main() {

@@ -16,8 +16,11 @@ abstract class Choice extends ElementBase
 
   Choice._();
 
-  /// The chance of success, from `0` to `1`.
-  double get successChance;
+  /// The name of the action being used.
+  String get actionName;
+
+  /// Additional data, as provided by [Action.getAdditionalData].
+  BuiltList<int> get additionalData;
 
   BuiltList<String> get commandPath;
 
@@ -27,4 +30,7 @@ abstract class Choice extends ElementBase
   /// Returns [:true:] when the choice is automatic (presenter picks it
   /// silently). Corresponds to `Action.isImplicit`.
   bool get isImplicit;
+
+  /// The chance of success, from `0` to `1`.
+  double get successChance;
 }

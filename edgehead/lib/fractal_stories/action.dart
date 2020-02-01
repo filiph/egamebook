@@ -40,6 +40,9 @@ abstract class Action<T> {
   static const Duration defaultPlayerRecoveryDuration =
       Duration(milliseconds: 750);
 
+  /// Allow [Action] subclasses to have `const` constructors.
+  const Action();
+
   /// [OtherActorActionBase] should include the [target] in the result of
   /// [getCommand]. To make it easier to implement, this class will
   /// automatically construct the name given a [Storyline] template.
@@ -57,9 +60,6 @@ abstract class Action<T> {
   /// next to the action. The message should explain what the action does
   /// and, if appropriate, why and when it should be used.
   String get helpMessage;
-
-  /// Allow [Action] subclasses to have `const` constructors.
-  const Action();
 
   /// Whether or not this action is aggressive towards its sufferer. Combat
   /// moves are aggressive, healing moves aren't.
@@ -133,6 +133,17 @@ abstract class Action<T> {
     throw UnimplementedError('generateObjects not implemented for $this. '
         'If this is an Action<Nothing>, then this method shouldn\'t have been '
         'called in the first place.');
+  }
+
+  /// Some actions can provide additional data for a give [context] and
+  /// [object]. This data can be used by the presenter.
+  ///
+  /// For example, a travel action can provide a path from the current
+  /// position ([context]) to the destination ([object]). The presenter
+  /// can then draw the path on a map.
+  List<int> getAdditionalData(ApplicabilityContext context, T object) {
+    // By default, there is no additional data.
+    return const [];
   }
 
   /// The path of sub-commands to be used for the action menu.
@@ -369,6 +380,7 @@ abstract class OtherActorActionBase extends Action<Actor> {
 /// as the object. Therefore, assuming there are two different enemies
 /// available for punching, the planner would create two instances
 /// of `Performance`, one for each enemy.
+@immutable
 class Performance<T> {
   /// The action to be performed on the [object]. For example, punch (if
   /// the object is an enemy actor) or take (if the object is an item).
@@ -383,8 +395,20 @@ class Performance<T> {
   /// The object the [action] is performed on.
   final T object;
 
+  /// Additional information about the performance that can be visualized
+  /// by the presenter.
+  ///
+  /// For example, a travel action can provide the path that is to be taken
+  /// by the actor to get to their destination ([object]) given their
+  /// current position ([context]).
+  ///
+  /// This is taken from [Action.getAdditionalData] and defaults to an empty
+  /// list.
+  final List<int> additionalData;
+
   /// Creates a performance object.
-  Performance(this.action, this.context, this.object, this.successChance);
+  const Performance(this.action, this.context, this.object, this.successChance,
+      this.additionalData);
 
   /// The performer of the action.
   Actor get actor => context.actor;
@@ -425,18 +449,16 @@ class Performance<T> {
     }
   }
 
-  void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world) {
-    if (_description == null) {
+  void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world,
+      String description) {
+    if (description == null) {
       throw StateError("No description given when executing $action. You "
           "should return it from your world-modifying function.");
     }
-    builder.description = _description;
+    builder.description = description;
     builder.time = world.time;
     world.recordAction(builder.build());
   }
-
-  /// The description of the performance.
-  String _description;
 
   Storyline _applyToWorldCopy(
       ActorTurn turn,
@@ -457,7 +479,7 @@ class Performance<T> {
         .onBeforeAction(sim, initialWorld, outputStoryline);
     final context = ActionContext(action, turn.actor, sim, initialWorld, output,
         outputStoryline, successChance);
-    _description = applyFunction(context, object);
+    final description = applyFunction(context, object);
 
     // The current situation could have been removed by [applyFunction].
     // If not, let's update its time.
@@ -493,7 +515,7 @@ class Performance<T> {
     // methods.
     output.currentSituation?.onAfterTurn(context);
 
-    _addWorldRecord(builder, output);
+    _addWorldRecord(builder, output, description);
     return outputStoryline;
   }
 

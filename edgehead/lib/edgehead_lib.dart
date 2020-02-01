@@ -422,6 +422,8 @@ class EdgeheadGame extends Book {
           ..commandPath = ListBuilder<String>(performance.commandPath)
           ..helpMessage = performance.action.helpMessage
           ..successChance = performance.successChance.value
+          ..actionName = performance.action.name
+          ..additionalData = ListBuilder<int>(performance.additionalData)
           ..isImplicit = performance.action.isImplicit);
         callbacks[choice] = () async {
           await _applySelected(

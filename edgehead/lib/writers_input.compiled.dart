@@ -3743,7 +3743,7 @@ final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
   s.add(
       'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
       wholeSentence: true);
-}, null, null, null);
+}, null, null, null, positionX: 0, positionY: 0);
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
         (ActionContext c) {

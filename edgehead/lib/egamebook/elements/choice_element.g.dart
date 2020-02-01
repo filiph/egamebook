@@ -18,9 +18,13 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
   Iterable<Object> serialize(Serializers serializers, Choice object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'successChance',
-      serializers.serialize(object.successChance,
-          specifiedType: const FullType(double)),
+      'actionName',
+      serializers.serialize(object.actionName,
+          specifiedType: const FullType(String)),
+      'additionalData',
+      serializers.serialize(object.additionalData,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(int)])),
       'commandPath',
       serializers.serialize(object.commandPath,
           specifiedType:
@@ -28,6 +32,9 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       'isImplicit',
       serializers.serialize(object.isImplicit,
           specifiedType: const FullType(bool)),
+      'successChance',
+      serializers.serialize(object.successChance,
+          specifiedType: const FullType(double)),
     ];
     if (object.helpMessage != null) {
       result
@@ -49,9 +56,15 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'successChance':
-          result.successChance = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double;
+        case 'actionName':
+          result.actionName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'additionalData':
+          result.additionalData.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(int)]))
+              as BuiltList<dynamic>);
           break;
         case 'commandPath':
           result.commandPath.replace(serializers.deserialize(value,
@@ -67,6 +80,10 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           result.isImplicit = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
           break;
+        case 'successChance':
+          result.successChance = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
+          break;
       }
     }
 
@@ -76,28 +93,43 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
 
 class _$Choice extends Choice {
   @override
-  final double successChance;
+  final String actionName;
+  @override
+  final BuiltList<int> additionalData;
   @override
   final BuiltList<String> commandPath;
   @override
   final String helpMessage;
   @override
   final bool isImplicit;
+  @override
+  final double successChance;
 
   factory _$Choice([void Function(ChoiceBuilder) updates]) =>
       (new ChoiceBuilder()..update(updates)).build();
 
   _$Choice._(
-      {this.successChance, this.commandPath, this.helpMessage, this.isImplicit})
+      {this.actionName,
+      this.additionalData,
+      this.commandPath,
+      this.helpMessage,
+      this.isImplicit,
+      this.successChance})
       : super._() {
-    if (successChance == null) {
-      throw new BuiltValueNullFieldError('Choice', 'successChance');
+    if (actionName == null) {
+      throw new BuiltValueNullFieldError('Choice', 'actionName');
+    }
+    if (additionalData == null) {
+      throw new BuiltValueNullFieldError('Choice', 'additionalData');
     }
     if (commandPath == null) {
       throw new BuiltValueNullFieldError('Choice', 'commandPath');
     }
     if (isImplicit == null) {
       throw new BuiltValueNullFieldError('Choice', 'isImplicit');
+    }
+    if (successChance == null) {
+      throw new BuiltValueNullFieldError('Choice', 'successChance');
     }
   }
 
@@ -112,27 +144,35 @@ class _$Choice extends Choice {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Choice &&
-        successChance == other.successChance &&
+        actionName == other.actionName &&
+        additionalData == other.additionalData &&
         commandPath == other.commandPath &&
         helpMessage == other.helpMessage &&
-        isImplicit == other.isImplicit;
+        isImplicit == other.isImplicit &&
+        successChance == other.successChance;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, successChance.hashCode), commandPath.hashCode),
-            helpMessage.hashCode),
-        isImplicit.hashCode));
+        $jc(
+            $jc(
+                $jc($jc($jc(0, actionName.hashCode), additionalData.hashCode),
+                    commandPath.hashCode),
+                helpMessage.hashCode),
+            isImplicit.hashCode),
+        successChance.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Choice')
-          ..add('successChance', successChance)
+          ..add('actionName', actionName)
+          ..add('additionalData', additionalData)
           ..add('commandPath', commandPath)
           ..add('helpMessage', helpMessage)
-          ..add('isImplicit', isImplicit))
+          ..add('isImplicit', isImplicit)
+          ..add('successChance', successChance))
         .toString();
   }
 }
@@ -140,10 +180,15 @@ class _$Choice extends Choice {
 class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   _$Choice _$v;
 
-  double _successChance;
-  double get successChance => _$this._successChance;
-  set successChance(double successChance) =>
-      _$this._successChance = successChance;
+  String _actionName;
+  String get actionName => _$this._actionName;
+  set actionName(String actionName) => _$this._actionName = actionName;
+
+  ListBuilder<int> _additionalData;
+  ListBuilder<int> get additionalData =>
+      _$this._additionalData ??= new ListBuilder<int>();
+  set additionalData(ListBuilder<int> additionalData) =>
+      _$this._additionalData = additionalData;
 
   ListBuilder<String> _commandPath;
   ListBuilder<String> get commandPath =>
@@ -159,14 +204,21 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   bool get isImplicit => _$this._isImplicit;
   set isImplicit(bool isImplicit) => _$this._isImplicit = isImplicit;
 
+  double _successChance;
+  double get successChance => _$this._successChance;
+  set successChance(double successChance) =>
+      _$this._successChance = successChance;
+
   ChoiceBuilder();
 
   ChoiceBuilder get _$this {
     if (_$v != null) {
-      _successChance = _$v.successChance;
+      _actionName = _$v.actionName;
+      _additionalData = _$v.additionalData?.toBuilder();
       _commandPath = _$v.commandPath?.toBuilder();
       _helpMessage = _$v.helpMessage;
       _isImplicit = _$v.isImplicit;
+      _successChance = _$v.successChance;
       _$v = null;
     }
     return this;
@@ -191,13 +243,17 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
     try {
       _$result = _$v ??
           new _$Choice._(
-              successChance: successChance,
+              actionName: actionName,
+              additionalData: additionalData.build(),
               commandPath: commandPath.build(),
               helpMessage: helpMessage,
-              isImplicit: isImplicit);
+              isImplicit: isImplicit,
+              successChance: successChance);
     } catch (_) {
       String _$failedField;
       try {
+        _$failedField = 'additionalData';
+        additionalData.build();
         _$failedField = 'commandPath';
         commandPath.build();
       } catch (e) {

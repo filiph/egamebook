@@ -12,25 +12,29 @@ class TakeApproachAction extends ApproachAction {
   static final TakeApproachAction singleton = TakeApproachAction();
 
   @override
+  List<String> get commandPathTemplate =>
+      throw UnimplementedError('This action overrides getCommandPath().');
+
+  @override
+  String get helpMessage => null;
+
+  @override
   bool get isAggressive => false;
 
   @override
+  bool get isImplicit => false;
+
+  @override
   bool get isProactive => true;
+
+  @override
+  String get name => className;
 
   @override
   bool get rerollable => false;
 
   @override
   Resource get rerollResource => null;
-
-  @override
-  String get helpMessage => null;
-
-  @override
-  bool get isImplicit => false;
-
-  @override
-  String get name => className;
 
   @override
   String applyFailure(ActionContext context, Approach approach) {
@@ -51,14 +55,53 @@ class TakeApproachAction extends ApproachAction {
     return "${a.name} went through approach to ${approach.to}";
   }
 
+  /// [TakeApproach] returns the path from the current position to
+  /// [Approach.to], as a list of coordinates.
+  ///
+  /// For example, `[0, 0, 10, 5, 100, 100]` is a path from (0, 0)
+  /// through (10, 5) to (100, 100).
   @override
-  List<String> get commandPathTemplate =>
-      throw UnimplementedError('This action overrides getCommandPath().');
+  List<int> getAdditionalData(ApplicabilityContext context, Approach approach) {
+    if (isImplicit) {
+      return const [];
+    }
+
+    final situation = context.world.currentSituation as RoomRoamingSituation;
+    final currentRoom =
+        context.simulation.getRoomByName(situation.currentRoomName);
+
+    if (currentRoom.positionX == null || currentRoom.positionY == null) {
+      // TODO: if possible, get rid of these rooms altogether
+      return const [];
+    }
+
+    assert(currentRoom.positionX != null, "no position for $currentRoom");
+    assert(currentRoom.positionY != null);
+
+    final destinationRoom = context.simulation.getRoomByName(approach.to);
+
+    if (destinationRoom.positionX == null ||
+        destinationRoom.positionY == null) {
+      // TODO: if possible, get rid of these rooms altogether
+      return const [];
+    }
+
+    assert(
+        destinationRoom.positionX != null, "no position for $destinationRoom");
+    assert(destinationRoom.positionY != null);
+
+    return [
+      currentRoom.positionX,
+      currentRoom.positionY,
+      destinationRoom.positionX,
+      destinationRoom.positionY,
+    ];
+  }
 
   /// When the writer specifies a command with " >> " in it, this will
   /// automatically create a command path.
   ///
-  /// For example, "Enter >> upper door".
+  /// For example, "go >> upper door".
   @override
   List<String> getCommandPath(
           ApplicabilityContext context, Approach approach) =>
