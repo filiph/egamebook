@@ -207,8 +207,8 @@ class ActorPlanner {
     final Set<WorldState> closed = <WorldState>{};
 
     var initialWorldHash = initial.world.hashCode;
-    for (final firstConsequence in firstPerformance.action.apply(startTurn, 1,
-        initial, simulation, initial.world, firstPerformance.object)) {
+    for (final firstConsequence in firstPerformance.apply(startTurn, 1, initial,
+        simulation, initial.world, firstPerformance.object)) {
       if (initial.world.hashCode != initialWorldHash) {
         throw StateError("Action $firstPerformance modified world state when "
             "producing $firstConsequence.");
@@ -327,7 +327,7 @@ class ActorPlanner {
         assert(performance.action.isApplicable(context, currentActor,
             simulation, current.world, performance.object));
 
-        var consequences = performance.action.apply(
+        var consequences = performance.apply(
             currentActorTurn,
             performances.length,
             current,

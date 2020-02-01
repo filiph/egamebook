@@ -33,13 +33,12 @@ typedef OtherActorApplicabilityFunction = bool Function(
 /// For example, an attack action would have another [Actor] as an object.
 /// Therefore, [applyFailure] and [applySuccess] would be called with
 /// an [Actor] object as the second parameter.
+@immutable
 abstract class Action<T> {
   static const Duration defaultRecoveryDuration = Duration(seconds: 1);
 
   static const Duration defaultPlayerRecoveryDuration =
       Duration(milliseconds: 750);
-
-  String _description;
 
   /// [OtherActorActionBase] should include the [target] in the result of
   /// [getCommand]. To make it easier to implement, this class will
@@ -58,6 +57,9 @@ abstract class Action<T> {
   /// next to the action. The message should explain what the action does
   /// and, if appropriate, why and when it should be used.
   String get helpMessage;
+
+  /// Allow [Action] subclasses to have `const` constructors.
+  const Action();
 
   /// Whether or not this action is aggressive towards its sufferer. Combat
   /// moves are aggressive, healing moves aren't.
@@ -112,53 +114,6 @@ abstract class Action<T> {
   /// the class – is responsible for taking the resource away and reporting
   /// on it.
   Resource get rerollResource;
-
-  /// Applies the action and returns the possible outcomes as an iterable
-  /// of [PlanConsequence].
-  ///
-  /// The [choiceCount] is the number of choices from which this action
-  /// was selected.
-  Iterable<PlanConsequence> apply(
-      ActorTurn turn,
-      int choiceCount,
-      PlanConsequence current,
-      Simulation sim,
-      WorldState world,
-      T object) sync* {
-    var successChance =
-        getSuccessChance(turn.actor, sim, current.world, object);
-    assert(successChance != null);
-    assert(successChance.value >= 0.0);
-    assert(successChance.value <= 1.0);
-
-    final performance = Performance<T>(
-      this,
-      ApplicabilityContext(turn.actor, sim, world),
-      object,
-      successChance.value,
-    );
-
-    if (successChance.value > 0) {
-      final worldOutput = world.toBuilder();
-      Storyline storyline = _applyToWorldCopy(
-          turn, sim, worldOutput, applySuccess, object, successChance,
-          isSuccess: true);
-
-      yield PlanConsequence(worldOutput.build(), current, performance,
-          storyline, successChance.value, choiceCount,
-          isSuccess: true);
-    }
-    if (successChance.value < 1) {
-      final worldOutput = world.toBuilder();
-      Storyline storyline = _applyToWorldCopy(
-          turn, sim, worldOutput, applyFailure, object, successChance,
-          isFailure: true);
-
-      yield PlanConsequence(worldOutput.build(), current, performance,
-          storyline, 1 - successChance.value, choiceCount,
-          isFailure: true);
-    }
-  }
 
   /// Called to get the result of failure to do this action. Returns
   /// the mutated [Simulation].
@@ -258,90 +213,6 @@ abstract class Action<T> {
   /// the actual actions (instead of `c.actor` we can just write `a`).
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, T object);
-
-  void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world) {
-    if (_description == null) {
-      throw StateError("No description given when executing $this. You "
-          "should return it from your world-modifying function.");
-    }
-    builder.description = _description;
-    builder.time = world.time;
-    world.recordAction(builder.build());
-  }
-
-  Storyline _applyToWorldCopy(
-      ActorTurn turn,
-      Simulation sim,
-      WorldStateBuilder output,
-      ApplyFunction<T> applyFunction,
-      T object,
-      ReasonedSuccessChance successChance,
-      {bool isSuccess = false,
-      bool isFailure = false}) {
-    final initialWorld = output.build();
-    final builder = _prepareWorldRecord(
-        turn.actor, sim, initialWorld, object, isSuccess, isFailure);
-    final outputStoryline = Storyline();
-    // Remember situation as it can be changed during applySuccess.
-    final situationId = initialWorld.currentSituation.id;
-    initialWorld.currentSituation
-        .onBeforeAction(sim, initialWorld, outputStoryline);
-    final context = ActionContext(this, turn.actor, sim, initialWorld, output,
-        outputStoryline, successChance);
-    _description = applyFunction(context, object);
-
-    // The current situation could have been removed by [applyFunction].
-    // If not, let's update its time.
-    output.elapseSituationTimeIfExists(situationId);
-
-    // Move world time to when the turn happens.
-    output.time = turn.time;
-
-    if (isProactive) {
-      // Mark actor busy after performing their action.
-      final recoveringUntil =
-          turn.time.add(getRecoveryDuration(context, object));
-      output.updateActorById(
-          turn.actor.id, (b) => b.recoveringUntil = recoveringUntil);
-    }
-
-    // Perform any [Situation.onAfterAction]s.
-    output.build().getSituationById(situationId)?.onAfterAction(context);
-
-    // Remove ended situations: the ones that don't return an actor anymore,
-    // and the ones that return shouldContinue(world) != true.
-    var builtOutput = output.build();
-    while (builtOutput.currentSituation?.getNextTurn(sim, builtOutput) ==
-            ActorTurn.never ||
-        builtOutput.currentSituation?.shouldContinue(sim, builtOutput) !=
-            true) {
-      if (builtOutput.currentSituation == null) break;
-      output.popSituation(context);
-      builtOutput = output.build();
-    }
-
-    // Only 'surviving' (non-popped) situations get to run their `onAfterTurn`
-    // methods.
-    output.currentSituation?.onAfterTurn(context);
-
-    _addWorldRecord(builder, output);
-    return outputStoryline;
-  }
-
-  ActionRecordBuilder _prepareWorldRecord(Actor actor, Simulation sim,
-      WorldState world, T object, bool isSuccess, bool isFailure) {
-    var builder = ActionRecordBuilder()
-      ..actionName = name
-      ..protagonist = actor.id
-      ..wasSuccess = isSuccess
-      ..wasFailure = isFailure
-      ..wasAggressive = isAggressive
-      ..wasProactive = isProactive;
-    if (this is OtherActorActionBase) {
-      builder.sufferers.add((object as Actor).id);
-    }
-    return builder;
-  }
 }
 
 /// This [Action] requires an [approach].
@@ -506,19 +377,140 @@ class Performance<T> {
   /// The context in which the action is performed.
   final ApplicabilityContext context;
 
-  /// The chance that the action will
-  final num successChance;
+  /// The chance that the action will succeed.
+  final ReasonedSuccessChance successChance;
 
   /// The object the [action] is performed on.
   final T object;
 
   /// Creates a performance object.
-  const Performance(this.action, this.context, this.object, this.successChance);
+  Performance(this.action, this.context, this.object, this.successChance);
 
   /// The performer of the action.
   Actor get actor => context.actor;
 
   List<String> get commandPath => action.getCommandPath(context, object);
+
+  /// Applies the performance and returns the possible outcomes as an iterable
+  /// of [PlanConsequence].
+  ///
+  /// The [choiceCount] is the number of choices from which this action
+  /// was selected.
+  Iterable<PlanConsequence> apply(
+      ActorTurn turn,
+      int choiceCount,
+      PlanConsequence current,
+      Simulation sim,
+      WorldState world,
+      T object) sync* {
+    if (successChance.value > 0) {
+      final worldOutput = world.toBuilder();
+      Storyline storyline = _applyToWorldCopy(
+          turn, sim, worldOutput, action.applySuccess, object, successChance,
+          isSuccess: true);
+
+      yield PlanConsequence(worldOutput.build(), current, this, storyline,
+          successChance.value, choiceCount,
+          isSuccess: true);
+    }
+    if (successChance.value < 1) {
+      final worldOutput = world.toBuilder();
+      Storyline storyline = _applyToWorldCopy(
+          turn, sim, worldOutput, action.applyFailure, object, successChance,
+          isFailure: true);
+
+      yield PlanConsequence(worldOutput.build(), current, this, storyline,
+          1 - successChance.value, choiceCount,
+          isFailure: true);
+    }
+  }
+
+  void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world) {
+    if (_description == null) {
+      throw StateError("No description given when executing $action. You "
+          "should return it from your world-modifying function.");
+    }
+    builder.description = _description;
+    builder.time = world.time;
+    world.recordAction(builder.build());
+  }
+
+  /// The description of the performance.
+  String _description;
+
+  Storyline _applyToWorldCopy(
+      ActorTurn turn,
+      Simulation sim,
+      WorldStateBuilder output,
+      ApplyFunction<T> applyFunction,
+      T object,
+      ReasonedSuccessChance successChance,
+      {bool isSuccess = false,
+      bool isFailure = false}) {
+    final initialWorld = output.build();
+    final builder = _prepareWorldRecord(
+        turn.actor, sim, initialWorld, object, isSuccess, isFailure);
+    final outputStoryline = Storyline();
+    // Remember situation as it can be changed during applySuccess.
+    final situationId = initialWorld.currentSituation.id;
+    initialWorld.currentSituation
+        .onBeforeAction(sim, initialWorld, outputStoryline);
+    final context = ActionContext(action, turn.actor, sim, initialWorld, output,
+        outputStoryline, successChance);
+    _description = applyFunction(context, object);
+
+    // The current situation could have been removed by [applyFunction].
+    // If not, let's update its time.
+    output.elapseSituationTimeIfExists(situationId);
+
+    // Move world time to when the turn happens.
+    output.time = turn.time;
+
+    if (action.isProactive) {
+      // Mark actor busy after performing their action.
+      final recoveringUntil =
+          turn.time.add(action.getRecoveryDuration(context, object));
+      output.updateActorById(
+          turn.actor.id, (b) => b.recoveringUntil = recoveringUntil);
+    }
+
+    // Perform any [Situation.onAfterAction]s.
+    output.build().getSituationById(situationId)?.onAfterAction(context);
+
+    // Remove ended situations: the ones that don't return an actor anymore,
+    // and the ones that return shouldContinue(world) != true.
+    var builtOutput = output.build();
+    while (builtOutput.currentSituation?.getNextTurn(sim, builtOutput) ==
+            ActorTurn.never ||
+        builtOutput.currentSituation?.shouldContinue(sim, builtOutput) !=
+            true) {
+      if (builtOutput.currentSituation == null) break;
+      output.popSituation(context);
+      builtOutput = output.build();
+    }
+
+    // Only 'surviving' (non-popped) situations get to run their `onAfterTurn`
+    // methods.
+    output.currentSituation?.onAfterTurn(context);
+
+    _addWorldRecord(builder, output);
+    return outputStoryline;
+  }
+
+  ActionRecordBuilder _prepareWorldRecord(Actor actor, Simulation sim,
+      WorldState world, T object, bool isSuccess, bool isFailure) {
+    var builder = ActionRecordBuilder()
+      ..actionName = action.name
+      ..protagonist = actor.id
+      ..wasSuccess = isSuccess
+      ..wasFailure = isFailure
+      ..wasAggressive = action.isAggressive
+      ..wasProactive = action.isProactive;
+    if (action is OtherActorActionBase) {
+      builder.sufferers.add((object as Actor).id);
+    }
+    return builder;
+  }
 }
 
 /// This class encapsulates a singular reason why an action might have

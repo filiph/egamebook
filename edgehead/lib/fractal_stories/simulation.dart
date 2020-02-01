@@ -133,7 +133,7 @@ class Simulation {
         }
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, null);
-        yield Performance<Nothing>(action, context, null, successChance.value);
+        yield Performance<Nothing>(action, context, null, successChance);
         continue;
       }
 
@@ -147,7 +147,7 @@ class Simulation {
         }
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, target);
-        yield Performance<Object>(action, context, target, successChance.value);
+        yield Performance<Object>(action, context, target, successChance);
       }
     }
   }

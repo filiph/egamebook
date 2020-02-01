@@ -179,7 +179,7 @@ class EdgeheadGame extends Book {
 
   Future<void> _applySelected(Performance performance, ActorTurn turn,
       int choiceCount, Storyline storyline) async {
-    var consequences = performance.action
+    var consequences = performance
         .apply(turn, choiceCount, consequence, simulation, world,
             performance.object)
         .toList();
@@ -349,7 +349,7 @@ class EdgeheadGame extends Book {
 
         logAndPrint("===== ACTIONPATTERN WAS HIT =====");
         logAndPrint("Found action that matches '$actionPattern': $performance");
-        for (final consequence in performance.action.apply(
+        for (final consequence in performance.apply(
             actorTurn,
             recs.performances.length,
             consequence,
@@ -421,7 +421,7 @@ class EdgeheadGame extends Book {
         final choice = Choice((b) => b
           ..commandPath = ListBuilder<String>(performance.commandPath)
           ..helpMessage = performance.action.helpMessage
-          ..successChance = performance.successChance.toDouble()
+          ..successChance = performance.successChance.value
           ..isImplicit = performance.action.isImplicit);
         callbacks[choice] = () async {
           await _applySelected(
