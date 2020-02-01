@@ -21,7 +21,7 @@ class AutoLoot extends Action<Nothing> {
   final bool isProactive = true;
 
   @override
-  bool isImplicit = true;
+  final bool isImplicit = true;
 
   @override
   final bool rerollable = false;

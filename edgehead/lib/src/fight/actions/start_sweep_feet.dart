@@ -44,9 +44,9 @@ class SweepFeet extends StartDefensibleActionBase {
   final bool isProactive = true;
 
   @override
-  String helpMessage = "Sweeping the opponent's feet away doesn't deal much "
-      "damage but on the ground they will be much easier targets for me "
-      "and my allies.";
+  final String helpMessage = "Sweeping the opponent's feet away doesn't "
+      "deal much damage but on the ground they will be much easier targets "
+      "for me and my allies.";
 
   @override
   CombatCommandType get combatCommandType => CombatCommandType.stance;

@@ -21,9 +21,9 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
   final bool isProactive = true;
 
   @override
-  String helpMessage = "A lesser known talent of necromancers is to channel "
-      "the horror of death to the target's mind. It makes the target rabid "
-      "and disoriented. They might attack their own.";
+  final String helpMessage = "A lesser known talent of necromancers is "
+      "to channel the horror of death to the target's mind. It makes "
+      "the target rabid and disoriented. They might attack their own.";
 
   @override
   final bool rerollable = true;

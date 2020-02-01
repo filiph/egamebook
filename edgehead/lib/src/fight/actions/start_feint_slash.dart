@@ -46,7 +46,7 @@ class FeintSlash extends StartDefensibleActionBase {
   final bool isProactive = true;
 
   @override
-  String helpMessage = "Feinting an attack helps luring my opponent from "
+  final String helpMessage = "Feinting an attack helps luring my opponent from "
       "a defensive position. If successful, the enemy will be extended, "
       "and therefore vulnerable to follow up attack.";
 

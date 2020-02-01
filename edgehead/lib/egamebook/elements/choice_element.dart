@@ -24,7 +24,7 @@ abstract class Choice extends ElementBase
   @nullable
   String get helpMessage;
 
-  /// Returns [:true:] when the choice is automatic (scripter picks it
+  /// Returns [:true:] when the choice is automatic (presenter picks it
   /// silently). Corresponds to `Action.isImplicit`.
   bool get isImplicit;
 }
