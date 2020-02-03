@@ -168,7 +168,9 @@ class Report {
         final b = nonNulls[j];
         if (a.id == b.id) continue;
         if (a.name == b.name && a.adjective == b.adjective) {
-          print("$a and $b aren't differentiated enough");
+          // Uncomment the line below to debug this problem if the debugger
+          // refuses to stop at the assertion.
+          // print("$a and $b aren't differentiated enough");
           return false;
         }
       }
