@@ -3661,7 +3661,7 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
         wholeSentence: true);
     w.recordCustom(evJisadSeesUndeadLeroy);
   }
-}, null, null, isIdle: true);
+}, null, null, isIdle: true, positionX: 36, positionY: 97);
 final Approach endOfRoamFromBleedsMain =
     Approach('bleeds_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
         (ActionContext c) {

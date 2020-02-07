@@ -10,6 +10,8 @@ ROOM: $bleeds_trader_hut
 
 FLAGS: $IDLE
 
+POS: 36, 97
+
 FIRST_DESCRIPTION:
 [We] enter a small building made of stone. It's dark in here but cozy.
 A gray haired trader greets me and gestures around.
