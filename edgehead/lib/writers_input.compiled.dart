@@ -2356,7 +2356,7 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
   s.add(
       'Orc noises from all around, but thankfully no orc in sight. $ifBlock_753ddd0b\n',
       wholeSentence: true);
-}, null, null, positionX: 32, positionY: 72);
+}, null, null, positionX: 32, positionY: 42);
 final Approach godsLairFromElevator28 =
     Approach('elevator_28', 'gods_lair', 'Go >> east', (ActionContext c) {
   final WorldState originalWorld = c.world;

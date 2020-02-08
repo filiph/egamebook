@@ -21,7 +21,7 @@ DESCRIPTION: $NONE
 // ---
 ROOM: $elevator_28
 
-POS: 32, 72
+POS: 32, 42
 
 DESCRIPTION: 
 Orc noises from all around, but thankfully no orc in sight. [[IF !c.hasHappened(evKarlGuardsKilled)]]Brutal laughter from the east.[[ENDIF]]
