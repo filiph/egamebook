@@ -4311,7 +4311,7 @@ final Room meadowFight = Room(
     null,
     generateStartFight,
     null,
-    positionX: 37,
+    positionX: 49,
     positionY: 99,
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;

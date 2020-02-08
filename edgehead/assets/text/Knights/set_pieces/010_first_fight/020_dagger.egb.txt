@@ -20,6 +20,8 @@ c.movePlayer("meadow_fight");
 ACTION: $start_decline_dagger
 COMMAND: “You are going to be fine.”
 
+// TODO: replace with something more interesting, like "give me the sword instead"
+
 FOR_LOCATION: $start_enter_goblin
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
