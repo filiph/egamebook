@@ -2863,7 +2863,7 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   s.add('', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 37, positionY: 70);
 final Approach endOfRoamFromKnightsHqMain = Approach(
-    'knights_hq_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
+    'knights_hq_main', '__END_OF_ROAM__', 'go >> back home (ENDS GAME)',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3663,7 +3663,7 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   }
 }, null, null, isIdle: true, positionX: 36, positionY: 97);
 final Approach endOfRoamFromBleedsMain =
-    Approach('bleeds_main', '__END_OF_ROAM__', 'Travel back home (ENDS GAME)',
+    Approach('bleeds_main', '__END_OF_ROAM__', 'go >> back home (ENDS GAME)',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
