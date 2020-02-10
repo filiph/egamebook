@@ -226,11 +226,14 @@ class Simulation {
   /// Returns the parent of this room. If [room] is a variant, this function
   /// will return the main room. If [room] is the main room, it will be
   /// returned.
+  ///
+  /// If the parent of this room also has a parent, then the "grand parent"
+  /// will be returned. And so on until there is no other ancestor.
   Room getRoomParent(Room room) {
     var result = room;
     // This method is ready for the possibility of a chain of variants
     // (i.e. a variant of a variant of a room).
-    while (room.parent != null) {
+    while (result.parent != null) {
       result = getRoomByName(room.parent);
     }
     return result;
