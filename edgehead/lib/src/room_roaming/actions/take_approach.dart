@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class TakeApproachAction extends ApproachAction {
+class TakeApproachAction extends Action<Approach> {
   static const String className = "TakeApproachAction";
 
   static final TakeApproachAction singleton = TakeApproachAction();
@@ -53,6 +53,20 @@ class TakeApproachAction extends ApproachAction {
         .moveActor(context, approach.to);
 
     return "${a.name} went through approach to ${approach.to}";
+  }
+
+  @override
+  Iterable<Approach> generateObjects(ApplicabilityContext context) {
+    final situation = context.world.currentSituation as RoomRoamingSituation;
+    var room = context.simulation.getRoomByName(situation.currentRoomName);
+
+    var approaches = context.simulation
+        .getAvailableApproaches(room, context)
+        .toList(growable: false);
+
+    assert(approaches.every((a) => !a.isImplicit) || approaches.length == 1,
+        "You can have only one implicit approach: $approaches");
+    return approaches;
   }
 
   /// [TakeApproach] returns the path from the current position to

@@ -5,14 +5,12 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
-import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
 /// A typedef for [Action]'s apply functions: both [Action.applySuccess] and
@@ -224,30 +222,6 @@ abstract class Action<T> {
   /// the actual actions (instead of `c.actor` we can just write `a`).
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, T object);
-}
-
-/// This [Action] requires an [approach].
-///
-/// Every [ApproachAction] should contain a static builder like this:
-///
-///     static ApproachAction builder(Approach enemy) => new Example(exit);
-abstract class ApproachAction extends Action<Approach> {
-  @override
-  Iterable<Approach> generateObjects(ApplicabilityContext context) {
-    final situation = context.world.currentSituation as RoomRoamingSituation;
-    var room = context.simulation.getRoomByName(situation.currentRoomName);
-
-    var approaches = context.simulation
-        .getAvailableApproaches(room, context)
-        .toList(growable: false);
-
-    assert(approaches.every((a) => !a.isImplicit) || approaches.length == 1,
-        "You can have only one implicit approach: $approaches");
-    return approaches;
-  }
-
-  @override
-  String toString() => "ApproachAction";
 }
 
 /// This [Action] requires an [enemy].
