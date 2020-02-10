@@ -44,10 +44,10 @@ void main() {
       tempDir = await Directory.systemTemp.createTemp("edgehead_fuzzy_test");
     });
 
-    test("edgehead runs to completion 10 times from slaveQuarters", () async {
+    test("edgehead runs to completion 10 times from bleedsFight", () async {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
       await testWithStopWords(stopWords, tempDir, Level.WARNING, 10,
-          savegame: "slaveQuarters");
+          savegame: "bleedsFight");
     }, timeout: const Timeout.factor(10), tags: ["long-running"]);
 
     test("edgehead runs to completion 10 times without warnings", () async {
