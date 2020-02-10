@@ -31,12 +31,9 @@ FIRST_DESCRIPTION:
 I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.
 
 [[CODE]]
-// Making sure that Tamara & Briana are not active by now, in case we skip
+// Making sure that Tamara is not active by now, in case we skip
 // the initial fight during debug.
 w.updateActorById(tamaraId, (b) => b.isActive = false);
-if (w.actors.build().any((a) => a.id == brianaId)) {
-  w.updateActorById(brianaId, (b) => b.isActive = false);    
-}
 [[ENDCODE]]
 
 DESCRIPTION: $NONE

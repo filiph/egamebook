@@ -623,9 +623,6 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
       '(NOTE FOR TESTERS: This area is very much in development.)\n\nI come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.\n\n',
       wholeSentence: true);
   w.updateActorById(tamaraId, (b) => b.isActive = false);
-  if (w.actors.build().any((a) => a.id == brianaId)) {
-    w.updateActorById(brianaId, (b) => b.isActive = false);
-  }
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -850,9 +847,6 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   c.learnAbout(kbGoblinCampSmoke);
 
   w.updateActorById(tamaraId, (b) => b.isActive = false);
-  if (w.actors.build().any((a) => a.id == brianaId)) {
-    w.updateActorById(brianaId, (b) => b.isActive = false);
-  }
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1874,9 +1868,8 @@ final Room start = Room('start', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her slender sword. "This is the last and then I turn back."\n\n',
+      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her slender sword. "This is the last and then I turn back."\n',
       wholeSentence: true);
-  w.actors.removeWhere((actor) => actor.id == brianaId);
 }, null, null, null);
 final Approach startCowardFromStart =
     Approach('start', 'start_coward', '“Coward.”', (ActionContext c) {
@@ -2444,7 +2437,6 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
             'You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.\n\n\nYou look at Briana. Both of you are ready to fight.',
             wholeSentence: true);
         w.popSituation(c);
-        setUpStealShield(c, false);
         return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
       }, 'You can quickly snatch the shield, jump back and prepare for a fight.')
     ];

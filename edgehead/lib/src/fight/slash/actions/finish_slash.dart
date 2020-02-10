@@ -14,7 +14,6 @@ import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
-import 'package:edgehead/writers_helpers.dart' show orcthorn;
 
 class FinishSlash extends OtherActorAction {
   static final FinishSlash singleton = FinishSlash();
@@ -124,11 +123,6 @@ class FinishSlash extends OtherActorAction {
           object: result.victim,
           positive: true,
           actionThread: thread);
-      if (a.currentWeapon?.id == orcthorn.id && enemy.name.contains('orc')) {
-        a.currentWeapon.report(
-            s, "<subject> slit<s> through the flesh like it isn't there.",
-            wholeSentence: true);
-      }
       killHumanoid(context, result.victim.id);
     }
     return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";

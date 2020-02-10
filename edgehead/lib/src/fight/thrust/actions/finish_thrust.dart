@@ -11,7 +11,6 @@ import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
-import 'package:edgehead/writers_helpers.dart' show orcthorn;
 
 class FinishThrust extends OtherActorAction {
   static final FinishThrust singleton = FinishThrust();
@@ -102,11 +101,6 @@ class FinishThrust extends OtherActorAction {
           object: result.victim,
           positive: true,
           actionThread: thread);
-      if (a.currentWeapon?.id == orcthorn.id && enemy.name.contains('orc')) {
-        a.currentWeapon.report(
-            s, "<subject> slit<s> through the flesh like it isn't there.",
-            wholeSentence: true);
-      }
       killHumanoid(context, enemy.id);
     }
     return "${a.name} thrusts${killed ? ' (and kills)' : ''} ${enemy.name}";

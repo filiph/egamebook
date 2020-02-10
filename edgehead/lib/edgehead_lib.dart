@@ -226,7 +226,6 @@ class EdgeheadGame extends Book {
       world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(<Actor>[
           edgeheadPlayer,
-          edgeheadBriana,
           edgeheadTamara,
           edgeheadLeroy
         ])

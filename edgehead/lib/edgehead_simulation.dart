@@ -18,18 +18,6 @@ const String carelessMonsterFoldFunctionHandle = "carelessMonster";
 
 const String normalFoldFunctionHandle = "normal";
 
-final Actor edgeheadBriana = Actor.initialized(
-  brianaId,
-  "Briana",
-  // Plot armor for Briana.
-  isInvincible: true,
-  nameIsProperNoun: true,
-  pronoun: Pronoun.SHE,
-  constitution: 2,
-  currentRoomName: _preStartBook.name,
-  followingActorId: playerId,
-);
-
 final Actor edgeheadDirector = Actor.initialized(
   directorId,
   "DIRECTOR",
