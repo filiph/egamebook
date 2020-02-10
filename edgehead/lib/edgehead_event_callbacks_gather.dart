@@ -15,7 +15,6 @@ part 'edgehead_event_callbacks_gather.gathered.dart';
 final InstanceSerializer<EventCallback> eventCallbackSerializer =
     _$eventCallbackSerializer;
 
-
 final start_make_goblin_not_invincible = EventCallback((c, sim, w, s) {
   w.updateActorById(firstGoblinId, (b) => b.isInvincible = false);
 });
