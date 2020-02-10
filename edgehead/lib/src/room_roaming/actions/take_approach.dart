@@ -1,15 +1,19 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:logging/logging.dart';
 
 class TakeApproachAction extends Action<Approach> {
   static const String className = "TakeApproachAction";
 
   static final TakeApproachAction singleton = TakeApproachAction();
+
+  static final Logger _log = Logger('TakeApproachAction');
 
   @override
   List<String> get commandPathTemplate =>
@@ -59,14 +63,9 @@ class TakeApproachAction extends Action<Approach> {
   Iterable<Approach> generateObjects(ApplicabilityContext context) {
     final situation = context.world.currentSituation as RoomRoamingSituation;
     var room = context.simulation.getRoomByName(situation.currentRoomName);
+    _log.finest(() => 'Generating approaches for ${context.actor} from $room');
 
-    var approaches = context.simulation
-        .getAvailableApproaches(room, context)
-        .toList(growable: false);
-
-    assert(approaches.every((a) => !a.isImplicit) || approaches.length == 1,
-        "You can have only one implicit approach: $approaches");
-    return approaches;
+    return _walkApproaches(context, room);
   }
 
   /// [TakeApproach] returns the path from the current position to
@@ -149,5 +148,60 @@ class TakeApproachAction extends Action<Approach> {
     }
 
     return true;
+  }
+
+  /// Returns all approaches that can be accessed from [startingRoom] either
+  /// directly, or through a set of already-explored other rooms.
+  ///
+  /// This lets the player "fast travel" throughout the map.
+  static Iterable<Approach> _walkApproaches(
+      ApplicabilityContext context, Room startingRoom) sync* {
+    // The rooms that we yet have to "walk".
+    final sourceRooms = {startingRoom};
+
+    // Rooms that have been visited by the walk, and therefore shouldn't be
+    // considered again.
+    final closed = <Room>{};
+
+    while (sourceRooms.isNotEmpty) {
+      final room = sourceRooms.first;
+      sourceRooms.remove(room);
+      closed.add(context.simulation.getRoomParent(room));
+      _log.finest(() => 'Going from sourceRoom=$room '
+          '(sourceRoom.length=${sourceRooms.length})');
+
+      final approaches = context.simulation
+          .getAvailableApproaches(room, context)
+          .toList(growable: false);
+
+      assert(approaches.every((a) => !a.isImplicit) || approaches.length == 1,
+          "You can have only one implicit approach: $approaches");
+
+      for (final approach in approaches) {
+        if (approach.isImplicit) {
+          // Don't auto-travel through implicit approaches. Just yield it.
+          yield approach;
+          continue;
+        }
+
+        final destination = context.simulation.getRoomByName(approach.to);
+        final destinationParent = context.simulation.getRoomParent(destination);
+
+        if (closed.contains(destinationParent)) {
+          // Don't revisit rooms that have already been walked by
+          // this algorithm.
+          continue;
+        }
+
+        yield approach;
+
+        if (context.world.visitHistory
+            .query(context.actor, destination)
+            .hasHappened) {
+          // The actor has been here. They can "fast travel" through.
+          sourceRooms.add(destination);
+        }
+      }
+    }
   }
 }
