@@ -22,10 +22,10 @@ String formatAiConsequence(
   var buf = StringBuffer();
   buf.write('AI_CONSEQUENCE:');
   // ID of decision.
-  buf.write('actor${actor.id}-world${initial.world.hashCode}');
+  buf.write('actor${actor?.id}-world${initial.world.hashCode}');
   buf.write(_separator);
   // Actor
-  buf.write('${actor.name} (${actor.id})');
+  buf.write('${actor?.name} (${actor?.id})');
   buf.write(_separator);
   // Initial world hash
   buf.write(initial.world.hashCode);
