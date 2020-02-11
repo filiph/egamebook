@@ -526,13 +526,7 @@ class ShadowGraph {
       yield IdentifierLevel.adjectiveOne;
     }
 
-    final sameNameEntities =
-        others.where((e) => e.name == entity.name).toList(growable: false);
-    final multipleWithNoAdjective = entity.adjective == null &&
-        sameNameEntities.any((e) => e.adjective == null);
-
-    if (!entity.isCommon &&
-        (sameNameEntities.isNotEmpty && multipleWithNoAdjective)) {
+    if (!entity.isCommon && others.any((e) => e.name == entity.name)) {
       yield IdentifierLevel.noun;
     }
 
