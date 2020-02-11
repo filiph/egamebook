@@ -118,16 +118,12 @@ class EdgeheadGame extends Book {
   }
 
   Future<void> update() async {
-    try {
-      await _update();
-      // ignore: avoid_catches_without_on_clauses
-    } catch (e, s) {
+    return runZoned(_update, onError: (Object e, StackTrace s) {
       // Catch errors and send to presenter.
       elementsSink.add(ErrorElement((b) => b
         ..message = e.toString()
         ..stackTrace = s.toString()));
-      rethrow;
-    }
+    });
   }
 
   Future _applyPlayerAction(Performance<dynamic> performance, Actor actor,
