@@ -192,4 +192,7 @@ class ComplementType {
         pronounPossessive,
         pronounSelf,
       ];
+
+  @override
+  String toString() => 'ComplementType<$generic>';
 }
