@@ -123,6 +123,8 @@ class EdgeheadGame extends Book {
       elementsSink.add(ErrorElement((b) => b
         ..message = e.toString()
         ..stackTrace = s.toString()));
+      // ignore: only_throw_errors
+      throw e;
     });
   }
 
