@@ -186,13 +186,19 @@ class ShadowGraph {
   void __assertAtLeastOneIdentifier(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < _reportIdentifiers.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
         assert(
             set.isNotEmpty,
-            "We have an empty range ($set) for $entity in $report (#$i).\n"
+            "We have an empty range ($set) for $entity ($complement) "
+            "in $report (#$i).\n"
             "Reports: $reports\n\n"
             "Identifiers: $_identifiers\n\n"
             "ReportIdentifiers: $_reportIdentifiers");
+        assert(
+            complement == ComplementType.SUBJECT ||
+                set.difference(const {IdentifierLevel.omitted}).isNotEmpty,
+            "The identifier range only has 'omitted' despite the fact that "
+            "complement is $complement for $entity in $report (#$i).");
       });
     }
   }
@@ -239,7 +245,7 @@ class ShadowGraph {
     final Map<int, int> lastMentionedTimes = {};
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
         if (!entity.isPlayer && !everMentionedIds.contains(entity.id)) {
           // If this is the first time we mention this entity, call it by
           // at least the noun.
@@ -252,12 +258,22 @@ class ShadowGraph {
           everMentionedIds.add(entity.id);
         }
 
+        assert(
+            set.isNotEmpty,
+            'The range of identifiers for $entity ($complement) '
+            'is already empty. Entities: $entities.');
+
         // Unless we just talked about the entity...
         if ((lastMentionedTimes[entity.id] ?? -1000) < i - 1) {
           // ... disallow any identifiers that might confuse this with
           // any other entity.
           set.removeAll(_getConflictingQualificationLevels(entity, entities));
         }
+
+        assert(
+            set.isNotEmpty,
+            'The range of identifiers for $entity ($complement) '
+            'is already empty. Entities: $entities.');
 
         lastMentionedTimes[entity.id] = i;
       });
@@ -286,7 +302,7 @@ class ShadowGraph {
   void _detectMissingAdjectives(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
         if (entity.adjective == null) {
           set.removeAll(
               [IdentifierLevel.adjectiveOne, IdentifierLevel.adjectiveNoun]);
@@ -300,7 +316,7 @@ class ShadowGraph {
   void _detectMissingProperNouns(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
         if (!entity.nameIsProperNoun) {
           set.remove(IdentifierLevel.properNoun);
         }
@@ -510,7 +526,13 @@ class ShadowGraph {
       yield IdentifierLevel.adjectiveOne;
     }
 
-    if (!entity.isCommon && others.any((e) => e.name == entity.name)) {
+    final sameNameEntities =
+        others.where((e) => e.name == entity.name).toList(growable: false);
+    final multipleWithNoAdjective = entity.adjective == null &&
+        sameNameEntities.any((e) => e.adjective == null);
+
+    if (!entity.isCommon &&
+        (sameNameEntities.isNotEmpty && multipleWithNoAdjective)) {
       yield IdentifierLevel.noun;
     }
 
@@ -605,6 +627,11 @@ class ShadowGraph {
         }
       }
 
+      assert(
+          reportEntities
+              .every((entity) => current.values.any((e) => e.id == entity.id)),
+          'An entity is missing completely from $current');
+
       result[i] = current;
       previous = current;
     }
@@ -674,7 +701,8 @@ class ShadowGraph {
       // At this point, the final joiner must have been selected.
       final joiner = joiners[i];
       if (startNewSentenceJoiners.contains(joiner)) {
-        _reportIdentifiers[i].forEachEntityIn(reports[i], (entity, set) {
+        _reportIdentifiers[i].forEachEntityIn(reports[i],
+            (complement, entity, set) {
           set.remove(IdentifierLevel.omitted);
         });
       }
@@ -694,7 +722,7 @@ class ShadowGraph {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       final current = identifiers[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
         // Take the identifiers that refer to the entity.
         // For example, in a particular sentence, "he" and "Aren" can
         // both be relevant identifiers for the actor named Aren.
@@ -713,6 +741,11 @@ class ShadowGraph {
         // these identifiers.
         set.retainWhere((level) => relevantIdentifiers
             .any((identifier) => identifier.satisfiedBy(level)));
+
+        assert(
+            set.isNotEmpty,
+            "range of identifiers for $entity ($complement) is empty "
+            "in $report: current");
       });
     }
   }
@@ -739,7 +772,7 @@ class ShadowGraph {
       UnmodifiableListView<Report> reports) {
     for (int i = 0; i < _reportIdentifiers.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (entity, set) {
+      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
         assert(set.isNotEmpty,
             "We have an empty range ($set) for $entity in $report.");
         int j = 0;

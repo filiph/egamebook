@@ -123,22 +123,23 @@ class ReportIdentifiers {
   /// The callback has two parameters: the [Entity], and its current
   /// set of possible [IdentifierLevel]s. It is possible (and expected)
   /// to modify the set.
-  void forEachEntityIn(
-      Report report, void Function(Entity, Set<IdentifierLevel>) callback) {
+  void forEachEntityIn(Report report,
+      void Function(ComplementType, Entity, Set<IdentifierLevel>) callback) {
     if (report.subject != null) {
-      callback(report.subject, _subjectRange);
+      callback(ComplementType.SUBJECT, report.subject, _subjectRange);
     }
     if (report.object != null) {
-      callback(report.object, _objectRange);
+      callback(ComplementType.OBJECT, report.object, _objectRange);
     }
     if (report.object2 != null) {
-      callback(report.object2, _object2Range);
+      callback(ComplementType.OBJECT2, report.object2, _object2Range);
     }
     if (report.owner != null) {
-      callback(report.owner, _ownerRange);
+      callback(ComplementType.OWNER, report.owner, _ownerRange);
     }
     if (report.objectOwner != null) {
-      callback(report.objectOwner, _objectOwnerRange);
+      callback(
+          ComplementType.OBJECT_OWNER, report.objectOwner, _objectOwnerRange);
     }
   }
 
