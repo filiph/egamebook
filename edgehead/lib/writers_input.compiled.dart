@@ -75,7 +75,7 @@ final Room testRandomEncounter =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
-}, null, generateRandomEncounter, null);
+}, null, generateRandomEncounter, null, positionX: 0, positionY: 0);
 final Approach elevator28FromElevator12 =
     Approach('elevator_12', 'elevator_28', 'Go >> climb up', (ActionContext c) {
   final WorldState originalWorld = c.world;

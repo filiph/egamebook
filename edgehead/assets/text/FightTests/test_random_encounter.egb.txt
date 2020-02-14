@@ -1,6 +1,8 @@
 ROOM: $test_random_encounter
 FIRST_DESCRIPTION: $NONE
 
+POS: 0, 0
+
 FIGHT_SITUATION:
 generateRandomEncounter
 

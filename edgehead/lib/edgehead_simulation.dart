@@ -89,6 +89,8 @@ final _preStartBook = Room(
   null,
   null,
   isSynthetic: true,
+  positionX: 0,
+  positionY: 0,
 );
 
 final List<Room> _rooms = List<Room>.from(allRooms)
