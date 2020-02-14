@@ -1,6 +1,6 @@
 // ---
 APPROACH: $bleeds_trader_hut FROM $bleeds_main
-COMMAND: Go >> inside the trader's shop
+COMMAND: Trader shop >> Enter
 DESCRIPTION: $NONE
 PREREQUISITES:
 c.hasLearnedAbout(kbTrader)

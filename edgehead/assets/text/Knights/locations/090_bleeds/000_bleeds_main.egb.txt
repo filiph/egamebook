@@ -9,11 +9,6 @@ COMMAND: Go >> towards the Pyramid
 DESCRIPTION: $NONE
 
 // ---
-APPROACH: $bleeds_main FROM $bleeds_trader_hut
-COMMAND: Go >> outside
-DESCRIPTION: [We] walk out into the muddy street.
-
-// ---
 APPROACH: $bleeds_main FROM $goblin_skirmish_sneak
 COMMAND: Go >> to The Bleeds
 DESCRIPTION: [We] sneak through the bushes and emerge back in The Bleeds.
@@ -22,6 +17,11 @@ DESCRIPTION: [We] sneak through the bushes and emerge back in The Bleeds.
 APPROACH: $bleeds_main FROM $goblin_skirmish_main
 COMMAND: Go >> to The Bleeds
 DESCRIPTION: [We] walk back to The Bleeds.
+
+// ---
+APPROACH: $bleeds_main FROM $bleeds_trader_hut
+COMMAND: Exit >> Leave the shop
+DESCRIPTION: [We] walk out into the muddy street.
 
 
 // ---
