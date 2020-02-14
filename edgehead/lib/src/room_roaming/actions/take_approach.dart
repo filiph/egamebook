@@ -75,40 +75,7 @@ class TakeApproachAction extends Action<RoomPath> {
   /// through (10, 5) to (100, 100).
   @override
   List<int> getAdditionalData(ApplicabilityContext context, RoomPath path) {
-    if (isImplicit) {
-      return const [];
-    }
-
-    final situation = context.world.currentSituation as RoomRoamingSituation;
-    final currentRoom =
-        context.simulation.getRoomByName(situation.currentRoomName);
-
-    if (currentRoom.positionX == null || currentRoom.positionY == null) {
-      // TODO: if possible, get rid of these rooms altogether
-      return const [];
-    }
-
-    assert(currentRoom.positionX != null, "no position for $currentRoom");
-    assert(currentRoom.positionY != null);
-
-    final destinationRoom = context.simulation.getRoomByName(path.approach.to);
-
-    if (destinationRoom.positionX == null ||
-        destinationRoom.positionY == null) {
-      // TODO: if possible, get rid of these rooms altogether
-      return const [];
-    }
-
-    assert(
-        destinationRoom.positionX != null, "no position for $destinationRoom");
-    assert(destinationRoom.positionY != null);
-
-    return [
-      currentRoom.positionX,
-      currentRoom.positionY,
-      destinationRoom.positionX,
-      destinationRoom.positionY,
-    ];
+    return path.getPathCoordinates().toList(growable: false);
   }
 
   /// When the writer specifies a command with " >> " in it, this will
@@ -182,8 +149,13 @@ class TakeApproachAction extends Action<RoomPath> {
 
         // Construct the new path from the last one, by adding one intermediate
         // room, and changing the destination.
-        final newPath = RoomPath(startingRoom, current.destination, destination,
-            approach, List.from(current.intermediateRooms)..add(current.from));
+        final newPath = RoomPath(
+          startingRoom,
+          current.destination,
+          destination,
+          approach,
+          List.from(current.intermediateRooms)..add(current.destination),
+        );
 
         if (approach.isImplicit) {
           // Don't auto-travel through implicit approaches. Just yield it.
@@ -212,6 +184,8 @@ class TakeApproachAction extends Action<RoomPath> {
 }
 
 class RoomPath {
+  static final Logger _log = Logger('RoomPath');
+
   final Approach approach;
 
   /// The origin of the path.
@@ -226,7 +200,12 @@ class RoomPath {
   final List<Room> intermediateRooms;
 
   const RoomPath(this.origin, this.from, this.destination, this.approach,
-      this.intermediateRooms);
+      this.intermediateRooms)
+      : assert(origin != null),
+        assert(from != null),
+        assert(destination != null),
+        assert(approach != null),
+        assert(intermediateRooms != null);
 
   const RoomPath.start(this.destination)
       : origin = null,
@@ -235,4 +214,42 @@ class RoomPath {
         approach = null;
 
   bool get isStart => origin == null;
+
+  /// Constructs the list of coordinates that we can send to the UI as a path.
+  Iterable<int> getPathCoordinates() sync* {
+    assert(
+        !isStart,
+        'Trying to construct path for RoomPath.start(). '
+        'This should not happen: the starting path is empty, and only used '
+        'for the tree search.');
+
+    if (origin.positionX == null || origin.positionY == null) {
+      _log.info('$origin in $this has no position. Returning empty path.');
+      return;
+    }
+
+    if (destination.positionX == null || destination.positionY == null) {
+      _log.info('$destination in $this has no position. '
+          'Returning empty path.');
+      return;
+    }
+
+    yield origin.positionX;
+    yield origin.positionY;
+
+    for (final room in intermediateRooms) {
+      if (room.positionX == null || room.positionY == null) {
+        continue;
+      }
+
+      yield room.positionX;
+      yield room.positionY;
+    }
+
+    yield destination.positionX;
+    yield destination.positionY;
+  }
+
+  @override
+  String toString() => 'RoomPath<$origin, $from, $destination, $approach>';
 }
