@@ -642,9 +642,8 @@ final Approach endOfRoamFromKnightsHqMain = Approach(
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
 });
-final Approach bleedsMainFromBleedsTraderHut =
-    Approach('bleeds_trader_hut', 'bleeds_main', 'Exit >> Leave the shop',
-        (ActionContext c) {
+final Approach bleedsMainFromBleedsTraderHut = Approach(
+    'bleeds_trader_hut', 'bleeds_main', 'Go >> outside', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1097,9 +1096,9 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach bleedsTraderHutFromBleedsMain =
-    Approach('bleeds_main', 'bleeds_trader_hut', 'Trader shop >> Enter',
-        (ActionContext c) {
+final Approach bleedsTraderHutFromBleedsMain = Approach(
+    'bleeds_main', 'bleeds_trader_hut', 'Go >> inside the trader\'s shop',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
