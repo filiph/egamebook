@@ -463,6 +463,73 @@ final Approach reservoirFromJunction =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+
+class ReservoirOpenDam extends RoamingAction {
+  @override
+  final String name = 'reservoir_open_dam';
+
+  static final ReservoirOpenDam singleton = ReservoirOpenDam();
+
+  @override
+  List<String> get commandPathTemplate => ['Dam', 'Open'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('reservoir') != true) {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I open the dam and the reservoir quickly empties. Water rushes past me, into corridors of the Pyramid.\n\n',
+        wholeSentence: true);
+    c.markHappened(evOpenedDam);
+
+    return '${a.name} successfully performs ReservoirOpenDam';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room reservoir = Room('reservoir', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -472,6 +539,24 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
   s.add('A filthy pool covered with a layer of green sludge.\n',
       wholeSentence: true);
 }, null, null, isIdle: true, positionX: 25, positionY: 48);
+final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'A huge empty room, with the floor covered with sludge and slimy carcasses.\n',
+      wholeSentence: true);
+}, null, null,
+    parent: 'reservoir',
+    prerequisite: Prerequisite(364228247, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOpenedDam);
+    }));
 final Approach oracleMainFromKnightsHqMain = Approach(
     'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2480,6 +2565,7 @@ final allRooms = <Room>[
   junction,
   maintenanceShaft,
   reservoir,
+  reservoirAfterOpenDam,
   oracleMain,
   battlefield,
   elevator12,
@@ -2540,6 +2626,7 @@ final allActions = <RoamingAction>[
   KarlTakeStar.singleton,
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
+  ReservoirOpenDam.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
   BleedsBlindGuideGoblins.singleton,

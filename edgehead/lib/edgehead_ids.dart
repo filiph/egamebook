@@ -25,6 +25,8 @@ const evKarlKilled = "evKarlKilled";
 
 const evKarlKilledViaNecromancy = "evKarlKilledViaNecromancy";
 
+const evOpenedDam = "evOpenedDam";
+
 const kbBlindGuide = "kbBlindGuide";
 
 const kbGoblinCampSmoke = "kbGoblinCampSmoke";

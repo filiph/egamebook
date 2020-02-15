@@ -14,8 +14,30 @@ DESCRIPTION:
 A filthy pool covered with a layer of green sludge.
 
 
+// ---
+ROOM: $reservoir_after_open_dam
+VARIANT_OF: $reservoir
 
-NOTES:
-TODO: write the action that describes the dam
-TODO: write the action that opens the dam
-TODO: write VARIANT for released dam
+RULE: c.hasHappened(evOpenedDam)
+
+DESCRIPTION:
+A huge empty room, with the floor covered with sludge and slimy carcasses.
+
+// TODO: write the action that describes the dam before we open it
+
+// ---
+ACTION: $reservoir_open_dam
+COMMAND: Dam >> Open
+FOR_LOCATION: $reservoir
+
+PREREQUISITES:
+w.actionNeverUsed(name)
+
+COMPLETE_SUCCESS_PROBABILITY: 100%
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I open the dam and the reservoir quickly empties. Water rushes past me, into corridors of the Pyramid.
+
+[[CODE]]
+c.markHappened(evOpenedDam);
+[[ENDCODE]]
