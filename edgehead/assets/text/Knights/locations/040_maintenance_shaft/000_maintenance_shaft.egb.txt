@@ -1,6 +1,6 @@
 // ---
 APPROACH: $maintenance_shaft FROM $elevator_28
-COMMAND: Go >> climb into the shaft
+COMMAND: Go >> Maintenance Shaft above 28th Floor
 DESCRIPTION: $NONE
 
 // ---

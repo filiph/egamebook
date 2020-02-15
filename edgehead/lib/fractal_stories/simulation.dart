@@ -198,10 +198,6 @@ class Simulation {
       // For each source -> destination path, pick only the most specific
       // exit.
       final alternatives = paths[hash];
-      if (alternatives.length == 1) {
-        yield alternatives.single.approach;
-        continue;
-      }
       alternatives.sort();
       for (final rule in alternatives) {
         if (rule.prerequisite.isSatisfiedBy(context)) {

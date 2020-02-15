@@ -5,17 +5,17 @@ DESCRIPTION: $NONE
 
 // ---
 APPROACH: $knights_hq_main FROM $oracle_main
-COMMAND: Go >> the Knights HQ
+COMMAND: Go >> Knights Headquarters
 DESCRIPTION: $NONE
 
 // ---
 APPROACH: $knights_hq_main FROM $battlefield
-COMMAND: Go >> the Knights HQ
+COMMAND: Go >> Knights Headquarters
 DESCRIPTION: $NONE
 
 // ---
 APPROACH: $knights_hq_main FROM $elevator_12
-COMMAND: Go >> the Knights HQ
+COMMAND: Go >> Knights Headquarters
 DESCRIPTION: $NONE
 
 // ---

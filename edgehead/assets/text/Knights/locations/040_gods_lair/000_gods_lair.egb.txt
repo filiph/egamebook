@@ -1,6 +1,6 @@
 // ---
 APPROACH: $gods_lair FROM $elevator_28
-COMMAND: Go >> east
+COMMAND: Go >> God's Lair
 DESCRIPTION: $NONE
 
 // ---

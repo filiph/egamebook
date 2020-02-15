@@ -1,13 +1,13 @@
 // ---
 APPROACH: $goblin_skirmish_main FROM $bleeds_main
-COMMAND: Go >> to the goblin outpost
+COMMAND: Go >> Goblin Outpost
 DESCRIPTION: $NONE
 PREREQUISITES:
 c.hasHappened(evGoblinCampCleared)
 
 // ---
 APPROACH: $goblin_skirmish_main FROM $goblin_skirmish_sneak
-COMMAND: Go >> attack the camp
+COMMAND: Go >> Goblin Outpost
 DESCRIPTION: $NONE
 PREREQUISITES:
 !c.hasHappened(evGoblinCampCleared)

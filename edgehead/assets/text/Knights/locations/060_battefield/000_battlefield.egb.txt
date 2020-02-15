@@ -1,5 +1,5 @@
 APPROACH: $battlefield FROM $knights_hq_main
-COMMAND: Go >> to the battlefield
+COMMAND: Go >> Battlefield
 DESCRIPTION: [We] climb up the stairs to the sixteenth floor.
 
 // ---

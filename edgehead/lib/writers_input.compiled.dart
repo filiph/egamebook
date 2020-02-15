@@ -76,8 +76,9 @@ final Room testRandomEncounter =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, generateRandomEncounter, null, positionX: 0, positionY: 0);
-final Approach elevator28FromElevator12 =
-    Approach('elevator_12', 'elevator_28', 'Go >> climb up', (ActionContext c) {
+final Approach elevator28FromElevator12 = Approach(
+    'elevator_12', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -89,7 +90,8 @@ final Approach elevator28FromElevator12 =
       wholeSentence: true);
 });
 final Approach elevator28FromGodsLair = Approach(
-    'gods_lair', 'elevator_28', 'Go >> to the elevator', (ActionContext c) {
+    'gods_lair', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -98,7 +100,8 @@ final Approach elevator28FromGodsLair = Approach(
   s.add('', wholeSentence: true);
 });
 final Approach elevator28FromJunction = Approach(
-    'junction', 'elevator_28', 'Go >> to the elevator', (ActionContext c) {
+    'junction', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -106,9 +109,10 @@ final Approach elevator28FromJunction = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Approach elevator28FromMaintenanceShaft =
-    Approach('maintenance_shaft', 'elevator_28', 'Go >> to the elevator',
-        (ActionContext c) {
+final Approach elevator28FromMaintenanceShaft = Approach(
+    'maintenance_shaft',
+    'elevator_28',
+    'Go >> Elevator Shaft Entrance on 28th Floor', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -129,8 +133,8 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
       'Orc noises from all around, but thankfully no orc in sight. $ifBlock_753ddd0b\n',
       wholeSentence: true);
 }, null, null, positionX: 32, positionY: 42);
-final Approach godsLairFromElevator28 =
-    Approach('elevator_28', 'gods_lair', 'Go >> east', (ActionContext c) {
+final Approach godsLairFromElevator28 = Approach(
+    'elevator_28', 'gods_lair', 'Go >> God\'s Lair', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -260,7 +264,8 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
     }),
     isIdle: true);
 final Approach junctionFromElevator28 =
-    Approach('elevator_28', 'junction', 'Go >> west', (ActionContext c) {
+    Approach('elevator_28', 'junction', 'Go >> Junction on 26th Floor',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -268,8 +273,8 @@ final Approach junctionFromElevator28 =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Approach junctionFromReservoir =
-    Approach('reservoir', 'junction', 'Go >> up', (ActionContext c) {
+final Approach junctionFromReservoir = Approach(
+    'reservoir', 'junction', 'Go >> Junction on 26th Floor', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -289,9 +294,10 @@ final Room junction = Room('junction', null, (ActionContext c) {
       'A place of increased orc foot traffic. $weSubstitutionCapitalized stay hidden.\n',
       wholeSentence: true);
 }, null, null, positionX: 27, positionY: 45);
-final Approach maintenanceShaftFromElevator28 =
-    Approach('elevator_28', 'maintenance_shaft', 'Go >> climb into the shaft',
-        (ActionContext c) {
+final Approach maintenanceShaftFromElevator28 = Approach(
+    'elevator_28',
+    'maintenance_shaft',
+    'Go >> Maintenance Shaft above 28th Floor', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -455,7 +461,7 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
   s.add('Musty, dark place.\n', wholeSentence: true);
 }, null, null, positionX: 34, positionY: 40);
 final Approach reservoirFromJunction =
-    Approach('junction', 'reservoir', 'Go >> down', (ActionContext c) {
+    Approach('junction', 'reservoir', 'Go >> Reservoir', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -558,7 +564,7 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
       return c.hasHappened(evOpenedDam);
     }));
 final Approach oracleMainFromKnightsHqMain = Approach(
-    'knights_hq_main', 'oracle_main', 'Go >> to the Oracle', (ActionContext c) {
+    'knights_hq_main', 'oracle_main', 'Go >> Oracle\'s', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -574,9 +580,8 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The Oracle is here.\n', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 15, positionY: 57);
-final Approach battlefieldFromKnightsHqMain =
-    Approach('knights_hq_main', 'battlefield', 'Go >> to the battlefield',
-        (ActionContext c) {
+final Approach battlefieldFromKnightsHqMain = Approach(
+    'knights_hq_main', 'battlefield', 'Go >> Battlefield', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -628,7 +633,8 @@ final Room battlefield = Room(
     },
     whereDescription: 'among the columns');
 final Approach elevator12FromElevator28 = Approach(
-    'elevator_28', 'elevator_12', 'Go >> climb down', (ActionContext c) {
+    'elevator_28', 'elevator_12', 'Go >> Elevator Shaft Entrance on 12th Floor',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -640,9 +646,10 @@ final Approach elevator12FromElevator28 = Approach(
       '$weSubstitutionCapitalized climb down using an ancient rusty ladder.\n',
       wholeSentence: true);
 });
-final Approach elevator12FromKnightsHqMain =
-    Approach('knights_hq_main', 'elevator_12', 'Go >> to Floor 12 elevator',
-        (ActionContext c) {
+final Approach elevator12FromKnightsHqMain = Approach(
+    'knights_hq_main',
+    'elevator_12',
+    'Go >> Elevator Shaft Entrance on 12th Floor', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -659,7 +666,7 @@ final Room elevator12 = Room('elevator_12', null, (ActionContext c) {
   s.add('A rare access to the ancient elevator shaft.\n', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 32, positionY: 72);
 final Approach knightsHqMainFromBattlefield =
-    Approach('battlefield', 'knights_hq_main', 'Go >> the Knights HQ',
+    Approach('battlefield', 'knights_hq_main', 'Go >> Knights Headquarters',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -669,7 +676,7 @@ final Approach knightsHqMainFromBattlefield =
   s.add('', wholeSentence: true);
 });
 final Approach knightsHqMainFromElevator12 =
-    Approach('elevator_12', 'knights_hq_main', 'Go >> the Knights HQ',
+    Approach('elevator_12', 'knights_hq_main', 'Go >> Knights Headquarters',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -679,7 +686,7 @@ final Approach knightsHqMainFromElevator12 =
   s.add('', wholeSentence: true);
 });
 final Approach knightsHqMainFromOracleMain =
-    Approach('oracle_main', 'knights_hq_main', 'Go >> the Knights HQ',
+    Approach('oracle_main', 'knights_hq_main', 'Go >> Knights Headquarters',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -728,7 +735,7 @@ final Approach endOfRoamFromKnightsHqMain = Approach(
       wholeSentence: true);
 });
 final Approach bleedsMainFromBleedsTraderHut = Approach(
-    'bleeds_trader_hut', 'bleeds_main', 'Go >> outside', (ActionContext c) {
+    'bleeds_trader_hut', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -740,7 +747,7 @@ final Approach bleedsMainFromBleedsTraderHut = Approach(
       wholeSentence: true);
 });
 final Approach bleedsMainFromGoblinSkirmishMain =
-    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> to The Bleeds',
+    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> The Bleeds',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -753,7 +760,7 @@ final Approach bleedsMainFromGoblinSkirmishMain =
       wholeSentence: true);
 });
 final Approach bleedsMainFromGoblinSkirmishSneak =
-    Approach('goblin_skirmish_sneak', 'bleeds_main', 'Go >> to The Bleeds',
+    Approach('goblin_skirmish_sneak', 'bleeds_main', 'Go >> The Bleeds',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -766,9 +773,8 @@ final Approach bleedsMainFromGoblinSkirmishSneak =
       '$weSubstitutionCapitalized sneak through the bushes and emerge back in The Bleeds.\n',
       wholeSentence: true);
 });
-final Approach bleedsMainFromMeadowFight =
-    Approach('meadow_fight', 'bleeds_main', 'Go >> towards the Pyramid',
-        (ActionContext c) {
+final Approach bleedsMainFromMeadowFight = Approach(
+    'meadow_fight', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1181,9 +1187,9 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach bleedsTraderHutFromBleedsMain = Approach(
-    'bleeds_main', 'bleeds_trader_hut', 'Go >> inside the trader\'s shop',
-    (ActionContext c) {
+final Approach bleedsTraderHutFromBleedsMain =
+    Approach('bleeds_main', 'bleeds_trader_hut', 'Go >> Trader\'s Shop',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1529,9 +1535,9 @@ final Approach endOfRoamFromBleedsMain =
   final Actor a = c.actor;
   return c.hasHappened(evGoblinCampCleared);
 });
-final Approach goblinSkirmishMainFromBleedsMain = Approach(
-    'bleeds_main', 'goblin_skirmish_main', 'Go >> to the goblin outpost',
-    (ActionContext c) {
+final Approach goblinSkirmishMainFromBleedsMain =
+    Approach('bleeds_main', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1545,7 +1551,7 @@ final Approach goblinSkirmishMainFromBleedsMain = Approach(
   return c.hasHappened(evGoblinCampCleared);
 });
 final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
-    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> attack the camp',
+    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1595,9 +1601,8 @@ final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
       'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
       wholeSentence: true);
 }, null, null, null, positionX: 0, positionY: 0);
-final Approach goblinSkirmishPatrolFromBleedsMain =
-    Approach('bleeds_main', 'goblin_skirmish_patrol', 'Go >> to the west',
-        (ActionContext c) {
+final Approach goblinSkirmishPatrolFromBleedsMain = Approach(
+    'bleeds_main', 'goblin_skirmish_patrol', 'Go >> Smoke', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1629,16 +1634,14 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
 }, null, generateBleedsGoblinSkirmishPatrol, null,
     positionX: 15, positionY: 97);
 final Approach goblinSkirmishSneakFromBleedsMain = Approach(
-    'bleeds_main', 'goblin_skirmish_sneak', 'Go >> towards the goblin outpost',
+    'bleeds_main', 'goblin_skirmish_sneak', 'Go >> Near the Goblin Outpost',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add('$weSubstitutionCapitalized carry on.\n', wholeSentence: true);
+  s.add('', wholeSentence: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -1647,9 +1650,8 @@ final Approach goblinSkirmishSneakFromBleedsMain = Approach(
       !c.hasHappened(evGoblinCampCleared);
 });
 final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
-    'goblin_skirmish_patrol',
-    'goblin_skirmish_sneak',
-    'Go >> towards the smoke', (ActionContext c) {
+    'goblin_skirmish_patrol', 'goblin_skirmish_sneak', 'Smoke >> Come closer',
+    (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;

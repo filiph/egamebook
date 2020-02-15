@@ -1,6 +1,6 @@
 // ---
 APPROACH: $reservoir FROM $junction
-COMMAND: Go >> down
+COMMAND: Go >> Reservoir
 DESCRIPTION: $NONE
 
 // ---

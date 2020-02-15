@@ -1,21 +1,21 @@
 // ---
 APPROACH: $elevator_28 FROM $elevator_12
-COMMAND: Go >> climb up
+COMMAND: Go >> Elevator Shaft Entrance on 28th Floor
 DESCRIPTION: [We] climb up using an ancient rusty ladder.
 
 // ---
 APPROACH: $elevator_28 FROM $maintenance_shaft
-COMMAND: Go >> to the elevator
+COMMAND: Go >> Elevator Shaft Entrance on 28th Floor
 DESCRIPTION: $NONE
 
 // ---
 APPROACH: $elevator_28 FROM $gods_lair
-COMMAND: Go >> to the elevator
+COMMAND: Go >> Elevator Shaft Entrance on 28th Floor
 DESCRIPTION: $NONE
 
 // ---
 APPROACH: $elevator_28 FROM $junction
-COMMAND: Go >> to the elevator
+COMMAND: Go >> Elevator Shaft Entrance on 28th Floor
 DESCRIPTION: $NONE
 
 // ---

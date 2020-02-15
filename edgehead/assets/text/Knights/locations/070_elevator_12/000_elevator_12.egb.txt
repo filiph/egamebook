@@ -1,12 +1,12 @@
 // ---
 APPROACH: $elevator_12 FROM $knights_hq_main
-COMMAND: Go >> to Floor 12 elevator
+COMMAND: Go >> Elevator Shaft Entrance on 12th Floor
 DESCRIPTION: $NONE
 // TODO: PREREQUISITES - only after someone tells me
 
 // ---
 APPROACH: $elevator_12 FROM $elevator_28
-COMMAND: Go >> climb down
+COMMAND: Go >> Elevator Shaft Entrance on 12th Floor
 DESCRIPTION: [We] climb down using an ancient rusty ladder.
 
 // ---

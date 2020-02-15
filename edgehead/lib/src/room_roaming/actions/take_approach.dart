@@ -126,14 +126,11 @@ class TakeApproachAction extends Action<RoomPath> {
 
     // Rooms that have been visited by the walk, and therefore shouldn't be
     // considered again.
-    final closed = <Room>{};
+    final closed = <Room>{startingRoom};
 
     while (open.isNotEmpty) {
       final current = open.first;
       open.remove(current);
-      if (!current.isStart) {
-        closed.add(context.simulation.getRoomParent(current.from));
-      }
       _log.finest(() => 'Going from sourceRoom=${current.from} '
           '(open.length=${open.length})');
 
@@ -146,6 +143,15 @@ class TakeApproachAction extends Action<RoomPath> {
 
       for (final approach in approaches) {
         final destination = context.simulation.getRoomByName(approach.to);
+        final destinationParent = context.simulation.getRoomParent(destination);
+
+        if (closed.contains(destinationParent)) {
+          // Don't revisit rooms that have already been walked by
+          // this algorithm.
+          continue;
+        }
+
+        closed.add(destination);
 
         // Construct the new path from the last one, by adding one intermediate
         // room, and changing the destination.
@@ -160,13 +166,6 @@ class TakeApproachAction extends Action<RoomPath> {
         if (approach.isImplicit) {
           // Don't auto-travel through implicit approaches. Just yield it.
           yield newPath;
-          continue;
-        }
-
-        final destinationParent = context.simulation.getRoomParent(destination);
-        if (closed.contains(destinationParent)) {
-          // Don't revisit rooms that have already been walked by
-          // this algorithm.
           continue;
         }
 

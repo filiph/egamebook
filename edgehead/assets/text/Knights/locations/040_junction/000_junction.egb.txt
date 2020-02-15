@@ -1,11 +1,11 @@
 // ---
 APPROACH: $junction FROM $elevator_28
-COMMAND: Go >> west
+COMMAND: Go >> Junction on 26th Floor
 DESCRIPTION: $NONE
 
 // ---
 APPROACH: $junction FROM $reservoir
-COMMAND: Go >> up
+COMMAND: Go >> Junction on 26th Floor
 DESCRIPTION: $NONE
 
 // ---
