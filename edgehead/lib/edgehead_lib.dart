@@ -412,6 +412,11 @@ class EdgeheadGame extends Book {
       final choices = ListBuilder<Choice>();
       final callbacks = <Choice, Future<void> Function()>{};
       for (final performance in performances) {
+        assert(
+            performance.commandPath.first != 'Go' ||
+                performance.additionalData.isNotEmpty,
+            'Go actions should have path data: $performance.');
+
         final choice = Choice((b) => b
           ..commandPath = ListBuilder<String>(performance.commandPath)
           ..helpMessage = performance.action.helpMessage

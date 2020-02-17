@@ -562,7 +562,9 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
       return c.hasHappened(evOpenedDam);
-    }));
+    }),
+    positionX: 25,
+    positionY: 48);
 final Approach oracleMainFromKnightsHqMain = Approach(
     'knights_hq_main', 'oracle_main', 'Go >> Oracle\'s', (ActionContext c) {
   final WorldState originalWorld = c.world;

@@ -20,6 +20,8 @@ VARIANT_OF: $reservoir
 
 RULE: c.hasHappened(evOpenedDam)
 
+POS: 25, 48
+
 DESCRIPTION:
 A huge empty room, with the floor covered with sludge and slimy carcasses.
 
