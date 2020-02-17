@@ -32,6 +32,7 @@ FOR_LOCATION: $reservoir
 
 PREREQUISITES:
 w.actionNeverUsed(name)
+// TODO: need a long pole (e.g. spear or a polearm) to open
 
 COMPLETE_SUCCESS_PROBABILITY: 100%
 
