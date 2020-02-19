@@ -217,7 +217,8 @@ FightSituation generateRandomEncounter(ActionContext c,
       break;
     case 3:
       final name = w.randomBool() ? "spear" : "pike";
-      final spear = Item.weapon(w.randomInt(), WeaponType.spear, name: name);
+      final spear = Item.weapon(w.randomInt(), WeaponType.spear,
+          name: name, adjective: 'moldy');
       w.updateActorById(
           playerId, (b) => b.inventory.equip(spear, initialPlayer.anatomy));
       initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
