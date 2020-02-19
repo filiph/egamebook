@@ -413,7 +413,8 @@ class EdgeheadGame extends Book {
       final callbacks = <Choice, Future<void> Function()>{};
       for (final performance in performances) {
         assert(
-            performance.commandPath.first != 'Go' ||
+            performance.action.isImplicit ||
+                performance.commandPath.first != 'Go' ||
                 performance.additionalData.isNotEmpty,
             'Go actions should have path data: $performance.');
 
