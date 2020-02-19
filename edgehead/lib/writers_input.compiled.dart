@@ -262,7 +262,9 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
       final Actor a = c.actor;
       return c.hasHappened(evKarlKilledViaNecromancy);
     }),
-    isIdle: true);
+    isIdle: true,
+    positionX: 35,
+    positionY: 42);
 final Approach junctionFromElevator28 =
     Approach('elevator_28', 'junction', 'Go >> Junction on 26th Floor',
         (ActionContext c) {

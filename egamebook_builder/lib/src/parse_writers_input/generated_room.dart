@@ -43,7 +43,9 @@ class GeneratedRoom extends GeneratedGameObject {
 
     final Map<String, Expression> namedArguments = {};
 
-    if (_map.containsKey('VARIANT_OF')) {
+    final isVariant = _map.containsKey('VARIANT_OF');
+
+    if (isVariant) {
       if (!_map.containsKey('RULE')) {
         throw FormatException("Room $writersName has VARIANT_OF "
             "but no RULE");
@@ -86,6 +88,9 @@ class GeneratedRoom extends GeneratedGameObject {
           'Position of a room must be given as "X, Y" (e.g. POS: 5, 7).');
       namedArguments['positionX'] = literalNum(int.parse(posStrings[0]));
       namedArguments['positionY'] = literalNum(int.parse(posStrings[1]));
+    } else if (isVariant) {
+      print('WARNING: Variant $name has no position. Please specify POS even '
+          'if it\'s the same as the parent room\s.');
     }
 
     if (_map.containsKey('AFTER_MONSTERS_CLEARED')) {

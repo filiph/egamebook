@@ -36,6 +36,8 @@ VARIANT_OF: $gods_lair
 
 FLAGS: $IDLE
 
+POS: 35, 42
+
 RULE: c.hasHappened(evKarlKilledViaNecromancy)
 
 DESCRIPTION:
