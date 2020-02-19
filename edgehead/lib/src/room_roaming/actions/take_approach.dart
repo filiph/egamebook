@@ -126,7 +126,8 @@ class TakeApproachAction extends Action<RoomPath> {
 
     // Rooms that have been visited by the walk, and therefore shouldn't be
     // considered again.
-    final closed = <Room>{startingRoom};
+    // These are normalized to the parent (no variants here).
+    final closed = <Room>{context.simulation.getRoomParent(startingRoom)};
 
     while (open.isNotEmpty) {
       final current = open.first;
