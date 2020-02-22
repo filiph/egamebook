@@ -20,7 +20,7 @@ final RoomDescriber emptyRoomDescription = (c) {};
 /// the room roaming situation stop.
 final Room endOfRoam = Room(
     endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null,
-    positionX: 0, positionY: 0);
+    positionX: 48, positionY: 100);
 
 /// This generator creates a [FightSituation].
 ///

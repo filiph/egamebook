@@ -1,0 +1,21 @@
+// ---
+APPROACH: $staging_area FROM $knights_hq_main
+COMMAND: Go >> Staging Area
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $staging_area FROM $pyramid_entrance
+COMMAND: Go >> Staging Area
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $staging_area
+
+FLAGS: $IDLE
+
+POS: 23, 82
+
+FIRST_DESCRIPTION:
+This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
+
+DESCRIPTION: $NONE

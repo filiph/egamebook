@@ -1,3 +1,0 @@
-APPROACH: $__END_OF_ROAM__ FROM $knights_hq_main
-COMMAND: go >> back home (ENDS GAME)
-DESCRIPTION: You realize this adventuring life is not for you.

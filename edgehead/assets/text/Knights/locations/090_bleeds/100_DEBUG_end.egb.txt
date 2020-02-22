@@ -1,5 +1,3 @@
 APPROACH: $__END_OF_ROAM__ FROM $bleeds_main
 COMMAND: go >> back home (ENDS GAME)
 DESCRIPTION: You realize this adventuring life is not for you.
-PREREQUISITES:
-c.hasHappened(evGoblinCampCleared)

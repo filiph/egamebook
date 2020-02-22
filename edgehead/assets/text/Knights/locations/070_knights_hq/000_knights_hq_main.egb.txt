@@ -1,6 +1,6 @@
 // ---
-APPROACH: $knights_hq_main FROM $start_tester_build
-COMMAND: Set piece >> in medias res
+APPROACH: $knights_hq_main FROM $staging_area
+COMMAND: Go >> Knights Headquarters
 DESCRIPTION: $NONE
 
 // ---
@@ -30,12 +30,6 @@ FIRST_DESCRIPTION:
 
 I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.
 
-[[CODE]]
-// Making sure that Tamara is not active by now, in case we skip
-// the initial fight during debug.
-w.updateActorById(tamaraId, (b) => b.isActive = false);
-[[ENDCODE]]
-
 DESCRIPTION: $NONE
 
 
@@ -47,7 +41,7 @@ ACTION: $talk_to_corporal
 DESCRIPTION:
 The corporal says there's not much the Knights can do. They are retreating in any case. But he does feel responsible. Maybe if I go and help Zee (a knight) with a counter attack, that could give everyone more time to evacuate. I could also help by persuading the Farmers to evacuate. They don't want to.
 
-ACTION: $talk_to_zee
+ACTION: $talk_to_zee -- maybe move Zee to the staging area?
 DESCRIPTION:
 // Zee wants revenge. His comrade was killed. Zee wants to leave this world with justice served.
 The knight called Zee is sitting on a piece of ancient rubble, polishing his sword.

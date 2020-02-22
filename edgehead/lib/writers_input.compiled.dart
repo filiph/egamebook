@@ -699,9 +699,9 @@ final Approach knightsHqMainFromOracleMain =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Approach knightsHqMainFromStartTesterBuild = Approach(
-    'start_tester_build', 'knights_hq_main', 'Set piece >> in medias res',
-    (ActionContext c) {
+final Approach knightsHqMainFromStagingArea =
+    Approach('staging_area', 'knights_hq_main', 'Go >> Knights Headquarters',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -716,9 +716,8 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '(NOTE FOR TESTERS: This area is very much in development.)\n\nI come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.\n\n',
+      '(NOTE FOR TESTERS: This area is very much in development.)\n\nI come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.\n',
       wholeSentence: true);
-  w.updateActorById(tamaraId, (b) => b.isActive = false);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -727,17 +726,42 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 37, positionY: 70);
-final Approach endOfRoamFromKnightsHqMain = Approach(
-    'knights_hq_main', '__END_OF_ROAM__', 'go >> back home (ENDS GAME)',
-    (ActionContext c) {
+final Approach stagingAreaFromKnightsHqMain = Approach(
+    'knights_hq_main', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('You realize this adventuring life is not for you.\n',
-      wholeSentence: true);
+  s.add('', wholeSentence: true);
 });
+final Approach stagingAreaFromPyramidEntrance =
+    Approach('pyramid_entrance', 'staging_area', 'Go >> Staging Area',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room stagingArea = Room('staging_area', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, null, null, isIdle: true, positionX: 23, positionY: 82);
 final Approach bleedsMainFromBleedsTraderHut = Approach(
     'bleeds_trader_hut', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1542,11 +1566,6 @@ final Approach endOfRoamFromBleedsMain =
   final Storyline s = c.outputStoryline;
   s.add('You realize this adventuring life is not for you.\n',
       wholeSentence: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return c.hasHappened(evGoblinCampCleared);
 });
 final Approach goblinSkirmishMainFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
@@ -1605,6 +1624,16 @@ final Approach pyramidEntranceFromBleedsMain = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Approach pyramidEntranceFromStagingArea = Approach(
+    'staging_area', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1613,7 +1642,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nThere is a commotion of knights, coming and going through the main entrance to the building. Two knights, a man and a woman, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
+      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a man and a woman, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2613,6 +2642,7 @@ final allRooms = <Room>[
   battlefield,
   elevator12,
   knightsHqMain,
+  stagingArea,
   bleedsMain,
   bleedsTraderHut,
   goblinSkirmishMain,
@@ -2645,8 +2675,9 @@ final allApproaches = <Approach>[
   knightsHqMainFromBattlefield,
   knightsHqMainFromElevator12,
   knightsHqMainFromOracleMain,
-  knightsHqMainFromStartTesterBuild,
-  endOfRoamFromKnightsHqMain,
+  knightsHqMainFromStagingArea,
+  stagingAreaFromKnightsHqMain,
+  stagingAreaFromPyramidEntrance,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishMain,
   bleedsMainFromGoblinSkirmishSneak,
@@ -2658,6 +2689,7 @@ final allApproaches = <Approach>[
   goblinSkirmishMainFromBleedsMain,
   goblinSkirmishMainFromGoblinSkirmishSneak,
   pyramidEntranceFromBleedsMain,
+  pyramidEntranceFromStagingArea,
   startTesterBuildFromPreStartBook,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishSneakFromBleedsMain,
