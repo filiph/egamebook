@@ -23,6 +23,10 @@ APPROACH: $bleeds_main FROM $goblin_skirmish_main
 COMMAND: Go >> The Bleeds
 DESCRIPTION: [We] walk back to The Bleeds.
 
+// ---
+APPROACH: $bleeds_main FROM $pyramid_entrance
+COMMAND: Go >> The Bleeds
+DESCRIPTION: $NONE
 
 // ---
 ROOM: $bleeds_main

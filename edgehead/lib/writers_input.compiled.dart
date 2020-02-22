@@ -786,6 +786,15 @@ final Approach bleedsMainFromMeadowFight = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Approach bleedsMainFromPyramidEntrance = Approach(
+    'pyramid_entrance', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Approach bleedsMainFromStartTesterBuild = Approach(
     'start_tester_build',
     'bleeds_main',
@@ -1586,6 +1595,34 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The goblin camp is deserted.\n', wholeSentence: true);
 }, null, null, positionX: 11, positionY: 97);
+final Approach pyramidEntranceFromBleedsMain = Approach(
+    'bleeds_main', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+  s.add(
+      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nThere is a commotion of knights, coming and going through the main entrance to the building. Two knights, a man and a woman, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The two knights are still here.\n', wholeSentence: true);
+}, null, null, positionX: 26, positionY: 94);
 final Approach startTesterBuildFromPreStartBook = Approach(
     'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2579,6 +2616,7 @@ final allRooms = <Room>[
   bleedsMain,
   bleedsTraderHut,
   goblinSkirmishMain,
+  pyramidEntrance,
   startTesterBuild,
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
@@ -2613,11 +2651,13 @@ final allApproaches = <Approach>[
   bleedsMainFromGoblinSkirmishMain,
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromMeadowFight,
+  bleedsMainFromPyramidEntrance,
   bleedsMainFromStartTesterBuild,
   bleedsTraderHutFromBleedsMain,
   endOfRoamFromBleedsMain,
   goblinSkirmishMainFromBleedsMain,
   goblinSkirmishMainFromGoblinSkirmishSneak,
+  pyramidEntranceFromBleedsMain,
   startTesterBuildFromPreStartBook,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishSneakFromBleedsMain,

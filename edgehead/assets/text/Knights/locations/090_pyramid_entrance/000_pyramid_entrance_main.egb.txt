@@ -1,15 +1,27 @@
-ROOM: pyramid_entrance
+// ---
+APPROACH: $pyramid_entrance FROM $bleeds_main
+COMMAND: Go >> Pyramid's Main Entrance
+DESCRIPTION: $NONE
+
+
+// ---
+ROOM: $pyramid_entrance
 
 POS: 26, 94
 
 FIRST_DESCRIPTION:
 // majestic
-As [we] approach, I can't stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building.
+As [we] approach, I can't stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.
 
-Two knights, a man and a woman, are guarding the entrance.
+There is a commotion of knights, coming and going through the main entrance to the building. Two knights, a man and a woman, are on guard.
+
+Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. 
 
 DESCRIPTION:
 The two knights are still here.
+
+NOTES:
+// TODO: make the following into actual actions
 
 // --
 ACTION: observe_knights
