@@ -417,11 +417,14 @@ void main() {
 
   test("he has his dagger and his shield", () {
     var storyline = Storyline();
-    var a = Actor.initialized(42, 'Leroy',
+    var actorId = 42;
+    var a = Actor.initialized(actorId, 'Leroy',
         nameIsProperNoun: true, pronoun: Pronoun.HE);
     var npc = a.rebuild((b) => b
-      ..inventory.equip(Item.weapon(50, WeaponType.dagger), a.anatomy)
-      ..inventory.currentShield = Item.weapon(60, WeaponType.shield));
+      ..inventory.equip(
+          Item.weapon(50, WeaponType.dagger, firstOwnerId: actorId), a.anatomy)
+      ..inventory.currentShield =
+          Item.weapon(60, WeaponType.shield, firstOwnerId: actorId));
 
     npc.report(storyline, "<subject> <has> <subjectPronoun's> <object>",
         object: npc.currentWeapon);

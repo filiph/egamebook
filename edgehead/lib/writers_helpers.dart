@@ -23,7 +23,7 @@ final Item lairOfGodStar = Item(
 );
 
 final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger,
-    name: "dagger", adjective: "long");
+    name: "dagger", adjective: "long", firstOwnerId: tamaraId);
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
@@ -33,21 +33,23 @@ bool bothAreAlive(Actor a, Actor b) {
 FightSituation generateBattlefieldFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
-  final redOrc = Actor.initialized(w.randomInt(), "orc",
+  final redOrcId = w.randomInt();
+  final redOrc = Actor.initialized(redOrcId, "orc",
       nameIsProperNoun: false,
       adjective: 'red',
       pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'serrated'),
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
+          adjective: 'serrated', firstOwnerId: redOrcId),
       constitution: 2,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  final leatherJerkinOrc = Actor.initialized(w.randomInt(), "orc",
+  final leatherJerkinOrcId = w.randomInt();
+  final leatherJerkinOrc = Actor.initialized(leatherJerkinOrcId, "orc",
       nameIsProperNoun: false,
       adjective: 'ordinary',
       pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.axe, adjective: 'battle'),
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
+          adjective: 'battle', firstOwnerId: leatherJerkinOrcId),
       constitution: 1,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
@@ -69,11 +71,12 @@ FightSituation generateBattlefieldFight(ActionContext c,
 FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
-  var goblin = Actor.initialized(w.randomInt(), "goblin",
+  var goblinId = w.randomInt();
+  var goblin = Actor.initialized(goblinId, "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.spear, adjective: "gray"),
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear,
+          adjective: "gray", firstOwnerId: goblinId),
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   w.actors.add(goblin);
@@ -85,21 +88,25 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
 FightSituation generateGodsLairFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
   final w = c.outputWorld;
-  final orcBerserker = Actor.initialized(w.randomInt(), "berserker",
+  final orcBerserkerId = w.randomInt();
+  final orcBerserker = Actor.initialized(orcBerserkerId, "berserker",
       nameIsProperNoun: false,
       adjective: 'orc',
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
-          name: 'battle axe', adjective: 'berserker'),
+          name: 'battle axe',
+          adjective: 'berserker',
+          firstOwnerId: orcBerserkerId),
       constitution: 3,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  final orcCaptain = Actor.initialized(w.randomInt(), 'captain',
+  final orcCaptainId = w.randomInt();
+  final orcCaptain = Actor.initialized(orcCaptainId, 'captain',
       nameIsProperNoun: false,
       adjective: 'orc',
       pronoun: Pronoun.HE,
-      currentWeapon:
-          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'labelled'),
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
+          adjective: 'labelled', firstOwnerId: orcCaptainId),
       constitution: 2,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
@@ -151,7 +158,8 @@ FightSituation generateRandomEncounter(ActionContext c,
           initiative: 100,
           foldFunctionHandle: carelessMonsterFoldFunctionHandle);
       final equippedOrc = orc.rebuild((b) => b.inventory.equip(
-          Item.weapon(w.randomInt(), WeaponType.sword, adjective: 'crude'),
+          Item.weapon(w.randomInt(), WeaponType.sword,
+              adjective: 'crude', firstOwnerId: orc.id),
           orc.anatomy));
       enemies.add(equippedOrc);
       final goblin = _makeGoblin(w, spear: true);
@@ -186,12 +194,12 @@ FightSituation generateRandomEncounter(ActionContext c,
 
   if (w.randomBool()) {
     final name = w.randomBool() ? "rock" : "brick";
-    items.add(Item.weapon(w.randomInt(), WeaponType.rock, name: name));
     s.add(
         "I ${items.isNotEmpty ? 'also' : ''} notice "
         "a nice, solid $name in the ${isInside ? 'rubble' : 'puddle'} "
         "on the ground.",
         wholeSentence: true);
+    items.add(Item.weapon(w.randomInt(), WeaponType.rock, name: name));
   }
 
   if (items.isEmpty) {
@@ -210,7 +218,7 @@ FightSituation generateRandomEncounter(ActionContext c,
       final name = w.randomBool() ? "sword" : "scimitar";
       final adjective = w.randomBool() ? "shiny" : "family";
       final sword = Item.weapon(w.randomInt(), WeaponType.sword,
-          name: name, adjective: adjective);
+          name: name, adjective: adjective, firstOwnerId: playerId);
       w.updateActorById(
           playerId, (b) => b.inventory.equip(sword, initialPlayer.anatomy));
       initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
@@ -218,7 +226,7 @@ FightSituation generateRandomEncounter(ActionContext c,
     case 3:
       final name = w.randomBool() ? "spear" : "pike";
       final spear = Item.weapon(w.randomInt(), WeaponType.spear,
-          name: name, adjective: 'moldy');
+          name: name, adjective: 'moldy', firstOwnerId: playerId);
       w.updateActorById(
           playerId, (b) => b.inventory.equip(spear, initialPlayer.anatomy));
       initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
@@ -248,7 +256,7 @@ FightSituation generateStartFight(ActionContext c,
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
-          name: "sword", adjective: "rusty"),
+          name: "sword", adjective: "rusty", firstOwnerId: firstGoblinId),
       dexterity: 150,
       // The goblin starts the fight.
       initiative: 2000,
@@ -270,58 +278,6 @@ FightSituation generateStartFight(ActionContext c,
       });
 }
 
-/// Test fight. Do not use in production.
-FightSituation generateTestFightWithGoblin(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final w = c.outputWorld;
-  final goblin = _makeGoblin(w, spear: true, spearAdjective: 'goblin');
-  w.actors.add(goblin);
-  return FightSituation.initialized(
-    w.randomInt(),
-    party.where((a) => a.isPlayer),
-    [goblin],
-    "{rock|cavern} floor",
-    roomRoamingSituation,
-    {},
-    items: [
-      Item.weapon(89892141, WeaponType.dagger),
-      Item.weapon(89892142, WeaponType.rock),
-    ],
-  );
-}
-
-/// Test fight. Do not use in production.
-FightSituation generateTestFightWithOrcAndGoblin(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
-  final w = c.outputWorld;
-  final orcsSword = Item.weapon(898921730, WeaponType.sword,
-      name: 'sword', adjective: 'orcish');
-  final playersSword =
-      Item.weapon(898921731, WeaponType.sword, adjective: 'heirloom');
-  final orc = Actor.initialized(6000, "orc",
-      pronoun: Pronoun.HE,
-      constitution: 2,
-      team: defaultEnemyTeam,
-      initiative: 100,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  final equippedOrc =
-      orc.rebuild((b) => b.inventory.equip(orcsSword, orc.anatomy));
-  w.actors.add(equippedOrc);
-  final goblin = _makeGoblin(w, spear: true);
-  w.actors.add(goblin);
-
-  w.updateActorById(
-      playerId, (b) => b.inventory.equip(playersSword, c.player.anatomy));
-  return FightSituation.initialized(
-    w.randomInt(),
-    party.where((a) => a.isPlayer),
-    [orc, goblin],
-    "{cold|gray} floor",
-    roomRoamingSituation,
-    {},
-  );
-}
-
 /// Either returns `we` or `I`, depending on the current state of the party.
 ///
 /// Calls [getPartyOf] in the background.
@@ -336,33 +292,37 @@ String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
 }
 
 Actor _makeGoblin(WorldStateBuilder w,
-        {int id,
-        bool spear = false,
-        String spearAdjective = 'crude',
-        String swordAdjective = 'rusty',
-        String currentRoomName}) =>
-    Actor.initialized(id ?? w.randomInt(), "goblin",
-        nameIsProperNoun: false,
-        pronoun: Pronoun.HE,
-        currentWeapon: spear
-            ? Item.weapon(w.randomInt(), WeaponType.spear,
-                adjective: spearAdjective)
-            : Item.weapon(w.randomInt(), WeaponType.sword,
-                adjective: swordAdjective),
-        team: defaultEnemyTeam,
-        currentRoomName: currentRoomName,
-        foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+    {int id,
+    bool spear = false,
+    String spearAdjective = 'crude',
+    String swordAdjective = 'rusty',
+    String currentRoomName}) {
+  final goblinId = id ?? w.randomInt();
+  return Actor.initialized(goblinId, "goblin",
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      currentWeapon: spear
+          ? Item.weapon(w.randomInt(), WeaponType.spear,
+              adjective: spearAdjective, firstOwnerId: goblinId)
+          : Item.weapon(w.randomInt(), WeaponType.sword,
+              adjective: swordAdjective, firstOwnerId: goblinId),
+      team: defaultEnemyTeam,
+      currentRoomName: currentRoomName,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+}
 
 Actor _makeOrc(WorldStateBuilder w,
-        {int id, int constitution = 2, String swordAdjective = 'orcish'}) =>
-    Actor.initialized(id ?? w.randomInt(), "orc",
-        nameIsProperNoun: false,
-        pronoun: Pronoun.HE,
-        currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
-            adjective: swordAdjective),
-        constitution: constitution,
-        team: defaultEnemyTeam,
-        foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+    {int id, int constitution = 2, String swordAdjective = 'orcish'}) {
+  final orcId = id ?? w.randomInt();
+  return Actor.initialized(orcId, "orc",
+      nameIsProperNoun: false,
+      pronoun: Pronoun.HE,
+      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
+          adjective: swordAdjective, firstOwnerId: orcId),
+      constitution: constitution,
+      team: defaultEnemyTeam,
+      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+}
 
 extension ActionContextHelpers on ActionContext {
   void movePlayer(String locationName, {bool silent = false}) {

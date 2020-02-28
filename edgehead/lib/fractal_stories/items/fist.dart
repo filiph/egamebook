@@ -8,5 +8,7 @@ Item createFist(BodyPart part) {
   assert(part.designation == BodyPartDesignation.primaryHand ||
       part.designation == BodyPartDesignation.secondaryHand);
   return Item(StatefulRandom(part.id << 2).next(),
-      name: "fist", damageCapability: part.damageCapability.toBuilder());
+      name: "fist",
+      damageCapability: part.damageCapability.toBuilder(),
+      firstOwnerId: part.firstOwnerId);
 }

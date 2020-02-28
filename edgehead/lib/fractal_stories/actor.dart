@@ -74,10 +74,13 @@ abstract class Actor extends Object
     String foldFunctionHandle = "normal",
     bool isDirector = false,
   }) {
+    assert(currentWeapon == null || currentWeapon.firstOwnerId == id);
+    assert(currentShield == null || currentShield.firstOwnerId == id);
+
     Anatomy currentAnatomy = anatomy ??
         buildHumanoid(id,
             constitution: constitution, isUndead: isUndead, isBlind: isBlind);
-    Item weapon = currentWeapon;
+    assert(currentAnatomy.allParts.every((part) => part.firstOwnerId == id));
 
     return _$Actor((b) => b
       ..id = id
@@ -89,7 +92,7 @@ abstract class Actor extends Object
       ..pronoun = (pronoun ?? Pronoun.IT).toBuilder()
       ..adjective = adjective
       ..inventory = (InventoryBuilder()
-        ..currentWeapon = weapon
+        ..currentWeapon = currentWeapon
         ..weapons.addAll([
           if (currentWeapon != null) currentWeapon,
         ])

@@ -233,7 +233,7 @@ class EdgeheadGame extends Book {
     }
 
     storyline = Storyline(referredEntities: world.actors);
-    
+
     playerCharacter = world.getActorById(playerId);
 
     hitpoints.value = playerCharacter.hitpoints / playerCharacter.maxHitpoints;

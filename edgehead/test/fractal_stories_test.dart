@@ -32,7 +32,7 @@ void main() {
         Actor filip = Actor.initialized(1, "Filip",
             isPlayer: true,
             pronoun: Pronoun.YOU,
-            currentWeapon: Item.weapon(42, WeaponType.sword),
+            currentWeapon: Item.weapon(42, WeaponType.sword, firstOwnerId: 1),
             constitution: 2,
             stamina: 1,
             initiative: 1000);
