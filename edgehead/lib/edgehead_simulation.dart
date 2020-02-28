@@ -35,7 +35,7 @@ final Actor edgeheadLeroy = Actor.initialized(
   pronoun: Pronoun.HE,
   currentRoomName: 'bleeds_trader_hut',
   currentWeapon: Item.weapon(234234, WeaponType.dagger,
-      name: "long dagger", firstOwnerId: leroyId),
+      adjective: "long", name: "dagger", firstOwnerId: leroyId),
   currentShield: Item.weapon(1188984, WeaponType.shield,
       adjective: "peasant", firstOwnerId: leroyId),
 );
