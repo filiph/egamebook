@@ -118,13 +118,11 @@ abstract class BodyPart extends Object
   bool get isAnimated => hitpoints > 0;
 
   /// Body parts are all over the place. In any given fight, there are
-  /// several eyes and a bunch of legs.
-  ///
-  /// Body parts are, fortunately, used in reports in such a way that
-  /// it's easy to understand what is what. If I "thrust at the goblin's eye",
-  /// it's pretty obvious that it's not my eye.
+  /// several eyes and a bunch of legs. But all these eyes have different
+  /// owners, and it would be confusing if we had reports such as
+  /// "I hit the leg" (when there are at least four legs in the fight).
   @override
-  bool get isCommon => true;
+  bool get isCommon => false;
 
   @override
   bool get isPlayer => false;
