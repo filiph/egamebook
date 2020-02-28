@@ -96,7 +96,15 @@ class PlanConsequence {
   /// Create the first consequence (the start of planning). It's a consequence
   /// of nothing, with no previous state.
   PlanConsequence.initial(WorldState world)
-      : this(world, null, null, Storyline(), 1.0, 1, isInitial: true);
+      : this(
+          world,
+          null,
+          null,
+          Storyline(referredEntities: world.actors),
+          1.0,
+          1,
+          isInitial: true,
+        );
 
   /// Returns a copy of the [consequence] with updated [PlanConsequence.world].
   ///

@@ -446,7 +446,7 @@ class Performance<T> {
     final initialWorld = output.build();
     final builder = _prepareWorldRecord(
         turn.actor, sim, initialWorld, object, isSuccess, isFailure);
-    final outputStoryline = Storyline();
+    final outputStoryline = Storyline(referredEntities: initialWorld.actors);
     // Remember situation as it can be changed during applySuccess.
     final situationId = initialWorld.currentSituation.id;
     initialWorld.currentSituation

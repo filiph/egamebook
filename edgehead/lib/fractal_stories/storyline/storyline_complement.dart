@@ -53,6 +53,10 @@ class ComplementType {
     pronounSelf: '<objectPronounSelf>',
     theOtherNoun: '<objectTheOtherNoun>',
     theOtherNounPossessive: "<objectTheOtherNoun's>",
+    ownerPronounsNoun: "<ownerPronoun'sObject>",
+    ownerPronounsNounPossessive: "<ownerPronoun'sObject's>",
+    ownerNamesNoun: "<ownerName'sObject>",
+    ownerNamesNounPossessive: "<ownerName'sObject's>",
   );
 
   static const ComplementType OBJECT2 = ComplementType._(
@@ -71,6 +75,10 @@ class ComplementType {
     pronounSelf: '<object2PronounSelf>',
     theOtherNoun: '<object2TheOtherNoun>',
     theOtherNounPossessive: "<object2TheOtherNoun's>",
+    ownerPronounsNoun: "<ownerPronoun'sObject2>",
+    ownerPronounsNounPossessive: "<ownerPronoun'sObject2's>",
+    ownerNamesNoun: "<ownerName'sObject2>",
+    ownerNamesNounPossessive: "<ownerName'sObject2's>",
   );
 
   static const ComplementType OBJECT_OWNER = ComplementType._(
@@ -89,6 +97,10 @@ class ComplementType {
     pronounSelf: '<objectOwnerPronounSelf>',
     theOtherNoun: '<objectOwnerTheOtherNoun>',
     theOtherNounPossessive: "<objectOwnerTheOtherNoun's>",
+    ownerPronounsNoun: "<ownerPronoun'sObjectOwner>",
+    ownerPronounsNounPossessive: "<ownerPronoun'sObjectOwner's>",
+    ownerNamesNoun: "<ownerName'sObjectOwner>",
+    ownerNamesNounPossessive: "<ownerName'sObjectOwner's>",
   );
 
   static const ComplementType OWNER = ComplementType._(
@@ -107,6 +119,10 @@ class ComplementType {
     pronounSelf: '<ownerPronounSelf>',
     theOtherNoun: '<ownerTheOtherNoun>',
     theOtherNounPossessive: "<ownerTheOtherNoun's>",
+    ownerPronounsNoun: "<ownerPronoun'sOwner>",
+    ownerPronounsNounPossessive: "<ownerPronoun'sOwner's>",
+    ownerNamesNoun: "<ownerName'sOwner>",
+    ownerNamesNounPossessive: "<ownerName'sOwner's>",
   );
 
   static const ComplementType SUBJECT = ComplementType._(
@@ -126,6 +142,10 @@ class ComplementType {
     pronounSelf: '<subjectPronounSelf>',
     theOtherNoun: '<subjectTheOtherNoun>',
     theOtherNounPossessive: "<subjectTheOtherNoun's>",
+    ownerPronounsNoun: "<ownerPronoun'sSubject>",
+    ownerPronounsNounPossessive: "<ownerPronoun'sSubject's>",
+    ownerNamesNoun: "<ownerName'sSubject>",
+    ownerNamesNounPossessive: "<ownerName'sSubject's>",
   );
 
   /// When `true`, this [ComplementType] is the subject.
@@ -154,6 +174,10 @@ class ComplementType {
   final String pronounNominative;
   final String pronounPossessive;
   final String pronounSelf;
+  final String ownerPronounsNoun;
+  final String ownerPronounsNounPossessive;
+  final String ownerNamesNoun;
+  final String ownerNamesNounPossessive;
 
   /// "The other noun" is currently unused.
   @Deprecated('Do not use, or make sure we actually solve for this.')
@@ -180,6 +204,10 @@ class ComplementType {
     @required this.pronounSelf,
     @required this.theOtherNoun,
     @required this.theOtherNounPossessive,
+    @required this.ownerPronounsNoun,
+    @required this.ownerPronounsNounPossessive,
+    @required this.ownerNamesNoun,
+    @required this.ownerNamesNounPossessive,
     this.isSubject = false,
   });
 

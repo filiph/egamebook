@@ -959,7 +959,7 @@ void main() {
           "<subject> swing<s> at <objectOwner's> <object>",
           subject: ordinaryOrc,
           objectOwner: aren,
-          object: BodyPart(1001, "leg"),
+          object: BodyPart(1001, "leg", firstOwnerId: aren.id),
         );
 
         final result = storyline.realizeAsString();
@@ -1017,6 +1017,44 @@ void main() {
               storyline.realizeAsString(),
               'The old goblin lies on the ground. '
               'The pale goblin sits at the table.');
+        });
+      });
+
+      group('firstOwnerId', () {
+        Entity aren;
+        Actor orc;
+        Item mySword, myAxe, orcSword;
+        Storyline storyline;
+
+        setUp(() {
+          aren = _createPlayer('Aren');
+          orc = Actor.initialized(60, "orc",
+              adjective: "red", pronoun: Pronoun.HE);
+          mySword = Item.weapon(100, WeaponType.sword, firstOwnerId: aren.id);
+          myAxe = Item.weapon(100, WeaponType.axe, firstOwnerId: aren.id);
+          orcSword = Item.weapon(110, WeaponType.sword, firstOwnerId: orc.id);
+
+          // Make sure all actors are accounted for in storyline.
+          storyline = Storyline(referredEntities: [aren, orc]);
+        });
+
+        test('is used when needed', () {
+          storyline.add('<subject> hit<s> <object> with <object2>',
+              subject: aren, object: orcSword, object2: mySword);
+
+          final result = storyline.realizeAsString();
+          expect(result, contains('the orc\'s sword'));
+          expect(result, contains('with my'));
+        });
+
+        test('isn\'t used when not needed', () {
+          storyline.add('<subject> hit<s> <object> with <object2>',
+              subject: aren, object: orcSword, object2: myAxe);
+
+          final result = storyline.realizeAsString();
+          expect(result, contains('the sword'));
+          expect(result, isNot(contains('with my')));
+          expect(result, contains('the axe'));
         });
       });
 

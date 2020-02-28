@@ -98,7 +98,12 @@ class ShadowGraph {
   /// (such as "he" or "the goblin") to entities in that report.
   List<Map<Identifier, Entity>> _identifiers;
 
-  ShadowGraph.from(Storyline storyline) {
+  Set<Entity> _mentionedEntities;
+
+  final UnmodifiableMapView<int, Entity> _storylineEntities;
+
+  ShadowGraph.from(Storyline storyline)
+      : _storylineEntities = storyline.allEntities {
     // At first, all qualifications and all joiners are possible.
     _reportIdentifiers = List.generate(
       storyline.reports.length,
@@ -118,7 +123,8 @@ class ShadowGraph {
       growable: false,
     );
 
-    final entities = _getAllMentionedEntities(storyline.reports);
+    _mentionedEntities = _getAllMentionedEntities(storyline.reports);
+
     // TODO: allow pronouns for player
     _fillForcedJoinersAndConjunctions(storyline.reports);
     __assertAtLeastOneJoiner(storyline.reports);
@@ -128,9 +134,10 @@ class ShadowGraph {
     __assertAtLeastOneIdentifier(storyline.reports);
     _detectMissingAdjectives(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
-    _detectFirstMentions(storyline.reports, entities);
+    _detectFirstMentions(storyline.reports, _mentionedEntities);
     __assertAtLeastOneIdentifier(storyline.reports);
-    _identifiers = _getIdentifiersThroughoutStory(storyline.reports, entities);
+    _identifiers =
+        _getIdentifiersThroughoutStory(storyline.reports, _mentionedEntities);
     _removeQualificationsWhereUnavailable(storyline.reports, _identifiers);
     __assertAtLeastOneIdentifier(storyline.reports);
     _findPositiveNegativeButConjunctions(storyline.reports);
@@ -153,6 +160,8 @@ class ShadowGraph {
     _retainTheLowestPossibleIdentifiers(storyline.reports);
     _retainTheHighestPossibleConjunction(storyline.reports);
   }
+
+  Set<Entity> get allMentionedEntities => _mentionedEntities;
 
   UnmodifiableListView<SentenceConjunction> get conjunctions =>
       UnmodifiableListView(_conjunctions.map((set) => set.single));
@@ -276,6 +285,19 @@ class ShadowGraph {
             'is already empty. Entities: $entities.');
 
         lastMentionedTimes[entity.id] = i;
+
+        if (entity.firstOwnerId != null) {
+          // Also solve this for the owner of the entity.
+          final owner = getEntityById(entity.firstOwnerId, entities);
+
+          if (!owner.isPlayer && !everMentionedIds.contains(owner.id)) {
+            // If we haven't mentioned the owner yet, we can't use their
+            // pronoun.
+            set.removeAll([
+              IdentifierLevel.ownerPronounsNoun,
+            ]);
+          }
+        }
       });
     }
   }
@@ -542,6 +564,23 @@ class ShadowGraph {
     }
   }
 
+  /// Uses the [currentEntities] to find the entity with the provided [id].
+  ///
+  /// If it cannot find the entity among the current ones (usually the ones
+  /// mentioned in the current [Storyline]), it will broaden the search
+  /// to [_storylineEntities] (which are generally all entities in the Book).
+  ///
+  /// Returns `null` if the entity with [id] cannot be found.
+  Entity getEntityById(int id, Set<Entity> currentEntities) {
+    for (final entity in currentEntities) {
+      if (entity.id == id) return entity;
+    }
+
+    final result = _storylineEntities[id];
+    assert(result != null);
+    return result;
+  }
+
   /// Finds out which [Entity] is referred to by which [Identifier] as the
   /// story unfolds.
   ///
@@ -604,6 +643,18 @@ class ShadowGraph {
         if (!entity.nameIsProperNoun) {
           final nounId = Identifier.noun(entity.name);
           assign(nounId, entity);
+        }
+
+        if (entity.firstOwnerId != null) {
+          final owner = getEntityById(entity.firstOwnerId, entities);
+
+          final ownerPronounsNounId = Identifier.ownerPronounsNoun(
+              '${owner.pronoun.genitive} ${entity.name}');
+          assign(ownerPronounsNounId, entity);
+
+          final ownerNamesNounId =
+              Identifier.ownerNamesNoun('${owner.name}\'s ${entity.name}');
+          assign(ownerNamesNounId, entity);
         }
 
         // TODO: theOtherNoun - by definition, this one will have 2 entities

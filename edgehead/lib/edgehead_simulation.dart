@@ -65,7 +65,7 @@ final Actor edgeheadTamara = Actor.initialized(
   initiative: 1500,
   currentRoomName: _preStartBook.name,
   followingActorId: playerId,
-  currentWeapon: Item.weapon(2342341, WeaponType.sword, adjective: "slender"),
+  currentWeapon: Item.weapon(2342341, WeaponType.sword, adjective: "mercenary"),
 );
 
 final Map<String, FoldFunction> _foldFunctions = {

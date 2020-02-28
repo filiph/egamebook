@@ -170,7 +170,8 @@ abstract class AttackerSituation extends Object
         ..name = situationName
         ..move = (MoveEntityBuilder()
           ..id = id * 31
-          ..name = moveName)
+          ..name = moveName
+          ..firstOwnerId = attacker.id)
         ..builtOtherActorActionGenerators =
             ListBuilder<OtherActorAction>(builtOtherActorActionGenerators)
         ..builtEnemyTargetActionGenerators =
@@ -233,14 +234,6 @@ abstract class MoveEntity extends Object
   static Serializer<MoveEntity> get serializer => _$moveEntitySerializer;
 
   factory MoveEntity([void Function(MoveEntityBuilder) updates]) = _$MoveEntity;
-
-  factory MoveEntity.initialized(
-    int id,
-    String name,
-  ) =>
-      MoveEntity((b) => b
-        ..id = id
-        ..name = name);
 
   MoveEntity._();
 

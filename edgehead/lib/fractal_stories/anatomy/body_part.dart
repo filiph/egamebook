@@ -36,6 +36,7 @@ abstract class BodyPart extends Object
     int swingSurfaceLeft = 1,
     int swingSurfaceRight = 1,
     int thrustSurface = 1,
+    int firstOwnerId,
   }) =>
       _$BodyPart((b) => b
         ..id = id
@@ -57,6 +58,7 @@ abstract class BodyPart extends Object
         ..swingSurfaceLeft = swingSurfaceLeft
         ..swingSurfaceRight = swingSurfaceRight
         ..thrustSurface = thrustSurface
+        ..firstOwnerId = firstOwnerId
         ..isActive = true);
 
   BodyPart._();
@@ -84,6 +86,9 @@ abstract class BodyPart extends Object
   DamageCapability get damageCapability;
 
   BodyPartDesignation get designation;
+
+  @override
+  int get firstOwnerId;
 
   BodyPartFunction get function;
 

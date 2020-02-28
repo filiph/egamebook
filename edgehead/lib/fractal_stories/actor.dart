@@ -184,6 +184,11 @@ abstract class Actor extends Object
   @nullable
   DirectorCapability get director;
 
+  /// Actors don't have "owners".
+  @override
+  // ignore: avoid_returning_null
+  int get firstOwnerId => null;
+
   /// The string handle to the fold function that this actor should use.
   String get foldFunctionHandle;
 

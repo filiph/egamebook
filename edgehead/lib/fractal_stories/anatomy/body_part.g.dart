@@ -138,6 +138,9 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
       'designation',
       serializers.serialize(object.designation,
           specifiedType: const FullType(BodyPartDesignation)),
+      'firstOwnerId',
+      serializers.serialize(object.firstOwnerId,
+          specifiedType: const FullType(int)),
       'function',
       serializers.serialize(object.function,
           specifiedType: const FullType(BodyPartFunction)),
@@ -221,6 +224,10 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           result.designation = serializers.deserialize(value,
                   specifiedType: const FullType(BodyPartDesignation))
               as BodyPartDesignation;
+          break;
+        case 'firstOwnerId':
+          result.firstOwnerId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'function':
           result.function = serializers.deserialize(value,
@@ -336,6 +343,8 @@ class _$BodyPart extends BodyPart {
   @override
   final BodyPartDesignation designation;
   @override
+  final int firstOwnerId;
+  @override
   final BodyPartFunction function;
   @override
   final int hitpoints;
@@ -374,6 +383,7 @@ class _$BodyPart extends BodyPart {
       this.children,
       this.damageCapability,
       this.designation,
+      this.firstOwnerId,
       this.function,
       this.hitpoints,
       this.id,
@@ -398,6 +408,9 @@ class _$BodyPart extends BodyPart {
     }
     if (designation == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'designation');
+    }
+    if (firstOwnerId == null) {
+      throw new BuiltValueNullFieldError('BodyPart', 'firstOwnerId');
     }
     if (function == null) {
       throw new BuiltValueNullFieldError('BodyPart', 'function');
@@ -461,6 +474,7 @@ class _$BodyPart extends BodyPart {
         children == other.children &&
         damageCapability == other.damageCapability &&
         designation == other.designation &&
+        firstOwnerId == other.firstOwnerId &&
         function == other.function &&
         hitpoints == other.hitpoints &&
         id == other.id &&
@@ -498,18 +512,12 @@ class _$BodyPart extends BodyPart {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc(
-                                                                                0,
-                                                                                bluntHitsCount
-                                                                                    .hashCode),
-                                                                            children
-                                                                                .hashCode),
-                                                                        damageCapability
-                                                                            .hashCode),
-                                                                    designation
-                                                                        .hashCode),
-                                                                function
-                                                                    .hashCode),
+                                                                            $jc($jc(0, bluntHitsCount.hashCode),
+                                                                                children.hashCode),
+                                                                            damageCapability.hashCode),
+                                                                        designation.hashCode),
+                                                                    firstOwnerId.hashCode),
+                                                                function.hashCode),
                                                             hitpoints.hashCode),
                                                         id.hashCode),
                                                     isActive.hashCode),
@@ -533,6 +541,7 @@ class _$BodyPart extends BodyPart {
           ..add('children', children)
           ..add('damageCapability', damageCapability)
           ..add('designation', designation)
+          ..add('firstOwnerId', firstOwnerId)
           ..add('function', function)
           ..add('hitpoints', hitpoints)
           ..add('id', id)
@@ -575,6 +584,10 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   BodyPartDesignation get designation => _$this._designation;
   set designation(BodyPartDesignation designation) =>
       _$this._designation = designation;
+
+  int _firstOwnerId;
+  int get firstOwnerId => _$this._firstOwnerId;
+  set firstOwnerId(int firstOwnerId) => _$this._firstOwnerId = firstOwnerId;
 
   BodyPartFunction _function;
   BodyPartFunction get function => _$this._function;
@@ -649,6 +662,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
       _children = _$v.children?.toBuilder();
       _damageCapability = _$v.damageCapability?.toBuilder();
       _designation = _$v.designation;
+      _firstOwnerId = _$v.firstOwnerId;
       _function = _$v.function;
       _hitpoints = _$v.hitpoints;
       _id = _$v.id;
@@ -692,6 +706,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
               children: children.build(),
               damageCapability: _damageCapability?.build(),
               designation: designation,
+              firstOwnerId: firstOwnerId,
               function: function,
               hitpoints: hitpoints,
               id: id,

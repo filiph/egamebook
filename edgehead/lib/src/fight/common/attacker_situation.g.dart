@@ -216,6 +216,9 @@ class _$MoveEntitySerializer implements StructuredSerializer<MoveEntity> {
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
+      'firstOwnerId',
+      serializers.serialize(object.firstOwnerId,
+          specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -239,6 +242,10 @@ class _$MoveEntitySerializer implements StructuredSerializer<MoveEntity> {
         case 'name':
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'firstOwnerId':
+          result.firstOwnerId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -517,16 +524,21 @@ class _$MoveEntity extends MoveEntity {
   final int id;
   @override
   final String name;
+  @override
+  final int firstOwnerId;
 
   factory _$MoveEntity([void Function(MoveEntityBuilder) updates]) =>
       (new MoveEntityBuilder()..update(updates)).build();
 
-  _$MoveEntity._({this.id, this.name}) : super._() {
+  _$MoveEntity._({this.id, this.name, this.firstOwnerId}) : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('MoveEntity', 'id');
     }
     if (name == null) {
       throw new BuiltValueNullFieldError('MoveEntity', 'name');
+    }
+    if (firstOwnerId == null) {
+      throw new BuiltValueNullFieldError('MoveEntity', 'firstOwnerId');
     }
   }
 
@@ -540,19 +552,24 @@ class _$MoveEntity extends MoveEntity {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is MoveEntity && id == other.id && name == other.name;
+    return other is MoveEntity &&
+        id == other.id &&
+        name == other.name &&
+        firstOwnerId == other.firstOwnerId;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, id.hashCode), name.hashCode));
+    return $jf(
+        $jc($jc($jc(0, id.hashCode), name.hashCode), firstOwnerId.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('MoveEntity')
           ..add('id', id)
-          ..add('name', name))
+          ..add('name', name)
+          ..add('firstOwnerId', firstOwnerId))
         .toString();
   }
 }
@@ -568,12 +585,17 @@ class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
+  int _firstOwnerId;
+  int get firstOwnerId => _$this._firstOwnerId;
+  set firstOwnerId(int firstOwnerId) => _$this._firstOwnerId = firstOwnerId;
+
   MoveEntityBuilder();
 
   MoveEntityBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
       _name = _$v.name;
+      _firstOwnerId = _$v.firstOwnerId;
       _$v = null;
     }
     return this;
@@ -594,7 +616,8 @@ class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
 
   @override
   _$MoveEntity build() {
-    final _$result = _$v ?? new _$MoveEntity._(id: id, name: name);
+    final _$result = _$v ??
+        new _$MoveEntity._(id: id, name: name, firstOwnerId: firstOwnerId);
     replace(_$result);
     return _$result;
   }

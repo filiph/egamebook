@@ -8,6 +8,8 @@ part of storyline.shadow_graph;
 const List<IdentifierLevel> orderedQualificationLevels = [
   IdentifierLevel.properNoun,
   IdentifierLevel.adjectiveNoun,
+  IdentifierLevel.ownerNamesNoun,
+  IdentifierLevel.ownerPronounsNoun,
   IdentifierLevel.noun,
   IdentifierLevel.adjectiveOne,
   IdentifierLevel.pronoun,
@@ -44,6 +46,14 @@ class Identifier {
       : level = IdentifierLevel.omitted,
         pronoun = null,
         string = null;
+
+  const Identifier.ownerNamesNoun(this.string)
+      : level = IdentifierLevel.ownerNamesNoun,
+        pronoun = null;
+
+  const Identifier.ownerPronounsNoun(this.string)
+      : level = IdentifierLevel.ownerPronounsNoun,
+        pronoun = null;
 
   const Identifier.pronoun(this.pronoun)
       : level = IdentifierLevel.pronoun,
@@ -84,14 +94,25 @@ enum IdentifierLevel {
   /// Like [pronoun], but so close that it can be omitted.
   omitted,
 
+  /// Something like "he" or "it".
   pronoun,
 
+  /// Something like "the brown one" or "the slimy one".
   adjectiveOne,
 
+  /// Something like "sword" or "apple".
   noun,
 
+  /// Something like "my sword" or "her shield".
+  ownerPronounsNoun,
+
+  /// Something like "Tamara's sword" or "the goblin's helmet".
+  ownerNamesNoun,
+
+  /// Something like "the brown jacket" or "the long sword"
   adjectiveNoun,
 
+  /// Something like "Aren" or "Excalibur".
   properNoun,
 }
 

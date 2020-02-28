@@ -44,8 +44,11 @@ void main() {
         "tail",
         designation: BodyPartDesignation.tail,
         children: [
-          BodyPart(1234123222, "eye", designation: BodyPartDesignation.leftEye)
+          BodyPart(1234123222, "eye",
+              designation: BodyPartDesignation.leftEye,
+              firstOwnerId: monster.id)
         ],
+        firstOwnerId: monster.id,
       ));
       final sword = Item.weapon(42, WeaponType.sword);
 
@@ -253,8 +256,9 @@ void main() {
   });
 
   group("pickRandomBodyPart", () {
-    final head = BodyPart(1, "head");
-    final neck = BodyPart(2, "neck");
+    final actor = Actor.initialized(1000, "orc");
+    final head = BodyPart(1, "head", firstOwnerId: actor.id);
+    final neck = BodyPart(2, "neck", firstOwnerId: actor.id);
     final random = Random();
     final randomIntGetter = random.nextInt;
 

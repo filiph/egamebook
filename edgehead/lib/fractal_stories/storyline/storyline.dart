@@ -167,7 +167,9 @@ class Report {
         final a = nonNulls[i];
         final b = nonNulls[j];
         if (a.id == b.id) continue;
-        if (a.name == b.name && a.adjective == b.adjective) {
+        if (a.name == b.name &&
+            a.adjective == b.adjective &&
+            a.firstOwnerId == b.firstOwnerId) {
           // Uncomment the line below to debug this problem if the debugger
           // refuses to stop at the assertion.
           // print("$a and $b aren't differentiated enough");
@@ -208,6 +210,8 @@ class Storyline {
 
   static const _endOfTime = 9999999;
 
+  static final _vowelsRegExp = RegExp(r"[aeiouy]", caseSensitive: false);
+
   /// Internal list of reports. This is constructed by filtering [_records].
   List<Report> _reports;
 
@@ -231,7 +235,24 @@ class Storyline {
   /// would then forever appear as "mentioned from the beginning".
   final Map<int, int> _firstMentions = {};
 
-  Storyline();
+  /// The backing data structure to [allEntities].
+  final Map<int, Entity> _allEntities;
+
+  /// Constructs a new storyline.
+  ///
+  /// Provide [referredEntities] to give [Storyline] more information
+  /// about the entities that might play a role in this story.
+  Storyline({Iterable<Entity> referredEntities = const []})
+      : _allEntities = {
+          for (final entity in referredEntities) entity.id: entity,
+        };
+
+  /// A database of entities. The map associates an [Entity.id] (an integer)
+  /// with the actual [Entity]. This way, we are guaranteed that each
+  /// entity has only one record. It also makes it faster to access
+  /// the entities.
+  UnmodifiableMapView<int, Entity> get allEntities =>
+      UnmodifiableMapView(_allEntities);
 
   @visibleForTesting
   bool get hasManyParagraphs =>
@@ -399,6 +420,10 @@ class Storyline {
   /// Appends [other] storyline to this one.
   void concatenate(Storyline other) {
     _records.addAll(other._records);
+    for (final key in other._allEntities.keys) {
+      // It's okay to overwrite old entries with newer ones.
+      _allEntities[key] = other._allEntities[key];
+    }
   }
 
   bool exchangedSubjectObject(int i, int j) {
@@ -623,7 +648,9 @@ class Storyline {
       report = _preventPossessivesBeforePronouns(report, _reports[i]);
       report = _preventPossessivesBeforeProperNouns(report, _reports[i]);
       report = _addParticles(report, _reports[i]);
-      report = _realizeStopwords(report, _reports[i]);
+      report = _realizeStopwords(report, _reports[i],
+          getEntityFromId: (id) =>
+              shadowGraph.getEntityById(id, _reports[i].allEntities.toSet()));
 
       if (needsCapitalization) {
         report = capitalize(report);
@@ -760,6 +787,62 @@ class Storyline {
     }
   }
 
+  /// Given [str] which still has stopwords (such as
+  /// [ComplementType.SUBJECT.noun]) in it, add particles where appropriate.
+  String _addParticles(String str, Report report) {
+    String result = str;
+
+    // Searches in [result] for [stopword]. Adds article if applicable.
+    void maybeAddArticleToOne(Entity entity, String stopword) {
+      result = result.replaceAllMapped(stopword, (m) {
+        for (final possessive in ComplementType.allPossessives) {
+          final possessiveIndex = result.indexOf(possessive);
+          if (possessiveIndex == -1) continue;
+          if (possessiveIndex == m.start - possessive.length - 1) {
+            // The possessive (such as `<subject's>`) is just before
+            // the [stopword]. The -1 is there for a space character.
+            // Ignore this replacement.
+            return stopword;
+          }
+        }
+
+        if (_hasBeenMentioned(entity, report.time)) {
+          return "the $stopword";
+        } else {
+          _firstMentions[entity.id] = report.time;
+          if (entity.name.startsWith(_vowelsRegExp)) {
+            return "an $stopword";
+          } else {
+            return "a $stopword";
+          }
+        }
+      });
+    }
+
+    // Searches for any of the [stopwords] in [result]. Defers to
+    // [maybeAddArticleToOne].
+    void maybeAddArticleToAny(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+
+      if (entity == null) return;
+      if (entity.nameIsProperNoun) return;
+
+      // Only nouns need particles (i.e. not pronouns or "the other nouns").
+      maybeAddArticleToOne(entity, complement.noun);
+      maybeAddArticleToOne(entity, complement.nounPossessive);
+      maybeAddArticleToOne(entity, complement.nounWithAdjective);
+      maybeAddArticleToOne(entity, complement.nounWithAdjectivePossessive);
+    }
+
+    maybeAddArticleToAny(ComplementType.SUBJECT);
+    maybeAddArticleToAny(ComplementType.OBJECT);
+    maybeAddArticleToAny(ComplementType.OBJECT2);
+    maybeAddArticleToAny(ComplementType.OWNER);
+    maybeAddArticleToAny(ComplementType.OBJECT_OWNER);
+
+    return result;
+  }
+
   /// Detect unbroken chains of actionThread from start to summary, remove
   /// everything except summary.
   Iterable<Report> _collapseThreads(List<Report> reports) sync* {
@@ -837,59 +920,6 @@ class Storyline {
       }
     }
     return true;
-  }
-
-  /// A special case for things like "Haijing's it" or "wolf's they". In this
-  /// case, we just want to drop the possessive.
-  String _preventPossessivesBeforePronouns(String string, Report report) {
-    String result = string;
-
-    void maybeRemovePossessive(ComplementType complement) {
-      final entity = report.getEntityByType(complement);
-      if (entity == null) return;
-
-      for (final pronoun in complement.allPronouns) {
-        for (final possessive in ComplementType.allPossessives) {
-          result = result.replaceAll("$possessive $pronoun", pronoun);
-        }
-      }
-    }
-
-    maybeRemovePossessive(ComplementType.SUBJECT);
-    maybeRemovePossessive(ComplementType.OBJECT);
-    maybeRemovePossessive(ComplementType.OBJECT2);
-    maybeRemovePossessive(ComplementType.OWNER);
-    maybeRemovePossessive(ComplementType.OBJECT_OWNER);
-
-    return result;
-  }
-
-  /// A special case for things like "Bilbo swings Sting at the orc." In this
-  /// case, we don't want to say "his Sting", since "Sting" is a proper noun
-  /// and it sounds weird.
-  String _preventPossessivesBeforeProperNouns(String string, Report report) {
-    String result = string;
-
-    void maybeRemovePossessive(Entity entity, ComplementType complement) {
-      if (entity == null) return;
-      if (!entity.nameIsProperNoun) return;
-      for (final stopword in [
-        complement.noun,
-        complement.nounPossessive,
-        complement.nounWithAdjective,
-        complement.nounWithAdjectivePossessive,
-      ]) {
-        for (final possessive in ComplementType.allPossessives) {
-          result = result.replaceAll("$possessive $stopword", stopword);
-        }
-      }
-    }
-
-    maybeRemovePossessive(report.subject, ComplementType.SUBJECT);
-    maybeRemovePossessive(report.object, ComplementType.OBJECT);
-    maybeRemovePossessive(report.object2, ComplementType.OBJECT2);
-
-    return result;
   }
 
   /// Returns whether or not the [entity] has been mentioned by time of the
@@ -990,6 +1020,40 @@ class Storyline {
             },
           );
           break;
+
+        case IdentifierLevel.ownerPronounsNoun:
+          assert(entity.firstOwnerId != null);
+
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              complement.generic: complement.ownerPronounsNoun,
+              complement.genericPossessive:
+                  complement.ownerPronounsNounPossessive,
+            },
+            following: {
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
+            },
+          );
+          break;
+
+        case IdentifierLevel.ownerNamesNoun:
+          assert(entity.firstOwnerId != null);
+
+          result = _replaceFirstThenAll(
+            result,
+            first: {
+              complement.generic: complement.ownerNamesNoun,
+              complement.genericPossessive: complement.ownerNamesNounPossessive,
+            },
+            following: {
+              complement.generic: complement.pronoun,
+              complement.genericPossessive: complement.pronounPossessive,
+            },
+          );
+          break;
+
         case IdentifierLevel.adjectiveNoun:
           result = _replaceFirstThenAll(
             result,
@@ -1035,10 +1099,67 @@ class Storyline {
     return result;
   }
 
+  /// A special case for things like "Haijing's it" or "wolf's they". In this
+  /// case, we just want to drop the possessive.
+  String _preventPossessivesBeforePronouns(String string, Report report) {
+    String result = string;
+
+    void maybeRemovePossessive(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+      if (entity == null) return;
+
+      for (final pronoun in complement.allPronouns) {
+        for (final possessive in ComplementType.allPossessives) {
+          result = result.replaceAll("$possessive $pronoun", pronoun);
+        }
+      }
+    }
+
+    maybeRemovePossessive(ComplementType.SUBJECT);
+    maybeRemovePossessive(ComplementType.OBJECT);
+    maybeRemovePossessive(ComplementType.OBJECT2);
+    maybeRemovePossessive(ComplementType.OWNER);
+    maybeRemovePossessive(ComplementType.OBJECT_OWNER);
+
+    return result;
+  }
+
+  /// A special case for things like "Bilbo swings Sting at the orc." In this
+  /// case, we don't want to say "his Sting", since "Sting" is a proper noun
+  /// and it sounds weird.
+  String _preventPossessivesBeforeProperNouns(String string, Report report) {
+    String result = string;
+
+    void maybeRemovePossessive(Entity entity, ComplementType complement) {
+      if (entity == null) return;
+      if (!entity.nameIsProperNoun) return;
+      for (final stopword in [
+        complement.noun,
+        complement.nounPossessive,
+        complement.nounWithAdjective,
+        complement.nounWithAdjectivePossessive,
+      ]) {
+        for (final possessive in ComplementType.allPossessives) {
+          result = result.replaceAll("$possessive $stopword", stopword);
+        }
+      }
+    }
+
+    maybeRemovePossessive(report.subject, ComplementType.SUBJECT);
+    maybeRemovePossessive(report.object, ComplementType.OBJECT);
+    maybeRemovePossessive(report.object2, ComplementType.OBJECT2);
+
+    return result;
+  }
+
   /// Takes care of substitution of stopwords for actual text.
   ///
   /// For example, `<subject>` becomes `the goblin` or `she`.
-  String _realizeStopwords(String str, Report report) {
+  String _realizeStopwords(
+    String str,
+    Report report, {
+    @required Entity Function(int) getEntityFromId,
+  }) {
     Entity subject = report.subject;
     String result = str;
 
@@ -1127,6 +1248,27 @@ class Storyline {
       result = result.replaceAll(x.pronounPossessive, object.pronoun.genitive);
       result = result.replaceAll(
           x.adjectiveOnePossessive, "the ${object.adjective} one's");
+
+      if (object.firstOwnerId == null) {
+        // If firstOwnerId is null, then `result` shouldn't contain any
+        // of these.
+        assert(!result.contains(x.ownerPronounsNoun));
+        assert(!result.contains(x.ownerPronounsNounPossessive));
+        assert(!result.contains(x.ownerNamesNoun));
+        assert(!result.contains(x.ownerNamesNounPossessive));
+      } else {
+        final owner = getEntityFromId(object.firstOwnerId);
+        final the_ = owner.nameIsProperNoun ? '' : 'the ';
+
+        result = result.replaceAll(
+            x.ownerPronounsNoun, "${owner.pronoun.genitive} ${object.name}");
+        result = result.replaceAll(x.ownerPronounsNounPossessive,
+            "${owner.pronoun.genitive}'s ${object.name}'s");
+        result = result.replaceAll(
+            x.ownerNamesNoun, "$the_${owner.name}'s ${object.name}");
+        result = result.replaceAll(x.ownerNamesNounPossessive,
+            "$the_${owner.name}'s ${object.name}'s");
+      }
     }
 
     substituteForType(ComplementType.SUBJECT);
@@ -1167,6 +1309,7 @@ class Storyline {
     return result;
   }
 
+  // Never show "the guard's it".
   /// Taking care of all the exceptions and rules when comparing
   /// different reports call: [: sameSubject(i, i+1) ... :]
   bool _sameSubject(int i, int j) {
@@ -1191,7 +1334,6 @@ class Storyline {
     }
   }
 
-  // Never show "the guard's it".
   /// Takes the string, and first searches for keys in [first]. Once that is
   /// found, the corresponding value in [first] is used as replacement.
   ///
@@ -1235,64 +1377,6 @@ class Storyline {
     for (final key in following.keys) {
       result = result.replaceAll(key, following[key]);
     }
-    return result;
-  }
-
-  static final _vowelsRegExp = RegExp(r"[aeiouy]", caseSensitive: false);
-
-  /// Given [str] which still has stopwords (such as
-  /// [ComplementType.SUBJECT.noun]) in it, add particles where appropriate.
-  String _addParticles(String str, Report report) {
-    String result = str;
-
-    // Searches in [result] for [stopword]. Adds article if applicable.
-    void maybeAddArticleToOne(Entity entity, String stopword) {
-      result = result.replaceAllMapped(stopword, (m) {
-        for (final possessive in ComplementType.allPossessives) {
-          final possessiveIndex = result.indexOf(possessive);
-          if (possessiveIndex == -1) continue;
-          if (possessiveIndex == m.start - possessive.length - 1) {
-            // The possessive (such as `<subject's>`) is just before
-            // the [stopword]. The -1 is there for a space character.
-            // Ignore this replacement.
-            return stopword;
-          }
-        }
-
-        if (_hasBeenMentioned(entity, report.time)) {
-          return "the $stopword";
-        } else {
-          _firstMentions[entity.id] = report.time;
-          if (entity.name.startsWith(_vowelsRegExp)) {
-            return "an $stopword";
-          } else {
-            return "a $stopword";
-          }
-        }
-      });
-    }
-
-    // Searches for any of the [stopwords] in [result]. Defers to
-    // [maybeAddArticleToOne].
-    void maybeAddArticleToAny(ComplementType complement) {
-      final entity = report.getEntityByType(complement);
-
-      if (entity == null) return;
-      if (entity.nameIsProperNoun) return;
-
-      // Only nouns need particles (i.e. not pronouns or "the other nouns").
-      maybeAddArticleToOne(entity, complement.noun);
-      maybeAddArticleToOne(entity, complement.nounPossessive);
-      maybeAddArticleToOne(entity, complement.nounWithAdjective);
-      maybeAddArticleToOne(entity, complement.nounWithAdjectivePossessive);
-    }
-
-    maybeAddArticleToAny(ComplementType.SUBJECT);
-    maybeAddArticleToAny(ComplementType.OBJECT);
-    maybeAddArticleToAny(ComplementType.OBJECT2);
-    maybeAddArticleToAny(ComplementType.OWNER);
-    maybeAddArticleToAny(ComplementType.OBJECT_OWNER);
-
     return result;
   }
 }

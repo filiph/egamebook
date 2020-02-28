@@ -22,27 +22,31 @@ abstract class Item extends Object
           {@required String name,
           String adjective,
           bool nameIsProperNoun = false,
-          DamageCapabilityBuilder damageCapability}) =>
+          DamageCapabilityBuilder damageCapability,
+          int firstOwnerId}) =>
       _$Item((b) => b
         ..id = id
         ..damageCapability = damageCapability
         ..name = name
         ..nameIsProperNoun = nameIsProperNoun
-        ..adjective = adjective);
+        ..adjective = adjective
+        ..firstOwnerId = firstOwnerId);
 
   factory Item.weapon(int id, WeaponType type,
       {String name,
       bool nameIsProperNoun = false,
       String adjective,
       int slashingDamage,
-      int thrustingDamage}) {
+      int thrustingDamage,
+      int firstOwnerId}) {
     final damageCapability = DamageCapability(type,
         slashingDamage: slashingDamage, thrustingDamage: thrustingDamage);
     return Item(id,
         name: name ?? type.name,
         nameIsProperNoun: nameIsProperNoun,
         adjective: adjective,
-        damageCapability: damageCapability.toBuilder());
+        damageCapability: damageCapability.toBuilder(),
+        firstOwnerId: firstOwnerId);
   }
 
   Item._();
@@ -55,6 +59,10 @@ abstract class Item extends Object
   DamageCapability get damageCapability;
 
   String get description => throw UnimplementedError();
+
+  @override
+  @nullable
+  int get firstOwnerId;
 
   @override
   int get id;

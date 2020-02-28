@@ -62,7 +62,7 @@ class EdgeheadGame extends Book {
   Simulation simulation;
 
   PlanConsequence consequence;
-  Storyline storyline = Storyline();
+  Storyline storyline;
   final Stat<double> hitpoints = Stat<double>(hitpointsSetting, 0.0);
   final Stat<int> stamina = Stat<int>(staminaSetting, 1);
 
@@ -232,6 +232,8 @@ class EdgeheadGame extends Book {
         ..time = startingTime);
     }
 
+    storyline = Storyline(referredEntities: world.actors);
+    
     playerCharacter = world.getActorById(playerId);
 
     hitpoints.value = playerCharacter.hitpoints / playerCharacter.maxHitpoints;

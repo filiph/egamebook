@@ -38,6 +38,12 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
         ..add(serializers.serialize(object.damageCapability,
             specifiedType: const FullType(DamageCapability)));
     }
+    if (object.firstOwnerId != null) {
+      result
+        ..add('firstOwnerId')
+        ..add(serializers.serialize(object.firstOwnerId,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -60,6 +66,10 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
           result.damageCapability.replace(serializers.deserialize(value,
                   specifiedType: const FullType(DamageCapability))
               as DamageCapability);
+          break;
+        case 'firstOwnerId':
+          result.firstOwnerId = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -86,6 +96,8 @@ class _$Item extends Item {
   @override
   final DamageCapability damageCapability;
   @override
+  final int firstOwnerId;
+  @override
   final int id;
   @override
   final String name;
@@ -98,6 +110,7 @@ class _$Item extends Item {
   _$Item._(
       {this.adjective,
       this.damageCapability,
+      this.firstOwnerId,
       this.id,
       this.name,
       this.nameIsProperNoun})
@@ -126,6 +139,7 @@ class _$Item extends Item {
     return other is Item &&
         adjective == other.adjective &&
         damageCapability == other.damageCapability &&
+        firstOwnerId == other.firstOwnerId &&
         id == other.id &&
         name == other.name &&
         nameIsProperNoun == other.nameIsProperNoun;
@@ -135,7 +149,9 @@ class _$Item extends Item {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, adjective.hashCode), damageCapability.hashCode),
+            $jc(
+                $jc($jc($jc(0, adjective.hashCode), damageCapability.hashCode),
+                    firstOwnerId.hashCode),
                 id.hashCode),
             name.hashCode),
         nameIsProperNoun.hashCode));
@@ -154,6 +170,10 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
       _$this._damageCapability ??= new DamageCapabilityBuilder();
   set damageCapability(DamageCapabilityBuilder damageCapability) =>
       _$this._damageCapability = damageCapability;
+
+  int _firstOwnerId;
+  int get firstOwnerId => _$this._firstOwnerId;
+  set firstOwnerId(int firstOwnerId) => _$this._firstOwnerId = firstOwnerId;
 
   int _id;
   int get id => _$this._id;
@@ -174,6 +194,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
     if (_$v != null) {
       _adjective = _$v.adjective;
       _damageCapability = _$v.damageCapability?.toBuilder();
+      _firstOwnerId = _$v.firstOwnerId;
       _id = _$v.id;
       _name = _$v.name;
       _nameIsProperNoun = _$v.nameIsProperNoun;
@@ -203,6 +224,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
           new _$Item._(
               adjective: adjective,
               damageCapability: _damageCapability?.build(),
+              firstOwnerId: firstOwnerId,
               id: id,
               name: name,
               nameIsProperNoun: nameIsProperNoun);

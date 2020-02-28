@@ -25,6 +25,18 @@ abstract class Entity {
   /// or information ("I hit the already injured arm") is still on the writer.
   String get adjective;
 
+  /// The [Entity.id] of the entity that "owned" this entity the first
+  /// time the player sees it. For example, a goblin's hand is
+  /// "owned" by the goblin, so we can later refer to "goblin's hand"
+  /// even when the hand has been severed.
+  ///
+  /// This becomes similar to [adjective] — useful to distinguish
+  /// between two entities with the same noun ("my sword" versus "orc's sword").
+  ///
+  /// This field _can_ be `null`. Lots of things don't belong to anything
+  /// or anyone.
+  int get firstOwnerId;
+
   /// An entity's [id] is the only constant thing. All other things, including
   /// [name] can change during play. ID cannot.
   ///
@@ -162,6 +174,10 @@ class _NonserializableEntity extends Object
 
   @override
   final bool isPlayer;
+
+  @override
+  // ignore: avoid_returning_null
+  int get firstOwnerId => null;
 
   _NonserializableEntity({
     @required this.name,
