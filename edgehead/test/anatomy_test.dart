@@ -194,8 +194,10 @@ void main() {
 
   group("executeThrustingHit", () {
     test("disabling primary hand drops weapon", () {
-      final orc = Actor.initialized(1000, "orc",
-          currentWeapon: Item.weapon(10000, WeaponType.sword));
+      const orcId = 1000;
+      final orc = Actor.initialized(orcId, "orc",
+          currentWeapon:
+              Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
       final dagger = Item.weapon(42, WeaponType.dagger);
 
       final result =
@@ -204,8 +206,10 @@ void main() {
     });
 
     test("disabling primary arm drops weapon", () {
-      final orc = Actor.initialized(1000, "orc",
-          currentWeapon: Item.weapon(10000, WeaponType.sword));
+      const orcId = 1000;
+      final orc = Actor.initialized(orcId, "orc",
+          currentWeapon:
+              Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
       final dagger = Item.weapon(42, WeaponType.dagger);
 
       final result =
@@ -214,8 +218,10 @@ void main() {
     });
 
     test("disabling secondary hand doesn't drop weapon", () {
-      final orc = Actor.initialized(1000, "orc",
-          currentWeapon: Item.weapon(10000, WeaponType.sword));
+      const orcId = 1000;
+      final orc = Actor.initialized(orcId, "orc",
+          currentWeapon:
+              Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
       final dagger = Item.weapon(42, WeaponType.dagger);
 
       final result =

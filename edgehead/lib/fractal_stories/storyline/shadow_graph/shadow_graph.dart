@@ -134,6 +134,8 @@ class ShadowGraph {
     __assertAtLeastOneIdentifier(storyline.reports);
     _detectMissingAdjectives(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
+    _detectMissingOwners(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _detectFirstMentions(storyline.reports, _mentionedEntities);
     __assertAtLeastOneIdentifier(storyline.reports);
     _identifiers =
@@ -328,6 +330,22 @@ class ShadowGraph {
         if (entity.adjective == null) {
           set.removeAll(
               [IdentifierLevel.adjectiveOne, IdentifierLevel.adjectiveNoun]);
+        }
+      });
+    }
+  }
+
+  /// Detects entities that have [Entity.firstOwnerId] == `null`, and removes
+  /// the relevant [IdentifierLevel]s.
+  void _detectMissingOwners(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < reports.length; i++) {
+      final report = reports[i];
+      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+        if (entity.firstOwnerId == null) {
+          set.removeAll([
+            IdentifierLevel.ownerPronounsNoun,
+            IdentifierLevel.ownerNamesNoun,
+          ]);
         }
       });
     }

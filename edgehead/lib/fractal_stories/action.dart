@@ -164,7 +164,7 @@ abstract class Action<T> {
       final templateContainsObject = commandPathTemplate
           .any((part) => part.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP));
       // Realize the template, optionally with "<object>".
-      return (Storyline()
+      return (Storyline(referredEntities: context.world.actors)
             ..add(commandPathTemplate.join(' >> '),
                 object: templateContainsObject ? object : null))
           .realizeAsString()
