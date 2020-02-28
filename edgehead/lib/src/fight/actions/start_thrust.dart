@@ -94,7 +94,7 @@ PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
             s,
             "<subject> thrust<s> at "
             "<objectOwner's> <object>",
-            object: Entity(name: designation.toHumanString(), isCommon: true),
+            object: enemy.anatomy.findByDesignation(designation),
             objectOwner: enemy,
             actionThread: mainSituation.id,
             startsThread: true),
@@ -102,7 +102,7 @@ PartialApplyFunction startThrustReportStart(BodyPartDesignation designation) =>
             s,
             "<subject> thrust<s> <object2> at "
             "<objectOwner's> <object>",
-            object: Entity(name: designation.toHumanString(), isCommon: true),
+            object: enemy.anatomy.findByDesignation(designation),
             objectOwner: enemy,
             object2: a.currentWeapon,
             actionThread: mainSituation.id,

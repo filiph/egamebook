@@ -57,7 +57,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
           s,
           "<subject> thrust<s> at "
           "<objectOwner's> <object>",
-          object: Entity(name: 'eye', isCommon: true),
+          object: _getTargetEye(enemy, world.time.millisecondsSinceEpoch),
           objectOwner: enemy,
           positive: true,
           actionThread: mainSituation.id,
@@ -66,7 +66,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
           s,
           "<subject> thrust<s> <object2> at "
           "<objectOwner's> <object>",
-          object: Entity(name: 'eye', isCommon: true),
+          object: _getTargetEye(enemy, world.time.millisecondsSinceEpoch),
           objectOwner: enemy,
           object2: a.currentWeaponOrBodyPart,
           positive: true,

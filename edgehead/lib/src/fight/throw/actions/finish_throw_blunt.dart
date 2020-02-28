@@ -56,7 +56,7 @@ class FinishThrowBlunt extends OtherActorAction {
     assert(projectile.damageCapability.isBlunt);
 
     final bodyPart = _createBodyPartEntity(
-        a, "{shoulder|{left|right} arm|{left|right} thigh|chest|stomach}");
+        enemy, "{shoulder|{left|right} arm|{left|right} thigh|chest|stomach}");
     projectile.report(
         s,
         "<subject> {hit<s>|strike<s>} "
@@ -87,7 +87,10 @@ class FinishThrowBlunt extends OtherActorAction {
 
   Entity _createBodyPartEntity(Actor a, String name) {
     return Entity(
-        name: Randomly.parseAndPick(name), team: a.team, isCommon: true);
+        name: Randomly.parseAndPick(name),
+        team: a.team,
+        firstOwnerId: a.id,
+        isCommon: true);
   }
 
   @override

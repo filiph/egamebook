@@ -136,6 +136,8 @@ class ShadowGraph {
     __assertAtLeastOneIdentifier(storyline.reports);
     _detectMissingOwners(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
+    _forceOwners(storyline.reports);
+    __assertAtLeastOneIdentifier(storyline.reports);
     _detectFirstMentions(storyline.reports, _mentionedEntities);
     __assertAtLeastOneIdentifier(storyline.reports);
     _identifiers =
@@ -262,6 +264,36 @@ class ShadowGraph {
 
   void _allowObjectPronoun(int i) {
     _reportIdentifiers[i]._objectRange.add(IdentifierLevel.pronoun);
+  }
+
+  /// Detects entities that have `<*wner>` before them, and removes
+  /// all irrelevant [IdentifierLevel]s.
+  ///
+  /// Entities with `<*wner>` before them cannot be just [IdentifierLevel.noun],
+  /// for example. They are forced to be either
+  /// [IdentifierLevel.ownerPronounsNoun] or
+  /// [IdentifierLevel.ownerNamesNounNoun].
+  void _forceOwners(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < reports.length; i++) {
+      final report = reports[i];
+
+      if (report.string.contains(ComplementType.OWNER.genericPossessive) &&
+          report.subject.firstOwnerId != null) {
+        _reportIdentifiers[i]._subjectRange.retainAll([
+          IdentifierLevel.ownerPronounsNoun,
+          IdentifierLevel.ownerNamesNoun,
+        ]);
+      }
+
+      if (report.string
+              .contains(ComplementType.OBJECT_OWNER.genericPossessive) &&
+          report.object.firstOwnerId != null) {
+        _reportIdentifiers[i]._objectRange.retainAll([
+          IdentifierLevel.ownerPronounsNoun,
+          IdentifierLevel.ownerNamesNoun,
+        ]);
+      }
+    }
   }
 
   /// In any storyline, the first time we mention anyone after a while,
@@ -585,6 +617,14 @@ class ShadowGraph {
 
     if (!entity.isCommon && others.any((e) => e.name == entity.name)) {
       yield IdentifierLevel.noun;
+    }
+
+    if (entity.firstOwnerId != null &&
+        others.any((e) =>
+            e.name == entity.name && e.firstOwnerId == entity.firstOwnerId)) {
+      // TODO: Also check for owner's pronoun equality, not just id equality.
+      yield IdentifierLevel.ownerPronounsNoun;
+      yield IdentifierLevel.ownerNamesNoun;
     }
 
     if (entity.adjective != null &&

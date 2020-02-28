@@ -13,12 +13,6 @@ class RegainBalance extends Action<Nothing> {
 
   static const String className = "RegainBalance";
 
-  static final Entity _balance = Entity(
-      name: "balance",
-      team: neutralTeam,
-      nameIsProperNoun: true,
-      isCommon: true);
-
   @override
   final String helpMessage = "Most moves are easier and more effective when "
       "I am firmly in balance.";
@@ -54,8 +48,14 @@ class RegainBalance extends Action<Nothing> {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
+    final balance = Entity(
+        name: "balance",
+        team: neutralTeam,
+        nameIsProperNoun: true,
+        firstOwnerId: a.id,
+        isCommon: true);
     a.report(s, "<subject> regain<s> <object>",
-        object: _balance, positive: true);
+        object: balance, positive: true);
     if (a.isPlayer) {
       // Player doesn't need to do two stance improvements in a row.
       w.updateActorById(a.id, (b) => b.pose = a.poseMax);

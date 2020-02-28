@@ -14,6 +14,7 @@ abstract class Entity {
     bool nameIsProperNoun,
     bool isPlayer,
     bool isCommon,
+    @required int firstOwnerId,
   }) = _NonserializableEntity;
 
   /// A way to specify the entity more concretely than with just the [name].
@@ -176,8 +177,7 @@ class _NonserializableEntity extends Object
   final bool isPlayer;
 
   @override
-  // ignore: avoid_returning_null
-  int get firstOwnerId => null;
+  final int firstOwnerId;
 
   _NonserializableEntity({
     @required this.name,
@@ -187,6 +187,7 @@ class _NonserializableEntity extends Object
     this.nameIsProperNoun = false,
     this.isPlayer = false,
     this.isCommon = false,
+    this.firstOwnerId,
   })  : team = team ?? neutralTeam,
         pronoun = pronoun ?? Pronoun.IT;
 

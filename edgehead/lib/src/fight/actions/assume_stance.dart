@@ -13,12 +13,6 @@ class AssumeStance extends Action<Nothing> {
 
   static const String className = "AssumeStance";
 
-  static final Entity _stance = Entity(
-      name: "stance",
-      team: neutralTeam,
-      nameIsProperNoun: true,
-      isCommon: true);
-
   @override
   final String helpMessage = "When in proper combat stance, the enemy has "
       "fewer opportunities for attack.";
@@ -54,8 +48,14 @@ class AssumeStance extends Action<Nothing> {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
+    Entity stance = Entity(
+        name: "stance",
+        team: neutralTeam,
+        nameIsProperNoun: true,
+        firstOwnerId: a.id,
+        isCommon: true);
     a.report(s, "<subject> assume<s> better <object>",
-        object: _stance, positive: true);
+        object: stance, positive: true);
     w.updateActorById(a.id, (b) => b.pose = a.poseMax);
     return "${a.name} assumes better stance";
   }

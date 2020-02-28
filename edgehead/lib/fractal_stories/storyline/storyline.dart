@@ -644,6 +644,7 @@ class Storyline {
             "${ComplementType.SUBJECT.generic} $VERB_HAVE ", "");
       }
 
+      report = _preventDoubleOwners(report, _reports[i]);
       report = _modifyStopwords(report, _reports[i], qualifications);
       report = _preventPossessivesBeforePronouns(report, _reports[i]);
       report = _preventPossessivesBeforeProperNouns(report, _reports[i]);
@@ -1095,6 +1096,33 @@ class Storyline {
     modifyForComplement(ComplementType.OBJECT2);
     modifyForComplement(ComplementType.OWNER);
     modifyForComplement(ComplementType.OBJECT_OWNER);
+
+    return result;
+  }
+
+  /// A special case for things like "Haijing's it" or "wolf's they". In this
+  /// case, we just want to drop the possessive.
+  String _preventDoubleOwners(String string, Report report) {
+    String result = string;
+
+    final ownerComplements = [
+      ComplementType.OWNER.genericPossessive,
+      ComplementType.OBJECT_OWNER.genericPossessive,
+    ];
+
+    void maybeRemoveOwnerPossessiveBefore(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+      if (entity == null) return;
+
+      for (final possessive in ownerComplements) {
+        result = result.replaceAll(
+            "$possessive ${complement.generic}", complement.generic);
+      }
+    }
+
+    maybeRemoveOwnerPossessiveBefore(ComplementType.SUBJECT);
+    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT);
+    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT2);
 
     return result;
   }

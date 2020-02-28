@@ -178,10 +178,11 @@ void main() {
   });
 
   test("don't use <owner's> to pronoun", () {
-    var storyline = Storyline();
     var player = _createPlayer("Filip");
     var ship = Entity(name: "Haijing", pronoun: Pronoun.IT);
-    var part = Entity(name: "main jet", pronoun: Pronoun.IT);
+    var part =
+        Entity(name: "main jet", pronoun: Pronoun.IT, firstOwnerId: ship.id);
+    var storyline = Storyline(referredEntities: [player, ship, part]);
     storyline.add("<subject> hit<s> <object>", subject: player, object: part);
     storyline.add("<owner's> <subject> <is> damaged heavily",
         subject: part, owner: ship);
@@ -1023,44 +1024,6 @@ void main() {
         });
       });
 
-      group('firstOwnerId', () {
-        Entity aren;
-        Actor orc;
-        Item mySword, myAxe, orcSword;
-        Storyline storyline;
-
-        setUp(() {
-          aren = _createPlayer('Aren');
-          orc = Actor.initialized(60, "orc",
-              adjective: "red", pronoun: Pronoun.HE);
-          mySword = Item.weapon(100, WeaponType.sword, firstOwnerId: aren.id);
-          myAxe = Item.weapon(100, WeaponType.axe, firstOwnerId: aren.id);
-          orcSword = Item.weapon(110, WeaponType.sword, firstOwnerId: orc.id);
-
-          // Make sure all actors are accounted for in storyline.
-          storyline = Storyline(referredEntities: [aren, orc]);
-        });
-
-        test('is used when needed', () {
-          storyline.add('<subject> hit<s> <object> with <object2>',
-              subject: aren, object: orcSword, object2: mySword);
-
-          final result = storyline.realizeAsString();
-          expect(result, contains('the orc\'s sword'));
-          expect(result, contains('with my'));
-        });
-
-        test('isn\'t used when not needed', () {
-          storyline.add('<subject> hit<s> <object> with <object2>',
-              subject: aren, object: orcSword, object2: myAxe);
-
-          final result = storyline.realizeAsString();
-          expect(result, contains('the sword'));
-          expect(result, isNot(contains('with my')));
-          expect(result, contains('the axe'));
-        });
-      });
-
       group('sequence', () {
         test('put the adjective to the first occurence', () {
           // Avoid "I dodge the orc and the red orc hits the concrete floor."
@@ -1079,6 +1042,56 @@ void main() {
           expect(result, contains('I dodge the red orc'));
           expect(result, contains('he hits'));
         });
+      });
+    });
+
+    group('firstOwnerId', () {
+      Entity aren;
+      Actor orc;
+      Item mySword, myAxe, orcSword;
+      Storyline storyline;
+
+      setUp(() {
+        aren = _createPlayer('Aren');
+        orc =
+            Actor.initialized(60, "orc", adjective: "red", pronoun: Pronoun.HE);
+        mySword = Item.weapon(100, WeaponType.sword, firstOwnerId: aren.id);
+        myAxe = Item.weapon(100, WeaponType.axe, firstOwnerId: aren.id);
+        orcSword = Item.weapon(110, WeaponType.sword, firstOwnerId: orc.id);
+
+        // Make sure all actors are accounted for in storyline.
+        storyline = Storyline(referredEntities: [aren, orc]);
+      });
+
+      test('is used when needed', () {
+        storyline.add('<subject> hit<s> <object> with <object2>',
+            subject: aren, object: orcSword, object2: mySword);
+
+        final result = storyline.realizeAsString();
+        expect(result, contains('the orc\'s sword'));
+        expect(result, contains('with my'));
+      });
+
+      test('isn\'t used when not needed', () {
+        storyline.add('<subject> hit<s> <object> with <object2>',
+            subject: aren, object: orcSword, object2: myAxe);
+
+        final result = storyline.realizeAsString();
+        expect(result, contains('the sword'));
+        expect(result, isNot(contains('with my')));
+        expect(result, contains('the axe'));
+      });
+
+      test('isn\t used when there\'s already <owner> in the text', () {
+        storyline.add(
+            '<subject> hit<s> <objectOwner\'s> <object> with <object2>',
+            subject: aren,
+            object: orcSword,
+            objectOwner: orc,
+            object2: mySword);
+
+        final result = storyline.realizeAsString();
+        expect(result, contains('hit the orc\'s sword'));
       });
     });
   });
@@ -1102,10 +1115,12 @@ void main() {
     final aren = Entity(name: "Aren", pronoun: Pronoun.I, isPlayer: true);
     final arenSword = Entity(name: "sword");
     final orc = Entity(name: "orc", pronoun: Pronoun.HE);
-    final orcTorso = Entity(name: "torso", pronoun: Pronoun.IT);
+    final orcTorso =
+        Entity(name: "torso", pronoun: Pronoun.IT, firstOwnerId: orc.id);
     final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
 
-    final storyline = Storyline();
+    final storyline =
+        Storyline(referredEntities: [aren, arenSword, orc, orcTorso, goblin]);
     storyline.add("<subject> thrust<s> <object2> at <objectOwner's> <object>",
         subject: aren, object2: arenSword, objectOwner: orc, object: orcTorso);
 
@@ -1160,7 +1175,7 @@ void main() {
   test("add definitive articles before possessives", () {
     final undead = Entity(name: "undead", pronoun: Pronoun.HE);
     final goblin = Entity(name: "goblin", pronoun: Pronoun.HE);
-    final goblinNeck = Entity(name: "neck");
+    final goblinNeck = Entity(name: "neck", firstOwnerId: goblin.id);
 
     final storyline = Storyline();
     storyline.add("<subject> swing<s> at <objectOwner's> <object>",
