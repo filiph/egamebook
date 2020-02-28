@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;
@@ -96,16 +97,21 @@ class EdgeheadGame extends Book {
   /// Load existing game from [saveGameSerialized].
   @override
   void load(String saveGameSerialized) {
+    const parseErrorMessage =
+        "Error when parsing savegame. Maybe the savegame needs "
+        "to be updated to the newest version of the runtime?";
+
     try {
       world = edgehead_serializer.serializers.deserializeWith(
           WorldState.serializer, json.decode(saveGameSerialized));
       // ignore: avoid_catching_errors
-    } on ArgumentError {
-      const message = "Error when parsing savegame. Maybe the savegame needs "
-          "to be updated to the newest version of the runtime?";
-      log.severe(message);
-      print("ERROR: $message");
-      rethrow;
+    } on ArgumentError catch (e) {
+      log.severe(parseErrorMessage);
+      throw EdgeheadSaveGameParseException('Couldn\'t parse savegame', e);
+      // ignore: avoid_catching_errors
+    } on DeserializationError catch (e) {
+      log.severe(parseErrorMessage);
+      throw EdgeheadSaveGameParseException('Couldn\'t parse savegame', e);
     }
   }
 
@@ -462,4 +468,17 @@ class EdgeheadGame extends Book {
     // Run the next step asynchronously.
     Timer.run(update);
   }
+}
+
+/// An exception to be thrown when [new EdgeheadGame] is called with
+/// an outdated or corrupt savegame.
+class EdgeheadSaveGameParseException implements Exception {
+  final Error underlyingError;
+
+  final String message;
+
+  const EdgeheadSaveGameParseException(this.message, this.underlyingError);
+
+  @override
+  String toString() => '$message -- underlyingError: $underlyingError';
 }
