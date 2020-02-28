@@ -194,6 +194,23 @@ class ShadowGraph {
     return buf.toString();
   }
 
+  /// Uses the [currentEntities] to find the entity with the provided [id].
+  ///
+  /// If it cannot find the entity among the current ones (usually the ones
+  /// mentioned in the current [Storyline]), it will broaden the search
+  /// to [_storylineEntities] (which are generally all entities in the Book).
+  ///
+  /// Returns `null` if the entity with [id] cannot be found.
+  Entity getEntityById(int id, Set<Entity> currentEntities) {
+    for (final entity in currentEntities) {
+      if (entity.id == id) return entity;
+    }
+
+    final result = _storylineEntities[id];
+    assert(result != null);
+    return result;
+  }
+
   void __assertAtLeastOneIdentifier(UnmodifiableListView<Report> reports) {
     for (int i = 0; i < _reportIdentifiers.length; i++) {
       final report = reports[i];
@@ -580,23 +597,6 @@ class ShadowGraph {
     if (entity.nameIsProperNoun && others.any((e) => e.name == entity.name)) {
       yield IdentifierLevel.properNoun;
     }
-  }
-
-  /// Uses the [currentEntities] to find the entity with the provided [id].
-  ///
-  /// If it cannot find the entity among the current ones (usually the ones
-  /// mentioned in the current [Storyline]), it will broaden the search
-  /// to [_storylineEntities] (which are generally all entities in the Book).
-  ///
-  /// Returns `null` if the entity with [id] cannot be found.
-  Entity getEntityById(int id, Set<Entity> currentEntities) {
-    for (final entity in currentEntities) {
-      if (entity.id == id) return entity;
-    }
-
-    final result = _storylineEntities[id];
-    assert(result != null);
-    return result;
   }
 
   /// Finds out which [Entity] is referred to by which [Identifier] as the
