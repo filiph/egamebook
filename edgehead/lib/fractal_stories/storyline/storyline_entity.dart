@@ -14,7 +14,7 @@ abstract class Entity {
     bool nameIsProperNoun,
     bool isPlayer,
     bool isCommon,
-    @required int firstOwnerId,
+    int firstOwnerId,
   }) = _NonserializableEntity;
 
   /// A way to specify the entity more concretely than with just the [name].
