@@ -1350,6 +1350,9 @@ class Storyline {
   /// `<object>` to `<subject's> <object>`.
   ///
   /// This plays better with later methods, such as [_concretizeStopwords].
+  ///
+  /// TODO: Instead of doing this hack, add owners of entities into the report
+  ///       as full-fledged entities.
   String _extractMentionedOwnerStopwords(
     String string,
     Report report,
