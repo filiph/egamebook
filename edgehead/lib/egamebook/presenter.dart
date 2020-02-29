@@ -112,8 +112,8 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @override
   @mustCallSuper
   void close() {
-    book.close();
-    _bookSubscription.cancel();
+    book?.close();
+    _bookSubscription?.cancel();
   }
 
   @mustCallSuper
