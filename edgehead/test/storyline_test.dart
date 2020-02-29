@@ -1065,7 +1065,7 @@ void main() {
             adjective: 'shiny', firstOwnerId: orc.id);
 
         // Make sure all actors are accounted for in storyline.
-        storyline = Storyline(referredEntities: [aren, orc]);
+        storyline = Storyline(referredEntities: [aren, orc, goblin]);
       });
 
       test('is used when needed', () {
@@ -1094,6 +1094,17 @@ void main() {
         final result = storyline.realizeAsString();
         expect(result, isNot(contains('rusty')));
         expect(result, isNot(contains('shiny')));
+      });
+
+      test('works even for unmentioned entities', () {
+        storyline.add('<subject> swing<s> <object> at <object2>',
+            subject: aren, object: orcSword, object2: goblinRustySword);
+
+        final result = storyline.realizeAsString();
+        expect(result, isNot(contains('rusty')));
+        expect(result, isNot(contains('shiny')));
+        expect(result, contains('orc\'s sword'));
+        expect(result, contains('goblin\'s sword'));
       });
 
       test('isn\'t used when not needed', () {

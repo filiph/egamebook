@@ -210,7 +210,11 @@ class ShadowGraph {
     }
 
     final result = _storylineEntities[id];
-    assert(result != null);
+    assert(
+        result != null,
+        'The entity with id=$id is missing from both '
+        'currentEntities=$currentEntities and from '
+        '_storylineEntities=$_storylineEntities');
     return result;
   }
 
