@@ -644,8 +644,8 @@ class Storyline {
             "${ComplementType.SUBJECT.generic} $VERB_HAVE ", "");
       }
 
-      report = _preventDoubleOwners(report, _reports[i]);
-      report = _modifyStopwords(report, _reports[i], qualifications);
+      report = _removeOwnerStopwords(report, _reports[i]);
+      report = _concretizeStopwords(report, _reports[i], qualifications);
       report = _preventPossessivesBeforePronouns(report, _reports[i]);
       report = _preventPossessivesBeforeProperNouns(report, _reports[i]);
       report = _addParticles(report, _reports[i]);
@@ -902,33 +902,6 @@ class Storyline {
     }
   }
 
-  /// If [entity] is non-null, then _every_ variant of [str] must contain
-  /// [pattern]. If [entity] is `null`, then _no_ variant of [str]
-  /// can contain [pattern].
-  ///
-  /// Parses [str] with [Randomly.parse] to get all variants.
-  bool _entityAndSubstringExistTogether(
-      String str, Entity entity, Pattern pattern) {
-    final entityExists = entity != null;
-
-    for (final variant in Randomly.parse(str)) {
-      if (entityExists) {
-        // Entity exists but pattern wasn't found in [variant].
-        if (!variant.contains(pattern)) return false;
-      } else {
-        // Entity doesn't exist but pattern was found in [variant].
-        if (variant.contains(pattern)) return false;
-      }
-    }
-    return true;
-  }
-
-  /// Returns whether or not the [entity] has been mentioned by time of the
-  /// report ([reportTime]).
-  bool _hasBeenMentioned(Entity entity, int reportTime) {
-    return (_firstMentions[entity.id] ?? _beginningOfTime) < reportTime;
-  }
-
   /// Modifies stopwords in [string] according to [qualifications].
   ///
   /// For example, if [qualifications] say that the subject should be omitted,
@@ -936,7 +909,7 @@ class Storyline {
   /// says the subject can be referred to by a pronoun, this method will
   /// replace all `"<subject>"` with `"<subjectPronoun>"`, and all
   /// `"<subject's>"` to `"<subjectPronoun's>"`.
-  String _modifyStopwords(
+  String _concretizeStopwords(
       String string, Report report, ReportIdentifiers qualifications) {
     var result = string;
 
@@ -1100,31 +1073,31 @@ class Storyline {
     return result;
   }
 
-  /// A special case for things like "Haijing's it" or "wolf's they". In this
-  /// case, we just want to drop the possessive.
-  String _preventDoubleOwners(String string, Report report) {
-    String result = string;
+  /// If [entity] is non-null, then _every_ variant of [str] must contain
+  /// [pattern]. If [entity] is `null`, then _no_ variant of [str]
+  /// can contain [pattern].
+  ///
+  /// Parses [str] with [Randomly.parse] to get all variants.
+  bool _entityAndSubstringExistTogether(
+      String str, Entity entity, Pattern pattern) {
+    final entityExists = entity != null;
 
-    final ownerComplements = [
-      ComplementType.OWNER.genericPossessive,
-      ComplementType.OBJECT_OWNER.genericPossessive,
-    ];
-
-    void maybeRemoveOwnerPossessiveBefore(ComplementType complement) {
-      final entity = report.getEntityByType(complement);
-      if (entity == null) return;
-
-      for (final possessive in ownerComplements) {
-        result = result.replaceAll(
-            "$possessive ${complement.generic}", complement.generic);
+    for (final variant in Randomly.parse(str)) {
+      if (entityExists) {
+        // Entity exists but pattern wasn't found in [variant].
+        if (!variant.contains(pattern)) return false;
+      } else {
+        // Entity doesn't exist but pattern was found in [variant].
+        if (variant.contains(pattern)) return false;
       }
     }
+    return true;
+  }
 
-    maybeRemoveOwnerPossessiveBefore(ComplementType.SUBJECT);
-    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT);
-    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT2);
-
-    return result;
+  /// Returns whether or not the [entity] has been mentioned by time of the
+  /// report ([reportTime]).
+  bool _hasBeenMentioned(Entity entity, int reportTime) {
+    return (_firstMentions[entity.id] ?? _beginningOfTime) < reportTime;
   }
 
   /// A special case for things like "Haijing's it" or "wolf's they". In this
@@ -1333,6 +1306,35 @@ class Storyline {
       result = result.replaceAll(
           ComplementType.SUBJECT.pronounPossessive, subject.pronoun.genitive);
     }
+
+    return result;
+  }
+
+  /// When something is [IdentifierLevel.ownerNamesNoun] or
+  /// [IdentifierLevel.ownerPronounsNoun], we don't need `<owner's>`
+  /// or `<objectOwner's>` before it anymore, since it will be extracted to
+  /// that.
+  String _removeOwnerStopwords(String string, Report report) {
+    String result = string;
+
+    final ownerPossessives = [
+      ComplementType.OWNER.genericPossessive,
+      ComplementType.OBJECT_OWNER.genericPossessive,
+    ];
+
+    void maybeRemoveOwnerPossessiveBefore(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+      if (entity == null) return;
+
+      for (final possessive in ownerPossessives) {
+        result = result.replaceAll(
+            "$possessive ${complement.generic}", complement.generic);
+      }
+    }
+
+    maybeRemoveOwnerPossessiveBefore(ComplementType.SUBJECT);
+    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT);
+    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT2);
 
     return result;
   }
