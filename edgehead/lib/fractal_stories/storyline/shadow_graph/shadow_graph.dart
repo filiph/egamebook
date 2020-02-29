@@ -119,7 +119,7 @@ class ShadowGraph {
     // as we go.
     _conjunctions = List.generate(
       storyline.reports.length,
-      (_) => <SentenceConjunction>{SentenceConjunction.nothing},
+      (_) => {SentenceConjunction.nothing},
       growable: false,
     );
 
@@ -161,6 +161,7 @@ class ShadowGraph {
     _detectForcedPronouns(storyline.reports);
     __assertAtLeastOneIdentifier(storyline.reports);
     _removeButsTooClose(storyline.reports);
+
     _retainTheLowestPossibleIdentifiers(storyline.reports);
     _retainTheHighestPossibleConjunction(storyline.reports);
   }

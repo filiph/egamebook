@@ -644,14 +644,19 @@ class Storyline {
             "${ComplementType.SUBJECT.generic} $VERB_HAVE ", "");
       }
 
+      final reportEntities = _reports[i].allEntities.toSet();
+      Entity getEntity(int id) => shadowGraph.getEntityById(id, reportEntities);
+
       report = _removeOwnerStopwords(report, _reports[i]);
+      report = _extractMentionedOwnerStopwords(
+          report, _reports[i], qualifications,
+          getEntityFromId: getEntity);
       report = _concretizeStopwords(report, _reports[i], qualifications);
       report = _preventPossessivesBeforePronouns(report, _reports[i]);
       report = _preventPossessivesBeforeProperNouns(report, _reports[i]);
       report = _addParticles(report, _reports[i]);
-      report = _realizeStopwords(report, _reports[i],
-          getEntityFromId: (id) =>
-              shadowGraph.getEntityById(id, _reports[i].allEntities.toSet()));
+      report =
+          _realizeStopwords(report, _reports[i], getEntityFromId: getEntity);
 
       if (needsCapitalization) {
         report = capitalize(report);
@@ -1335,6 +1340,53 @@ class Storyline {
     maybeRemoveOwnerPossessiveBefore(ComplementType.SUBJECT);
     maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT);
     maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT2);
+
+    return result;
+  }
+
+  /// When an entity's owner is already mentioned in the [report], we
+  /// extract it as a stopword. For example, if [Report.object] has
+  /// an [Entity.firstOwnerId] of the [Report.subject], then we'll modify
+  /// `<object>` to `<subject's> <object>`.
+  ///
+  /// This plays better with later methods, such as [_concretizeStopwords].
+  String _extractMentionedOwnerStopwords(
+    String string,
+    Report report,
+    ReportIdentifiers qualifications, {
+    @required Entity Function(int) getEntityFromId,
+  }) {
+    String result = string;
+
+    const identifierLevelsWithOwners = [
+      IdentifierLevel.ownerNamesNoun,
+      IdentifierLevel.ownerPronounsNoun
+    ];
+
+    void maybeAddStopwordBefore(ComplementType complement) {
+      final entity = report.getEntityByType(complement);
+      if (entity == null) return;
+
+      final identifierLevel = qualifications.getByType(complement);
+      if (!identifierLevelsWithOwners.contains(identifierLevel)) return;
+
+      assert(entity.firstOwnerId != null);
+
+      final owner = getEntityFromId(entity.firstOwnerId);
+
+      qualifications.forEachEntityIn(report,
+          (otherComplement, otherEntity, otherSet) {
+        if (owner.id == otherEntity.id) {
+          result = result.replaceAll(complement.generic,
+              '${otherComplement.genericPossessive} ${complement.generic}');
+          qualifications.patchByType(complement, IdentifierLevel.noun);
+        }
+      });
+    }
+
+    maybeAddStopwordBefore(ComplementType.SUBJECT);
+    maybeAddStopwordBefore(ComplementType.OBJECT);
+    maybeAddStopwordBefore(ComplementType.OBJECT2);
 
     return result;
   }

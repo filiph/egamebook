@@ -1047,17 +1047,22 @@ void main() {
 
     group('firstOwnerId', () {
       Entity aren;
-      Actor orc;
-      Item mySword, myAxe, orcSword;
+      Actor orc, goblin;
+      Item mySword, myAxe, orcSword, goblinRustySword, orcShinySword;
       Storyline storyline;
 
       setUp(() {
         aren = _createPlayer('Aren');
         orc =
             Actor.initialized(60, "orc", adjective: "red", pronoun: Pronoun.HE);
+        goblin = Actor.initialized(70, "goblin", pronoun: Pronoun.HE);
         mySword = Item.weapon(100, WeaponType.sword, firstOwnerId: aren.id);
-        myAxe = Item.weapon(100, WeaponType.axe, firstOwnerId: aren.id);
+        myAxe = Item.weapon(101, WeaponType.axe, firstOwnerId: aren.id);
         orcSword = Item.weapon(110, WeaponType.sword, firstOwnerId: orc.id);
+        goblinRustySword = Item.weapon(120, WeaponType.sword,
+            adjective: 'rusty', firstOwnerId: goblin.id);
+        orcShinySword = Item.weapon(130, WeaponType.sword,
+            adjective: 'shiny', firstOwnerId: orc.id);
 
         // Make sure all actors are accounted for in storyline.
         storyline = Storyline(referredEntities: [aren, orc]);
@@ -1070,6 +1075,25 @@ void main() {
         final result = storyline.realizeAsString();
         expect(result, contains('the orc\'s sword'));
         expect(result, contains('with my'));
+      });
+
+      test('uses pronouns where it should', () {
+        // Prevent: The goblin swings the goblin's sword.
+        storyline.add('<subject> swing<s> <object> at <object2>',
+            subject: goblin, object: goblinRustySword, object2: orcShinySword);
+
+        final result = storyline.realizeAsString();
+        expect(result, contains('The goblin swings his sword'));
+      });
+
+      test('replaces adjectives', () {
+        // Prevent: The goblin swings his rusty sword at the orc's shiny sword.
+        storyline.add('<subject> swing<s> <object> at <object2>',
+            subject: goblin, object: goblinRustySword, object2: orcShinySword);
+
+        final result = storyline.realizeAsString();
+        expect(result, isNot(contains('rusty')));
+        expect(result, isNot(contains('shiny')));
       });
 
       test('isn\'t used when not needed', () {

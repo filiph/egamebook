@@ -219,4 +219,16 @@ class ReportIdentifiers {
     }
     return set.single;
   }
+
+  /// Replaces the identifier level of [complement] (e.g. subject or object)
+  /// with [level].
+  ///
+  /// This assumes the range of possible identifier levels has been already
+  /// collapsed to just one.
+  void patchByType(ComplementType complement, IdentifierLevel level) {
+    final set = getRangeByType(complement);
+    assert(set.length == 1);
+    set..clear()
+      ..add(level);
+  }
 }
