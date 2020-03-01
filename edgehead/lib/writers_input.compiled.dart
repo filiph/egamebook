@@ -726,6 +726,41 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 37, positionY: 70);
+final Approach keepGateFromStagingArea = Approach(
+    'staging_area', 'keep_gate', 'Go >> The Keep\'s Gate', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
+final Room keepGate = Room('keep_gate', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. \n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+}, null, null, isIdle: true, positionX: 15, positionY: 86);
+final Approach stagingAreaFromKeepGate = Approach(
+    'keep_gate', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', wholeSentence: true);
+});
 final Approach stagingAreaFromKnightsHqMain = Approach(
     'knights_hq_main', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2642,6 +2677,7 @@ final allRooms = <Room>[
   battlefield,
   elevator12,
   knightsHqMain,
+  keepGate,
   stagingArea,
   bleedsMain,
   bleedsTraderHut,
@@ -2676,6 +2712,8 @@ final allApproaches = <Approach>[
   knightsHqMainFromElevator12,
   knightsHqMainFromOracleMain,
   knightsHqMainFromStagingArea,
+  keepGateFromStagingArea,
+  stagingAreaFromKeepGate,
   stagingAreaFromKnightsHqMain,
   stagingAreaFromPyramidEntrance,
   bleedsMainFromBleedsTraderHut,
