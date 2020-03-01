@@ -1,7 +1,7 @@
 ROOM: $brother_start
 
 FIRST_DESCRIPTION:
-I first realize my brother is a complete idiot when I am 12. He decides to save a single lamb (something of which our family has plenty at the time) by going to a deep, musty forest, armed only with a stick. I, of course, follow him. Because I am also an idiot.
+I first realize my brother is a complete idiot when I am 12. He decides to save a single lamb (something of which our family has plenty of at the time) by going to a deep, musty forest, armed only with a stick. I, of course, follow him. Because I am also an idiot.
 
 * I am a boy / girl > named ___.
 
