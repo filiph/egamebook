@@ -228,7 +228,8 @@ class ReportIdentifiers {
   void patchByType(ComplementType complement, IdentifierLevel level) {
     final set = getRangeByType(complement);
     assert(set.length == 1);
-    set..clear()
+    set
+      ..clear()
       ..add(level);
   }
 }
