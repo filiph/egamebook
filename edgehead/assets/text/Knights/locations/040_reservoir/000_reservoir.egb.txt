@@ -47,3 +47,25 @@ c.markHappened(evOpenedDam);
 
 NOTES:
 - A monster from here leaves muddy footprints.
+
+// Vignette
+
+Everything is wet here, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.
+
+* Surface of water >> Examine
+
+Something something almost beautiful. <>
+
+* Ceiling >> Examine
+
+Something something kind of nice. <>
+
+-
+
+Not that this makes the place any less gross.
+
+
+// NOTES:
+This place has a dam that leads to regular corridors.
+It was build a long time ago by people with much more skill.
+There is evidence that the orcs are using it.
