@@ -44,3 +44,6 @@ I open the dam and the reservoir quickly empties. Water rushes past me, into cor
 [[CODE]]
 c.markHappened(evOpenedDam);
 [[ENDCODE]]
+
+NOTES:
+- A monster from here leaves muddy footprints.

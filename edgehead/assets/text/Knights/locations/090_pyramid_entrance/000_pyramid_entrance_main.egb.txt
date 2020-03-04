@@ -29,6 +29,22 @@ NOTES:
 // TODO: make the following into actual actions
 //       but any talking leads to unlocking of the entrance for the player
 //       use this as an opportunity to teach player about stuff
+// TODO: allow examining the gate, which is built in "the nortonian style"
+// TODO: at least one of the knights needs to re-appear again, as a hireable NPC
+
+// A vignette 
+// (Ideally when leaving the entrance towards the pyramid, or later. "As I pass the two knights..."):
+
+I wonder how it must be, having to spend so much time, idly waiting, together with a single person, for years. So they grow to love each other? Or hate? Both?
+
+I see X looking at Miguel, shaking her head, smiling.
+
+Both, then.
+
+// Vignette
+
+"You killed Hope?"
+"She was already dead."
 
 // --
 ACTION: observe_knights

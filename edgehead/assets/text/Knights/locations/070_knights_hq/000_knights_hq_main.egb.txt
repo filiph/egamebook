@@ -72,4 +72,3 @@ The knight nods upwards. "Just let me know. I'll follow you."
 ACTION: $hire_zee
 DESCRIPTION:
 Zee sheathes his sword, stands up, and nods.
-

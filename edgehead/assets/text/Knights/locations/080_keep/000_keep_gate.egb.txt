@@ -20,3 +20,46 @@ DESCRIPTION: $NONE
 NOTES:
 // TODO: $attempt_open_gate --> learn it's nailed down
 // TODO: the three different ways to get past the gate
+
+// Vignette
+
+The Keep
+
+A part of the pyramid previously inhabited by aristocrats. These days, it's deserted. People are afraid of the ghost that dwells there. And lately, some people saw goblins.
+
+There were some tomb raider there, snatching stuff. But the last party that was there came back decimated and insane.
+
+The Keep is full of decrepit beauty. Rich people with taste lived there for fifty years.
+
+There is the dining room, with a table of food that is as if people left in a hurry. Except it's clear that happened a decade ago. The dining room has a great overview of the surroundings. Lots of light. This is where Last Hope stands, watching.
+
+There are the lord's quarters, which still has some coin. You can "rummage through" stuff. Maybe you get some information about the "house improvements" in the pyramid. There is some sense that money is a form of legacy. And money begets money, so it's a self perpetuating legacy. But money and convenience, in itself, is vanity. You have to use the money to have actual legacy.
+
+There are also servants quarters, with evidence of goblins.
+
+
+
+
+// Vignette:
+// Wooden floor in the Keep
+
+Uneven after the years. But it does give the appearance of a castle, among the ancient flat walls. 
+
+The sound is different, hollow.
+
+The planks spring a little bit under my feet.
+
+// Vignette:
+// looking at Lady Hope
+
+Aren: "I wonder if she saw my brother."
+
+// Vignette
+
+The north skull
+
+A device that the compass is pointing to. It's how you can find a hidden room (if using the compass in a room right next to it).
+
+The skull room provides quick access to higher floors. You can also get there without the compass, but only from upward.
+
+The skull is either immovable, or placing it somewhere will make goblins go there.

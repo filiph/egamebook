@@ -128,3 +128,9 @@ _"Yes."_
 [[ENDRULE]]
 [[ENDRULESET]]
 
+NOTES:
+
+// Vignette
+
+Aren't you bored of this talking? You're in San Francisco! People don't come to San Francisco to talk. People come here to slay.
+

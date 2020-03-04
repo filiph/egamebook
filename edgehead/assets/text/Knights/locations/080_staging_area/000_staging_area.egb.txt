@@ -24,3 +24,36 @@ FIRST_DESCRIPTION:
 This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
 
 DESCRIPTION: $NONE
+
+NOTES:
+- the staircase here is called "Infinite Staircase"
+
+// Vignette
+
+- red knight - talk
+Subtext: the knight is scared, he wants out
+
+"Hello."
+
+"Greetings. What's your business here?" The knights takes a second good look at me. "You look far from home."
+
+"I'm looking for a person. One Sarn of Zamora. My brother."
+
+"Why would Sarn of Zamora be here, of all places? Any thinking man will go as far away from here as possible."
+
+"Yet you are here."
+
+"I wouldn't be a very good knight if I fled from my company, would I. But if you ask me, the withdrawal from here cannot come fast enough. I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
+
+"I'm here to find my brother."
+
+"How old is he? Cannot he take care of himself?"
+
+"Maybe he can't. I want to be there if he can't. I owe him that."
+
+"No you don't. People think that but they don't, really. They don't owe each other nothing."
+
+"I do."
+
+
+
