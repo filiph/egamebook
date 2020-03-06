@@ -1,5 +1,21 @@
-NOTES:
+// ---
+APPROACH: $big_o_observatory FROM $big_o_antechamber
+COMMAND: Go >> Observatory
+DESCRIPTION: $NONE
 
+// ---
+ROOM: $big_o_observatory
+
+POS: 26, 8
+
+FIRST_DESCRIPTION:
+A tiny floor overlooking the Bay and the ruins of San Francisco.
+
+DESCRIPTION: $NONE
+
+
+
+NOTES:
 
 // Vignette
 

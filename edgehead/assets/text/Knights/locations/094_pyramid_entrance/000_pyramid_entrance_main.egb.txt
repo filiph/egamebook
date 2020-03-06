@@ -8,9 +8,15 @@ APPROACH: $pyramid_entrance FROM $staging_area
 COMMAND: Go >> Pyramid's Main Entrance
 DESCRIPTION: $NONE
 
+// ---
+APPROACH: $pyramid_entrance FROM $farmers_village
+COMMAND: Go >> Pyramid's Main Entrance
+DESCRIPTION: $NONE
 
 // ---
 ROOM: $pyramid_entrance
+
+FLAGS: $IDLE
 
 POS: 26, 94
 

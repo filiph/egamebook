@@ -1,0 +1,22 @@
+// ---
+APPROACH: $slopes FROM $farmers_village
+COMMAND: Go >> Slopes
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $slopes
+
+FLAGS: $IDLE
+
+POS: 42, 78
+
+FIRST_DESCRIPTION:
+The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.
+
+DESCRIPTION: $NONE
+
+NOTES:
+
+// Idea
+
+You can climb down and find a cemetery in the vicinity of the Pyramid.

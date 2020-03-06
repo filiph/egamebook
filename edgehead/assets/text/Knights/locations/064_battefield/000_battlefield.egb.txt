@@ -1,6 +1,13 @@
+// ---
 APPROACH: $battlefield FROM $knights_hq_main
 COMMAND: Go >> Battlefield
 DESCRIPTION: [We] climb up the stairs to the sixteenth floor.
+
+// ---
+APPROACH: $battlefield FROM $jungle
+COMMAND: Go >> Battlefield
+DESCRIPTION: $NONE
+
 
 // ---
 ROOM: $battlefield

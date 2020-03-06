@@ -1,0 +1,14 @@
+// ---
+APPROACH: $cockroach_farm FROM $junction
+COMMAND: Go >> Cockroach Farm
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $cockroach_farm
+
+POS: 29, 52
+
+FIRST_DESCRIPTION:
+I am in a maze of twisty little passages, all alike. All crawling with cockroaches.
+
+DESCRIPTION: $NONE

@@ -14,6 +14,16 @@ COMMAND: Go >> Staging Area
 DESCRIPTION: $NONE
 
 // ---
+APPROACH: $staging_area FROM $farmers_village
+COMMAND: Go >> Staging Area
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $staging_area FROM $jungle
+COMMAND: Go >> Staging Area
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $staging_area
 
 FLAGS: $IDLE

@@ -1,0 +1,19 @@
+// ---
+APPROACH: $big_o_antechamber FROM $big_o_observatory
+COMMAND: Go >> Antechamber
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $big_o_antechamber FROM $crowdsource
+COMMAND: Go >> Antechamber
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $big_o_antechamber
+
+POS: 26, 12
+
+FIRST_DESCRIPTION:
+A dark room without windows. A stone staircase leads up to a trap door in the ceiling.
+
+DESCRIPTION: $NONE

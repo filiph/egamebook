@@ -1,0 +1,26 @@
+// ---
+APPROACH: $farmers_village FROM $staging_area
+COMMAND: Go >> Farmers' village
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $farmers_village FROM $pyramid_entrance
+COMMAND: Go >> Farmers' village
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $farmers_village FROM $slopes
+COMMAND: Go >> Farmers' village
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $farmers_village
+
+FLAGS: $IDLE
+
+POS: 35, 83
+
+FIRST_DESCRIPTION:
+Lively corridors full of well dressed people.
+
+DESCRIPTION: $NONE
