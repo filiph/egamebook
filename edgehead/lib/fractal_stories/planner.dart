@@ -29,7 +29,7 @@ class ActorPlanner {
 
   static DateTime _latestWait = DateTime.now();
 
-  final Logger log = Logger('ActorPlanner');
+  static final Logger log = Logger('ActorPlanner');
 
   final int actorId;
 

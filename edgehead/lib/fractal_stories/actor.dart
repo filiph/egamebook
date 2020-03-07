@@ -18,6 +18,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
 
 part 'actor.g.dart';
@@ -46,6 +47,7 @@ abstract class Actor extends Object
 
   factory Actor.initialized(
     int id,
+    RandomIdGetter randomIdGetter,
     String name, {
     bool isPlayer = false,
     bool isInvincible = false,
@@ -78,7 +80,7 @@ abstract class Actor extends Object
     assert(currentShield == null || currentShield.firstOwnerId == id);
 
     Anatomy currentAnatomy = anatomy ??
-        buildHumanoid(id,
+        buildHumanoid(id, randomIdGetter,
             constitution: constitution, isUndead: isUndead, isBlind: isBlind);
     assert(currentAnatomy.allParts.every((part) => part.firstOwnerId == id));
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -65,6 +67,8 @@ void main() {
   }
 }
 
+final _random = Random();
+
 Actor _createActor({
   String name,
   bool hasShield = false,
@@ -74,6 +78,7 @@ Actor _createActor({
   final actorId = name.hashCode;
   final actor = Actor.initialized(
     actorId,
+    _testRandomIdGetter,
     name,
     currentWeapon:
         Item.weapon(name.hashCode + 1, WeaponType.sword, firstOwnerId: actorId),
@@ -127,6 +132,8 @@ void _runConfiguration(_Configuration config, SuccessChanceGetter getter) {
   print("    player ${humanize(playerAttacking)} "
       "| goblin ${humanize(goblinAttacking)}");
 }
+
+int _testRandomIdGetter() => _random.nextInt(0xFFFFFF);
 
 class _Configuration {
   final bool actorOffBalance;

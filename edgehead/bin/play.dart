@@ -114,7 +114,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   StreamSubscription _loggerSubscription;
 
-  final Logger _log = Logger("play_run");
+  static final Logger _log = Logger("play_run");
 
   /// Silent mode can be overridden when [actionPattern] is encountered.
   bool _silent;

@@ -8,13 +8,11 @@ import 'package:meta/meta.dart';
 /// Builds a standard humanoid body (two legs, two arms, etc.).
 /// Provide a unique seed (probably the actor's ID) so we can create
 /// random ids for each body part.
-Anatomy buildHumanoid(int id,
+Anatomy buildHumanoid(int id, RandomIdGetter randomIdGetter,
     {@required bool isUndead, int constitution = 1, bool isBlind = false}) {
   assert(constitution >= 1, "Cannot have creature with constitution below 1");
 
-  final random = StatefulRandom(id);
-
-  final rightLeg = BodyPart(random.next(), "right leg",
+  final rightLeg = BodyPart(randomIdGetter(), "right leg",
       randomDesignation: "{right leg|right thigh}",
       designation: BodyPartDesignation.rightLeg,
       function: BodyPartFunction.mobile,
@@ -24,7 +22,7 @@ Anatomy buildHumanoid(int id,
       isSeverable: true,
       firstOwnerId: id);
 
-  final leftLeg = BodyPart(random.next(), "left leg",
+  final leftLeg = BodyPart(randomIdGetter(), "left leg",
       randomDesignation: "{left leg|left thigh}",
       designation: BodyPartDesignation.leftLeg,
       function: BodyPartFunction.mobile,
@@ -34,7 +32,7 @@ Anatomy buildHumanoid(int id,
       isSeverable: true,
       firstOwnerId: id);
 
-  final primaryHand = BodyPart(random.next(), "right hand",
+  final primaryHand = BodyPart(randomIdGetter(), "right hand",
       designation: BodyPartDesignation.primaryHand,
       function: BodyPartFunction.wielding,
       damageCapability: DamageCapability(WeaponType.fist).toBuilder(),
@@ -44,7 +42,7 @@ Anatomy buildHumanoid(int id,
       isSeverable: true,
       firstOwnerId: id);
 
-  final primaryArm = BodyPart(random.next(), "right arm",
+  final primaryArm = BodyPart(randomIdGetter(), "right arm",
       randomDesignation: "{right arm|right shoulder}",
       designation: BodyPartDesignation.primaryArm,
       isSeverable: true,
@@ -54,7 +52,7 @@ Anatomy buildHumanoid(int id,
       children: [primaryHand],
       firstOwnerId: id);
 
-  final secondaryHand = BodyPart(random.next(), "left hand",
+  final secondaryHand = BodyPart(randomIdGetter(), "left hand",
       designation: BodyPartDesignation.secondaryHand,
       function: BodyPartFunction.wielding,
       damageCapability: DamageCapability(WeaponType.fist).toBuilder(),
@@ -64,7 +62,7 @@ Anatomy buildHumanoid(int id,
       isSeverable: true,
       firstOwnerId: id);
 
-  final secondaryArm = BodyPart(random.next(), "left arm",
+  final secondaryArm = BodyPart(randomIdGetter(), "left arm",
       randomDesignation: "{left arm|left shoulder}",
       designation: BodyPartDesignation.secondaryArm,
       isSeverable: true,
@@ -74,7 +72,7 @@ Anatomy buildHumanoid(int id,
       children: [secondaryHand],
       firstOwnerId: id);
 
-  final leftEye = BodyPart(random.next(), "left eye",
+  final leftEye = BodyPart(randomIdGetter(), "left eye",
       designation: BodyPartDesignation.leftEye,
       function: BodyPartFunction.vision,
       swingSurfaceLeft: 0,
@@ -82,7 +80,7 @@ Anatomy buildHumanoid(int id,
       hitpoints: isBlind ? 0 : 1,
       firstOwnerId: id);
 
-  final rightEye = BodyPart(random.next(), "right eye",
+  final rightEye = BodyPart(randomIdGetter(), "right eye",
       designation: BodyPartDesignation.rightEye,
       function: BodyPartFunction.vision,
       swingSurfaceRight: 0,
@@ -90,7 +88,7 @@ Anatomy buildHumanoid(int id,
       hitpoints: isBlind ? 0 : 1,
       firstOwnerId: id);
 
-  final teeth = BodyPart(random.next(), "teeth",
+  final teeth = BodyPart(randomIdGetter(), "teeth",
       designation: BodyPartDesignation.teeth,
       function: BodyPartFunction.damageDealing,
       damageCapability: DamageCapability(WeaponType.teeth).toBuilder(),
@@ -99,7 +97,7 @@ Anatomy buildHumanoid(int id,
       thrustSurface: 0,
       firstOwnerId: id);
 
-  final head = BodyPart(random.next(), "head",
+  final head = BodyPart(randomIdGetter(), "head",
       randomDesignation: "{forehead|face|cheek|chin|nose}",
       designation: BodyPartDesignation.head,
       isVital: true,
@@ -109,7 +107,7 @@ Anatomy buildHumanoid(int id,
       children: [leftEye, rightEye, teeth],
       firstOwnerId: id);
 
-  final neck = BodyPart(random.next(), "neck",
+  final neck = BodyPart(randomIdGetter(), "neck",
       randomDesignation: "{throat|neck}",
       designation: BodyPartDesignation.neck,
       isVital: true,
@@ -120,7 +118,7 @@ Anatomy buildHumanoid(int id,
       children: [head],
       firstOwnerId: id);
 
-  final torso = BodyPart(random.next(), "torso",
+  final torso = BodyPart(randomIdGetter(), "torso",
       randomDesignation: "{abdomen|belly|chest|upper body|lower body}",
       hitpoints: constitution,
       designation: BodyPartDesignation.torso,

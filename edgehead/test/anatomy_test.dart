@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -9,10 +10,12 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:test/test.dart';
 
+import 'src/test_random.dart';
+
 void main() {
   group("executeSlashingHit", () {
     test("decapitating kills", () {
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
@@ -22,7 +25,7 @@ void main() {
     });
 
     test("cleaving neck removes head", () {
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
@@ -34,7 +37,8 @@ void main() {
 
     test("disabling a part that leads to a single eye will make actor blind",
         () {
-      final monster = Actor.initialized(1000, "monster").toBuilder();
+      final monster =
+          Actor.initialized(1000, testRandomIdGetter, "monster").toBuilder();
       // This monster has no neck.
       monster.anatomy.torso.children
           .removeWhere((part) => part.designation == BodyPartDesignation.neck);
@@ -60,7 +64,7 @@ void main() {
     });
 
     test("cleaving neck disables it", () {
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
@@ -74,7 +78,7 @@ void main() {
     });
 
     test("cleaving neck returns neck and head", () {
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
       final severed = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
@@ -87,7 +91,7 @@ void main() {
 
     test("cleaving non-severable body part kills it but not its descendants",
         () {
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
@@ -106,7 +110,7 @@ void main() {
     });
 
     test("cleaving non-severable body part downgrades to major cut", () {
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
       final slashResult = executeSlashingHit(
@@ -116,7 +120,8 @@ void main() {
     });
 
     test("major-cutting actor with Con=2 once does not kill him", () {
-      final orc = Actor.initialized(1000, "orc", constitution: 2);
+      final orc =
+          Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
       final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
@@ -128,7 +133,8 @@ void main() {
     test(
         "major-cutting actor with Con=2 two times on a vital body part "
         "kills him", () {
-      final orc = Actor.initialized(1000, "orc", constitution: 2);
+      final orc =
+          Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
       final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
@@ -144,7 +150,8 @@ void main() {
     test(
         "major-cutting actor with Con=2 two times on a non-vital body part "
         "does not kill him", () {
-      final orc = Actor.initialized(1000, "orc", constitution: 2);
+      final orc =
+          Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
       final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
@@ -160,7 +167,8 @@ void main() {
     test(
         "major-cutting actor with Con=2 two times on a non-vital body part "
         "disables it", () {
-      final orc = Actor.initialized(1000, "orc", constitution: 2);
+      final orc =
+          Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
       final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
@@ -178,7 +186,7 @@ void main() {
     });
 
     test("minor-cutting several times does not kill", () {
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
       final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.minorCut,
@@ -195,7 +203,7 @@ void main() {
   group("executeThrustingHit", () {
     test("disabling primary hand drops weapon", () {
       const orcId = 1000;
-      final orc = Actor.initialized(orcId, "orc",
+      final orc = Actor.initialized(orcId, testRandomIdGetter, "orc",
           currentWeapon:
               Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
       final dagger = Item.weapon(42, WeaponType.dagger);
@@ -207,7 +215,7 @@ void main() {
 
     test("disabling primary arm drops weapon", () {
       const orcId = 1000;
-      final orc = Actor.initialized(orcId, "orc",
+      final orc = Actor.initialized(orcId, testRandomIdGetter, "orc",
           currentWeapon:
               Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
       final dagger = Item.weapon(42, WeaponType.dagger);
@@ -219,7 +227,7 @@ void main() {
 
     test("disabling secondary hand doesn't drop weapon", () {
       const orcId = 1000;
-      final orc = Actor.initialized(orcId, "orc",
+      final orc = Actor.initialized(orcId, testRandomIdGetter, "orc",
           currentWeapon:
               Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
       final dagger = Item.weapon(42, WeaponType.dagger);
@@ -238,7 +246,7 @@ void main() {
         "attack from right side (attacker's perspective) "
         "never hits right (primary) arm", () {
       // By default, all humanoids are right handed.
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
       for (int i = 0; i < 1000; i++) {
         final hit =
@@ -251,7 +259,7 @@ void main() {
         "attack from left side (attacker's perspective) "
         "never hits left (secondary) arm", () {
       // By default, all humanoids are right handed.
-      final orc = Actor.initialized(1000, "orc");
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
       for (int i = 0; i < 1000; i++) {
         final hit =
@@ -262,7 +270,7 @@ void main() {
   });
 
   group("pickRandomBodyPart", () {
-    final actor = Actor.initialized(1000, "orc");
+    final actor = Actor.initialized(1000, testRandomIdGetter, "orc");
     final head = BodyPart(1, "head", firstOwnerId: actor.id);
     final neck = BodyPart(2, "neck", firstOwnerId: actor.id);
     final random = Random();
@@ -306,7 +314,7 @@ void main() {
     });
 
     test("pickRandomBodyPartFromLeft never picks teeth", () {
-      final humanoid = buildHumanoid(42, isUndead: false);
+      final humanoid = buildHumanoid(42, testRandomIdGetter, isUndead: false);
 
       for (int i = 0; i < 10000; i++) {
         final bodyPart =

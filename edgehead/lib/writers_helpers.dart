@@ -31,10 +31,10 @@ bool bothAreAlive(Actor a, Actor b) {
 
 /// Battlefield fight.
 FightSituation generateBattlefieldFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
   final redOrcId = w.randomInt();
-  final redOrc = Actor.initialized(redOrcId, "orc",
+  final redOrc = Actor.initialized(redOrcId, w.randomInt, "orc",
       nameIsProperNoun: false,
       adjective: 'red',
       pronoun: Pronoun.HE,
@@ -44,7 +44,8 @@ FightSituation generateBattlefieldFight(ActionContext c,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   final leatherJerkinOrcId = w.randomInt();
-  final leatherJerkinOrc = Actor.initialized(leatherJerkinOrcId, "orc",
+  final leatherJerkinOrc = Actor.initialized(
+      leatherJerkinOrcId, w.randomInt, "orc",
       nameIsProperNoun: false,
       adjective: 'ordinary',
       pronoun: Pronoun.HE,
@@ -69,10 +70,10 @@ FightSituation generateBattlefieldFight(ActionContext c,
 
 /// The fight west of The Bleeds.
 FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
   var goblinId = w.randomInt();
-  var goblin = Actor.initialized(goblinId, "goblin",
+  var goblin = Actor.initialized(goblinId, w.randomInt, "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear,
@@ -86,10 +87,11 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
 
 /// God's lair fight.
 FightSituation generateGodsLairFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
   final orcBerserkerId = w.randomInt();
-  final orcBerserker = Actor.initialized(orcBerserkerId, "berserker",
+  final orcBerserker = Actor.initialized(
+      orcBerserkerId, w.randomInt, "berserker",
       nameIsProperNoun: false,
       adjective: 'orc',
       pronoun: Pronoun.HE,
@@ -101,7 +103,7 @@ FightSituation generateGodsLairFight(ActionContext c,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   final orcCaptainId = w.randomInt();
-  final orcCaptain = Actor.initialized(orcCaptainId, 'captain',
+  final orcCaptain = Actor.initialized(orcCaptainId, w.randomInt, 'captain',
       nameIsProperNoun: false,
       adjective: 'orc',
       pronoun: Pronoun.HE,
@@ -151,7 +153,7 @@ FightSituation generateRandomEncounter(ActionContext c,
           wholeSentence: true);
       break;
     case 2:
-      final orc = Actor.initialized(6000, "orc",
+      final orc = Actor.initialized(6000, w.randomInt, "orc",
           pronoun: Pronoun.HE,
           constitution: 2,
           team: defaultEnemyTeam,
@@ -237,7 +239,7 @@ FightSituation generateRandomEncounter(ActionContext c,
 
   return FightSituation.initialized(
     w.randomInt(),
-    party.where((a) => a.isPlayer),
+    party.where((a) => a.isPlayer).toList(),
     enemies,
     groundMaterial,
     roomRoamingSituation,
@@ -250,9 +252,9 @@ FightSituation generateRandomEncounter(ActionContext c,
 
 /// The fight at the start of Knights of San Francisco, with Tamara.
 FightSituation generateStartFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, Iterable<Actor> party) {
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  var firstGoblin = Actor.initialized(firstGoblinId, "goblin",
+  var firstGoblin = Actor.initialized(firstGoblinId, w.randomInt, "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
@@ -298,7 +300,7 @@ Actor _makeGoblin(WorldStateBuilder w,
     String swordAdjective = 'rusty',
     String currentRoomName}) {
   final goblinId = id ?? w.randomInt();
-  return Actor.initialized(goblinId, "goblin",
+  return Actor.initialized(goblinId, w.randomInt, "goblin",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: spear
@@ -314,7 +316,7 @@ Actor _makeGoblin(WorldStateBuilder w,
 Actor _makeOrc(WorldStateBuilder w,
     {int id, int constitution = 2, String swordAdjective = 'orcish'}) {
   final orcId = id ?? w.randomInt();
-  return Actor.initialized(orcId, "orc",
+  return Actor.initialized(orcId, w.randomInt, "orc",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,

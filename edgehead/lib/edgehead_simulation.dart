@@ -10,6 +10,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:edgehead/writers_input.compiled.dart';
 
 import 'edgehead_ids.dart';
@@ -20,6 +21,7 @@ const String normalFoldFunctionHandle = "normal";
 
 final Actor edgeheadDirector = Actor.initialized(
   directorId,
+  StatefulRandom(directorId + ~42).next,
   "DIRECTOR",
   isDirector: true,
 );
@@ -30,6 +32,7 @@ final Situation edgeheadInitialSituation =
 /// Trader Joseph's son.
 final Actor edgeheadLeroy = Actor.initialized(
   leroyId,
+  StatefulRandom(~leroyId).next,
   "Leroy",
   nameIsProperNoun: true,
   pronoun: Pronoun.HE,
@@ -42,6 +45,7 @@ final Actor edgeheadLeroy = Actor.initialized(
 
 final Actor edgeheadPlayer = Actor.initialized(
   playerId,
+  StatefulRandom(~playerId).next,
   "Aren",
   isSurvivor: true,
   nameIsProperNoun: true,
@@ -60,6 +64,7 @@ final Simulation edgeheadSimulation =
 
 final Actor edgeheadTamara = Actor.initialized(
   tamaraId,
+  StatefulRandom(~tamaraId).next,
   "Tamara",
   nameIsProperNoun: true,
   pronoun: Pronoun.SHE,

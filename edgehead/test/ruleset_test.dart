@@ -7,9 +7,11 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:test/test.dart';
 
+import 'src/test_random.dart';
+
 void main() {
-  final orc = Actor.initialized(1, "orc");
-  final aren = Actor.initialized(2, "Aren", isPlayer: true);
+  final orc = Actor.initialized(1, testRandomIdGetter, "orc");
+  final aren = Actor.initialized(2, testRandomIdGetter, "Aren", isPlayer: true);
   const sureSuccess = ReasonedSuccessChance.sureSuccess;
 
   test("ruleset with 1 rule applies that rule", () {

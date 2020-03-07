@@ -7,6 +7,8 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:test/test.dart';
 
+import 'src/test_random.dart';
+
 void main() {
   test("simple storyline", () {
     var storyline = Storyline();
@@ -297,7 +299,8 @@ void main() {
     });
 
     test("for grab <object> by <object's> <object2>", () {
-      var goblin = Actor.initialized(4123, "goblin", pronoun: Pronoun.HE);
+      var goblin = Actor.initialized(4123, testRandomIdGetter, "goblin",
+          pronoun: Pronoun.HE);
       assert(goblin.anatomy.weaponAppendage.name == 'right hand');
 
       orc.report(
@@ -403,7 +406,8 @@ void main() {
 
   test("'they bite' (not bites)", () {
     var storyline = Storyline();
-    var enemy = Actor.initialized(42, "Tamara", nameIsProperNoun: true);
+    var enemy = Actor.initialized(42, testRandomIdGetter, "Tamara",
+        nameIsProperNoun: true);
 
     storyline.add("<object2's> <subject> {snap<s> at|bite<s>} empty air",
         subject: enemy.anatomy.findByDesignation(BodyPartDesignation.teeth),
@@ -419,7 +423,7 @@ void main() {
   test("he has his dagger and his shield", () {
     var storyline = Storyline();
     var actorId = 42;
-    var a = Actor.initialized(actorId, 'Leroy',
+    var a = Actor.initialized(actorId, testRandomIdGetter, 'Leroy',
         nameIsProperNoun: true, pronoun: Pronoun.HE);
     var npc = a.rebuild((b) => b
       ..inventory.equip(
@@ -927,8 +931,10 @@ void main() {
 
       group('actors', () {
         test('in one sentence', () {
-          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
-          var paleOrc = Actor.initialized(2, "orc", adjective: "pale");
+          var oldGoblin = Actor.initialized(1, testRandomIdGetter, "goblin",
+              adjective: "old");
+          var paleOrc = Actor.initialized(2, testRandomIdGetter, "orc",
+              adjective: "pale");
 
           storyline.add('<subject> stand<s> next to <object>',
               subject: oldGoblin, object: paleOrc);
@@ -938,8 +944,10 @@ void main() {
         });
 
         test('in neighboring sentences', () {
-          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
-          var paleOrc = Actor.initialized(2, "orc", adjective: "pale");
+          var oldGoblin = Actor.initialized(1, testRandomIdGetter, "goblin",
+              adjective: "old");
+          var paleOrc = Actor.initialized(2, testRandomIdGetter, "orc",
+              adjective: "pale");
 
           storyline.add('<subject> lie<s> on the ground', subject: oldGoblin);
           storyline.add('<subject> sit<s> at the table', subject: paleOrc);
@@ -954,9 +962,9 @@ void main() {
         // swings at my null leg."
 
         var aren = _createPlayer('Aren');
-        var redOrc =
-            Actor.initialized(60, "orc", adjective: "red", pronoun: Pronoun.HE);
-        var ordinaryOrc = Actor.initialized(61, "orc",
+        var redOrc = Actor.initialized(60, testRandomIdGetter, "orc",
+            adjective: "red", pronoun: Pronoun.HE);
+        var ordinaryOrc = Actor.initialized(61, testRandomIdGetter, "orc",
             adjective: "ordinary", pronoun: Pronoun.HE);
         storyline.add('<subject> hit<s> the concrete floor', subject: redOrc);
         storyline.add(
@@ -1000,8 +1008,10 @@ void main() {
 
       group('actors', () {
         test('in one sentence', () {
-          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
-          var paleGoblin = Actor.initialized(2, "goblin", adjective: "pale");
+          var oldGoblin = Actor.initialized(1, testRandomIdGetter, "goblin",
+              adjective: "old");
+          var paleGoblin = Actor.initialized(2, testRandomIdGetter, "goblin",
+              adjective: "pale");
 
           storyline.add('<subject> stand<s> next to <object>',
               subject: oldGoblin, object: paleGoblin);
@@ -1011,8 +1021,10 @@ void main() {
         });
 
         test('in neighboring sentences', () {
-          var oldGoblin = Actor.initialized(1, "goblin", adjective: "old");
-          var paleGoblin = Actor.initialized(2, "goblin", adjective: "pale");
+          var oldGoblin = Actor.initialized(1, testRandomIdGetter, "goblin",
+              adjective: "old");
+          var paleGoblin = Actor.initialized(2, testRandomIdGetter, "goblin",
+              adjective: "pale");
 
           storyline.add('<subject> lie<s> on the ground', subject: oldGoblin);
           storyline.add('<subject> sit<s> at the table', subject: paleGoblin);
@@ -1029,9 +1041,9 @@ void main() {
           // Avoid "I dodge the orc and the red orc hits the concrete floor."
 
           var aren = _createPlayer('Aren');
-          var redOrc = Actor.initialized(60, "orc",
+          var redOrc = Actor.initialized(60, testRandomIdGetter, "orc",
               adjective: "red", pronoun: Pronoun.HE);
-          var ordinaryOrc = Actor.initialized(61, "orc",
+          var ordinaryOrc = Actor.initialized(61, testRandomIdGetter, "orc",
               adjective: "ordinary", pronoun: Pronoun.HE);
           storyline.add('<subject> dodge<s> <object>',
               subject: aren, object: redOrc);
@@ -1053,9 +1065,10 @@ void main() {
 
       setUp(() {
         aren = _createPlayer('Aren');
-        orc =
-            Actor.initialized(60, "orc", adjective: "red", pronoun: Pronoun.HE);
-        goblin = Actor.initialized(70, "goblin", pronoun: Pronoun.HE);
+        orc = Actor.initialized(60, testRandomIdGetter, "orc",
+            adjective: "red", pronoun: Pronoun.HE);
+        goblin = Actor.initialized(70, testRandomIdGetter, "goblin",
+            pronoun: Pronoun.HE);
         mySword = Item.weapon(100, WeaponType.sword, firstOwnerId: aren.id);
         myAxe = Item.weapon(101, WeaponType.axe, firstOwnerId: aren.id);
         orcSword = Item.weapon(110, WeaponType.sword, firstOwnerId: orc.id);

@@ -10,6 +10,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/util/alternate_iterables.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -50,6 +51,7 @@ import 'package:edgehead/src/fight/actions/wait.dart';
 import 'package:edgehead/src/fight/actions/wrestle_weapon_on_ground.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:logging/logging.dart';
 
 part 'fight_situation.g.dart';
 
@@ -64,6 +66,8 @@ abstract class FightSituation extends Object
     implements Built<FightSituation, FightSituationBuilder> {
   static const String className = "FightSituation";
 
+  static final Logger _log = Logger('FightSituation');
+
   static Serializer<FightSituation> get serializer =>
       _$fightSituationSerializer;
 
@@ -71,23 +75,27 @@ abstract class FightSituation extends Object
       _$FightSituation;
 
   factory FightSituation.initialized(
-          int id,
-          Iterable<Actor> playerTeam,
-          Iterable<Actor> enemyTeam,
-          String groundMaterial,
-          RoomRoamingSituation roomRoamingSituation,
-          Map<int, EventCallback> events,
-          {Iterable<Item> items = const []}) =>
-      FightSituation((b) => b
-        ..id = id
-        ..turn = 0
-        ..playerTeamIds.replace(playerTeam.map<int>((a) => a.id))
-        ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
-        ..groundMaterial = groundMaterial
-        ..droppedItems = ListBuilder<Item>(items)
-        ..droppedItemsOutOfReach = ListBuilder<Item>()
-        ..roomRoamingSituationId = roomRoamingSituation.id
-        ..events = MapBuilder<int, EventCallback>(events));
+      int id,
+      List<Actor> playerTeam,
+      List<Actor> enemyTeam,
+      String groundMaterial,
+      RoomRoamingSituation roomRoamingSituation,
+      Map<int, EventCallback> events,
+      {List<Item> items = const []}) {
+    assert(_ensureUniqueIds(playerTeam.followedBy(enemyTeam), items));
+
+    return FightSituation((b) => b
+      ..id = id
+      ..turn = 0
+      ..playerTeamIds.replace(playerTeam.map<int>((a) => a.id))
+      ..enemyTeamIds.replace(enemyTeam.map<int>((a) => a.id))
+      ..groundMaterial = groundMaterial
+      ..droppedItems = ListBuilder<Item>(items)
+      ..droppedItemsOutOfReach = ListBuilder<Item>()
+      ..roomRoamingSituationId = roomRoamingSituation.id
+      ..events = MapBuilder<int, EventCallback>(events));
+  }
+
   FightSituation._();
 
   @override
@@ -223,7 +231,8 @@ abstract class FightSituation extends Object
           context.outputStoryline);
     }
 
-    _ensureUniqueIds(context.world);
+    assert(_ensureUniqueIds(context.outputWorld.actors.build(),
+        droppedItems.followedBy(droppedItemsOutOfReach)));
   }
 
   @override
@@ -282,25 +291,47 @@ abstract class FightSituation extends Object
         playerTeamIds.any(isPlayerAndAlive);
   }
 
-  void _ensureUniqueIds(WorldState world) {
-    assert(() {
-      final ids = <int>{};
-      for (final actor in getActors(null, world)) {
-        if (ids.contains(actor.id)) {
-          return false;
-        }
-        ids.add(actor.id);
-        for (final item in actor.inventory.items.followedBy([
-          actor.currentWeapon,
-          actor.currentShield
-        ].where((el) => el != null))) {
-          if (ids.contains(item.id)) {
-            return false;
-          }
-          ids.add(item.id);
-        }
+  /// Because [FightSituation] is one of the more dynamic parts of the game,
+  /// with lots of entities, it's especially important to check that duplicate
+  /// ids can never happen.
+  static bool _ensureUniqueIds(
+      Iterable<Actor> actors, Iterable<Item> locationItems) {
+    final ids = <int>{};
+    final duplicates = <int>{};
+    final map = <int, Entity>{};
+
+    void checkDuplicate(Entity entity) {
+      final id = entity.id;
+
+      if (ids.contains(id)) {
+        duplicates.add(id);
+        _log.warning('Entities have duplicate id ($entity): '
+            '$entity vs ${map[id]}');
+        assert(
+            false,
+            'Entities have duplicate id ($entity): '
+            '$entity vs ${map[id]}');
       }
-      return true;
-    }());
+      ids.add(id);
+      map[id] = entity;
+    }
+
+    for (final actor in actors) {
+      checkDuplicate(actor);
+
+      actor.inventory.items
+          .followedBy(actor.inventory.weapons)
+          .followedBy(actor.inventory.shields)
+          .forEach(checkDuplicate);
+      actor.anatomy.allParts.forEach(checkDuplicate);
+    }
+
+    locationItems.forEach(checkDuplicate);
+
+    if (duplicates.isNotEmpty) {
+      _log.severe('Duplicate ids: $duplicates.');
+    }
+
+    return duplicates.isEmpty;
   }
 }

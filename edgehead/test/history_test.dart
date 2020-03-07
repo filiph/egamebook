@@ -6,6 +6,8 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:test/test.dart';
 
+import 'src/test_random.dart';
+
 void main() {
   group("VisitHistory", () {
     const _outsideName = "outside";
@@ -13,7 +15,8 @@ void main() {
         _outsideName, emptyRoomDescription, emptyRoomDescription, null, null);
     final inside =
         Room("inside", emptyRoomDescription, emptyRoomDescription, null, null);
-    final aren = Actor.initialized(42, "Aren", currentRoomName: _outsideName);
+    final aren = Actor.initialized(42, testRandomIdGetter, "Aren",
+        currentRoomName: _outsideName);
 
     test("saves events in world state", () {
       final initialSituation =

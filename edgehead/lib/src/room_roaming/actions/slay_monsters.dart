@@ -56,10 +56,12 @@ class SlayMonstersAction extends Action<Nothing> {
     Room room = sim.getRoomByName(situation.currentRoomName);
 
     WorldState built = w.build();
-    var friends = built.actors.where((other) =>
-        other.isAnimatedAndActive &&
-        other.team.isFriendWith(a.team) &&
-        other.currentRoomName == room.name);
+    var friends = built.actors
+        .where((other) =>
+            other.isAnimatedAndActive &&
+            other.team.isFriendWith(a.team) &&
+            other.currentRoomName == room.name)
+        .toList(growable: false);
 
     var fightSituation = room.fightGenerator(context, situation, friends);
     assert(() {

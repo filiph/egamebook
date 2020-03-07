@@ -25,11 +25,13 @@ import 'package:edgehead/src/predetermined_result.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:test/test.dart';
 
+import 'src/test_random.dart';
+
 void main() {
   group("fractal_stories", () {
     group("Actor", () {
       test("rebuilt actor has different hashcode", () {
-        Actor filip = Actor.initialized(1, "Filip",
+        Actor filip = Actor.initialized(1, testRandomIdGetter, "Filip",
             isPlayer: true,
             pronoun: Pronoun.YOU,
             currentWeapon: Item.weapon(42, WeaponType.sword, firstOwnerId: 1),
@@ -56,8 +58,8 @@ void main() {
         ..time = DateTime.utc(1000)).toBuilder();
 
       setUp(() {
-        a = Actor.initialized(1001, "A");
-        b = Actor.initialized(1002, "B");
+        a = Actor.initialized(1001, testRandomIdGetter, "A");
+        b = Actor.initialized(1002, testRandomIdGetter, "B");
       });
 
       test("FightSituation", () {
@@ -168,8 +170,8 @@ void main() {
       });
 
       group("RoomRoamingSituation.moveActor", () {
-        final aren =
-            Actor.initialized(42, "Aren", currentRoomName: _outsideName);
+        final aren = Actor.initialized(42, testRandomIdGetter, "Aren",
+            currentRoomName: _outsideName);
         final initialSituation =
             RoomRoamingSituation.initialized(1, outside, false);
         final world = WorldState((b) => b
