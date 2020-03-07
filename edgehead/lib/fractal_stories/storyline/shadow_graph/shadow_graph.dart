@@ -653,6 +653,10 @@ class ShadowGraph {
       UnmodifiableListView<Report> reports, Set<Entity> entities) {
     final result = List<Map<Identifier, Entity>>(reports.length);
     var previous = <Identifier, Entity>{};
+
+    // Used to ensure that no two unrelated entities have the same id.
+    final assertionIdMap = <int, Type>{};
+
     for (int i = 0; i < reports.length; i++) {
       final current = <Identifier, Entity>{};
 
@@ -686,6 +690,13 @@ class ShadowGraph {
       final reportEntities = reports[i].allEntities.toList(growable: false);
 
       for (final entityInReport in reportEntities) {
+        assert(!assertionIdMap.containsKey(entityInReport.id) ||
+            assertionIdMap[entityInReport.id] == entityInReport.runtimeType);
+        assert(() {
+          assertionIdMap[entityInReport.id] = entityInReport.runtimeType;
+          return true;
+        }());
+
         final entity = entities.singleWhere((e) => e.id == entityInReport.id);
 
         if (entity.isCommon) {
