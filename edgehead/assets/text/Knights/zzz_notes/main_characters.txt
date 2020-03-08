@@ -27,7 +27,7 @@ Hippie lover of all things ancient. Nobody touches her because she is too valuab
 Contrast: impractical wise person -- actually has a stash of weapons and a pretty decent plan of defense.
 
 
-## Corporal
+## Corporal (TODO: find better name, corporal == desátník)
 
 Main knight.
 
@@ -37,6 +37,26 @@ Torn between duty and rationality (keep Knights alive by retreating) and interna
 * "Die, goblin scum! This is for all the young lads and lassies that fell by your dirty swords."
 
 Contrast: a sensible leader -- actually wants to die to achieve nirvana.
+
+
+## Horseman White
+
+The lord knight responsible for organizing the Knights' retreat from the Pyramid. Terrified of the place. Personally wants out of there as soon as possible. He doesn't really think about a legacy: survival trumps that.
+
+* "I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
+* "No you don't. People think that but they don't, really. They don't owe each other nothing."
+
+Contrast: high status -- low glory, no legacy
+
+
+# Ada the farmer
+
+A motherly figure. Raised a child and now the nest is empty. She has second thoughts about career vs children: she would have liked more than one. Had grown apart from the husband (maybe Jisad?).
+
+* "Are you cold? You look like you are freezing. I have some clothes after Pascal. He's left. He won't be needing them."
+* "I like this life. It's a good, comfortable life. I worked hard for it."
+
+Contrast: supportive and warm and welcoming -- extremely sad
 
 
 ## Darg
