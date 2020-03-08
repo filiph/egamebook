@@ -1,0 +1,27 @@
+
+# Micro-personality (for randomly generated knights)
+
+TODO: decide whether I need this. The idea is that many knights will die in a fight, and we don't want this to prevent the player from learning important things. Dialogue should be central to the prose, but we can't have dialogue if everyone is dead (or undead).
+
+Many dialogues are actually possible with almost any character. The ink "file" has access to the personality of the person we're talking to.
+
+The Knights are randomly generated on the following dimensions:
+
+* Gender (man, woman, bisexual)
+* Appearance (color of hair, beard, body type; possibly color of skin - not said but informs the other dimensions, so that we don't get weird blond hair-black beard combinations too often)
+* Name (a good name generator)
+* Birth place (somewhere in NorCal)
+* Debility (none, missing eye, missing arm)
+* Micro-personality (below)
+* Verbal tick (ending: "pal", "buddy", "you know", "haha", "bro", interjection: "like", "er", "hmm") - informed by micro-personality
+
+Get inspiration from "Instant NPCs", [Dungeon World](file:///Users/filiph/Downloads/dungeonworld/DungeonWorld.pdf) pp. 390+.
+
+## Family person
+
+Wants to go home to his/her family. Often remembers them. Sometimes makes similes to their kids ("you're like my kid, <pal>").
+
+## Bro
+
+The bro wants to party. He talks about girls and booze. He's careless.
+

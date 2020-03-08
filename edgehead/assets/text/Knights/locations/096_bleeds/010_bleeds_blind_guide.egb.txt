@@ -6,6 +6,8 @@
 // "I will do anything to make this place peaceful again. Just don't ask me to touch magic. Much less _black_ magic."
 // In the end, of course, he will need to do just that.
 
+// Also sells hints (useful info about the pyramid). His first hint (for free) is turn around and never go back. This is too dangerous. Look around, maybe visit the Oracle down in Redwood Shores, but try to stay away from this area. His catch phrase: "Oh, you're still here!"
+
 // ---
 ACTION: $bleeds_blind_guide_greet
 COMMAND: Blind man >> “Hello!”

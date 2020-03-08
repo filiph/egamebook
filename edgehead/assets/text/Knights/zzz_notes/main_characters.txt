@@ -4,6 +4,9 @@
 
 An outsider coming from "Cannibal country", from the mountains. His country is called "Falling Rock". In those parts, Necromancy is forbidden. It's backwater, and relatively safer than San Francisco.
 
+Contrast: sickly-looking person -- a powerful necromancer & swordsman
+
+
 ## Big O (Osiris)
 
 Wants to prevent another "Arrival" by being all knowing. The only way to do that: be immortal, or at the very least very long-lived. What are a few thousand dead against the chance that humanity survives the next apocalypse.
@@ -11,12 +14,18 @@ Wants to prevent another "Arrival" by being all knowing. The only way to do that
 * "I don't care about how you feel about all this. Cattle can feel. Only a few can think."
 * "I am impressed. I truly am. I don't think I had the gift as young as you do. I can spare you, and I ask you of only one thing in exchange. Use your head."
 
+Contrast: very noble looking and stoic -- actually vicious
+
+
 ## Oracle
 
 Hippie lover of all things ancient. Nobody touches her because she is too valuable, and people are unsure whether or not she is a wizard (or worse, a tech-mancer). Pronounces tech like teχ in LaTeΧ (with guttural "kh").
  
-* "Right on, this is like exactly what I was talking about."
-* "Dude, chill. This is intense, sure, but we won't solve this by being all freaked out or whatever."
+* "Right on, this is, oh, exactly what I was talking about."
+* "Dude, chill. This is intense, sure, but we won't solve this by being all freaked out."
+
+Contrast: impractical wise person -- actually has a stash of weapons and a pretty decent plan of defense.
+
 
 ## Corporal
 
@@ -26,6 +35,9 @@ Torn between duty and rationality (keep Knights alive by retreating) and interna
 
 * "My lad, I wish I saw the world with your eyes, so simple and straightforward. Instead, I live in the hell that is reality."
 * "Die, goblin scum! This is for all the young lads and lassies that fell by your dirty swords."
+
+Contrast: a sensible leader -- actually wants to die to achieve nirvana.
+
 
 ## Darg
 
@@ -44,11 +56,15 @@ What does he want that clashes with Aren at the start? He wants the Tome of Necr
 * "I am blind, young sir, but I am not stupid. You come here for power, like everyone else. You forget there are people here who just want to live their lives."
 * "I will do anything to make this place peaceful again. Just don't ask me to touch magic. Much less _black_ magic."
 
+Contrast: blind old man -- actually bad ass.
+
+
 ## Leroy
 
 The son of trader Joseph Siencyn.
  
 The name Siencyn is a Welsh variant of "Jenkins" -- an allusion to Leeroy Jenkins.
+
 
 ## Miguel (the avid knight at the entrance)
 
@@ -57,36 +73,13 @@ Drank a bit too much of the cool aid. Likes to think he will be the one sacrific
 * "There is no glory in defending this place from the _outside_ when all the action happens inside."
 * "I don't care what you think, coward."
 
+Contrast: a "bro", talks about glory -- actually terrified for the farmers
+
+
 ## Kat (Miguel's master-knight)
 
 Kat is much less avid than Miguel. Just wants to provide strength where needed, doesn't want to fight if not necessary.
 
+* ...
 
-# Micro-personality (for randomly generated knights)
-
-TODO: decide whether I need this. The idea is that many knights will die in a fight, and we don't want this to prevent the player from learning important things. Dialogue should be central to the prose, but we can't have dialogue if everyone is dead (or undead).
-
-Many dialogues are actually possible with almost any character. The ink "file" has access to the personality of the person we're talking to.
-
-The Knights are randomly generated on the following dimensions:
-
-* Gender (man, woman, bisexual)
-* Appearance (color of hair, beard, body type; possibly color of skin - not said but informs the other dimensions, so that we don't get weird blond hair-black beard combinations too often)
-* Name (a good name generator)
-* Birth place (somewhere in NorCal)
-* Debility (none, missing eye, missing arm)
-* Micro-personality (below)
-* Verbal tick (ending: "pal", "buddy", "you know", "haha", "bro", interjection: "like", "er", "hmm") - informed by micro-personality
-
-Get inspiration from "Instant NPCs", [Dungeon World](file:///Users/filiph/Downloads/dungeonworld/DungeonWorld.pdf) pp. 390+.
-
-## Family person
-
-Wants to go home to his/her family. Often remembers them. Sometimes makes similes to their kids ("you're like my kid, <pal>").
-
-## Bro
-
-The bro wants to party. He talks about girls and booze. He's careless.
-
-
-
+Contrast: serious, stoic, professional -- cries when alone
