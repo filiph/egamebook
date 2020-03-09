@@ -61,7 +61,8 @@ class ActorScoreChange {
   final num enemy;
 
   /// How much more interesting the history of this world is relative
-  /// to another outcome.
+  /// to another outcome. Look at [Actor.scoreWorld] to see how this gets
+  /// computed.
   final num varietyOfAction;
 
   const ActorScoreChange(this.selfPreservation, this.teamPreservation,
@@ -101,9 +102,6 @@ class ActorScoreChange {
       teamPreservation == double.negativeInfinity &&
       enemy == double.negativeInfinity &&
       varietyOfAction == double.negativeInfinity;
-
-  /// A simple combination of different scores, for AI.
-  num get simpleCombination => selfPreservation + teamPreservation - enemy;
 
   /// Returns a score change multiplied by a scalar value.
   ActorScoreChange operator *(num value) => ActorScoreChange(

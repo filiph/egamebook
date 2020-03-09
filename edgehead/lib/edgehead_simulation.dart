@@ -107,7 +107,11 @@ final List<Room> _rooms = List<Room>.from(allRooms)
 /// Lesser self-worth than normal combine function as monsters should
 /// kind of carelessly attack to make fights more action-packed.
 num carelessMonsterFoldFunction(ActorScoreChange scoreChange) =>
-    scoreChange.selfPreservation - scoreChange.enemy;
+    scoreChange.selfPreservation +
+    // Monster AI cares about action-packed combat.
+    scoreChange.varietyOfAction -
+    // Twice the weight of hurting the enemy.
+    2 * scoreChange.enemy;
 
 num normalFoldFunction(ActorScoreChange scoreChange) =>
     scoreChange.selfPreservation +
