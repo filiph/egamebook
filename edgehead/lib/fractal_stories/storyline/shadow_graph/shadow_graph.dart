@@ -271,36 +271,6 @@ class ShadowGraph {
     _reportIdentifiers[i]._objectRange.add(IdentifierLevel.pronoun);
   }
 
-  /// Detects entities that have `<*wner>` before them, and removes
-  /// all irrelevant [IdentifierLevel]s.
-  ///
-  /// Entities with `<*wner>` before them cannot be just [IdentifierLevel.noun],
-  /// for example. They are forced to be either
-  /// [IdentifierLevel.ownerPronounsNoun] or
-  /// [IdentifierLevel.ownerNamesNounNoun].
-  void _forceOwners(UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < reports.length; i++) {
-      final report = reports[i];
-
-      if (report.string.contains(ComplementType.OWNER.genericPossessive) &&
-          report.subject.firstOwnerId != null) {
-        _reportIdentifiers[i]._subjectRange.retainAll([
-          IdentifierLevel.ownerPronounsNoun,
-          IdentifierLevel.ownerNamesNoun,
-        ]);
-      }
-
-      if (report.string
-              .contains(ComplementType.OBJECT_OWNER.genericPossessive) &&
-          report.object.firstOwnerId != null) {
-        _reportIdentifiers[i]._objectRange.retainAll([
-          IdentifierLevel.ownerPronounsNoun,
-          IdentifierLevel.ownerNamesNoun,
-        ]);
-      }
-    }
-  }
-
   /// In any storyline, the first time we mention anyone after a while,
   /// we cannot use pronouns or any other confusing identifiers.
   void _detectFirstMentions(
@@ -571,6 +541,36 @@ class ShadowGraph {
     }
   }
 
+  /// Detects entities that have `<*wner>` before them, and removes
+  /// all irrelevant [IdentifierLevel]s.
+  ///
+  /// Entities with `<*wner>` before them cannot be just [IdentifierLevel.noun],
+  /// for example. They are forced to be either
+  /// [IdentifierLevel.ownerPronounsNoun] or
+  /// [IdentifierLevel.ownerNamesNounNoun].
+  void _forceOwners(UnmodifiableListView<Report> reports) {
+    for (int i = 0; i < reports.length; i++) {
+      final report = reports[i];
+
+      if (report.string.contains(ComplementType.OWNER.genericPossessive) &&
+          report.subject.firstOwnerId != null) {
+        _reportIdentifiers[i]._subjectRange.retainAll([
+          IdentifierLevel.ownerPronounsNoun,
+          IdentifierLevel.ownerNamesNoun,
+        ]);
+      }
+
+      if (report.string
+              .contains(ComplementType.OBJECT_OWNER.genericPossessive) &&
+          report.object.firstOwnerId != null) {
+        _reportIdentifiers[i]._objectRange.retainAll([
+          IdentifierLevel.ownerPronounsNoun,
+          IdentifierLevel.ownerNamesNoun,
+        ]);
+      }
+    }
+  }
+
   /// Gets all mentioned entities in [reports].
   ///
   /// The entities will be stored in their initial state (for example,
@@ -657,6 +657,11 @@ class ShadowGraph {
     // Used to ensure that no two unrelated entities have the same id.
     final assertionIdMap = <int, Type>{};
 
+    // Gets an entity, either from [entities] (mentioned in this
+    // Storyline), or — if unavailable - in [_storylineEntities].
+    Entity getEntity(int id) => entities.singleWhere((e) => e.id == id,
+        orElse: () => _storylineEntities.values.singleWhere((e) => e.id == id));
+
     for (int i = 0; i < reports.length; i++) {
       final current = <Identifier, Entity>{};
 
@@ -687,7 +692,15 @@ class ShadowGraph {
         }
       }
 
-      final reportEntities = reports[i].allEntities.toList(growable: false);
+      final reportEntities = reports[i].allEntities.toList();
+
+      // If this is the first report in the Storyline,
+      // we also add all storyline entities (not just this report's entities).
+      // This way, we don't start a paragraph with "the orc" when there are,
+      // in fact, multiple orcs present.
+      if (i == 0) {
+        reportEntities.addAll(_difference(_storylineEntities, reportEntities));
+      }
 
       for (final entityInReport in reportEntities) {
         assert(!assertionIdMap.containsKey(entityInReport.id) ||
@@ -697,7 +710,9 @@ class ShadowGraph {
           return true;
         }());
 
-        final entity = entities.singleWhere((e) => e.id == entityInReport.id);
+        // This normalizes the entity so it always has the same adjective,
+        // pronoun, and so on, during the whole Storyline.
+        final entity = getEntity(entityInReport.id);
 
         if (entity.isCommon) {
           // Can share a storyline with entities of same name, like "thrust".
@@ -745,11 +760,6 @@ class ShadowGraph {
           assign(properNounId, entity);
         }
       }
-
-      assert(
-          reportEntities
-              .every((entity) => current.values.any((e) => e.id == entity.id)),
-          'An entity is missing completely from $current');
 
       result[i] = current;
       previous = current;
@@ -901,6 +911,18 @@ class ShadowGraph {
         }
         assert(set.length == 1);
       });
+    }
+  }
+
+  /// Returns an iterable of entities that are in [larger]
+  /// but not in [smaller]. The [Entity.id] is used for equality
+  /// checking.
+  static Iterable<Entity> _difference(
+      UnmodifiableMapView<int, Entity> larger, List<Entity> smaller) sync* {
+    final ids = smaller.map((e) => e.id).toSet();
+    for (final entity in larger.values) {
+      if (ids.contains(entity.id)) continue;
+      yield entity;
     }
   }
 }

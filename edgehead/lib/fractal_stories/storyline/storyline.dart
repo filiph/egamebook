@@ -251,6 +251,17 @@ class Storyline {
   /// with the actual [Entity]. This way, we are guaranteed that each
   /// entity has only one record. It also makes it faster to access
   /// the entities.
+  ///
+  /// This is a set of all entities that matter at the point of the
+  /// [Storyline]. They don't need to _be_ in the storyline, but they are
+  /// in the context.
+  ///
+  /// For example, even if the storyline only involves an orc and his sword
+  /// (e.g. "the orc equips his sword"), that doesn't mean another orc in
+  /// the same room isn't part of [allEntities]. The thing is, if the other
+  /// orc in the room wasn't part of [allEntities] then the storyline
+  /// might only realize to "the orc equips his sword", and the reader would
+  /// be unsure which orc it was.
   UnmodifiableMapView<int, Entity> get allEntities =>
       UnmodifiableMapView(_allEntities);
 
