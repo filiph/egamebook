@@ -759,6 +759,9 @@ class ShadowGraph {
           final properNounId = Identifier.properNoun(entity.name);
           assign(properNounId, entity);
         }
+
+        assert(current.values.any((e) => e.id == entity.id),
+            "The entity $entity didn't get any values in $current.");
       }
 
       result[i] = current;

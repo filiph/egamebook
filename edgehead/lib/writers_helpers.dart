@@ -35,8 +35,8 @@ FightSituation generateBattlefieldFight(ActionContext c,
   final w = c.outputWorld;
   final redOrcId = w.randomInt();
   final redOrc = Actor.initialized(redOrcId, w.randomInt, "orc",
-      nameIsProperNoun: false,
       adjective: 'red',
+      nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
           adjective: 'serrated', firstOwnerId: redOrcId),
@@ -46,8 +46,8 @@ FightSituation generateBattlefieldFight(ActionContext c,
   final leatherJerkinOrcId = w.randomInt();
   final leatherJerkinOrc = Actor.initialized(
       leatherJerkinOrcId, w.randomInt, "orc",
-      nameIsProperNoun: false,
       adjective: 'ordinary',
+      nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
           adjective: 'battle', firstOwnerId: leatherJerkinOrcId),
@@ -74,6 +74,7 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
   final w = c.outputWorld;
   var goblinId = w.randomInt();
   var goblin = Actor.initialized(goblinId, w.randomInt, "goblin",
+      adjective: "snarky",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear,
@@ -92,8 +93,8 @@ FightSituation generateGodsLairFight(ActionContext c,
   final orcBerserkerId = w.randomInt();
   final orcBerserker = Actor.initialized(
       orcBerserkerId, w.randomInt, "berserker",
-      nameIsProperNoun: false,
       adjective: 'orc',
+      nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
           name: 'battle axe',
@@ -104,8 +105,8 @@ FightSituation generateGodsLairFight(ActionContext c,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   final orcCaptainId = w.randomInt();
   final orcCaptain = Actor.initialized(orcCaptainId, w.randomInt, 'captain',
-      nameIsProperNoun: false,
       adjective: 'orc',
+      nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
           adjective: 'labelled', firstOwnerId: orcCaptainId),
@@ -255,6 +256,7 @@ FightSituation generateStartFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
   var firstGoblin = Actor.initialized(firstGoblinId, w.randomInt, "goblin",
+      adjective: "feral",
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
