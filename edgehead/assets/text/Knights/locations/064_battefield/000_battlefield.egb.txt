@@ -1,11 +1,11 @@
 // ---
 APPROACH: $battlefield FROM $knights_hq_main
-COMMAND: Go >> Battlefield
+COMMAND: Go >> Battlefield Floor
 DESCRIPTION: [We] climb up the stairs to the sixteenth floor.
 
 // ---
 APPROACH: $battlefield FROM $jungle
-COMMAND: Go >> Battlefield
+COMMAND: Go >> Battlefield Floor
 DESCRIPTION: $NONE
 
 
@@ -38,3 +38,7 @@ AFTER_MONSTERS_CLEARED:
 A glorious battle this was, I'm sure. It became a scab.
 
 Whatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.
+
+NOTES: 
+
+// TODO: battlefield should be a "bottleneck" floor (only the elevators go through)

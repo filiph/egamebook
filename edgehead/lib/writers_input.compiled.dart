@@ -794,8 +794,8 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The Oracle is here.\n', wholeSentence: true);
 }, null, null, isIdle: true, positionX: 15, positionY: 57);
-final Approach battlefieldFromJungle =
-    Approach('jungle', 'battlefield', 'Go >> Battlefield', (ActionContext c) {
+final Approach battlefieldFromJungle = Approach(
+    'jungle', 'battlefield', 'Go >> Battlefield Floor', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -803,8 +803,9 @@ final Approach battlefieldFromJungle =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Approach battlefieldFromKnightsHqMain = Approach(
-    'knights_hq_main', 'battlefield', 'Go >> Battlefield', (ActionContext c) {
+final Approach battlefieldFromKnightsHqMain =
+    Approach('knights_hq_main', 'battlefield', 'Go >> Battlefield Floor',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
