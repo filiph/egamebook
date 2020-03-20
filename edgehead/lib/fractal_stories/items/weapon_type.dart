@@ -33,6 +33,8 @@ class WeaponType extends EnumClass {
   static const WeaponType dagger = _$dagger;
   static const WeaponType axe = _$axe;
 
+  static const WeaponType club = _$club;
+
   /// A throwable piece of something hard and small. A rock, a brick,
   /// a golden nugget.
   static const WeaponType rock = _$rock;
@@ -43,7 +45,7 @@ class WeaponType extends EnumClass {
   /// The weapons that are not actual holdable weapons, but actually
   /// body parts.
   ///
-  /// Use this for asserts, nothing more. The set may not be updated.
+  /// Use this for asserts, nothing more. The set may not be up-to-date.
   static Set<WeaponType> get bodyPartWeapons => const {claw, teeth, fist};
 
   static Serializer<WeaponType> get serializer => _$weaponTypeSerializer;
@@ -70,12 +72,12 @@ class WeaponType extends EnumClass {
   /// are swords and reinforced blunt weapons. Knives and non-reinforced staffs
   /// cannot parry slashes.
   bool get canParrySlash {
-    if (this == sword || this == axe) return true;
+    if (this == sword || this == axe || this == club) return true;
     return false;
   }
 
   int get defaultBluntDamage {
-    if (this == rock) return 1;
+    if (this == rock || this == club) return 1;
     return 0;
   }
 
@@ -96,6 +98,7 @@ class WeaponType extends EnumClass {
     if (this == dagger) return 1;
     if (this == sword) return 2;
     if (this == axe) return 2;
+    if (this == club) return 2;
     if (this == spear) return 3;
     throw UnimplementedError('No length for $this');
   }

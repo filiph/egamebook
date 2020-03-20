@@ -105,6 +105,18 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'ShieldBlockThrustOnGround.singleton': ShieldBlockThrustOnGround.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_gronud.dart:
   'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
+  // From lib/src/fight/blunt_swing/actions/finish_blunt_swing.dart:
+  'FinishBluntSwing.singleton': FinishBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/defensive_parry_blunt_swing.dart:
+  'DefensiveParryBluntSwing.singleton': DefensiveParryBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/dodge_blunt_swing.dart:
+  'DodgeBluntSwing.singleton': DodgeBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/parry_blunt_swing.dart:
+  'ParryBluntSwing.singleton': ParryBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/shield_block_blunt_swing.dart:
+  'ShieldBlockBluntSwing.singleton': ShieldBlockBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/jump_back_from_blunt_swing.dart:
+  'JumpBackFromBluntSwing.singleton': JumpBackFromBluntSwing.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

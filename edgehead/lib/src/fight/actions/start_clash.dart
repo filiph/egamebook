@@ -36,7 +36,7 @@ class StartClash extends StartDefensibleActionBase {
 
   @override
   String get helpMessage =>
-      "This is a powerful slash directed at the enemy's weapon "
+      "This is a powerful swing directed at the enemy's weapon "
       "in order to force them off balance. "
       "The goal is not to deal damage but to "
       "force the opponent to lose their combat stance. It can also "
@@ -95,6 +95,7 @@ class StartClash extends StartDefensibleActionBase {
       !a.anatomy.isBlind &&
       (a.currentDamageCapability.isSlashing ||
           a.currentDamageCapability.isBlunt) &&
+      a.currentDamageCapability.length >= 2 &&
       (enemy.currentDamageCapability.type.canParrySlash ||
           enemy.currentDamageCapability.type.canParryBlunt) &&
       // So that you can either feint or clash, but not both.

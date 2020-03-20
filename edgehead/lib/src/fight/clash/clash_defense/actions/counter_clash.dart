@@ -27,7 +27,7 @@ class CounterAttackClash extends OtherActorAction {
   static const String className = "CounterAttackClash";
 
   @override
-  final String helpMessage = "By calling the bluff, I can try and steal "
+  final String helpMessage = "By countering, I can try and steal "
       "the initiative.";
 
   @override
@@ -74,7 +74,6 @@ class CounterAttackClash extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, clashSituationName);
-    a.report(s, "<subject> <isn't> fooled", actionThread: thread);
     a.report(
         s,
         "<subject> {retain<s>|keep<s>} "

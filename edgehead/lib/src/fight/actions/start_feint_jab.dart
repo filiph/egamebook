@@ -32,7 +32,9 @@ class FeintJab extends FeintSlash {
       !a.anatomy.isBlind &&
       !enemy.anatomy.isBlind &&
       enemy.pose > Pose.extended &&
-      a.currentDamageCapability.isThrusting &&
+      (a.currentDamageCapability.isThrusting ||
+          (a.currentDamageCapability.isBlunt &&
+              a.currentDamageCapability.length >= 2)) &&
       // Prevent showing both [FeintJab] and [FeintSlash] when player
       // is wielding a sword.
       !a.currentDamageCapability.isSlashing;
