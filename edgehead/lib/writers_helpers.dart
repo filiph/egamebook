@@ -196,13 +196,22 @@ FightSituation generateRandomEncounter(ActionContext c,
   }
 
   if (w.randomBool()) {
-    final name = w.randomBool() ? "rock" : "brick";
+    String name;
+
+    if (w.randomBool()) {
+      name = w.randomBool() ? "rock" : "brick";
+      items.add(Item.weapon(w.randomInt(), WeaponType.rock, name: name));
+    } else {
+      name = "branch";
+      items.add(Item.weapon(w.randomInt(), WeaponType.club,
+          name: 'branch', adjective: 'hefty'));
+    }
+
     s.add(
         "I ${items.isNotEmpty ? 'also' : ''} notice "
-        "a nice, solid $name in the ${isInside ? 'rubble' : 'puddle'} "
+        "a nice, hefty $name in the ${isInside ? 'rubble' : 'puddle'} "
         "on the ground.",
         wholeSentence: true);
-    items.add(Item.weapon(w.randomInt(), WeaponType.rock, name: name));
   }
 
   if (items.isEmpty) {
