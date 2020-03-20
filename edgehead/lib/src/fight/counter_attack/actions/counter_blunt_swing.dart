@@ -6,22 +6,24 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/blunt_swing/blunt_swing_defense/blunt_swing_defense_situation.dart';
+import 'package:edgehead/src/fight/blunt_swing/blunt_swing_situation.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
-import 'package:edgehead/src/fight/thrust/thrust_defense/thrust_defense_situation.dart';
-import 'package:edgehead/src/fight/thrust/thrust_situation.dart';
 
-const String counterThrustHelpMessage =
-    "The opponent is briefly vulnerable to a devastating, precise strike. "
-    "If it doesn't succeed, though, it will throw me off balance.";
+const String counterBluntSwingHelpMessage =
+    "I can deal serious damage when countering "
+    "because my opponent is caught off guard. On the other hand, "
+    "counters require fast reaction and could throw me out of balance.";
 
-ReasonedSuccessChance computeCounterThrust(
+/// Will the actor be able to even execute the counter?
+ReasonedSuccessChance computeCounterBluntSwing(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.4, [
-    const Modifier(30, CombatReason.dexterity),
-    const Penalty(30, CombatReason.targetHasShield),
-    const Modifier(30, CombatReason.balance),
+  return getCombatMoveChance(a, enemy, 0.6, [
+    const Modifier(50, CombatReason.dexterity),
+    const Penalty(50, CombatReason.targetHasShield),
+    const Modifier(50, CombatReason.balance),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
@@ -31,45 +33,38 @@ ReasonedSuccessChance computeCounterThrust(
   ]);
 }
 
-EnemyTargetAction counterThrustBuilder() => StartDefensibleAction(
-      name: "CounterThrust",
+EnemyTargetAction counterBluntSwingBuilder() => StartDefensibleAction(
+      name: "CounterSlash",
       combatCommandType: CombatCommandType.reaction,
-      commandPathTail: "thrust at <object>",
-      helpMessage: counterThrustHelpMessage,
-      applyStart: counterThrustReportStart,
-      applyShortCircuit: counterThrustShortCircuitFailure,
+      commandPathTail: "swing back at <object>",
+      helpMessage: counterBluntSwingHelpMessage,
+      applyStart: counterBluntSwingReportStart,
+      applyShortCircuit: counterBluntSwingShortCircuitFailure,
       isApplicable: (a, sim, w, enemy) =>
-          a.currentDamageCapability.isThrusting &&
+          a.currentDamageCapability.isBlunt &&
           !a.isOnGround &&
           !a.anatomy.isBlind,
-      mainSituationBuilder: (a, sim, w, enemy) =>
-          createThrustSituation(w.randomInt(), a, enemy,
-              designation: w.randomChoose([
-                BodyPartDesignation.torso,
-                BodyPartDesignation.primaryArm,
-                BodyPartDesignation.leftEye,
-                BodyPartDesignation.rightEye,
-              ])),
+      mainSituationBuilder: (a, sim, w, enemy) => createBluntSwingSituation(
+          w.randomInt(), a, enemy,
+          designation: BodyPartDesignation.head),
       defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
-          createThrustDefenseSituation(
+          createBluntSwingDefenseSituation(
               w.randomInt(), a, enemy, predetermination),
-      successChanceGetter: computeCounterThrust,
+      successChanceGetter: computeCounterBluntSwing,
       rerollable: true,
       rerollResource: Resource.stamina,
       rollReasonTemplate: "will <subject> hit <objectPronoun>?",
-      // This is a reaction to an attack.
+      // This is a reaction to a slash.
       isProactive: false,
     );
 
-void counterThrustReportStart(Actor a, Simulation sim, WorldStateBuilder w,
+void counterBluntSwingReportStart(Actor a, Simulation sim, WorldStateBuilder w,
         Storyline s, Actor enemy, Situation mainSituation) =>
-    a.report(s, "<subject> thrust<s> <object2> at <object>",
-        object: enemy, object2: a.currentWeapon);
+    a.report(s, "<subject> swing<s> back");
 
-void counterThrustShortCircuitFailure(Actor a, Simulation sim,
+void counterBluntSwingShortCircuitFailure(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation situation) {
-  a.report(s, "<subject> tr<ies> to thrust <object2> at <object>",
-      object: enemy, object2: a.currentWeapon);
+  a.report(s, "<subject> tr<ies> to swing back");
   a.report(s, "<subject> {go<es> wide|miss<es>}", but: true, negative: true);
   if (a.pose > Pose.offBalance) {
     w.updateActorById(a.id, (b) => b..pose = Pose.offBalance);

@@ -105,11 +105,12 @@ class FinishBluntSwing extends OtherActorAction {
       a.report(
           s,
           "<subject> {hit<s>|land<s> <subject's> swing at} "
-          "<object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.victim,
+          "<objectOwner's> <object>",
+          objectOwner: result.victim,
+          object: result.touchedPart,
           positive: true,
           actionThread: thread);
+      s.add('something cracks');
       killHumanoid(context, result.victim.id);
     }
     return "${a.name} blunt-swings"
