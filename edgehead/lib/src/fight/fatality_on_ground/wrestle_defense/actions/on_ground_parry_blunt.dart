@@ -9,7 +9,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 
-ReasonedSuccessChance computeOnGroundParry(
+ReasonedSuccessChance computeOnGroundParryBlunt(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.5, [
     const Modifier(70, CombatReason.dexterity),
@@ -18,10 +18,10 @@ ReasonedSuccessChance computeOnGroundParry(
   ]);
 }
 
-class OnGroundParry extends OtherActorAction {
-  static final OnGroundParry singleton = OnGroundParry();
+class OnGroundParryBlunt extends OtherActorAction {
+  static final OnGroundParryBlunt singleton = OnGroundParryBlunt();
 
-  static const String className = "OnGroundParry";
+  static const String className = "OnGroundParryBlunt";
 
   @override
   final bool isAggressive = false;
@@ -90,13 +90,14 @@ class OnGroundParry extends OtherActorAction {
       Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeOnGroundParry(a, sim, w, enemy));
+        .or(computeOnGroundParryBlunt(a, sim, w, enemy));
   }
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, Actor enemy) =>
       !a.anatomy.isBlind &&
-      enemy.currentDamageCapability.isSlashing &&
-      a.currentDamageCapability.type.canParrySlash;
+      enemy.currentDamageCapability.isBlunt &&
+      enemy.currentDamageCapability.length >= 2 &&
+      a.currentDamageCapability.type.canParryBlunt;
 }

@@ -19,6 +19,7 @@ import 'package:edgehead/src/fight/counter_attack/actions/counter_tackle.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/actions/finish_break_neck.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/actions/finish_crack_skull.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/wrestle_defense/actions/evade_on_ground.dart';
+import 'package:edgehead/src/fight/fatality_on_ground/wrestle_defense/actions/on_ground_parry_blunt.dart';
 import 'package:edgehead/src/fight/feint/actions/finish_feint.dart';
 import 'package:edgehead/src/fight/feint/feint_defense/actions/counter_feint.dart';
 import 'package:edgehead/src/fight/feint/feint_defense/actions/withstand_feint.dart';

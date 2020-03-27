@@ -117,6 +117,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'ShieldBlockBluntSwing.singleton': ShieldBlockBluntSwing.singleton,
   // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/jump_back_from_blunt_swing.dart:
   'JumpBackFromBluntSwing.singleton': JumpBackFromBluntSwing.singleton,
+  // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/on_ground_parry_blunt.dart:
+  'OnGroundParryBlunt.singleton': OnGroundParryBlunt.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,
