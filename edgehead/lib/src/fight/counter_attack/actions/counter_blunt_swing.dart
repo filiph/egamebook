@@ -24,6 +24,7 @@ ReasonedSuccessChance computeCounterBluntSwing(
     const Modifier(50, CombatReason.dexterity),
     const Penalty(50, CombatReason.targetHasShield),
     const Modifier(50, CombatReason.balance),
+    const Modifier(50, CombatReason.height),
     const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
     const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
@@ -34,7 +35,7 @@ ReasonedSuccessChance computeCounterBluntSwing(
 }
 
 EnemyTargetAction counterBluntSwingBuilder() => StartDefensibleAction(
-      name: "CounterSlash",
+      name: "CounterBluntSwing",
       combatCommandType: CombatCommandType.reaction,
       commandPathTail: "swing back at <object>",
       helpMessage: counterBluntSwingHelpMessage,
@@ -42,7 +43,6 @@ EnemyTargetAction counterBluntSwingBuilder() => StartDefensibleAction(
       applyShortCircuit: counterBluntSwingShortCircuitFailure,
       isApplicable: (a, sim, w, enemy) =>
           a.currentDamageCapability.isBlunt &&
-          !a.isOnGround &&
           !a.anatomy.isBlind,
       mainSituationBuilder: (a, sim, w, enemy) => createBluntSwingSituation(
           w.randomInt(), a, enemy,
