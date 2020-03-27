@@ -45,14 +45,14 @@ const List<CombatReason> reasonsRequiringPenalties = [
 /// Example:
 ///
 ///    return getCombatMoveChance(a, enemy, 0.5, [
-///      const Bonus(100, CombatReason.dexterity),
+///      const Bonus(90, CombatReason.dexterity),
 ///      const Bonus(30, CombatReason.balance),
 ///    ]);
 ///
 /// The example above defines a combat move that has 50% chance of success when
 /// [actor] and [performer] have the same dexterity and the actor is in combat
 /// stance. The difference in dexterity of the two actors can nudge
-/// the success chance all the way (`100`) up to 100%, or down to 0%. The
+/// the success chance almost all the way (`90`) up to 100%, or down to 0%. The
 /// combat stance can change the final success chance, too, but only by 30%.
 ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
     Actor target, double base, List<Modifier<CombatReason>> modifiers) {

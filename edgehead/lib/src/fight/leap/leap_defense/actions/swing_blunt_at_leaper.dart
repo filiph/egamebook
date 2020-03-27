@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/fractal_stories/anatomy/deal_blunt_damage.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -9,19 +10,19 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
+import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
 
-class ImpaleLeaper extends EnemyTargetAction {
-  static final ImpaleLeaper singleton = ImpaleLeaper();
+class SwingBluntAtLeaper extends EnemyTargetAction {
+  static final SwingBluntAtLeaper singleton = SwingBluntAtLeaper();
 
-  static const String className = "ImpaleLeaper";
+  static const String className = "SwingBluntAtLeaper";
 
   @override
-  final String helpMessage = "I can move my weapon to point at "
-      "the attacker. If successful, the weapon will pierce the attacker "
-      "with the force of his own leap.";
+  final String helpMessage = "I can swing at the enemy as they are leaping at "
+      "me, exposed.";
 
   @override
   final bool isAggressive = false;
@@ -36,13 +37,13 @@ class ImpaleLeaper extends EnemyTargetAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  List<String> get commandPathTemplate => ["impale"];
+  List<String> get commandPathTemplate => ["swing"];
 
   @override
   String get name => className;
 
   @override
-  String get rollReasonTemplate => "will <subject> impale <objectPronoun>?";
+  String get rollReasonTemplate => "will <subject> hit <objectPronoun>?";
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {
@@ -51,11 +52,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, leapSituationName);
-    a.report(
-        s,
-        "<subject> tr<ies> to {move|swing|shift} "
-        "<object2> between <subjectPronounSelf> "
-        "and <object>",
+    a.report(s, "<subject> tr<ies> to swing <object2> at <object>",
         object: enemy,
         object2: a.currentWeaponOrBodyPart,
         actionThread: thread);
@@ -72,7 +69,7 @@ class ImpaleLeaper extends EnemyTargetAction {
               but: true, actionThread: thread));
     }
     w.popSituation(context);
-    return "${a.name} fails to impale ${enemy.name}";
+    return "${a.name} fails to swing blunt weapon at ${enemy.name}";
   }
 
   @override
@@ -82,54 +79,75 @@ class ImpaleLeaper extends EnemyTargetAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final thread = getThreadId(sim, w, leapSituationName);
-    a.report(
-        s,
-        "<subject> {move<s>|swing<s>|shift<s>} "
-        "<object2> between <subjectPronounSelf> "
-        "and <object>",
+    a.report(s, "<subject> swing<s> <object2> at <object>",
         object: enemy,
         object2: a.currentWeaponOrBodyPart,
         positive: true,
         actionThread: thread);
     enemy.report(s, "<subject> {leap<s>|run<s>|lunge<s>} right into it",
         negative: true);
-    final damage = enemy.isInvincible ? 0 : 1;
-    w.updateActorById(
-        enemy.id,
-        (b) => b
-          ..hitpoints -= damage
-          ..pose = Pose.onGround);
-    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
-    final updatedEnemy = w.getActorById(enemy.id);
-    bool killed = !updatedEnemy.isAnimated && !enemy.isInvincible;
+
+    const damage = 0;
+    final result = executeBluntHit(
+        enemy,
+        a.currentWeaponOrBodyPart,
+        enemy.isInvincible
+            ? BodyPartDesignation.torso
+            : BodyPartDesignation.head);
+
+    w.updateActorById(enemy.id, (b) => b.replace(result.victim));
+    bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
     if (!killed) {
-      a.currentWeaponOrBodyPart.report(
+      a.report(
           s,
-          "<subject> {cut<s> into|pierce<s>|go<es> into} "
-          "<object's> flesh",
-          object: updatedEnemy);
-      updatedEnemy.report(s, "<subject> fall<s> to the ground");
-      inflictPain(context, enemy.id, damage,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
+          "<subject> hit<s> <object's> "
+          "${result.touchedPart.randomDesignation}",
+          object: result.victim,
+          positive: true,
+          actionThread: thread);
+      if (result.disabled &&
+          (result.touchedPart.function == BodyPartFunction.damageDealing ||
+              result.touchedPart.function == BodyPartFunction.mobile ||
+              result.touchedPart.function == BodyPartFunction.wielding)) {
+        assert(result.touchedPart.designation != BodyPartDesignation.teeth);
+        result.touchedPart.report(s, "<subject> go<es> limp",
+            negative: true, actionThread: thread);
+      }
+      if (result.willDropCurrentWeapon) {
+        final weapon = dropCurrentWeapon(w, result.victim.id);
+        result.victim.report(s, "<subject> drop<s> <object>",
+            object: weapon, negative: true, actionThread: thread);
+      }
+      inflictPain(context, result.victim.id, damage, result.touchedPart);
+      if (result.wasBlinding) {
+        result.victim.report(s, "<subject> <is> now blind", negative: true);
+      }
     } else {
-      a.currentWeaponOrBodyPart.report(
+      a.report(
           s,
-          "<subject> {go<es> right through|completely impale<s>|"
-          "bore<s> through} <object's> {body|chest|stomach|neck}",
-          object: updatedEnemy);
-      updatedEnemy.report(s, "<subject> go<es> down", negative: true);
-      killHumanoid(context, enemy.id);
+          "<subject> {hit<s>|land<s> <subject's> swing at} "
+          "<objectOwner's> <object>",
+          objectOwner: result.victim,
+          object: result.touchedPart,
+          positive: true,
+          actionThread: thread);
+      s.add('something cracks');
+      killHumanoid(context, result.victim.id);
     }
 
+    w.updateActorById(enemy.id, (b) => b.pose = Pose.onGround);
+    // Mark this as "fell to ground" because the leap didn't go well.
+    w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
+
     w.popSituationsUntil("FightSituation", context);
-    return "${a.name} impales ${enemy.name}";
+    return "${a.name} swings blunt weapon at ${enemy.name}";
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final chance = getCombatMoveChance(a, enemy, 0.4, [
-      const Modifier(50, CombatReason.dexterity),
+    final chance = getCombatMoveChance(a, enemy, 0.2, [
+      const Modifier(40, CombatReason.dexterity),
       const Modifier(30, CombatReason.height),
       const Modifier(20, CombatReason.balance),
       const Bonus(30, CombatReason.targetHasOneLegDisabled),
@@ -143,5 +161,5 @@ class ImpaleLeaper extends EnemyTargetAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      !a.anatomy.isBlind && a.currentDamageCapability.isThrusting;
+      !a.anatomy.isBlind && a.currentDamageCapability.isBlunt;
 }

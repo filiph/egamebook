@@ -6,6 +6,19 @@ import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 
+/// All body parts can be bruised by a blunt weapon, but the only hitting
+/// the following body parts will result in reduced hitpoints or disabling
+/// of a body part.
+///
+/// For example, with a branch attack, hitting the legs will make the enemy
+/// fall down. But hitting the head will actually release the head's hitpoints,
+/// leading to death.
+const bodyPartsVulnerableToBluntHits = [
+  BodyPartDesignation.head,
+  BodyPartDesignation.neck,
+  BodyPartDesignation.teeth,
+];
+
 WeaponAssaultResult executeBluntHit(
     Actor target, Item weapon, BodyPartDesignation designation) {
   assert(target.hitpoints > 0);
@@ -27,15 +40,21 @@ WeaponAssaultResult _addMajorBluntWound(
     Actor target, BodyPart designated, Item weapon) {
   assert(designated.hitpoints >= 0);
 
-  if (designated.hitpoints == 1 && !target.isInvincible) {
+  final vulnerableBodyPart =
+      bodyPartsVulnerableToBluntHits.contains(designated.designation);
+
+  if (vulnerableBodyPart && designated.hitpoints == 1 && !target.isInvincible) {
     return _disableByBluntHit(target, designated, weapon);
   }
 
   final ActorBuilder victim = target.toBuilder();
 
-  // When a body part is vital, each major blunt hit removes
-  // actor's hitpoint.
-  if (designated.isVital && designated.isAnimated && !target.isInvincible) {
+  // When a body part is vital and vulnerable to blunt hits, each major blunt
+  // hit removes actor's hitpoint.
+  if (vulnerableBodyPart &&
+      designated.isVital &&
+      designated.isAnimated &&
+      !target.isInvincible) {
     victim.hitpoints -= 1;
   }
 
@@ -50,7 +69,7 @@ WeaponAssaultResult _addMajorBluntWound(
         return;
       }
       b.bluntHitsCount += 1;
-      if (b.hitpoints > 0 && !target.isInvincible) {
+      if (vulnerableBodyPart && b.hitpoints > 0 && !target.isInvincible) {
         b.hitpoints -= 1;
       }
     },
@@ -73,6 +92,7 @@ WeaponAssaultResult _addMajorBluntWound(
 WeaponAssaultResult _disableByBluntHit(
     Actor target, BodyPart bodyPart, Item weapon) {
   final ActorBuilder victim = target.toBuilder();
+
   if (bodyPart.isVital || bodyPart.hasVitalDescendants) {
     victim.hitpoints = 0;
   }

@@ -26,6 +26,7 @@ import 'package:edgehead/src/fight/feint/feint_defense/actions/withstand_feint.d
 import 'package:edgehead/src/fight/leap/actions/finish_leap.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/actions/dodge_leap.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/actions/impale_leaper.dart';
+import 'package:edgehead/src/fight/leap/leap_defense/actions/swing_blunt_at_leaper.dart';
 import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
 import 'package:edgehead/src/fight/punch/actions/finish_punch.dart';

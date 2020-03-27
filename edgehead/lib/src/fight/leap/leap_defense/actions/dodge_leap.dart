@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
+import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 class DodgeLeap extends OtherActorAction {
@@ -78,6 +79,7 @@ class DodgeLeap extends OtherActorAction {
     enemy.report(s, "<subject> {crash<es> to|fall<s> to|hit<s>} the $ground",
         negative: true);
     w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
+    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
     w.popSituationsUntil("FightSituation", context);
     return "${a.name} dodges ${enemy.name}";
   }
