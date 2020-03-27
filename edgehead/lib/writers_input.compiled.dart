@@ -548,7 +548,7 @@ final Room godsLair = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Two orcs, a berserker and a captain, watch you approach in amazement.\n\n"You!" the captain bellows. "Stand still so I can chop off your head."\n',
+          'Two orcs, a berserker and a captain, watch me approach in amazement.\n\n"You!" the captain bellows. "Stand still so I can chop off your head."\n',
           wholeSentence: true);
     },
     (ActionContext c) {

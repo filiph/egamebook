@@ -11,7 +11,7 @@ FLAGS: $IDLE
 POS: 35, 42
 
 FIRST_DESCRIPTION: 
-Two orcs, a berserker and a captain, watch you approach in amazement.
+Two orcs, a berserker and a captain, watch me approach in amazement.
 
 "You!" the captain bellows. "Stand still so I can chop off your head."
 
