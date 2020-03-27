@@ -50,7 +50,11 @@ class EvadeOnGround extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> tr<ies> to {dodge|evade|break free}");
+    if (enemy.isOnGround) {
+      a.report(s, "<subject> tr<ies> to {evade|break free}");
+    } else {
+      a.report(s, "<subject> tr<ies> to {dodge|roll away}");
+    }
     Randomly.run(
         () => a.report(s, "<subject> {can't|fail<s>}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
@@ -64,7 +68,11 @@ class EvadeOnGround extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> {evade<s>|break<s> free}", positive: true);
+    if (enemy.isOnGround) {
+      a.report(s, "<subject> {evade<s>|break<s> free}", positive: true);
+    } else {
+      a.report(s, "<subject> {dodge<s>|roll<s> away}", positive: true);
+    }
     w.popSituationsUntil("FightSituation", context);
     return "${a.name} evades ${enemy.name}";
   }
