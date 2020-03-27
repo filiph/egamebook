@@ -103,8 +103,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'FinishThrustOnGround.singleton': FinishThrustOnGround.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/shield_block_thrust_on_ground.dart:
   'ShieldBlockThrustOnGround.singleton': ShieldBlockThrustOnGround.singleton,
-  // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_gronud.dart:
-  'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
   // From lib/src/fight/blunt_swing/actions/finish_blunt_swing.dart:
   'FinishBluntSwing.singleton': FinishBluntSwing.singleton,
   // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/defensive_parry_blunt_swing.dart:
@@ -121,6 +119,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'OnGroundParryBlunt.singleton': OnGroundParryBlunt.singleton,
   // From lib/src/fight/leap/leap_defense/actions/swing_blunt_at_leaper.dart:
   'SwingBluntAtLeaper.singleton': SwingBluntAtLeaper.singleton,
+  // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_ground.dart:
+  'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

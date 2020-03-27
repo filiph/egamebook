@@ -2,7 +2,7 @@ library stranded.fight.thrust_defense_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
-import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_gronud.dart';
+import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_ground.dart';
 import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/shield_block_thrust_on_ground.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 

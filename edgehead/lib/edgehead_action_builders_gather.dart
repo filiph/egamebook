@@ -55,7 +55,7 @@ import 'package:edgehead/src/fight/thrust/thrust_defense/actions/dodge_thrust.da
 import 'package:edgehead/src/fight/thrust/thrust_defense/actions/jump_back.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart';
 import 'package:edgehead/src/fight/thrust_on_ground/actions/finish_thrust_on_ground.dart';
-import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_gronud.dart';
+import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_ground.dart';
 import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/shield_block_thrust_on_ground.dart';
 import 'package:egamebook_builder/instance_serializer.dart';
 
