@@ -47,13 +47,24 @@ EnemyTargetAction startCrackSkullOnGroundBuilder() => StartDefensibleAction(
 void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation mainSituation) {
   final weapon = a.currentWeaponOrBodyPart;
-  a.report(
-      s,
-      "<subject> throw<s> <subjectPronounSelf> {on|upon} <object> "
-      "with <object2> held high",
-      object: enemy,
-      object2: weapon,
-      positive: true,
-      endSentence: true);
-  w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
+  if (weapon.damageCapability.length <= 1) {
+    a.report(
+        s,
+        "<subject> throw<s> <subjectPronounSelf> {on|upon} <object> "
+        "with <object2> held high",
+        object: enemy,
+        object2: weapon,
+        positive: true,
+        endSentence: true);
+    w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
+  } else {
+    a.report(
+        s,
+        "<subject> swing<s> at <object> "
+        "with <subject's> <object2>",
+        object: enemy,
+        object2: weapon,
+        positive: true,
+        endSentence: true);
+  }
 }
