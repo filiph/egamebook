@@ -19,6 +19,8 @@ ReasonedSuccessChance computeCrackSkullOnGroundChance(
         Actor a, Simulation sim, WorldState w, Actor enemy) =>
     getCombatMoveChance(a, enemy, 0.6, [
       const Modifier(50, CombatReason.dexterity),
+      Penalty(a.currentDamageCapability.length >= 2 ? 40 : 90,
+          CombatReason.targetHasWeapon),
       const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
       const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
       const Bonus(50, CombatReason.targetHasOneEyeDisabled),
@@ -31,10 +33,9 @@ EnemyTargetAction startCrackSkullOnGroundBuilder() => StartDefensibleAction(
       commandPathTail: "crack skull",
       helpMessage: startCrackSkullOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>
-          (a.currentWeaponOrBodyPart?.damageCapability?.isBlunt ?? false) &&
+          a.currentDamageCapability.isBlunt &&
           !a.anatomy.isBlind &&
-          enemy.isOnGround &&
-          enemy.holdsNoWeapon,
+          enemy.isOnGround,
       applyStart: startBreakNeckOnGroundReportStart,
       mainSituationBuilder: createFatalityOnGroundSituation,
       defenseSituationBuilder: createOnGroundWrestleDefenseSituation,
@@ -47,7 +48,7 @@ EnemyTargetAction startCrackSkullOnGroundBuilder() => StartDefensibleAction(
 void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation mainSituation) {
   final weapon = a.currentWeaponOrBodyPart;
-  if (weapon.damageCapability.length <= 1) {
+  if (a.currentDamageCapability.length <= 1) {
     a.report(
         s,
         "<subject> throw<s> <subjectPronounSelf> {on|upon} <object> "

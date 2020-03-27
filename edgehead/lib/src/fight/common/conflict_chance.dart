@@ -25,6 +25,7 @@ const List<CombatReason> reasonsRequiringModifiers = [
 const List<CombatReason> reasonsRequiringPenalties = [
   CombatReason.performerHasLimitedMobility,
   CombatReason.performerHasLimitedVision,
+  CombatReason.targetHasWeapon,
   CombatReason.targetHasShield,
 ];
 
@@ -159,6 +160,13 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
     case CombatReason.performerHasLimitedVision:
       final percent = _fractionDisabled(target, BodyPartFunction.vision);
       return -percent;
+    case CombatReason.targetHasWeapon:
+      if (target.currentWeapon != null) {
+        return -1.0;
+      } else {
+        return 0.0;
+      }
+      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.targetHasShield:
       if (target.currentShield != null) {
         return -1.0;
@@ -280,6 +288,12 @@ enum CombatReason {
 
   /// The performer of this action cannot move well.
   performerHasLimitedMobility,
+
+  /// The fact that the target doesn't have (or can't use) a weapon to deflect
+  /// or foil the move.
+  ///
+  /// This is always a [Penalty] to the attacker.
+  targetHasWeapon,
 
   /// The fact that the target doesn't have (or can't use) a shield to deflect
   /// or foil the move.
