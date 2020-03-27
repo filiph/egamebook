@@ -52,14 +52,9 @@ Actor raiseDead(Actor necromancer, Actor corpse) {
 
   // Heal all vital parts.
   deepReplaceBodyPart(
-    corpseBuilder.build(),
     corpseBuilder,
     (part) => part.isVital,
-    (b, isDescendant) {
-      if (isDescendant) {
-        // Ignore descendants, they aren't affected.
-        return;
-      }
+    (b) {
       if (b.hitpoints > 0) return;
       b.hitpoints = 1;
     },

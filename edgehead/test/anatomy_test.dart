@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -13,6 +14,49 @@ import 'package:test/test.dart';
 import 'src/test_random.dart';
 
 void main() {
+  group("deepReplaceBodyPart", () {
+    test("damages head correctly", () {
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
+      final orcBuilder = orc.toBuilder();
+
+      deepReplaceBodyPart(
+          orcBuilder,
+          (p) => p.designation == BodyPartDesignation.head,
+          (b) => b.hitpoints = 0);
+
+      final newOrc = orcBuilder.build();
+
+      expect(
+        newOrc.anatomy.findByDesignation(BodyPartDesignation.head).hitpoints,
+        0,
+      );
+    });
+
+    test("heals head correctly", () {
+      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
+      final orcBuilder = orc.toBuilder();
+
+      // Damage first
+      deepReplaceBodyPart(
+          orcBuilder,
+          (p) => p.designation == BodyPartDesignation.head,
+          (b) => b.hitpoints = 0);
+
+      // Heal next
+      deepReplaceBodyPart(
+          orcBuilder,
+          (p) => p.designation == BodyPartDesignation.head,
+          (b) => b.hitpoints = 1);
+
+      final newOrc = orcBuilder.build();
+
+      expect(
+        newOrc.anatomy.findByDesignation(BodyPartDesignation.head).hitpoints,
+        greaterThan(0),
+      );
+    });
+  });
+
   group("executeSlashingHit", () {
     test("decapitating kills", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");

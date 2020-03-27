@@ -2,21 +2,28 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 
 /// Walks body parts from torso down the anatomy-tree, and calls [update]
-/// on each [BodyPart] that satisfies [whereFilter] or which is below
-/// such a body part in the hierarchy.
+/// with each [BodyPart] that satisfies [whereFilter].
+///
+/// If [descendantUpdate] is specified, then it will be called with all
+/// descendants of the above body parts in the hierarchy (unless they
+/// themselves pass [whereFilter]).
 ///
 /// This is complex because we're dealing with an immutable tree of built
 /// values that need to be updated.
-void deepReplaceBodyPart(Actor actor, ActorBuilder builder,
-    bool whereFilter(BodyPart bodyPart), BodyPartUpdater update) {
-  final torsoAfflicted = whereFilter(actor.anatomy.torso);
+void deepReplaceBodyPart(ActorBuilder builder,
+    bool whereFilter(BodyPart bodyPart), BodyPartUpdater update,
+    {BodyPartUpdater descendantUpdate}) {
+  final actor = builder.build();
 
-  if (torsoAfflicted) {
-    update(builder.anatomy.torso, false);
+  // If the torso passes `whereFilter`, then we need to update that first.
+  // _updateWalker below only works on children of the given BodyPartBuilder.
+  final torsoPassesFilter = whereFilter(actor.anatomy.torso);
+  if (torsoPassesFilter) {
+    update(builder.anatomy.torso);
   }
 
   _updateWalker(builder.anatomy.torso.build(), builder.anatomy.torso,
-      whereFilter, update, torsoAfflicted);
+      whereFilter, update, descendantUpdate, torsoPassesFilter);
 }
 
 void _updateWalker(
@@ -24,23 +31,26 @@ void _updateWalker(
     BodyPartBuilder builder,
     bool whereFilter(BodyPart bodyPart),
     BodyPartUpdater update,
-    bool afflictedDescendant) {
+    BodyPartUpdater descendantUpdate,
+    bool hasAfflictedParent) {
   // ListBuilder.map updates the list in place.
   builder.children.map((child) {
-    final afflicted = whereFilter(child);
+    final isAfflicted = whereFilter(child);
     final updated = child.toBuilder();
-    _updateWalker(
-        child, updated, whereFilter, update, afflictedDescendant || afflicted);
 
-    if (afflicted || afflictedDescendant) {
-      update(updated, afflictedDescendant);
+    // Update children recursively.
+    _updateWalker(child, updated, whereFilter, update, descendantUpdate,
+        hasAfflictedParent || isAfflicted);
+
+    if (isAfflicted) {
+      update(updated);
+    } else if (descendantUpdate != null && hasAfflictedParent) {
+      descendantUpdate(updated);
     }
 
     return updated.build();
   });
 }
 
-/// An update function that modifies [b]. It also takes [afflictedDescendant],
-/// which is `true` when the body part is a descendant of the target body part.
-typedef BodyPartUpdater = void Function(
-    BodyPartBuilder b, bool afflictedDescendant);
+/// An update function that modifies [b].
+typedef BodyPartUpdater = void Function(BodyPartBuilder b);

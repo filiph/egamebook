@@ -42,8 +42,7 @@ EnemyTargetAction counterBluntSwingBuilder() => StartDefensibleAction(
       applyStart: counterBluntSwingReportStart,
       applyShortCircuit: counterBluntSwingShortCircuitFailure,
       isApplicable: (a, sim, w, enemy) =>
-          a.currentDamageCapability.isBlunt &&
-          !a.anatomy.isBlind,
+          a.currentDamageCapability.isBlunt && !a.anatomy.isBlind,
       mainSituationBuilder: (a, sim, w, enemy) => createBluntSwingSituation(
           w.randomInt(), a, enemy,
           designation: BodyPartDesignation.head),

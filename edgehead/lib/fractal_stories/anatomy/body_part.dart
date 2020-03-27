@@ -235,6 +235,12 @@ abstract class BodyPart extends Object
       yield* child.getDescendantParts();
     }
   }
+
+  @override
+  String toString() => 'BodyPart<$name, hp=$hitpoints, '
+      '${isVital ? 'vital, ' : ''}'
+      '${hasVitalDescendants ? 'vitalDescendants, ' : ''}'
+      'children: [${children.map((c) => c.name).join(', ')}]>';
 }
 
 /// This uniquely identifies a [BodyPart] in a body.

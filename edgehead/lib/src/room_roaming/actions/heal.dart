@@ -61,12 +61,10 @@ class HealAction extends Action<Actor> {
 
     final patientBuilder = patient.toBuilder();
     deepReplaceBodyPart(
-      patient,
       patientBuilder,
       (part) => part.designation == BodyPartDesignation.torso,
-      (b, isDescendant) {
-        b.hitpoints = b.maxHitpoints;
-      },
+      (b) => b.hitpoints = b.maxHitpoints,
+      descendantUpdate: (b) => b.hitpoints = b.maxHitpoints,
     );
 
     w.updateActorById(patient.id, (b) => b.replace(patientBuilder.build()));

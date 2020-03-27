@@ -60,14 +60,9 @@ WeaponAssaultResult _addMajorBluntWound(
 
   // Add a major blunt hit to the body part that was hit.
   deepReplaceBodyPart(
-    target,
     victim,
     (part) => part.id == designated.id,
-    (b, isDescendant) {
-      if (isDescendant) {
-        // Ignore descendants, they aren't affected.
-        return;
-      }
+    (b) {
       b.bluntHitsCount += 1;
       if (vulnerableBodyPart && b.hitpoints > 0 && !target.isInvincible) {
         b.hitpoints -= 1;
@@ -100,14 +95,9 @@ WeaponAssaultResult _disableByBluntHit(
   bool startedBlind = target.anatomy.isBlind;
 
   deepReplaceBodyPart(
-    target,
     victim,
     (part) => part.id == bodyPart.id,
-    (b, isDescendant) {
-      if (isDescendant) {
-        // Ignore descendants, they aren't affected.
-        return;
-      }
+    (b) {
       b.bluntHitsCount += 1;
       b.hitpoints = 0;
     },

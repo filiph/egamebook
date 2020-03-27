@@ -533,32 +533,6 @@ class _$BodyPart extends BodyPart {
             swingSurfaceRight.hashCode),
         thrustSurface.hashCode));
   }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper('BodyPart')
-          ..add('bluntHitsCount', bluntHitsCount)
-          ..add('children', children)
-          ..add('damageCapability', damageCapability)
-          ..add('designation', designation)
-          ..add('firstOwnerId', firstOwnerId)
-          ..add('function', function)
-          ..add('hitpoints', hitpoints)
-          ..add('id', id)
-          ..add('isActive', isActive)
-          ..add('isSeverable', isSeverable)
-          ..add('isSevered', isSevered)
-          ..add('isVital', isVital)
-          ..add('majorCutsCount', majorCutsCount)
-          ..add('maxHitpoints', maxHitpoints)
-          ..add('minorCutsCount', minorCutsCount)
-          ..add('name', name)
-          ..add('randomDesignation', randomDesignation)
-          ..add('swingSurfaceLeft', swingSurfaceLeft)
-          ..add('swingSurfaceRight', swingSurfaceRight)
-          ..add('thrustSurface', thrustSurface))
-        .toString();
-  }
 }
 
 class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
