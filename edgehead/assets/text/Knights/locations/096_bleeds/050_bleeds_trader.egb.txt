@@ -41,8 +41,6 @@ FOR_LOCATION: $bleeds_trader_hut
 
 PREREQUISITES: w.actionNeverUsed(name)
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
-
 COMPLETE_SUCCESS_DESCRIPTION:
 The trader shrugs.
 
@@ -75,8 +73,6 @@ PREREQUISITES:
 w.actionNeverUsed(name)
 &&
 w.actionHasBeenPerformed("bleeds_trader_greet")
-
-COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
 The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they're the worst. I fear we won't get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."
@@ -121,8 +117,6 @@ w.actionHasBeenPerformed("bleeds_trader_greet")
 &&
 c.hasHappened(evGoblinCampCleared)
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
-
 COMPLETE_SUCCESS_DESCRIPTION:
 “What happened?”
 
@@ -143,8 +137,6 @@ c.hasLearnedAbout(kbLeroy)
 c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke)
 &&
 !c.hasHappened(evGoblinCampCleared)
-
-COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]

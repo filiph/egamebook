@@ -80,7 +80,8 @@ class GeneratedAction extends GeneratedGameObject {
     Method isApplicableBuilder = _createIsApplicableBuilder(forLocation);
     classBuilder.methods.add(isApplicableBuilder);
 
-    var successChance = parsePercent(_map['COMPLETE_SUCCESS_PROBABILITY']);
+    var successChance =
+        parsePercent(_map['COMPLETE_SUCCESS_PROBABILITY'] ?? '100%');
 
     Method applySuccessBuilder =
         _createApplySuccessBuilder(successChance, className);

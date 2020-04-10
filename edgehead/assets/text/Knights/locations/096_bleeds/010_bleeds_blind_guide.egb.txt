@@ -19,8 +19,6 @@ w.actionNeverUsed(name)
 &&
 c.hasLearnedAbout(kbBlindGuide)
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
-
 COMPLETE_SUCCESS_DESCRIPTION:
 I come over to the blind man and introduce myself.
 
@@ -53,8 +51,6 @@ PREREQUISITES:
 w.actionNeverUsed(name)
 &&
 w.actionHasBeenPerformed("bleeds_blind_guide_greet")
-
-COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
 "So you want to explore the Pyramid."
@@ -97,8 +93,6 @@ PREREQUISITES:
 w.actionNeverUsed(name)
 &&
 w.actionHasBeenPerformed("bleeds_blind_guide_greet")
-
-COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
 "Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It's like the goblins are being drawn here."

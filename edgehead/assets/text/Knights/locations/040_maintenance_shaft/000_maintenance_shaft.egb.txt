@@ -26,7 +26,6 @@ w.actionNeverUsed(name)
 &&
 !c.hasHappened(evKarlKilled)
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 Terrible roar and thrashing comes from beyond the gate.
 
@@ -51,7 +50,6 @@ w.actionNeverUsed(name)
 &&
 !c.hasHappened(evKarlGuardsKilled)
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 The two are laughing.
 

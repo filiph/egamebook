@@ -55,7 +55,6 @@ w.actionNeverUsed(name)
 &&
 c.isInIdleRoom
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 I take the star. It fits into my palm. It says "Lair of God".
 

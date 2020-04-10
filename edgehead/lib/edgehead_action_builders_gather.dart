@@ -61,6 +61,14 @@ import 'package:egamebook_builder/instance_serializer.dart';
 
 part 'edgehead_action_builders_gather.gathered.dart';
 
+/// Some [Situation]s aren't defined as separate classes, but as instances.
+/// For example, `"FeintSituation"` is an instance of [AttackerSituation].
+/// It's constructed with [AttackerSituation.initialized], with [FinishFeint]
+/// (the only available [Action]) added to that constructor.
+///
+/// This means that we need to be able to serialize actions such as
+/// [FinishFeint] in order to serialize some [Situation]s. And we _do_ need
+/// to serialize situations.
 @GatherInstancesFrom(['lib/src/fight/**/actions/*.dart'],
     additionalTypes: [OtherActorAction, EnemyTargetAction])
 final InstanceSerializer<Action> actionSerializer = _$actionSerializer;

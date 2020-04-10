@@ -37,7 +37,6 @@ FOR_LOCATION: $goblin_skirmish_sneak
 PREREQUISITES:
 w.actionNeverUsed(name)
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 "Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."
 
@@ -56,7 +55,6 @@ FOR_LOCATION: $goblin_skirmish_sneak
 PREREQUISITES:
 w.actionNeverUsed(name)
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 [We] find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don't see, but looking at the size of the camp ground, it's not likely.
 
@@ -69,7 +67,6 @@ w.actionNeverUsed(name)
 &&
 w.actionHasBeenPerformed("listen_to_them_arguing")
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 The higher ranked goblin takes something out of a leather bag and shoves it into the other's face.
 
@@ -90,6 +87,5 @@ w.actionNeverUsed(name)
 &&
 w.actionHasBeenPerformed("listen_continue")
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
 COMPLETE_SUCCESS_DESCRIPTION:
 The two goblins don't speak anymore. They each look into the fire.

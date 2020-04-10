@@ -4,8 +4,6 @@ COMMAND: Take dagger
 
 FOR_LOCATION: $start_enter_goblin
 
-COMPLETE_SUCCESS_PROBABILITY: 100%
-
 COMPLETE_SUCCESS_DESCRIPTION:
 I take the dagger.
 
@@ -23,8 +21,6 @@ COMMAND: “You are going to be fine.”
 // TODO: replace with something more interesting, like "give me the sword instead"
 
 FOR_LOCATION: $start_enter_goblin
-
-COMPLETE_SUCCESS_PROBABILITY: 100%
 
 COMPLETE_SUCCESS_DESCRIPTION:
 Tamara shrugs and puts the dagger in her belt.
