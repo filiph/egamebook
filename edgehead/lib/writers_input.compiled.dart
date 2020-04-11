@@ -1162,55 +1162,108 @@ final Approach pyramidEntranceFromStagingArea = Approach(
   s.add('', wholeSentence: true);
 });
 final talkToMiguel2Ink = InkAst([
-  InkParagraphNode((c) => c.outputStoryline.add(
-      """ The male knight raises an eyebrow. "What brings you here?" """.trim(),
-      wholeSentence: true)),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The male knight raises an eyebrow. "What brings you here?"\n',
+        wholeSentence: true);
+  }),
   InkForkNode([
     InkChoiceNode(
       command: r""" "I seek someone." """.trim(),
       consequence: [
-        InkParagraphNode((c) =>
-            c.outputStoryline.add(""" TBD. """.trim(), wholeSentence: true)),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('TBD.\n', wholeSentence: true);
+        }),
       ],
     ),
     InkChoiceNode(
       command: r""" "I seek knowledge." """.trim(),
       consequence: [
-        InkParagraphNode((c) =>
-            c.outputStoryline.add(""" TBD. """.trim(), wholeSentence: true)),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('TBD.\n', wholeSentence: true);
+        }),
       ],
     ),
     InkChoiceNode(
       command: r""" "That is none of your business." """.trim(),
       consequence: [
-        InkParagraphNode((c) =>
-            c.outputStoryline.add(""" TBD. """.trim(), wholeSentence: true)),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('TBD.\n', wholeSentence: true);
+        }),
       ],
     ),
   ]),
-  InkParagraphNode((c) => c.outputStoryline.add(
-      """ "Oh," the man says, "you would _not_ like to get in. You would like to get out." """
-          .trim(),
-      wholeSentence: true)),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Oh," the man says, "you would _not_ like to get in. You would like to get out."\n',
+        wholeSentence: true);
+  }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((c) => c.outputStoryline.add(
-      """ The woman looks at him with a mix of puzzlement and exasperation, then she turns to me. """
-          .trim(),
-      wholeSentence: true)),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.\n',
+        wholeSentence: true);
+  }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((c) => c.outputStoryline.add(
-      """ "This place is no longer safe. Unless you have business with one of the farmers, you shouldn't go in." """
-          .trim(),
-      wholeSentence: true)),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"This place is no longer safe. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
+        wholeSentence: true);
+  }),
 ]);
 final talkToMiguelGreetingsInk = InkAst([
-  InkParagraphNode((c) => c.outputStoryline
-      .add(""" The knight nods. """.trim(), wholeSentence: true)),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The knight nods.\n', wholeSentence: true);
+  }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((c) => c.outputStoryline.add(
-      """ "Welcome," he says, and there is a bit of sarcasm in his voice. """
-          .trim(),
-      wholeSentence: true)),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Welcome," he says, and there is a bit of sarcasm in his voice.\n',
+        wholeSentence: true);
+  }),
   InkForkNode([
     InkChoiceNode(
       command: r""" "I am [Aren]." """.trim(),
@@ -1221,8 +1274,14 @@ final talkToMiguelGreetingsInk = InkAst([
       consequence: [],
     ),
   ]),
-  InkParagraphNode((c) =>
-      c.outputStoryline.add(""" "Miguel." """.trim(), wholeSentence: true)),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Miguel."\n', wholeSentence: true);
+  }),
 ]);
 
 class TalkToMiguel2 extends RoamingAction {

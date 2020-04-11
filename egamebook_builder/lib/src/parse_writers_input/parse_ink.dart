@@ -1,3 +1,12 @@
+import 'package:code_builder/code_builder.dart';
+import 'package:egamebook_builder/src/parse_writers_input/describer.dart';
+
+final _dartEmitter = DartEmitter();
+
+final _gather = RegExp(r'^[\s\-]$');
+
+final _whitespaceOrStar = RegExp(r'^[\s\*]+');
+
 /// Parses a block of text (with `\n` newlines) and returns the code for
 /// the [InkAst].
 ///
@@ -67,9 +76,11 @@ String parseInk(String name, String text) {
       buf.writeln('InkParagraphNode((c) => '
           'c.outputStoryline.addParagraph()), ');
     }
-    // TODO: use describer here.
-    buf.writeln('InkParagraphNode((c) => '
-        'c.outputStoryline.add(""" $line """.trim(), wholeSentence: true)), ');
+
+    final describer = createDescriber(line);
+    final describerCode = describer.accept(_dartEmitter).toString();
+
+    buf.writeln('InkParagraphNode($describerCode), ');
     previousWasParagraph = true;
   }
 
@@ -84,10 +95,6 @@ String parseInk(String name, String text) {
   buf.writeln(']);');
   return buf.toString();
 }
-
-final _whitespaceOrStar = RegExp(r'^[\s\*]+');
-
-final _gather = RegExp(r'^[\s\-]$');
 
 /// Returns the choice level.
 ///
