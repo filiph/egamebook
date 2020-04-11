@@ -1,5 +1,9 @@
 /// Parses a block of text (with `\n` newlines) and returns the code for
 /// the [InkAst].
+///
+/// The format of Ink in Egamebook is very limited. It supports the
+/// ["weave" format](https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md#part-2-weave)
+/// with gathers (must be on their own line) and nested flows.
 String parseInk(String name, String text) {
   final buf = StringBuffer();
   buf.writeln('final $name = InkAst([');
@@ -44,16 +48,16 @@ String parseInk(String name, String text) {
       continue;
     }
 
-    final weaveLevel = _getWeaveLevel(line);
-    if (weaveLevel != null) {
-      // There's a weave here.
+    final gatherLevel = _getGatherLevel(line);
+    if (gatherLevel != null) {
+      // There's a gather here.
       for (var i = 0; i < depth - choiceLevel; i++) {
         // Close the last choice first.
         buf.writeln('],),');
         // Close the fork.
         buf.writeln(']),');
       }
-      depth = weaveLevel;
+      depth = gatherLevel;
       previousWasParagraph = false;
       continue;
     }
@@ -83,7 +87,7 @@ String parseInk(String name, String text) {
 
 final _whitespaceOrStar = RegExp(r'^[\s\*]+');
 
-final _weave = RegExp(r'^[\s\-]$');
+final _gather = RegExp(r'^[\s\-]$');
 
 /// Returns the choice level.
 ///
@@ -94,14 +98,14 @@ int _getChoiceLevel(String line) {
   return '*'.allMatches(prefix).length;
 }
 
-/// Returns the level to which a weave will bring down the depth.
+/// Returns the level to which a gather will bring down the depth.
 ///
 /// For example, '-' will bring the depth to 0. '---' will bring the weave
 /// to 2.
 ///
 /// Returns `null` for anything else.
-int _getWeaveLevel(String line) {
-  if (!_weave.hasMatch(line)) return null;
+int _getGatherLevel(String line) {
+  if (!_gather.hasMatch(line)) return null;
   return '-'.allMatches(line).length - 1;
 }
 
