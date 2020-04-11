@@ -11,12 +11,9 @@
 // ---
 ACTION: $bleeds_blind_guide_greet
 COMMAND: Blind man >> “Hello!”
-
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 c.hasLearnedAbout(kbBlindGuide)
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -44,12 +41,9 @@ c.learnAbout(kbBlindGuide);
 // ---
 ACTION: $bleeds_blind_guide_terrible_idea
 COMMAND: Blind Guide >> “Why is hunting for treasure in the Pyramid a terrible idea?”
-
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 w.actionHasBeenPerformed("bleeds_blind_guide_greet")
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -86,12 +80,9 @@ The man calms down again and turns his unseeing face almost precisely to me. "Go
 // ---
 ACTION: $bleeds_blind_guide_goblins
 COMMAND: Blind Guide >> “The goblins are new here?”
-
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 w.actionHasBeenPerformed("bleeds_blind_guide_greet")
 
 COMPLETE_SUCCESS_DESCRIPTION:

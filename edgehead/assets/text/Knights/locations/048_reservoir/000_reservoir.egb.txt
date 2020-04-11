@@ -31,10 +31,7 @@ A huge empty room, with the floor covered with sludge and slimy carcasses.
 ACTION: $reservoir_open_dam
 COMMAND: Dam >> Open
 FOR_LOCATION: $reservoir
-
-PREREQUISITES:
-w.actionNeverUsed(name)
-// TODO: need a long pole (e.g. spear or a polearm) to open
+// TODO: PREREQUISITES: need a long pole (e.g. spear or a polearm) to open
 
 COMPLETE_SUCCESS_DESCRIPTION:
 I open the dam and the reservoir quickly empties. Water rushes past me, into corridors of the Pyramid.

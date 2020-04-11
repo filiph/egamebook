@@ -272,12 +272,10 @@ class KarlListenToGuards extends RoamingAction {
     if (c.inRoomParent('maintenance_shaft') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        !c.hasHappened(evKarlKilled) &&
-        !c.hasHappened(evKarlGuardsKilled))) {
+    if (!(!c.hasHappened(evKarlKilled) && !c.hasHappened(evKarlGuardsKilled))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -338,10 +336,10 @@ class KarlUseNecromancy extends RoamingAction {
     if (c.inRoomParent('maintenance_shaft') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && !c.hasHappened(evKarlKilled))) {
+    if (!(!c.hasHappened(evKarlKilled))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -493,10 +491,10 @@ class KarlTakeStar extends RoamingAction {
     if (c.inRoomParent('gods_lair') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && c.isInIdleRoom)) {
+    if (!(c.isInIdleRoom)) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -675,10 +673,7 @@ class ReservoirOpenDam extends RoamingAction {
     if (c.inRoomParent('reservoir') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1223,10 +1218,7 @@ class TalkToMiguel1 extends RoamingAction {
     if (c.inRoomParent('pyramid_entrance') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1376,10 +1368,10 @@ class BleedsMainObserveSmoke extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && !c.hasHappened(evGoblinCampCleared))) {
+    if (!(!c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1440,10 +1432,7 @@ class BleedsMainObserveVillage extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1529,11 +1518,10 @@ class BleedsBlindGuideGoblins extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
+    if (!(w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1622,10 +1610,10 @@ class BleedsBlindGuideGreet extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) && c.hasLearnedAbout(kbBlindGuide))) {
+    if (!(c.hasLearnedAbout(kbBlindGuide))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1692,11 +1680,10 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
+    if (!(w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1785,13 +1772,12 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        c.hasLearnedAbout(kbLeroy) &&
+    if (!(c.hasLearnedAbout(kbLeroy) &&
         c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke) &&
         !c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1865,11 +1851,10 @@ class BleedsTraderGoblins extends RoamingAction {
     if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        w.actionHasBeenPerformed("bleeds_trader_greet"))) {
+    if (!(w.actionHasBeenPerformed("bleeds_trader_greet"))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -1937,10 +1922,7 @@ class BleedsTraderGreet extends RoamingAction {
     if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2005,12 +1987,11 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
     if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        w.actionHasBeenPerformed("bleeds_trader_greet") &&
+    if (!(w.actionHasBeenPerformed("bleeds_trader_greet") &&
         c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2236,11 +2217,10 @@ class ListenContinue extends RoamingAction {
     if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        w.actionHasBeenPerformed("listen_to_them_arguing"))) {
+    if (!(w.actionHasBeenPerformed("listen_to_them_arguing"))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2301,11 +2281,10 @@ class ListenMore extends RoamingAction {
     if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name) &&
-        w.actionHasBeenPerformed("listen_continue"))) {
+    if (!(w.actionHasBeenPerformed("listen_continue"))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2366,10 +2345,7 @@ class ListenToThemArguing extends RoamingAction {
     if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2430,10 +2406,7 @@ class ObserveGoblinCamp extends RoamingAction {
     if (c.inRoomParent('goblin_skirmish_sneak') != true) {
       return false;
     }
-    if (!(w.actionNeverUsed(name))) {
-      return false;
-    }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2601,7 +2574,7 @@ class StartDeclineDagger extends RoamingAction {
     if (c.inRoomParent('start_enter_goblin') != true) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2663,7 +2636,7 @@ class StartTakeDagger extends RoamingAction {
     if (c.inRoomParent('start_enter_goblin') != true) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2845,10 +2818,10 @@ class ReadLetterFromFather extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(w.actionNeverUsed(name) && c.isInIdleRoom)) {
+    if (!(c.isInIdleRoom)) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2907,10 +2880,10 @@ class ReadLetterFromMentor extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(w.actionNeverUsed(name) && c.isInIdleRoom)) {
+    if (!(c.isInIdleRoom)) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override
@@ -2975,7 +2948,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
     if (!(w.actionNeverUsed(name))) {
       return false;
     }
-    return true;
+    return w.actionNeverUsed(name);
   }
 
   @override

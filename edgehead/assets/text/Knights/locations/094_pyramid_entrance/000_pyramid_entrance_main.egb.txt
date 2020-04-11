@@ -36,8 +36,6 @@ The two knights are still here.
 ACTION: $talk_to_miguel_1
 COMMAND: Man >> Talk
 FOR_LOCATION: $pyramid_entrance
-PREREQUISITES:
-w.actionNeverUsed(name)
 
 INK:
 // Subtext: The knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.

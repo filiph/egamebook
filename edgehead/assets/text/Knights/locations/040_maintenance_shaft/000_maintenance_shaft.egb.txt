@@ -22,8 +22,6 @@ ACTION: $karl_use_necromancy
 COMMAND: Skills >> Necromancy
 FOR_LOCATION: $maintenance_shaft
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 !c.hasHappened(evKarlKilled)
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -44,8 +42,6 @@ ACTION: $karl_listen_to_guards
 COMMAND: Guards >> Listen
 FOR_LOCATION: $maintenance_shaft
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 !c.hasHappened(evKarlKilled)
 &&
 !c.hasHappened(evKarlGuardsKilled)

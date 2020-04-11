@@ -61,11 +61,7 @@ DESCRIPTION: $NONE
 // ---
 ACTION: $bleeds_main_observe_village
 COMMAND: Village >> observe
-
 FOR_LOCATION: $bleeds_main
-
-PREREQUISITES:
-w.actionNeverUsed(name)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. Something bad is happening.
@@ -79,12 +75,9 @@ c.learnAbout(kbBlindGuide);
 // ---
 ACTION: $bleeds_main_observe_smoke
 COMMAND: Smoke >> observe
-
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 !c.hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_DESCRIPTION:

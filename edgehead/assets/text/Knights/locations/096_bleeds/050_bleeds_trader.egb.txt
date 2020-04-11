@@ -36,10 +36,7 @@ if (c.inRoomWith(leroyId) &&
 // ---
 ACTION: $bleeds_trader_greet
 COMMAND: Trader >> “How is business?”
-
 FOR_LOCATION: $bleeds_trader_hut
-
-PREREQUISITES: w.actionNeverUsed(name)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 The trader shrugs.
@@ -66,12 +63,9 @@ c.learnAbout(kbLeroy);
 // ---
 ACTION: $bleeds_trader_goblins
 COMMAND: Trader >> “What's with all the goblins around here?”
-
 FOR_LOCATION: $bleeds_trader_hut
 
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 w.actionHasBeenPerformed("bleeds_trader_greet")
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -107,12 +101,9 @@ c.learnAbout(kbLeroyKnowsGoblinSmoke);
 // ---
 ACTION: $bleeds_trader_tell_about_cleared_camp
 COMMAND: Trader >> “No need to worry about that camp anymore.”
-
 FOR_LOCATION: $bleeds_trader_hut
 
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 w.actionHasBeenPerformed("bleeds_trader_greet")
 &&
 c.hasHappened(evGoblinCampCleared)
@@ -126,12 +117,9 @@ I describe the battle to him.
 // ---
 ACTION: $bleeds_trader_goblin_smoke
 COMMAND: Leroy >> “Can you tell me more about that goblin camp?”
-
 FOR_LOCATION: $bleeds_trader_hut
 
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 c.hasLearnedAbout(kbLeroy)
 &&
 c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke)

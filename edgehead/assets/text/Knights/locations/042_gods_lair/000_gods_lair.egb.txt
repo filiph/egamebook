@@ -51,8 +51,6 @@ ACTION: $karl_take_star
 COMMAND: Star >> Take
 FOR_LOCATION: $gods_lair
 PREREQUISITES:
-w.actionNeverUsed(name)
-&&
 c.isInIdleRoom
 
 COMPLETE_SUCCESS_DESCRIPTION:
