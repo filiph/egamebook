@@ -68,6 +68,9 @@ class WritersInputGenerator extends Generator {
           } else if (rawMap.keys.contains("ACTION")) {
             var action = generateAction(rawMap, path);
             objects.add(action);
+            if (action.ink != null) {
+              objects.add(action.ink);
+            }
           } else if (rawMap.keys.contains("APPROACH")) {
             final approach = generateApproach(rawMap, path);
             objects.add(approach);
@@ -119,6 +122,7 @@ class WritersInputGenerator extends Generator {
     lib.body.add(generateAllRooms(objects));
     lib.body.add(generateAllApproaches(objects));
     lib.body.add(generateAllActionInstances(objects));
+    lib.body.add(generateAllInksMap(objects));
 
     final emitter = cb.DartEmitter();
     final source = DartFormatter().format('${lib.build().accept(emitter)}');

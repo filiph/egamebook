@@ -18,6 +18,11 @@ import 'package:edgehead/fractal_stories/time/actor_turn.dart' show ActorTurn;
 import 'package:edgehead/fractal_stories/room_approach.dart' show Approach;
 import 'package:edgehead/fractal_stories/context.dart'
     show ApplicabilityContext;
+import 'package:edgehead/fractal_stories/ink_ast.dart' show InkAst;
+import 'package:edgehead/fractal_stories/ink_ast.dart' show InkChoiceNode;
+import 'package:edgehead/fractal_stories/ink_ast.dart' show InkForkNode;
+import 'package:edgehead/fractal_stories/ink_ast.dart' show InkParagraphNode;
+import 'package:edgehead/src/ink/ink_situation.dart' show InkSituation;
 import 'package:edgehead/fractal_stories/action.dart' show Nothing;
 import 'package:edgehead/ruleset/ruleset.dart' show Prerequisite;
 import 'package:edgehead/fractal_stories/action.dart'
@@ -1161,6 +1166,114 @@ final Approach pyramidEntranceFromStagingArea = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final talkToMiguel1Ink = InkAst([
+  InkParagraphNode((c) => c.outputStoryline.add(
+      """ The male knight raises an eyebrow. "What brings you here?" """.trim(),
+      wholeSentence: true)),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I seek someone." """.trim(),
+      consequence: [
+        InkParagraphNode((c) =>
+            c.outputStoryline.add(""" TBD. """.trim(), wholeSentence: true)),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "I seek knowledge." """.trim(),
+      consequence: [
+        InkParagraphNode((c) =>
+            c.outputStoryline.add(""" TBD. """.trim(), wholeSentence: true)),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "That is none of your business." """.trim(),
+      consequence: [
+        InkParagraphNode((c) =>
+            c.outputStoryline.add(""" TBD. """.trim(), wholeSentence: true)),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.add(
+      """ "Oh," the man says, "you would _not_ like to get in. You would like to get out." """
+          .trim(),
+      wholeSentence: true)),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((c) => c.outputStoryline.add(
+      """ The woman looks at him with a mix of puzzlement and exasperation, then she turns to me. """
+          .trim(),
+      wholeSentence: true)),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((c) => c.outputStoryline.add(
+      """ "This place is no longer safe. Unless you have business with one of the farmers, you shouldn't go in." """
+          .trim(),
+      wholeSentence: true)),
+]);
+
+class TalkToMiguel1 extends RoamingAction {
+  @override
+  final String name = 'talk_to_miguel_1';
+
+  static final TalkToMiguel1 singleton = TalkToMiguel1();
+
+  @override
+  List<String> get commandPathTemplate => ['Man', 'Talk'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(w.actionNeverUsed(name))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talkToMiguel1Ink",
+    ));
+    return '${a.name} successfully performs TalkToMiguel1';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3117,6 +3230,7 @@ final allActions = <RoamingAction>[
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
+  TalkToMiguel1.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
   BleedsBlindGuideGoblins.singleton,
@@ -3136,3 +3250,4 @@ final allActions = <RoamingAction>[
   ReadLetterFromMentor.singleton,
   GuardpostAboveChurchTakeShield.singleton
 ];
+final allInks = <String, InkAst>{'talkToMiguel1Ink': talkToMiguel1Ink};

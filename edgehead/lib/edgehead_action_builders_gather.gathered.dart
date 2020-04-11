@@ -18,6 +18,18 @@ final _$actionSerializer = InstanceSerializer<Action>({
   // From lib/src/fight/strike_down/actions/finish_thrust_spear_down.dart:
   'FinishThrustAtGroundedEnemy.singleton':
       FinishThrustAtGroundedEnemy.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/jump_back_from_blunt_swing.dart:
+  'JumpBackFromBluntSwing.singleton': JumpBackFromBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/dodge_blunt_swing.dart:
+  'DodgeBluntSwing.singleton': DodgeBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/parry_blunt_swing.dart:
+  'ParryBluntSwing.singleton': ParryBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/shield_block_blunt_swing.dart:
+  'ShieldBlockBluntSwing.singleton': ShieldBlockBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/defensive_parry_blunt_swing.dart:
+  'DefensiveParryBluntSwing.singleton': DefensiveParryBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/actions/finish_blunt_swing.dart:
+  'FinishBluntSwing.singleton': FinishBluntSwing.singleton,
   // From lib/src/fight/feint/actions/finish_feint.dart:
   'FinishFeint.singleton': FinishFeint.singleton,
   // From lib/src/fight/feint/feint_defense/actions/counter_feint.dart:
@@ -59,6 +71,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'ImpaleLeaper.singleton': ImpaleLeaper.singleton,
   // From lib/src/fight/leap/leap_defense/actions/dodge_leap.dart:
   'DodgeLeap.singleton': DodgeLeap.singleton,
+  // From lib/src/fight/leap/leap_defense/actions/swing_blunt_at_leaper.dart:
+  'SwingBluntAtLeaper.singleton': SwingBluntAtLeaper.singleton,
   // From lib/src/fight/leap/actions/finish_leap.dart:
   'FinishLeap.singleton': FinishLeap.singleton,
   // From lib/src/fight/counter_attack/actions/counter_tackle.dart:
@@ -91,6 +105,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'FinishBreakNeck.singleton': FinishBreakNeck.singleton,
   // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/evade_on_ground.dart:
   'EvadeOnGround.singleton': EvadeOnGround.singleton,
+  // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/on_ground_parry_blunt.dart:
+  'OnGroundParryBlunt.singleton': OnGroundParryBlunt.singleton,
   // From lib/src/fight/thrust/thrust_defense/actions/jump_back.dart:
   'JumpBackFromThrust.singleton': JumpBackFromThrust.singleton,
   // From lib/src/fight/thrust/thrust_defense/actions/shield_block_thrust.dart:
@@ -103,22 +119,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'FinishThrustOnGround.singleton': FinishThrustOnGround.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/shield_block_thrust_on_ground.dart:
   'ShieldBlockThrustOnGround.singleton': ShieldBlockThrustOnGround.singleton,
-  // From lib/src/fight/blunt_swing/actions/finish_blunt_swing.dart:
-  'FinishBluntSwing.singleton': FinishBluntSwing.singleton,
-  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/defensive_parry_blunt_swing.dart:
-  'DefensiveParryBluntSwing.singleton': DefensiveParryBluntSwing.singleton,
-  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/dodge_blunt_swing.dart:
-  'DodgeBluntSwing.singleton': DodgeBluntSwing.singleton,
-  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/parry_blunt_swing.dart:
-  'ParryBluntSwing.singleton': ParryBluntSwing.singleton,
-  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/shield_block_blunt_swing.dart:
-  'ShieldBlockBluntSwing.singleton': ShieldBlockBluntSwing.singleton,
-  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/jump_back_from_blunt_swing.dart:
-  'JumpBackFromBluntSwing.singleton': JumpBackFromBluntSwing.singleton,
-  // From lib/src/fight/fatality_on_ground/wrestle_defense/actions/on_ground_parry_blunt.dart:
-  'OnGroundParryBlunt.singleton': OnGroundParryBlunt.singleton,
-  // From lib/src/fight/leap/leap_defense/actions/swing_blunt_at_leaper.dart:
-  'SwingBluntAtLeaper.singleton': SwingBluntAtLeaper.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_ground.dart:
   'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
 }, additionalTypes: [

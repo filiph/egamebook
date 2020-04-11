@@ -1,4 +1,5 @@
 import 'package:code_builder/code_builder.dart';
+import 'package:egamebook_builder/src/parse_writers_input/generated_ink.dart';
 import 'package:logging/logging.dart';
 
 import 'add_writers_statements.dart';
@@ -20,17 +21,20 @@ final Logger log = Logger("generated_action");
 ///
 /// Following this:
 /// https://trello.com/c/S1cXPDQ7/1-parser-for-writer-s-output#comment-58682ee019b9e7b833655fb7
-GeneratedGameObject generateAction(Map<String, String> map, String dirPath) {
+GeneratedAction generateAction(Map<String, String> map, String dirPath) {
   return GeneratedAction(Map.from(map), dirPath);
 }
 
 class GeneratedAction extends GeneratedGameObject {
+  static final _dartEmitter = DartEmitter();
+
   final Map<String, String> _map;
 
-  final _dartEmitter = DartEmitter();
+  final GeneratedInk ink;
 
   GeneratedAction(Map<String, String> map, String path)
       : _map = map,
+        ink = _constructInk(map['INK'], map['ACTION'], path),
         super(
             map['ACTION'], reCase(map['ACTION']).pascalCase, actionType, path);
 
@@ -198,15 +202,34 @@ class GeneratedAction extends GeneratedGameObject {
       applySuccessBuilder.block.statements
           .add(stateErrorThrow('Success chance is 0%.'));
     } else {
-      assert(_map.containsKey('COMPLETE_SUCCESS_DESCRIPTION'),
-          "$name is missing COMPLETE_SUCCESS_DESCRIPTION: $_map");
-      var successDescription = _map['COMPLETE_SUCCESS_DESCRIPTION'];
-      applySuccessBuilder.block.statements
-          .addAll(createDescriptionStatements(successDescription ?? ''));
+      assert(
+          _map.containsKey('COMPLETE_SUCCESS_DESCRIPTION') ||
+              _map.containsKey('INK'),
+          "$name is missing COMPLETE_SUCCESS_DESCRIPTION or INK: $_map");
+
+      if (_map['COMPLETE_SUCCESS_DESCRIPTION'] != null) {
+        var successDescription = _map['COMPLETE_SUCCESS_DESCRIPTION'];
+        applySuccessBuilder.block.statements
+            .addAll(createDescriptionStatements(successDescription ?? ''));
+      }
+
       if (_map['SUCCESS_EFFECT'] != null) {
         String successEffectBlock = _map['SUCCESS_EFFECT'];
         addStatements(successEffectBlock, applySuccessBuilder.block);
       }
+
+      if (_map['INK'] != null) {
+        assert(ink != null);
+        // Push the InkSituation with the correct name at
+        // the end of applySuccess.
+        addStatements(
+            'w.pushSituation(InkSituation.initialized('
+            'w.randomInt(),'
+            '"${ink.name}",'
+            '));',
+            applySuccessBuilder.block);
+      }
+
       applySuccessBuilder.block.addExpression(
           literal('\${a.name} successfully performs $className').returned);
     }
@@ -252,5 +275,14 @@ class GeneratedAction extends GeneratedGameObject {
     }
     isApplicableBuilder.block.addExpression(literal(true).returned);
     return isApplicableBuilder.bake();
+  }
+
+  /// Returns a [GeneratedInk] if [source] is non-null. Returns `null`
+  /// if [source] is `null`.
+  static GeneratedInk _constructInk(
+      String source, String writersName, String path) {
+    if (source == null) return null;
+    final name = reCase(writersName).camelCase + 'Ink';
+    return GeneratedInk('\$${writersName}_ink', name, path, source);
   }
 }

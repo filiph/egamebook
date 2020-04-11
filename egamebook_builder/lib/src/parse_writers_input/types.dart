@@ -26,6 +26,11 @@ final allNeededTypes = <TypeReference>[
   actorTurnType,
   approachType,
   applicabilityContextType,
+  inkAstType,
+  inkChoiceNodeType,
+  inkForkNodeType,
+  inkParagraphNodeType,
+  inkSituationType,
   nothingType,
   prerequisiteType,
   reasonedSuccessChanceOfNothingType,
@@ -63,6 +68,26 @@ final builtType = TypeReference((b) => b
   ..url = 'package:built_value/built_value.dart');
 
 final dateTimeType = TypeReference((b) => b..symbol = 'DateTime');
+
+final inkAstType = TypeReference((b) => b
+  ..symbol = 'InkAst'
+  ..url = 'package:edgehead/fractal_stories/ink_ast.dart');
+
+final inkChoiceNodeType = TypeReference((b) => b
+  ..symbol = 'InkChoiceNode'
+  ..url = 'package:edgehead/fractal_stories/ink_ast.dart');
+
+final inkForkNodeType = TypeReference((b) => b
+  ..symbol = 'InkForkNode'
+  ..url = 'package:edgehead/fractal_stories/ink_ast.dart');
+
+final inkParagraphNodeType = TypeReference((b) => b
+  ..symbol = 'InkParagraphNode'
+  ..url = 'package:edgehead/fractal_stories/ink_ast.dart');
+
+final inkSituationType = TypeReference((b) => b
+  ..symbol = 'InkSituation'
+  ..url = 'package:edgehead/src/ink/ink_situation.dart');
 
 final intType = TypeReference((b) => b..symbol = 'int');
 

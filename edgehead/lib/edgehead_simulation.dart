@@ -59,8 +59,17 @@ final Actor edgeheadPlayer = Actor.initialized(
   currentRoomName: _preStartBook.name,
 );
 
-final Simulation edgeheadSimulation =
-    Simulation(_rooms, allApproaches, _foldFunctions, edgeheadDirectorRuleset);
+final Simulation edgeheadSimulation = Simulation(
+    _rooms, allApproaches, _foldFunctions, edgeheadDirectorRuleset, allInks);
+
+//@Deprecated('use builder to generate these')
+//final Map<String, InkAst> allInks = {
+//  'talk_to_miguel_1': InkAst([
+//    InkParagraphNode(
+//      (c) => c.outputStoryline.add('HELLO WORLD', wholeSentence: true),
+//    ),
+//  ])
+//};
 
 final Actor edgeheadTamara = Actor.initialized(
   tamaraId,

@@ -10,6 +10,8 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
+import 'package:edgehead/fractal_stories/ink_ast.dart';
+import 'package:edgehead/writers_input.compiled.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
@@ -59,6 +61,8 @@ class Simulation {
 
   final Set<Approach> approaches;
 
+  final Map<String, InkAst> inks;
+
   final Ruleset directorRuleset;
 
   final Logger log = Logger('Simulation');
@@ -78,6 +82,7 @@ class Simulation {
     Iterable<Approach> approaches,
     this.foldFunctions,
     this.directorRuleset,
+    this.inks,
   )   : rooms = Set<Room>.from(rooms),
         approaches = Set<Approach>.from(approaches),
         assert(!hasDuplicities(rooms.map((r) => r.name))),
@@ -154,6 +159,13 @@ class Simulation {
             action, context, target, successChance, additionalData);
       }
     }
+  }
+
+  InkAst getInkByName(String inkAstName) {
+    if (!allInks.containsKey(inkAstName)) {
+      throw StateError('missing ink: $inkAstName');
+    }
+    return allInks[inkAstName];
   }
 
   /// Lists all applicable approaches from [room] in current [world].

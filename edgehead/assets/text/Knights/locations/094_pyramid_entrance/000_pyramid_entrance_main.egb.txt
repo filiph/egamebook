@@ -31,6 +31,40 @@ Four stories above, in a corner room of the Pyramid, an eerily motionless woman 
 DESCRIPTION:
 The two knights are still here.
 
+
+// ---
+ACTION: $talk_to_miguel_1
+COMMAND: Man >> Talk
+FOR_LOCATION: $pyramid_entrance
+PREREQUISITES:
+w.actionNeverUsed(name)
+
+INK:
+// Subtext: The knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.
+The male knight raises an eyebrow. "What brings you here?"
+
+* "I seek someone."
+
+TBD.
+
+* "I seek knowledge."
+
+TBD.
+
+* "That is none of your business."
+
+TBD.
+
+-
+
+"Oh," the man says, "you would _not_ like to get in. You would like to get out."
+
+The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.
+
+"This place is no longer safe. Unless you have business with one of the farmers, you shouldn't go in."
+
+
+
 NOTES:
 // TODO: make the following into actual actions
 //       but any talking leads to unlocking of the entrance for the player

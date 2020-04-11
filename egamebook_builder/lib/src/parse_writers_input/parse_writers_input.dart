@@ -25,18 +25,29 @@ Spec generateAllActionInstances(List<GeneratedGameObject> objects) {
   return list.assignFinal('allActions').statement;
 }
 
-Spec generateAllRooms(List<GeneratedGameObject> objects) {
-  var list = literalList(
-      objects.where((o) => o.type == roomType).map((o) => refer(o.name)),
-      roomType);
-  return list.assignFinal('allRooms').statement;
-}
-
 Spec generateAllApproaches(List<GeneratedGameObject> objects) {
   var listLiteral = literalList(
       objects.where((o) => o.type == approachType).map((o) => refer(o.name)),
       approachType);
   return listLiteral.assignFinal('allApproaches').statement;
+}
+
+Spec generateAllInksMap(List<GeneratedGameObject> objects) {
+  var map = literalMap(
+    Map.fromEntries(objects
+        .where((o) => o.type == inkAstType)
+        .map((o) => MapEntry(literalString(o.name), refer(o.name)))),
+    stringType,
+    inkAstType,
+  );
+  return map.assignFinal('allInks').statement;
+}
+
+Spec generateAllRooms(List<GeneratedGameObject> objects) {
+  var list = literalList(
+      objects.where((o) => o.type == roomType).map((o) => refer(o.name)),
+      roomType);
+  return list.assignFinal('allRooms').statement;
 }
 
 /// Parses a file and returns all objects specified in that file as a raw
