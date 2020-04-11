@@ -31,11 +31,32 @@ Four stories above, in a corner room of the Pyramid, an eerily motionless woman 
 DESCRIPTION:
 The two knights are still here.
 
+// ---
+ACTION: $talk_to_miguel_greetings
+COMMAND: Guardsman >> Talk >> "Greetings."
+FOR_LOCATION: $pyramid_entrance
+
+INK:
+// Subtext: the knight is taking himself seriously.
+The knight nods.
+
+"Welcome," he says, and there is a bit of sarcasm in his voice.
+
+* "I am [Aren]."
+
+* "What's your name?"
+
+-
+
+"Miguel."
 
 // ---
-ACTION: $talk_to_miguel_1
-COMMAND: Man >> Talk
+ACTION: $talk_to_miguel_2
+COMMAND: Miguel, the guardsman >> Talk >> "baah "
 FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_miguel_greetings")
 
 INK:
 // Subtext: The knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.

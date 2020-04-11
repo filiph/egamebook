@@ -1161,7 +1161,7 @@ final Approach pyramidEntranceFromStagingArea = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final talkToMiguel1Ink = InkAst([
+final talkToMiguel2Ink = InkAst([
   InkParagraphNode((c) => c.outputStoryline.add(
       """ The male knight raises an eyebrow. "What brings you here?" """.trim(),
       wholeSentence: true)),
@@ -1203,15 +1203,102 @@ final talkToMiguel1Ink = InkAst([
           .trim(),
       wholeSentence: true)),
 ]);
+final talkToMiguelGreetingsInk = InkAst([
+  InkParagraphNode((c) => c.outputStoryline
+      .add(""" The knight nods. """.trim(), wholeSentence: true)),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((c) => c.outputStoryline.add(
+      """ "Welcome," he says, and there is a bit of sarcasm in his voice. """
+          .trim(),
+      wholeSentence: true)),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I am [Aren]." """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "What's your name?" """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) =>
+      c.outputStoryline.add(""" "Miguel." """.trim(), wholeSentence: true)),
+]);
 
-class TalkToMiguel1 extends RoamingAction {
+class TalkToMiguel2 extends RoamingAction {
   @override
-  final String name = 'talk_to_miguel_1';
+  final String name = 'talk_to_miguel_2';
 
-  static final TalkToMiguel1 singleton = TalkToMiguel1();
+  static final TalkToMiguel2 singleton = TalkToMiguel2();
 
   @override
-  List<String> get commandPathTemplate => ['Man', 'Talk'];
+  List<String> get commandPathTemplate =>
+      ['Miguel, the guardsman', 'Talk', '"baah "'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_miguel_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talkToMiguel2Ink",
+    ));
+    return '${a.name} successfully performs TalkToMiguel2';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToMiguelGreetings extends RoamingAction {
+  @override
+  final String name = 'talk_to_miguel_greetings';
+
+  static final TalkToMiguelGreetings singleton = TalkToMiguelGreetings();
+
+  @override
+  List<String> get commandPathTemplate => ['Guardsman', 'Talk', '"Greetings."'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -1230,9 +1317,9 @@ class TalkToMiguel1 extends RoamingAction {
     final Storyline s = c.outputStoryline;
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
-      "talkToMiguel1Ink",
+      "talkToMiguelGreetingsInk",
     ));
-    return '${a.name} successfully performs TalkToMiguel1';
+    return '${a.name} successfully performs TalkToMiguelGreetings';
   }
 
   @override
@@ -3203,7 +3290,8 @@ final allActions = <RoamingAction>[
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
-  TalkToMiguel1.singleton,
+  TalkToMiguel2.singleton,
+  TalkToMiguelGreetings.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
   BleedsBlindGuideGoblins.singleton,
@@ -3223,4 +3311,7 @@ final allActions = <RoamingAction>[
   ReadLetterFromMentor.singleton,
   GuardpostAboveChurchTakeShield.singleton
 ];
-final allInks = <String, InkAst>{'talkToMiguel1Ink': talkToMiguel1Ink};
+final allInks = <String, InkAst>{
+  'talkToMiguel2Ink': talkToMiguel2Ink,
+  'talkToMiguelGreetingsInk': talkToMiguelGreetingsInk
+};
