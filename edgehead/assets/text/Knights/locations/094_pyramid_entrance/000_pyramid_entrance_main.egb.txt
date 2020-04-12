@@ -24,7 +24,7 @@ FIRST_DESCRIPTION:
 // majestic
 As [we] approach, I can't stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.
 
-Two knights, a man and a woman, are on guard.
+Two knights, a woman and a man, are on guard.
 
 Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. 
 
@@ -51,8 +51,8 @@ The knight nods.
 "Miguel."
 
 // ---
-ACTION: $talk_to_miguel_2
-COMMAND: Miguel, the guardsman >> Talk >> "baah "
+ACTION: $talk_to_miguel_about_brother
+COMMAND: Miguel, the guardsman >> Talk >> "I'm looking for Sarn of Falling Rock."
 FOR_LOCATION: $pyramid_entrance
 
 PREREQUISITES:
@@ -60,28 +60,55 @@ w.actionHasBeenPerformed("talk_to_miguel_greetings")
 
 INK:
 // Subtext: The knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.
-The male knight raises an eyebrow. "What brings you here?"
+"Sarn? Doesn't ring the bell. Who is he?"
 
-* "I seek someone."
+* "He came here with the Knights."
 
-TBD.
+    Miguel looks surprised. "He's a knight, then?"
 
-* "I seek knowledge."
+    * * "No, a blacksmith."
 
-TBD.
+        "Ah. He's a mender with the Knights." 
 
-* "That is none of your business."
+* "A blacksmith."
 
-TBD.
+    "There are no blacksmiths here." Miguel gestures around, towards the ruins and the forest.
+
+    * * "Whose work is your sword, then?"
+
+        "Her?" He looks at his sword and pats it. "She's not from here. I bought her in Lywood, years ago, for more coins that I will admit." He smiles for the first time since we met.
+
+        * * * "The sword looks great."
+
+            Miguel's smile widens. "You get what you pay for. And I'm taking good care of her, taking her to ..." Miguel stops. "Oh!" He shakes his head, still smiling.
+
+        * * * "Who repairs it when there's a chink in the blade?"
+
+            "Oh!" he says. 
+
+        - - -
+
+        "I know what you're driving at. You mean a mender. Your Sarn is a mender with the Knights."
+
+    * * "The Knights recruited him."
+
+        "Oh, you mean a mender."
 
 -
 
-"Oh," the man says, "you would _not_ like to get in. You would like to get out."
+He looks to the woman. "Do you know of a mender called Sarn?"
+
+"No," she says.
+
+* "But he might be in."
+
+-
+
+Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is, you would not want to get in. You would want to get out."
 
 The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.
 
 "This place is no longer safe. Unless you have business with one of the farmers, you shouldn't go in."
-
 
 
 NOTES:

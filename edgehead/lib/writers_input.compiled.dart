@@ -1161,19 +1161,18 @@ final Approach pyramidEntranceFromStagingArea = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final talkToMiguel2Ink = InkAst([
+final talkToMiguelAboutBrotherInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('The male knight raises an eyebrow. "What brings you here?"\n',
-        wholeSentence: true);
+    s.add('"Sarn? Doesn\'t ring the bell. Who is he?"\n', wholeSentence: true);
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "I seek someone." """.trim(),
+      command: r""" "He came here with the Knights." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -1181,12 +1180,29 @@ final talkToMiguel2Ink = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('TBD.\n', wholeSentence: true);
+          s.add('    Miguel looks surprised. "He\'s a knight, then?"\n',
+              wholeSentence: true);
         }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "No, a blacksmith." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('        "Ah. He\'s a mender with the Knights." \n',
+                    wholeSentence: true);
+              }),
+            ],
+          ),
+        ]),
       ],
     ),
     InkChoiceNode(
-      command: r""" "I seek knowledge." """.trim(),
+      command: r""" "A blacksmith." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -1194,24 +1210,114 @@ final talkToMiguel2Ink = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('TBD.\n', wholeSentence: true);
+          s.add(
+              '    "There are no blacksmiths here." Miguel gestures around, towards the ruins and the forest.\n',
+              wholeSentence: true);
         }),
-      ],
-    ),
-    InkChoiceNode(
-      command: r""" "That is none of your business." """.trim(),
-      consequence: [
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add('TBD.\n', wholeSentence: true);
-        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "Whose work is your sword, then?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '        "Her?" He looks at his sword and pats it. "She\'s not from here. I bought her in Lywood, years ago, for more coins that I will admit." He smiles for the first time since we met.\n',
+                    wholeSentence: true);
+              }),
+              InkForkNode([
+                InkChoiceNode(
+                  command: r""" "The sword looks great." """.trim(),
+                  consequence: [
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add(
+                          '            Miguel\'s smile widens. "You get what you pay for. And I\'m taking good care of her, taking her to ..." Miguel stops. "Oh!" He shakes his head, still smiling.\n',
+                          wholeSentence: true);
+                    }),
+                  ],
+                ),
+                InkChoiceNode(
+                  command:
+                      r""" "Who repairs it when there's a chink in the blade?" """
+                          .trim(),
+                  consequence: [
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add('            "Oh!" he says. \n',
+                          wholeSentence: true);
+                    }),
+                  ],
+                ),
+              ]),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '        "I know what you\'re driving at. You mean a mender. Your Sarn is a mender with the Knights."\n',
+                    wholeSentence: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "The Knights recruited him." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('        "Oh, you mean a mender."\n',
+                    wholeSentence: true);
+              }),
+            ],
+          ),
+        ]),
       ],
     ),
   ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('He looks to the woman. "Do you know of a mender called Sarn?"\n',
+        wholeSentence: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"No," she says.\n', wholeSentence: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "But he might be in." """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -1219,7 +1325,7 @@ final talkToMiguel2Ink = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Oh," the man says, "you would _not_ like to get in. You would like to get out."\n',
+        'Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is, you would not want to get in. You would want to get out."\n',
         wholeSentence: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -1274,6 +1380,7 @@ final talkToMiguelGreetingsInk = InkAst([
       consequence: [],
     ),
   ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -1284,15 +1391,18 @@ final talkToMiguelGreetingsInk = InkAst([
   }),
 ]);
 
-class TalkToMiguel2 extends RoamingAction {
+class TalkToMiguelAboutBrother extends RoamingAction {
   @override
-  final String name = 'talk_to_miguel_2';
+  final String name = 'talk_to_miguel_about_brother';
 
-  static final TalkToMiguel2 singleton = TalkToMiguel2();
+  static final TalkToMiguelAboutBrother singleton = TalkToMiguelAboutBrother();
 
   @override
-  List<String> get commandPathTemplate =>
-      ['Miguel, the guardsman', 'Talk', '"baah "'];
+  List<String> get commandPathTemplate => [
+        'Miguel, the guardsman',
+        'Talk',
+        '"I\'m looking for Sarn of Falling Rock."'
+      ];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -1314,9 +1424,9 @@ class TalkToMiguel2 extends RoamingAction {
     final Storyline s = c.outputStoryline;
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
-      "talkToMiguel2Ink",
+      "talkToMiguelAboutBrotherInk",
     ));
-    return '${a.name} successfully performs TalkToMiguel2';
+    return '${a.name} successfully performs TalkToMiguelAboutBrother';
   }
 
   @override
@@ -1420,7 +1530,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a man and a woman, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
+      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
       wholeSentence: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3349,7 +3459,7 @@ final allActions = <RoamingAction>[
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
-  TalkToMiguel2.singleton,
+  TalkToMiguelAboutBrother.singleton,
   TalkToMiguelGreetings.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
@@ -3371,6 +3481,6 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
-  'talkToMiguel2Ink': talkToMiguel2Ink,
+  'talkToMiguelAboutBrotherInk': talkToMiguelAboutBrotherInk,
   'talkToMiguelGreetingsInk': talkToMiguelGreetingsInk
 };

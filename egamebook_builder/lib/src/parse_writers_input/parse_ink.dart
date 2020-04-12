@@ -3,7 +3,7 @@ import 'package:egamebook_builder/src/parse_writers_input/describer.dart';
 
 final _dartEmitter = DartEmitter();
 
-final _gather = RegExp(r'^[\s\-]$');
+final _gather = RegExp(r'^\s*\-[\s\-]*$');
 
 final _whitespaceOrStar = RegExp(r'^[\s\*]+');
 
@@ -26,6 +26,7 @@ String parseInk(String name, String text) {
 
     final choiceLevel = _getChoiceLevel(line);
     if (choiceLevel > 0) {
+      // A choice.
       if (choiceLevel > depth) {
         // A new fork.
         buf.writeln('InkForkNode([');
@@ -42,11 +43,17 @@ String parseInk(String name, String text) {
           // Close the fork.
           buf.writeln(']),');
         }
+        // Close the previous choice on this level.
+        buf.writeln('],),');
+        // Start the next choice.
+        buf.writeln('InkChoiceNode(');
+        buf.writeln('  command: r""" ${_sanitizeCommand(line)} """.trim(),');
+        buf.writeln('  consequence: [');
         depth = choiceLevel;
       } else {
         // The fork continues with another choice.
         assert(choiceLevel == depth);
-        // Close the last one.
+        // Close the previous one.
         buf.writeln('],),');
         // Start the new one.
         buf.writeln('InkChoiceNode(');
@@ -60,14 +67,16 @@ String parseInk(String name, String text) {
     final gatherLevel = _getGatherLevel(line);
     if (gatherLevel != null) {
       // There's a gather here.
-      for (var i = 0; i < depth - choiceLevel; i++) {
+      for (var i = 0; i < depth - gatherLevel; i++) {
         // Close the last choice first.
         buf.writeln('],),');
         // Close the fork.
         buf.writeln(']),');
       }
       depth = gatherLevel;
-      previousWasParagraph = false;
+      // We want to ensure that paragraphs after gather points are
+      // new paragraphs.
+      previousWasParagraph = true;
       continue;
     }
 
@@ -107,7 +116,7 @@ int _getChoiceLevel(String line) {
 
 /// Returns the level to which a gather will bring down the depth.
 ///
-/// For example, '-' will bring the depth to 0. '---' will bring the weave
+/// For example, '-' will bring the depth to 0. '---' will bring the depth
 /// to 2.
 ///
 /// Returns `null` for anything else.
