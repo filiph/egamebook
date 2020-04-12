@@ -662,13 +662,16 @@ class ShadowGraph {
     Entity getEntity(int id) => entities.singleWhere((e) => e.id == id,
         orElse: () => _storylineEntities.values.singleWhere((e) => e.id == id));
 
-    for (int i = 0; i < reports.length; i++) {
+    // We start with a "minus first" report in order to populate [previous]
+    // with all entities. This ensures that the first report of the storyline
+    // doesn't start referring to one of two orcs as simply "orc".
+    for (int i = -1; i < reports.length; i++) {
       final current = <Identifier, Entity>{};
 
       // Mark [entity] as identifiable with [id], or mark the [id]
       // unusable ([noEntity]) if it's already assigned to some other entity.
       void assign(Identifier id, Entity entity) {
-        if (previous.containsKey(id) && previous[id] != entity) {
+        if (previous.containsKey(id) && previous[id].id != entity.id) {
           // A new entity assignable to an id that was assignable to someone
           // else in the preceding report.
           return;
@@ -692,14 +695,16 @@ class ShadowGraph {
         }
       }
 
-      final reportEntities = reports[i].allEntities.toList();
-
-      // If this is the first report in the Storyline,
-      // we also add all storyline entities (not just this report's entities).
-      // This way, we don't start a paragraph with "the orc" when there are,
-      // in fact, multiple orcs present.
-      if (i == 0) {
-        reportEntities.addAll(_difference(_storylineEntities, reportEntities));
+      UnmodifiableListView<Entity> reportEntities;
+      if (i == -1) {
+        // Before the first report in the Storyline,
+        // we also add a bogus report that contains all storyline entities
+        // (not just this report's entities).
+        // This way, we don't start a paragraph with "the orc" when there are,
+        // in fact, multiple orcs present.
+        reportEntities = UnmodifiableListView(_storylineEntities.values);
+      } else {
+        reportEntities = UnmodifiableListView(reports[i].allEntities);
       }
 
       for (final entityInReport in reportEntities) {
@@ -764,7 +769,9 @@ class ShadowGraph {
             "The entity $entity didn't get any values in $current.");
       }
 
-      result[i] = current;
+      if (i >= 0) {
+        result[i] = current;
+      }
       previous = current;
     }
 
