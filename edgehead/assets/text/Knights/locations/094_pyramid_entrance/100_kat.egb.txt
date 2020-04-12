@@ -1,0 +1,47 @@
+// ---
+ACTION: $talk_to_kat_greetings
+COMMAND: Guardswoman >> Talk >> "Greetings."
+FOR_LOCATION: $pyramid_entrance
+
+INK:
+// Subtext: Kat is a bit self-conscious about her name. But she's professional.
+"Greetings to you!" The woman smiles. "My name is Kat."
+
+* "Kat?"
+
+  The woman's face sharpens. "Kat, yes. That's my name. What's yours?"
+  
+  * * "Aren."
+  
+  * * "Kat with a K. Like Katherine?"
+  
+  "Yes. But don't call me that. And your name is..."
+  
+  * * * "[Aren]."
+
+* "Mine's [Aren]."
+
+-
+
+"Good to meet you, [Aren]."
+
+// ---
+ACTION: $talk_to_kat_about_brother
+COMMAND: Kat, the guardswoman >> Talk >> "I'm looking for a Sarn of Falling Rock."
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_kat_greetings")
+&&
+w.actionNeverUsed("talk_to_miguel_about_brother")
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"Sarn of Falling Rock," she repeats. But before she can continue, the man steps in. Kat looks at him. "You know a Sarn of Falling Rock, Miguel?"
+
+[[CODE]]
+// Miguel just jumps in.
+w.pushSituation(InkSituation.initialized(
+    w.randomInt(),
+    "talkToMiguelAboutBrotherInk",
+));
+[[ENDCODE]]

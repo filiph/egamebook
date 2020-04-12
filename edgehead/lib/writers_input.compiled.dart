@@ -1161,6 +1161,229 @@ final Approach pyramidEntranceFromStagingArea = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+  s.add(
+      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
+      wholeSentence: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The two knights are still here.\n', wholeSentence: true);
+}, null, null, isIdle: true, positionX: 26, positionY: 94);
+final talkToKatGreetingsInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Greetings to you!" The woman smiles. "My name is Kat."\n',
+        wholeSentence: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Kat?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '  The woman\'s face sharpens. "Kat, yes. That\'s my name. What\'s yours?"\n',
+              wholeSentence: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "Aren." """.trim(),
+            consequence: [],
+          ),
+          InkChoiceNode(
+            command: r""" "Kat with a K. Like Katherine?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('  "Yes. But don\'t call me that. And your name is..."\n',
+                    wholeSentence: true);
+              }),
+              InkForkNode([
+                InkChoiceNode(
+                  command: r""" "[Aren]." """.trim(),
+                  consequence: [],
+                ),
+              ]),
+            ],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Mine's [Aren]." """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Good to meet you, [Aren]."\n', wholeSentence: true);
+  }),
+]);
+
+class TalkToKatAboutBrother extends RoamingAction {
+  @override
+  final String name = 'talk_to_kat_about_brother';
+
+  static final TalkToKatAboutBrother singleton = TalkToKatAboutBrother();
+
+  @override
+  List<String> get commandPathTemplate => [
+        'Kat, the guardswoman',
+        'Talk',
+        '"I\'m looking for a Sarn of Falling Rock."'
+      ];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_kat_greetings") &&
+        w.actionNeverUsed("talk_to_miguel_about_brother"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Sarn of Falling Rock," she repeats. But before she can continue, the man steps in. Kat looks at him. "You know a Sarn of Falling Rock, Miguel?"\n\n',
+        wholeSentence: true);
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talkToMiguelAboutBrotherInk",
+    ));
+
+    return '${a.name} successfully performs TalkToKatAboutBrother';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToKatGreetings extends RoamingAction {
+  @override
+  final String name = 'talk_to_kat_greetings';
+
+  static final TalkToKatGreetings singleton = TalkToKatGreetings();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Guardswoman', 'Talk', '"Greetings."'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talkToKatGreetingsInk",
+    ));
+    return '${a.name} successfully performs TalkToKatGreetings';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final talkToMiguelAboutBrotherInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -1401,7 +1624,7 @@ class TalkToMiguelAboutBrother extends RoamingAction {
   List<String> get commandPathTemplate => [
         'Miguel, the guardsman',
         'Talk',
-        '"I\'m looking for Sarn of Falling Rock."'
+        '"I\'m looking for a Sarn of Falling Rock."'
       ];
   @override
   bool isApplicable(
@@ -1409,7 +1632,8 @@ class TalkToMiguelAboutBrother extends RoamingAction {
     if (c.inRoomParent('pyramid_entrance') != true) {
       return false;
     }
-    if (!(w.actionHasBeenPerformed("talk_to_miguel_greetings"))) {
+    if (!(w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
+        w.actionNeverUsed("talk_to_kat_about_brother"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -1522,24 +1746,6 @@ class TalkToMiguelGreetings extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
-  s.add(
-      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
-      wholeSentence: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The two knights are still here.\n', wholeSentence: true);
-}, null, null, isIdle: true, positionX: 26, positionY: 94);
 final Approach bleedsMainFromBleedsTraderHut = Approach(
     'bleeds_trader_hut', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3459,6 +3665,8 @@ final allActions = <RoamingAction>[
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
+  TalkToKatAboutBrother.singleton,
+  TalkToKatGreetings.singleton,
   TalkToMiguelAboutBrother.singleton,
   TalkToMiguelGreetings.singleton,
   BleedsMainObserveSmoke.singleton,
@@ -3481,6 +3689,7 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'talkToKatGreetingsInk': talkToKatGreetingsInk,
   'talkToMiguelAboutBrotherInk': talkToMiguelAboutBrotherInk,
   'talkToMiguelGreetingsInk': talkToMiguelGreetingsInk
 };
