@@ -923,16 +923,4 @@ class ShadowGraph {
       });
     }
   }
-
-  /// Returns an iterable of entities that are in [larger]
-  /// but not in [smaller]. The [Entity.id] is used for equality
-  /// checking.
-  static Iterable<Entity> _difference(
-      UnmodifiableMapView<int, Entity> larger, List<Entity> smaller) sync* {
-    final ids = smaller.map((e) => e.id).toSet();
-    for (final entity in larger.values) {
-      if (ids.contains(entity.id)) continue;
-      yield entity;
-    }
-  }
 }
