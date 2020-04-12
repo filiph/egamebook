@@ -79,7 +79,7 @@ class RollOutOfWay extends OtherActorAction {
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> <is> able to roll out of the way",
         but: true, positive: true);
-    if (a.isPlayer) {
+    if (a.isPlayer && a.anatomy.hasHealthyLegs) {
       w.updateActorById(a.id, (b) => b..pose = Pose.standing);
       a.report(s, "<subject> jump<s> up on <subject's> feet", positive: true);
     }
