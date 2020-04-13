@@ -31,7 +31,7 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class Situation {
   /// Default value for [maxActionsToShow].
-  static const int defaultMaxActionsToShow = 3;
+  static const int defaultMaxActionsToShow = 1000;
 
   /// The actions available to the actors.
   List<Action<dynamic>> get actions;
