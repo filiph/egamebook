@@ -1284,7 +1284,7 @@ class TalkToKatAboutBrother extends RoamingAction {
         wholeSentence: true);
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
-      "talkToMiguelAboutBrotherInk",
+      "talk_to_miguel_about_brother_ink",
     ));
 
     return '${a.name} successfully performs TalkToKatAboutBrother';
@@ -1348,7 +1348,7 @@ class TalkToKatGreetings extends RoamingAction {
     final Storyline s = c.outputStoryline;
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
-      "talkToKatGreetingsInk",
+      "talk_to_kat_greetings_ink",
     ));
     return '${a.name} successfully performs TalkToKatGreetings';
   }
@@ -1648,7 +1648,7 @@ class TalkToMiguelAboutBrother extends RoamingAction {
     final Storyline s = c.outputStoryline;
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
-      "talkToMiguelAboutBrotherInk",
+      "talk_to_miguel_about_brother_ink",
     ));
     return '${a.name} successfully performs TalkToMiguelAboutBrother';
   }
@@ -1710,7 +1710,7 @@ class TalkToMiguelGreetings extends RoamingAction {
     final Storyline s = c.outputStoryline;
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
-      "talkToMiguelGreetingsInk",
+      "talk_to_miguel_greetings_ink",
     ));
     return '${a.name} successfully performs TalkToMiguelGreetings';
   }
@@ -2945,18 +2945,379 @@ final Approach startFromStartTesterBuild = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
+final startInkInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Here I am in the ancient ruins of San Francisco. After a month long journey, I have finally reached my destination. My brother is here, somewhere.\n',
+        wholeSentence: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with black curly hair >> and a large debt. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with black curly hair >> and a wooden stump for a leg. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with black curly hair >> and tuberculosis. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with straight white hair >> and a large debt. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with straight white hair >> and a wooden stump for a leg. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with straight white hair >> and tuberculosis. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with blond wavy hair >> and a large debt. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with blond wavy hair >> and a wooden stump for a leg. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young woman >> with blond wavy hair >> and tuberculosis. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with black curly hair >> and a large debt. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with black curly hair >> and a wooden stump for a leg. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with black curly hair >> and tuberculosis. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with straight white hair >> and a large debt. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with straight white hair >> and a wooden stump for a leg. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with straight white hair >> and tuberculosis. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with blond wavy hair >> and a large debt. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with blond wavy hair >> and a wooden stump for a leg. """
+              .trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" I am a young man >> with blond wavy hair >> and tuberculosis. """
+              .trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I am also a necromancer. Which might come in handy around here.\n',
+        wholeSentence: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"This place is dangerous, young sir." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a city.\n',
+        wholeSentence: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "What an insight!" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '    Tamara gives me a look. "Extremely funny," she whispers.\n',
+              wholeSentence: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command:
+                r""" "It can't be more dangerous than the journey here." """
+                    .trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('        Then again, I _have_ seen <>\n',
+                    wholeSentence: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "Sorry." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '        Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen <>\n',
+                    wholeSentence: true);
+              }),
+            ],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Do you see anything?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '    "No," she whispers. "Trees and leaves and fog. And corpses."\n',
+              wholeSentence: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('    It\'s true. I\'ve also seen <>\n', wholeSentence: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "I will keep my eyes open." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Tamara nods. "Good," she whispers, and starts walking again. I look around, at the thick overgrowth. I\'ve seen <>\n',
+              wholeSentence: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '<> quite a few corpses in the few hours we have been here. (All of them way too old and dry to raise, though.)\n',
+        wholeSentence: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Tamara stops. For a moment, she\'s as still as painting, and I try to mirror her. Then, she nods in the direction of a ferocious goblin stepping out of hiding.\n',
+        wholeSentence: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('[IMAGE]\n', wholeSentence: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Keeping her teeth together, Tamara says: "I might need your help with this. Take my dagger."\n',
+        wholeSentence: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "What? I am no warrior." (Refuse the weapon.) """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "Keep it. I'll improvise." (Pick up a rock.) """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "Thanks." (Take the dagger.) """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The fight begins.\n', wholeSentence: true);
+  }),
+]);
+
+class StartInk extends RoamingAction {
+  @override
+  final String name = 'start_ink';
+
+  static final StartInk singleton = StartInk();
+
+  @override
+  List<String> get commandPathTemplate => ['N/A'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('start_bogus_location') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "start_ink_ink",
+    ));
+    return '${a.name} successfully performs StartInk';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room start = Room('start', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add(
-      'We are in the ruins of San Francisco, not far from my destination, when my guard finally decides she has had enough.\n\n"Young sir, I quit." The guard says this as she unsheathes her slender sword. "This is the last and then I turn back."\n',
-      wholeSentence: true);
+  w.pushSituation(InkSituation.initialized(
+    w.randomInt(),
+    "start_ink_ink",
+  ));
 }, null, null, null);
-final Approach startCowardFromStart =
-    Approach('start', 'start_coward', '“Coward.”', (ActionContext c) {
+final Approach meadowFightFromStart =
+    Approach('start', 'meadow_fight', r'$IMPLICIT', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2964,187 +3325,6 @@ final Approach startCowardFromStart =
   final Storyline s = c.outputStoryline;
   s.add('', wholeSentence: true);
 });
-final Approach startRaccoonFromStart = Approach('start', 'start_raccoon',
-    '“It is just a rustle in the bush, Tamara. Probably a raccoon.”',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startCoward = Room('start_coward', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '"Look, you paid me for the journey, not for babysitting you around the freaking Pyramid."\n',
-      wholeSentence: true);
-}, null, null, null);
-final Room startRaccoon = Room('start_raccoon', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('"I\'m tired. And _that_ is definitely not a raccoon."\n',
-      wholeSentence: true);
-}, null, null, null);
-final Approach startEnterGoblinFromStartCoward = Approach(
-    'start_coward', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Approach startEnterGoblinFromStartRaccoon = Approach(
-    'start_raccoon', 'start_enter_goblin', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
-});
-final Room startEnterGoblin = Room('start_enter_goblin', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'She motions toward the bush. I look in the direction and see a figure with a short, rusty sword.\n\nThis place. Why does everything need to be so difficult around here?\n\n"You think you could help me with this one?" She hands me a long dagger.\n',
-      wholeSentence: true);
-}, null, null, null);
-
-class StartDeclineDagger extends RoamingAction {
-  @override
-  final String name = 'start_decline_dagger';
-
-  static final StartDeclineDagger singleton = StartDeclineDagger();
-
-  @override
-  List<String> get commandPathTemplate => ['“You are going to be fine.”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('start_enter_goblin') != true) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('Tamara shrugs and puts the dagger in her belt.\n',
-        wholeSentence: true);
-    w.updateActorById(tamaraId, (b) => b.inventory.weapons.add(tamarasDagger));
-    c.movePlayer("meadow_fight");
-    return '${a.name} successfully performs StartDeclineDagger';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class StartTakeDagger extends RoamingAction {
-  @override
-  final String name = 'start_take_dagger';
-
-  static final StartTakeDagger singleton = StartTakeDagger();
-
-  @override
-  List<String> get commandPathTemplate => ['Take dagger'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('start_enter_goblin') != true) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('I take the dagger.\n', wholeSentence: true);
-    w.updateActorById(a.id, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
-    c.movePlayer("meadow_fight");
-    return '${a.name} successfully performs StartTakeDagger';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
 final Room meadowFight = Room(
     'meadow_fight',
     (ActionContext c) {
@@ -3154,7 +3334,7 @@ final Room meadowFight = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The fight begins. The goblin before us is especially feral. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
+          'The goblin before us is especially feral. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
           wholeSentence: true);
     },
     null,
@@ -3204,7 +3384,7 @@ final Room meadowFight = Room(
                 'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
                 wholeSentence: true);
           }),
-          Rule(469897863, 1, false, (ApplicabilityContext c) {
+          Rule(335866054, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -3216,35 +3396,19 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add('\nThe fight is over.\n\n', wholeSentence: true);
-            Ruleset(
-                Rule(230873140, 1, false, (ApplicabilityContext c) {
-                  final WorldState w = c.world;
-                  final Simulation sim = c.simulation;
-                  final Actor a = c.actor;
-                  return c.playerHasVisited("start_raccoon");
-                }, (ActionContext c) {
-                  final WorldState originalWorld = c.world;
-                  final Simulation sim = c.simulation;
-                  final Actor a = c.actor;
-                  final WorldStateBuilder w = c.outputWorld;
-                  final Storyline s = c.outputStoryline;
-                  s.add('"Raccoon my ass."\n\n', wholeSentence: true);
-                }),
-                Rule(633100163, 0, false, (ApplicabilityContext c) {
-                  final WorldState w = c.world;
-                  final Simulation sim = c.simulation;
-                  final Actor a = c.actor;
-                  return true;
-                }, (ActionContext c) {
-                  final WorldState originalWorld = c.world;
-                  final Simulation sim = c.simulation;
-                  final Actor a = c.actor;
-                  final WorldStateBuilder w = c.outputWorld;
-                  final Storyline s = c.outputStoryline;
-                  s.add(
-                      '"Well, as I said, that was the last one. And, young sir, call me coward one more time and I\'ll slash your neck." She seems to mean it.\n\n',
-                      wholeSentence: true);
-                })).apply(c);
+            Ruleset(Rule(827330017, 0, false, (ApplicabilityContext c) {
+              final WorldState w = c.world;
+              final Simulation sim = c.simulation;
+              final Actor a = c.actor;
+              return true;
+            }, (ActionContext c) {
+              final WorldState originalWorld = c.world;
+              final Simulation sim = c.simulation;
+              final Actor a = c.actor;
+              final WorldStateBuilder w = c.outputWorld;
+              final Storyline s = c.outputStoryline;
+              s.add('"Well, that was (TBD)."\n\n', wholeSentence: true);
+            })).apply(c);
             s.add(
                 '\n$ifBlock_3c0f034e2 "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
                 wholeSentence: true);
@@ -3588,9 +3752,6 @@ final allRooms = <Room>[
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
   start,
-  startCoward,
-  startRaccoon,
-  startEnterGoblin,
   meadowFight
 ];
 final allApproaches = <Approach>[
@@ -3655,10 +3816,7 @@ final allApproaches = <Approach>[
   goblinSkirmishSneakFromBleedsMain,
   goblinSkirmishSneakFromGoblinSkirmishPatrol,
   startFromStartTesterBuild,
-  startCowardFromStart,
-  startRaccoonFromStart,
-  startEnterGoblinFromStartCoward,
-  startEnterGoblinFromStartRaccoon
+  meadowFightFromStart
 ];
 final allActions = <RoamingAction>[
   KarlListenToGuards.singleton,
@@ -3682,14 +3840,14 @@ final allActions = <RoamingAction>[
   ListenMore.singleton,
   ListenToThemArguing.singleton,
   ObserveGoblinCamp.singleton,
-  StartDeclineDagger.singleton,
-  StartTakeDagger.singleton,
+  StartInk.singleton,
   ReadLetterFromFather.singleton,
   ReadLetterFromMentor.singleton,
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
-  'talkToKatGreetingsInk': talkToKatGreetingsInk,
-  'talkToMiguelAboutBrotherInk': talkToMiguelAboutBrotherInk,
-  'talkToMiguelGreetingsInk': talkToMiguelGreetingsInk
+  'talk_to_kat_greetings_ink': talkToKatGreetingsInk,
+  'talk_to_miguel_about_brother_ink': talkToMiguelAboutBrotherInk,
+  'talk_to_miguel_greetings_ink': talkToMiguelGreetingsInk,
+  'start_ink_ink': startInkInk
 };

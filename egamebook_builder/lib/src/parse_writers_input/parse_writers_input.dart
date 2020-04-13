@@ -36,7 +36,7 @@ Spec generateAllInksMap(List<GeneratedGameObject> objects) {
   var map = literalMap(
     Map.fromEntries(objects
         .where((o) => o.type == inkAstType)
-        .map((o) => MapEntry(literalString(o.name), refer(o.name)))),
+        .map((o) => MapEntry(literalString(o.writersName), refer(o.name)))),
     stringType,
     inkAstType,
   );

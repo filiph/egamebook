@@ -1,9 +1,15 @@
+// ---
+APPROACH: $meadow_fight FROM $start
+COMMAND: $IMPLICIT
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $meadow_fight
 
 POS: 49, 99
 
 FIRST_DESCRIPTION:
-The fight begins. The goblin before us is especially feral. He's gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.
+The goblin before us is especially feral. He's gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.
 
 FIGHT_SITUATION:
 generateStartFight
@@ -22,15 +28,9 @@ The fight is over.
 
 [[RULESET]]
 [[RULE]]
-  c.playerHasVisited("start_raccoon")
-[[THEN]]
-"Raccoon my ass."
-
-[[ENDRULE]]
-[[RULE]]
   $DEFAULT
 [[THEN]]
-"Well, as I said, that was the last one. And, [young sir], call me coward one more time and I'll slash your neck." She seems to mean it.
+"Well, that was (TBD)."
 
 [[ENDRULE]]
 [[ENDRULESET]]

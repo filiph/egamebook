@@ -225,7 +225,7 @@ class GeneratedAction extends GeneratedGameObject {
         addStatements(
             'w.pushSituation(InkSituation.initialized('
             'w.randomInt(),'
-            '"${ink.name}",'
+            '"${ink.writersName}",'
             '));',
             applySuccessBuilder.block);
       }
@@ -287,6 +287,6 @@ class GeneratedAction extends GeneratedGameObject {
       String source, String writersName, String path) {
     if (source == null) return null;
     final name = reCase(writersName).camelCase + 'Ink';
-    return GeneratedInk('\$${writersName}_ink', name, path, source);
+    return GeneratedInk('${writersName}_ink', name, path, source);
   }
 }

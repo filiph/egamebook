@@ -42,6 +42,6 @@ COMPLETE_SUCCESS_DESCRIPTION:
 // Miguel just jumps in.
 w.pushSituation(InkSituation.initialized(
     w.randomInt(),
-    "talkToMiguelAboutBrotherInk",
+    "talk_to_miguel_about_brother_ink",
 ));
 [[ENDCODE]]
