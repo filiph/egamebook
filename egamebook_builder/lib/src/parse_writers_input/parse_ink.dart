@@ -18,7 +18,16 @@ String parseInk(String name, String text) {
   buf.writeln('final $name = InkAst([');
 
   int depth = 0;
+
+  /// This is `true` if the previous node was a paragraph, and so if the next
+  /// node is also a paragraph, we should add newlines
+  /// (via `Storyline.addParagraph()`).
   bool previousWasParagraph = false;
+
+  /// This is `true` if the previous paragraph ended with `<>`, which is
+  /// a special instruction in Ink. It tells the system to join the
+  /// two paragraphs into one.
+  bool previousParagraphHadGlue = false;
 
   final lines = text.split('\n').toList(growable: false);
   for (final line in lines) {
@@ -81,16 +90,23 @@ String parseInk(String name, String text) {
     }
 
     // Normal paragraph.
-    if (previousWasParagraph) {
+    final paragraph = _ParagraphText(line);
+    if (previousWasParagraph && !previousParagraphHadGlue) {
+      assert(
+          !paragraph.hasStartingGlue,
+          "Previous paragraph didn't have glue "
+          "but this one does: $line");
+      // Add newlines between paragraphs.
       buf.writeln('InkParagraphNode((c) => '
           'c.outputStoryline.addParagraph()), ');
     }
 
-    final describer = createDescriber(line);
+    final describer = createDescriber(paragraph.line);
     final describerCode = describer.accept(_dartEmitter).toString();
 
     buf.writeln('InkParagraphNode($describerCode), ');
     previousWasParagraph = true;
+    previousParagraphHadGlue = paragraph.hasEndingGlue;
   }
 
   // We're at the end, we need to get back to 0.
@@ -128,4 +144,21 @@ int _getGatherLevel(String line) {
 /// Sanitizes a line, such as "* * Open the door" --> "Open the door".
 String _sanitizeCommand(String line) {
   return line.replaceFirst(_whitespaceOrStar, '').trim();
+}
+
+class _ParagraphText {
+  static final _endingGlue = RegExp(r'<>\s*$');
+
+  static final _startingGlue = RegExp(r'^\s*<>\s+');
+
+  final bool hasEndingGlue;
+
+  final bool hasStartingGlue;
+
+  final String line;
+
+  _ParagraphText(String raw)
+      : hasStartingGlue = _startingGlue.hasMatch(raw),
+        hasEndingGlue = _endingGlue.hasMatch(raw),
+        line = raw.replaceAll(_startingGlue, '').replaceAll(_endingGlue, '');
 }
