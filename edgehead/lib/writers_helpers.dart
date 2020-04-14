@@ -146,12 +146,12 @@ FightSituation generateRandomEncounter(ActionContext c,
       s.add(
           "A goblin stands in front of me, "
           "wielding a ${hasSpear ? 'black spear' : 'rusty sword'}.",
-          wholeSentence: true);
+          isRaw: true);
       break;
     case 1:
       enemies.add(_makeOrc(w));
       s.add("An orc stands in front of me, wielding a sword.",
-          wholeSentence: true);
+          isRaw: true);
       break;
     case 2:
       final orc = Actor.initialized(6000, w.randomInt, "orc",
@@ -170,7 +170,7 @@ FightSituation generateRandomEncounter(ActionContext c,
       s.add(
           "An orc and a goblin stand in front of me. "
           "The orc is wielding a crude sword, the goblin is holding a spear.",
-          wholeSentence: true);
+          isRaw: true);
       break;
     default:
       throw UnimplementedError();
@@ -192,7 +192,7 @@ FightSituation generateRandomEncounter(ActionContext c,
     s.add(
         "Between ${numberOfUs}us, "
         "{a plain|an ordinary} $name lies on the $groundMaterial.",
-        wholeSentence: true);
+        isRaw: true);
   }
 
   if (w.randomBool()) {
@@ -211,12 +211,12 @@ FightSituation generateRandomEncounter(ActionContext c,
         "I ${items.isNotEmpty ? 'also' : ''} notice "
         "a nice, hefty $name in the ${isInside ? 'rubble' : 'puddle'} "
         "on the ground.",
-        wholeSentence: true);
+        isRaw: true);
   }
 
   if (items.isEmpty) {
     s.add("A quick glance reveals there's nothing useful on the ground.",
-        wholeSentence: true);
+        isRaw: true);
   }
 
   s.addParagraph();

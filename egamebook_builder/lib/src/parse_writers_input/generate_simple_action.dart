@@ -23,7 +23,7 @@ Expression generateSimpleAction(
   final successClosure = createActionContextSelfClosure();
   successClosure.block.addExpression(refer('s').property('add').call(
       [literal(escapeWritersText(description))],
-      {'wholeSentence': literalTrue}));
+      {'isRaw': literalTrue}));
   successClosure.block
       .addExpression(refer('w').property('popSituation').call([refer('c')]));
 

@@ -323,7 +323,7 @@ class SequenceBlockVisitor {
         _builder.addExpression(refer(storylineParameter.name)
             .property("add")
             .call([literal(escapeWritersText(block.content, _ifBlocks))],
-                {"wholeSentence": literalTrue}));
+                {"isRaw": literalTrue}));
         break;
       case BlockType.code:
         _builder.statements.add(Code(block.content));

@@ -26,7 +26,7 @@ final _karlHeardFirstTime = Rule(_id++, 1, true, (ApplicabilityContext c) {
   s.add(
       'Somewhere way above, something large groans. '
       'The sound is guttural, low, as rolling thunder.',
-      wholeSentence: true);
+      isRaw: true);
   c.outputWorld.recordCustom(evKarlHeardFirstTime);
 });
 
@@ -45,7 +45,7 @@ final _leroyQuits = Rule(_id++, 2, false, (ApplicabilityContext c) {
       'Leroy turns to me. "We did it. And I am proud. '
       'But now I need to go back to my father. Thank you." '
       'Leroy leaves towards the trader\'s shop.',
-      wholeSentence: true);
+      isRaw: true);
   w.updateActorById(leroyId, (b) {
     b.npc
       ..isHireable = false
@@ -59,7 +59,7 @@ final _playerHurt = Rule(_id++, 1, false, (ApplicabilityContext c) {
 }, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.addParagraph();
-  s.add('I still hurt.', wholeSentence: true);
+  s.add('I still hurt.', isRaw: true);
 });
 
 /// These are the rules that the director in the game will be using

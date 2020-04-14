@@ -406,6 +406,7 @@ class ShadowGraph {
   /// Fill the joiner graph with obvious / forced stuff, such as:
   ///
   /// * wholeSentence == none
+  /// * isRaw == none
   void _fillForcedJoinersAndConjunctions(UnmodifiableListView<Report> reports) {
     // Always start with new sentence (no ", and" or period).
     _joiners[0]
@@ -414,7 +415,7 @@ class ShadowGraph {
 
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      if (report.wholeSentence) {
+      if (report.wholeSentence || report.isRaw) {
         _limitJoinerToPeriodOrNone(i);
         _limitJoinerToNone(i + 1);
       }

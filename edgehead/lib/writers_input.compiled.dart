@@ -60,7 +60,7 @@ final Approach endOfRoamFromTestRandomEncounter =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach testRandomEncounterFromStartTesterBuild =
     Approach('start_tester_build', 'test_random_encounter', 'Random encounter',
@@ -70,7 +70,7 @@ final Approach testRandomEncounterFromStartTesterBuild =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room testRandomEncounter =
     Room('test_random_encounter', (ActionContext c) {
@@ -79,7 +79,7 @@ final Room testRandomEncounter =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, generateRandomEncounter, null, positionX: 0, positionY: 0);
 final Approach bigOObservatoryFromBigOAntechamber =
     Approach('big_o_antechamber', 'big_o_observatory', 'Go >> Observatory',
@@ -89,7 +89,7 @@ final Approach bigOObservatoryFromBigOAntechamber =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -98,14 +98,14 @@ final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('A tiny floor overlooking the Bay and the ruins of San Francisco.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, positionX: 26, positionY: 8);
 final Approach bigOAntechamberFromBigOObservatory =
     Approach('big_o_observatory', 'big_o_antechamber', 'Go >> Antechamber',
@@ -115,7 +115,7 @@ final Approach bigOAntechamberFromBigOObservatory =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach bigOAntechamberFromCrowdsource = Approach(
     'crowdsource', 'big_o_antechamber', 'Go >> Antechamber', (ActionContext c) {
@@ -124,7 +124,7 @@ final Approach bigOAntechamberFromCrowdsource = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -134,14 +134,14 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'A dark room without windows. A stone staircase leads up to a trap door in the ceiling.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, positionX: 26, positionY: 12);
 final Approach topOfClimbFromBarracks = Approach(
     'barracks', 'top_of_climb', 'Go >> Top of the climb', (ActionContext c) {
@@ -150,7 +150,7 @@ final Approach topOfClimbFromBarracks = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -159,14 +159,14 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('A huge, dark pit. The bottom is unseen, in complete darkness.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, positionX: 20, positionY: 26);
 final Approach crowdsourceFromBarracks = Approach(
     'barracks', 'crowdsource', 'Go >> Crowd\'s temple', (ActionContext c) {
@@ -175,7 +175,7 @@ final Approach crowdsourceFromBarracks = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach crowdsourceFromBigOAntechamber =
     Approach('big_o_antechamber', 'crowdsource', 'Go >> Crowd\'s temple',
@@ -185,7 +185,7 @@ final Approach crowdsourceFromBigOAntechamber =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -193,14 +193,14 @@ final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A temple.\n', wholeSentence: true);
+  s.add('A temple.\n', isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, positionX: 27, positionY: 29);
 final Approach barracksFromCrowdsource =
     Approach('crowdsource', 'barracks', 'Go >> Barracks', (ActionContext c) {
@@ -209,7 +209,7 @@ final Approach barracksFromCrowdsource =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach barracksFromJunction =
     Approach('junction', 'barracks', 'Go >> Barracks', (ActionContext c) {
@@ -218,7 +218,7 @@ final Approach barracksFromJunction =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach barracksFromTopOfClimb =
     Approach('top_of_climb', 'barracks', 'Go >> Barracks', (ActionContext c) {
@@ -227,7 +227,7 @@ final Approach barracksFromTopOfClimb =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room barracks = Room('barracks', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -237,14 +237,14 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'A large room taking up two floors. Bunk beds, an assembly area, and a number of training poles.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, positionX: 22, positionY: 36);
 final Approach maintenanceShaftFromElevator28 = Approach(
     'elevator_28',
@@ -255,7 +255,7 @@ final Approach maintenanceShaftFromElevator28 = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 
 class KarlListenToGuards extends RoamingAction {
@@ -287,7 +287,7 @@ class KarlListenToGuards extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'The two are laughing.\n\n"He ate it whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole taheen in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs KarlListenToGuards';
   }
 
@@ -351,7 +351,7 @@ class KarlUseNecromancy extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'Terrible roar and thrashing comes from beyond the gate.\n\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s goind on with Karl?"\n\nThey go in, and are killed. Then, some more thrashing, then silence.\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.markHappened(evKarlKilled);
     c.markHappened(evKarlGuardsKilled);
     c.markHappened(evKarlKilledViaNecromancy);
@@ -401,14 +401,14 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
       : '''''';
   s.add(
       'Musty, dark place. Through cracks, I can see rooms under me.\n\n$ifBlock_373b22f49\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Musty, dark place.\n', wholeSentence: true);
+  s.add('Musty, dark place.\n', isRaw: true);
 }, null, null, positionX: 34, positionY: 40);
 final Approach elevator28FromElevator12 = Approach(
     'elevator_12', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
@@ -421,7 +421,7 @@ final Approach elevator28FromElevator12 = Approach(
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add('$weSubstitutionCapitalized climb up using an ancient rusty ladder.\n',
-      wholeSentence: true);
+      isRaw: true);
 });
 final Approach elevator28FromGodsLair = Approach(
     'gods_lair', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
@@ -431,7 +431,7 @@ final Approach elevator28FromGodsLair = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach elevator28FromJunction = Approach(
     'junction', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
@@ -441,7 +441,7 @@ final Approach elevator28FromJunction = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach elevator28FromMaintenanceShaft = Approach(
     'maintenance_shaft',
@@ -452,7 +452,7 @@ final Approach elevator28FromMaintenanceShaft = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -465,7 +465,7 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
       : '''''';
   s.add(
       'Orc noises from all around, but thankfully no orc in sight. $ifBlock_753ddd0b\n',
-      wholeSentence: true);
+      isRaw: true);
 }, null, null, positionX: 32, positionY: 42);
 final Approach godsLairFromElevator28 = Approach(
     'elevator_28', 'gods_lair', 'Go >> God\'s Lair', (ActionContext c) {
@@ -474,7 +474,7 @@ final Approach godsLairFromElevator28 = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 
 class KarlTakeStar extends RoamingAction {
@@ -505,7 +505,7 @@ class KarlTakeStar extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add('I take the star. It fits into my palm. It says "Lair of God".\n\n\n',
-        wholeSentence: true);
+        isRaw: true);
     w.updateActorById(playerId, (b) => b..inventory.items.add(lairOfGodStar));
 
     return '${a.name} successfully performs KarlTakeStar';
@@ -552,7 +552,7 @@ final Room godsLair = Room(
       final Storyline s = c.outputStoryline;
       s.add(
           'Two orcs, a berserker and a captain, watch me approach in amazement.\n\n"You!" the captain bellows. "Stand still so I can chop off your head."\n',
-          wholeSentence: true);
+          isRaw: true);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -560,7 +560,7 @@ final Room godsLair = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('The gate to God\'s lair.\n', wholeSentence: true);
+      s.add('The gate to God\'s lair.\n', isRaw: true);
     },
     generateGodsLairFight,
     null,
@@ -575,7 +575,7 @@ final Room godsLair = Room(
       final Storyline s = c.outputStoryline;
       s.add(
           'A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
-          wholeSentence: true);
+          isRaw: true);
       c.markHappened(evKarlGuardsKilled);
     });
 final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
@@ -587,7 +587,7 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
   final Storyline s = c.outputStoryline;
   s.add(
       'The gate is open. On it, there is a small star decoration.\n\nBeyond the gate, a giant\'s carcass lies. It\'s belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, null, null,
     parent: 'gods_lair',
     prerequisite: Prerequisite(727361369, 1, true, (ApplicabilityContext c) {
@@ -606,7 +606,7 @@ final Approach junctionFromBarracks = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach junctionFromCockroachFarm =
     Approach('cockroach_farm', 'junction', 'Go >> Junction on 26th Floor',
@@ -616,7 +616,7 @@ final Approach junctionFromCockroachFarm =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach junctionFromElevator28 =
     Approach('elevator_28', 'junction', 'Go >> Junction on 26th Floor',
@@ -626,7 +626,7 @@ final Approach junctionFromElevator28 =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach junctionFromReservoir = Approach(
     'reservoir', 'junction', 'Go >> Junction on 26th Floor', (ActionContext c) {
@@ -635,7 +635,7 @@ final Approach junctionFromReservoir = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room junction = Room('junction', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -647,7 +647,7 @@ final Room junction = Room('junction', null, (ActionContext c) {
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
       'A place of increased orc foot traffic. $weSubstitutionCapitalized stay hidden.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, null, null, positionX: 27, positionY: 45);
 final Approach reservoirFromJunction =
     Approach('junction', 'reservoir', 'Go >> Reservoir', (ActionContext c) {
@@ -656,7 +656,7 @@ final Approach reservoirFromJunction =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 
 class ReservoirOpenDam extends RoamingAction {
@@ -685,7 +685,7 @@ class ReservoirOpenDam extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'I open the dam and the reservoir quickly empties. Water rushes past me, into corridors of the Pyramid.\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.markHappened(evOpenedDam);
 
     return '${a.name} successfully performs ReservoirOpenDam';
@@ -728,8 +728,7 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A filthy pool covered with a layer of green sludge.\n',
-      wholeSentence: true);
+  s.add('A filthy pool covered with a layer of green sludge.\n', isRaw: true);
 }, null, null, isIdle: true, positionX: 25, positionY: 48);
 final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
     (ActionContext c) {
@@ -740,7 +739,7 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
   final Storyline s = c.outputStoryline;
   s.add(
       'A huge empty room, with the floor covered with sludge and slimy carcasses.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, null, null,
     parent: 'reservoir',
     prerequisite: Prerequisite(364228247, 1, true, (ApplicabilityContext c) {
@@ -758,7 +757,7 @@ final Approach cockroachFarmFromJunction = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -768,14 +767,14 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'I am in a maze of twisty little passages, all alike. All crawling with cockroaches.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, positionX: 29, positionY: 52);
 final Approach oracleMainFromKnightsHqMain = Approach(
     'knights_hq_main', 'oracle_main', 'Go >> Oracle\'s', (ActionContext c) {
@@ -784,7 +783,7 @@ final Approach oracleMainFromKnightsHqMain = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -792,7 +791,7 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The Oracle is here.\n', wholeSentence: true);
+  s.add('The Oracle is here.\n', isRaw: true);
 }, null, null, isIdle: true, positionX: 15, positionY: 57);
 final Approach battlefieldFromJungle = Approach(
     'jungle', 'battlefield', 'Go >> Battlefield Floor', (ActionContext c) {
@@ -801,7 +800,7 @@ final Approach battlefieldFromJungle = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach battlefieldFromKnightsHqMain =
     Approach('knights_hq_main', 'battlefield', 'Go >> Battlefield Floor',
@@ -815,7 +814,7 @@ final Approach battlefieldFromKnightsHqMain =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
       '$weSubstitutionCapitalized climb up the stairs to the sixteenth floor.\n',
-      wholeSentence: true);
+      isRaw: true);
 });
 final Room battlefield = Room(
     'battlefield',
@@ -829,7 +828,7 @@ final Room battlefield = Room(
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
           'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."\n\nThe two orcs attack.\n',
-          wholeSentence: true);
+          isRaw: true);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -837,7 +836,7 @@ final Room battlefield = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', wholeSentence: true);
+      s.add('', isRaw: true);
     },
     generateBattlefieldFight,
     null,
@@ -853,7 +852,7 @@ final Room battlefield = Room(
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
           '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n',
-          wholeSentence: true);
+          isRaw: true);
     },
     whereDescription: 'among the columns');
 final Approach jungleFromStagingArea =
@@ -863,7 +862,7 @@ final Approach jungleFromStagingArea =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room jungle = Room('jungle', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -873,14 +872,14 @@ final Room jungle = Room('jungle', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'Corridors full of vegetation. Path through that, like a path in a forest, but indoors.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, positionX: 15, positionY: 67);
 final Approach knightsHqMainFromBattlefield =
     Approach('battlefield', 'knights_hq_main', 'Go >> Knights Headquarters',
@@ -890,7 +889,7 @@ final Approach knightsHqMainFromBattlefield =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach knightsHqMainFromElevator12 =
     Approach('elevator_12', 'knights_hq_main', 'Go >> Knights Headquarters',
@@ -900,7 +899,7 @@ final Approach knightsHqMainFromElevator12 =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach knightsHqMainFromOracleMain =
     Approach('oracle_main', 'knights_hq_main', 'Go >> Knights Headquarters',
@@ -910,7 +909,7 @@ final Approach knightsHqMainFromOracleMain =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach knightsHqMainFromStagingArea =
     Approach('staging_area', 'knights_hq_main', 'Go >> Knights Headquarters',
@@ -920,7 +919,7 @@ final Approach knightsHqMainFromStagingArea =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -930,14 +929,14 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       '(NOTE FOR TESTERS: This area is very much in development.)\n\nI come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 37, positionY: 70);
 final Approach elevator12FromElevator28 = Approach(
     'elevator_28', 'elevator_12', 'Go >> Elevator Shaft Entrance on 12th Floor',
@@ -951,7 +950,7 @@ final Approach elevator12FromElevator28 = Approach(
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
       '$weSubstitutionCapitalized climb down using an ancient rusty ladder.\n',
-      wholeSentence: true);
+      isRaw: true);
 });
 final Approach elevator12FromKnightsHqMain = Approach(
     'knights_hq_main',
@@ -962,7 +961,7 @@ final Approach elevator12FromKnightsHqMain = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room elevator12 = Room('elevator_12', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -970,7 +969,7 @@ final Room elevator12 = Room('elevator_12', null, (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A rare access to the ancient elevator shaft.\n', wholeSentence: true);
+  s.add('A rare access to the ancient elevator shaft.\n', isRaw: true);
 }, null, null, isIdle: true, positionX: 32, positionY: 72);
 final Approach slopesFromFarmersVillage =
     Approach('farmers_village', 'slopes', 'Go >> Slopes', (ActionContext c) {
@@ -979,7 +978,7 @@ final Approach slopesFromFarmersVillage =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room slopes = Room('slopes', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -989,14 +988,14 @@ final Room slopes = Room('slopes', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 42, positionY: 78);
 final Approach stagingAreaFromFarmersVillage = Approach(
     'farmers_village', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
@@ -1005,7 +1004,7 @@ final Approach stagingAreaFromFarmersVillage = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach stagingAreaFromJungle =
     Approach('jungle', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
@@ -1014,7 +1013,7 @@ final Approach stagingAreaFromJungle =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach stagingAreaFromKeepGate = Approach(
     'keep_gate', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
@@ -1023,7 +1022,7 @@ final Approach stagingAreaFromKeepGate = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach stagingAreaFromKnightsHqMain = Approach(
     'knights_hq_main', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
@@ -1032,7 +1031,7 @@ final Approach stagingAreaFromKnightsHqMain = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach stagingAreaFromPyramidEntrance =
     Approach('pyramid_entrance', 'staging_area', 'Go >> Staging Area',
@@ -1042,7 +1041,7 @@ final Approach stagingAreaFromPyramidEntrance =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room stagingArea = Room('staging_area', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1052,14 +1051,14 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 23, positionY: 82);
 final Approach farmersVillageFromPyramidEntrance =
     Approach('pyramid_entrance', 'farmers_village', 'Go >> Farmers\' village',
@@ -1069,7 +1068,7 @@ final Approach farmersVillageFromPyramidEntrance =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach farmersVillageFromSlopes = Approach(
     'slopes', 'farmers_village', 'Go >> Farmers\' village', (ActionContext c) {
@@ -1078,7 +1077,7 @@ final Approach farmersVillageFromSlopes = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach farmersVillageFromStagingArea =
     Approach('staging_area', 'farmers_village', 'Go >> Farmers\' village',
@@ -1088,7 +1087,7 @@ final Approach farmersVillageFromStagingArea =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1096,14 +1095,14 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Lively corridors full of well dressed people.\n', wholeSentence: true);
+  s.add('Lively corridors full of well dressed people.\n', isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 35, positionY: 83);
 final Approach keepGateFromStagingArea = Approach(
     'staging_area', 'keep_gate', 'Go >> The Keep\'s Gate', (ActionContext c) {
@@ -1112,7 +1111,7 @@ final Approach keepGateFromStagingArea = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1122,14 +1121,14 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. \n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 15, positionY: 86);
 final Approach pyramidEntranceFromBleedsMain = Approach(
     'bleeds_main', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
@@ -1139,7 +1138,7 @@ final Approach pyramidEntranceFromBleedsMain = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach pyramidEntranceFromFarmersVillage = Approach(
     'farmers_village', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
@@ -1149,7 +1148,7 @@ final Approach pyramidEntranceFromFarmersVillage = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach pyramidEntranceFromStagingArea = Approach(
     'staging_area', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
@@ -1159,7 +1158,7 @@ final Approach pyramidEntranceFromStagingArea = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1170,14 +1169,14 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
       'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The two knights are still here.\n', wholeSentence: true);
+  s.add('The two knights are still here.\n', isRaw: true);
 }, null, null, isIdle: true, positionX: 26, positionY: 94);
 final talkToKatGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -1187,7 +1186,7 @@ final talkToKatGreetingsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add('"Greetings to you!" The woman smiles. "My name is Kat."\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -1201,7 +1200,7 @@ final talkToKatGreetingsInk = InkAst([
           final Storyline s = c.outputStoryline;
           s.add(
               '  The woman\'s face sharpens. "Kat, yes. That\'s my name. What\'s yours?"\n',
-              wholeSentence: true);
+              isRaw: true);
         }),
         InkForkNode([
           InkChoiceNode(
@@ -1218,7 +1217,7 @@ final talkToKatGreetingsInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add('  "Yes. But don\'t call me that. And your name is..."\n',
-                    wholeSentence: true);
+                    isRaw: true);
               }),
               InkForkNode([
                 InkChoiceNode(
@@ -1243,7 +1242,7 @@ final talkToKatGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"Good to meet you, [Aren]."\n', wholeSentence: true);
+    s.add('"Good to meet you, [Aren]."\n', isRaw: true);
   }),
 ]);
 
@@ -1281,7 +1280,7 @@ class TalkToKatAboutBrother extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         '"Sarn of Falling Rock," she repeats. But before she can continue, the man steps in. Kat looks at him. "You know a Sarn of Falling Rock, Miguel?"\n\n',
-        wholeSentence: true);
+        isRaw: true);
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
       "talk_to_miguel_about_brother_ink",
@@ -1391,7 +1390,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"Sarn? Doesn\'t ring the bell. Who is he?"\n', wholeSentence: true);
+    s.add('"Sarn? Doesn\'t ring the bell. Who is he?"\n', isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -1404,7 +1403,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add('    Miguel looks surprised. "He\'s a knight, then?"\n',
-              wholeSentence: true);
+              isRaw: true);
         }),
         InkForkNode([
           InkChoiceNode(
@@ -1417,7 +1416,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add('        "Ah. He\'s a mender with the Knights." \n',
-                    wholeSentence: true);
+                    isRaw: true);
               }),
             ],
           ),
@@ -1435,7 +1434,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final Storyline s = c.outputStoryline;
           s.add(
               '    "There are no blacksmiths here." Miguel gestures around, towards the ruins and the forest.\n',
-              wholeSentence: true);
+              isRaw: true);
         }),
         InkForkNode([
           InkChoiceNode(
@@ -1449,7 +1448,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final Storyline s = c.outputStoryline;
                 s.add(
                     '        "Her?" He looks at his sword and pats it. "She\'s not from here. I bought her in Lywood, years ago, for more coins that I will admit." He smiles for the first time since we met.\n',
-                    wholeSentence: true);
+                    isRaw: true);
               }),
               InkForkNode([
                 InkChoiceNode(
@@ -1463,7 +1462,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                       final Storyline s = c.outputStoryline;
                       s.add(
                           '            Miguel\'s smile widens. "You get what you pay for. And I\'m taking good care of her, taking her to ..." Miguel stops. "Oh!" He shakes his head, still smiling.\n',
-                          wholeSentence: true);
+                          isRaw: true);
                     }),
                   ],
                 ),
@@ -1478,8 +1477,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                       final Actor a = c.actor;
                       final WorldStateBuilder w = c.outputWorld;
                       final Storyline s = c.outputStoryline;
-                      s.add('            "Oh!" he says. \n',
-                          wholeSentence: true);
+                      s.add('            "Oh!" he says. \n', isRaw: true);
                     }),
                   ],
                 ),
@@ -1493,7 +1491,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final Storyline s = c.outputStoryline;
                 s.add(
                     '        "I know what you\'re driving at. You mean a mender. Your Sarn is a mender with the Knights."\n',
-                    wholeSentence: true);
+                    isRaw: true);
               }),
             ],
           ),
@@ -1506,8 +1504,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('        "Oh, you mean a mender."\n',
-                    wholeSentence: true);
+                s.add('        "Oh, you mean a mender."\n', isRaw: true);
               }),
             ],
           ),
@@ -1523,7 +1520,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add('He looks to the woman. "Do you know of a mender called Sarn?"\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -1532,7 +1529,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"No," she says.\n', wholeSentence: true);
+    s.add('"No," she says.\n', isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -1549,7 +1546,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add(
         'Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is, you would not want to get in. You would want to get out."\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -1560,7 +1557,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add(
         'The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -1571,7 +1568,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add(
         '"This place is no longer safe. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
 ]);
 final talkToMiguelGreetingsInk = InkAst([
@@ -1581,7 +1578,7 @@ final talkToMiguelGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('The knight nods.\n', wholeSentence: true);
+    s.add('The knight nods.\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -1591,7 +1588,7 @@ final talkToMiguelGreetingsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add('"Welcome," he says, and there is a bit of sarcasm in his voice.\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -1610,7 +1607,7 @@ final talkToMiguelGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"Miguel."\n', wholeSentence: true);
+    s.add('"Miguel."\n', isRaw: true);
   }),
 ]);
 
@@ -1756,7 +1753,7 @@ final Approach bleedsMainFromBleedsTraderHut = Approach(
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add('$weSubstitutionCapitalized walk out into the muddy street.\n',
-      wholeSentence: true);
+      isRaw: true);
 });
 final Approach bleedsMainFromGoblinSkirmishMain =
     Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> The Bleeds',
@@ -1768,8 +1765,7 @@ final Approach bleedsMainFromGoblinSkirmishMain =
   final Storyline s = c.outputStoryline;
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add('$weSubstitutionCapitalized walk back to The Bleeds.\n',
-      wholeSentence: true);
+  s.add('$weSubstitutionCapitalized walk back to The Bleeds.\n', isRaw: true);
 });
 final Approach bleedsMainFromGoblinSkirmishSneak =
     Approach('goblin_skirmish_sneak', 'bleeds_main', 'Go >> The Bleeds',
@@ -1783,7 +1779,7 @@ final Approach bleedsMainFromGoblinSkirmishSneak =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
       '$weSubstitutionCapitalized sneak through the bushes and emerge back in The Bleeds.\n',
-      wholeSentence: true);
+      isRaw: true);
 });
 final Approach bleedsMainFromMeadowFight = Approach(
     'meadow_fight', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
@@ -1792,7 +1788,7 @@ final Approach bleedsMainFromMeadowFight = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach bleedsMainFromPyramidEntrance = Approach(
     'pyramid_entrance', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
@@ -1801,7 +1797,7 @@ final Approach bleedsMainFromPyramidEntrance = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Approach bleedsMainFromStartTesterBuild = Approach(
     'start_tester_build',
@@ -1813,7 +1809,7 @@ final Approach bleedsMainFromStartTesterBuild = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 
 class BleedsMainObserveSmoke extends RoamingAction {
@@ -1845,7 +1841,7 @@ class BleedsMainObserveSmoke extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire.\n\nSomeone is not afraid to be found.\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs BleedsMainObserveSmoke';
   }
 
@@ -1906,7 +1902,7 @@ class BleedsMainObserveVillage extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.learnAbout(kbBlindGuide);
 
     return '${a.name} successfully performs BleedsMainObserveVillage';
@@ -1951,7 +1947,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
-      wholeSentence: true);
+      isRaw: true);
   c.learnAbout(kbTrader);
   c.learnAbout(kbGoblinCampSmoke);
 
@@ -1962,7 +1958,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 37, positionY: 98);
 
 class BleedsBlindGuideGoblins extends RoamingAction {
@@ -1995,7 +1991,7 @@ class BleedsBlindGuideGoblins extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         '"Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It\'s like the goblins are being drawn here."\n\n_"What do they want?"_\n\n"They\'re goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it\'s strange. They come in larger numbers than you would think makes sense. They\'d get more slaves and more steel elsewhere."\n\n_"They want into the Pyramid, perhaps?"_\n\n"Nonsense. Goblins fear these kinds of things. Even if they didn\'t, they\'d probably get slaughtered by the orcs. Oh, that\'s something I\'d like to see." He absentmindedly touches his face just under the left eye.\n\n',
-        wholeSentence: true);
+        isRaw: true);
     Ruleset(
         Rule(126964403, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
@@ -2010,7 +2006,7 @@ class BleedsBlindGuideGoblins extends RoamingAction {
           final Storyline s = c.outputStoryline;
           s.add(
               '\n"Anyway. The goblins aren\'t stupid, but they _are_ getting awfully bold. I\'ve heard a band has made their camp not far from here. So close that people can see their campfire\'s smoke sometimes." He shudders. "Can you see it?"\n\n_"Yes."_\n\n"It must be a harrowing sight. A herald of our own future, possibly."\n\n',
-              wholeSentence: true);
+              isRaw: true);
         }),
         Rule(775067539, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
@@ -2087,7 +2083,7 @@ class BleedsBlindGuideGreet extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.learnAbout(kbBlindGuide);
 
     return '${a.name} successfully performs BleedsBlindGuideGreet';
@@ -2157,18 +2153,18 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         '"So you want to explore the Pyramid."\n\n_"I need something that\'s in there."_\n\n"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n\nI don\'t want to reveal more than needed. But "magic" is vague enough. So I just say yes.\n\nThe man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.hearAbout(kbJisadHatesMagic);
 
     s.add(
         '\n_"What about it?"_\n\n"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.hearAbout(kbOrcsInPyramid);
     c.hearAbout(kbKnightsLeaving);
 
     s.add(
         '\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs BleedsBlindGuideTerribleIdea';
   }
 
@@ -2211,7 +2207,7 @@ final Approach bleedsTraderHutFromBleedsMain =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -2253,17 +2249,17 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
 
     s.add(
         '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.hearAbout(kbKnightsLeaving);
 
     s.add(
         '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! Sir, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
-        wholeSentence: true);
+        isRaw: true);
     w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
 
     s.add(
         '\n"The hell you can! You\'re a trader, Leroy! You\'re no fighter." Leroy\'s father is shaking. When he remembers that I\'m there with them, he apologizes, then turns back to Leroy. "Son, I forget that you are a grown man now. But... it is my wish that you don\'t go."\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs BleedsTraderGoblinSmoke';
   }
 
@@ -2328,12 +2324,12 @@ class BleedsTraderGoblins extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they\'re the worst. I fear we won\'t get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."\n\n',
-        wholeSentence: true);
+        isRaw: true);
     assert(c.inRoomWith(leroyId));
 
     s.add(
         '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.learnAbout(kbLeroyKnowsGoblinSmoke);
 
     return '${a.name} successfully performs BleedsTraderGoblins';
@@ -2396,7 +2392,7 @@ class BleedsTraderGreet extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
-        wholeSentence: true);
+        isRaw: true);
     c.learnAbout(kbLeroy);
 
     return '${a.name} successfully performs BleedsTraderGreet';
@@ -2463,8 +2459,7 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('“What happened?”\n\nI describe the battle to him.\n',
-        wholeSentence: true);
+    s.add('“What happened?”\n\nI describe the battle to him.\n', isRaw: true);
     return '${a.name} successfully performs BleedsTraderTellAboutClearedCamp';
   }
 
@@ -2509,7 +2504,7 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
       '$weSubstitutionCapitalized enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2519,7 +2514,7 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
       'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n\n',
-      wholeSentence: true);
+      isRaw: true);
   if (c.inRoomWith(leroyId) &&
       w.getActorById(leroyId).anatomy.isUndead &&
       !c.hasHappened(evJisadSeesUndeadLeroy)) {
@@ -2537,8 +2532,7 @@ final Approach endOfRoamFromBleedsMain =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('You realize this adventuring life is not for you.\n',
-      wholeSentence: true);
+  s.add('You realize this adventuring life is not for you.\n', isRaw: true);
 });
 final Approach goblinSkirmishMainFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
@@ -2548,7 +2542,7 @@ final Approach goblinSkirmishMainFromBleedsMain =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -2563,7 +2557,7 @@ final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -2576,8 +2570,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('(To be done: actual battle. Assume you won.)\n\n',
-      wholeSentence: true);
+  s.add('(To be done: actual battle. Assume you won.)\n\n', isRaw: true);
   c.markHappened(evGoblinCampCleared);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2585,7 +2578,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The goblin camp is deserted.\n', wholeSentence: true);
+  s.add('The goblin camp is deserted.\n', isRaw: true);
 }, null, null, positionX: 11, positionY: 97);
 final Approach startTesterBuildFromPreStartBook = Approach(
     'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
@@ -2594,7 +2587,7 @@ final Approach startTesterBuildFromPreStartBook = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2604,7 +2597,7 @@ final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add(
       'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, null, null, null, positionX: 0, positionY: 0);
 final Approach goblinSkirmishPatrolFromBleedsMain = Approach(
     'bleeds_main', 'goblin_skirmish_patrol', 'Go >> Smoke', (ActionContext c) {
@@ -2617,7 +2610,7 @@ final Approach goblinSkirmishPatrolFromBleedsMain = Approach(
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
       'There is no path in the direction of the smoke. $weSubstitutionCapitalized go through the brush and step over logs and ancient rubble.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -2635,7 +2628,7 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
       'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
-      wholeSentence: true);
+      isRaw: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null,
     positionX: 15, positionY: 97);
 final Approach goblinSkirmishSneakFromBleedsMain = Approach(
@@ -2646,7 +2639,7 @@ final Approach goblinSkirmishSneakFromBleedsMain = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
@@ -2662,7 +2655,7 @@ final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 
 class ListenContinue extends RoamingAction {
@@ -2694,7 +2687,7 @@ class ListenContinue extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'The higher ranked goblin takes something out of a leather bag and shoves it into the other\'s face.\n\n"The only reason we are here, shithead, is the graytower. Look at the device."\n\nThe lower ranked goblin\'s face wrinkles, almost showing his teeth but not quite.\n\n"The kh\'ompakh is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."\n\n"Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs ListenContinue';
   }
 
@@ -2758,7 +2751,7 @@ class ListenMore extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'The two goblins don\'t speak anymore. They each look into the fire.\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs ListenMore';
   }
 
@@ -2819,7 +2812,7 @@ class ListenToThemArguing extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         '"Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw no guards!" \n\n"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go there."\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs ListenToThemArguing';
   }
 
@@ -2882,7 +2875,7 @@ class ObserveGoblinCamp extends RoamingAction {
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
         '$weSubstitutionCapitalized find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs ObserveGoblinCamp';
   }
 
@@ -2926,14 +2919,14 @@ final Room goblinSkirmishSneak =
   final Storyline s = c.outputStoryline;
   s.add(
       'Suddenly, I hear voices ahead. Two goblins are arguing about something.\n',
-      wholeSentence: true);
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The goblins are still here.\n', wholeSentence: true);
+  s.add('The goblins are still here.\n', isRaw: true);
 }, null, null, positionX: 13, positionY: 98);
 final Approach startFromStartTesterBuild = Approach(
     'start_tester_build', 'start', 'Set piece >> from the start of the game',
@@ -2943,7 +2936,7 @@ final Approach startFromStartTesterBuild = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final startInkInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -2954,7 +2947,7 @@ final startInkInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add(
         'Here I am in the ancient ruins of San Francisco. After a month long journey, I have finally reached my destination. My brother is here, somewhere.\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -3074,7 +3067,7 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add('I am also a necromancer. Which might come in handy around here.\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3084,8 +3077,8 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"This place is dangerous, young sir." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a city.\n',
-        wholeSentence: true);
+        '"This place is dangerous, young sir." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a city. The air is damp and raw.\n',
+        isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -3099,7 +3092,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           s.add(
               '    Tamara gives me a look. "Extremely funny," she whispers.\n',
-              wholeSentence: true);
+              isRaw: true);
         }),
         InkForkNode([
           InkChoiceNode(
@@ -3113,8 +3106,7 @@ final startInkInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('        Then again, I _have_ seen <>\n',
-                    wholeSentence: true);
+                s.add('        Then again, I _have_ seen \n', isRaw: true);
               }),
             ],
           ),
@@ -3128,8 +3120,8 @@ final startInkInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '        Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen <>\n',
-                    wholeSentence: true);
+                    '        Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen \n',
+                    isRaw: true);
               }),
             ],
           ),
@@ -3147,7 +3139,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           s.add(
               '    "No," she whispers. "Trees and leaves and fog. And corpses."\n',
-              wholeSentence: true);
+              isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
@@ -3156,7 +3148,7 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('    It\'s true. I\'ve also seen <>\n', wholeSentence: true);
+          s.add('    It\'s true. I\'ve also seen \n', isRaw: true);
         }),
       ],
     ),
@@ -3170,13 +3162,12 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'Tamara nods. "Good," she whispers, and starts walking again. I look around, at the thick overgrowth. I\'ve seen <>\n',
-              wholeSentence: true);
+              'Tamara nods. "Good," she whispers, and starts walking again. I look around, at the thick overgrowth. I\'ve seen \n',
+              isRaw: true);
         }),
       ],
     ),
   ]),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -3184,8 +3175,8 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '<> quite a few corpses in the few hours we have been here. (All of them way too old and dry to raise, though.)\n',
-        wholeSentence: true);
+        'quite a few corpses in the few hours we have been here. (All of them way too old and dry to raise, though.)\n',
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3196,7 +3187,7 @@ final startInkInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add(
         'Tamara stops. For a moment, she\'s as still as painting, and I try to mirror her. Then, she nods in the direction of a ferocious goblin stepping out of hiding.\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3205,7 +3196,7 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('[IMAGE]\n', wholeSentence: true);
+    s.add('[IMAGE]\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3216,7 +3207,7 @@ final startInkInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add(
         'Keeping her teeth together, Tamara says: "I might need your help with this. Take my dagger."\n',
-        wholeSentence: true);
+        isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -3239,7 +3230,7 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('The fight begins.\n', wholeSentence: true);
+    s.add('The fight begins.\n', isRaw: true);
   }),
 ]);
 
@@ -3323,7 +3314,7 @@ final Approach meadowFightFromStart =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', wholeSentence: true);
+  s.add('', isRaw: true);
 });
 final Room meadowFight = Room(
     'meadow_fight',
@@ -3335,7 +3326,7 @@ final Room meadowFight = Room(
       final Storyline s = c.outputStoryline;
       s.add(
           'The goblin before us is especially feral. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
-          wholeSentence: true);
+          isRaw: true);
     },
     null,
     generateStartFight,
@@ -3366,7 +3357,7 @@ final Room meadowFight = Room(
             final Storyline s = c.outputStoryline;
             s.add(
                 '"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n',
-                wholeSentence: true);
+                isRaw: true);
           }),
           Rule(906032650, 2, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
@@ -3382,7 +3373,7 @@ final Room meadowFight = Room(
             final Storyline s = c.outputStoryline;
             s.add(
                 'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
-                wholeSentence: true);
+                isRaw: true);
           }),
           Rule(335866054, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
@@ -3395,7 +3386,7 @@ final Room meadowFight = Room(
             final Actor a = c.actor;
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
-            s.add('\nThe fight is over.\n\n', wholeSentence: true);
+            s.add('\nThe fight is over.\n\n', isRaw: true);
             Ruleset(Rule(827330017, 0, false, (ApplicabilityContext c) {
               final WorldState w = c.world;
               final Simulation sim = c.simulation;
@@ -3407,11 +3398,11 @@ final Room meadowFight = Room(
               final Actor a = c.actor;
               final WorldStateBuilder w = c.outputWorld;
               final Storyline s = c.outputStoryline;
-              s.add('"Well, that was (TBD)."\n\n', wholeSentence: true);
+              s.add('"Well, that was (TBD)."\n\n', isRaw: true);
             })).apply(c);
             s.add(
                 '\n$ifBlock_3c0f034e2 "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
-                wholeSentence: true);
+                isRaw: true);
             w.updateActorById(tamaraId, (b) => b.isActive = false);
           }),
           Rule(991926294, 0, false, (ApplicabilityContext c) {
@@ -3459,7 +3450,7 @@ class ReadLetterFromFather extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and bountiful.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your brother back from the dead.\n\n- Father\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs ReadLetterFromFather';
   }
 
@@ -3521,7 +3512,7 @@ class ReadLetterFromMentor extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'I take the letter from my pocket and read it.\n\nMy young friend,\n\nYou ask good questions. But before I will answer them, we must do something with your situation.\n\nYou must understand that a necromancer cannot be poor. There is no glory for practitioners of our profession unless we wield the resources and power to lead others.\n\nIt\'s not my place, or style, to share my wealth with you. But I can do something more exciting.\n\nI can share some knowledge. There exists a curious structure called the Pyramid. It lies in the ruins of an ancient city called San Francisco. The place is rich with ancient artifacts and gold.\n\nGo there, and take all you can. Learn about the place.\n\nIf you succeed in your quest, you may have the apprenticeship you seek.\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs ReadLetterFromMentor';
   }
 
@@ -3586,7 +3577,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'You silently approach the goblin, wait a few moments, then lean over him and deftly lift the shield. The goblin sniffs and leans his head to the side, but stays asleep.\n\n\nYou take a few slow steps back, then grip the shield in your left hand, ready for anything.\n',
-        wholeSentence: true);
+        isRaw: true);
     return '${a.name} successfully performs GuardpostAboveChurchTakeShield';
   }
 
@@ -3599,7 +3590,7 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add(
         'You silently approach the goblin, then wait a few moments. The goblin sniffs, moves, but stays asleep. You shift your weight on your right leg, leaning over the goblin and using the other leg as a counterweight. Briana watches you with amusement.\n\n\nYou touch the shield to lift it, but freeze. The goblin sniffs again, and shifts. If you move an inch, he\'ll wake up.\n',
-        wholeSentence: true);
+        isRaw: true);
     w.pushSituation(GuardpostAboveChurchTakeShieldRescueSituation.initialized(
         w.randomInt()));
     return '${a.name} fails to perform GuardpostAboveChurchTakeShield';
@@ -3663,7 +3654,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
             final Storyline s = c.outputStoryline;
             s.add(
                 'You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.\n\n\n<p class="toast">Your stamina decreases by 1.</p>\n\n\nFortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.\n\n\nYou deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.',
-                wholeSentence: true);
+                isRaw: true);
             w.popSituation(c);
             w.updateActorById(a.id, (b) => b..stamina -= 1);
 
@@ -3683,7 +3674,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
         final Storyline s = c.outputStoryline;
         s.add(
             'You snatch the shield and jump back next to Briana. The goblin wakes up instantly, and he gets his bearings surprisingly fast. He jumps up and points his scimitar at you.\n\n\nYou look at Briana. Both of you are ready to fight.',
-            wholeSentence: true);
+            isRaw: true);
         w.popSituation(c);
         return 'GuardpostAboveChurchTakeShieldRescueSituation resolved with rescue/continuation (Snatch the shield)';
       }, 'You can quickly snatch the shield, jump back and prepare for a fight.')

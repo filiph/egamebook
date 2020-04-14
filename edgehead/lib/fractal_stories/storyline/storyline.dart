@@ -41,7 +41,15 @@ class Report {
   final bool subjectAndObjectAreEnemies;
   final bool endSentence;
   final bool startSentence;
+
+  /// Tells [Storyline] not to use this sentence as a part of a larger
+  /// sentence. It must be by itself.
   final bool wholeSentence;
+
+  /// Raw reports are shown verbatim, without capitalization. They are often
+  /// a writer's input, and don't have any `<subject>` or similar stop words
+  /// in them.
+  final bool isRaw;
 
   /// A unique identifier of a thread of events that belong together. This is
   /// used with [replacesThread].
@@ -86,6 +94,7 @@ class Report {
       this.endSentence = false,
       this.startSentence = false,
       this.wholeSentence = false,
+      this.isRaw = false,
       this.actionThread,
       this.startsThread = false,
       this.replacesThread = false,
@@ -115,7 +124,8 @@ class Report {
         actionThread = null,
         startsThread = false,
         replacesThread = false,
-        time = null;
+        time = null,
+        isRaw = false;
 
   /// Returns all non-null entities (like [subject], [object] etc.)
   /// mentioned in the report.
@@ -289,6 +299,7 @@ class Storyline {
       bool endSentence = false,
       bool startSentence = false,
       bool wholeSentence = false,
+      bool isRaw = false,
       int actionThread,
       bool startsThread = false,
       bool replacesThread = false,
@@ -324,6 +335,7 @@ class Storyline {
         endSentence: endSentence,
         startSentence: startSentence,
         wholeSentence: wholeSentenceAutoDetected || wholeSentence,
+        isRaw: isRaw,
         actionThread: actionThread,
         startsThread: startsThread,
         replacesThread: replacesThread,
@@ -422,7 +434,7 @@ class Storyline {
     }
   }
 
-  void addParagraph() => add(PARAGRAPH_NEWLINES, wholeSentence: true);
+  void addParagraph() => add(PARAGRAPH_NEWLINES, isRaw: true);
 
   void clear() {
     _records.clear();
@@ -669,7 +681,7 @@ class Storyline {
       report =
           _realizeStopwords(report, _reports[i], getEntityFromId: getEntity);
 
-      if (needsCapitalization) {
+      if (needsCapitalization && !_reports[i].isRaw) {
         report = capitalize(report);
       }
 
@@ -681,7 +693,9 @@ class Storyline {
     }
 
     // add last dot
-    if (!_reports[length - 1].wholeSentence) strBuf.write(".");
+    if (!_reports[length - 1].wholeSentence && !_reports[length - 1].isRaw) {
+      strBuf.write(".");
+    }
 
     String s = strBuf.toString();
 
