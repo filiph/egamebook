@@ -1199,7 +1199,7 @@ final talkToKatGreetingsInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '  The woman\'s face sharpens. "Kat, yes. That\'s my name. What\'s yours?"\n',
+              ' The woman\'s face sharpens. "Kat, yes. That\'s my name. What\'s yours?"\n',
               isRaw: true);
         }),
         InkForkNode([
@@ -1216,7 +1216,7 @@ final talkToKatGreetingsInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('  "Yes. But don\'t call me that. And your name is..."\n',
+                s.add(' "Yes. But don\'t call me that. And your name is..."\n',
                     isRaw: true);
               }),
               InkForkNode([
@@ -1402,7 +1402,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('    Miguel looks surprised. "He\'s a knight, then?"\n',
+          s.add(' Miguel looks surprised. "He\'s a knight, then?"\n',
               isRaw: true);
         }),
         InkForkNode([
@@ -1415,7 +1415,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('        "Ah. He\'s a mender with the Knights." \n',
+                s.add(' "Ah. He\'s a mender with the Knights." \n',
                     isRaw: true);
               }),
             ],
@@ -1433,7 +1433,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '    "There are no blacksmiths here." Miguel gestures around, towards the ruins and the forest.\n',
+              ' "There are no blacksmiths here." Miguel gestures around, towards the ruins and the forest.\n',
               isRaw: true);
         }),
         InkForkNode([
@@ -1447,7 +1447,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '        "Her?" He looks at his sword and pats it. "She\'s not from here. I bought her in Lywood, years ago, for more coins that I will admit." He smiles for the first time since we met.\n',
+                    ' "Her?" He looks at his sword and pats it. "She\'s not from here. I bought her in Lywood, years ago, for more coins that I will admit." He smiles for the first time since we met.\n',
                     isRaw: true);
               }),
               InkForkNode([
@@ -1461,7 +1461,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                       final WorldStateBuilder w = c.outputWorld;
                       final Storyline s = c.outputStoryline;
                       s.add(
-                          '            Miguel\'s smile widens. "You get what you pay for. And I\'m taking good care of her, taking her to ..." Miguel stops. "Oh!" He shakes his head, still smiling.\n',
+                          ' Miguel\'s smile widens. "You get what you pay for. And I\'m taking good care of her, taking her to ..." Miguel stops. "Oh!" He shakes his head, still smiling.\n',
                           isRaw: true);
                     }),
                   ],
@@ -1477,7 +1477,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                       final Actor a = c.actor;
                       final WorldStateBuilder w = c.outputWorld;
                       final Storyline s = c.outputStoryline;
-                      s.add('            "Oh!" he says. \n', isRaw: true);
+                      s.add(' "Oh!" he says. \n', isRaw: true);
                     }),
                   ],
                 ),
@@ -1490,7 +1490,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '        "I know what you\'re driving at. You mean a mender. Your Sarn is a mender with the Knights."\n',
+                    ' "I know what you\'re driving at. You mean a mender. Your Sarn is a mender with the Knights."\n',
                     isRaw: true);
               }),
             ],
@@ -1504,7 +1504,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('        "Oh, you mean a mender."\n', isRaw: true);
+                s.add(' "Oh, you mean a mender."\n', isRaw: true);
               }),
             ],
           ),
@@ -2874,7 +2874,7 @@ class ObserveGoblinCamp extends RoamingAction {
     final weSubstitutionCapitalized =
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '$weSubstitutionCapitalized find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
+        '$weSubstitutionCapitalized find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
         isRaw: true);
     return '${a.name} successfully performs ObserveGoblinCamp';
   }
@@ -3090,8 +3090,7 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add(
-              '    Tamara gives me a look. "Extremely funny," she whispers.\n',
+          s.add(' Tamara gives me a look. "Extremely funny," she whispers.\n',
               isRaw: true);
         }),
         InkForkNode([
@@ -3106,7 +3105,7 @@ final startInkInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('        Then again, I _have_ seen\n', isRaw: true);
+                s.add(' Then again, I _have_ seen\n', isRaw: true);
               }),
             ],
           ),
@@ -3120,7 +3119,7 @@ final startInkInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '        Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen\n',
+                    ' Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen\n',
                     isRaw: true);
               }),
             ],
@@ -3138,7 +3137,7 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '    "No," she whispers. "Trees and leaves and fog. And corpses."\n',
+              ' "No," she whispers. "Trees and leaves and fog. And corpses."\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3148,7 +3147,7 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('    It\'s true. I\'ve also seen\n', isRaw: true);
+          s.add(' It\'s true. I\'ve also seen\n', isRaw: true);
         }),
       ],
     ),
@@ -3175,7 +3174,7 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'quite a few corpses in the few hours we have been here. (All of them way too old and dry to raise, though.)\n',
+        'quite a few corpses in the few hours we have been here. (All of them way too old and blood-dry to raise, though.)\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3186,7 +3185,7 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Tamara stops. For a moment, she\'s as still as a painting, and I try to mirror her. Then, she nods in the direction of a ferocious goblin stepping out of hiding.\n',
+        'Tamara stops. For a moment, she\'s as still as a painting, and I try to mirror her. Then, she nods in the direction of a brush just ahead. It\'s shaking. Then something, something evil and fierce, steps right out of it.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3196,7 +3195,8 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('[IMAGE]\n', isRaw: true);
+    s.add('[IMAGE alt="A ferocious goblin is stepping out of hiding"]\n',
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3211,7 +3211,7 @@ final startInkInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "No. I am not a warrior." """.trim(),
+      command: r""" "No. I'm not a warrior." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -3219,7 +3219,9 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('    Tamara purses her lips but says nothing.\n', isRaw: true);
+          s.add(
+              ' Tamara purses her lips but says nothing. Then, without warning,\n',
+              isRaw: true);
         }),
       ],
     ),
@@ -3233,7 +3235,7 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '    I pick up a moldy rock that lies right next to my feet. It\'s hard and heavy in my palm.\n',
+              ' I pick up a moldy rock that lies right next to my feet. It\'s hard and heavy in my palm. As soon as I straighten up,\n',
               isRaw: true);
         }),
       ],
@@ -3248,20 +3250,19 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '    I take the dagger and point it in the direction of the goblin. The hilt is think, and the weapon feels heavy but balanced.\n',
+              ' I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it,\n',
               isRaw: true);
         }),
       ],
     ),
   ]),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('The fight begins.\n', isRaw: true);
+    s.add('the fight begins.\n', isRaw: true);
   }),
 ]);
 
@@ -3373,6 +3374,9 @@ final Room meadowFight = Room(
       final ifBlock_3c0f034e2 = c.isHurt(tamaraId)
           ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
+      s.add(
+          'My hands are shaking. I put them on the sides of my neck to stop the shudder, then on my ears. Then I don\'t know why I put my hands on my ears. I put them down again.\n\nAs a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. \n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking. Still shaking.\n\n\n',
+          isRaw: true);
       Ruleset(
           Rule(1072603126, 2, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
@@ -3684,7 +3688,7 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                'You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.\n\n\n<p class="toast">Your stamina decreases by 1.</p>\n\n\nFortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.\n\n\nYou deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.',
+                'You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin\'s leg.\n\n\n<p class="toast">Your stamina decreases by 1.</p>\n\n\nFortunately, the goblin shifts again and his expression gets visibly more relaxed. His breathing is deep and regular again.\n\n\nYou deftly lift the shield, take a few slow steps back, then grip the shield in your left hand, ready for anything.',
                 isRaw: true);
             w.popSituation(c);
             w.updateActorById(a.id, (b) => b..stamina -= 1);

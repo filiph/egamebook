@@ -74,28 +74,28 @@ Tamara nods. "Good," she whispers, and starts walking again. I look around, at t
 
 -
 
-<> quite a few corpses in the few hours we have been here. (All of them way too old and dry to raise, though.)
+<> quite a few corpses in the few hours we have been here. (All of them way too old and blood-dry to raise, though.)
 
-Tamara stops. For a moment, she's as still as a painting, and I try to mirror her. Then, she nods in the direction of a ferocious goblin stepping out of hiding.
+Tamara stops. For a moment, she's as still as a painting, and I try to mirror her. Then, she nods in the direction of a brush just ahead. It's shaking. Then something, something evil and fierce, steps right out of it.
 
-[IMAGE]
+[IMAGE alt="A ferocious goblin is stepping out of hiding"]
 
 Keeping her teeth together, Tamara says: "I might need your help with this. Take my dagger."
 
 // TODO: make this work - dagger / rock must be held
 
-* "No. I am not a warrior."
+* "No. I'm not a warrior."
 
-    Tamara purses her lips but says nothing.
+    Tamara purses her lips but says nothing. Then, without warning, <>
 
 * "Keep it. I'll improvise."
 
-    I pick up a moldy rock that lies right next to my feet. It's hard and heavy in my palm.
+    I pick up a moldy rock that lies right next to my feet. It's hard and heavy in my palm. As soon as I straighten up, <>
 
 * "Thanks, I'll take it."
 
-    I take the dagger and point it in the direction of the goblin. The hilt is think, and the weapon feels heavy but balanced.
+    I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it, <>
 
 -
 
-The fight begins.
+<> the fight begins.

@@ -19,6 +19,14 @@ WHERE: among the trees
 GROUND_MATERIAL: {earth|dirt}
 
 AFTER_MONSTERS_CLEARED:
+My hands are shaking. I put them on the sides of my neck to stop the shudder, then on my ears. Then I don't know why I put my hands on my ears. I put them down again.
+
+As a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. 
+
+But this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking. Still shaking.
+
+// TODO: let Tamara hang around (camp?), or even follow Aren to The Bleeds. Move the content below to separate actions.
+
 [[RULESET]]
 [[RULE]]
 !w.wasKilled(tamaraId)
@@ -35,6 +43,7 @@ The fight is over.
 [[ENDRULE]]
 [[ENDRULESET]]
 
+// TODO: stand up if Tamara ended the fight down, and isn't hurt
 [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "I'll survive, [young sir]. But you might not." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "Come with me back to safety. I'll give you a discount for the way back."
 
 _"Thanks for your service, Tamara. But I've come this far."_
