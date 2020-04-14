@@ -117,7 +117,7 @@ class InkChoose extends Action<InkChoicePointer> {
   @override
   List<String> getCommandPath(
       ApplicabilityContext context, InkChoicePointer pointer) {
-    return [pointer.choice.command];
+    return pointer.choice.command.split('>>');
   }
 
   @override
