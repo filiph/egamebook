@@ -29,7 +29,7 @@ String parseInk(String name, String text) {
   /// two paragraphs into one.
   bool previousParagraphHadGlue = false;
 
-  final lines = text.split('\n').toList(growable: false);
+  final lines = text.split('\n');
   for (final line in lines) {
     if (line.trim().isEmpty) continue;
 
