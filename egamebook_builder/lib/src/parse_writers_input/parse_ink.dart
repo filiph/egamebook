@@ -147,7 +147,7 @@ String _sanitizeCommand(String line) {
 }
 
 class _ParagraphText {
-  static final _endingGlue = RegExp(r'<>\s*$');
+  static final _endingGlue = RegExp(r'\s*<>\s*$');
 
   static final _startingGlue = RegExp(r'^\s*<>\s+');
 

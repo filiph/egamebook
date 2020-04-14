@@ -1,8 +1,6 @@
 import 'package:egamebook_builder/src/parse_writers_input/if_block.dart';
 import 'package:logging/logging.dart';
 
-final Logger _log = Logger("escape_writers_text");
-
 final Pattern sirSubstitution = "[sir]";
 
 final Pattern sirSubstitutionCapitalized = "[Sir]";
@@ -14,6 +12,10 @@ final Pattern weSubstitutionCapitalized = "[We]";
 final Pattern youngSirSubstitution = "[young sir]";
 
 final Pattern youngSirSubstitutionCapitalized = "[Young sir]";
+
+final Logger _log = Logger("escape_writers_text");
+
+final RegExp _multipleSpaces = RegExp(r'\s+');
 
 /// Escape writer's string to be used in code.
 ///
@@ -45,5 +47,6 @@ String escapeWritersText(String s, [List<IfBlock> ifBlocks = const []]) {
       .replaceAll(youngSirSubstitution, r'young sir')
       .replaceAll(youngSirSubstitutionCapitalized, r'Young sir')
       .replaceAll('\n', r'\n')
-      .replaceAll('\r', '');
+      .replaceAll('\r', '')
+      .replaceAll(_multipleSpaces, ' ');
 }

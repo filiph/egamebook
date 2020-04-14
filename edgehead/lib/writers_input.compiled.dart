@@ -3106,7 +3106,7 @@ final startInkInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('        Then again, I _have_ seen \n', isRaw: true);
+                s.add('        Then again, I _have_ seen\n', isRaw: true);
               }),
             ],
           ),
@@ -3120,7 +3120,7 @@ final startInkInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '        Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen \n',
+                    '        Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen\n',
                     isRaw: true);
               }),
             ],
@@ -3148,7 +3148,7 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('    It\'s true. I\'ve also seen \n', isRaw: true);
+          s.add('    It\'s true. I\'ve also seen\n', isRaw: true);
         }),
       ],
     ),
@@ -3162,7 +3162,7 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'Tamara nods. "Good," she whispers, and starts walking again. I look around, at the thick overgrowth. I\'ve seen \n',
+              'Tamara nods. "Good," she whispers, and starts walking again. I look around, at the thick overgrowth. I\'ve seen\n',
               isRaw: true);
         }),
       ],
