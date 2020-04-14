@@ -41,6 +41,8 @@ final RegExp _whiteSpaceOnly = RegExp(r"^\s*$");
 /// Parses a block of text (containing a `[[CODE]]` block or not) and returns
 /// an iterable of statements.
 Iterable<Code> createDescriptionStatements(String text) sync* {
+  if (text.trim().isEmpty) return;
+
   // Define we substitutions if needed.
   if (text.contains(weSubstitution)) {
     yield Code(r"final weSubstitution = "
