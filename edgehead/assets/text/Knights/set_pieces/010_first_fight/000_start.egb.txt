@@ -84,11 +84,17 @@ Keeping her teeth together, Tamara says: "I might need your help with this. Take
 
 // TODO: make this work - dagger / rock must be held
 
-* "What? I am no warrior." (Refuse the weapon.)
+* "No. I am not a warrior."
 
-* "Keep it. I'll improvise." (Pick up a rock.)
+    Tamara purses her lips but says nothing.
 
-* "Thanks." (Take the dagger.)
+* "Keep it. I'll improvise."
+
+    I pick up a moldy rock that lies right next to my feet. It's hard and heavy in my palm.
+
+* "Thanks, I'll take it."
+
+    I take the dagger and point it in the direction of the goblin. The hilt is think, and the weapon feels heavy but balanced.
 
 -
 

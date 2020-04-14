@@ -3211,16 +3211,47 @@ final startInkInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "What? I am no warrior." (Refuse the weapon.) """.trim(),
-      consequence: [],
+      command: r""" "No. I am not a warrior." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('    Tamara purses her lips but says nothing.\n', isRaw: true);
+        }),
+      ],
     ),
     InkChoiceNode(
-      command: r""" "Keep it. I'll improvise." (Pick up a rock.) """.trim(),
-      consequence: [],
+      command: r""" "Keep it. I'll improvise." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '    I pick up a moldy rock that lies right next to my feet. It\'s hard and heavy in my palm.\n',
+              isRaw: true);
+        }),
+      ],
     ),
     InkChoiceNode(
-      command: r""" "Thanks." (Take the dagger.) """.trim(),
-      consequence: [],
+      command: r""" "Thanks, I'll take it." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '    I take the dagger and point it in the direction of the goblin. The hilt is think, and the weapon feels heavy but balanced.\n',
+              isRaw: true);
+        }),
+      ],
     ),
   ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
