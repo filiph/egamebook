@@ -3077,7 +3077,7 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"This place is dangerous, young sir." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a city. The air is damp and raw.\n',
+        '"This place is dangerous, young sir." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a major city. The air is damp and raw.\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -3186,7 +3186,7 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Tamara stops. For a moment, she\'s as still as painting, and I try to mirror her. Then, she nods in the direction of a ferocious goblin stepping out of hiding.\n',
+        'Tamara stops. For a moment, she\'s as still as a painting, and I try to mirror her. Then, she nods in the direction of a ferocious goblin stepping out of hiding.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
