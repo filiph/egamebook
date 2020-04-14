@@ -150,8 +150,7 @@ FightSituation generateRandomEncounter(ActionContext c,
       break;
     case 1:
       enemies.add(_makeOrc(w));
-      s.add("An orc stands in front of me, wielding a sword.",
-          isRaw: true);
+      s.add("An orc stands in front of me, wielding a sword.", isRaw: true);
       break;
     case 2:
       final orc = Actor.initialized(6000, w.randomInt, "orc",
