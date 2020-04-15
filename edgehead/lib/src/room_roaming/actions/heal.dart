@@ -16,7 +16,12 @@ class HealAction extends Action<Actor> {
   List<String> get commandPathTemplate => ['<object>', 'heal'];
 
   @override
-  String get helpMessage => null;
+  String get helpMessage =>
+      "Although most necromancers would not call what we do ‘healing’, "
+      "necromancy is, in fact, the highest level of that discipline. "
+      "Where healers spend days to make a person slightly better, "
+      "necromancers take only moments mending torn muscles and setting "
+      "broken bones. It comes with a cost, sure. What doesn’t?";
 
   @override
   bool get isAggressive => false;
