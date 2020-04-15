@@ -24,6 +24,14 @@ abstract class Choice extends ElementBase
 
   BuiltList<String> get commandPath;
 
+  /// This is the sentence that gets printed _after_ the player selects
+  /// the choice.
+  ///
+  /// For example, a choice with a [commandPath] of
+  /// `['Goblin', 'body', 'slash arm']`, a [commandSentence] might be something
+  /// like `"I try to slash the goblin's arm."`.
+  String get commandSentence;
+
   @nullable
   String get helpMessage;
 

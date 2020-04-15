@@ -179,6 +179,25 @@ abstract class Action<T> {
     }
   }
 
+  /// This is the sentence that gets printed _after_ the player selects
+  /// the choice.
+  ///
+  /// For example, a choice with a [commandPathTemplate] of
+  /// `['<object>', 'body', 'slash arm']`, a command sentence might be something
+  /// like `"I try to slash the goblin's arm."`.
+  ///
+  /// By default, this method just takes the last part of the command path.
+  /// This makes sense for things like "Door >> open". But for
+  /// other things, like "Open >> door", this will not result in good
+  /// sentences. In that case, override this.
+  String getCommandSentence(ApplicabilityContext context, T object) {
+    if (isImplicit) {
+      return '';
+    }
+
+    return getCommandPath(context, object).last;
+  }
+
   /// The time it takes the actor to be available again after performing
   /// the action.
   ///
@@ -388,6 +407,8 @@ class Performance<T> {
   Actor get actor => context.actor;
 
   List<String> get commandPath => action.getCommandPath(context, object);
+
+  String get commandSentence => action.getCommandSentence(context, object);
 
   /// Applies the performance and returns the possible outcomes as an iterable
   /// of [PlanConsequence].

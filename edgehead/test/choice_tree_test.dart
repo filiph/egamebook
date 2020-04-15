@@ -8,6 +8,7 @@ import 'package:test/test.dart';
 Choice _buildChoice(String commandWithCarets, {bool isImplicit = false}) {
   return Choice((b) => b
     ..commandPath = ListBuilder<String>(commandWithCarets.split('>>'))
+    ..commandSentence = commandWithCarets.replaceAll(' >> ', ' ')
     ..isImplicit = isImplicit
     ..successChance = 100
     ..actionName = 'Dummy'

@@ -42,6 +42,8 @@ abstract class RoamingAction extends Action<Nothing> {
 /// involved (needing a target, a non-1.0 success chance, rerollability)
 /// will need to use another class or extend [Action].
 class SimpleAction extends RoamingAction {
+  static final _multipleWhiteSpace = RegExp(r'\s+');
+
   final SimpleActionApplyFunction success;
 
   final SimpleActionApplicableFunction isApplicableClosure;
@@ -57,6 +59,9 @@ class SimpleAction extends RoamingAction {
   SimpleAction(
       this.name, this.simpleActionCommand, this.success, this.helpMessage,
       {this.isApplicableClosure});
+
+  @override
+  List<String> get commandPathTemplate => [simpleActionCommand];
 
   @override
   bool get isAggressive => false;
@@ -78,6 +83,20 @@ class SimpleAction extends RoamingAction {
   }
 
   @override
+  Iterable<Nothing> generateObjects(ApplicabilityContext context) {
+    throw AssertionError('generateObjects was called on Action<Nothing>');
+  }
+
+  @override
+  String getCommandSentence(ApplicabilityContext context, Nothing object) {
+    // Unlike most other actions, simple actions should generally be spelled out
+    // in full.
+    return getCommandPath(context, object)
+        .join(' ')
+        .replaceAll(_multipleWhiteSpace, ' ');
+  }
+
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void object) {
     throw StateError("SimpleAction shouldn't have to provide roll reason");
   }
@@ -94,12 +113,4 @@ class SimpleAction extends RoamingAction {
     if (isApplicableClosure == null) return true;
     return isApplicableClosure(context, a, sim, w, this);
   }
-
-  @override
-  Iterable<Nothing> generateObjects(ApplicabilityContext context) {
-    throw AssertionError('generateObjects was called on Action<Nothing>');
-  }
-
-  @override
-  List<String> get commandPathTemplate => [simpleActionCommand];
 }

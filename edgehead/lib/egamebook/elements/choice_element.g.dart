@@ -29,6 +29,9 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       serializers.serialize(object.commandPath,
           specifiedType:
               const FullType(BuiltList, const [const FullType(String)])),
+      'commandSentence',
+      serializers.serialize(object.commandSentence,
+          specifiedType: const FullType(String)),
       'isImplicit',
       serializers.serialize(object.isImplicit,
           specifiedType: const FullType(bool)),
@@ -72,6 +75,10 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
                       const FullType(BuiltList, const [const FullType(String)]))
               as BuiltList<dynamic>);
           break;
+        case 'commandSentence':
+          result.commandSentence = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'helpMessage':
           result.helpMessage = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -99,6 +106,8 @@ class _$Choice extends Choice {
   @override
   final BuiltList<String> commandPath;
   @override
+  final String commandSentence;
+  @override
   final String helpMessage;
   @override
   final bool isImplicit;
@@ -112,6 +121,7 @@ class _$Choice extends Choice {
       {this.actionName,
       this.additionalData,
       this.commandPath,
+      this.commandSentence,
       this.helpMessage,
       this.isImplicit,
       this.successChance})
@@ -124,6 +134,9 @@ class _$Choice extends Choice {
     }
     if (commandPath == null) {
       throw new BuiltValueNullFieldError('Choice', 'commandPath');
+    }
+    if (commandSentence == null) {
+      throw new BuiltValueNullFieldError('Choice', 'commandSentence');
     }
     if (isImplicit == null) {
       throw new BuiltValueNullFieldError('Choice', 'isImplicit');
@@ -147,6 +160,7 @@ class _$Choice extends Choice {
         actionName == other.actionName &&
         additionalData == other.additionalData &&
         commandPath == other.commandPath &&
+        commandSentence == other.commandSentence &&
         helpMessage == other.helpMessage &&
         isImplicit == other.isImplicit &&
         successChance == other.successChance;
@@ -157,8 +171,12 @@ class _$Choice extends Choice {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, actionName.hashCode), additionalData.hashCode),
-                    commandPath.hashCode),
+                $jc(
+                    $jc(
+                        $jc($jc(0, actionName.hashCode),
+                            additionalData.hashCode),
+                        commandPath.hashCode),
+                    commandSentence.hashCode),
                 helpMessage.hashCode),
             isImplicit.hashCode),
         successChance.hashCode));
@@ -170,6 +188,7 @@ class _$Choice extends Choice {
           ..add('actionName', actionName)
           ..add('additionalData', additionalData)
           ..add('commandPath', commandPath)
+          ..add('commandSentence', commandSentence)
           ..add('helpMessage', helpMessage)
           ..add('isImplicit', isImplicit)
           ..add('successChance', successChance))
@@ -196,6 +215,11 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   set commandPath(ListBuilder<String> commandPath) =>
       _$this._commandPath = commandPath;
 
+  String _commandSentence;
+  String get commandSentence => _$this._commandSentence;
+  set commandSentence(String commandSentence) =>
+      _$this._commandSentence = commandSentence;
+
   String _helpMessage;
   String get helpMessage => _$this._helpMessage;
   set helpMessage(String helpMessage) => _$this._helpMessage = helpMessage;
@@ -216,6 +240,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
       _actionName = _$v.actionName;
       _additionalData = _$v.additionalData?.toBuilder();
       _commandPath = _$v.commandPath?.toBuilder();
+      _commandSentence = _$v.commandSentence;
       _helpMessage = _$v.helpMessage;
       _isImplicit = _$v.isImplicit;
       _successChance = _$v.successChance;
@@ -246,6 +271,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
               actionName: actionName,
               additionalData: additionalData.build(),
               commandPath: commandPath.build(),
+              commandSentence: commandSentence,
               helpMessage: helpMessage,
               isImplicit: isImplicit,
               successChance: successChance);
