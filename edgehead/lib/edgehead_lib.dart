@@ -272,9 +272,10 @@ class EdgeheadGame extends Book {
       storyline.generateOutput().forEach(elementsSink.add);
 
       if (world.wasKilled(playerCharacter.id)) {
-        elementsSink.add(LoseGame((b) => b..markdownText = "I die."));
+        showLose("I die.");
       } else {
-        elementsSink.add(WinGame((b) => b..markdownText = "TODO win text"));
+        // TODO: show a better message.
+        showWin("I win.");
       }
       return;
     }

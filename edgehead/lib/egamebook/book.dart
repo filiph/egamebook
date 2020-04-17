@@ -129,6 +129,12 @@ abstract class Book {
   }
 
   @protected
+  void showLose(String message) {
+    elementsSink.add(LoseGame((b) => b..markdownText = message));
+    isWaitingForInput = true;
+  }
+
+  @protected
   Future<slot.SessionResult> showSlotMachine(
       double probability, String rollReason,
       {bool rerollable = false, String rerollEffectDescription}) {
@@ -141,6 +147,12 @@ abstract class Book {
       ..rerollEffectDescription = rerollEffectDescription));
     isWaitingForInput = true;
     return _showSlotMachineCompleter.future;
+  }
+
+  @protected
+  void showWin(String message) {
+    elementsSink.add(WinGame((b) => b..markdownText = message));
+    isWaitingForInput = true;
   }
 
   /// Sets the book in motion. Either from the start, or from a saved position.
