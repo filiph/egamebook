@@ -11,7 +11,10 @@ import 'package:edgehead/fractal_stories/actor.dart';
 ///
 ///     commandPathTailGenerator: (w, a, target) =>
 ///          "throw ${weaponAsObject2InCommandPath(a)} at <objectPronoun>",
-String weaponAsObject2InCommandPath(Actor a) =>
-    a.currentWeaponOrBodyPart.nameIsProperNoun
-        ? a.currentWeaponOrBodyPart.name
-        : "<subject's> ${a.currentWeaponOrBodyPart.name}";
+String weaponAsObject2InCommandPath(Actor a) {
+  final weapon = a.currentWeaponOrBodyPart;
+  if (weapon.nameIsProperNoun) {
+    return a.currentWeaponOrBodyPart.name;
+  }
+  return '${weapon.adjective ?? "<subject's>"} ${weapon.name}';
+}

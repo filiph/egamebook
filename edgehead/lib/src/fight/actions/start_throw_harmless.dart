@@ -32,7 +32,7 @@ ReasonedSuccessChance computeThrowHarmlessPlayer(
 
 EnemyTargetAction startThrowHarmless() => StartDefensibleAction(
       name: "StartThrowHarmless",
-      combatCommandType: CombatCommandType.stance,
+      combatCommandType: CombatCommandType.body,
       commandPathTailGenerator: (w, a, target) =>
           "throw ${weaponAsObject2InCommandPath(a)} at <objectPronoun>",
       helpMessage: startThrowHarmlessHelpMessage,
