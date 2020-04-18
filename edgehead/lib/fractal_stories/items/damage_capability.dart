@@ -53,6 +53,9 @@ abstract class DamageCapability
 
   bool get isBlunt => bluntDamage > 0;
 
+  /// A "weapon" such as a piece of paper, a glove, or an apple.
+  bool get isHarmless => type == WeaponType.harmless;
+
   /// This is only set for items and body parts that _cannot_ be used
   /// in a fight, such as a crippled arm.
   bool get isInvalid => type == WeaponType.invalid;

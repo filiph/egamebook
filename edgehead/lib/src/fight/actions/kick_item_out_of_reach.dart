@@ -91,6 +91,11 @@ class KickItemOutOfReach extends ItemAction {
         return false;
       }
 
+      if (item.damageCapability.isHarmless) {
+        // Don't kick away harmless trinkets.
+        return false;
+      }
+
       final actors = w.currentSituation.getActors(sim, w);
       final enemies = actors.where((actor) => actor.team.isEnemyWith(a.team));
       final weapons = enemies.map((actor) => actor.currentWeapon?.value ?? 0);

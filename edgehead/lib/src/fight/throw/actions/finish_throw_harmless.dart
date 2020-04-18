@@ -1,18 +1,17 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
 
-class FinishThrowBlunt extends OtherActorAction {
-  static final FinishThrowBlunt singleton = FinishThrowBlunt();
+class FinishThrowHarmless extends OtherActorAction {
+  static final FinishThrowHarmless singleton = FinishThrowHarmless();
 
-  static const String className = "FinishThrowBlunt";
+  static const String className = "FinishThrowHarmless";
 
   @override
   final String helpMessage = null;
@@ -52,36 +51,26 @@ class FinishThrowBlunt extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final projectile = a.currentWeapon;
-    assert(projectile.damageCapability.isBlunt);
+    assert(projectile.damageCapability.isHarmless);
+    final groundMaterial = getGroundMaterial(w);
 
     final bodyPart = _createBodyPartEntity(
         enemy, "{shoulder|{left|right} arm|{left|right} thigh|chest|stomach}");
     projectile.report(
         s,
-        "<subject> {hit<s>|strike<s>} "
+        "<subject> {hit<s>|land<s> on} "
         "<objectOwner's> <object>",
         owner: a,
         objectOwner: enemy,
         object: bodyPart,
         positive: true);
-    enemy.report(
+    projectile.report(
         s,
-        "<subject> "
-        "{step<s> back|take<s> two steps back|falter<s>|waver<s>}",
-        negative: true);
-
-    if (enemy.pose > Pose.offBalance) {
-      enemy.report(s, "<subject> barely keep<s> <subject's> {balance|footing}",
-          negative: true);
-      w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
-    } else {
-      enemy.report(s, "<subject> <is> knocked to the ground", negative: true);
-      w.updateActorById(enemy.id, (b) => b.pose = Pose.onGround);
-      w.recordCustom(fellToGroundCustomEventName, actor: enemy);
-    }
+        '<subject> {fall<s>|drop<s>} to the {ground|$groundMaterial} '
+        'uselessly');
 
     moveProjectileToGround(w, a, projectile, false);
-    return "${a.name} hits ${enemy.name} with a blunt weapon";
+    return "${a.name} hits ${enemy.name} with a harmless projectile";
   }
 
   @override
@@ -92,7 +81,7 @@ class FinishThrowBlunt extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      a.currentWeapon.damageCapability.isBlunt;
+      a.currentWeapon.damageCapability.isHarmless;
 
   Entity _createBodyPartEntity(Actor a, String name) {
     return Entity(

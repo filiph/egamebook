@@ -129,6 +129,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   // From lib/src/fight/strike_from_ground/strike_from_ground_defense/actions/jump_to_side_and_counter.dart:
   'JumpToSideFromStrikeFromGround.singleton':
       JumpToSideFromStrikeFromGround.singleton,
+  // From lib/src/fight/throw/actions/finish_throw_harmless.dart:
+  'FinishThrowHarmless.singleton': FinishThrowHarmless.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

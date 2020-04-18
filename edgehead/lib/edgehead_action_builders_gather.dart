@@ -49,6 +49,7 @@ import 'package:edgehead/src/fight/sweep_feet/actions/finish_sweep_feet.dart';
 import 'package:edgehead/src/fight/sweep_feet/sweep_feet_defense/actions/avoid_sweep_feet.dart';
 import 'package:edgehead/src/fight/sweep_feet/sweep_feet_defense/actions/counter_sweep_feet.dart';
 import 'package:edgehead/src/fight/throw/actions/finish_throw_blunt.dart';
+import 'package:edgehead/src/fight/throw/actions/finish_throw_harmless.dart';
 import 'package:edgehead/src/fight/throw/actions/finish_throw_thrusting.dart';
 import 'package:edgehead/src/fight/throw/throw_defense/actions/catch_projectile.dart';
 import 'package:edgehead/src/fight/throw/throw_defense/actions/dodge_throw.dart';
