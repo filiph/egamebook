@@ -239,7 +239,7 @@ class AutoLoot extends Action<Nothing> {
   bool _noCurrentWeaponsMissingFromInventory(WorldStateBuilder world) {
     for (final actor in world.build().actors) {
       if (actor.holdsSomeWeapon &&
-          !actor.inventory.weapons.contains(actor.currentWeapon)) {
+          !actor.inventory.items.contains(actor.currentWeapon)) {
         assert(
             false,
             "Weapon ${actor.currentWeapon.name} held by ${actor.name} "
@@ -247,7 +247,7 @@ class AutoLoot extends Action<Nothing> {
         return false;
       }
       if (actor.currentShield != null &&
-          !actor.inventory.shields.contains(actor.currentShield)) {
+          !actor.inventory.items.contains(actor.currentShield)) {
         assert(
             false,
             "Shield ${actor.currentShield.name} held by ${actor.name} "
