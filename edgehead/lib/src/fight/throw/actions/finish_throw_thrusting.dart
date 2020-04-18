@@ -58,7 +58,6 @@ class FinishThrowThrusting extends OtherActorAction {
     Storyline s = context.outputStoryline;
     Simulation sim = context.simulation;
     final projectile = a.currentWeapon;
-    assert(projectile.isWeapon);
     assert(projectile.damageCapability.isThrusting);
 
     final targetPart = enemy.anatomy

@@ -37,7 +37,7 @@ EnemyTargetAction startLeapBuilder() => StartDefensibleAction(
     applyStart: startLeapReportStart,
     isApplicable: (a, sim, w, enemy) =>
         !a.anatomy.isBlind &&
-        !a.currentDamageCapability.isNone &&
+        !a.currentDamageCapability.isInvalid &&
         !a.anatomy.hasCrippledLegs &&
         !recentlyForcedToGround(a, w),
     mainSituationBuilder: (a, sim, w, enemy) =>

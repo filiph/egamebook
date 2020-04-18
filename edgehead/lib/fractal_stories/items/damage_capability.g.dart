@@ -23,8 +23,6 @@ class _$DamageCapabilitySerializer
       'bluntDamage',
       serializers.serialize(object.bluntDamage,
           specifiedType: const FullType(int)),
-      'isNone',
-      serializers.serialize(object.isNone, specifiedType: const FullType(bool)),
       'length',
       serializers.serialize(object.length, specifiedType: const FullType(int)),
       'slashingDamage',
@@ -60,10 +58,6 @@ class _$DamageCapabilitySerializer
           result.bluntDamage = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'isNone':
-          result.isNone = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
-          break;
         case 'length':
           result.length = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -95,8 +89,6 @@ class _$DamageCapability extends DamageCapability {
   @override
   final int bluntDamage;
   @override
-  final bool isNone;
-  @override
   final int length;
   @override
   final int slashingDamage;
@@ -113,7 +105,6 @@ class _$DamageCapability extends DamageCapability {
 
   _$DamageCapability._(
       {this.bluntDamage,
-      this.isNone,
       this.length,
       this.slashingDamage,
       this.tearingDamage,
@@ -122,9 +113,6 @@ class _$DamageCapability extends DamageCapability {
       : super._() {
     if (bluntDamage == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'bluntDamage');
-    }
-    if (isNone == null) {
-      throw new BuiltValueNullFieldError('DamageCapability', 'isNone');
     }
     if (length == null) {
       throw new BuiltValueNullFieldError('DamageCapability', 'length');
@@ -156,7 +144,6 @@ class _$DamageCapability extends DamageCapability {
     if (identical(other, this)) return true;
     return other is DamageCapability &&
         bluntDamage == other.bluntDamage &&
-        isNone == other.isNone &&
         length == other.length &&
         slashingDamage == other.slashingDamage &&
         tearingDamage == other.tearingDamage &&
@@ -169,9 +156,7 @@ class _$DamageCapability extends DamageCapability {
     return $jf($jc(
         $jc(
             $jc(
-                $jc(
-                    $jc($jc($jc(0, bluntDamage.hashCode), isNone.hashCode),
-                        length.hashCode),
+                $jc($jc($jc(0, bluntDamage.hashCode), length.hashCode),
                     slashingDamage.hashCode),
                 tearingDamage.hashCode),
             thrustingDamage.hashCode),
@@ -186,10 +171,6 @@ class DamageCapabilityBuilder
   int _bluntDamage;
   int get bluntDamage => _$this._bluntDamage;
   set bluntDamage(int bluntDamage) => _$this._bluntDamage = bluntDamage;
-
-  bool _isNone;
-  bool get isNone => _$this._isNone;
-  set isNone(bool isNone) => _$this._isNone = isNone;
 
   int _length;
   int get length => _$this._length;
@@ -218,7 +199,6 @@ class DamageCapabilityBuilder
   DamageCapabilityBuilder get _$this {
     if (_$v != null) {
       _bluntDamage = _$v.bluntDamage;
-      _isNone = _$v.isNone;
       _length = _$v.length;
       _slashingDamage = _$v.slashingDamage;
       _tearingDamage = _$v.tearingDamage;
@@ -247,7 +227,6 @@ class DamageCapabilityBuilder
     final _$result = _$v ??
         new _$DamageCapability._(
             bluntDamage: bluntDamage,
-            isNone: isNone,
             length: length,
             slashingDamage: slashingDamage,
             tearingDamage: tearingDamage,

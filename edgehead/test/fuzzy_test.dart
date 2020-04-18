@@ -15,7 +15,7 @@ void main() {
     final runner = CliRunner(true, true, null);
     await runner.initialize(EdgeheadGame());
     runner.startBook();
-    await runner.bookEnd;
+    await runner.bookEnd.first;
     runner.close();
   }, tags: ["long-running"]);
 
@@ -26,7 +26,7 @@ void main() {
       final runner = CliRunner(true, true, null, random: Random(seed));
       await runner.initialize(EdgeheadGame(randomSeed: seed));
       runner.startBook();
-      await runner.bookEnd;
+      await runner.bookEnd.first;
       runner.close();
       return runner.latestSaveGame;
     }
@@ -85,7 +85,7 @@ Future<void> testWithStopWords(
     ));
     try {
       runner.startBook();
-      await runner.bookEnd;
+      await runner.bookEnd.first;
     } finally {
       runner.close();
     }

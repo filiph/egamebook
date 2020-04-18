@@ -8,12 +8,18 @@ part 'damage_capability.g.dart';
 
 abstract class DamageCapability
     implements Built<DamageCapability, DamageCapabilityBuilder> {
-  /// A special kind of capability that has zero effect.
+  /// A special kind of capability that has zero effect, and tells us that
+  /// the item with such capability cannot be used. For example, a crippled
+  /// hand will not be able to strike the enemy. It has an [invalid]
+  /// damage capability.
   ///
   /// Compare to fists, for example, which might have zero damage but at least
   /// can be used to punch the enemy.
-  static DamageCapability none =
-      DamageCapability(WeaponType.none, isNone: true);
+  ///
+  /// Also compare to [WeaponType.harmless], which is reserved for items such
+  /// as a piece of paper or an apple. You _can_ hit with a piece of paper
+  /// (i.e. it is not invalid) but it won't do any harm.
+  static DamageCapability invalid = DamageCapability(WeaponType.invalid);
 
   static Serializer<DamageCapability> get serializer =>
       _$damageCapabilitySerializer;
@@ -23,12 +29,10 @@ abstract class DamageCapability
       int slashingDamage,
       int thrustingDamage,
       int tearingDamage,
-      int length,
-      bool isNone = false}) {
+      int length}) {
     assert(type != null);
-    assert(type != WeaponType.none || isNone);
     assert(
-        !isNone ||
+        type != WeaponType.invalid ||
             (bluntDamage == null &&
                 slashingDamage == null &&
                 thrustingDamage == null &&
@@ -40,8 +44,7 @@ abstract class DamageCapability
       ..slashingDamage = slashingDamage ?? type.defaultSlashingDamage
       ..thrustingDamage = thrustingDamage ?? type.defaultThrustingDamage
       ..tearingDamage = tearingDamage ?? type.defaultTearingDamage
-      ..length = length ?? type.defaultLength
-      ..isNone = isNone);
+      ..length = length ?? type.defaultLength);
   }
 
   DamageCapability._();
@@ -50,9 +53,15 @@ abstract class DamageCapability
 
   bool get isBlunt => bluntDamage > 0;
 
-  /// This is only set for when there is no damage capability at all. Not even
-  /// fists.
-  bool get isNone;
+  /// This is only set for items and body parts that _cannot_ be used
+  /// in a fight, such as a crippled arm.
+  bool get isInvalid => type == WeaponType.invalid;
+
+  /// "Proper" weapons are things like swords, clubs, and so on. Body parts
+  /// and random items are not proper weapons.
+  bool get isProperWeapon => type.defaultIsProperWeapon;
+
+  bool get isShield => type == WeaponType.shield;
 
   bool get isSlashing => slashingDamage > 0;
 

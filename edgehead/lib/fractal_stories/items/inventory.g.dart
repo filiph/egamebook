@@ -22,17 +22,9 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
       serializers.serialize(object.items,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Item)])),
-      'shields',
-      serializers.serialize(object.shields,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Item)])),
       'weaponInPrimaryAppendage',
       serializers.serialize(object.weaponInPrimaryAppendage,
           specifiedType: const FullType(bool)),
-      'weapons',
-      serializers.serialize(object.weapons,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Item)])),
     ];
     if (object.currentShield != null) {
       result
@@ -74,21 +66,9 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
                       const FullType(BuiltList, const [const FullType(Item)]))
               as BuiltList<dynamic>);
           break;
-        case 'shields':
-          result.shields.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<dynamic>);
-          break;
         case 'weaponInPrimaryAppendage':
           result.weaponInPrimaryAppendage = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
-          break;
-        case 'weapons':
-          result.weapons.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<dynamic>);
           break;
       }
     }
@@ -105,11 +85,7 @@ class _$Inventory extends Inventory {
   @override
   final BuiltList<Item> items;
   @override
-  final BuiltList<Item> shields;
-  @override
   final bool weaponInPrimaryAppendage;
-  @override
-  final BuiltList<Item> weapons;
 
   factory _$Inventory([void Function(InventoryBuilder) updates]) =>
       (new InventoryBuilder()..update(updates)).build() as _$Inventory;
@@ -118,22 +94,14 @@ class _$Inventory extends Inventory {
       {this.currentShield,
       this.currentWeapon,
       this.items,
-      this.shields,
-      this.weaponInPrimaryAppendage,
-      this.weapons})
+      this.weaponInPrimaryAppendage})
       : super._() {
     if (items == null) {
       throw new BuiltValueNullFieldError('Inventory', 'items');
     }
-    if (shields == null) {
-      throw new BuiltValueNullFieldError('Inventory', 'shields');
-    }
     if (weaponInPrimaryAppendage == null) {
       throw new BuiltValueNullFieldError(
           'Inventory', 'weaponInPrimaryAppendage');
-    }
-    if (weapons == null) {
-      throw new BuiltValueNullFieldError('Inventory', 'weapons');
     }
   }
 
@@ -151,21 +119,15 @@ class _$Inventory extends Inventory {
         currentShield == other.currentShield &&
         currentWeapon == other.currentWeapon &&
         items == other.items &&
-        shields == other.shields &&
-        weaponInPrimaryAppendage == other.weaponInPrimaryAppendage &&
-        weapons == other.weapons;
+        weaponInPrimaryAppendage == other.weaponInPrimaryAppendage;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc(
-            $jc(
-                $jc($jc($jc(0, currentShield.hashCode), currentWeapon.hashCode),
-                    items.hashCode),
-                shields.hashCode),
-            weaponInPrimaryAppendage.hashCode),
-        weapons.hashCode));
+        $jc($jc($jc(0, currentShield.hashCode), currentWeapon.hashCode),
+            items.hashCode),
+        weaponInPrimaryAppendage.hashCode));
   }
 
   @override
@@ -174,9 +136,7 @@ class _$Inventory extends Inventory {
           ..add('currentShield', currentShield)
           ..add('currentWeapon', currentWeapon)
           ..add('items', items)
-          ..add('shields', shields)
-          ..add('weaponInPrimaryAppendage', weaponInPrimaryAppendage)
-          ..add('weapons', weapons))
+          ..add('weaponInPrimaryAppendage', weaponInPrimaryAppendage))
         .toString();
   }
 }
@@ -221,18 +181,6 @@ class _$InventoryBuilder extends InventoryBuilder {
   }
 
   @override
-  ListBuilder<Item> get shields {
-    _$this;
-    return super.shields ??= new ListBuilder<Item>();
-  }
-
-  @override
-  set shields(ListBuilder<Item> shields) {
-    _$this;
-    super.shields = shields;
-  }
-
-  @override
   bool get weaponInPrimaryAppendage {
     _$this;
     return super.weaponInPrimaryAppendage;
@@ -244,18 +192,6 @@ class _$InventoryBuilder extends InventoryBuilder {
     super.weaponInPrimaryAppendage = weaponInPrimaryAppendage;
   }
 
-  @override
-  ListBuilder<Item> get weapons {
-    _$this;
-    return super.weapons ??= new ListBuilder<Item>();
-  }
-
-  @override
-  set weapons(ListBuilder<Item> weapons) {
-    _$this;
-    super.weapons = weapons;
-  }
-
   _$InventoryBuilder() : super._();
 
   InventoryBuilder get _$this {
@@ -263,9 +199,7 @@ class _$InventoryBuilder extends InventoryBuilder {
       super.currentShield = _$v.currentShield;
       super.currentWeapon = _$v.currentWeapon;
       super.items = _$v.items?.toBuilder();
-      super.shields = _$v.shields?.toBuilder();
       super.weaponInPrimaryAppendage = _$v.weaponInPrimaryAppendage;
-      super.weapons = _$v.weapons?.toBuilder();
       _$v = null;
     }
     return this;
@@ -293,19 +227,12 @@ class _$InventoryBuilder extends InventoryBuilder {
               currentShield: currentShield,
               currentWeapon: currentWeapon,
               items: items.build(),
-              shields: shields.build(),
-              weaponInPrimaryAppendage: weaponInPrimaryAppendage,
-              weapons: weapons.build());
+              weaponInPrimaryAppendage: weaponInPrimaryAppendage);
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'items';
         items.build();
-        _$failedField = 'shields';
-        shields.build();
-
-        _$failedField = 'weapons';
-        weapons.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Inventory', _$failedField, e.toString());

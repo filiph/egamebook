@@ -34,12 +34,14 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
 
   /// Inventory of items possessed by the actor.
   ///
-  /// This does not include things that are wield-able ([weapons], [shields]) or
-  /// otherwise equip-able (armor). Consider [items] more like "contents of
-  /// actor's backpack": potions, books, scrolls.
+  /// This includes all items possessed by the actor, whether wielded or
+  /// in a backpack.
+  ///
+  /// This includes all types of items, from apples to letters to war hammers.
   BuiltList<Item> get items;
 
-  BuiltList<Item> get shields;
+  Iterable<Item> get shields =>
+      items.where((item) => item.damageCapability.isShield);
 
   /// This is `true` if [currentWeapon] is being held with the primary
   /// appendage (e.g. right hand of right-handed humanoids).
@@ -53,17 +55,12 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
 
   /// A list of all weapons possessed by the actor. Can be in hand or
   /// in a backpack.
-  ///
-  /// This is a list because we want to allow having duplicate items
-  /// (2 apples).
-  ///
-  /// Put shields in [shields].
-  BuiltList<Item> get weapons;
+  Iterable<Item> get weapons =>
+      items.where((item) => item.damageCapability.isProperWeapon);
 
   int countWeapons(WeaponType type) {
     int count = 0;
     for (final weapon in weapons) {
-      assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
       if (weapon.damageCapability.type == type) count += 1;
     }
     return count;
@@ -79,7 +76,6 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
     Item best;
     int value = -9999999;
     for (final weapon in weapons) {
-      assert(weapon.isWeapon, "Non-weapon in Actor.weapons");
       if (type != null && weapon.damageCapability.type != type) continue;
       if (weapon.value > value) {
         best = weapon;
@@ -106,11 +102,7 @@ abstract class InventoryBuilder
 
   bool weaponInPrimaryAppendage;
 
-  ListBuilder<Item> shields;
-
   ListBuilder<Item> items;
-
-  ListBuilder<Item> weapons;
 
   factory InventoryBuilder() = _$InventoryBuilder;
 
@@ -118,13 +110,7 @@ abstract class InventoryBuilder
 
   /// Add an item to inventory. Does not equip the item.
   void add(Item item) {
-    if (item.isWeapon) {
-      weapons.add(item);
-    } else if (item.isShield) {
-      shields.add(item);
-    } else {
-      items.add(item);
-    }
+    items.add(item);
   }
 
   /// Tries to equip [weapon] and returns the result.
@@ -132,7 +118,6 @@ abstract class InventoryBuilder
   /// This can fail, for example when the [anatomy] doesn't have any viable
   /// appendages.
   WeaponEquipResult equip(Item weapon, Anatomy anatomy) {
-    assert(weapon.isWeapon);
     assert(!WeaponType.bodyPartWeapons.contains(weapon.damageCapability.type),
         "Tried to equip a body part. Use goBarehanded instead.");
     if (!anatomy.anyWeaponAppendageAvailable) {
@@ -157,7 +142,7 @@ abstract class InventoryBuilder
 
     if (!currentInventory.weapons.any((item) => item.id == weapon.id)) {
       // Weapon not in inventory.
-      weapons.add(weapon);
+      add(weapon);
     }
     currentWeapon = weapon;
     return WeaponEquipResult.equipped;
@@ -182,9 +167,9 @@ abstract class InventoryBuilder
       throw StateError('Cannot equip shield.');
     }
 
-    if (!build().shields.any((item) => item.id == shield.id)) {
+    if (!build().items.any((item) => item.id == shield.id)) {
       // Weapon not in inventory.
-      shields.add(shield);
+      add(shield);
     }
     currentShield = shield;
   }
@@ -208,23 +193,15 @@ abstract class InventoryBuilder
     return WeaponEquipResult.equipped;
   }
 
-  /// Removes [item] from either [weapons], [shields] or [items]. Updates
-  /// [currentWeapon] and [currentShield] if needed.
+  /// Removes [item] from [items]. Updates [currentWeapon] and [currentShield]
+  /// if needed.
   ///
   /// Asserts that [item] exists in the inventory.
   void remove(Item item) {
     if (item.isWeapon) {
-      _assertItemInList(item, weapons);
       if (currentWeapon?.id == item.id) currentWeapon = null;
-      weapons.remove(item);
-      return;
-    }
-
-    if (item.isShield) {
-      _assertItemInList(item, shields);
+    } else if (item.isShield) {
       if (currentShield?.id == item.id) currentShield = null;
-      shields.remove(item);
-      return;
     }
 
     _assertItemInList(item, items);

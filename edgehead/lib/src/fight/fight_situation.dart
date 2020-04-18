@@ -322,8 +322,6 @@ abstract class FightSituation extends Object
       checkDuplicate(actor);
 
       actor.inventory.items
-          .followedBy(actor.inventory.weapons)
-          .followedBy(actor.inventory.shields)
           .forEach(checkDuplicate);
       actor.anatomy.allParts.forEach(checkDuplicate);
     }

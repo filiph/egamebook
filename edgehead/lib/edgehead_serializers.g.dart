@@ -67,12 +67,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Item)]),
           () => new ListBuilder<Item>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Item)]),
-          () => new ListBuilder<Item>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Item)]),
-          () => new ListBuilder<Item>())
       ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
           () => new SetBuilder<int>())
       ..addBuilderFactory(

@@ -51,7 +51,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
 
     final candidates = torso
         .getDescendantParts()
-        .where((p) => p.isAnimatedAndActive && p.damageCapability != null)
+        .where((p) => p.isAnimatedAndActive && !p.damageCapability.isInvalid)
         .toList();
 
     if (candidates.isEmpty) return null;

@@ -18,6 +18,9 @@ abstract class Item extends Object
   /// Create a generic item.
   ///
   /// For weapons, use [Item.weapon] instead.
+  ///
+  /// If no [damageCapability] is provided, then the item will be
+  /// of [WeaponType.harmless].
   factory Item(int id,
           {@required String name,
           String adjective,
@@ -26,7 +29,8 @@ abstract class Item extends Object
           int firstOwnerId}) =>
       _$Item((b) => b
         ..id = id
-        ..damageCapability = damageCapability
+        ..damageCapability = damageCapability ??
+            DamageCapability(WeaponType.harmless).toBuilder()
         ..name = name
         ..nameIsProperNoun = nameIsProperNoun
         ..adjective = adjective
@@ -36,11 +40,16 @@ abstract class Item extends Object
       {String name,
       bool nameIsProperNoun = false,
       String adjective,
+      int bluntDamage,
       int slashingDamage,
       int thrustingDamage,
+      int tearingDamage,
       int firstOwnerId}) {
     final damageCapability = DamageCapability(type,
-        slashingDamage: slashingDamage, thrustingDamage: thrustingDamage);
+        bluntDamage: bluntDamage,
+        slashingDamage: slashingDamage,
+        thrustingDamage: thrustingDamage,
+        tearingDamage: tearingDamage);
     return Item(id,
         name: name ?? type.name,
         nameIsProperNoun: nameIsProperNoun,
@@ -55,7 +64,6 @@ abstract class Item extends Object
   @nullable
   String get adjective;
 
-  @nullable
   DamageCapability get damageCapability;
 
   String get description => throw UnimplementedError();
@@ -79,13 +87,10 @@ abstract class Item extends Object
   @override
   bool get isPlayer => false;
 
-  bool get isShield =>
-      damageCapability != null && damageCapability.type == WeaponType.shield;
+  bool get isShield => damageCapability.type == WeaponType.shield;
 
   bool get isWeapon =>
-      damageCapability != null &&
-      !damageCapability.isNone &&
-      damageCapability.type != WeaponType.shield;
+      !damageCapability.isInvalid && damageCapability.type != WeaponType.shield;
 
   @override
   String get name;
@@ -110,16 +115,14 @@ abstract class Item extends Object
     int score = 0;
     if (nameIsProperNoun) score += 1;
     if (isShield) score += 1;
-    if (damageCapability != null) {
-      assert(!WeaponType.bodyPartWeapons.contains(damageCapability.type),
-          "Getting value of a body part weapon: ${damageCapability.type}.");
-      score += 1;
-      score += damageCapability.length;
-      score += damageCapability.slashingDamage;
-      score += damageCapability.thrustingDamage;
-      score += damageCapability.bluntDamage;
-      score += damageCapability.tearingDamage;
-    }
+    assert(!WeaponType.bodyPartWeapons.contains(damageCapability.type),
+        "Getting value of a body part weapon: ${damageCapability.type}.");
+    score += 1;
+    score += damageCapability.length;
+    score += damageCapability.slashingDamage;
+    score += damageCapability.thrustingDamage;
+    score += damageCapability.bluntDamage;
+    score += damageCapability.tearingDamage;
     return score;
   }
 

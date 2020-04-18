@@ -10,17 +10,20 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
   T book;
 
-  final Completer<void> _bookEndCompleter = Completer<void>();
+  final StreamController<void> _bookEndCompleter = StreamController<void>();
 
   StreamSubscription<ElementBase> _bookSubscription;
 
-  /// Future completes when the underlying [book] ends, either with [WinGame]
-  /// or with [LoseGame].
+  /// Stream that gets a new event whenever the underlying [book] ends,
+  /// either with [WinGame] or with [LoseGame].
   ///
-  /// After this future completes, the caller should call [close]. This will
-  /// close both the [book] and this [Presenter]. Once this happens, there is
-  /// no way to restart either. You have to create new ones.
-  Future<void> get bookEnd => _bookEndCompleter.future;
+  /// After this future completes, the caller may want to call [close].
+  /// This will close both the [book] and this [Presenter]. Once this happens,
+  /// there is no way to restart either. You have to create new ones.
+  ///
+  /// But the user can also reload the current book (using [Book.load]) after
+  /// ending it, in which case the book can end several times in a row.
+  Stream<void> get bookEnd => _bookEndCompleter.stream;
 
   @protected
   @override
@@ -34,13 +37,13 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
 
     if (element is WinGame) {
       addWin(element);
-      _bookEndCompleter.complete();
+      _bookEndCompleter.add(null);
       return;
     }
 
     if (element is LoseGame) {
       addLose(element);
-      _bookEndCompleter.complete();
+      _bookEndCompleter.add(null);
       return;
     }
 

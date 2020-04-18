@@ -87,7 +87,7 @@ Future<void> main(List<String> args) async {
     ));
     try {
       runner.startBook();
-      await runner.bookEnd;
+      await runner.bookEnd.first;
     } finally {
       runner.close();
     }

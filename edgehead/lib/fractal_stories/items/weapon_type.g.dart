@@ -6,7 +6,8 @@ part of fractal_stories.items.weapon_type;
 // BuiltValueGenerator
 // **************************************************************************
 
-const WeaponType _$none = const WeaponType._('none');
+const WeaponType _$invalid = const WeaponType._('invalid');
+const WeaponType _$harmless = const WeaponType._('harmless');
 const WeaponType _$claw = const WeaponType._('claw');
 const WeaponType _$teeth = const WeaponType._('teeth');
 const WeaponType _$fist = const WeaponType._('fist');
@@ -20,8 +21,10 @@ const WeaponType _$shield = const WeaponType._('shield');
 
 WeaponType _$valueOf(String name) {
   switch (name) {
-    case 'none':
-      return _$none;
+    case 'invalid':
+      return _$invalid;
+    case 'harmless':
+      return _$harmless;
     case 'claw':
       return _$claw;
     case 'teeth':
@@ -49,7 +52,8 @@ WeaponType _$valueOf(String name) {
 
 final BuiltSet<WeaponType> _$values =
     new BuiltSet<WeaponType>(const <WeaponType>[
-  _$none,
+  _$invalid,
+  _$harmless,
   _$claw,
   _$teeth,
   _$fist,

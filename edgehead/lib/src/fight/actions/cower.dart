@@ -63,5 +63,5 @@ class Cower extends Action<Nothing> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, void _) =>
-      a.currentDamageCapability.isNone;
+      a.currentDamageCapability.isInvalid;
 }

@@ -9,7 +9,6 @@ import 'package:edgehead/fractal_stories/pose.dart';
 WeaponAssaultResult executeTearingHit(
     Actor target, Item weapon, BodyPartDesignation designation) {
   assert(target.hitpoints > 0);
-  assert(weapon.isWeapon);
   assert(weapon.damageCapability.isTearing);
   assert(designation != null);
 

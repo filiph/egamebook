@@ -18,6 +18,9 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
   Iterable<Object> serialize(Serializers serializers, Item object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
+      'damageCapability',
+      serializers.serialize(object.damageCapability,
+          specifiedType: const FullType(DamageCapability)),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'name',
@@ -31,12 +34,6 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
         ..add('adjective')
         ..add(serializers.serialize(object.adjective,
             specifiedType: const FullType(String)));
-    }
-    if (object.damageCapability != null) {
-      result
-        ..add('damageCapability')
-        ..add(serializers.serialize(object.damageCapability,
-            specifiedType: const FullType(DamageCapability)));
     }
     if (object.firstOwnerId != null) {
       result
@@ -115,6 +112,9 @@ class _$Item extends Item {
       this.name,
       this.nameIsProperNoun})
       : super._() {
+    if (damageCapability == null) {
+      throw new BuiltValueNullFieldError('Item', 'damageCapability');
+    }
     if (id == null) {
       throw new BuiltValueNullFieldError('Item', 'id');
     }
@@ -223,7 +223,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
       _$result = _$v ??
           new _$Item._(
               adjective: adjective,
-              damageCapability: _damageCapability?.build(),
+              damageCapability: damageCapability.build(),
               firstOwnerId: firstOwnerId,
               id: id,
               name: name,
@@ -232,7 +232,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
       String _$failedField;
       try {
         _$failedField = 'damageCapability';
-        _damageCapability?.build();
+        damageCapability.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Item', _$failedField, e.toString());

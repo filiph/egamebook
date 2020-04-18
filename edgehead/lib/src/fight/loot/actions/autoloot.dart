@@ -71,17 +71,16 @@ class AutoLoot extends Action<Nothing> {
     List<Item> takenItems = [];
     for (final item in situation.droppedItems) {
       final currentActor = world.getActorById(a.id);
-      // TODO: generalize sword for spear for other weapons
-      final isSwordForSpear =
-          currentActor.currentWeapon?.damageCapability?.type ==
-                  WeaponType.spear &&
-              item.isWeapon &&
-              item.damageCapability.type == WeaponType.sword;
+      // If the player has a spear, they might be interested in wielding
+      // a sword instead (because it adds slashing capability).
+      final addsSlashingCapability =
+          currentActor.currentWeapon?.damageCapability?.isSlashing != true &&
+              item.damageCapability.isProperWeapon &&
+              item.damageCapability.isSlashing;
       if (currentActor.anatomy.anyWeaponAppendageAvailable &&
-          item.isWeapon &&
-          !item.isShield &&
+          item.damageCapability.isProperWeapon &&
           (item.value > (currentActor.currentWeapon?.value ?? 0) ||
-              isSwordForSpear)) {
+              addsSlashingCapability)) {
         // Arm player with the best weapon available.
         world.updateActorById(a.id, (b) {
           // Wield the new weapon.
@@ -172,8 +171,7 @@ class AutoLoot extends Action<Nothing> {
       world.updateActorById(
           friend.id, (b) => b.inventory.equipShield(shield, friend.anatomy));
       takenItems.remove(shield);
-      world.updateActorById(
-          player.id, (b) => b.inventory.shields.remove(shield));
+      world.updateActorById(player.id, (b) => b.inventory.remove(shield));
       player.report(s, "<subject> give<s> the ${shield.name} to <object>",
           object: friend);
     }
@@ -211,8 +209,7 @@ class AutoLoot extends Action<Nothing> {
       world.updateActorById(
           friend.id, (b) => b.inventory.equip(weapon, friend.anatomy));
       takenItems.remove(weapon);
-      world.updateActorById(
-          player.id, (b) => b.inventory.weapons.remove(weapon));
+      world.updateActorById(player.id, (b) => b.inventory.remove(weapon));
       player.report(s, "<subject> give<s> the ${weapon.name} to <object>",
           object: friend);
     }
@@ -224,9 +221,7 @@ class AutoLoot extends Action<Nothing> {
     final ids = <int>{};
 
     for (final actor in world.build().actors) {
-      for (final item in actor.inventory.items
-          .followedBy(actor.inventory.weapons)
-          .followedBy(actor.inventory.shields)) {
+      for (final item in actor.inventory.items) {
         if (ids.contains(item.id)) {
           log.severe("Duplicate item: $item was previously seen");
           assert(

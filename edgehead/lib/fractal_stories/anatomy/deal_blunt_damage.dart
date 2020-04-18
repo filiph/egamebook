@@ -22,7 +22,6 @@ const bodyPartsVulnerableToBluntHits = [
 WeaponAssaultResult executeBluntHit(
     Actor target, Item weapon, BodyPartDesignation designation) {
   assert(target.hitpoints > 0);
-  assert(weapon.isWeapon);
   assert(weapon.damageCapability.isBlunt);
   assert(designation != null);
 

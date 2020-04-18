@@ -23,7 +23,7 @@ WeaponAssaultResult executeSlashingHit(
   BodyPart bodyPart,
 }) {
   assert(target.hitpoints > 0);
-  assert(weapon.isWeapon);
+  assert(weapon.damageCapability.isSlashing);
   assert(designation != null || bodyPart != null);
   assert(designation == null || bodyPart == null);
 

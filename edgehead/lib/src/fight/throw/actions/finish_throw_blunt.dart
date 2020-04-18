@@ -52,7 +52,6 @@ class FinishThrowBlunt extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final projectile = a.currentWeapon;
-    assert(projectile.isWeapon);
     assert(projectile.damageCapability.isBlunt);
 
     final bodyPart = _createBodyPartEntity(

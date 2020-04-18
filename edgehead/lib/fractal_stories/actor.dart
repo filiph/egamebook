@@ -95,11 +95,9 @@ abstract class Actor extends Object
       ..adjective = adjective
       ..inventory = (InventoryBuilder()
         ..currentWeapon = currentWeapon
-        ..weapons.addAll([
-          if (currentWeapon != null) currentWeapon,
-        ])
         ..currentShield = currentShield
-        ..shields.addAll([
+        ..items.addAll([
+          if (currentWeapon != null) currentWeapon,
           if (currentShield != null) currentShield,
         ])
         ..weaponInPrimaryAppendage = true)
@@ -148,12 +146,12 @@ abstract class Actor extends Object
   /// capability is returned. Failing that, any [Anatomy.bodyPartWeapon]'s
   /// capability is returned.
   ///
-  /// When the actor can deal no damage at all, [DamageCapability.none]
+  /// When the actor can deal no damage at all, [DamageCapability.invalid]
   /// is returned. This getter never returns `null` (as opposed
   /// to [currentWeaponOrBodyPart]).
   DamageCapability get currentDamageCapability {
     final weapon = currentWeaponOrBodyPart;
-    if (weapon == null) return DamageCapability.none;
+    if (weapon == null) return DamageCapability.invalid;
     return weapon.damageCapability;
   }
 

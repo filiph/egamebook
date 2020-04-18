@@ -15,8 +15,14 @@ part 'weapon_type.g.dart';
 ///
 /// Note that [fist] and [claw] and [teeth] are also weapons.
 class WeaponType extends EnumClass {
-  /// This is only used in [DamageCapability.none].
-  static const WeaponType none = _$none;
+  /// This is only used in [DamageCapability.invalid].
+  static const WeaponType invalid = _$invalid;
+
+  /// Things that aren't really a weapon, but still could be wielded.
+  ///
+  /// If the player wants to repeatedly hit an orc with a glove,
+  /// who am I to stop them?
+  static const WeaponType harmless = _$harmless;
 
   /// An animal claw.
   static const WeaponType claw = _$claw;
@@ -60,7 +66,7 @@ class WeaponType extends EnumClass {
     return false;
   }
 
-  /// The weapon can parry blunt weapons (like clubs and warhammers).
+  /// The weapon can parry blunt weapons (like clubs and war hammers).
   /// Typical examples include other blunt weapons, and shields. Rapiers and
   /// knives, on the other hand, cannot parry blunt weapons.
   bool get canParryBlunt {
@@ -91,8 +97,9 @@ class WeaponType extends EnumClass {
   /// Note that even [shield] has a "length". This just means it's in front
   /// of you.
   int get defaultLength {
-    if (this == none) return 0;
+    if (this == invalid) return 0;
     if (bodyPartWeapons.contains(this)) return 0;
+    if (this == harmless) return 0;
     if (this == rock) return 0;
     if (this == shield) return 1;
     if (this == dagger) return 1;
@@ -129,6 +136,28 @@ class WeaponType extends EnumClass {
         return 1;
       default:
         return 0;
+    }
+  }
+
+  /// "Proper" weapons are things like swords, clubs, and so on. Body parts
+  /// and random items are not proper weapons.
+  bool get defaultIsProperWeapon {
+    switch (this) {
+      case sword:
+      case spear:
+      case dagger:
+      case axe:
+      case club:
+      case rock:
+        return true;
+      case harmless:
+      case shield:
+      case teeth:
+      case claw:
+      case fist:
+        return false;
+      default:
+        throw UnimplementedError('no defaultIsProperWeapon for $this');
     }
   }
 

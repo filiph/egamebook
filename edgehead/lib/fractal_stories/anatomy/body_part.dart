@@ -54,7 +54,8 @@ abstract class BodyPart extends Object
         ..bluntHitsCount = bluntHitsCount ?? 0
         ..majorCutsCount = majorCutsCount ?? 0
         ..minorCutsCount = minorCutsCount ?? 0
-        ..damageCapability = damageCapability
+        ..damageCapability =
+            damageCapability ?? DamageCapability.invalid.toBuilder()
         ..swingSurfaceLeft = swingSurfaceLeft
         ..swingSurfaceRight = swingSurfaceRight
         ..thrustSurface = thrustSurface

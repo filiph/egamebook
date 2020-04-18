@@ -70,7 +70,7 @@ class EquipWeapon extends Action<Item> {
   @override
   Iterable<Item> generateObjects(ApplicabilityContext context) {
     // Takes all weapons from inventory except from the one currently held.
-    return context.actor.inventory.weapons
+    return context.actor.inventory.items
         .where((w) => w.id != context.actor.currentWeapon?.id);
   }
 
