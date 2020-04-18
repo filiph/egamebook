@@ -74,7 +74,7 @@ class PullDown extends StartDefensibleActionBase {
       Storyline storyline, Actor enemy, Situation mainSituation) {
     actor.report(storyline, "<subject> crawl<s> toward <object>",
         object: enemy, actionThread: mainSituation.id, startsThread: true);
-    actor.report(storyline, "<subject> tr<ies> bring <object> down",
+    actor.report(storyline, "<subject> tr<ies> to bring <object> down",
         object: enemy, actionThread: mainSituation.id);
   }
 
