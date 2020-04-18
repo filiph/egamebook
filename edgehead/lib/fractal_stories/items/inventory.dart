@@ -138,11 +138,11 @@ abstract class InventoryBuilder
 
     assert(
         currentWeapon == null ||
-            currentInventory.weapons.contains(currentWeapon),
+            currentInventory.items.contains(currentWeapon),
         "Before equiping $weapon, actor was wielding a weapon ($currentWeapon) "
         "that wasn't in their inventory");
 
-    if (!currentInventory.weapons.any((item) => item.id == weapon.id)) {
+    if (!currentInventory.items.any((item) => item.id == weapon.id)) {
       // Weapon not in inventory.
       add(weapon);
     }
