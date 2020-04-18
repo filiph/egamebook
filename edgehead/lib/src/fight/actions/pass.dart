@@ -67,6 +67,6 @@ class Pass extends Action<Nothing> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, void _) =>
-      // For blind actors, we have PassUnseeing.
+      // For blind actors, we have [PassWhileBlind].
       !a.anatomy.isBlind;
 }

@@ -45,9 +45,6 @@ class PassWhileBlind extends OtherActorAction {
   String applyFailure(ActionContext context, Actor enemy) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
-    WorldState w = context.world;
-
-    assert(w.currentSituation is DefenseSituation);
 
     if (a.isPlayer) {
       a.report(s, "<subject> just stand<s> there, unseeing", endSentence: true);
@@ -80,6 +77,9 @@ class PassWhileBlind extends OtherActorAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, _) {
+    if (w.currentSituation is! DefenseSituation) {
+      return ReasonedSuccessChance.sureFailure;
+    }
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance.or(ReasonedSuccessChance.sureFailure);
   }
