@@ -137,8 +137,7 @@ abstract class InventoryBuilder
     var currentInventory = build();
 
     assert(
-        currentWeapon == null ||
-            currentInventory.items.contains(currentWeapon),
+        currentWeapon == null || currentInventory.items.contains(currentWeapon),
         "Before equiping $weapon, actor was wielding a weapon ($currentWeapon) "
         "that wasn't in their inventory");
 
