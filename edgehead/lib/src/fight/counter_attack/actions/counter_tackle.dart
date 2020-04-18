@@ -90,5 +90,5 @@ class CounterTackle extends EnemyTargetAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      !a.isOnGround && !a.anatomy.isBlind;
+      !a.isOnGround && !a.anatomy.isBlind && !enemy.isOnGround;
 }
