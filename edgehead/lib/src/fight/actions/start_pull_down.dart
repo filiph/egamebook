@@ -94,10 +94,7 @@ class PullDown extends StartDefensibleActionBase {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, Actor enemy) =>
-      a.pose == Pose.onGround &&
-      !enemy.isOnGround &&
-      !a.anatomy.isBlind &&
-      enemy.pose <= Pose.extended;
+      a.pose == Pose.onGround && !enemy.isOnGround && !a.anatomy.isBlind;
 
   @override
   Situation mainSituationBuilder(
