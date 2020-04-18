@@ -89,7 +89,7 @@ class SweepFeet extends StartDefensibleActionBase {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, Actor enemy) =>
       a.pose > Pose.onGround &&
-      !a.anatomy.hasHealthyLegs &&
+      a.anatomy.hasHealthyLegs &&
       !enemy.isOnGround &&
       !a.anatomy.isBlind &&
       enemy.pose <= Pose.extended;
