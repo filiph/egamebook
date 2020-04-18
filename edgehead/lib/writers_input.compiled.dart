@@ -49,6 +49,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/writers_helpers.dart';
 import 'package:edgehead/edgehead_ids.dart';
+import 'package:edgehead/edgehead_ids_items.dart';
 part 'writers_input.compiled.g.dart';
 
 const bool DEV_MODE = false;
@@ -3454,6 +3455,7 @@ final Room meadowFight = Room(
             throw StateError(
                 "Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
           })).apply(c);
+      w.updateActorById(playerId, (b) => b..inventory.add(letterFromFather));
     },
     whereDescription: 'among the trees',
     groundMaterial: '{earth|dirt}');
@@ -3466,11 +3468,11 @@ class ReadLetterFromFather extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['inventory', 'letter from father', 'read'];
+      ['inventory', 'letter from my father', 'read'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(c.isInIdleRoom)) {
+    if (!(c.isInIdleRoom && c.hasItem(letterFromFatherId))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -3487,68 +3489,6 @@ class ReadLetterFromFather extends RoamingAction {
         'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and bountiful.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your brother back from the dead.\n\n- Father\n',
         isRaw: true);
     return '${a.name} successfully performs ReadLetterFromFather';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class ReadLetterFromMentor extends RoamingAction {
-  @override
-  final String name = 'read_letter_from_mentor';
-
-  static final ReadLetterFromMentor singleton = ReadLetterFromMentor();
-
-  @override
-  List<String> get commandPathTemplate =>
-      ['inventory', 'letter from mentor', 'read'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(c.isInIdleRoom)) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'I take the letter from my pocket and read it.\n\nMy young friend,\n\nYou ask good questions. But before I will answer them, we must do something with your situation.\n\nYou must understand that a necromancer cannot be poor. There is no glory for practitioners of our profession unless we wield the resources and power to lead others.\n\nIt\'s not my place, or style, to share my wealth with you. But I can do something more exciting.\n\nI can share some knowledge. There exists a curious structure called the Pyramid. It lies in the ruins of an ancient city called San Francisco. The place is rich with ancient artifacts and gold.\n\nGo there, and take all you can. Learn about the place.\n\nIf you succeed in your quest, you may have the apprenticeship you seek.\n',
-        isRaw: true);
-    return '${a.name} successfully performs ReadLetterFromMentor';
   }
 
   @override
@@ -3868,7 +3808,6 @@ final allActions = <RoamingAction>[
   ObserveGoblinCamp.singleton,
   StartInk.singleton,
   ReadLetterFromFather.singleton,
-  ReadLetterFromMentor.singleton,
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{

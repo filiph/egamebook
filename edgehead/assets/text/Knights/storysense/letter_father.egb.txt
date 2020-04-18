@@ -1,8 +1,10 @@
 ACTION: $read_letter_from_father
-COMMAND: inventory >> letter from father >> read
+COMMAND: inventory >> letter from my father >> read
 
 PREREQUISITES:
 c.isInIdleRoom
+&&
+c.hasItem(letterFromFatherId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 I take the letter from my pocket and read it.

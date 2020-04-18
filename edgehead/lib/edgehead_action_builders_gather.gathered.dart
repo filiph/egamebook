@@ -55,8 +55,18 @@ final _$actionSerializer = InstanceSerializer<Action>({
   // From lib/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart:
   'OffBalanceOpportunityThrust.singleton':
       OffBalanceOpportunityThrust.singleton,
+  // From lib/src/fight/strike_from_ground/strike_from_ground_defense/actions/jump_to_side_and_counter.dart:
+  'JumpToSideFromStrikeFromGround.singleton':
+      JumpToSideFromStrikeFromGround.singleton,
+  // From lib/src/fight/strike_from_ground/strike_from_ground_defense/actions/step_back.dart:
+  'StepBackFromStrikeFromGround.singleton':
+      StepBackFromStrikeFromGround.singleton,
+  // From lib/src/fight/strike_from_ground/actions/finish_pull_down.dart:
+  'FinishPullDown.singleton': FinishPullDown.singleton,
   // From lib/src/fight/loot/actions/autoloot.dart:
   'AutoLoot.singleton': AutoLoot.singleton,
+  // From lib/src/fight/throw/actions/finish_throw_harmless.dart:
+  'FinishThrowHarmless.singleton': FinishThrowHarmless.singleton,
   // From lib/src/fight/throw/actions/finish_throw_blunt.dart:
   'FinishThrowBlunt.singleton': FinishThrowBlunt.singleton,
   // From lib/src/fight/throw/actions/finish_throw_thrusting.dart:
@@ -121,16 +131,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'ShieldBlockThrustOnGround.singleton': ShieldBlockThrustOnGround.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_ground.dart:
   'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
-  // From lib/src/fight/strike_from_ground/actions/finish_pull_down.dart:
-  'FinishPullDown.singleton': FinishPullDown.singleton,
-  // From lib/src/fight/strike_from_ground/strike_from_ground_defense/actions/step_back.dart:
-  'StepBackFromStrikeFromGround.singleton':
-      StepBackFromStrikeFromGround.singleton,
-  // From lib/src/fight/strike_from_ground/strike_from_ground_defense/actions/jump_to_side_and_counter.dart:
-  'JumpToSideFromStrikeFromGround.singleton':
-      JumpToSideFromStrikeFromGround.singleton,
-  // From lib/src/fight/throw/actions/finish_throw_harmless.dart:
-  'FinishThrowHarmless.singleton': FinishThrowHarmless.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

@@ -3,14 +3,11 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
-import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/object2_in_command_path.dart';
-import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
 
 class SmackWithHarmlessItem extends EnemyTargetAction with CombatCommandPath {
   static const String className = "SmackWithHarmlessItem";
@@ -64,7 +61,6 @@ class SmackWithHarmlessItem extends EnemyTargetAction with CombatCommandPath {
   @override
   String applySuccess(ActionContext context, Actor enemy) {
     Actor a = context.actor;
-    WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
 
     assert(a.currentWeapon.damageCapability.isHarmless);

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_ids.dart';
+import 'package:edgehead/edgehead_ids_items.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/elements/stat_update_element.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -20,6 +21,11 @@ import 'package:meta/meta.dart';
 final Item lairOfGodStar = Item(
   lairOfGodStarId,
   name: "Lair of God Star",
+);
+
+final Item letterFromFather = Item(
+  letterFromFatherId,
+  name: "letter from my father",
 );
 
 final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger,
@@ -285,7 +291,7 @@ FightSituation generateStartFight(ActionContext c,
       "{muddy |wet |}ground",
       roomRoamingSituation,
       {
-        1: start_make_goblin_not_invincible,
+        3: start_make_goblin_not_invincible,
         2: start_tamara_bellows,
       });
 }
@@ -450,6 +456,10 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   bool isHurt(int actorId) {
     final actor = world.getActorById(actorId);
     return actor.anatomy.woundedParts.isNotEmpty;
+  }
+
+  bool hasItem(int itemId) {
+    return player.inventory.items.where((item) => item.id == itemId).isNotEmpty;
   }
 
   double playerDistanceTo(String roomName) {
