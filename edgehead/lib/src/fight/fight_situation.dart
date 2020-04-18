@@ -304,30 +304,40 @@ abstract class FightSituation extends Object
     final duplicates = <int>{};
     final map = <int, Entity>{};
 
-    void checkDuplicate(Entity entity) {
+    /// A map of locations: where the entity with given id was seen.
+    final locations = <int, String>{};
+
+    void checkDuplicate(Entity entity, String location) {
       final id = entity.id;
 
       if (ids.contains(id)) {
         duplicates.add(id);
         _log.warning('Entities have duplicate id ($entity): '
-            '$entity vs ${map[id]}');
+            '$entity vs ${map[id]}.  Previous one was in ${locations[id]}, '
+            'this one is in $location');
         assert(
             false,
             'Entities have duplicate id ($entity): '
-            '$entity vs ${map[id]}');
+            '$entity vs ${map[id]}. Previous one was in ${locations[id]}, '
+            'this one is in $location');
       }
       ids.add(id);
       map[id] = entity;
+      locations[id] = location;
     }
 
     for (final actor in actors) {
-      checkDuplicate(actor);
+      checkDuplicate(actor, "actors");
 
-      actor.inventory.items.forEach(checkDuplicate);
-      actor.anatomy.allParts.forEach(checkDuplicate);
+      for (final e in actor.inventory.items) {
+        checkDuplicate(e, "${actor.name}'s items");
+      }
+      for (final e in actor.anatomy.allParts) {
+        checkDuplicate(e, "${actor.name}'s body parts");
+      }
     }
 
-    locationItems.forEach(checkDuplicate);
+    locationItems.forEach((e) => checkDuplicate(e, "location items"));
 
     if (duplicates.isNotEmpty) {
       _log.severe('Duplicate ids: $duplicates.');

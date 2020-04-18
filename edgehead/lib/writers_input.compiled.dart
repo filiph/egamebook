@@ -506,7 +506,7 @@ class KarlTakeStar extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add('I take the star. It fits into my palm. It says "Lair of God".\n\n\n',
         isRaw: true);
-    w.updateActorById(playerId, (b) => b..inventory.items.add(lairOfGodStar));
+    w.updateActorById(playerId, (b) => b..inventory.add(lairOfGodStar));
 
     return '${a.name} successfully performs KarlTakeStar';
   }

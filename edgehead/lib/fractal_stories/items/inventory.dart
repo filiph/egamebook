@@ -110,6 +110,8 @@ abstract class InventoryBuilder
 
   /// Add an item to inventory. Does not equip the item.
   void add(Item item) {
+    assert(items.build().where((e) => e.id == item.id).isEmpty,
+        'Adding item that is already in the inventory: $item, $items');
     items.add(item);
   }
 
