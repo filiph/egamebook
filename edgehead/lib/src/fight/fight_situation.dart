@@ -337,7 +337,9 @@ abstract class FightSituation extends Object
       }
     }
 
-    locationItems.forEach((e) => checkDuplicate(e, "location items"));
+    for (final e in locationItems) {
+      checkDuplicate(e, "location items");
+    }
 
     if (duplicates.isNotEmpty) {
       _log.severe('Duplicate ids: $duplicates.');
