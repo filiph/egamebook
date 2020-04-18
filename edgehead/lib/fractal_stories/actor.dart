@@ -234,7 +234,8 @@ abstract class Actor extends Object
   @override
   bool get isActive;
 
-  /// When `true`, this actor can move around, attack, etc.
+  /// When `true`, this actor can move around, attack, etc. When `false`,
+  /// this actor is dead.
   ///
   /// They can be either alive or undead (when [isUndead] is `true`).
   @override
@@ -454,10 +455,16 @@ abstract class Actor extends Object
     final buf = StringBuffer('Actor<');
     buf.write(name);
     buf.write(' (');
+    if (!isAnimated) {
+      buf.write('dead,');
+    }
     if (isUndead) {
       buf.write('undead,');
     }
-    if (anatomy.isBlind) {
+    if (isAnimated && anatomy.isBlind) {
+      // We have to check if the actor is animated before checking isBlind
+      // because all dead actors are blind, and we have an assert that prevents
+      // the developer from checking blindness of a dead actor.
       buf.write('blind,');
     }
     if (anatomy.hasCrippledLegs) {
