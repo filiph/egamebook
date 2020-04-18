@@ -32,6 +32,7 @@ import 'package:edgehead/src/fight/actions/start_crack_skull_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_feint_jab.dart';
 import 'package:edgehead/src/fight/actions/start_feint_slash.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
+import 'package:edgehead/src/fight/actions/start_pull_down.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_arm.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
@@ -107,6 +108,7 @@ abstract class FightSituation extends Object
         EquipWeapon.singleton,
         FeintJab.singleton,
         FeintSlash.singleton,
+        PullDown.singleton,
         SweepFeet.singleton,
         startBiteAtBodyPartGenerator(BodyPartDesignation.leftLeg),
         startBiteAtBodyPartGenerator(BodyPartDesignation.rightLeg),
@@ -321,8 +323,7 @@ abstract class FightSituation extends Object
     for (final actor in actors) {
       checkDuplicate(actor);
 
-      actor.inventory.items
-          .forEach(checkDuplicate);
+      actor.inventory.items.forEach(checkDuplicate);
       actor.anatomy.allParts.forEach(checkDuplicate);
     }
 
