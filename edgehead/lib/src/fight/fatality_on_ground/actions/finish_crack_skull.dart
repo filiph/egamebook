@@ -61,19 +61,30 @@ class FinishCrackSkull extends OtherActorAction {
         positive: true);
 
     final victim = enemy.toBuilder();
-    victim.hitpoints = 0;
+
+    if (!enemy.isInvincible) {
+      victim.hitpoints = 0;
+    } else {
+      // Target is invincible.
+      enemy.report(s, '<subject> briefly stop<s> moving', negative: true);
+      enemy.report(s, 'then <subject> start<s> again',
+          but: true, positive: true, endSentence: true);
+    }
 
     deepReplaceBodyPart(
       victim,
       (part) => part.designation == BodyPartDesignation.head,
       (b) {
-        b.majorCutsCount += 1;
-        b.hitpoints = 0;
+        b.bluntHitsCount += 1;
+        if (!enemy.isInvincible) {
+          b.hitpoints = 0;
+        }
       },
     );
 
     final updatedEnemy = victim.build();
     w.updateActorById(enemy.id, (b) => b.replace(updatedEnemy));
+
     if (!enemy.isInvincible) {
       killHumanoid(context, enemy.id);
     } else {
