@@ -3376,7 +3376,7 @@ final Room meadowFight = Room(
           ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
       s.add(
-          'My hands are shaking. I put them on the sides of my neck to stop the shudder, then on my ears. Then I don\'t know why I put my hands on my ears. I put them down again.\n\nAs a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. \n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking. Still shaking.\n\n\n',
+          'My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. \n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking.\n\n\n',
           isRaw: true);
       Ruleset(
           Rule(1072603126, 2, false, (ApplicabilityContext c) {
@@ -3411,7 +3411,7 @@ final Room meadowFight = Room(
                 'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
                 isRaw: true);
           }),
-          Rule(335866054, 1, false, (ApplicabilityContext c) {
+          Rule(708888700, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;

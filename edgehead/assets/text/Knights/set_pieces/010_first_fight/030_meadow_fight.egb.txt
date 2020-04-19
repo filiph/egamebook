@@ -18,17 +18,15 @@ WHERE: among the trees
 GROUND_MATERIAL: {earth|dirt}
 
 AFTER_MONSTERS_CLEARED:
-My hands are shaking. I put them on the sides of my neck to stop the shudder, then on my ears. Then I don't know why I put my hands on my ears. I put them down again.
+My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. 
 
-As a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. 
-
-But this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking. Still shaking.
+But this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking.
 
 // TODO: let Tamara hang around (camp?), or even follow Aren to The Bleeds. Move the content below to separate actions.
 
 [[RULESET]]
 [[RULE]]
-!w.wasKilled(tamaraId)
+  !w.wasKilled(tamaraId)
 [[THEN]]
 
 The fight is over.
@@ -76,7 +74,7 @@ She doesn't respond, so I nod, and tell her corpse to follow me.
 [[THEN]]
 
 [[CODE]]
-// This room is always served by one of the variants below.
+// This room is always served by one of the variants above.
 throw StateError("Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
 [[ENDCODE]]
 
