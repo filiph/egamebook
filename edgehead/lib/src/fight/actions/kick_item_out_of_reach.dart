@@ -19,7 +19,7 @@ class KickItemOutOfReach extends ItemAction {
 
   @override
   List<String> get commandPathTemplate =>
-      const ["environment", "<object>", "kick out of reach"];
+      const ["environment", "<objectNounWithAdjective>", "kick out of reach"];
 
   @override
   String get helpMessage => "Denies anyone to pick up the weapon. "

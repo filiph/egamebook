@@ -20,7 +20,7 @@ class TakeDroppedWeapon extends ItemAction {
 
   @override
   List<String> get commandPathTemplate =>
-      const ["environment", "<object>", "pick up"];
+      const ["environment", "<objectNounWithAdjective>", "pick up"];
 
   @override
   String get helpMessage => "A different weapon might change "

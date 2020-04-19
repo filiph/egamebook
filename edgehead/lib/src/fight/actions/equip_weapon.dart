@@ -18,7 +18,8 @@ class EquipWeapon extends Action<Item> {
   final bool isImplicit = false;
 
   @override
-  List<String> get commandPathTemplate => ["self", "<object>", "equip"];
+  List<String> get commandPathTemplate =>
+      ["self", "<objectNounWithAdjective>", "equip"];
 
   @override
   final String helpMessage = "Picking a different weapon can be a smart move. "
