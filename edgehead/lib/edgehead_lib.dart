@@ -32,6 +32,11 @@ class EdgeheadGame extends Book {
   static final StatSetting<int> staminaSetting = StatSetting<int>(
       "stamina", "The physical energy that the player can use.", (v) => "$v S");
 
+  /// This is the random generator used to scramble randomness just after
+  /// the player has selected an option (assuming [randomizeAfterPlayerChoice]
+  /// is `true`).
+  static final Random _randomizeAfterPlayerChoiceRandom = Random();
+
   final Logger log = Logger('KnightsGame');
 
   @override
@@ -50,6 +55,7 @@ class EdgeheadGame extends Book {
   /// This field exist in order to allow skipping to an action, as a way of
   /// play-testing.
   final Pattern actionPattern;
+
   bool actionPatternWasHit = false;
 
   /// The player character as it started the game. It is mostly used in
@@ -61,15 +67,23 @@ class EdgeheadGame extends Book {
   WorldState world;
 
   Simulation simulation;
-
   PlanConsequence consequence;
   Storyline storyline;
   final Stat<double> hitpoints = Stat<double>(hitpointsSetting, 0.0);
+
   final Stat<int> stamina = Stat<int>(staminaSetting, 1);
 
   /// An instance that can be reused to generate randomness, provided that
   /// it's always seeded with a new state before use.
   final StatefulRandom _reusableRandom = StatefulRandom(42);
+
+  /// If `true`, we update [world]'s [WorldState.statefulRandomState] with a new
+  /// number. This is so that the player can reload the game from a savegame
+  /// and have a different experience.
+  ///
+  /// If we didn't have this, reloading would lead to the same exact
+  /// playthrough, because the system is completely deterministic.
+  final bool randomizeAfterPlayerChoice;
 
   /// Create a new Edgehead game.
   ///
@@ -82,10 +96,17 @@ class EdgeheadGame extends Book {
   ///
   /// If [saveGameSerialized] is provided, [randomSeed] mustn't be provided,
   /// and vice versa.
+  ///
+  /// Set [randomizeAfterPlayerChoice] to `false` if you want a completely
+  /// deterministic playthrough. By default, this is `true`, which means that
+  /// the world state's random seed is changed after every player
+  /// input (i.e. choice taken). This ensures that reloading a previous position
+  /// will result in a different experience.
   EdgeheadGame({
     this.actionPattern,
     String saveGameSerialized,
     int randomSeed,
+    this.randomizeAfterPlayerChoice = true,
   }) {
     if (randomSeed != null && saveGameSerialized != null) {
       throw ArgumentError(
@@ -438,6 +459,13 @@ class EdgeheadGame extends Book {
         callbacks[choice] = () async {
           await _applySelected(
               performance, actorTurn, performances.length, storyline);
+
+          // New seed for WorldState's stateful random state, so that players
+          // can reload and see different results.
+          if (randomizeAfterPlayerChoice) {
+            world = world.rebuild((b) => b.statefulRandomState =
+                _randomizeAfterPlayerChoiceRandom.nextInt(0xFFFFFF));
+          }
         };
         choices.add(choice);
       }

@@ -24,7 +24,10 @@ void main() {
 
     Future<String> runAndGetFinalWorld(int seed) async {
       final runner = CliRunner(true, true, null, random: Random(seed));
-      await runner.initialize(EdgeheadGame(randomSeed: seed));
+      await runner.initialize(EdgeheadGame(
+        randomSeed: seed,
+        randomizeAfterPlayerChoice: false,
+      ));
       runner.startBook();
       await runner.bookEnd.first;
       runner.close();
