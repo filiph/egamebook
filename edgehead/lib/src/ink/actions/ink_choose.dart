@@ -1,9 +1,9 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/ink_ast.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/fractal_stories/ink_ast.dart';
 import 'package:edgehead/src/ink/ink_situation.dart';
 import 'package:meta/meta.dart';
 
@@ -27,6 +27,8 @@ class InkChoose extends Action<InkChoicePointer> {
   static const className = 'InkChoose';
 
   static const InkChoose singleton = InkChoose();
+
+  static final _whitespace = RegExp(r'\s+');
 
   const InkChoose();
 
@@ -118,6 +120,16 @@ class InkChoose extends Action<InkChoicePointer> {
   List<String> getCommandPath(
       ApplicabilityContext context, InkChoicePointer pointer) {
     return pointer.choice.command.split('>>');
+  }
+
+  @override
+  String getCommandSentence(
+      ApplicabilityContext context, InkChoicePointer pointer) {
+    // Ink choices are generally constructed in a way that the whole
+    // [commandPath] joins into an English sentence.
+    final sentence =
+        getCommandPath(context, pointer).join(' ').replaceAll(_whitespace, ' ');
+    return sentence;
   }
 
   @override
