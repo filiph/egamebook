@@ -36,6 +36,7 @@ import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_s
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/jump_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/roll_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/shield_block_slash.dart';
 import 'package:edgehead/src/fight/strike_down/actions/finish_strike_down.dart';
 import 'package:edgehead/src/fight/strike_down/actions/finish_thrust_spear_down.dart';

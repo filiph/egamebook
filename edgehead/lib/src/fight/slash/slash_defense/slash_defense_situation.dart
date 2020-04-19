@@ -6,6 +6,7 @@ import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_s
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/jump_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/parry_slash.dart';
+import 'package:edgehead/src/fight/slash/slash_defense/actions/roll_back.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/shield_block_slash.dart';
 import 'package:edgehead/src/predetermined_result.dart';
 
@@ -21,6 +22,7 @@ DefenseSituation createSlashDefenseSituation(int id, Actor attacker,
           DodgeSlash.singleton,
           JumpBackFromSlash.singleton,
           ParrySlash.singleton,
+          RollBackFromSlash.singleton,
           ShieldBlockSlash.singleton,
         ],
         [],

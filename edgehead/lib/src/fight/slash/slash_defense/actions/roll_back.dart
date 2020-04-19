@@ -6,10 +6,11 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 
-ReasonedSuccessChance computeJumpBackSlash(
+ReasonedSuccessChance computeRollBackSlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.9, [
+  return getCombatMoveChance(a, enemy, 0.4, [
     const Modifier(90, CombatReason.dexterity),
     const Modifier(10, CombatReason.balance),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
@@ -19,13 +20,13 @@ ReasonedSuccessChance computeJumpBackSlash(
   ]);
 }
 
-class JumpBackFromSlash extends OtherActorAction {
-  static final JumpBackFromSlash singleton = JumpBackFromSlash();
+class RollBackFromSlash extends OtherActorAction {
+  static final RollBackFromSlash singleton = RollBackFromSlash();
 
-  static const String className = "JumpBackFromSlash";
+  static const String className = "RollBackFromSlash";
 
   @override
-  final String helpMessage = "Jump back and the weapon can't reach me.";
+  final String helpMessage = "Roll back and the weapon can't reach me.";
 
   @override
   final bool isAggressive = false;
@@ -40,7 +41,7 @@ class JumpBackFromSlash extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  List<String> get commandPathTemplate => ["jump back"];
+  List<String> get commandPathTemplate => ["roll back"];
 
   @override
   String get name => className;
@@ -53,13 +54,10 @@ class JumpBackFromSlash extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(
-        s,
-        "<subject> {jump<s>|leap<s>} {back|backward} "
-        "but <subject> <is> {not fast enough|too slow}.",
-        wholeSentence: true);
+    a.report(s, "<subject> roll<s> {away|backward|out of the way}");
+    a.report(s, '<subject> <is> {not fast enough|too slow}', but: true);
     w.popSituation(context);
-    return "${a.name} fails to jump back from ${enemy.name}";
+    return "${a.name} fails to roll back from ${enemy.name}";
   }
 
   @override
@@ -67,12 +65,13 @@ class JumpBackFromSlash extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
+    final groundMaterial = getGroundMaterial(w);
+    a.report(s, "<subject> roll<s> {away|backward|out of the way}",
         positive: true);
-    s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",
+    s.add("<owner's> <subject> {slash<es>|cut<s>} into the $groundMaterial",
         subject: enemy.currentWeaponOrBodyPart, owner: enemy);
     w.popSituationsUntil("FightSituation", context);
-    return "${a.name} jumps back from ${enemy.name}'s attack";
+    return "${a.name} rolls back from ${enemy.name}'s attack";
   }
 
   @override
@@ -80,11 +79,11 @@ class JumpBackFromSlash extends OtherActorAction {
       Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeJumpBackSlash(a, sim, w, enemy));
+        .or(computeRollBackSlash(a, sim, w, enemy));
   }
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      !a.isOnGround && !a.anatomy.isBlind;
+      a.isOnGround && !a.anatomy.isBlind;
 }
