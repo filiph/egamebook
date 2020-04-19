@@ -203,8 +203,10 @@ class CliRunner extends Presenter<EdgeheadGame> {
     }
 
     final selectedChoice = element.choices[option];
-    print(selectedChoice.commandSentence);
-    print("");
+    if (!automated || book.actionPatternWasHit) {
+      print(selectedChoice.commandSentence);
+      print("");
+    }
     book.accept(PickChoice((b) => b..choice = selectedChoice.toBuilder()));
   }
 
