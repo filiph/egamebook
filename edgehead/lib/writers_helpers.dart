@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_ids.dart';
-import 'package:edgehead/edgehead_ids_items.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/elements/stat_update_element.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
