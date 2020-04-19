@@ -58,9 +58,10 @@ void main() {
   });
 
   group("executeSlashingHit", () {
+    final sword = Item.weapon(42, WeaponType.sword, adjective: 'ordinary');
+
     test("decapitating kills", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
@@ -70,7 +71,6 @@ void main() {
 
     test("cleaving neck removes head", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
@@ -98,7 +98,6 @@ void main() {
         ],
         firstOwnerId: monster.id,
       ));
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final blindMonster = executeSlashingHit(
               monster.build(), sword, SlashSuccessLevel.cleave,
@@ -109,7 +108,6 @@ void main() {
 
     test("cleaving neck disables it", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
@@ -123,7 +121,6 @@ void main() {
 
     test("cleaving neck returns neck and head", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final severed = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.neck)
@@ -136,7 +133,6 @@ void main() {
     test("cleaving non-severable body part kills it but not its descendants",
         () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
               designation: BodyPartDesignation.head)
@@ -155,7 +151,6 @@ void main() {
 
     test("cleaving non-severable body part downgrades to major cut", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final slashResult = executeSlashingHit(
           orc, sword, SlashSuccessLevel.cleave,
@@ -166,7 +161,6 @@ void main() {
     test("major-cutting actor with Con=2 once does not kill him", () {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.torso)
@@ -179,7 +173,6 @@ void main() {
         "kills him", () {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.torso)
@@ -196,7 +189,6 @@ void main() {
         "does not kill him", () {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.rightLeg)
@@ -213,7 +205,6 @@ void main() {
         "disables it", () {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
               designation: BodyPartDesignation.rightLeg)
@@ -231,7 +222,6 @@ void main() {
 
     test("minor-cutting several times does not kill", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-      final sword = Item.weapon(42, WeaponType.sword);
 
       final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.minorCut,
               designation: BodyPartDesignation.head)
@@ -245,12 +235,13 @@ void main() {
   });
 
   group("executeThrustingHit", () {
+    final dagger = Item.weapon(42, WeaponType.dagger, adjective: 'ordinary');
+
     test("disabling primary hand drops weapon", () {
       const orcId = 1000;
       final orc = Actor.initialized(orcId, testRandomIdGetter, "orc",
-          currentWeapon:
-              Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
-      final dagger = Item.weapon(42, WeaponType.dagger);
+          currentWeapon: Item.weapon(10000, WeaponType.sword,
+              adjective: 'orcish', firstOwnerId: orcId));
 
       final result =
           executeThrustingHit(orc, dagger, BodyPartDesignation.primaryHand);
@@ -260,9 +251,8 @@ void main() {
     test("disabling primary arm drops weapon", () {
       const orcId = 1000;
       final orc = Actor.initialized(orcId, testRandomIdGetter, "orc",
-          currentWeapon:
-              Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
-      final dagger = Item.weapon(42, WeaponType.dagger);
+          currentWeapon: Item.weapon(10000, WeaponType.sword,
+              adjective: 'orcish', firstOwnerId: orcId));
 
       final result =
           executeThrustingHit(orc, dagger, BodyPartDesignation.primaryArm);
@@ -272,9 +262,8 @@ void main() {
     test("disabling secondary hand doesn't drop weapon", () {
       const orcId = 1000;
       final orc = Actor.initialized(orcId, testRandomIdGetter, "orc",
-          currentWeapon:
-              Item.weapon(10000, WeaponType.sword, firstOwnerId: orcId));
-      final dagger = Item.weapon(42, WeaponType.dagger);
+          currentWeapon: Item.weapon(10000, WeaponType.sword,
+              adjective: 'orcish', firstOwnerId: orcId));
 
       final result =
           executeThrustingHit(orc, dagger, BodyPartDesignation.secondaryHand);

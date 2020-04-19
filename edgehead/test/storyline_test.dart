@@ -427,9 +427,11 @@ void main() {
         nameIsProperNoun: true, pronoun: Pronoun.HE);
     var npc = a.rebuild((b) => b
       ..inventory.equip(
-          Item.weapon(50, WeaponType.dagger, firstOwnerId: actorId), a.anatomy)
-      ..inventory.currentShield =
-          Item.weapon(60, WeaponType.shield, firstOwnerId: actorId));
+          Item.weapon(50, WeaponType.dagger,
+              adjective: 'trusty', firstOwnerId: actorId),
+          a.anatomy)
+      ..inventory.currentShield = Item.weapon(60, WeaponType.shield,
+          adjective: 'heavy', firstOwnerId: actorId));
 
     npc.report(storyline, "<subject> <has> <subjectPronoun's> <object>",
         object: npc.currentWeapon);
@@ -1069,9 +1071,12 @@ void main() {
             adjective: "red", pronoun: Pronoun.HE);
         goblin = Actor.initialized(70, testRandomIdGetter, "goblin",
             pronoun: Pronoun.HE);
-        mySword = Item.weapon(100, WeaponType.sword, firstOwnerId: aren.id);
-        myAxe = Item.weapon(101, WeaponType.axe, firstOwnerId: aren.id);
-        orcSword = Item.weapon(110, WeaponType.sword, firstOwnerId: orc.id);
+        mySword = Item.weapon(100, WeaponType.sword,
+            adjective: 'serrated', firstOwnerId: aren.id);
+        myAxe = Item.weapon(101, WeaponType.axe,
+            adjective: 'dirty', firstOwnerId: aren.id);
+        orcSword = Item.weapon(110, WeaponType.sword,
+            adjective: 'orcish', firstOwnerId: orc.id);
         goblinRustySword = Item.weapon(120, WeaponType.sword,
             adjective: 'rusty', firstOwnerId: goblin.id);
         orcShinySword = Item.weapon(130, WeaponType.sword,

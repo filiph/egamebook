@@ -22,29 +22,34 @@ abstract class Item extends Object
   /// If no [damageCapability] is provided, then the item will be
   /// of [WeaponType.harmless].
   factory Item(int id,
-          {@required String name,
-          String adjective,
-          bool nameIsProperNoun = false,
-          DamageCapabilityBuilder damageCapability,
-          int firstOwnerId}) =>
-      _$Item((b) => b
-        ..id = id
-        ..damageCapability = damageCapability ??
-            DamageCapability(WeaponType.harmless).toBuilder()
-        ..name = name
-        ..nameIsProperNoun = nameIsProperNoun
-        ..adjective = adjective
-        ..firstOwnerId = firstOwnerId);
+      {@required String name,
+      String adjective,
+      bool nameIsProperNoun = false,
+      DamageCapabilityBuilder damageCapability,
+      int firstOwnerId}) {
+    return _$Item((b) => b
+      ..id = id
+      ..damageCapability =
+          damageCapability ?? DamageCapability(WeaponType.harmless).toBuilder()
+      ..name = name
+      ..nameIsProperNoun = nameIsProperNoun
+      ..adjective = adjective
+      ..firstOwnerId = firstOwnerId);
+  }
 
   factory Item.weapon(int id, WeaponType type,
       {String name,
-      bool nameIsProperNoun = false,
       String adjective,
+      bool nameIsProperNoun = false,
       int bluntDamage,
       int slashingDamage,
       int thrustingDamage,
       int tearingDamage,
       int firstOwnerId}) {
+    assert(
+        nameIsProperNoun || adjective != null,
+        "All items that are not unique must have an adjective: "
+        "$name with id=$id doesn't");
     final damageCapability = DamageCapability(type,
         bluntDamage: bluntDamage,
         slashingDamage: slashingDamage,

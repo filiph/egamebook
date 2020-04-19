@@ -20,6 +20,7 @@ import 'package:meta/meta.dart';
 final Item lairOfGodStar = Item(
   lairOfGodStarId,
   name: "Lair of God Star",
+  nameIsProperNoun: true,
 );
 
 final Item letterFromFather = Item(
@@ -189,10 +190,12 @@ FightSituation generateRandomEncounter(ActionContext c,
     String name;
     if (w.randomBool()) {
       name = w.randomBool() ? "dagger" : "knife";
-      items.add(Item.weapon(w.randomInt(), WeaponType.dagger, name: name));
+      items.add(Item.weapon(w.randomInt(), WeaponType.dagger,
+          name: name, adjective: 'plain'));
     } else {
       name = w.randomBool() ? "axe" : "hatchet";
-      items.add(Item.weapon(w.randomInt(), WeaponType.axe, name: name));
+      items.add(Item.weapon(w.randomInt(), WeaponType.axe,
+          name: name, adjective: 'plain'));
     }
 
     final numberOfUs = enemies.length == 1 ? "the two of " : "";
@@ -207,7 +210,8 @@ FightSituation generateRandomEncounter(ActionContext c,
 
     if (w.randomBool()) {
       name = w.randomBool() ? "rock" : "brick";
-      items.add(Item.weapon(w.randomInt(), WeaponType.rock, name: name));
+      items.add(Item.weapon(w.randomInt(), WeaponType.rock,
+          name: name, adjective: 'hefty'));
     } else {
       name = "branch";
       items.add(Item.weapon(w.randomInt(), WeaponType.club,
