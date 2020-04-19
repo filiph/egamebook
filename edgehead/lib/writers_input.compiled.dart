@@ -3243,6 +3243,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           w.updateActorById(
               playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
+          w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
         }),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;

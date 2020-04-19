@@ -96,6 +96,7 @@ Keeping her teeth together, Tamara says: "I might need your help with this. Take
 
     [[CODE]]
     w.updateActorById(playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
+    w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
     [[ENDCODE]]
 
     I pick up a moldy rock that lies right next to my {left|right} foot. It's hard and heavy in my palm. As soon as I straighten up, <>
