@@ -29,13 +29,72 @@ String parseInk(String name, String text) {
   /// two paragraphs into one.
   bool previousParagraphHadGlue = false;
 
+  final List<String> currentParagraphLines = [];
+
+  void addToParagraph(String line) {
+    currentParagraphLines.add(line);
+  }
+
+  void addParagraphBreak() {
+    if (currentParagraphLines.isEmpty) return;
+    currentParagraphLines.add('[PARAGRAPH_BREAK]');
+  }
+
+  /// Take [currentParagraphLines] and make them into a paragraph.
+  /// This is here because we want to use [createDescriber] on the full
+  /// text and not just one line. So we accumulate lines until we know there
+  /// will be no more (e.g. we reached a choice, or end of file),
+  /// and then put them all together.
+  void finalizeParagraph() {
+    if (currentParagraphLines.isEmpty) return;
+    if (currentParagraphLines.every((line) => line.isEmpty)) return;
+
+    // Take [currentParagraphLines] and split the text by the magic
+    // "[PARAGRAPH_BREAK]" keyword.
+    final fullParagraphs = currentParagraphLines
+        .map((line) => line.trim())
+        .join('\n')
+        .split('[PARAGRAPH_BREAK]')
+        .where((line) => line.trim().isNotEmpty);
+
+    for (final fullParagraph in fullParagraphs) {
+      final paragraph = _ParagraphText(fullParagraph.trim());
+      final isCodeParagraph = fullParagraph.contains('[[CODE]]');
+
+      if (previousWasParagraph &&
+          !previousParagraphHadGlue &&
+          !isCodeParagraph) {
+        assert(
+            !paragraph.hasStartingGlue,
+            "Previous paragraph didn't have glue "
+            "but this one does: $fullParagraph");
+        // Add newlines between paragraphs.
+        buf.writeln('InkParagraphNode((c) => '
+            'c.outputStoryline.addParagraph()), ');
+      }
+
+      final describer = createDescriber(paragraph.line);
+      final describerCode = describer.accept(_dartEmitter).toString();
+
+      buf.writeln('InkParagraphNode($describerCode), ');
+      // Mark this paragraph a
+      previousWasParagraph = !isCodeParagraph;
+      previousParagraphHadGlue = paragraph.hasEndingGlue;
+    }
+    currentParagraphLines.clear();
+  }
+
   final lines = text.split('\n');
   for (final line in lines) {
-    if (line.trim().isEmpty) continue;
+    if (line.trim().isEmpty) {
+      addParagraphBreak();
+      continue;
+    }
 
     final choiceLevel = _getChoiceLevel(line);
     if (choiceLevel > 0) {
       // A choice.
+      finalizeParagraph();
       if (choiceLevel > depth) {
         // A new fork.
         buf.writeln('InkForkNode([');
@@ -76,6 +135,7 @@ String parseInk(String name, String text) {
     final gatherLevel = _getGatherLevel(line);
     if (gatherLevel != null) {
       // There's a gather here.
+      finalizeParagraph();
       for (var i = 0; i < depth - gatherLevel; i++) {
         // Close the last choice first.
         buf.writeln('],),');
@@ -90,24 +150,10 @@ String parseInk(String name, String text) {
     }
 
     // Normal paragraph.
-    final paragraph = _ParagraphText(line);
-    if (previousWasParagraph && !previousParagraphHadGlue) {
-      assert(
-          !paragraph.hasStartingGlue,
-          "Previous paragraph didn't have glue "
-          "but this one does: $line");
-      // Add newlines between paragraphs.
-      buf.writeln('InkParagraphNode((c) => '
-          'c.outputStoryline.addParagraph()), ');
-    }
-
-    final describer = createDescriber(paragraph.line);
-    final describerCode = describer.accept(_dartEmitter).toString();
-
-    buf.writeln('InkParagraphNode($describerCode), ');
-    previousWasParagraph = true;
-    previousParagraphHadGlue = paragraph.hasEndingGlue;
+    addToParagraph(line);
   }
+
+  finalizeParagraph();
 
   // We're at the end, we need to get back to 0.
   for (var i = 0; i < depth; i++) {

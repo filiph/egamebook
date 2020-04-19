@@ -86,13 +86,25 @@ Keeping her teeth together, Tamara says: "I might need your help with this. Take
 
 * "No. I'm not a warrior."
 
+    [[CODE]]
+    w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
+    [[ENDCODE]]
+
     Tamara purses her lips but says nothing. Then, without warning, <>
 
 * "Keep it. I'll improvise."
 
+    [[CODE]]
+    w.updateActorById(playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
+    [[ENDCODE]]
+
     I pick up a moldy rock that lies right next to my feet. It's hard and heavy in my palm. As soon as I straighten up, <>
 
 * "Thanks, I'll take it."
+
+    [[CODE]]
+    w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
+    [[ENDCODE]]
 
     I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it, <>
 

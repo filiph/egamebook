@@ -90,8 +90,8 @@
 		},
 		"brackets": {
 			"patterns": [{
-				"begin": "^(\\[\\[CODE\\]\\])$",
-				"end": "^(\\[\\[ENDCODE\\]\\])$",
+				"begin": "^\\s*(\\[\\[CODE\\]\\])\\s*$",
+				"end": "^\\s*(\\[\\[ENDCODE\\]\\])\\s*$",
 				"captures": {
 					"1": {"name": "keyword.egb"}
 				},
