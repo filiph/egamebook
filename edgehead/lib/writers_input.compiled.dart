@@ -3263,7 +3263,9 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('the fight begins.\n', isRaw: true);
+    s.add(
+        'the goblin is out of the brush and ready to attack. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
+        isRaw: true);
   }),
 ]);
 
@@ -3357,9 +3359,7 @@ final Room meadowFight = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add(
-          'The goblin before us is especially feral. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
-          isRaw: true);
+      s.add('', isRaw: true);
     },
     null,
     generateStartFight,
