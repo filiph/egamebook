@@ -3251,7 +3251,7 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I pick up a moldy rock that lies right next to my feet. It\'s hard and heavy in my palm. As soon as I straighten up,\n',
+              'I pick up a moldy rock that lies right next to my {left|right} foot. It\'s hard and heavy in my palm. As soon as I straighten up,\n',
               isRaw: true);
         }),
       ],

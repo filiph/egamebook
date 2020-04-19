@@ -98,7 +98,7 @@ Keeping her teeth together, Tamara says: "I might need your help with this. Take
     w.updateActorById(playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
     [[ENDCODE]]
 
-    I pick up a moldy rock that lies right next to my feet. It's hard and heavy in my palm. As soon as I straighten up, <>
+    I pick up a moldy rock that lies right next to my {left|right} foot. It's hard and heavy in my palm. As soon as I straighten up, <>
 
 * "Thanks, I'll take it."
 
