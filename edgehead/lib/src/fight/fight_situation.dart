@@ -20,6 +20,7 @@ import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/equip_weapon.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
+import 'package:edgehead/src/fight/actions/punch_on_ground.dart';
 import 'package:edgehead/src/fight/actions/raise_dead.dart';
 import 'package:edgehead/src/fight/actions/regain_balance.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
@@ -111,6 +112,7 @@ abstract class FightSituation extends Object
         FeintJab.singleton,
         FeintSlash.singleton,
         PullDown.singleton,
+        PunchOnGround.singleton,
         SmackWithHarmlessItem.singleton,
         SweepFeet.singleton,
         startBiteAtBodyPartGenerator(BodyPartDesignation.leftLeg),
