@@ -3081,7 +3081,7 @@ final startInkInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "What an insight!" """.trim(),
+      command: r""" "Dangerous? This place? What an insight!" """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
