@@ -139,6 +139,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeSlashOnGround.singleton': DodgeSlashOnGround.singleton,
   // From lib/src/fight/slash_on_ground/slash_on_ground_defense/actions/shield_block_slash_on_ground.dart:
   'ShieldBlockSlashOnGround.singleton': ShieldBlockSlashOnGround.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/roll_away_from_blunt_swing.dart:
+  'RollAwayFromBluntSwing.singleton': RollAwayFromBluntSwing.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

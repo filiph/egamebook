@@ -491,6 +491,7 @@ abstract class Actor extends Object
     if (isBarehanded) {
       buf.write('barehanded,');
     }
+    buf.write('${currentDamageCapability.type}');
     buf.write(')>');
     return buf.toString();
   }

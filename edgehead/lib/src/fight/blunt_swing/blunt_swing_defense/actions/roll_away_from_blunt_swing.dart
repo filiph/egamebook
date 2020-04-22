@@ -6,27 +6,27 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 
-ReasonedSuccessChance computeJumpBackBluntSwing(
+ReasonedSuccessChance computeRollAwayFromBluntSwing(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.9, [
+  return getCombatMoveChance(a, enemy, 0.5, [
     const Modifier(90, CombatReason.dexterity),
     const Modifier(10, CombatReason.balance),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
-    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
-    const Penalty(80, CombatReason.performerHasLimitedVision),
+    const Bonus(20, CombatReason.targetHasOneLegDisabled),
+    const Bonus(50, CombatReason.targetHasAllLegsDisabled),
+    const Bonus(30, CombatReason.targetHasOneEyeDisabled),
+    const Bonus(50, CombatReason.targetHasAllEyesDisabled),
   ]);
 }
 
-class JumpBackFromBluntSwing extends OtherActorAction {
-  static final JumpBackFromBluntSwing singleton = JumpBackFromBluntSwing();
+class RollAwayFromBluntSwing extends OtherActorAction {
+  static final RollAwayFromBluntSwing singleton = RollAwayFromBluntSwing();
 
-  static const String className = "JumpBackFromBluntSwing";
+  static const String className = "RollAwayFromBluntSwing";
 
   @override
-  final String helpMessage = "Jump back so that the weapon can't reach me.";
+  final String helpMessage = "Roll away so that the weapon can't reach me.";
 
   @override
   final bool isAggressive = false;
@@ -41,7 +41,7 @@ class JumpBackFromBluntSwing extends OtherActorAction {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  List<String> get commandPathTemplate => ["jump back"];
+  List<String> get commandPathTemplate => ["roll away"];
 
   @override
   String get name => className;
@@ -56,11 +56,11 @@ class JumpBackFromBluntSwing extends OtherActorAction {
     Storyline s = context.outputStoryline;
     a.report(
         s,
-        "<subject> {jump<s>|leap<s>} {back|backward} "
+        "<subject> tr<ies> to roll away "
         "but <subject> <is> {not fast enough|too slow}.",
         wholeSentence: true);
     w.popSituation(context);
-    return "${a.name} fails to jump back from ${enemy.name}";
+    return "${a.name} fails to roll away from ${enemy.name}";
   }
 
   @override
@@ -68,12 +68,12 @@ class JumpBackFromBluntSwing extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
-        positive: true);
-    s.add("<owner's> <subject> {swing<s>|swish<es>} through empty air",
+    final groundMaterial = getGroundMaterial(w);
+    a.report(s, "<subject> roll<s> {away|off}", positive: true);
+    s.add("<owner's> <subject> {hit<s>|crash<es> into} the $groundMaterial",
         subject: enemy.currentWeaponOrBodyPart, owner: enemy);
     w.popSituationsUntil("FightSituation", context);
-    return "${a.name} jumps back from ${enemy.name}'s attack";
+    return "${a.name} rolls away from ${enemy.name}'s attack";
   }
 
   @override
@@ -81,11 +81,11 @@ class JumpBackFromBluntSwing extends OtherActorAction {
       Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeJumpBackBluntSwing(a, sim, w, enemy));
+        .or(computeRollAwayFromBluntSwing(a, sim, w, enemy));
   }
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      !a.isOnGround;
+      a.isOnGround;
 }
