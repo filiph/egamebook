@@ -29,7 +29,7 @@ final Item letterFromFather = Item(
 );
 
 final Item rockFromMeadow = Item.weapon(rockFromMeadowId, WeaponType.rock,
-    name: "rock", adjective: "moldy", firstOwnerId: playerId);
+    name: "rock", adjective: "moldy");
 
 final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger,
     name: "dagger", adjective: "long", firstOwnerId: tamaraId);
