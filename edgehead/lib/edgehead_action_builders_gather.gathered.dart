@@ -133,6 +133,12 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
   // From lib/src/fight/slash/slash_defense/actions/roll_back.dart:
   'RollBackFromSlash.singleton': RollBackFromSlash.singleton,
+  // From lib/src/fight/slash_on_ground/actions/finish_slash_on_ground.dart:
+  'FinishSlashOnGround.singleton': FinishSlashOnGround.singleton,
+  // From lib/src/fight/slash_on_ground/slash_on_ground_defense/actions/dodge_slash_on_ground.dart:
+  'DodgeSlashOnGround.singleton': DodgeSlashOnGround.singleton,
+  // From lib/src/fight/slash_on_ground/slash_on_ground_defense/actions/shield_block_slash_on_ground.dart:
+  'ShieldBlockSlashOnGround.singleton': ShieldBlockSlashOnGround.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,
