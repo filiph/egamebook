@@ -24,7 +24,7 @@ abstract class Item extends Object
   /// of [WeaponType.harmless].
   factory Item(int id,
       {@required String name,
-      String adjective,
+      @required String adjective,
       bool nameIsProperNoun = false,
       DamageCapabilityBuilder damageCapability,
       int firstOwnerId}) {
@@ -120,8 +120,10 @@ abstract class Item extends Object
   @override
   bool get isAnimated => false;
 
+  /// Items are automatically common when their [adjective] is `null`
+  /// and their [name] is not a proper noun.
   @override
-  bool get isCommon => false;
+  bool get isCommon => !nameIsProperNoun && adjective == null;
 
   @override
   bool get isPlayer => false;

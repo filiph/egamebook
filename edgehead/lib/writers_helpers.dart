@@ -21,12 +21,11 @@ final Item lairOfGodStar = Item(
   lairOfGodStarId,
   name: "Lair of God Star",
   nameIsProperNoun: true,
+  adjective: null,
 );
 
-final Item letterFromFather = Item(
-  letterFromFatherId,
-  name: "letter from my father",
-);
+final Item letterFromFather =
+    Item(letterFromFatherId, name: "letter", adjective: "father's");
 
 final Item rockFromMeadow = Item.weapon(rockFromMeadowId, WeaponType.rock,
     name: "rock", adjective: "moldy");
