@@ -2,6 +2,7 @@ import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -18,10 +19,6 @@ class EquipWeapon extends Action<Item> {
   final bool isImplicit = false;
 
   @override
-  List<String> get commandPathTemplate =>
-      ["self", "<objectNounWithAdjective>", "equip"];
-
-  @override
   final String helpMessage = "Picking a different weapon can be a smart move. "
       "Different weapons excel in different situations.";
 
@@ -32,10 +29,14 @@ class EquipWeapon extends Action<Item> {
   final bool isProactive = true;
 
   @override
-  String get name => className;
+  final bool rerollable = false;
 
   @override
-  final bool rerollable = false;
+  List<String> get commandPathTemplate =>
+      ["self", "<objectNounWithAdjective>", "equip"];
+
+  @override
+  String get name => className;
 
   @override
   Resource get rerollResource => throw StateError('not rerollable');
@@ -70,9 +71,12 @@ class EquipWeapon extends Action<Item> {
 
   @override
   Iterable<Item> generateObjects(ApplicabilityContext context) {
-    // Takes all weapons from inventory except from the one currently held.
-    return context.actor.inventory.items
-        .where((w) => w.id != context.actor.currentWeapon?.id);
+    // Takes all weapons from inventory...
+    return context.actor.inventory.items.where((w) =>
+        // ... except from the one currently held ...
+        w.id != context.actor.currentWeapon?.id &&
+        // ... and except for shields.
+        w.damageCapability.type != WeaponType.shield);
   }
 
   @override
