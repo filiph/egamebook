@@ -2,7 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';

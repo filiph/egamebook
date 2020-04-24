@@ -35,6 +35,12 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
         ..add(serializers.serialize(object.adjective,
             specifiedType: const FullType(String)));
     }
+    if (object.bodyPart != null) {
+      result
+        ..add('bodyPart')
+        ..add(serializers.serialize(object.bodyPart,
+            specifiedType: const FullType(BodyPart)));
+    }
     if (object.firstOwnerId != null) {
       result
         ..add('firstOwnerId')
@@ -58,6 +64,10 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
         case 'adjective':
           result.adjective = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'bodyPart':
+          result.bodyPart.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BodyPart)) as BodyPart);
           break;
         case 'damageCapability':
           result.damageCapability.replace(serializers.deserialize(value,
@@ -91,6 +101,8 @@ class _$Item extends Item {
   @override
   final String adjective;
   @override
+  final BodyPart bodyPart;
+  @override
   final DamageCapability damageCapability;
   @override
   final int firstOwnerId;
@@ -106,6 +118,7 @@ class _$Item extends Item {
 
   _$Item._(
       {this.adjective,
+      this.bodyPart,
       this.damageCapability,
       this.firstOwnerId,
       this.id,
@@ -138,6 +151,7 @@ class _$Item extends Item {
     if (identical(other, this)) return true;
     return other is Item &&
         adjective == other.adjective &&
+        bodyPart == other.bodyPart &&
         damageCapability == other.damageCapability &&
         firstOwnerId == other.firstOwnerId &&
         id == other.id &&
@@ -150,7 +164,9 @@ class _$Item extends Item {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, adjective.hashCode), damageCapability.hashCode),
+                $jc(
+                    $jc($jc($jc(0, adjective.hashCode), bodyPart.hashCode),
+                        damageCapability.hashCode),
                     firstOwnerId.hashCode),
                 id.hashCode),
             name.hashCode),
@@ -164,6 +180,10 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   String _adjective;
   String get adjective => _$this._adjective;
   set adjective(String adjective) => _$this._adjective = adjective;
+
+  BodyPartBuilder _bodyPart;
+  BodyPartBuilder get bodyPart => _$this._bodyPart ??= new BodyPartBuilder();
+  set bodyPart(BodyPartBuilder bodyPart) => _$this._bodyPart = bodyPart;
 
   DamageCapabilityBuilder _damageCapability;
   DamageCapabilityBuilder get damageCapability =>
@@ -193,6 +213,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   ItemBuilder get _$this {
     if (_$v != null) {
       _adjective = _$v.adjective;
+      _bodyPart = _$v.bodyPart?.toBuilder();
       _damageCapability = _$v.damageCapability?.toBuilder();
       _firstOwnerId = _$v.firstOwnerId;
       _id = _$v.id;
@@ -223,6 +244,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
       _$result = _$v ??
           new _$Item._(
               adjective: adjective,
+              bodyPart: _bodyPart?.build(),
               damageCapability: damageCapability.build(),
               firstOwnerId: firstOwnerId,
               id: id,
@@ -231,6 +253,8 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
     } catch (_) {
       String _$failedField;
       try {
+        _$failedField = 'bodyPart';
+        _bodyPart?.build();
         _$failedField = 'damageCapability';
         damageCapability.build();
       } catch (e) {

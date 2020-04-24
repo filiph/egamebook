@@ -1,12 +1,11 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
+import 'package:edgehead/src/fight/common/apply_slash.dart';
 import 'package:edgehead/src/fight/slash_on_ground/slash_on_ground_situation.dart';
 
 class FinishSlashOnGround extends OtherActorAction {
@@ -51,14 +50,12 @@ class FinishSlashOnGround extends OtherActorAction {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
     assert(a.currentWeaponOrBodyPart != null);
-    final damage = a.currentDamageCapability.slashingDamage;
 
-    final result = executeSlashingHit(
+    final result = decideSlashingHit(
       enemy,
       a.currentWeaponOrBodyPart,
-      SlashSuccessLevel.majorCut,
+      w.randomInt,
       designation: w.randomChoose([
         BodyPartDesignation.torso,
         BodyPartDesignation.primaryArm,
@@ -68,32 +65,10 @@ class FinishSlashOnGround extends OtherActorAction {
       ]),
     );
 
-    w.updateActorById(enemy.id, (b) => b.replace(result.victim));
+    final threadId = getThreadId(sim, w, slashOnGroundSituationName);
+    applySlash(result, context, enemy, threadId);
 
-    final thread = getThreadId(sim, w, slashOnGroundSituationName);
-    bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
-    if (!killed) {
-      a.report(
-          s,
-          "<subject> {slash<es>|cleave<s>} <object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.victim,
-          positive: true,
-          actionThread: thread);
-      assert(!result.willFall, "Enemy is already on the ground.");
-      inflictPain(context, enemy.id, damage, result.touchedPart);
-    } else {
-      a.report(
-          s,
-          "<subject> {slash<es>|cleave<s>} <object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.victim,
-          positive: true,
-          actionThread: thread);
-      killHumanoid(context, enemy.id);
-    }
-    return "${a.name} slashes ${killed ? ' (and kills)' : ''} ${enemy.name} "
-        "while on the ground";
+    return "${a.name} slashes  ${enemy.name} while on the ground";
   }
 
   @override

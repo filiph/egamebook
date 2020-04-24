@@ -8,17 +8,19 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart'
     show RandomIntGetter;
 
-/// Executes the business logic of dealing damage to a body part with [weapon]
-/// and [success]. Supports anything from minor cuts to decapitation.
+/// Decides what happens when [target] is slashed by [weapon].
 ///
 /// The affected body part is specified either directly with [bodyPart]
 /// or indirectly with [designation]. For example, a slash can either
 /// directly target a specific body part (selected at random in a previous
 /// step), or at a body part "designation" (such as head, neck, etc.).
-WeaponAssaultResult executeSlashingHit(
+///
+/// Does not actually report anything or make any change to the world state.
+/// Merely returns a [WeaponAssaultResult].
+WeaponAssaultResult decideSlashingHit(
   Actor target,
   Item weapon,
-  SlashSuccessLevel success, {
+  RandomIntGetter randomGetter, {
   BodyPartDesignation designation,
   BodyPart bodyPart,
 }) {
@@ -37,18 +39,20 @@ WeaponAssaultResult executeSlashingHit(
     }
   }
 
+  SlashSuccessLevel success = weapon.damageCapability.isCleaving
+      ? SlashSuccessLevel.cleave
+      : SlashSuccessLevel.majorCut;
+
   switch (success) {
     case SlashSuccessLevel.cleave:
       if (part.isSeverable) {
-        return _cleaveOff(target, part, weapon);
+        return _cleaveOff(target, part, weapon, randomGetter);
       } else {
         return _disableBySlash(target, part, weapon);
       }
       break;
     case SlashSuccessLevel.majorCut:
       return _addMajorCut(target, part, weapon);
-    case SlashSuccessLevel.minorCut:
-      return _addMinorCut(target, part, weapon);
   }
 
   throw UnimplementedError("this type of slash not implemented yet");
@@ -59,19 +63,15 @@ WeaponAssaultResult executeSlashingHit(
 /// with [weapon] and [success].
 ///
 /// Supports anything from minor cuts to decapitation.
-WeaponAssaultResult executeSlashingHitFromDirection(
-    Actor target,
-    SlashDirection direction,
-    Item weapon,
-    SlashSuccessLevel success,
-    RandomIntGetter randomIntGenerator) {
+WeaponAssaultResult decideSlashingHitFromDirection(Actor target,
+    SlashDirection direction, Item weapon, RandomIntGetter randomIntGenerator) {
   final fromLeft = direction == SlashDirection.left;
   assert(fromLeft || direction == SlashDirection.right,
       "The logic below assumes only two possible directions. Update it.");
 
   // Only slash vital parts if the enemy is almost ready to go down.
   final avoidVital =
-      target.hitpoints > 1 || target.isSurvivor || !target.isInvincible;
+      target.hitpoints > 1 || target.isSurvivor || target.isInvincible;
 
   final bodyPart = fromLeft
       ? target.anatomy
@@ -79,7 +79,8 @@ WeaponAssaultResult executeSlashingHitFromDirection(
       : target.anatomy
           .pickRandomBodyPartFromRight(randomIntGenerator, avoidVital);
 
-  return executeSlashingHit(target, weapon, success, bodyPart: bodyPart);
+  return decideSlashingHit(target, weapon, randomIntGenerator,
+      bodyPart: bodyPart);
 }
 
 WeaponAssaultResult _addMajorCut(
@@ -122,39 +123,9 @@ WeaponAssaultResult _addMajorCut(
   );
 }
 
-/// Minor cuts are merely recorded on the body part. They don't have any
-/// combat effect.
-WeaponAssaultResult _addMinorCut(
-    Actor target, BodyPart designated, Item weapon) {
-  assert(designated.isAnimated,
-      "Slashing a dead body part is not yet implemented");
-
-  final victim = target.toBuilder();
-
-  // Add a major cut to the body part that was hit.
-  deepReplaceBodyPart(
-    victim,
-    (part) => part.id == designated.id,
-    (b) {
-      b.minorCutsCount += 1;
-    },
-  );
-
-  return WeaponAssaultResult(
-    victim.build(),
-    designated,
-    slashSuccessLevel: SlashSuccessLevel.minorCut,
-    // Minor cuts do none of the below.
-    severedPart: null,
-    disabled: false,
-    willFall: false,
-    willDropCurrentWeapon: false,
-    wasBlinding: false,
-  );
-}
-
 /// Cuts off the body part. The [bodyPart] must be severable.
-WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
+WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon,
+    RandomIntGetter randomGetter) {
   assert(bodyPart.isSeverable);
 
   bool startedBlind = target.anatomy.isBlind;
@@ -193,7 +164,7 @@ WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon) {
     victim.build(),
     bodyPart,
     slashSuccessLevel: SlashSuccessLevel.cleave,
-    severedPart: severedPart,
+    severedPart: Item.bodyPart(randomGetter(), severedPart),
     willDropCurrentWeapon:
         isWeaponHeld(target.currentWeapon, severedPart, target.inventory),
     disabled: false,
@@ -267,10 +238,6 @@ enum SlashDirection {
 }
 
 enum SlashSuccessLevel {
-  /// A slash capable of inflicting a minor gash that might bleed but
-  /// won't have an effect on the function of the [BodyPart].
-  minorCut,
-
   /// A slash capable of inflicting a major, bleeding cut.
   ///
   /// Will have effect on the organ, and will generally

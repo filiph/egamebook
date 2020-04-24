@@ -33,6 +33,7 @@ class ActionContext extends ApplicabilityContext {
   /// or [Action.applyFailure].
   final ReasonedSuccessChance successChance;
 
+  /// The [Storyline] instance that actions can use to report what happened.
   final Storyline outputStoryline;
 
   const ActionContext(

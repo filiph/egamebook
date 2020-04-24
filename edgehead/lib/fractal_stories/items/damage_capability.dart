@@ -24,12 +24,15 @@ abstract class DamageCapability
   static Serializer<DamageCapability> get serializer =>
       _$damageCapabilitySerializer;
 
-  factory DamageCapability(WeaponType type,
-      {int bluntDamage,
-      int slashingDamage,
-      int thrustingDamage,
-      int tearingDamage,
-      int length}) {
+  factory DamageCapability(
+    WeaponType type, {
+    int bluntDamage,
+    int slashingDamage,
+    int thrustingDamage,
+    int tearingDamage,
+    int length,
+    bool isCleaving = false,
+  }) {
     assert(type != null);
     assert(
         type != WeaponType.invalid ||
@@ -38,13 +41,16 @@ abstract class DamageCapability
                 thrustingDamage == null &&
                 tearingDamage == null),
         "Do not provide values to DamageCapability.isNone.");
+    assert(!isCleaving || (slashingDamage ?? type.defaultSlashingDamage) > 0,
+        'A weapon that is cleaving must also be slashing.');
     return _$DamageCapability((b) => b
       ..type = type
       ..bluntDamage = bluntDamage ?? type.defaultBluntDamage
       ..slashingDamage = slashingDamage ?? type.defaultSlashingDamage
       ..thrustingDamage = thrustingDamage ?? type.defaultThrustingDamage
       ..tearingDamage = tearingDamage ?? type.defaultTearingDamage
-      ..length = length ?? type.defaultLength);
+      ..length = length ?? type.defaultLength
+      ..isCleaving = isCleaving);
   }
 
   DamageCapability._();
@@ -52,6 +58,11 @@ abstract class DamageCapability
   int get bluntDamage;
 
   bool get isBlunt => bluntDamage > 0;
+
+  /// Cleaving weapons are those that can completely sever a limb.
+  /// They can, in other words, go through bone. Think a katana
+  /// or a serrated sword. (The "messy" tag in Dungeon World.)
+  bool get isCleaving;
 
   /// A "weapon" such as a piece of paper, a glove, or an apple.
   bool get isHarmless => type == WeaponType.harmless;

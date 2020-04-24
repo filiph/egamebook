@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/anatomy.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
 import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/humanoid.dart';
@@ -58,12 +58,15 @@ void main() {
   });
 
   group("executeSlashingHit", () {
+    final katana = Item.weapon(42, WeaponType.sword,
+        name: 'katana', adjective: 'sharp', isCleaving: true);
+
     final sword = Item.weapon(42, WeaponType.sword, adjective: 'ordinary');
 
     test("decapitating kills", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
-      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+      final deadOrc = decideSlashingHit(orc, katana, randomIntGetter,
               designation: BodyPartDesignation.neck)
           .victim;
       expect(deadOrc.isAnimated, isFalse);
@@ -72,7 +75,7 @@ void main() {
     test("cleaving neck removes head", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
-      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+      final deadOrc = decideSlashingHit(orc, katana, randomIntGetter,
               designation: BodyPartDesignation.neck)
           .victim;
       expect(
@@ -99,8 +102,8 @@ void main() {
         firstOwnerId: monster.id,
       ));
 
-      final blindMonster = executeSlashingHit(
-              monster.build(), sword, SlashSuccessLevel.cleave,
+      final blindMonster = decideSlashingHit(
+              monster.build(), katana, randomIntGetter,
               designation: BodyPartDesignation.tail)
           .victim;
       expect(blindMonster.anatomy.isBlind, isTrue);
@@ -109,7 +112,7 @@ void main() {
     test("cleaving neck disables it", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
-      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+      final deadOrc = decideSlashingHit(orc, katana, randomIntGetter,
               designation: BodyPartDesignation.neck)
           .victim;
       expect(
@@ -122,11 +125,12 @@ void main() {
     test("cleaving neck returns neck and head", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
-      final severed = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+      final severed = decideSlashingHit(orc, katana, randomIntGetter,
               designation: BodyPartDesignation.neck)
           .severedPart;
       expect(
-          Anatomy.findByDesignationFromPart(BodyPartDesignation.head, severed),
+          Anatomy.findByDesignationFromPart(
+              BodyPartDesignation.head, severed.bodyPart),
           isNotNull);
     });
 
@@ -134,7 +138,7 @@ void main() {
         () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
-      final deadOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.cleave,
+      final deadOrc = decideSlashingHit(orc, katana, randomIntGetter,
               designation: BodyPartDesignation.head)
           .victim;
       expect(
@@ -152,8 +156,7 @@ void main() {
     test("cleaving non-severable body part downgrades to major cut", () {
       final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
 
-      final slashResult = executeSlashingHit(
-          orc, sword, SlashSuccessLevel.cleave,
+      final slashResult = decideSlashingHit(orc, katana, randomIntGetter,
           designation: BodyPartDesignation.head);
       expect(slashResult.slashSuccessLevel, SlashSuccessLevel.majorCut);
     });
@@ -162,7 +165,7 @@ void main() {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
 
-      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+      final cutOrc = decideSlashingHit(orc, sword, randomIntGetter,
               designation: BodyPartDesignation.torso)
           .victim;
       expect(cutOrc.isAnimated, isTrue);
@@ -174,11 +177,10 @@ void main() {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
 
-      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+      final cutOrc = decideSlashingHit(orc, sword, randomIntGetter,
               designation: BodyPartDesignation.torso)
           .victim;
-      final doublyCutOrc = executeSlashingHit(
-              cutOrc, sword, SlashSuccessLevel.majorCut,
+      final doublyCutOrc = decideSlashingHit(cutOrc, sword, randomIntGetter,
               designation: BodyPartDesignation.torso)
           .victim;
       expect(doublyCutOrc.isAnimated, isFalse);
@@ -190,11 +192,10 @@ void main() {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
 
-      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+      final cutOrc = decideSlashingHit(orc, sword, randomIntGetter,
               designation: BodyPartDesignation.rightLeg)
           .victim;
-      final doublyCutOrc = executeSlashingHit(
-              cutOrc, sword, SlashSuccessLevel.majorCut,
+      final doublyCutOrc = decideSlashingHit(cutOrc, sword, randomIntGetter,
               designation: BodyPartDesignation.rightLeg)
           .victim;
       expect(doublyCutOrc.isAnimated, isTrue);
@@ -206,11 +207,10 @@ void main() {
       final orc =
           Actor.initialized(1000, testRandomIdGetter, "orc", constitution: 2);
 
-      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.majorCut,
+      final cutOrc = decideSlashingHit(orc, sword, randomIntGetter,
               designation: BodyPartDesignation.rightLeg)
           .victim;
-      final doublyCutOrc = executeSlashingHit(
-              cutOrc, sword, SlashSuccessLevel.majorCut,
+      final doublyCutOrc = decideSlashingHit(cutOrc, sword, randomIntGetter,
               designation: BodyPartDesignation.rightLeg)
           .victim;
       expect(
@@ -218,19 +218,6 @@ void main() {
               .findByDesignation(BodyPartDesignation.rightLeg)
               .isAnimated,
           isFalse);
-    });
-
-    test("minor-cutting several times does not kill", () {
-      final orc = Actor.initialized(1000, testRandomIdGetter, "orc");
-
-      final cutOrc = executeSlashingHit(orc, sword, SlashSuccessLevel.minorCut,
-              designation: BodyPartDesignation.head)
-          .victim;
-      final doublyCutOrc = executeSlashingHit(
-              cutOrc, sword, SlashSuccessLevel.minorCut,
-              designation: BodyPartDesignation.head)
-          .victim;
-      expect(doublyCutOrc.isAnimated, isTrue);
     });
   });
 
@@ -272,9 +259,6 @@ void main() {
   });
 
   group("pickRandomBodyPartFromLeft/Right", () {
-    final random = Random();
-    final randomIntGetter = random.nextInt;
-
     test(
         "attack from right side (attacker's perspective) "
         "never hits right (primary) arm", () {
@@ -306,8 +290,6 @@ void main() {
     final actor = Actor.initialized(1000, testRandomIdGetter, "orc");
     final head = BodyPart(1, "head", firstOwnerId: actor.id);
     final neck = BodyPart(2, "neck", firstOwnerId: actor.id);
-    final random = Random();
-    final randomIntGetter = random.nextInt;
 
     test("gets the one body part", () {
       final bodyPartsWithWeights = {
@@ -357,3 +339,6 @@ void main() {
     });
   });
 }
+
+final _random = Random();
+int randomIntGetter([int max]) => _random.nextInt(max ?? 0xFFFFFF);

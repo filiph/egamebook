@@ -2,7 +2,7 @@ library stranded.fight.slash_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/slash/actions/finish_slash.dart';

@@ -31,6 +31,14 @@ final Item letterFromFather = Item(
 final Item rockFromMeadow = Item.weapon(rockFromMeadowId, WeaponType.rock,
     name: "rock", adjective: "moldy");
 
+final Item katana = Item.weapon(
+  katanaId,
+  WeaponType.sword,
+  name: "katana",
+  adjective: "ancient", // TODO: add firstOwnerId: ladyHopeId
+  isCleaving: true,
+);
+
 final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger,
     name: "dagger", adjective: "long", firstOwnerId: tamaraId);
 
@@ -291,15 +299,17 @@ FightSituation generateStartFight(ActionContext c,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   w.actors.add(firstGoblin);
   return FightSituation.initialized(
-      w.randomInt(),
-      party,
-      [firstGoblin],
-      "{muddy |wet |}ground",
-      roomRoamingSituation,
-      {
-        3: start_make_goblin_not_invincible,
-        2: start_tamara_bellows,
-      });
+    w.randomInt(),
+    party,
+    [firstGoblin],
+    "{muddy |wet |}ground",
+    roomRoamingSituation,
+    {
+      3: start_make_goblin_not_invincible,
+      2: start_tamara_bellows,
+    },
+    items: [katana],
+  );
 }
 
 /// Either returns `we` or `I`, depending on the current state of the party.

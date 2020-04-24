@@ -12,7 +12,7 @@ typedef RandomIdGetter = int Function();
 /// Corresponds to the [StatefulRandom.nextInt()] function. This typedef is used
 /// for functions that wrap [StatefulRandom.nextInt()] with other logic, such
 /// as [WorldState.randomInt].
-typedef RandomIntGetter = int Function(int max);
+typedef RandomIntGetter = int Function([int max]);
 
 /// A pseudo-random number generator that can save its complete state.
 ///

@@ -2,6 +2,7 @@ library stranded.item;
 
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -37,6 +38,32 @@ abstract class Item extends Object
       ..firstOwnerId = firstOwnerId);
   }
 
+  factory Item.bodyPart(int id, BodyPart part) {
+    assert(part.isSevered);
+    WeaponType weaponType;
+    String name;
+
+    if (part.designation == BodyPartDesignation.neck) {
+      weaponType = WeaponType.rock;
+      name = 'head';
+    } else if (part.designation.isArm || part.designation.isLeg) {
+      weaponType = WeaponType.club;
+      name = part.name;
+    } else if (part.designation.isHand) {
+      weaponType = WeaponType.harmless;
+      name = part.name;
+    }
+
+    return _$Item((b) => b
+      ..id = id
+      ..bodyPart = part.toBuilder()
+      ..damageCapability = DamageCapability(weaponType).toBuilder()
+      ..name = name
+      ..nameIsProperNoun = false
+      ..adjective = 'severed'
+      ..firstOwnerId = part.firstOwnerId);
+  }
+
   factory Item.weapon(int id, WeaponType type,
       {String name,
       String adjective,
@@ -45,6 +72,7 @@ abstract class Item extends Object
       int slashingDamage,
       int thrustingDamage,
       int tearingDamage,
+      bool isCleaving = false,
       int firstOwnerId}) {
     assert(
         nameIsProperNoun || adjective != null,
@@ -54,7 +82,8 @@ abstract class Item extends Object
         bluntDamage: bluntDamage,
         slashingDamage: slashingDamage,
         thrustingDamage: thrustingDamage,
-        tearingDamage: tearingDamage);
+        tearingDamage: tearingDamage,
+        isCleaving: isCleaving);
     return Item(id,
         name: name ?? type.name,
         nameIsProperNoun: nameIsProperNoun,
@@ -68,6 +97,11 @@ abstract class Item extends Object
   @override
   @nullable
   String get adjective;
+
+  /// The body part that constitutes this item. For example, a severed head
+  /// constitutes of an "anatomy" of a neck and head and eyes and so on.
+  @nullable
+  BodyPart get bodyPart;
 
   DamageCapability get damageCapability;
 

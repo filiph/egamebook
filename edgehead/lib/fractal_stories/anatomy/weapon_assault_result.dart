@@ -1,6 +1,7 @@
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
+import 'package:edgehead/fractal_stories/item.dart';
 import 'package:meta/meta.dart';
 
 /// Result of an assault by a weapon (sword, spear, claw).
@@ -14,7 +15,7 @@ class WeaponAssaultResult {
 
   /// The body part that was severed (and should be added to the ground).
   /// This can be (and often _will_ be) `null`.
-  final BodyPart severedPart;
+  final Item severedPart;
 
   /// The body part that was hit (slashed, pierced, etc.).
   final BodyPart touchedPart;
@@ -36,7 +37,7 @@ class WeaponAssaultResult {
 
   /// The success level of the slash.
   ///
-  /// Normally, this is the [SlashSuccessLevel] that [executeSlashingHit]
+  /// Normally, this is the [SlashSuccessLevel] that [decideSlashingHit]
   /// was called with. But in some cases, the success level is upgraded
   /// or downgraded.
   ///
@@ -67,4 +68,6 @@ class WeaponAssaultResult {
     @required this.willDropCurrentWeapon,
     @required this.wasBlinding,
   });
+
+  bool get didSeverBodyPart => severedPart != null;
 }

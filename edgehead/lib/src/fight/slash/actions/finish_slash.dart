@@ -1,17 +1,12 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
-import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/apply_slash.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
-import 'package:edgehead/src/fight/common/drop_weapon.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
-import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/slash/slash_situation.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 
@@ -19,10 +14,6 @@ class FinishSlash extends OtherActorAction {
   static final FinishSlash singleton = FinishSlash();
 
   static const String className = "FinishSlash";
-
-  /// The default severity of the slash that is dealt. Can be upgraded
-  /// or downgraded depending on specific rules.
-  static const _defaultSlashSuccessLevel = SlashSuccessLevel.majorCut;
 
   @override
   final String helpMessage = null;
@@ -63,8 +54,7 @@ class FinishSlash extends OtherActorAction {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
-    final damage = a.currentDamageCapability.slashingDamage;
+
     final situation = context.world.currentSituation as AttackerSituation;
     assert(situation.name == slashSituationName);
 
@@ -80,52 +70,10 @@ class FinishSlash extends OtherActorAction {
           situation, situation.attackDirection, a, enemy, w.randomInt);
     }
 
-    w.updateActorById(enemy.id, (b) => b.replace(result.victim));
-    final thread = getThreadId(sim, w, slashSituationName);
-    bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
-    if (!killed) {
-      a.report(
-          s,
-          "<subject> {slash<es>|cut<s>} <object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.victim,
-          positive: true,
-          actionThread: thread);
-      if (result.disabled &&
-          (result.touchedPart.function == BodyPartFunction.damageDealing ||
-              result.touchedPart.function == BodyPartFunction.mobile ||
-              result.touchedPart.function == BodyPartFunction.wielding)) {
-        assert(result.touchedPart.designation != BodyPartDesignation.teeth);
-        result.touchedPart.report(s, "<subject> go<es> limp",
-            negative: true, actionThread: thread);
-      }
-      if (result.willDropCurrentWeapon) {
-        final weapon = dropCurrentWeapon(w, result.victim.id);
-        result.victim.report(s, "<subject> drop<s> <object>",
-            object: weapon, negative: true, actionThread: thread);
-      }
-      if (result.willFall) {
-        result.victim.report(s, "<subject> fall<s>{| down| to the ground}",
-            negative: true, actionThread: thread);
-        w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
-        w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
-      }
-      inflictPain(context, result.victim.id, damage, result.touchedPart);
-      if (result.wasBlinding) {
-        result.victim.report(s, "<subject> <is> now blind", negative: true);
-      }
-    } else {
-      a.report(
-          s,
-          "<subject> {slash<es>|cut<s>} "
-          "{across|through} <object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.victim,
-          positive: true,
-          actionThread: thread);
-      killHumanoid(context, result.victim.id);
-    }
-    return "${a.name} slashes${killed ? ' (and kills)' : ''} ${enemy.name}";
+    final threadId = getThreadId(sim, w, slashSituationName);
+    applySlash(result, context, enemy, threadId);
+
+    return "${a.name} slashes ${enemy.name}";
   }
 
   @override
@@ -146,8 +94,8 @@ class FinishSlash extends OtherActorAction {
       RandomIntGetter randomGetter) {
     final designation = direction.toBodyPartDesignation();
     assert(attacker.currentWeaponOrBodyPart != null);
-    return executeSlashingHit(
-        enemy, attacker.currentWeaponOrBodyPart, _defaultSlashSuccessLevel,
+    return decideSlashingHit(
+        enemy, attacker.currentWeaponOrBodyPart, randomGetter,
         designation: designation);
   }
 
@@ -161,11 +109,7 @@ class FinishSlash extends OtherActorAction {
         ? SlashDirection.left
         : SlashDirection.right;
     assert(attacker.currentWeaponOrBodyPart != null);
-    return executeSlashingHitFromDirection(
-        enemy,
-        slashDirection,
-        attacker.currentWeaponOrBodyPart,
-        _defaultSlashSuccessLevel,
-        randomGetter);
+    return decideSlashingHitFromDirection(
+        enemy, slashDirection, attacker.currentWeaponOrBodyPart, randomGetter);
   }
 }

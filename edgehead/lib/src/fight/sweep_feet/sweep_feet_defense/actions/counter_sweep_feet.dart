@@ -1,16 +1,13 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
-import 'package:edgehead/fractal_stories/anatomy/deal_slashing_damage.dart';
+import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/apply_slash.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
-import 'package:edgehead/src/fight/common/drop_weapon.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
-import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/sweep_feet/sweep_feet_situation.dart';
 
 ReasonedSuccessChance computeCounterSweepFeet(
@@ -92,12 +89,9 @@ class CounterSweepFeet extends OtherActorAction {
             part.isAnimatedAndActive)
         .first;
 
-    final damage = a.currentDamageCapability.slashingDamage;
-    var result = executeSlashingHit(
-        enemy, a.currentWeaponOrBodyPart, SlashSuccessLevel.majorCut,
+    var result = decideSlashingHit(
+        enemy, a.currentWeaponOrBodyPart, w.randomInt,
         bodyPart: leg);
-
-    w.updateActorById(enemy.id, (b) => b.replace(result.victim));
 
     assert(
         result.victim.isAnimated,
@@ -105,30 +99,8 @@ class CounterSweepFeet extends OtherActorAction {
         "the leg wound. Which is a safe bet unless they have some really "
         "weird anatomy.");
 
-    // Copied from finish_slash.dart.
-    a.report(
-        s,
-        "<subject> {slash<es>|cut<s>} <object's> "
-        "${result.touchedPart.randomDesignation}",
-        object: result.victim,
-        positive: true,
-        actionThread: thread);
-    if (result.disabled) {
-      result.touchedPart.report(s, "<subject> go<es> limp",
-          negative: true, actionThread: thread);
-    }
-    if (result.willDropCurrentWeapon) {
-      final weapon = dropCurrentWeapon(w, result.victim.id);
-      result.victim.report(s, "<subject> drop<s> <object>",
-          object: weapon, negative: true, actionThread: thread);
-    }
-    if (result.willFall) {
-      result.victim.report(s, "<subject> fall<s> {|down|to the ground}",
-          negative: true, actionThread: thread);
-      w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
-      w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
-    }
-    inflictPain(context, enemy.id, damage, result.touchedPart);
+    applySlash(result, context, enemy,
+        null /* we don't want to replace the above with the slash */);
 
     w.popSituationsUntil("FightSituation", context);
 
