@@ -67,7 +67,7 @@ void applySlash(WeaponAssaultResult result, ActionContext context, Actor enemy,
       }
     }
     if (result.willFall) {
-      result.victim.report(s, "<subject> fall<s>{| down| to the ground}",
+      result.victim.report(s, "<subject> collapse<s>",
           negative: true, actionThread: thread);
       w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
       w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
