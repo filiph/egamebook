@@ -35,9 +35,10 @@ void applySlash(WeaponAssaultResult result, ActionContext context, Actor enemy,
           object: result.severedPart,
           positive: true,
           actionThread: thread);
-      result.severedPart
-          .report(s, '<subject> fall<s> to the ground', actionThread: thread);
-
+      if (!enemy.isOnGround) {
+        result.severedPart
+            .report(s, '<subject> fall<s> to the ground', actionThread: thread);
+      }
       _placeBodyPartOnGround(w, result.severedPart);
     } else {
       a.report(
