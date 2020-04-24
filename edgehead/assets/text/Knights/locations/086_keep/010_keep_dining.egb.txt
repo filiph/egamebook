@@ -1,0 +1,16 @@
+// ---
+APPROACH: $keep_dining FROM $keep_bedroom
+COMMAND: Go >> Dining room
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $keep_dining
+
+FLAGS: $IDLE
+
+POS: 9, 86
+
+FIRST_DESCRIPTION:
+TBA + lady hope
+
+DESCRIPTION: $NONE

@@ -1,5 +1,7 @@
 part of edgehead.ids;
 
+const int compassId = 77007;
+
 const int katanaId = 77006;
 
 const int lairOfGodStarId = 77003;

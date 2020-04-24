@@ -12,6 +12,8 @@ c.playerHasVisited("goblin_skirmish_sneak")
 &&
 !c.hasHappened(evGoblinCampCleared)
 
+// TODO: make it clear that this is going to be hard
+
 // Goal: Tell player what they should expect if they attack.
 // Optional: 
 //   - learn about kh'ompakh (compass device)

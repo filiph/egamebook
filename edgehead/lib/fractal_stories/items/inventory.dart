@@ -182,7 +182,7 @@ abstract class InventoryBuilder
   /// and doesn't have time to [equipBestAvailable].
   WeaponEquipResult goBarehanded(Anatomy anatomy) {
     assert(
-        currentWeapon == null || build().weapons.contains(currentWeapon),
+        currentWeapon == null || build().items.contains(currentWeapon),
         "Before going barehanded, actor was wielding a weapon ($currentWeapon) "
         "that wasn't in their inventory");
 

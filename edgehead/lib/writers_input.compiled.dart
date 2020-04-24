@@ -167,7 +167,7 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, null, positionX: 20, positionY: 26);
+}, null, null, positionX: 19, positionY: 26);
 final Approach crowdsourceFromBarracks = Approach(
     'barracks', 'crowdsource', 'Go >> Crowd\'s temple', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1104,6 +1104,15 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 35, positionY: 83);
+final Approach keepGateFromKeepBedroom = Approach(
+    'keep_bedroom', 'keep_gate', 'Go >> The Keep\'s Gate', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
 final Approach keepGateFromStagingArea = Approach(
     'staging_area', 'keep_gate', 'Go >> The Keep\'s Gate', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1193,7 +1202,107 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
+}, null, null, isIdle: true, positionX: 20, positionY: 86);
+final Approach keepBedroomFromKeepDining = Approach(
+    'keep_dining', 'keep_bedroom', 'Go >> Lord\'s quarters', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Approach keepBedroomFromKeepGate = Approach(
+    'keep_gate', 'keep_bedroom', 'Go >> Lord\'s quarters', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Approach keepBedroomFromKeepServants =
+    Approach('keep_servants', 'keep_bedroom', 'Go >> Lord\'s quarters',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('TBA\n', isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 15, positionY: 86);
+final Approach keepDiningFromKeepBedroom = Approach(
+    'keep_bedroom', 'keep_dining', 'Go >> Dining room', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room keepDining = Room('keep_dining', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('TBA + lady hope\n', isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null, isIdle: true, positionX: 9, positionY: 86);
+final Approach keepServantsFromKeepBedroom =
+    Approach('keep_bedroom', 'keep_servants', 'Go >> Servants\' quarters',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return c.hasItem(compassId);
+});
+final Approach keepServantsFromTopOfClimb =
+    Approach('top_of_climb', 'keep_servants', 'Go >> Servants\' quarters',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room keepServants = Room('keep_servants', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null, isIdle: true, positionX: 19, positionY: 89);
 final Approach pyramidEntranceFromBleedsMain = Approach(
     'bleeds_main', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
     (ActionContext c) {
@@ -2635,6 +2744,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('(To be done: actual battle. Assume you won.)\n\n', isRaw: true);
   c.markHappened(evGoblinCampCleared);
+  c.giveNewItemToPlayer(compass);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3799,6 +3909,9 @@ final allRooms = <Room>[
   stagingArea,
   farmersVillage,
   keepGate,
+  keepBedroom,
+  keepDining,
+  keepServants,
   pyramidEntrance,
   bleedsMain,
   bleedsTraderHut,
@@ -3852,7 +3965,14 @@ final allApproaches = <Approach>[
   farmersVillageFromPyramidEntrance,
   farmersVillageFromSlopes,
   farmersVillageFromStagingArea,
+  keepGateFromKeepBedroom,
   keepGateFromStagingArea,
+  keepBedroomFromKeepDining,
+  keepBedroomFromKeepGate,
+  keepBedroomFromKeepServants,
+  keepDiningFromKeepBedroom,
+  keepServantsFromKeepBedroom,
+  keepServantsFromTopOfClimb,
   pyramidEntranceFromBleedsMain,
   pyramidEntranceFromFarmersVillage,
   pyramidEntranceFromStagingArea,

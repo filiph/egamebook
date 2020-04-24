@@ -23,6 +23,7 @@ FIRST_DESCRIPTION:
 
 [[CODE]]
 c.markHappened(evGoblinCampCleared);
+c.giveNewItemToPlayer(compass);
 [[ENDCODE]]
 
 

@@ -1,0 +1,23 @@
+// ---
+APPROACH: $keep_servants FROM $keep_bedroom
+COMMAND: Go >> Servants' quarters
+DESCRIPTION: $NONE
+PREREQUISITES:
+c.hasItem(compassId)
+
+// ---
+APPROACH: $keep_servants FROM $top_of_climb
+COMMAND: Go >> Servants' quarters
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $keep_servants
+
+FLAGS: $IDLE
+
+POS: 19, 89
+
+FIRST_DESCRIPTION:
+TBD: North skull
+
+DESCRIPTION: $NONE

@@ -8,7 +8,7 @@ DESCRIPTION: $NONE
 // ---
 ROOM: $top_of_climb
 
-POS: 20, 26
+POS: 19, 26
 
 FIRST_DESCRIPTION:
 A huge, dark pit. The bottom is unseen, in complete darkness.

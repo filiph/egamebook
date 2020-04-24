@@ -17,6 +17,21 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
+final Item compass = Item(
+  compassId,
+  name: 'compass',
+  adjective: 'iron',
+  /* TODO: add firstOwnerId: a goblin in the camp */
+);
+
+final Item katana = Item.weapon(
+  katanaId,
+  WeaponType.sword,
+  name: "katana",
+  adjective: "ancient", // TODO: add firstOwnerId: ladyHopeId
+  isCleaving: true,
+);
+
 final Item lairOfGodStar = Item(
   lairOfGodStarId,
   name: "Lair of God Star",
@@ -29,14 +44,6 @@ final Item letterFromFather =
 
 final Item rockFromMeadow = Item.weapon(rockFromMeadowId, WeaponType.rock,
     name: "rock", adjective: "moldy");
-
-final Item katana = Item.weapon(
-  katanaId,
-  WeaponType.sword,
-  name: "katana",
-  adjective: "ancient", // TODO: add firstOwnerId: ladyHopeId
-  isCleaving: true,
-);
 
 final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger,
     name: "dagger", adjective: "long", firstOwnerId: tamaraId);
