@@ -1,0 +1,16 @@
+// ---
+APPROACH: $dragon_egg FROM $deathless_village
+COMMAND: Go >> Sacred Place
+DESCRIPTION: $NONE
+PREREQUISITES:
+c.hasHappened(evDeathlessRespectGained)
+
+// ---
+ROOM: $dragon_egg
+
+POS: 15, 67
+
+FIRST_DESCRIPTION:
+The sacred place for the Deathless.
+
+DESCRIPTION: $NONE

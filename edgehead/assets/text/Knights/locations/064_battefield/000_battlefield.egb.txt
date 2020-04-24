@@ -4,12 +4,6 @@ COMMAND: Go >> Battlefield Floor
 DESCRIPTION: [We] climb up the stairs to the sixteenth floor.
 
 // ---
-APPROACH: $battlefield FROM $jungle
-COMMAND: Go >> Battlefield Floor
-DESCRIPTION: $NONE
-
-
-// ---
 ROOM: $battlefield
 
 POS: 28, 64

@@ -1,0 +1,40 @@
+// ---
+APPROACH: $deathless_village FROM $jungle_entrance
+COMMAND: Go >> Village of the Deathless
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $deathless_village FROM $dragon_egg
+COMMAND: Go >> Village of the Deathless
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $deathless_village
+
+POS: 18, 68
+
+FIRST_DESCRIPTION:
+On a ledge overlooking the jungle, a village of cargo cultists.
+
+DESCRIPTION: $NONE
+
+// ---
+ACTION: $give_lair_of_god_star_to_deathless
+COMMAND: inventory >> Lair of God star >> give to the Deathless
+FOR_LOCATION: $deathless_village
+
+PREREQUISITES:
+c.hasItem(lairOfGodStarId)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+They are happy.
+
+[[CODE]]
+c.markHappened(evDeathlessRespectGained);
+c.removeItemFromPlayer(lairOfGodStarId);
+[[ENDCODE]]
+
+
+NOTES:
+
+TODO: Make it harder to get here. Add at least one "twisty little passages" area in between jungle entrance and here. Or just "jungle floor", which is the place where you can meet lizard man

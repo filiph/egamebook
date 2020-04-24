@@ -40,4 +40,12 @@ c.learnAbout(kbKeepServantsLocation);
 c.movePlayer('keep_servants');
 [[ENDCODE]]
 
+NOTES:
+// Vignette:
+// Wooden floor in the Keep
 
+Uneven after the years. But it does give the appearance of a castle, among the ancient flat walls. 
+
+The sound is different, hollow.
+
+The planks spring a little bit under my feet.

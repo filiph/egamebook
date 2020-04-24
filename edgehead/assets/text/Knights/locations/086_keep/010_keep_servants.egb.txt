@@ -21,3 +21,15 @@ FIRST_DESCRIPTION:
 TBD: North skull
 
 DESCRIPTION: $NONE
+
+NOTES:
+// Vignette
+
+The north skull
+
+A device that the compass is pointing to. It's how you can find a hidden room (if using the compass in a room right next to it).
+
+The skull room provides quick access to higher floors. You can also get there without the compass, but only from upward.
+
+The skull is either immovable, or placing it somewhere will make goblins go there.
+

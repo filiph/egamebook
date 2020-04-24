@@ -401,6 +401,12 @@ extension ActionContextHelpers on ActionContext {
     outputWorld.updateActorById(playerId, (b) => b..inventory.add(item));
   }
 
+  void removeItemFromPlayer(int itemId) {
+    final item =
+        player.inventory.items.singleWhere((item) => item.id == itemId);
+    outputWorld.updateActorById(playerId, (b) => b..inventory.remove(item));
+  }
+
   Actor get player {
     return outputWorld.getActorById(playerId);
   }

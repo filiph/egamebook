@@ -19,7 +19,7 @@ COMMAND: Go >> Staging Area
 DESCRIPTION: $NONE
 
 // ---
-APPROACH: $staging_area FROM $jungle
+APPROACH: $staging_area FROM $jungle_entrance
 COMMAND: Go >> Staging Area
 DESCRIPTION: $NONE
 

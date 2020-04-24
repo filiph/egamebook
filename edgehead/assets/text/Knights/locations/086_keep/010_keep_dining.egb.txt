@@ -14,3 +14,9 @@ FIRST_DESCRIPTION:
 TBA + lady hope
 
 DESCRIPTION: $NONE
+
+NOTES:
+// Vignette:
+// looking at Lady Hope
+
+Aren: "I wonder if she saw my brother."

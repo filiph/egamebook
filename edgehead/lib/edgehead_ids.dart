@@ -12,6 +12,8 @@ library edgehead.ids;
 part 'edgehead_ids_actors.dart';
 part 'edgehead_ids_items.dart';
 
+const evDeathlessRespectGained = "evDeathlessRespectGained";
+
 const evDirectorNoRuleApplicable = "evDirectorNoRuleApplicable";
 
 const evGoblinCampCleared = "evGoblinCampCleared";

@@ -1,0 +1,23 @@
+// ---
+APPROACH: $jungle_entrance FROM $staging_area
+COMMAND: Go >> Jungle
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $jungle_entrance FROM $deathless_village
+COMMAND: Go >> Jungle
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $jungle_entrance
+
+POS: 21, 72
+
+FIRST_DESCRIPTION:
+Corridors full of vegetation. Path through that, like a path in a forest, but indoors.
+
+DESCRIPTION: $NONE
+
+NOTES:
+
+TODO: Make it harder to get to the jungle. Add at least one "twisty little passages" area in between staging area and jungle.

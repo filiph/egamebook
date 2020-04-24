@@ -38,7 +38,7 @@ c.giveNewItemToPlayer(katana);
 
 NOTES:
 // TODO: $attempt_open_gate --> learn it's nailed down
-// TODO: the three different ways to get past the gate
+// TODO: the three different ways to get past the gate: Talk to someone and learn the access path; Use stamina to move open a nailed door, or use an axe.; Descend from way above
 
 // Vignette
 
@@ -57,28 +57,9 @@ There are the lord's quarters, which still has some coin. You can "rummage throu
 There are also servants quarters, with evidence of goblins.
 
 
-
-
-// Vignette:
-// Wooden floor in the Keep
-
-Uneven after the years. But it does give the appearance of a castle, among the ancient flat walls. 
-
-The sound is different, hollow.
-
-The planks spring a little bit under my feet.
-
-// Vignette:
-// looking at Lady Hope
-
-Aren: "I wonder if she saw my brother."
-
 // Vignette
+"Eat the rich"
 
-The north skull
+> A big warning sign on the wall says "Haunted." Below the pain, an older, fainter sign says "Eat the rich".
 
-A device that the compass is pointing to. It's how you can find a hidden room (if using the compass in a room right next to it).
-
-The skull room provides quick access to higher floors. You can also get there without the compass, but only from upward.
-
-The skull is either immovable, or placing it somewhere will make goblins go there.
+At the keep

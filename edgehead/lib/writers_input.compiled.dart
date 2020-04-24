@@ -793,15 +793,6 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The Oracle is here.\n', isRaw: true);
 }, null, null, isIdle: true, positionX: 15, positionY: 57);
-final Approach battlefieldFromJungle = Approach(
-    'jungle', 'battlefield', 'Go >> Battlefield Floor', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
 final Approach battlefieldFromKnightsHqMain =
     Approach('knights_hq_main', 'battlefield', 'Go >> Battlefield Floor',
         (ActionContext c) {
@@ -855,8 +846,8 @@ final Room battlefield = Room(
           isRaw: true);
     },
     whereDescription: 'among the columns');
-final Approach jungleFromStagingArea =
-    Approach('staging_area', 'jungle', 'Go >> Jungle', (ActionContext c) {
+final Approach jungleEntranceFromDeathlessVillage = Approach(
+    'deathless_village', 'jungle_entrance', 'Go >> Jungle', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -864,7 +855,16 @@ final Approach jungleFromStagingArea =
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
-final Room jungle = Room('jungle', (ActionContext c) {
+final Approach jungleEntranceFromStagingArea = Approach(
+    'staging_area', 'jungle_entrance', 'Go >> Jungle', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -873,6 +873,139 @@ final Room jungle = Room('jungle', (ActionContext c) {
   s.add(
       'Corridors full of vegetation. Path through that, like a path in a forest, but indoors.\n',
       isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null, positionX: 21, positionY: 72);
+final Approach deathlessVillageFromDragonEgg = Approach(
+    'dragon_egg', 'deathless_village', 'Go >> Village of the Deathless',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Approach deathlessVillageFromJungleEntrance = Approach(
+    'jungle_entrance', 'deathless_village', 'Go >> Village of the Deathless',
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+
+class GiveLairOfGodStarToDeathless extends RoamingAction {
+  @override
+  final String name = 'give_lair_of_god_star_to_deathless';
+
+  static final GiveLairOfGodStarToDeathless singleton =
+      GiveLairOfGodStarToDeathless();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['inventory', 'Lair of God star', 'give to the Deathless'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('deathless_village') != true) {
+      return false;
+    }
+    if (!(c.hasItem(lairOfGodStarId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('They are happy.\n\n', isRaw: true);
+    c.markHappened(evDeathlessRespectGained);
+    c.removeItemFromPlayer(lairOfGodStarId);
+
+    return '${a.name} successfully performs GiveLairOfGodStarToDeathless';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('On a ledge overlooking the jungle, a village of cargo cultists.\n',
+      isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null, positionX: 18, positionY: 68);
+final Approach dragonEggFromDeathlessVillage = Approach(
+    'deathless_village', 'dragon_egg', 'Go >> Sacred Place', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return c.hasHappened(evDeathlessRespectGained);
+});
+final Room dragonEgg = Room('dragon_egg', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The sacred place for the Deathless.\n', isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1006,8 +1139,8 @@ final Approach stagingAreaFromFarmersVillage = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
-final Approach stagingAreaFromJungle =
-    Approach('jungle', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
+final Approach stagingAreaFromJungleEntrance = Approach(
+    'jungle_entrance', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3967,7 +4100,9 @@ final allRooms = <Room>[
   cockroachFarm,
   oracleMain,
   battlefield,
-  jungle,
+  jungleEntrance,
+  deathlessVillage,
+  dragonEgg,
   knightsHqMain,
   elevator12,
   slopes,
@@ -4012,9 +4147,12 @@ final allApproaches = <Approach>[
   reservoirFromJunction,
   cockroachFarmFromJunction,
   oracleMainFromKnightsHqMain,
-  battlefieldFromJungle,
   battlefieldFromKnightsHqMain,
-  jungleFromStagingArea,
+  jungleEntranceFromDeathlessVillage,
+  jungleEntranceFromStagingArea,
+  deathlessVillageFromDragonEgg,
+  deathlessVillageFromJungleEntrance,
+  dragonEggFromDeathlessVillage,
   knightsHqMainFromBattlefield,
   knightsHqMainFromElevator12,
   knightsHqMainFromOracleMain,
@@ -4023,7 +4161,7 @@ final allApproaches = <Approach>[
   elevator12FromKnightsHqMain,
   slopesFromFarmersVillage,
   stagingAreaFromFarmersVillage,
-  stagingAreaFromJungle,
+  stagingAreaFromJungleEntrance,
   stagingAreaFromKeepGate,
   stagingAreaFromKnightsHqMain,
   stagingAreaFromPyramidEntrance,
@@ -4063,6 +4201,7 @@ final allActions = <RoamingAction>[
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
+  GiveLairOfGodStarToDeathless.singleton,
   DebugSearchForKatana.singleton,
   UseCompass.singleton,
   TalkToKatAboutBrother.singleton,
