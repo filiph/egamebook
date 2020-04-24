@@ -17,6 +17,20 @@ This is a lord's house, except it doesn't stand on top of a hill or next to a la
 
 DESCRIPTION: $NONE
 
+
+// ---
+ACTION: $debug_search_for_katana
+COMMAND: Rubble >> Examine
+FOR_LOCATION: $keep_gate
+// TODO: remove this once we implement Lady Hope (who wields the katana)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+Something's sticking from the rubble. I pull it out. It's a katana. I take it.
+
+[[CODE]]
+c.giveNewItemToPlayer(katana);
+[[ENDCODE]]
+
 NOTES:
 // TODO: $attempt_open_gate --> learn it's nailed down
 // TODO: the three different ways to get past the gate

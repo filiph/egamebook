@@ -1113,6 +1113,70 @@ final Approach keepGateFromStagingArea = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
+
+class DebugSearchForKatana extends RoamingAction {
+  @override
+  final String name = 'debug_search_for_katana';
+
+  static final DebugSearchForKatana singleton = DebugSearchForKatana();
+
+  @override
+  List<String> get commandPathTemplate => ['Rubble', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_gate') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Something\'s sticking from the rubble. I pull it out. It\'s a katana. I take it.\n\n',
+        isRaw: true);
+    c.giveNewItemToPlayer(katana);
+
+    return '${a.name} successfully performs DebugSearchForKatana';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3814,6 +3878,7 @@ final allActions = <RoamingAction>[
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
+  DebugSearchForKatana.singleton,
   TalkToKatAboutBrother.singleton,
   TalkToKatGreetings.singleton,
   TalkToMiguelAboutBrother.singleton,

@@ -308,7 +308,6 @@ FightSituation generateStartFight(ActionContext c,
       3: start_make_goblin_not_invincible,
       2: start_tamara_bellows,
     },
-    items: [katana],
   );
 }
 
@@ -390,6 +389,10 @@ extension ActionContextHelpers on ActionContext {
     outputStoryline
         .addCustomElement(StatUpdate.stamina(player.stamina, amount));
     outputWorld.updateActorById(playerId, (b) => b..stamina += amount);
+  }
+
+  void giveNewItemToPlayer(Item item) {
+    outputWorld.updateActorById(playerId, (b) => b..inventory.add(item));
   }
 
   Actor get player {
