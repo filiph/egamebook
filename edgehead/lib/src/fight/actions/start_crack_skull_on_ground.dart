@@ -62,7 +62,7 @@ void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
     a.report(
         s,
         "<subject> swing<s> at <object> "
-        "with <subject's> <object2>",
+        "with <object2>",
         object: enemy,
         object2: weapon,
         positive: true,
