@@ -1231,6 +1231,71 @@ final Approach keepBedroomFromKeepServants =
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
+
+class UseCompass extends RoamingAction {
+  @override
+  final String name = 'use_compass';
+
+  static final UseCompass singleton = UseCompass();
+
+  @override
+  List<String> get commandPathTemplate => ['inventory', 'compass', 'use'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_bedroom') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The compass leads me through twisty little passages to the servants room.\n\n',
+        isRaw: true);
+    c.learnAbout(kbKeepServantsLocation);
+    c.movePlayer('keep_servants');
+
+    return '${a.name} successfully performs UseCompass';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1283,7 +1348,7 @@ final Approach keepServantsFromKeepBedroom =
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return c.hasItem(compassId);
+  return c.hasLearnedAbout(kbKeepServantsLocation);
 });
 final Approach keepServantsFromTopOfClimb =
     Approach('top_of_climb', 'keep_servants', 'Go >> Servants\' quarters',
@@ -3999,6 +4064,7 @@ final allActions = <RoamingAction>[
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
   DebugSearchForKatana.singleton,
+  UseCompass.singleton,
   TalkToKatAboutBrother.singleton,
   TalkToKatGreetings.singleton,
   TalkToMiguelAboutBrother.singleton,

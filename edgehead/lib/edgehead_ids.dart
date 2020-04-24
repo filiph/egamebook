@@ -34,6 +34,8 @@ const kbGoblinCampSmoke = "kbGoblinCampSmoke";
 
 const kbJisadHatesMagic = "kbJisadHatesMagic";
 
+const kbKeepServantsLocation = "kbKeepServantsLocation";
+
 const kbKnightsLeaving = "kbKnightsLeaving";
 
 const kbLeroy = "kbLeroy";

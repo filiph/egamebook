@@ -24,3 +24,20 @@ FIRST_DESCRIPTION:
 TBA
 
 DESCRIPTION: $NONE
+
+
+// ---
+ACTION: $use_compass
+COMMAND: inventory >> compass >> use
+FOR_LOCATION: $keep_bedroom
+// TODO: remove FOR_LOCATION and allow this everywhere
+
+COMPLETE_SUCCESS_DESCRIPTION:
+The compass leads me through twisty little passages to the servants room.
+
+[[CODE]]
+c.learnAbout(kbKeepServantsLocation);
+c.movePlayer('keep_servants');
+[[ENDCODE]]
+
+

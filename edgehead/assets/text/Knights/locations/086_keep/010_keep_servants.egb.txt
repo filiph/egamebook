@@ -3,7 +3,7 @@ APPROACH: $keep_servants FROM $keep_bedroom
 COMMAND: Go >> Servants' quarters
 DESCRIPTION: $NONE
 PREREQUISITES:
-c.hasItem(compassId)
+c.hasLearnedAbout(kbKeepServantsLocation)
 
 // ---
 APPROACH: $keep_servants FROM $top_of_climb
