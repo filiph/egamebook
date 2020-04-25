@@ -62,8 +62,6 @@ class HealAction extends Action<Actor> {
         "<object's> $woundOrWounds",
         object: patient);
 
-    // TODO: reattach limbs
-
     final patientBuilder = patient.toBuilder();
     deepReplaceBodyPart(
       patientBuilder,

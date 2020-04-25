@@ -230,15 +230,20 @@ abstract class BodyPart extends Object
   ///
   /// Because anatomies start with the torso (where the heart is), descendants
   /// of [torso] include every part of the anatomy. (Use [allParts] for that.)
+  ///
+  /// When a part is severed ([BodyPart.isSevered]) it will be skipped
+  /// from the return of this function (and so will its descendants).
   Iterable<BodyPart> getDescendantParts() sync* {
     yield this;
     for (final child in children) {
+      if (child.isSevered) continue;
       yield* child.getDescendantParts();
     }
   }
 
   @override
   String toString() => 'BodyPart<$name, hp=$hitpoints, '
+      '${isSevered ? 'severed, ' : ''}'
       '${isVital ? 'vital, ' : ''}'
       '${hasVitalDescendants ? 'vitalDescendants, ' : ''}'
       'children: [${children.map((c) => c.name).join(', ')}]>';

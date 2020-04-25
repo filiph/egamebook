@@ -196,7 +196,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   }
 
   /// Returns all body parts that are currently hurt (damaged and
-  /// not healed yet)
+  /// not healed yet) but not severed.
   Iterable<BodyPart> get woundedParts sync* {
     for (final part in allParts) {
       if (!part.isActive) continue;
