@@ -2904,59 +2904,6 @@ final Approach endOfRoamFromBleedsMain =
   final Storyline s = c.outputStoryline;
   s.add('You realize this adventuring life is not for you.\n', isRaw: true);
 });
-final Approach goblinSkirmishMainFromBleedsMain =
-    Approach('bleeds_main', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return c.hasHappened(evGoblinCampCleared);
-});
-final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      '(To be done: actual battle. Assume you won.)\n\nI take a curious device from the ground. Some kind of a compass.\n\n',
-      isRaw: true);
-  c.markHappened(evGoblinCampCleared);
-  c.giveNewItemToPlayer(compass);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblin camp is deserted.\n', isRaw: true);
-}, null, null, positionX: 11, positionY: 97);
-final Approach startTesterBuildFromPreStartBook = Approach(
-    'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
-      isRaw: true);
-}, null, null, null, positionX: 0, positionY: 0);
 final Approach goblinSkirmishPatrolFromBleedsMain = Approach(
     'bleeds_main', 'goblin_skirmish_patrol', 'Go >> Smoke', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3351,6 +3298,59 @@ final Room goblinSkirmishSneak =
   final Storyline s = c.outputStoryline;
   s.add('The goblins are still here.\n', isRaw: true);
 }, null, null, positionX: 13, positionY: 98);
+final Approach goblinSkirmishMainFromBleedsMain =
+    Approach('bleeds_main', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return c.hasHappened(evGoblinCampCleared);
+});
+final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      '(To be done: actual battle. Assume you won.)\n\nI take a curious device from the ground. Some kind of a compass.\n\n',
+      isRaw: true);
+  c.markHappened(evGoblinCampCleared);
+  c.giveNewItemToPlayer(compass);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The goblin camp is deserted.\n', isRaw: true);
+}, null, null, positionX: 11, positionY: 97);
+final Approach startTesterBuildFromPreStartBook = Approach(
+    'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
+      isRaw: true);
+}, null, null, null, positionX: 0, positionY: 0);
 final Approach startFromStartTesterBuild = Approach(
     'start_tester_build', 'start', 'Set piece >> from the start of the game',
     (ActionContext c) {
@@ -4167,10 +4167,10 @@ final allRooms = <Room>[
   pyramidEntrance,
   bleedsMain,
   bleedsTraderHut,
-  goblinSkirmishMain,
-  startTesterBuild,
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
+  goblinSkirmishMain,
+  startTesterBuild,
   start,
   meadowFight
 ];
@@ -4239,11 +4239,11 @@ final allApproaches = <Approach>[
   bleedsMainFromStartTesterBuild,
   bleedsTraderHutFromBleedsMain,
   endOfRoamFromBleedsMain,
-  goblinSkirmishMainFromBleedsMain,
-  startTesterBuildFromPreStartBook,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishSneakFromBleedsMain,
   goblinSkirmishSneakFromGoblinSkirmishPatrol,
+  goblinSkirmishMainFromBleedsMain,
+  startTesterBuildFromPreStartBook,
   startFromStartTesterBuild,
   meadowFightFromStart
 ];
