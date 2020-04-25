@@ -2919,28 +2919,15 @@ final Approach goblinSkirmishMainFromBleedsMain =
   final Actor a = c.actor;
   return c.hasHappened(evGoblinCampCleared);
 });
-final Approach goblinSkirmishMainFromGoblinSkirmishSneak = Approach(
-    'goblin_skirmish_sneak', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return !c.hasHappened(evGoblinCampCleared);
-});
 final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('(To be done: actual battle. Assume you won.)\n\n', isRaw: true);
+  s.add(
+      '(To be done: actual battle. Assume you won.)\n\nI take a curious device from the ground. Some kind of a compass.\n\n',
+      isRaw: true);
   c.markHappened(evGoblinCampCleared);
   c.giveNewItemToPlayer(compass);
 }, (ActionContext c) {
@@ -3028,6 +3015,71 @@ final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
+
+class GoblinCampAttack extends RoamingAction {
+  @override
+  final String name = 'goblin_camp_attack';
+
+  static final GoblinCampAttack singleton = GoblinCampAttack();
+
+  @override
+  List<String> get commandPathTemplate => ['Camp', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    s.add(
+        '$weSubstitutionCapitalized come out of the hiding and charge the goblins.\n\n',
+        isRaw: true);
+    c.movePlayer('goblin_skirmish_main');
+
+    return '${a.name} successfully performs GoblinCampAttack';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
 
 class ListenContinue extends RoamingAction {
   @override
@@ -4188,7 +4240,6 @@ final allApproaches = <Approach>[
   bleedsTraderHutFromBleedsMain,
   endOfRoamFromBleedsMain,
   goblinSkirmishMainFromBleedsMain,
-  goblinSkirmishMainFromGoblinSkirmishSneak,
   startTesterBuildFromPreStartBook,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishSneakFromBleedsMain,
@@ -4217,6 +4268,7 @@ final allActions = <RoamingAction>[
   BleedsTraderGoblins.singleton,
   BleedsTraderGreet.singleton,
   BleedsTraderTellAboutClearedCamp.singleton,
+  GoblinCampAttack.singleton,
   ListenContinue.singleton,
   ListenMore.singleton,
   ListenToThemArguing.singleton,
