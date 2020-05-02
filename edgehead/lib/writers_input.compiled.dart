@@ -235,8 +235,7 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add(
-      'A large room taking up two floors. Bunk beds, an assembly area, and a number of training poles.\n',
+  s.add('A large room taking up two floors. Bunk beds, and a dining area.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -245,7 +244,24 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, null, positionX: 22, positionY: 36);
+}, null, null, positionX: 34, positionY: 31);
+final Approach conetFromSmithy =
+    Approach('smithy', 'conet', 'Go >> Conet', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room conet = Room('conet', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('Some kobolds operating a large "woodpecker".\n', isRaw: true);
+}, null, null, positionX: 17, positionY: 36);
 final Approach maintenanceShaftFromElevator28 = Approach(
     'elevator_28',
     'maintenance_shaft',
@@ -410,6 +426,33 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('Musty, dark place.\n', isRaw: true);
 }, null, null, positionX: 34, positionY: 40);
+final Approach smithyFromConet =
+    Approach('conet', 'smithy', 'Go >> Smithy', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Approach smithyFromJunction =
+    Approach('junction', 'smithy', 'Go >> Smithy', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room smithy = Room('smithy', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('My brother, Sarn, working for the orcs, forging weapons.\n',
+      isRaw: true);
+}, null, null, positionX: 24, positionY: 40);
 final Approach elevator28FromElevator12 = Approach(
     'elevator_12', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
     (ActionContext c) {
@@ -637,6 +680,15 @@ final Approach junctionFromReservoir = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
+final Approach junctionFromSmithy = Approach(
+    'smithy', 'junction', 'Go >> Junction on 26th Floor', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
 final Room junction = Room('junction', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -651,6 +703,15 @@ final Room junction = Room('junction', null, (ActionContext c) {
 }, null, null, positionX: 27, positionY: 45);
 final Approach reservoirFromJunction =
     Approach('junction', 'reservoir', 'Go >> Reservoir', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Approach reservoirFromTrainingGrounds = Approach(
+    'training_grounds', 'reservoir', 'Go >> Reservoir', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -776,8 +837,9 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 29, positionY: 52);
-final Approach oracleMainFromKnightsHqMain = Approach(
-    'knights_hq_main', 'oracle_main', 'Go >> Oracle\'s', (ActionContext c) {
+final Approach trainingGroundsFromBattlefield =
+    Approach('battlefield', 'training_grounds', 'Go >> Training Grounds',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -785,14 +847,25 @@ final Approach oracleMainFromKnightsHqMain = Approach(
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
-final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
+final Approach trainingGroundsFromReservoir =
+    Approach('reservoir', 'training_grounds', 'Go >> Training Grounds',
+        (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The Oracle is here.\n', isRaw: true);
-}, null, null, isIdle: true, positionX: 15, positionY: 57);
+  s.add('', isRaw: true);
+});
+final Room trainingGrounds = Room('training_grounds', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('An army of orcs, goblins and kobolds, all training for war.\n',
+      isRaw: true);
+}, null, null, positionX: 21, positionY: 54);
 final Approach battlefieldFromKnightsHqMain =
     Approach('knights_hq_main', 'battlefield', 'Go >> Battlefield Floor',
         (ActionContext c) {
@@ -806,6 +879,16 @@ final Approach battlefieldFromKnightsHqMain =
   s.add(
       '$weSubstitutionCapitalized climb up the stairs to the sixteenth floor.\n',
       isRaw: true);
+});
+final Approach battlefieldFromTrainingGrounds =
+    Approach('training_grounds', 'battlefield', 'Go >> Battlefield Floor',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
 });
 final Room battlefield = Room(
     'battlefield',
@@ -846,6 +929,23 @@ final Room battlefield = Room(
           isRaw: true);
     },
     whereDescription: 'among the columns');
+final Approach oracleMainFromKnightsHqMain = Approach(
+    'knights_hq_main', 'oracle_main', 'Go >> Oracle\'s', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The Oracle is here.\n', isRaw: true);
+}, null, null, isIdle: true, positionX: 39, positionY: 65);
 final Approach jungleEntranceFromDeathlessVillage = Approach(
     'deathless_village', 'jungle_entrance', 'Go >> Jungle', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1193,6 +1293,16 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 23, positionY: 82);
+final Approach farmersVillageFromFloatingPoint =
+    Approach('floating_point', 'farmers_village', 'Go >> Farmers\' village',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
 final Approach farmersVillageFromPyramidEntrance =
     Approach('pyramid_entrance', 'farmers_village', 'Go >> Farmers\' village',
         (ActionContext c) {
@@ -1501,6 +1611,31 @@ final Room keepServants = Room('keep_servants', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 19, positionY: 89);
+final Approach floatingPointFromFarmersVillage =
+    Approach('farmers_village', 'floating_point', 'Go >> Floating Point',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+});
+final Room floatingPoint = Room('floating_point', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('A thin place. Objects floating in mid air.\n', isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null, isIdle: true, positionX: 40, positionY: 90);
 final Approach pyramidEntranceFromBleedsMain = Approach(
     'bleeds_main', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
     (ActionContext c) {
@@ -4142,7 +4277,9 @@ final allRooms = <Room>[
   topOfClimb,
   crowdsource,
   barracks,
+  conet,
   maintenanceShaft,
+  smithy,
   elevator28,
   godsLair,
   godsLairAfterNecromancy,
@@ -4150,8 +4287,9 @@ final allRooms = <Room>[
   reservoir,
   reservoirAfterOpenDam,
   cockroachFarm,
-  oracleMain,
+  trainingGrounds,
   battlefield,
+  oracleMain,
   jungleEntrance,
   deathlessVillage,
   dragonEgg,
@@ -4164,6 +4302,7 @@ final allRooms = <Room>[
   keepBedroom,
   keepDining,
   keepServants,
+  floatingPoint,
   pyramidEntrance,
   bleedsMain,
   bleedsTraderHut,
@@ -4186,7 +4325,10 @@ final allApproaches = <Approach>[
   barracksFromCrowdsource,
   barracksFromJunction,
   barracksFromTopOfClimb,
+  conetFromSmithy,
   maintenanceShaftFromElevator28,
+  smithyFromConet,
+  smithyFromJunction,
   elevator28FromElevator12,
   elevator28FromGodsLair,
   elevator28FromJunction,
@@ -4196,10 +4338,15 @@ final allApproaches = <Approach>[
   junctionFromCockroachFarm,
   junctionFromElevator28,
   junctionFromReservoir,
+  junctionFromSmithy,
   reservoirFromJunction,
+  reservoirFromTrainingGrounds,
   cockroachFarmFromJunction,
-  oracleMainFromKnightsHqMain,
+  trainingGroundsFromBattlefield,
+  trainingGroundsFromReservoir,
   battlefieldFromKnightsHqMain,
+  battlefieldFromTrainingGrounds,
+  oracleMainFromKnightsHqMain,
   jungleEntranceFromDeathlessVillage,
   jungleEntranceFromStagingArea,
   deathlessVillageFromDragonEgg,
@@ -4217,6 +4364,7 @@ final allApproaches = <Approach>[
   stagingAreaFromKeepGate,
   stagingAreaFromKnightsHqMain,
   stagingAreaFromPyramidEntrance,
+  farmersVillageFromFloatingPoint,
   farmersVillageFromPyramidEntrance,
   farmersVillageFromSlopes,
   farmersVillageFromStagingArea,
@@ -4228,6 +4376,7 @@ final allApproaches = <Approach>[
   keepDiningFromKeepBedroom,
   keepServantsFromKeepBedroom,
   keepServantsFromTopOfClimb,
+  floatingPointFromFarmersVillage,
   pyramidEntranceFromBleedsMain,
   pyramidEntranceFromFarmersVillage,
   pyramidEntranceFromStagingArea,

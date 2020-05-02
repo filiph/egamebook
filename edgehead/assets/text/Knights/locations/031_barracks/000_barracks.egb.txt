@@ -16,9 +16,9 @@ DESCRIPTION: $NONE
 // ---
 ROOM: $barracks
 
-POS: 22, 36
+POS: 34, 31
 
 FIRST_DESCRIPTION:
-A large room taking up two floors. Bunk beds, an assembly area, and a number of training poles.
+A large room taking up two floors. Bunk beds, and a dining area.
 
 DESCRIPTION: $NONE

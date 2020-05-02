@@ -1,0 +1,16 @@
+// ---
+APPROACH: $conet FROM $smithy
+COMMAND: Go >> Conet
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $conet
+
+POS: 17, 36
+
+DESCRIPTION:
+Some kobolds operating a large "woodpecker". 
+
+NOTES:
+- Name inspired by https://en.wikipedia.org/wiki/The_Conet_Project.
+- Attracting "evil" from far away.

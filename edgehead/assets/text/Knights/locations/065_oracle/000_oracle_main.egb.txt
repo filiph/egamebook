@@ -8,12 +8,14 @@ ROOM: $oracle_main
 
 FLAGS: $IDLE
 
-POS: 15, 57
+POS: 39, 65
 
 DESCRIPTION: 
 The Oracle is here.
 
 NOTES:
+
+// Maybe this is where we smell the coffee, and later the room is taken over, and the Oracle is dead, and all we smell is the coffee.
 
 // Vignette:
 

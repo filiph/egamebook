@@ -4,6 +4,11 @@ COMMAND: Go >> Battlefield Floor
 DESCRIPTION: [We] climb up the stairs to the sixteenth floor.
 
 // ---
+APPROACH: $battlefield FROM $training_grounds
+COMMAND: Go >> Battlefield Floor
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $battlefield
 
 POS: 28, 64
@@ -35,4 +40,4 @@ Whatever the reason for this cleared space had been in the ancient times, I can 
 
 NOTES: 
 
-// TODO: battlefield should be a "bottleneck" floor (only the elevators go through)
+- The 65er + goblin is here.

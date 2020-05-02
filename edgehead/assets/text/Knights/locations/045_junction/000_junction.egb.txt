@@ -14,6 +14,11 @@ COMMAND: Go >> Junction on 26th Floor
 DESCRIPTION: $NONE
 
 // ---
+APPROACH: $junction FROM $smithy
+COMMAND: Go >> Junction on 26th Floor
+DESCRIPTION: $NONE
+
+// ---
 APPROACH: $junction FROM $cockroach_farm
 COMMAND: Go >> Junction on 26th Floor
 DESCRIPTION: $NONE

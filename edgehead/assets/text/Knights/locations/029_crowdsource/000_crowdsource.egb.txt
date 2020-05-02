@@ -17,3 +17,7 @@ FIRST_DESCRIPTION:
 A temple.
 
 DESCRIPTION: $NONE
+
+NOTES:
+- This is where you finally confront the Akxe orc (named captain).
+- You might see him before, but shouldn't be able to kill him.

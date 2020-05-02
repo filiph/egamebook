@@ -1,0 +1,17 @@
+// ---
+APPROACH: $smithy FROM $junction
+COMMAND: Go >> Smithy
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $smithy FROM $conet
+COMMAND: Go >> Smithy
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $smithy
+
+POS: 24, 40
+
+DESCRIPTION:
+My brother, Sarn, working for the orcs, forging weapons.

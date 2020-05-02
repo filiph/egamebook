@@ -4,6 +4,11 @@ COMMAND: Go >> Reservoir
 DESCRIPTION: $NONE
 
 // ---
+APPROACH: $reservoir FROM $training_grounds
+COMMAND: Go >> Reservoir
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $reservoir
 
 POS: 25, 48
@@ -42,6 +47,7 @@ c.markHappened(evOpenedDam);
 
 NOTES:
 - A monster from here leaves muddy footprints.
+- The lizardman: he can be find either here or in the jungle.
 
 // Vignette
 

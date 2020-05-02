@@ -16,6 +16,7 @@ The steep slope of the Pyramid is covered in vines from this point down. Young m
 DESCRIPTION: $NONE
 
 NOTES:
+- A farmer is changing shirt while they talk to you, and doing farm things.
 
 // Idea
 

@@ -1,0 +1,17 @@
+// ---
+APPROACH: $training_grounds FROM $reservoir
+COMMAND: Go >> Training Grounds
+DESCRIPTION: $NONE
+
+// ---
+APPROACH: $training_grounds FROM $battlefield
+COMMAND: Go >> Training Grounds
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $training_grounds
+
+POS: 21, 54
+
+DESCRIPTION:
+An army of orcs, goblins and kobolds, all training for war.

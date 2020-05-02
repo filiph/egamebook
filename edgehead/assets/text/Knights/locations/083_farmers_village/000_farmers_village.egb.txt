@@ -14,6 +14,11 @@ COMMAND: Go >> Farmers' village
 DESCRIPTION: $NONE
 
 // ---
+APPROACH: $farmers_village FROM $floating_point
+COMMAND: Go >> Farmers' village
+DESCRIPTION: $NONE
+
+// ---
 ROOM: $farmers_village
 
 FLAGS: $IDLE
@@ -24,3 +29,9 @@ FIRST_DESCRIPTION:
 Lively corridors full of well dressed people.
 
 DESCRIPTION: $NONE
+
+NOTES:
+
+- A couple is having an argument and packing.
+- Smell of coffee
+- A variant much later: everyone's dead, only smell of coffee is still here.

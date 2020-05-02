@@ -1,0 +1,24 @@
+// ---
+APPROACH: $floating_point FROM $farmers_village
+COMMAND: Go >> Floating Point
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $floating_point
+
+FLAGS: $IDLE
+
+POS: 40, 90
+
+FIRST_DESCRIPTION:
+A thin place. Objects floating in mid air.
+
+DESCRIPTION: $NONE
+
+NOTES:
+
+- Maybe only allow visiting this place after some time.
+- Should be dangerous.
+- A way to explain that the Pyramid is "infused" with magic.
+- Maybe a way to "trade" sanity for stamina or other boons?
+- Possibly a place to fight something weird. Or someone sneaky.
