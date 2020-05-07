@@ -4,9 +4,8 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
+import 'package:edgehead/src/fight/common/apply_thrust.dart';
 import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_situation.dart';
 
 class FinishThrustOnGround extends OtherActorAction {
@@ -51,43 +50,24 @@ class FinishThrustOnGround extends OtherActorAction {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    Storyline s = context.outputStoryline;
+    assert(a.isOnGround);
     assert(a.currentWeaponOrBodyPart != null);
-    final damage = a.currentDamageCapability.thrustingDamage;
 
-    final result = executeThrustingHit(
-        enemy, a.currentWeaponOrBodyPart, BodyPartDesignation.torso);
+    final designation = enemy.isOnGround
+        ? BodyPartDesignation.torso
+        : w.randomChoose([
+            BodyPartDesignation.leftLeg,
+            BodyPartDesignation.rightLeg,
+          ]);
+    final result =
+        executeThrustingHit(enemy, a.currentWeaponOrBodyPart, designation);
 
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
 
     final thread = getThreadId(sim, w, thrustOnGroundSituationName);
-    bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
-    if (!killed) {
-      a.report(
-          s,
-          "<subject> {pierce<s>|stab<s>|bore<s> through} <object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.victim,
-          positive: true,
-          actionThread: thread);
-      assert(!result.willDropCurrentWeapon,
-          "Attacking torso shouldn't make enemy drop weapon.");
-      assert(!result.willFall, "Enemy is already on the ground.");
-      inflictPain(context, enemy.id, damage, result.touchedPart);
-      assert(!result.wasBlinding, "Torso is not a vision body part.");
-    } else {
-      a.report(
-          s,
-          "<subject> {pierce<s>|stab<s>|bore<s> through|impale<s>} "
-          "<object's> "
-          "${result.touchedPart.randomDesignation}",
-          object: result.victim,
-          positive: true,
-          actionThread: thread);
-      killHumanoid(context, enemy.id);
-    }
-    return "${a.name} thrusts${killed ? ' (and kills)' : ''} ${enemy.name} "
-        "while on the ground";
+    applyThrust(result, context, enemy, thread);
+
+    return "${a.name} thrusts ${enemy.name} while on the ground";
   }
 
   @override

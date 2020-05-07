@@ -208,7 +208,7 @@ abstract class Action<T> {
   /// instantaneously, but the goblin will be recovering (i.e. unable
   /// to move again) for the next 1 second.
   ///
-  /// This defaults and 750ms ([defaultPlayerRecoveryDuration]) for the player.
+  /// This defaults and 750ms ([defaultPlayerRecoveryDuration]) for the player,
   /// and to one second ([defaultRecoveryDuration]) for everyone else.
   /// Subclasses can safely override this.
   Duration getRecoveryDuration(ApplicabilityContext context, T object) {
