@@ -63,12 +63,6 @@ class Identifier {
       : level = IdentifierLevel.properNoun,
         pronoun = null;
 
-  const Identifier._()
-      : level = null,
-        pronoun = null,
-        string = null,
-        assert(false, 'Only use named constructors such as Identifier.pronoun');
-
   @override
   int get hashCode =>
       $jf($jc($jc($jc(0, string.hashCode), pronoun.hashCode), level.hashCode));

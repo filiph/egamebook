@@ -28,6 +28,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'ShieldBlockBluntSwing.singleton': ShieldBlockBluntSwing.singleton,
   // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/defensive_parry_blunt_swing.dart:
   'DefensiveParryBluntSwing.singleton': DefensiveParryBluntSwing.singleton,
+  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/roll_away_from_blunt_swing.dart:
+  'RollAwayFromBluntSwing.singleton': RollAwayFromBluntSwing.singleton,
   // From lib/src/fight/blunt_swing/actions/finish_blunt_swing.dart:
   'FinishBluntSwing.singleton': FinishBluntSwing.singleton,
   // From lib/src/fight/feint/actions/finish_feint.dart:
@@ -63,6 +65,12 @@ final _$actionSerializer = InstanceSerializer<Action>({
       StepBackFromStrikeFromGround.singleton,
   // From lib/src/fight/strike_from_ground/actions/finish_pull_down.dart:
   'FinishPullDown.singleton': FinishPullDown.singleton,
+  // From lib/src/fight/slash_on_ground/actions/finish_slash_on_ground.dart:
+  'FinishSlashOnGround.singleton': FinishSlashOnGround.singleton,
+  // From lib/src/fight/slash_on_ground/slash_on_ground_defense/actions/dodge_slash_on_ground.dart:
+  'DodgeSlashOnGround.singleton': DodgeSlashOnGround.singleton,
+  // From lib/src/fight/slash_on_ground/slash_on_ground_defense/actions/shield_block_slash_on_ground.dart:
+  'ShieldBlockSlashOnGround.singleton': ShieldBlockSlashOnGround.singleton,
   // From lib/src/fight/loot/actions/autoloot.dart:
   'AutoLoot.singleton': AutoLoot.singleton,
   // From lib/src/fight/throw/actions/finish_throw_harmless.dart:
@@ -89,6 +97,8 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'CounterTackle.singleton': CounterTackle.singleton,
   // From lib/src/fight/slash/slash_defense/actions/jump_back.dart:
   'JumpBackFromSlash.singleton': JumpBackFromSlash.singleton,
+  // From lib/src/fight/slash/slash_defense/actions/roll_back.dart:
+  'RollBackFromSlash.singleton': RollBackFromSlash.singleton,
   // From lib/src/fight/slash/slash_defense/actions/shield_block_slash.dart:
   'ShieldBlockSlash.singleton': ShieldBlockSlash.singleton,
   // From lib/src/fight/slash/slash_defense/actions/dodge_slash.dart:
@@ -131,16 +141,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'ShieldBlockThrustOnGround.singleton': ShieldBlockThrustOnGround.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/dodge_thrust_on_ground.dart:
   'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
-  // From lib/src/fight/slash/slash_defense/actions/roll_back.dart:
-  'RollBackFromSlash.singleton': RollBackFromSlash.singleton,
-  // From lib/src/fight/slash_on_ground/actions/finish_slash_on_ground.dart:
-  'FinishSlashOnGround.singleton': FinishSlashOnGround.singleton,
-  // From lib/src/fight/slash_on_ground/slash_on_ground_defense/actions/dodge_slash_on_ground.dart:
-  'DodgeSlashOnGround.singleton': DodgeSlashOnGround.singleton,
-  // From lib/src/fight/slash_on_ground/slash_on_ground_defense/actions/shield_block_slash_on_ground.dart:
-  'ShieldBlockSlashOnGround.singleton': ShieldBlockSlashOnGround.singleton,
-  // From lib/src/fight/blunt_swing/blunt_swing_defense/actions/roll_away_from_blunt_swing.dart:
-  'RollAwayFromBluntSwing.singleton': RollAwayFromBluntSwing.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/jump_over_thrust_on_ground.dart:
   'JumpOverThrustOnGround.singleton': JumpOverThrustOnGround.singleton,
 }, additionalTypes: [
