@@ -27,6 +27,9 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
   final damage = weapon.damageCapability.thrustingDamage;
   final groundMaterial = getGroundMaterial(w);
 
+  const verbs =
+      "{cut<s> into|pierce<s>|go<es> into|pierce<s>|stab<s>|bore<s> through}";
+
   bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
   if (!killed) {
     if (result.didSeverBodyPart) {
@@ -43,7 +46,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
     } else {
       a.report(
           s,
-          "<subject> {pierce<s>|stab<s>} <object's> "
+          "<subject> $verbs <object's> "
           "${result.touchedPart.randomDesignation}",
           object: result.victim,
           positive: true,
@@ -82,7 +85,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
   } else {
     a.report(
         s,
-        "<subject>  {pierce<s>|stab<s> through|impale<s>} "
+        "<subject> $verbs "
         "<object's> "
         "${result.touchedPart.randomDesignation}",
         object: result.victim,
