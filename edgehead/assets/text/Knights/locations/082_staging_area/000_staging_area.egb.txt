@@ -37,7 +37,7 @@ DESCRIPTION: $NONE
 
 NOTES:
 - the staircase here is called "Infinite Staircase"
-- Horseman is shouting orders at people while you talk to him
+- Horseman White is shouting orders at people while you talk to him
 
 // Vignette
 

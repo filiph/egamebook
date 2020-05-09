@@ -6,7 +6,7 @@ DESCRIPTION: $NONE
 // ---
 ROOM: $conet
 
-POS: 17, 36
+POS: 17, 34
 
 DESCRIPTION:
 Some kobolds operating a large "woodpecker". 
@@ -14,3 +14,4 @@ Some kobolds operating a large "woodpecker".
 NOTES:
 - Name inspired by https://en.wikipedia.org/wiki/The_Conet_Project.
 - Attracting "evil" from far away.
+- This is on the 32nd floor (binary symbolism).

@@ -36,14 +36,18 @@ Hippie lover of all things ancient. Nobody touches her because she is too valuab
 Contrast: impractical wise person -- actually has a stash of weapons and a pretty decent plan of defense.
 
 
-## Corporal (TODO: find better name, corporal == desátník)
+## Colonel Jinhua
+
+(Named after the daughter of https://en.wikipedia.org/wiki/Mu_Guiying.)
 
 Main knight.
 
-Torn between duty and rationality (keep Knights alive by retreating) and internal moral compass (honor, defending the helpless). If given the chance, will sacrifice himself.
+Torn between duty and rationality (keep Knights alive by retreating) and internal moral compass (honor, defending the helpless). If given the chance, will sacrifice herself.
 
-* "My lad, I wish I saw the world with your eyes, so simple and straightforward. Instead, I live in the hell that is reality."
-* "Die, goblin scum! This is for all the young lads and lassies that fell by your dirty swords."
+Loves youth. Says she envies. But then, she often jumps into Aren's speech. (e.g. we let the player construct a sentence, and then before Aren finishes the first word, the Colonel says: "Let me finish, child.".)
+
+* "My child, I wish I saw the world with your eyes, so simple and straightforward. Instead, I live in the complicated hell that is real life."
+* "Die, goblin scum! This is for all the young ones that fell by your dirty swords."
 
 Contrast: a sensible leader -- actually wants to die to achieve nirvana.
 
@@ -112,3 +116,22 @@ Kat is much less avid than Miguel. Just wants to provide strength where needed, 
 * ...
 
 Contrast: serious, stoic, professional -- cries when alone
+
+
+## Black Sven
+
+A segmented being. Was an ordinary Farmer, with plans and all, when a quake segmented him.
+
+He is powerful, but only inside his reach. He is trying to die. 
+
+* "What a ridiculous thing. Being trapped in this infinity. My limbs are vibrations. My eyes are seasons. I have no mouth and I must scream."
+* "I have tried to terminate. But I cannot. Or, rather, I don't know how. How does one kill himself when there is no artery to cut? When there is no heart to pierce? When there is no height to jump from?"
+* "Look at me, Aren. I have powers beyond anyone's imagination. I can do whatever I want in this little playground of mine. Lift a steel beam, disintegrate a piece of concrete, move a chunk of the wall to Not-Place. Despite this, I am powerless. What does it matter to have useless powers, in a small immovable bubble like this one. I am a child forever trapped with an ant hill. All I can do is play."
+* "This place, the Floating Point, is my playground, and my tomb."
+
+Aren can help by killing Sven.
+
+Contrast: superpowers -- powerless
+
+Theme: If you scope down your sphere of influence, you can have huge powers. But it doesn't matter. Say, a videogamer can have huge influence on a videogame world -- not real impact. A kid can play with an ant hill -- no real impact.
+

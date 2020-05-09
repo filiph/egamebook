@@ -17,6 +17,8 @@ DESCRIPTION: $NONE
 
 NOTES:
 
+- This is on the 48th floor (binary symbolism).
+
 // Vignette
 
 Soul is another word for inefficiency

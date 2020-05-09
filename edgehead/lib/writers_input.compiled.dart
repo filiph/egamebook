@@ -261,7 +261,7 @@ final Room conet = Room('conet', null, (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('Some kobolds operating a large "woodpecker".\n', isRaw: true);
-}, null, null, positionX: 17, positionY: 36);
+}, null, null, positionX: 17, positionY: 34);
 final Approach maintenanceShaftFromElevator28 = Approach(
     'elevator_28',
     'maintenance_shaft',
@@ -1338,7 +1338,9 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Lively corridors full of well dressed people.\n', isRaw: true);
+  s.add(
+      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n',
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1635,7 +1637,7 @@ final Room floatingPoint = Room('floating_point', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, null, isIdle: true, positionX: 40, positionY: 90);
+}, null, null, isIdle: true, positionX: 32, positionY: 90);
 final Approach pyramidEntranceFromBleedsMain = Approach(
     'bleeds_main', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
     (ActionContext c) {

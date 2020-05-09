@@ -8,7 +8,7 @@ ROOM: $floating_point
 
 FLAGS: $IDLE
 
-POS: 40, 90
+POS: 32, 90
 
 FIRST_DESCRIPTION:
 A thin place. Objects floating in mid air.
@@ -17,8 +17,36 @@ DESCRIPTION: $NONE
 
 NOTES:
 
+- TODO: connect to the elevator shaft
+
 - Maybe only allow visiting this place after some time.
 - Should be dangerous.
 - A way to explain that the Pyramid is "infused" with magic.
 - Maybe a way to "trade" sanity for stamina or other boons?
 - Possibly a place to fight something weird. Or someone sneaky.
+- Maybe this was safe until recently, but something happened.
+- Access to the elevator shaft.
+
+
+This was the way from the Entrance to the Farms. Then, one of the quakes changed it. Now it's dangerous. Not because of monsters, but because of weird phenomena.
+
+Theme: you never know when things change. You can plan whatever, but something comes and changes everything. Maybe add a "black swan". Or "Black Sven". 
+
+This is an incident zone. Flesh interface. Objects are spontaneously segmented. Inspired directly by 9mother9horse9eyes9. "Mother Eyes"? "Mother's nine eyes." Somehow related to Horseman White? 
+
+> I can only list the various phenomena which are related to them. Chief among these is the creation of an incident zone wherein objects are spontaneously segmented; in other words, parts of the objects simply disappear, yet the objects continue to behave as if the missing parts are still present.”
+
+"One of the quakes from above came, and suddenly everything changed."
+
+Maybe we need a "near_floating_point". You can observe.
+
+> I can see the one who they call Black Sven. 
+
+What's the quest? To enter the Floating Point? To extract information? To get access to the elevator shaft!
+
+> "It was a quake. One of the quakes from above. You'll know what I mean when you feel it. There was a quake, and something fell through the shaft and it hit poor Sven. It didn't kill him. It... it split him. It fractured him. I don't know how to describe it. Since then, nobody has approached that area. Everyone is taking the longer way, through the infinite staircase, and through that room that the coward knights are now using to stage their retreat."
+
+How does Aren kill / remove the Black Sven? 
+
+* 
+
