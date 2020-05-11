@@ -12,6 +12,7 @@ DESCRIPTION: $NONE
 ROOM: $battlefield
 
 POS: 28, 64
+MAP_NAME: Battlefield Floor
 
 WHERE: among the columns
 

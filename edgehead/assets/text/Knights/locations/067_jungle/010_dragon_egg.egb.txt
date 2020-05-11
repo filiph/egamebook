@@ -9,6 +9,7 @@ c.hasHappened(evDeathlessRespectGained)
 ROOM: $dragon_egg
 
 POS: 15, 67
+MAP_NAME: The Dragon Egg
 
 FIRST_DESCRIPTION:
 The sacred place for the Deathless.

@@ -22,6 +22,7 @@ DESCRIPTION: $NONE
 ROOM: $elevator_28
 
 POS: 32, 42
+MAP_NAME: Elevator Shaft Entrance on 28th Floor
 
 DESCRIPTION: 
 Orc noises from all around, but thankfully no orc in sight. [[IF !c.hasHappened(evKarlGuardsKilled)]]Brutal laughter from the east.[[ENDIF]]

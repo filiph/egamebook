@@ -17,6 +17,7 @@ DESCRIPTION: $NONE
 ROOM: $barracks
 
 POS: 34, 31
+MAP_NAME: Barracks
 
 FIRST_DESCRIPTION:
 A large room taking up two floors. Bunk beds, and a dining area.

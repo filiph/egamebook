@@ -12,6 +12,7 @@ DESCRIPTION: $NONE
 ROOM: $reservoir
 
 POS: 25, 48
+MAP_NAME: Reservoir
 
 FLAGS: $IDLE
 
@@ -26,6 +27,7 @@ VARIANT_OF: $reservoir
 RULE: c.hasHappened(evOpenedDam)
 
 POS: 25, 48
+MAP_NAME: Reservoir
 
 DESCRIPTION:
 A huge empty room, with the floor covered with sludge and slimy carcasses.

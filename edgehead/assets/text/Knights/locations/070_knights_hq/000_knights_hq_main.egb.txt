@@ -24,6 +24,7 @@ ROOM: $knights_hq_main
 FLAGS: $IDLE
 
 POS: 37, 70
+MAP_NAME: Knights Headquarters
 
 FIRST_DESCRIPTION:
 (NOTE FOR TESTERS: This area is very much in development.)

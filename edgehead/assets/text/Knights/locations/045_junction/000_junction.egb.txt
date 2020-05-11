@@ -27,6 +27,7 @@ DESCRIPTION: $NONE
 ROOM: $junction
 
 POS: 27, 45
+MAP_NAME: Junction on 26th Floor
 
 DESCRIPTION:
 A place of increased orc foot traffic. [We] stay hidden.

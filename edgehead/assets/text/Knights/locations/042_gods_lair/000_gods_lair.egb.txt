@@ -9,6 +9,7 @@ ROOM: $gods_lair
 FLAGS: $IDLE
 
 POS: 35, 42
+MAP_NAME: God's Lair
 
 FIRST_DESCRIPTION: 
 Two orcs, a berserker and a captain, watch me approach in amazement.
@@ -37,6 +38,7 @@ VARIANT_OF: $gods_lair
 FLAGS: $IDLE
 
 POS: 35, 42
+MAP_NAME: God's Lair
 
 RULE: c.hasHappened(evKarlKilledViaNecromancy)
 

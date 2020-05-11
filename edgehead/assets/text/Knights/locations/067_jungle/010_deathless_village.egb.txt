@@ -12,6 +12,7 @@ DESCRIPTION: $NONE
 ROOM: $deathless_village
 
 POS: 18, 68
+MAP_NAME: Village of the Deathless
 
 FIRST_DESCRIPTION:
 On a ledge overlooking the jungle, a village of cargo cultists.

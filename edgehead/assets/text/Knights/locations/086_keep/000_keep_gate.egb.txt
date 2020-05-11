@@ -14,6 +14,7 @@ ROOM: $keep_gate
 FLAGS: $IDLE
 
 POS: 20, 86
+MAP_NAME: The Keep's Gate
 
 FIRST_DESCRIPTION:
 The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. 

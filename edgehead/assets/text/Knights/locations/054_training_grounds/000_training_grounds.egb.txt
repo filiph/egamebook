@@ -12,6 +12,7 @@ DESCRIPTION: $NONE
 ROOM: $training_grounds
 
 POS: 21, 54
+MAP_NAME: Training Grounds
 
 DESCRIPTION:
 An army of orcs, goblins and kobolds, all training for war.

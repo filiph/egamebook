@@ -10,6 +10,7 @@ DESCRIPTION: $NONE
 
 // ---
 ROOM: $big_o_antechamber
+MAP_NAME: Antechamber
 
 POS: 26, 12
 

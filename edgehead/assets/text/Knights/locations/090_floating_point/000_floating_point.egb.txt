@@ -9,6 +9,7 @@ ROOM: $floating_point
 FLAGS: $IDLE
 
 POS: 32, 90
+MAP_NAME: Floating Point
 
 FIRST_DESCRIPTION:
 A thin place. Objects floating in mid air.

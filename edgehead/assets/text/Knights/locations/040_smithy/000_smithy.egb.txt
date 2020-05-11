@@ -12,6 +12,7 @@ DESCRIPTION: $NONE
 ROOM: $smithy
 
 POS: 24, 40
+MAP_NAME: Smithy
 
 DESCRIPTION:
 My brother, Sarn, working for the orcs, forging weapons.

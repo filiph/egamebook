@@ -9,6 +9,7 @@ DESCRIPTION: $NONE
 ROOM: $top_of_climb
 
 POS: 19, 26
+MAP_NAME: Top of the climb
 
 FIRST_DESCRIPTION:
 A huge, dark pit. The bottom is unseen, in complete darkness.

@@ -223,12 +223,12 @@ class RoomPath {
         'This should not happen: the starting path is empty, and only used '
         'for the tree search.');
 
-    if (origin.positionX == null || origin.positionY == null) {
+    if (!origin.isOnMap) {
       _log.info('$origin in $this has no position. Returning empty path.');
       return;
     }
 
-    if (destination.positionX == null || destination.positionY == null) {
+    if (!destination.isOnMap) {
       _log.info('$destination in $this has no position. '
           'Returning empty path.');
       return;
@@ -238,7 +238,7 @@ class RoomPath {
     yield origin.positionY;
 
     for (final room in intermediateRooms) {
-      if (room.positionX == null || room.positionY == null) {
+      if (!room.isOnMap) {
         continue;
       }
 

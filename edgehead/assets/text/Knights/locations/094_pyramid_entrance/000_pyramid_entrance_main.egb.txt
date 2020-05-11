@@ -19,6 +19,7 @@ ROOM: $pyramid_entrance
 FLAGS: $IDLE
 
 POS: 26, 94
+MAP_NAME: Pyramid's Main Entrance
 
 FIRST_DESCRIPTION:
 // majestic

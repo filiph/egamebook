@@ -496,11 +496,11 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   double playerDistanceTo(String roomName) {
     final otherRoom = simulation.getRoomByName(roomName);
     assert(
-        otherRoom.positionX != null && otherRoom.positionY != null,
+        otherRoom.isOnMap,
         'Trying to learn player distance to $roomName, '
         'which doesn\'t have position.');
     final room = playerParentRoom;
-    if (room.positionX == null || room.positionY == null) {
+    if (!room.isOnMap) {
       // Fail silently. The player is in a room with no position.
       return double.infinity;
     }

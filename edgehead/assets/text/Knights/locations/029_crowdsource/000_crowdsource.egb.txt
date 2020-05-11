@@ -12,6 +12,7 @@ DESCRIPTION: $NONE
 ROOM: $crowdsource
 
 POS: 27, 29
+MAP_NAME: Crowd's Temple
 
 FIRST_DESCRIPTION:
 A temple.

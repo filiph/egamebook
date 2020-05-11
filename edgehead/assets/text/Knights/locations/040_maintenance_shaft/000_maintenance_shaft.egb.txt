@@ -7,6 +7,7 @@ DESCRIPTION: $NONE
 ROOM: $maintenance_shaft
 
 POS: 34, 40
+MAP_NAME: Maintenance Shaft above 28th Floor
 
 FIRST_DESCRIPTION:
 Musty, dark place. Through cracks, I can see rooms under me.

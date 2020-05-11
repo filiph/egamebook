@@ -19,8 +19,16 @@ final RoomDescriber emptyRoomDescription = (c) {};
 /// This is the magic [Room] that, when reached, makes
 /// the room roaming situation stop.
 final Room endOfRoam = Room(
-    endOfRoamName, emptyRoomDescription, emptyRoomDescription, null, null,
-    positionX: 48, positionY: 100);
+  endOfRoamName,
+  emptyRoomDescription,
+  emptyRoomDescription,
+  null,
+  null,
+  positionX: 48,
+  positionY: 100,
+  mapName: 'End of Adventure',
+  hint: 'There is always the possibility to go home.',
+);
 
 /// This generator creates a [FightSituation].
 ///
@@ -48,7 +56,29 @@ typedef RoomDescriber = void Function(ActionContext context);
 /// but it's best if they are concrete, physical places.
 @immutable
 class Room {
+  /// This is the internal ("writer's") name of the room, such as
+  /// `meadow` or `west_of_house`.
   final String name;
+
+  /// This is the name of the room as seen on the map after the player
+  /// has visited it at least once.
+  ///
+  /// Example: "The Tomb of the Raider"
+  final String mapName;
+
+  /// This is the name of the room as seen on the map before the player
+  /// visits it.
+  ///
+  /// Example: "a dark place"
+  final String firstMapName;
+
+  /// The long-form description of this place. This can remind the player
+  /// what this room is.
+  final String hint;
+
+  /// The long-form description of what to expect in this place. This is
+  /// shown only _before_ the player visits the room.
+  final String firstHint;
 
   /// Fully describes the room according to current state of the world when
   /// the actor first sees it.
@@ -141,15 +171,29 @@ class Room {
     this.isSynthetic = false,
     this.positionX,
     this.positionY,
+    this.mapName,
+    this.firstMapName,
+    this.hint,
+    this.firstHint,
   })  : assert(name != null),
         assert(
             describe != null || firstDescribe != null,
             "You must provide at least one description of the room. "
             "Ideally, you also provide both the first description and "
-            "the regular one.");
+            "the regular one."),
+        assert(
+            (positionX == null && positionY == null) ||
+                (positionX != null && positionY != null),
+            "Both dimensions of position must be given, or both must be null."),
+        assert((positionX == null && positionY == null) || (mapName != null),
+            "Room is on a map but it's missing mapName: $name.");
 
   @override
   int get hashCode => name.hashCode;
+
+  /// Returns `true` if the room has non-null [positionX] and [positionY].
+  /// That means it can be placed on a map.
+  bool get isOnMap => positionX != null && positionY != null;
 
   @override
   bool operator ==(Object other) => other is Room && other.name == name;

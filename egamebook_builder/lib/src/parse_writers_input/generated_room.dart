@@ -93,6 +93,30 @@ class GeneratedRoom extends GeneratedGameObject {
           'if it\'s the same as the parent room\s.');
     }
 
+    if (_map.containsKey('MAP_NAME')) {
+      namedArguments['mapName'] = literal(_map['MAP_NAME']);
+      if (_map.containsKey('FIRST_MAP_NAME')) {
+        namedArguments['firstMapName'] = literal(_map['FIRST_MAP_NAME']);
+      }
+    } else {
+      // No MAP_NAME.
+      if (_map.containsKey('FIRST_MAP_NAME')) {
+        print('WARNING: Cannot have FIRST_MAP_NAME but no MAP_NAME.');
+      }
+    }
+
+    if (_map.containsKey('HINT')) {
+      namedArguments['hint'] = literal(_map['HINT']);
+      if (_map.containsKey('FIRST_HINT')) {
+        namedArguments['firstHint'] = literal(_map['FIRST_HINT']);
+      }
+    } else {
+      // No HINT.
+      if (_map.containsKey('FIRST_HINT')) {
+        print('WARNING: Cannot have FIRST_HINT but no HINT.');
+      }
+    }
+
     if (_map.containsKey('AFTER_MONSTERS_CLEARED')) {
       namedArguments['afterMonstersCleared'] =
           createDescriber(_map['AFTER_MONSTERS_CLEARED']);

@@ -11,6 +11,7 @@ ROOM: $bleeds_trader_hut
 FLAGS: $IDLE
 
 POS: 36, 97
+MAP_NAME: Trader's Shop
 
 FIRST_DESCRIPTION:
 [We] enter a small building made of stone. It's dark in here but cozy.

@@ -29,6 +29,7 @@ ROOM: $staging_area
 FLAGS: $IDLE
 
 POS: 23, 82
+MAP_NAME: Staging Area
 
 FIRST_DESCRIPTION:
 This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.

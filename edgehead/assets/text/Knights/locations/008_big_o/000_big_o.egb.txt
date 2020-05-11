@@ -7,6 +7,7 @@ DESCRIPTION: $NONE
 ROOM: $big_o_observatory
 
 POS: 26, 8
+MAP_NAME: Observatory
 
 FIRST_DESCRIPTION:
 A tiny floor overlooking the Bay and the ruins of San Francisco.

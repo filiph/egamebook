@@ -99,6 +99,8 @@ final _preStartBook = Room(
   isSynthetic: true,
   positionX: 0,
   positionY: 0,
+  mapName: "<NOT VISIBLE>",
+  hint: "This should never be visible.",
 );
 
 final List<Room> _rooms = List<Room>.from(allRooms)

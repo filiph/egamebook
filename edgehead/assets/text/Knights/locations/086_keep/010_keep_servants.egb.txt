@@ -16,6 +16,7 @@ ROOM: $keep_servants
 FLAGS: $IDLE
 
 POS: 19, 89
+MAP_NAME: Servants' quarters
 
 FIRST_DESCRIPTION:
 TBD: North skull

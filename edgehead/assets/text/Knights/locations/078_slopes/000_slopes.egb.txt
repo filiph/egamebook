@@ -9,6 +9,7 @@ ROOM: $slopes
 FLAGS: $IDLE
 
 POS: 42, 78
+MAP_NAME: Slopes
 
 FIRST_DESCRIPTION:
 The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.

@@ -12,6 +12,7 @@ DESCRIPTION: $NONE
 ROOM: $jungle_entrance
 
 POS: 21, 72
+MAP_NAME: Jungle
 
 FIRST_DESCRIPTION:
 Corridors full of vegetation. Path through that, like a path in a forest, but indoors.

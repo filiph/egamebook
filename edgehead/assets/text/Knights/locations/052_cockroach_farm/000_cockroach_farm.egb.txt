@@ -7,6 +7,7 @@ DESCRIPTION: $NONE
 ROOM: $cockroach_farm
 
 POS: 29, 52
+MAP_NAME: Cockroach Farm
 
 FIRST_DESCRIPTION:
 I am in a maze of twisty little passages, all alike. All crawling with cockroaches.

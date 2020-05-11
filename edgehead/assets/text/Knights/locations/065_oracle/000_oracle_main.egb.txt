@@ -9,6 +9,7 @@ ROOM: $oracle_main
 FLAGS: $IDLE
 
 POS: 39, 65
+MAP_NAME: Oracle's
 
 DESCRIPTION: 
 The Oracle is here.

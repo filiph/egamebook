@@ -24,6 +24,7 @@ ROOM: $farmers_village
 FLAGS: $IDLE
 
 POS: 35, 83
+MAP_NAME: Farmers' village
 
 FIRST_DESCRIPTION:
 The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.

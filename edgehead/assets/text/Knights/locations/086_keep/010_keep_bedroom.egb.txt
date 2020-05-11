@@ -19,6 +19,7 @@ ROOM: $keep_bedroom
 FLAGS: $IDLE
 
 POS: 15, 86
+MAP_NAME: Lord's quarters
 
 FIRST_DESCRIPTION:
 TBA

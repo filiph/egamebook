@@ -2,6 +2,7 @@ ROOM: $test_random_encounter
 FIRST_DESCRIPTION: $NONE
 
 POS: 0, 0
+MAP_NAME: N/A
 
 FIGHT_SITUATION:
 generateRandomEncounter
