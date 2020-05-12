@@ -1,12 +1,5 @@
-// ---
 APPROACH: $deathless_village FROM $jungle_entrance
-COMMAND: Go >> Village of the Deathless
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $deathless_village FROM $dragon_egg
-COMMAND: Go >> Village of the Deathless
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $deathless_village

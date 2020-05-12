@@ -1,7 +1,4 @@
-// ---
 APPROACH: $slopes FROM $farmers_village
-COMMAND: Go >> Slopes
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $slopes

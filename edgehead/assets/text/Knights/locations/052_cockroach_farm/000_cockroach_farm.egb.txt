@@ -1,7 +1,4 @@
-// ---
 APPROACH: $cockroach_farm FROM $junction
-COMMAND: Go >> Cockroach Farm
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $cockroach_farm

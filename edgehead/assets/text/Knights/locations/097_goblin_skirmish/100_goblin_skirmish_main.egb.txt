@@ -1,7 +1,4 @@
-// ---
 APPROACH: $goblin_skirmish_main FROM $bleeds_main
-COMMAND: Go >> Goblin Outpost
-DESCRIPTION: $NONE
 PREREQUISITES:
 c.hasHappened(evGoblinCampCleared)
 

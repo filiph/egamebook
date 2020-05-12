@@ -1,7 +1,4 @@
-// ---
 APPROACH: $gods_lair FROM $elevator_28
-COMMAND: Go >> God's Lair
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $gods_lair

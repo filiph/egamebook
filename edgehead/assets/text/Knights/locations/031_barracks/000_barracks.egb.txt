@@ -1,17 +1,6 @@
-// ---
 APPROACH: $barracks FROM $top_of_climb
-COMMAND: Go >> Barracks
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $barracks FROM $crowdsource
-COMMAND: Go >> Barracks
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $barracks FROM $junction
-COMMAND: Go >> Barracks
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $barracks

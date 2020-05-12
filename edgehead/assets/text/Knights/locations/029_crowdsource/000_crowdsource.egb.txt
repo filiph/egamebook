@@ -1,12 +1,5 @@
-// ---
 APPROACH: $crowdsource FROM $big_o_antechamber
-COMMAND: Go >> Crowd's temple
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $crowdsource FROM $barracks
-COMMAND: Go >> Crowd's temple
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $crowdsource

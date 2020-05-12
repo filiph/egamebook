@@ -1,22 +1,7 @@
-// ---
 APPROACH: $knights_hq_main FROM $staging_area
-COMMAND: Go >> Knights Headquarters
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $knights_hq_main FROM $oracle_main
-COMMAND: Go >> Knights Headquarters
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $knights_hq_main FROM $battlefield
-COMMAND: Go >> Knights Headquarters
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $knights_hq_main FROM $elevator_12
-COMMAND: Go >> Knights Headquarters
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $knights_hq_main

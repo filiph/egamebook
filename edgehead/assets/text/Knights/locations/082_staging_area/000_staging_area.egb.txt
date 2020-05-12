@@ -1,27 +1,8 @@
-// ---
 APPROACH: $staging_area FROM $knights_hq_main
-COMMAND: Go >> Staging Area
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $staging_area FROM $pyramid_entrance
-COMMAND: Go >> Staging Area
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $staging_area FROM $keep_gate
-COMMAND: Go >> Staging Area
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $staging_area FROM $farmers_village
-COMMAND: Go >> Staging Area
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $staging_area FROM $jungle_entrance
-COMMAND: Go >> Staging Area
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $staging_area

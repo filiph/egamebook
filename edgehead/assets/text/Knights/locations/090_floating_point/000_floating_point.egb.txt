@@ -1,7 +1,4 @@
-// ---
 APPROACH: $floating_point FROM $farmers_village
-COMMAND: Go >> Floating Point
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $floating_point

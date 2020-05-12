@@ -1,12 +1,5 @@
-// ---
 APPROACH: $big_o_antechamber FROM $big_o_observatory
-COMMAND: Go >> Antechamber
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $big_o_antechamber FROM $crowdsource
-COMMAND: Go >> Antechamber
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $big_o_antechamber

@@ -1,7 +1,4 @@
-// ---
 APPROACH: $oracle_main FROM $knights_hq_main
-COMMAND: Go >> Oracle's
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $oracle_main

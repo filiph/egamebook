@@ -1,12 +1,7 @@
-// ---
 APPROACH: $battlefield FROM $knights_hq_main
-COMMAND: Go >> Battlefield Floor
 DESCRIPTION: [We] climb up the stairs to the sixteenth floor.
 
-// ---
 APPROACH: $battlefield FROM $training_grounds
-COMMAND: Go >> Battlefield Floor
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $battlefield

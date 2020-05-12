@@ -1,7 +1,4 @@
-// ---
 APPROACH: $dragon_egg FROM $deathless_village
-COMMAND: Go >> Sacred Place
-DESCRIPTION: $NONE
 PREREQUISITES:
 c.hasHappened(evDeathlessRespectGained)
 
@@ -9,7 +6,7 @@ c.hasHappened(evDeathlessRespectGained)
 ROOM: $dragon_egg
 
 POS: 15, 67
-MAP_NAME: The Dragon Egg
+MAP_NAME: Sacred Place
 
 FIRST_DESCRIPTION:
 The sacred place for the Deathless.

@@ -1,7 +1,4 @@
-// ---
 APPROACH: $keep_dining FROM $keep_bedroom
-COMMAND: Go >> Dining room
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $keep_dining

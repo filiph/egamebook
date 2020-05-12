@@ -1,7 +1,4 @@
-// ---
 APPROACH: $bleeds_trader_hut FROM $bleeds_main
-COMMAND: Go >> Trader's Shop
-DESCRIPTION: $NONE
 PREREQUISITES:
 c.hasLearnedAbout(kbTrader)
 

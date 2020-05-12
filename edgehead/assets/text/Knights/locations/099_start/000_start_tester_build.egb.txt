@@ -1,7 +1,5 @@
-// ---
 APPROACH: $start_tester_build FROM $pre_start_book
 COMMAND: $IMPLICIT
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $start_tester_build

@@ -1,12 +1,5 @@
-// ---
 APPROACH: $smithy FROM $junction
-COMMAND: Go >> Smithy
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $smithy FROM $conet
-COMMAND: Go >> Smithy
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $smithy

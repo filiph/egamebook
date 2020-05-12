@@ -1,7 +1,5 @@
-// ---
 APPROACH: $meadow_fight FROM $start
 COMMAND: $IMPLICIT
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $meadow_fight

@@ -1,12 +1,5 @@
-// ---
 APPROACH: $keep_gate FROM $staging_area
-COMMAND: Go >> The Keep's Gate
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $keep_gate FROM $keep_bedroom
-COMMAND: Go >> The Keep's Gate
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $keep_gate

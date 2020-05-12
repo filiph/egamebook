@@ -1,12 +1,5 @@
-// ---
 APPROACH: $training_grounds FROM $reservoir
-COMMAND: Go >> Training Grounds
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $training_grounds FROM $battlefield
-COMMAND: Go >> Training Grounds
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $training_grounds

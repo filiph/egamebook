@@ -1,14 +1,8 @@
-// ---
 APPROACH: $keep_servants FROM $keep_bedroom
-COMMAND: Go >> Servants' quarters
-DESCRIPTION: $NONE
 PREREQUISITES:
 c.hasLearnedAbout(kbKeepServantsLocation)
 
-// ---
 APPROACH: $keep_servants FROM $top_of_climb
-COMMAND: Go >> Servants' quarters
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $keep_servants

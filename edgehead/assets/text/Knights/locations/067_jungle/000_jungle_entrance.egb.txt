@@ -1,12 +1,5 @@
-// ---
 APPROACH: $jungle_entrance FROM $staging_area
-COMMAND: Go >> Jungle
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $jungle_entrance FROM $deathless_village
-COMMAND: Go >> Jungle
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $jungle_entrance

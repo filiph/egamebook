@@ -1,17 +1,6 @@
-// ---
 APPROACH: $keep_bedroom FROM $keep_gate
-COMMAND: Go >> Lord's quarters
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $keep_bedroom FROM $keep_dining
-COMMAND: Go >> Lord's quarters
-DESCRIPTION: $NONE
-
-// ---
 APPROACH: $keep_bedroom FROM $keep_servants
-COMMAND: Go >> Lord's quarters
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $keep_bedroom

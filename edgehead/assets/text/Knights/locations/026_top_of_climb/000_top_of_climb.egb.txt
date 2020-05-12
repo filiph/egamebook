@@ -1,7 +1,4 @@
-// ---
 APPROACH: $top_of_climb FROM $barracks
-COMMAND: Go >> Top of the climb
-DESCRIPTION: $NONE
 
 // TODO: add approach from the North Skull hidden room in the Keep.
 

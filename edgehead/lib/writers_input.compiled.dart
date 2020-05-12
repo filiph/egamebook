@@ -83,15 +83,7 @@ final Room testRandomEncounter = Room('test_random_encounter',
 }, null, generateRandomEncounter, null,
     positionX: 0, positionY: 0, mapName: 'N/A');
 final Approach bigOObservatoryFromBigOAntechamber =
-    Approach('big_o_antechamber', 'big_o_observatory', 'Go >> Observatory',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('big_o_antechamber', 'big_o_observatory', '', null);
 final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -109,24 +101,9 @@ final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null, positionX: 26, positionY: 8, mapName: 'Observatory');
 final Approach bigOAntechamberFromBigOObservatory =
-    Approach('big_o_observatory', 'big_o_antechamber', 'Go >> Antechamber',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach bigOAntechamberFromCrowdsource = Approach(
-    'crowdsource', 'big_o_antechamber', 'Go >> Antechamber', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('big_o_observatory', 'big_o_antechamber', '', null);
+final Approach bigOAntechamberFromCrowdsource =
+    Approach('crowdsource', 'big_o_antechamber', '', null);
 final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -144,15 +121,8 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 26, positionY: 12, mapName: 'Antechamber');
-final Approach topOfClimbFromBarracks = Approach(
-    'barracks', 'top_of_climb', 'Go >> Top of the climb', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach topOfClimbFromBarracks =
+    Approach('barracks', 'top_of_climb', '', null);
 final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -169,25 +139,10 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 19, positionY: 26, mapName: 'Top of the climb');
-final Approach crowdsourceFromBarracks = Approach(
-    'barracks', 'crowdsource', 'Go >> Crowd\'s temple', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach crowdsourceFromBarracks =
+    Approach('barracks', 'crowdsource', '', null);
 final Approach crowdsourceFromBigOAntechamber =
-    Approach('big_o_antechamber', 'crowdsource', 'Go >> Crowd\'s temple',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('big_o_antechamber', 'crowdsource', '', null);
 final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -204,32 +159,11 @@ final Room crowdsource = Room('crowdsource', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null, positionX: 27, positionY: 29, mapName: 'Crowd\'s Temple');
 final Approach barracksFromCrowdsource =
-    Approach('crowdsource', 'barracks', 'Go >> Barracks', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('crowdsource', 'barracks', '', null);
 final Approach barracksFromJunction =
-    Approach('junction', 'barracks', 'Go >> Barracks', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('junction', 'barracks', '', null);
 final Approach barracksFromTopOfClimb =
-    Approach('top_of_climb', 'barracks', 'Go >> Barracks', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('top_of_climb', 'barracks', '', null);
 final Room barracks = Room('barracks', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -246,15 +180,7 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 34, positionY: 31, mapName: 'Barracks');
-final Approach conetFromSmithy =
-    Approach('smithy', 'conet', 'Go >> Conet', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach conetFromSmithy = Approach('smithy', 'conet', '', null);
 final Room conet = Room('conet', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -263,17 +189,8 @@ final Room conet = Room('conet', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('Some kobolds operating a large "woodpecker".\n', isRaw: true);
 }, null, null, positionX: 17, positionY: 34, mapName: 'Conet');
-final Approach maintenanceShaftFromElevator28 = Approach(
-    'elevator_28',
-    'maintenance_shaft',
-    'Go >> Maintenance Shaft above 28th Floor', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach maintenanceShaftFromElevator28 =
+    Approach('elevator_28', 'maintenance_shaft', '', null);
 
 class KarlListenToGuards extends RoamingAction {
   @override
@@ -430,24 +347,8 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
     positionX: 34,
     positionY: 40,
     mapName: 'Maintenance Shaft above 28th Floor');
-final Approach smithyFromConet =
-    Approach('conet', 'smithy', 'Go >> Smithy', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach smithyFromJunction =
-    Approach('junction', 'smithy', 'Go >> Smithy', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach smithyFromConet = Approach('conet', 'smithy', '', null);
+final Approach smithyFromJunction = Approach('junction', 'smithy', '', null);
 final Room smithy = Room('smithy', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -457,9 +358,8 @@ final Room smithy = Room('smithy', null, (ActionContext c) {
   s.add('My brother, Sarn, working for the orcs, forging weapons.\n',
       isRaw: true);
 }, null, null, positionX: 24, positionY: 40, mapName: 'Smithy');
-final Approach elevator28FromElevator12 = Approach(
-    'elevator_12', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
-    (ActionContext c) {
+final Approach elevator28FromElevator12 =
+    Approach('elevator_12', 'elevator_28', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -470,37 +370,12 @@ final Approach elevator28FromElevator12 = Approach(
   s.add('$weSubstitutionCapitalized climb up using an ancient rusty ladder.\n',
       isRaw: true);
 });
-final Approach elevator28FromGodsLair = Approach(
-    'gods_lair', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach elevator28FromJunction = Approach(
-    'junction', 'elevator_28', 'Go >> Elevator Shaft Entrance on 28th Floor',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach elevator28FromMaintenanceShaft = Approach(
-    'maintenance_shaft',
-    'elevator_28',
-    'Go >> Elevator Shaft Entrance on 28th Floor', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach elevator28FromGodsLair =
+    Approach('gods_lair', 'elevator_28', '', null);
+final Approach elevator28FromJunction =
+    Approach('junction', 'elevator_28', '', null);
+final Approach elevator28FromMaintenanceShaft =
+    Approach('maintenance_shaft', 'elevator_28', '', null);
 final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -517,15 +392,8 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
     positionX: 32,
     positionY: 42,
     mapName: 'Elevator Shaft Entrance on 28th Floor');
-final Approach godsLairFromElevator28 = Approach(
-    'elevator_28', 'gods_lair', 'Go >> God\'s Lair', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach godsLairFromElevator28 =
+    Approach('elevator_28', 'gods_lair', '', null);
 
 class KarlTakeStar extends RoamingAction {
   @override
@@ -651,53 +519,15 @@ final Room godsLairAfterNecromancy = Room('gods_lair_after_necromancy', null,
     positionX: 35,
     positionY: 42,
     mapName: 'God\'s Lair');
-final Approach junctionFromBarracks = Approach(
-    'barracks', 'junction', 'Go >> Junction on 26th Floor', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach junctionFromBarracks =
+    Approach('barracks', 'junction', '', null);
 final Approach junctionFromCockroachFarm =
-    Approach('cockroach_farm', 'junction', 'Go >> Junction on 26th Floor',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('cockroach_farm', 'junction', '', null);
 final Approach junctionFromElevator28 =
-    Approach('elevator_28', 'junction', 'Go >> Junction on 26th Floor',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach junctionFromReservoir = Approach(
-    'reservoir', 'junction', 'Go >> Junction on 26th Floor', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach junctionFromSmithy = Approach(
-    'smithy', 'junction', 'Go >> Junction on 26th Floor', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('elevator_28', 'junction', '', null);
+final Approach junctionFromReservoir =
+    Approach('reservoir', 'junction', '', null);
+final Approach junctionFromSmithy = Approach('smithy', 'junction', '', null);
 final Room junction = Room('junction', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -711,23 +541,9 @@ final Room junction = Room('junction', null, (ActionContext c) {
       isRaw: true);
 }, null, null, positionX: 27, positionY: 45, mapName: 'Junction on 26th Floor');
 final Approach reservoirFromJunction =
-    Approach('junction', 'reservoir', 'Go >> Reservoir', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach reservoirFromTrainingGrounds = Approach(
-    'training_grounds', 'reservoir', 'Go >> Reservoir', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('junction', 'reservoir', '', null);
+final Approach reservoirFromTrainingGrounds =
+    Approach('training_grounds', 'reservoir', '', null);
 
 class ReservoirOpenDam extends RoamingAction {
   @override
@@ -822,15 +638,8 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
     positionX: 25,
     positionY: 48,
     mapName: 'Reservoir');
-final Approach cockroachFarmFromJunction = Approach(
-    'junction', 'cockroach_farm', 'Go >> Cockroach Farm', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach cockroachFarmFromJunction =
+    Approach('junction', 'cockroach_farm', '', null);
 final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -849,25 +658,9 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null, positionX: 29, positionY: 52, mapName: 'Cockroach Farm');
 final Approach trainingGroundsFromBattlefield =
-    Approach('battlefield', 'training_grounds', 'Go >> Training Grounds',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('battlefield', 'training_grounds', '', null);
 final Approach trainingGroundsFromReservoir =
-    Approach('reservoir', 'training_grounds', 'Go >> Training Grounds',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('reservoir', 'training_grounds', '', null);
 final Room trainingGrounds = Room('training_grounds', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -878,8 +671,7 @@ final Room trainingGrounds = Room('training_grounds', null, (ActionContext c) {
       isRaw: true);
 }, null, null, positionX: 21, positionY: 54, mapName: 'Training Grounds');
 final Approach battlefieldFromKnightsHqMain =
-    Approach('knights_hq_main', 'battlefield', 'Go >> Battlefield Floor',
-        (ActionContext c) {
+    Approach('knights_hq_main', 'battlefield', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -892,15 +684,7 @@ final Approach battlefieldFromKnightsHqMain =
       isRaw: true);
 });
 final Approach battlefieldFromTrainingGrounds =
-    Approach('training_grounds', 'battlefield', 'Go >> Battlefield Floor',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('training_grounds', 'battlefield', '', null);
 final Room battlefield = Room(
     'battlefield',
     (ActionContext c) {
@@ -941,15 +725,8 @@ final Room battlefield = Room(
           isRaw: true);
     },
     whereDescription: 'among the columns');
-final Approach oracleMainFromKnightsHqMain = Approach(
-    'knights_hq_main', 'oracle_main', 'Go >> Oracle\'s', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach oracleMainFromKnightsHqMain =
+    Approach('knights_hq_main', 'oracle_main', '', null);
 final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -959,24 +736,10 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   s.add('The Oracle is here.\n', isRaw: true);
 }, null, null,
     isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
-final Approach jungleEntranceFromDeathlessVillage = Approach(
-    'deathless_village', 'jungle_entrance', 'Go >> Jungle', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach jungleEntranceFromStagingArea = Approach(
-    'staging_area', 'jungle_entrance', 'Go >> Jungle', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach jungleEntranceFromDeathlessVillage =
+    Approach('deathless_village', 'jungle_entrance', '', null);
+final Approach jungleEntranceFromStagingArea =
+    Approach('staging_area', 'jungle_entrance', '', null);
 final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -994,26 +757,10 @@ final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 21, positionY: 72, mapName: 'Jungle');
-final Approach deathlessVillageFromDragonEgg = Approach(
-    'dragon_egg', 'deathless_village', 'Go >> Village of the Deathless',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach deathlessVillageFromJungleEntrance = Approach(
-    'jungle_entrance', 'deathless_village', 'Go >> Village of the Deathless',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach deathlessVillageFromDragonEgg =
+    Approach('dragon_egg', 'deathless_village', '', null);
+final Approach deathlessVillageFromJungleEntrance =
+    Approach('jungle_entrance', 'deathless_village', '', null);
 
 class GiveLairOfGodStarToDeathless extends RoamingAction {
   @override
@@ -1099,15 +846,9 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     positionX: 18, positionY: 68, mapName: 'Village of the Deathless');
-final Approach dragonEggFromDeathlessVillage = Approach(
-    'deathless_village', 'dragon_egg', 'Go >> Sacred Place', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
+final Approach dragonEggFromDeathlessVillage =
+    Approach('deathless_village', 'dragon_egg', '', null,
+        isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1127,47 +868,15 @@ final Room dragonEgg = Room('dragon_egg', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, null, positionX: 15, positionY: 67, mapName: 'The Dragon Egg');
+}, null, null, positionX: 15, positionY: 67, mapName: 'Sacred Place');
 final Approach knightsHqMainFromBattlefield =
-    Approach('battlefield', 'knights_hq_main', 'Go >> Knights Headquarters',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('battlefield', 'knights_hq_main', '', null);
 final Approach knightsHqMainFromElevator12 =
-    Approach('elevator_12', 'knights_hq_main', 'Go >> Knights Headquarters',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('elevator_12', 'knights_hq_main', '', null);
 final Approach knightsHqMainFromOracleMain =
-    Approach('oracle_main', 'knights_hq_main', 'Go >> Knights Headquarters',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('oracle_main', 'knights_hq_main', '', null);
 final Approach knightsHqMainFromStagingArea =
-    Approach('staging_area', 'knights_hq_main', 'Go >> Knights Headquarters',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('staging_area', 'knights_hq_main', '', null);
 final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1189,9 +898,8 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
     positionX: 37,
     positionY: 70,
     mapName: 'Knights Headquarters');
-final Approach elevator12FromElevator28 = Approach(
-    'elevator_28', 'elevator_12', 'Go >> Elevator Shaft Entrance on 12th Floor',
-    (ActionContext c) {
+final Approach elevator12FromElevator28 =
+    Approach('elevator_28', 'elevator_12', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1203,17 +911,8 @@ final Approach elevator12FromElevator28 = Approach(
       '$weSubstitutionCapitalized climb down using an ancient rusty ladder.\n',
       isRaw: true);
 });
-final Approach elevator12FromKnightsHqMain = Approach(
-    'knights_hq_main',
-    'elevator_12',
-    'Go >> Elevator Shaft Entrance on 12th Floor', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach elevator12FromKnightsHqMain =
+    Approach('knights_hq_main', 'elevator_12', '', null);
 final Room elevator12 = Room('elevator_12', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1227,14 +926,7 @@ final Room elevator12 = Room('elevator_12', null, (ActionContext c) {
     positionY: 72,
     mapName: 'Elevator Shaft Entrance on 12th Floor');
 final Approach slopesFromFarmersVillage =
-    Approach('farmers_village', 'slopes', 'Go >> Slopes', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('farmers_village', 'slopes', '', null);
 final Room slopes = Room('slopes', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1252,52 +944,16 @@ final Room slopes = Room('slopes', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 42, positionY: 78, mapName: 'Slopes');
-final Approach stagingAreaFromFarmersVillage = Approach(
-    'farmers_village', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach stagingAreaFromJungleEntrance = Approach(
-    'jungle_entrance', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach stagingAreaFromKeepGate = Approach(
-    'keep_gate', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach stagingAreaFromKnightsHqMain = Approach(
-    'knights_hq_main', 'staging_area', 'Go >> Staging Area', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach stagingAreaFromFarmersVillage =
+    Approach('farmers_village', 'staging_area', '', null);
+final Approach stagingAreaFromJungleEntrance =
+    Approach('jungle_entrance', 'staging_area', '', null);
+final Approach stagingAreaFromKeepGate =
+    Approach('keep_gate', 'staging_area', '', null);
+final Approach stagingAreaFromKnightsHqMain =
+    Approach('knights_hq_main', 'staging_area', '', null);
 final Approach stagingAreaFromPyramidEntrance =
-    Approach('pyramid_entrance', 'staging_area', 'Go >> Staging Area',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('pyramid_entrance', 'staging_area', '', null);
 final Room stagingArea = Room('staging_area', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1317,44 +973,13 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
 }, null, null,
     isIdle: true, positionX: 23, positionY: 82, mapName: 'Staging Area');
 final Approach farmersVillageFromFloatingPoint =
-    Approach('floating_point', 'farmers_village', 'Go >> Farmers\' village',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('floating_point', 'farmers_village', '', null);
 final Approach farmersVillageFromPyramidEntrance =
-    Approach('pyramid_entrance', 'farmers_village', 'Go >> Farmers\' village',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach farmersVillageFromSlopes = Approach(
-    'slopes', 'farmers_village', 'Go >> Farmers\' village', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('pyramid_entrance', 'farmers_village', '', null);
+final Approach farmersVillageFromSlopes =
+    Approach('slopes', 'farmers_village', '', null);
 final Approach farmersVillageFromStagingArea =
-    Approach('staging_area', 'farmers_village', 'Go >> Farmers\' village',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('staging_area', 'farmers_village', '', null);
 final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1373,24 +998,10 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     isIdle: true, positionX: 35, positionY: 83, mapName: 'Farmers\' village');
-final Approach keepGateFromKeepBedroom = Approach(
-    'keep_bedroom', 'keep_gate', 'Go >> The Keep\'s Gate', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach keepGateFromStagingArea = Approach(
-    'staging_area', 'keep_gate', 'Go >> The Keep\'s Gate', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach keepGateFromKeepBedroom =
+    Approach('keep_bedroom', 'keep_gate', '', null);
+final Approach keepGateFromStagingArea =
+    Approach('staging_area', 'keep_gate', '', null);
 
 class DebugSearchForKatana extends RoamingAction {
   @override
@@ -1473,34 +1084,12 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     isIdle: true, positionX: 20, positionY: 86, mapName: 'The Keep\'s Gate');
-final Approach keepBedroomFromKeepDining = Approach(
-    'keep_dining', 'keep_bedroom', 'Go >> Lord\'s quarters', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach keepBedroomFromKeepGate = Approach(
-    'keep_gate', 'keep_bedroom', 'Go >> Lord\'s quarters', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach keepBedroomFromKeepDining =
+    Approach('keep_dining', 'keep_bedroom', '', null);
+final Approach keepBedroomFromKeepGate =
+    Approach('keep_gate', 'keep_bedroom', '', null);
 final Approach keepBedroomFromKeepServants =
-    Approach('keep_servants', 'keep_bedroom', 'Go >> Lord\'s quarters',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('keep_servants', 'keep_bedroom', '', null);
 
 class UseCompass extends RoamingAction {
   @override
@@ -1582,15 +1171,8 @@ final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     isIdle: true, positionX: 15, positionY: 86, mapName: 'Lord\'s quarters');
-final Approach keepDiningFromKeepBedroom = Approach(
-    'keep_bedroom', 'keep_dining', 'Go >> Dining room', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach keepDiningFromKeepBedroom =
+    Approach('keep_bedroom', 'keep_dining', '', null);
 final Room keepDining = Room('keep_dining', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1608,30 +1190,15 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
 }, null, null,
     isIdle: true, positionX: 9, positionY: 86, mapName: 'Dining Room');
 final Approach keepServantsFromKeepBedroom =
-    Approach('keep_bedroom', 'keep_servants', 'Go >> Servants\' quarters',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
+    Approach('keep_bedroom', 'keep_servants', '', null,
+        isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   return c.hasLearnedAbout(kbKeepServantsLocation);
 });
 final Approach keepServantsFromTopOfClimb =
-    Approach('top_of_climb', 'keep_servants', 'Go >> Servants\' quarters',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('top_of_climb', 'keep_servants', '', null);
 final Room keepServants = Room('keep_servants', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1642,15 +1209,7 @@ final Room keepServants = Room('keep_servants', null, (ActionContext c) {
 }, null, null,
     isIdle: true, positionX: 19, positionY: 89, mapName: 'Servants\' quarters');
 final Approach floatingPointFromFarmersVillage =
-    Approach('farmers_village', 'floating_point', 'Go >> Floating Point',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('farmers_village', 'floating_point', '', null);
 final Room floatingPoint = Room('floating_point', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1667,36 +1226,12 @@ final Room floatingPoint = Room('floating_point', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     isIdle: true, positionX: 32, positionY: 90, mapName: 'Floating Point');
-final Approach pyramidEntranceFromBleedsMain = Approach(
-    'bleeds_main', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach pyramidEntranceFromFarmersVillage = Approach(
-    'farmers_village', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach pyramidEntranceFromStagingArea = Approach(
-    'staging_area', 'pyramid_entrance', 'Go >> Pyramid\'s Main Entrance',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach pyramidEntranceFromBleedsMain =
+    Approach('bleeds_main', 'pyramid_entrance', '', null);
+final Approach pyramidEntranceFromFarmersVillage =
+    Approach('farmers_village', 'pyramid_entrance', '', null);
+final Approach pyramidEntranceFromStagingArea =
+    Approach('staging_area', 'pyramid_entrance', '', null);
 final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2702,15 +2237,8 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
 }
 
 final Approach bleedsTraderHutFromBleedsMain =
-    Approach('bleeds_main', 'bleeds_trader_hut', 'Go >> Trader\'s Shop',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
+    Approach('bleeds_main', 'bleeds_trader_hut', '', null,
+        isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3037,8 +2565,8 @@ final Approach endOfRoamFromBleedsMain =
   final Storyline s = c.outputStoryline;
   s.add('You realize this adventuring life is not for you.\n', isRaw: true);
 });
-final Approach goblinSkirmishPatrolFromBleedsMain = Approach(
-    'bleeds_main', 'goblin_skirmish_patrol', 'Go >> Smoke', (ActionContext c) {
+final Approach goblinSkirmishPatrolFromBleedsMain =
+    Approach('bleeds_main', 'goblin_skirmish_patrol', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3070,15 +2598,10 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
 }, null, generateBleedsGoblinSkirmishPatrol, null,
     positionX: 15, positionY: 97, mapName: 'Towards the smoke');
 final Approach goblinSkirmishSneakFromBleedsMain = Approach(
-    'bleeds_main', 'goblin_skirmish_sneak', 'Go >> Near the Goblin Outpost',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
+    'bleeds_main',
+    'goblin_skirmish_sneak',
+    'Go >> Near the Goblin Outpost',
+    null, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3086,15 +2609,10 @@ final Approach goblinSkirmishSneakFromBleedsMain = Approach(
       !c.hasHappened(evGoblinCampCleared);
 });
 final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
-    'goblin_skirmish_patrol', 'goblin_skirmish_sneak', 'Smoke >> Come closer',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    'goblin_skirmish_patrol',
+    'goblin_skirmish_sneak',
+    'Smoke >> Come closer',
+    null);
 
 class GoblinCampAttack extends RoamingAction {
   @override
@@ -3432,15 +2950,8 @@ final Room goblinSkirmishSneak =
   s.add('The goblins are still here.\n', isRaw: true);
 }, null, null, positionX: 13, positionY: 98, mapName: 'The Camp');
 final Approach goblinSkirmishMainFromBleedsMain =
-    Approach('bleeds_main', 'goblin_skirmish_main', 'Go >> Goblin Outpost',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
+    Approach('bleeds_main', 'goblin_skirmish_main', '', null,
+        isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3465,15 +2976,8 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The goblin camp is deserted.\n', isRaw: true);
 }, null, null, positionX: 11, positionY: 97, mapName: 'The Camp');
-final Approach startTesterBuildFromPreStartBook = Approach(
-    'pre_start_book', 'start_tester_build', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach startTesterBuildFromPreStartBook =
+    Approach('pre_start_book', 'start_tester_build', r'$IMPLICIT', null);
 final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3484,16 +2988,8 @@ final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
       'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
       isRaw: true);
 }, null, null, null, positionX: 0, positionY: 0, mapName: 'N/A');
-final Approach startFromStartTesterBuild = Approach(
-    'start_tester_build', 'start', 'Set piece >> from the start of the game',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+final Approach startFromStartTesterBuild = Approach('start_tester_build',
+    'start', 'Set piece >> from the start of the game', null);
 final startInkInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -3925,14 +3421,7 @@ final Room start = Room('start', (ActionContext c) {
   ));
 }, null, null, null);
 final Approach meadowFightFromStart =
-    Approach('start', 'meadow_fight', r'$IMPLICIT', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('start', 'meadow_fight', r'$IMPLICIT', null);
 final Room meadowFight = Room(
     'meadow_fight',
     (ActionContext c) {

@@ -1,7 +1,5 @@
-// ---
 APPROACH: $start FROM $start_tester_build
 COMMAND: Set piece >> from the start of the game
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $start

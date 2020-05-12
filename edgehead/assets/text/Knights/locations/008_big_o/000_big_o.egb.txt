@@ -1,7 +1,4 @@
-// ---
 APPROACH: $big_o_observatory FROM $big_o_antechamber
-COMMAND: Go >> Observatory
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $big_o_observatory

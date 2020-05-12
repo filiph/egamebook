@@ -1,12 +1,8 @@
-// ---
 APPROACH: $goblin_skirmish_sneak FROM $goblin_skirmish_patrol
 COMMAND: Smoke >> Come closer
-DESCRIPTION: $NONE
 
-// ---
 APPROACH: $goblin_skirmish_sneak FROM $bleeds_main
 COMMAND: Go >> Near the Goblin Outpost
-DESCRIPTION: $NONE
 PREREQUISITES:
 c.playerHasVisited("goblin_skirmish_sneak")
 &&

@@ -1,7 +1,4 @@
-// ---
 APPROACH: $conet FROM $smithy
-COMMAND: Go >> Conet
-DESCRIPTION: $NONE
 
 // ---
 ROOM: $conet
