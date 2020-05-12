@@ -3424,6 +3424,7 @@ final Approach meadowFightFromStart =
     Approach('start', 'meadow_fight', r'$IMPLICIT', null);
 final Room meadowFight = Room(
     'meadow_fight',
+    null,
     (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -3432,7 +3433,6 @@ final Room meadowFight = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
-    null,
     generateStartFight,
     null,
     positionX: 49,

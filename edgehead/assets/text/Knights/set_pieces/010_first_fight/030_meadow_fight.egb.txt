@@ -7,7 +7,7 @@ ROOM: $meadow_fight
 POS: 49, 99
 MAP_NAME: Meadow
 
-FIRST_DESCRIPTION: $NONE
+DESCRIPTION: $NONE
 
 FIGHT_SITUATION:
 generateStartFight
