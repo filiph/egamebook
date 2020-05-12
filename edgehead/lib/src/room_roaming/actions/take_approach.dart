@@ -78,13 +78,45 @@ class TakeApproachAction extends Action<RoomPath> {
     return path.getPathCoordinates().toList(growable: false);
   }
 
-  /// When the writer specifies a command with " >> " in it, this will
-  /// automatically create a command path.
+  /// [TakeApproach] returns an additional hint to show alongside the map pin.
+  /// This is the "description" of the destination.
+  @override
+  Map<String, String> getAdditionalStrings(
+      ApplicabilityContext context, RoomPath path) {
+    if (!path.destination.isOnMap) {
+      // Bail out early.
+      return const {};
+    }
+
+    final wasVisited = _alreadyVisited(context, path.destination);
+    return {
+      'hint': wasVisited ? path.destination.hint : path.destination.firstHint,
+    };
+  }
+
+  /// When the writer specifies a command with the approach, it will be used.
   ///
   /// For example, "go >> upper door".
+  ///
+  /// Otherwise, the destination room's `MAP_NAME` (or `FIRST_MAP_NAME`)
+  /// will be used.
   @override
-  List<String> getCommandPath(ApplicabilityContext context, RoomPath path) =>
-      path.approach.command.split(' >> ');
+  List<String> getCommandPath(ApplicabilityContext context, RoomPath path) {
+    if (path.approach.command.isNotEmpty) {
+      return path.approach.command.split(' >> ');
+    }
+
+    assert(
+        path.destination.mapName != null,
+        "When command isn't provided, "
+        "then the destination room _must_ have a mapName.");
+
+    final wasVisited = _alreadyVisited(context, path.destination);
+    final name = wasVisited
+        ? path.destination.mapName
+        : (path.destination.firstMapName ?? path.destination.mapName);
+    return ['Go', name];
+  }
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, RoomPath path) =>
@@ -113,6 +145,12 @@ class TakeApproachAction extends Action<RoomPath> {
     }
 
     return true;
+  }
+
+  bool _alreadyVisited(ApplicabilityContext context, Room destination) {
+    return context.world.visitHistory
+        .query(context.actor, destination, includeVariants: true)
+        .hasHappened;
   }
 
   /// Returns all approaches that can be accessed from [startingRoom] either
@@ -218,8 +256,8 @@ class RoomPath {
   /// Constructs the list of coordinates that we can send to the UI as a path.
   Iterable<int> getPathCoordinates() sync* {
     assert(
-        !isStart,
-        'Trying to construct path for RoomPath.start(). '
+    !isStart,
+    'Trying to construct path for RoomPath.start(). '
         'This should not happen: the starting path is empty, and only used '
         'for the tree search.');
 

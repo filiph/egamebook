@@ -2283,62 +2283,16 @@ class TalkToMiguelGreetings extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach bleedsMainFromBleedsTraderHut = Approach(
-    'bleeds_trader_hut', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add('$weSubstitutionCapitalized walk out into the muddy street.\n',
-      isRaw: true);
-});
+final Approach bleedsMainFromBleedsTraderHut =
+    Approach('bleeds_trader_hut', 'bleeds_main', '', null);
 final Approach bleedsMainFromGoblinSkirmishMain =
-    Approach('goblin_skirmish_main', 'bleeds_main', 'Go >> The Bleeds',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add('$weSubstitutionCapitalized walk back to The Bleeds.\n', isRaw: true);
-});
+    Approach('goblin_skirmish_main', 'bleeds_main', '', null);
 final Approach bleedsMainFromGoblinSkirmishSneak =
-    Approach('goblin_skirmish_sneak', 'bleeds_main', 'Go >> The Bleeds',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      '$weSubstitutionCapitalized sneak through the bushes and emerge back in The Bleeds.\n',
-      isRaw: true);
-});
-final Approach bleedsMainFromMeadowFight = Approach(
-    'meadow_fight', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
-final Approach bleedsMainFromPyramidEntrance = Approach(
-    'pyramid_entrance', 'bleeds_main', 'Go >> The Bleeds', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
+    Approach('goblin_skirmish_sneak', 'bleeds_main', '', null);
+final Approach bleedsMainFromMeadowFight =
+    Approach('meadow_fight', 'bleeds_main', '', null);
+final Approach bleedsMainFromPyramidEntrance =
+    Approach('pyramid_entrance', 'bleeds_main', '', null);
 final Approach bleedsMainFromStartTesterBuild = Approach(
     'start_tester_build',
     'bleeds_main',

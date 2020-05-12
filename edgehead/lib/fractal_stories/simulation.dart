@@ -139,8 +139,9 @@ class Simulation {
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, null);
         final additionalData = action.getAdditionalData(context, null);
-        yield Performance<Nothing>(
-            action, context, null, successChance, additionalData);
+        final additionalStrings = action.getAdditionalStrings(context, null);
+        yield Performance<Nothing>(action, context, null, successChance,
+            additionalData, additionalStrings);
         continue;
       }
 
@@ -155,8 +156,9 @@ class Simulation {
         final successChance = action.getSuccessChance(
             context.actor, context.simulation, context.world, target);
         final additionalData = action.getAdditionalData(context, target);
-        yield Performance<Object>(
-            action, context, target, successChance, additionalData);
+        final additionalStrings = action.getAdditionalStrings(context, target);
+        yield Performance<Object>(action, context, target, successChance,
+            additionalData, additionalStrings);
       }
     }
   }

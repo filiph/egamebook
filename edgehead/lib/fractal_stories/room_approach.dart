@@ -34,8 +34,7 @@ class Approach {
       : isImplicit = command == r'$IMPLICIT',
         assert(from != null),
         assert(to != null),
-        assert(command != null),
-        assert(description != null);
+        assert(command != null);
 
   @override
   String toString() => "Approach<$from->$to,$command>";

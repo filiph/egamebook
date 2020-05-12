@@ -25,6 +25,10 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       serializers.serialize(object.additionalData,
           specifiedType:
               const FullType(BuiltList, const [const FullType(int)])),
+      'additionalStrings',
+      serializers.serialize(object.additionalStrings,
+          specifiedType: const FullType(BuiltMap,
+              const [const FullType(String), const FullType(String)])),
       'commandPath',
       serializers.serialize(object.commandPath,
           specifiedType:
@@ -69,6 +73,13 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
                       const FullType(BuiltList, const [const FullType(int)]))
               as BuiltList<dynamic>);
           break;
+        case 'additionalStrings':
+          result.additionalStrings.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(String),
+                const FullType(String)
+              ])) as BuiltMap<dynamic, dynamic>);
+          break;
         case 'commandPath':
           result.commandPath.replace(serializers.deserialize(value,
                   specifiedType:
@@ -104,6 +115,8 @@ class _$Choice extends Choice {
   @override
   final BuiltList<int> additionalData;
   @override
+  final BuiltMap<String, String> additionalStrings;
+  @override
   final BuiltList<String> commandPath;
   @override
   final String commandSentence;
@@ -120,6 +133,7 @@ class _$Choice extends Choice {
   _$Choice._(
       {this.actionName,
       this.additionalData,
+      this.additionalStrings,
       this.commandPath,
       this.commandSentence,
       this.helpMessage,
@@ -131,6 +145,9 @@ class _$Choice extends Choice {
     }
     if (additionalData == null) {
       throw new BuiltValueNullFieldError('Choice', 'additionalData');
+    }
+    if (additionalStrings == null) {
+      throw new BuiltValueNullFieldError('Choice', 'additionalStrings');
     }
     if (commandPath == null) {
       throw new BuiltValueNullFieldError('Choice', 'commandPath');
@@ -159,6 +176,7 @@ class _$Choice extends Choice {
     return other is Choice &&
         actionName == other.actionName &&
         additionalData == other.additionalData &&
+        additionalStrings == other.additionalStrings &&
         commandPath == other.commandPath &&
         commandSentence == other.commandSentence &&
         helpMessage == other.helpMessage &&
@@ -173,8 +191,10 @@ class _$Choice extends Choice {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc(0, actionName.hashCode),
-                            additionalData.hashCode),
+                        $jc(
+                            $jc($jc(0, actionName.hashCode),
+                                additionalData.hashCode),
+                            additionalStrings.hashCode),
                         commandPath.hashCode),
                     commandSentence.hashCode),
                 helpMessage.hashCode),
@@ -187,6 +207,7 @@ class _$Choice extends Choice {
     return (newBuiltValueToStringHelper('Choice')
           ..add('actionName', actionName)
           ..add('additionalData', additionalData)
+          ..add('additionalStrings', additionalStrings)
           ..add('commandPath', commandPath)
           ..add('commandSentence', commandSentence)
           ..add('helpMessage', helpMessage)
@@ -208,6 +229,12 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
       _$this._additionalData ??= new ListBuilder<int>();
   set additionalData(ListBuilder<int> additionalData) =>
       _$this._additionalData = additionalData;
+
+  MapBuilder<String, String> _additionalStrings;
+  MapBuilder<String, String> get additionalStrings =>
+      _$this._additionalStrings ??= new MapBuilder<String, String>();
+  set additionalStrings(MapBuilder<String, String> additionalStrings) =>
+      _$this._additionalStrings = additionalStrings;
 
   ListBuilder<String> _commandPath;
   ListBuilder<String> get commandPath =>
@@ -239,6 +266,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
     if (_$v != null) {
       _actionName = _$v.actionName;
       _additionalData = _$v.additionalData?.toBuilder();
+      _additionalStrings = _$v.additionalStrings?.toBuilder();
       _commandPath = _$v.commandPath?.toBuilder();
       _commandSentence = _$v.commandSentence;
       _helpMessage = _$v.helpMessage;
@@ -270,6 +298,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
           new _$Choice._(
               actionName: actionName,
               additionalData: additionalData.build(),
+              additionalStrings: additionalStrings.build(),
               commandPath: commandPath.build(),
               commandSentence: commandSentence,
               helpMessage: helpMessage,
@@ -280,6 +309,8 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
       try {
         _$failedField = 'additionalData';
         additionalData.build();
+        _$failedField = 'additionalStrings';
+        additionalStrings.build();
         _$failedField = 'commandPath';
         commandPath.build();
       } catch (e) {

@@ -133,7 +133,7 @@ abstract class Action<T> {
         'called in the first place.');
   }
 
-  /// Some actions can provide additional data for a give [context] and
+  /// Some actions can provide additional data for a given [context] and
   /// [object]. This data can be used by the presenter.
   ///
   /// For example, a travel action can provide a path from the current
@@ -142,6 +142,17 @@ abstract class Action<T> {
   List<int> getAdditionalData(ApplicabilityContext context, T object) {
     // By default, there is no additional data.
     return const [];
+  }
+
+  /// Some actions can provide additional strings for a given [context] and
+  /// [object]. This data can be used by the presenter.
+  ///
+  /// For example, a travel action can provide a context-sensitive hint
+  /// (a description of the destination room).
+  Map<String, String> getAdditionalStrings(
+      ApplicabilityContext context, T object) {
+    // By default, there are no additional strings.
+    return const {};
   }
 
   /// The path of sub-commands to be used for the action menu.
@@ -399,9 +410,13 @@ class Performance<T> {
   /// list.
   final List<int> additionalData;
 
+  /// Additional information about the performance that can be shown
+  /// by the presenter.
+  final Map<String, String> additionalStrings;
+
   /// Creates a performance object.
   const Performance(this.action, this.context, this.object, this.successChance,
-      this.additionalData);
+      this.additionalData, this.additionalStrings);
 
   /// The performer of the action.
   Actor get actor => context.actor;

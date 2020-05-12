@@ -22,6 +22,9 @@ abstract class Choice extends ElementBase
   /// Additional data, as provided by [Action.getAdditionalData].
   BuiltList<int> get additionalData;
 
+  /// Additional data, as provided by [Action.getAdditionalStrings].
+  BuiltMap<String, String> get additionalStrings;
+
   BuiltList<String> get commandPath;
 
   /// This is the sentence that gets printed _after_ the player selects
