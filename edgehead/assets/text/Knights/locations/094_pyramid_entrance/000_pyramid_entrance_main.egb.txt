@@ -8,7 +8,12 @@ ROOM: $pyramid_entrance
 FLAGS: $IDLE
 
 POS: 26, 94
-MAP_NAME: Pyramid's Main Entrance
+MAP_NAME: Pyramid's Entrance
+HINT: This is the only side of the Pyramid that allows access from outside.
+
+FIRST_MAP_NAME: The Pyramid
+FIRST_HINT: This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.
+
 
 FIRST_DESCRIPTION:
 // majestic

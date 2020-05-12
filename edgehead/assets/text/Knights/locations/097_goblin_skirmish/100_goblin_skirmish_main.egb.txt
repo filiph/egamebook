@@ -7,7 +7,7 @@ c.hasHappened(evGoblinCampCleared)
 ROOM: $goblin_skirmish_main
 
 POS: 11, 97
-MAP_NAME: The Camp
+MAP_NAME: The Goblin Camp
 
 FIRST_DESCRIPTION:
 // TODO -- an actual battle with the goblins.

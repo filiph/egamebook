@@ -1253,7 +1253,12 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
     isIdle: true,
     positionX: 26,
     positionY: 94,
-    mapName: 'Pyramid\'s Main Entrance');
+    mapName: 'Pyramid\'s Entrance',
+    firstMapName: 'The Pyramid',
+    hint:
+        'This is the only side of the Pyramid that allows access from outside.',
+    firstHint:
+        'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
 final talkToKatGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -1994,7 +1999,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
     positionY: 98,
     mapName: 'The Bleeds',
     firstMapName: 'Some buildings',
-    hint: 'This is a small village around the entrance to the Pyramid.',
+    hint: 'This is a small village close the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 
@@ -2596,7 +2601,7 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
       'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
       isRaw: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null,
-    positionX: 15, positionY: 97, mapName: 'Towards the smoke');
+    positionX: 15, positionY: 97, mapName: 'Smoke');
 final Approach goblinSkirmishSneakFromBleedsMain = Approach(
     'bleeds_main',
     'goblin_skirmish_sneak',
@@ -2975,7 +2980,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('The goblin camp is deserted.\n', isRaw: true);
-}, null, null, positionX: 11, positionY: 97, mapName: 'The Camp');
+}, null, null, positionX: 11, positionY: 97, mapName: 'The Goblin Camp');
 final Approach startTesterBuildFromPreStartBook =
     Approach('pre_start_book', 'start_tester_build', r'$IMPLICIT', null);
 final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {

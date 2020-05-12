@@ -16,7 +16,7 @@ FLAGS: $IDLE
 POS: 37, 98
 
 MAP_NAME: The Bleeds
-HINT: This is a small village around the entrance to the Pyramid.
+HINT: This is a small village close the entrance to the Pyramid.
 
 FIRST_MAP_NAME: Some buildings
 FIRST_HINT: There seems to be a village or at least a homestead next to the Pyramid.
