@@ -256,8 +256,8 @@ class RoomPath {
   /// Constructs the list of coordinates that we can send to the UI as a path.
   Iterable<int> getPathCoordinates() sync* {
     assert(
-    !isStart,
-    'Trying to construct path for RoomPath.start(). '
+        !isStart,
+        'Trying to construct path for RoomPath.start(). '
         'This should not happen: the starting path is empty, and only used '
         'for the tree search.');
 
