@@ -8,7 +8,12 @@ ROOM: $bleeds_trader_hut
 FLAGS: $IDLE
 
 POS: 36, 97
+
+FIRST_MAP_NAME: A building that says "Trader"
+FIRST_HINT: A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.
+
 MAP_NAME: Trader's Shop
+HINT: The shop of Joseph and his son, Leroy. Sells basic items for the inhabitants of The Bleeds, and the Farmers of the Pyramid.
 
 FIRST_DESCRIPTION:
 [We] enter a small building made of stone. It's dark in here but cozy.

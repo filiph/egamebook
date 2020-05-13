@@ -5,7 +5,9 @@ COMMAND: $IMPLICIT
 ROOM: $meadow_fight
 
 POS: 49, 99
+
 MAP_NAME: Meadow
+HINT: The clearing in the forest of San Francisco where we were ambushed.
 
 DESCRIPTION: $NONE
 

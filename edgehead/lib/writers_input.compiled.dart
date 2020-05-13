@@ -971,7 +971,15 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    isIdle: true, positionX: 23, positionY: 82, mapName: 'Staging Area');
+    isIdle: true,
+    positionX: 23,
+    positionY: 82,
+    mapName: 'The Staging Area',
+    firstMapName: 'Up the stairs',
+    hint:
+        'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
+    firstHint:
+        'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
 final Approach farmersVillageFromFloatingPoint =
     Approach('floating_point', 'farmers_village', '', null);
 final Approach farmersVillageFromPyramidEntrance =
@@ -1083,7 +1091,14 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    isIdle: true, positionX: 20, positionY: 86, mapName: 'The Keep\'s Gate');
+    isIdle: true,
+    positionX: 20,
+    positionY: 86,
+    mapName: 'The Keep\'s Gate',
+    firstMapName: 'The Keep',
+    hint: 'The entrance to the abandoned aristocratic mansion.',
+    firstHint:
+        'This part of the Pyramid seems to have been carved into an artistocratic residence. The strict simplicity of the ancient building gives way to nortonian redwood panels, doors and floors.');
 final Approach keepBedroomFromKeepDining =
     Approach('keep_dining', 'keep_bedroom', '', null);
 final Approach keepBedroomFromKeepGate =
@@ -2559,7 +2574,15 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
     w.recordCustom(evJisadSeesUndeadLeroy);
   }
 }, null, null,
-    isIdle: true, positionX: 36, positionY: 97, mapName: 'Trader\'s Shop');
+    isIdle: true,
+    positionX: 36,
+    positionY: 97,
+    mapName: 'Trader\'s Shop',
+    firstMapName: 'A building that says "Trader"',
+    hint:
+        'The shop of Joseph and his son, Leroy. Sells basic items for the inhabitants of The Bleeds, and the Farmers of the Pyramid.',
+    firstHint:
+        'A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.');
 final Approach endOfRoamFromBleedsMain =
     Approach('bleeds_main', '__END_OF_ROAM__', 'go >> back home (ENDS GAME)',
         (ActionContext c) {
@@ -2601,7 +2624,10 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
       'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
       isRaw: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null,
-    positionX: 15, positionY: 97, mapName: 'Smoke');
+    positionX: 15,
+    positionY: 97,
+    mapName: 'Smoke',
+    hint: 'I noticed a smoke to the west.');
 final Approach goblinSkirmishSneakFromBleedsMain = Approach(
     'bleeds_main',
     'goblin_skirmish_sneak',
@@ -3443,6 +3469,7 @@ final Room meadowFight = Room(
     positionX: 49,
     positionY: 99,
     mapName: 'Meadow',
+    hint: 'The clearing in the forest of San Francisco where we were ambushed.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;

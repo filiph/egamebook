@@ -10,7 +10,12 @@ ROOM: $staging_area
 FLAGS: $IDLE
 
 POS: 23, 82
-MAP_NAME: Staging Area
+
+FIRST_MAP_NAME: Up the stairs
+FIRST_HINT: The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.
+
+MAP_NAME: The Staging Area
+HINT: This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.
 
 FIRST_DESCRIPTION:
 This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.

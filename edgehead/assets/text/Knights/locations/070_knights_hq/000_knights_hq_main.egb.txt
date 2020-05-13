@@ -9,6 +9,7 @@ ROOM: $knights_hq_main
 FLAGS: $IDLE
 
 POS: 37, 70
+
 MAP_NAME: Knights Headquarters
 
 FIRST_DESCRIPTION:

@@ -7,7 +7,12 @@ ROOM: $keep_gate
 FLAGS: $IDLE
 
 POS: 20, 86
+
+FIRST_MAP_NAME: The Keep
+FIRST_HINT: This part of the Pyramid seems to have been carved into an artistocratic residence. The strict simplicity of the ancient building gives way to nortonian redwood panels, doors and floors.
+
 MAP_NAME: The Keep's Gate
+HINT: The entrance to the abandoned aristocratic mansion.
 
 FIRST_DESCRIPTION:
 The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. 

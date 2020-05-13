@@ -10,7 +10,7 @@ ROOM: $goblin_skirmish_patrol
 
 POS: 15, 97
 MAP_NAME: Smoke
-FIRST_HINT: I noticed a smoke to the west.
+HINT: I noticed a smoke to the west.
 
 FIRST_DESCRIPTION:
 When [we] come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.
