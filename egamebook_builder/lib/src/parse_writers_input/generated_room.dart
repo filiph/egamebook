@@ -89,7 +89,7 @@ class GeneratedRoom extends GeneratedGameObject {
       namedArguments['positionX'] = literalNum(int.parse(posStrings[0]));
       namedArguments['positionY'] = literalNum(int.parse(posStrings[1]));
     } else if (isVariant) {
-      print('WARNING: Variant $name has no position. Please specify POS even '
+      log.warning('Variant $name has no position. Please specify POS even '
           'if it\'s the same as the parent room\s.');
     }
 
@@ -101,7 +101,7 @@ class GeneratedRoom extends GeneratedGameObject {
     } else {
       // No MAP_NAME.
       if (_map.containsKey('FIRST_MAP_NAME')) {
-        print('WARNING: Cannot have FIRST_MAP_NAME but no MAP_NAME.');
+        log.warning('Cannot have FIRST_MAP_NAME but no MAP_NAME.');
       }
     }
 
@@ -113,7 +113,7 @@ class GeneratedRoom extends GeneratedGameObject {
     } else {
       // No HINT.
       if (_map.containsKey('FIRST_HINT')) {
-        print('WARNING: Cannot have FIRST_HINT but no HINT.');
+        log.warning('Cannot have FIRST_HINT but no HINT.');
       }
     }
 
