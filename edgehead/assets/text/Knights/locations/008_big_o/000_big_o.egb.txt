@@ -1,4 +1,6 @@
 APPROACH: $big_o_observatory FROM $big_o_antechamber
+PREREQUISITES:
+w.actionHasBeenPerformed('open_antechamber_lock')
 
 // ---
 ROOM: $big_o_observatory
@@ -8,6 +10,10 @@ MAP_NAME: Observatory
 
 FIRST_DESCRIPTION:
 A tiny floor overlooking the Bay and the ruins of San Francisco.
+
+TODO: fight with Osiris
+
+TODO: win
 
 DESCRIPTION: $NONE
 
@@ -26,5 +32,7 @@ Romance is another word for a lack of rationality
 Empathy is another word for not minding your own business.
 
 These are just words that let us feel good about our failings. I'm not interested in feelings.
+
+I am interested in results.
 
 The big O says this.

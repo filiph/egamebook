@@ -21,5 +21,7 @@ c.giveNewItemToPlayer(akxe);
 DESCRIPTION: $NONE
 
 NOTES:
-- This is where you finally confront the Akxe orc (named captain).
+- This is where you finally confront the Akxe orc (named captain - Darg).
+- Darg's head talks after you kill him. Big O is taunting you.
+- Darg's Akxe is the key to the antechamber.
 - You might see him before, but shouldn't be able to kill him.

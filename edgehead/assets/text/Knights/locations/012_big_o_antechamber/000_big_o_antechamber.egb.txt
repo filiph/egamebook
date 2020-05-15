@@ -1,5 +1,5 @@
-APPROACH: $big_o_antechamber FROM $big_o_observatory
 APPROACH: $big_o_antechamber FROM $crowdsource
+APPROACH: $big_o_antechamber FROM $top_of_climb
 
 // ---
 ROOM: $big_o_antechamber
@@ -10,4 +10,36 @@ POS: 26, 12
 FIRST_DESCRIPTION:
 A dark room without windows. A stone staircase leads up to a trap door in the ceiling.
 
+A curious lock mechanism guards the trap door from being opened.
+
 DESCRIPTION: $NONE
+
+
+// ---
+ACTION: $examine_antechamber_lock
+COMMAND: lock mechanism >> examine
+FOR_LOCATION: $big_o_antechamber
+
+COMPLETE_SUCCESS_DESCRIPTION:
+It is a long slit with an irregular shape. If it's meant to be opened by a key, the key must be massive, and weirdly shaped.
+
+// Maybe implement this as an INK, with "interrogation" of the lock.
+
+[[IF c.hasItem(akxeId)]]After a few moments, I realize the shape of the lock reminds me of something ancient. I look at the akxe and its hilt. It will fit.[[ENDIF]]
+
+
+// ---
+ACTION: $open_antechamber_lock
+COMMAND: lock mechanism >> open with akxe
+FOR_LOCATION: $big_o_antechamber
+
+PREREQUISITES:
+w.actionHasBeenPerformed('examine_antechamber_lock')
+&&
+c.hasItem(akxeId)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I insert the hilt of Darg's akxe to the lock mechanism. It fits perfectly. Something in the trapdoor clicks, and it slowly opens.
+
+
+

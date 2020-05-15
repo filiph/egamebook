@@ -83,14 +83,21 @@ final Room testRandomEncounter = Room('test_random_encounter',
 }, null, generateRandomEncounter, null,
     positionX: 0, positionY: 0, mapName: 'N/A');
 final Approach bigOObservatoryFromBigOAntechamber =
-    Approach('big_o_antechamber', 'big_o_observatory', '', null);
+    Approach('big_o_antechamber', 'big_o_observatory', '', null,
+        isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return w.actionHasBeenPerformed('open_antechamber_lock');
+});
 final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A tiny floor overlooking the Bay and the ruins of San Francisco.\n',
+  s.add(
+      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: fight with Osiris\n\nTODO: win\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -100,10 +107,149 @@ final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 26, positionY: 8, mapName: 'Observatory');
-final Approach bigOAntechamberFromBigOObservatory =
-    Approach('big_o_observatory', 'big_o_antechamber', '', null);
+final Approach endOfRoamFromBigOObservatory = Approach(
+    'big_o_observatory', '__END_OF_ROAM__', r'$IMPLICIT', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('I have prevailed. I am the Dog Head.\n', isRaw: true);
+});
 final Approach bigOAntechamberFromCrowdsource =
     Approach('crowdsource', 'big_o_antechamber', '', null);
+final Approach bigOAntechamberFromTopOfClimb =
+    Approach('top_of_climb', 'big_o_antechamber', '', null);
+
+class ExamineAntechamberLock extends RoamingAction {
+  @override
+  final String name = 'examine_antechamber_lock';
+
+  static final ExamineAntechamberLock singleton = ExamineAntechamberLock();
+
+  @override
+  List<String> get commandPathTemplate => ['lock mechanism', 'examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('big_o_antechamber') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_6892af2b6 = c.hasItem(akxeId)
+        ? '''After a few moments, I realize the shape of the lock reminds me of something ancient. I look at the akxe and its hilt. It will fit.'''
+        : '''''';
+    s.add(
+        'It is a long slit with an irregular shape. If it\'s meant to be opened by a key, the key must be massive, and weirdly shaped.\n\n\n$ifBlock_6892af2b6\n',
+        isRaw: true);
+    return '${a.name} successfully performs ExamineAntechamberLock';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class OpenAntechamberLock extends RoamingAction {
+  @override
+  final String name = 'open_antechamber_lock';
+
+  static final OpenAntechamberLock singleton = OpenAntechamberLock();
+
+  @override
+  List<String> get commandPathTemplate => ['lock mechanism', 'open with akxe'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('big_o_antechamber') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed('examine_antechamber_lock') &&
+        c.hasItem(akxeId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I insert the hilt of Darg\'s akxe to the lock mechanism. It fits perfectly. Something in the trapdoor clicks, and it slowly opens.\n',
+        isRaw: true);
+    return '${a.name} successfully performs OpenAntechamberLock';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -111,7 +257,7 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A dark room without windows. A stone staircase leads up to a trap door in the ceiling.\n',
+      'A dark room without windows. A stone staircase leads up to a trap door in the ceiling.\n\nA curious lock mechanism guards the trap door from being opened.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -123,6 +269,10 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
 }, null, null, positionX: 26, positionY: 12, mapName: 'Antechamber');
 final Approach topOfClimbFromBarracks =
     Approach('barracks', 'top_of_climb', '', null);
+final Approach topOfClimbFromBigOAntechamber =
+    Approach('big_o_antechamber', 'top_of_climb', '', null);
+final Approach topOfClimbFromKeepServants =
+    Approach('keep_servants', 'top_of_climb', '', null);
 final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1072,13 +1222,7 @@ class SearchBedroom extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: explain the family portrait\n\nI take the dragon egg.\n\n',
-        isRaw: true);
-    c.giveNewItemToPlayer(dragonEgg);
-
-    c.learnAbout(kbKeepServantsLocation);
-    c.movePlayer('keep_servants');
-
+    s.add('TODO: explain the family portrait\n', isRaw: true);
     return '${a.name} successfully performs SearchBedroom';
   }
 
@@ -1194,6 +1338,9 @@ class UseCompass extends RoamingAction {
     if (c.inRoomParent('keep_bedroom') != true) {
       return false;
     }
+    if (!(c.hasItem(compassId))) {
+      return false;
+    }
     return w.actionNeverUsed(name);
   }
 
@@ -1205,8 +1352,11 @@ class UseCompass extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The compass leads me through twisty little passages to the servants room.\n',
+        'The compass leads me through twisty little passages to the servants room.\n\n',
         isRaw: true);
+    c.learnAbout(kbKeepServantsLocation);
+    c.movePlayer('keep_servants');
+
     return '${a.name} successfully performs UseCompass';
   }
 
@@ -3912,9 +4062,12 @@ final allApproaches = <Approach>[
   endOfRoamFromTestRandomEncounter,
   testRandomEncounterFromStartTesterBuild,
   bigOObservatoryFromBigOAntechamber,
-  bigOAntechamberFromBigOObservatory,
+  endOfRoamFromBigOObservatory,
   bigOAntechamberFromCrowdsource,
+  bigOAntechamberFromTopOfClimb,
   topOfClimbFromBarracks,
+  topOfClimbFromBigOAntechamber,
+  topOfClimbFromKeepServants,
   crowdsourceFromBarracks,
   crowdsourceFromBigOAntechamber,
   barracksFromCrowdsource,
@@ -3992,6 +4145,8 @@ final allApproaches = <Approach>[
   meadowFightFromStart
 ];
 final allActions = <RoamingAction>[
+  ExamineAntechamberLock.singleton,
+  OpenAntechamberLock.singleton,
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,

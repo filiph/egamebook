@@ -1,6 +1,6 @@
+APPROACH: $top_of_climb FROM $big_o_antechamber
 APPROACH: $top_of_climb FROM $barracks
-
-// TODO: add approach from the North Skull hidden room in the Keep.
+APPROACH: $top_of_climb FROM $keep_servants
 
 // ---
 ROOM: $top_of_climb

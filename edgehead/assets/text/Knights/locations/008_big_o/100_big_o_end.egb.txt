@@ -1,0 +1,5 @@
+// This will be executed automatically after Osiris is overcome.
+APPROACH: $__END_OF_ROAM__ FROM $big_o_observatory
+COMMAND: $IMPLICIT
+DESCRIPTION: 
+I have prevailed. I am the Dog Head.
