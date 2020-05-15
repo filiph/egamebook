@@ -40,6 +40,19 @@
 
 -----
 
+# "Filler" rooms
+
+These are rooms that add more meat to the Upside. Otherwise, the upside would just be a few rooms, far from each other. But we want to give the player chance to make many decisions, and explore. Aren can always attack (gain coins, food).
+
+* Kobolds talking (cruel)
+* Orc playing cards with some goblins, and cheating (the goblins obviously know this, but don't say anything)
+* Goblins training, and talking about how meaningless it is (they want actual blood)
+* An empty corridor
+* Someone big (Ettin?) eating a human leg
+* Some goblin explaining to the other one the symbolism of 65 (2-4-8-16-32-64)
+
+-----
+
 ## Old ideas from [Pyramid](https://docs.google.com/document/d/1xp0q903tnf099vvRsELrTfoxApN6KAUtWIU828r4cSY/edit) 
 
 * The wizard's temple (at the very top)

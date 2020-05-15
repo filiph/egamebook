@@ -56,7 +56,6 @@ COMPLETE_SUCCESS_DESCRIPTION:
 I take the star. It fits into my palm. It says "Lair of God".
 
 // TODO: image of "Lamb of God"
-// TODO: add item to inventory
 
 [[CODE]]
 c.giveNewItemToPlayer(lairOfGodStar);
