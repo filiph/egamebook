@@ -10,6 +10,14 @@ MAP_NAME: Crowd's Temple
 FIRST_DESCRIPTION:
 A temple.
 
+TODO: fight with Darg.
+
+I take the akxe.
+
+[[CODE]]
+c.giveNewItemToPlayer(akxe);
+[[ENDCODE]]
+
 DESCRIPTION: $NONE
 
 NOTES:

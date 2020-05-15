@@ -256,6 +256,7 @@ class EdgeheadGame extends Book {
           edgeheadLeroy,
           edgeheadLadyHope,
           edgeheadDarg,
+          sixtyFiverOrc,
         ])
         ..director = edgeheadDirector.toBuilder()
         ..situations =

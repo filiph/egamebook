@@ -62,7 +62,6 @@ class WritersInputGenerator extends Generator {
         final rawMaps = parseWritersOutput(lines);
         for (var rawMap in rawMaps) {
           if (rawMap.keys.contains("ROOM")) {
-            // TODO: remove dirPath if not needed
             var room = generateRoom(rawMap, path);
             objects.add(room);
           } else if (rawMap.keys.contains("ACTION")) {

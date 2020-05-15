@@ -10,8 +10,7 @@ POS: 11, 97
 MAP_NAME: The Goblin Camp
 
 FIRST_DESCRIPTION:
-// TODO -- an actual battle with the goblins.
-(To be done: actual battle. Assume you won.)
+TODO: an actual battle with the goblins.
 
 I take a curious device from the ground. Some kind of a compass.
 

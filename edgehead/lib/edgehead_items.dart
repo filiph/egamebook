@@ -70,8 +70,8 @@ final Item sixtyFiverShield = Item.weapon(
   sixtyFiverShieldId,
   WeaponType.shield,
   name: 'shield',
-  adjective: '65',
-  /* TODO: add firstOwnerId: sixty-fiver */
+  adjective: 'sixty-fiver',
+  firstOwnerId: sixtyFiverOrcId,
 );
 
 final Item tamarasDagger = Item.weapon(

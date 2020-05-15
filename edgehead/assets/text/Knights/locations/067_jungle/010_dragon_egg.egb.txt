@@ -1,14 +1,22 @@
-APPROACH: $dragon_egg FROM $deathless_village
+APPROACH: $dragon_egg_room FROM $deathless_village
 PREREQUISITES:
 c.hasHappened(evDeathlessRespectGained)
 
 // ---
-ROOM: $dragon_egg
+ROOM: $dragon_egg_room
 
 POS: 15, 67
 MAP_NAME: Sacred Place
 
 FIRST_DESCRIPTION:
 The sacred place for the Deathless.
+
+TODO: explain the dragon egg
+
+I take the dragon egg.
+
+[[CODE]]
+c.giveNewItemToPlayer(dragonEgg);
+[[ENDCODE]]
 
 DESCRIPTION: $NONE

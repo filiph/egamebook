@@ -84,5 +84,5 @@ throw StateError("Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}
 [[ENDRULESET]]
 
 [[CODE]]
-w.updateActorById(playerId, (b) => b..inventory.add(letterFromFather));
+c.giveNewItemToPlayer(letterFromFather);
 [[ENDCODE]]

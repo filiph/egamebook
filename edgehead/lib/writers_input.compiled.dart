@@ -149,7 +149,9 @@ final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A temple.\n', isRaw: true);
+  s.add('A temple.\n\nTODO: fight with Darg.\n\nI take the akxe.\n\n',
+      isRaw: true);
+  c.giveNewItemToPlayer(akxe);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -424,7 +426,7 @@ class KarlTakeStar extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add('I take the star. It fits into my palm. It says "Lair of God".\n\n\n',
         isRaw: true);
-    w.updateActorById(playerId, (b) => b..inventory.add(lairOfGodStar));
+    c.giveNewItemToPlayer(lairOfGodStar);
 
     return '${a.name} successfully performs KarlTakeStar';
   }
@@ -721,8 +723,9 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n',
+          '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner\n\nI take the banner.\n\n',
           isRaw: true);
+      c.giveNewItemToPlayer(banner);
     },
     whereDescription: 'among the columns');
 final Approach oracleMainFromKnightsHqMain =
@@ -757,8 +760,8 @@ final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 21, positionY: 72, mapName: 'Jungle');
-final Approach deathlessVillageFromDragonEgg =
-    Approach('dragon_egg', 'deathless_village', '', null);
+final Approach deathlessVillageFromDragonEggRoom =
+    Approach('dragon_egg_room', 'deathless_village', '', null);
 final Approach deathlessVillageFromJungleEntrance =
     Approach('jungle_entrance', 'deathless_village', '', null);
 
@@ -846,21 +849,24 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     positionX: 18, positionY: 68, mapName: 'Village of the Deathless');
-final Approach dragonEggFromDeathlessVillage =
-    Approach('deathless_village', 'dragon_egg', '', null,
+final Approach dragonEggRoomFromDeathlessVillage =
+    Approach('deathless_village', 'dragon_egg_room', '', null,
         isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   return c.hasHappened(evDeathlessRespectGained);
 });
-final Room dragonEgg = Room('dragon_egg', (ActionContext c) {
+final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The sacred place for the Deathless.\n', isRaw: true);
+  s.add(
+      'The sacred place for the Deathless.\n\nTODO: explain the dragon egg\n\nI take the dragon egg.\n\n',
+      isRaw: true);
+  c.giveNewItemToPlayer(dragonEgg);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1010,19 +1016,50 @@ final Approach keepGateFromKeepBedroom =
     Approach('keep_bedroom', 'keep_gate', '', null);
 final Approach keepGateFromStagingArea =
     Approach('staging_area', 'keep_gate', '', null);
+final Room keepGate = Room('keep_gate', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. \n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
+      isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null,
+    isIdle: true,
+    positionX: 20,
+    positionY: 86,
+    mapName: 'The Keep\'s Gate',
+    firstMapName: 'The Keep',
+    hint: 'The entrance to the abandoned aristocratic mansion.',
+    firstHint:
+        'This part of the Pyramid seems to have been carved into an artistocratic residence. The strict simplicity of the ancient building gives way to nortonian redwood panels, doors and floors.');
+final Approach keepBedroomFromKeepDining =
+    Approach('keep_dining', 'keep_bedroom', '', null);
+final Approach keepBedroomFromKeepGate =
+    Approach('keep_gate', 'keep_bedroom', '', null);
+final Approach keepBedroomFromKeepServants =
+    Approach('keep_servants', 'keep_bedroom', '', null);
 
-class DebugSearchForKatana extends RoamingAction {
+class SearchBedroom extends RoamingAction {
   @override
-  final String name = 'debug_search_for_katana';
+  final String name = 'search_bedroom';
 
-  static final DebugSearchForKatana singleton = DebugSearchForKatana();
+  static final SearchBedroom singleton = SearchBedroom();
 
   @override
-  List<String> get commandPathTemplate => ['Rubble', 'Examine'];
+  List<String> get commandPathTemplate => ['furniture', 'search'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('keep_gate') != true) {
+    if (c.inRoomParent('keep_bedroom') != true) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -1035,12 +1072,14 @@ class DebugSearchForKatana extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'Something\'s sticking from the rubble. I pull it out. It\'s a katana. I take it.\n\n',
+    s.add('TODO: explain the family portrait\n\nI take the dragon egg.\n\n',
         isRaw: true);
-    c.giveNewItemToPlayer(katana);
+    c.giveNewItemToPlayer(dragonEgg);
 
-    return '${a.name} successfully performs DebugSearchForKatana';
+    c.learnAbout(kbKeepServantsLocation);
+    c.movePlayer('keep_servants');
+
+    return '${a.name} successfully performs SearchBedroom';
   }
 
   @override
@@ -1074,37 +1113,72 @@ class DebugSearchForKatana extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room keepGate = Room('keep_gate', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. \n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null,
-    isIdle: true,
-    positionX: 20,
-    positionY: 86,
-    mapName: 'The Keep\'s Gate',
-    firstMapName: 'The Keep',
-    hint: 'The entrance to the abandoned aristocratic mansion.',
-    firstHint:
-        'This part of the Pyramid seems to have been carved into an artistocratic residence. The strict simplicity of the ancient building gives way to nortonian redwood panels, doors and floors.');
-final Approach keepBedroomFromKeepDining =
-    Approach('keep_dining', 'keep_bedroom', '', null);
-final Approach keepBedroomFromKeepGate =
-    Approach('keep_gate', 'keep_bedroom', '', null);
-final Approach keepBedroomFromKeepServants =
-    Approach('keep_servants', 'keep_bedroom', '', null);
+class TakeFamilyPortrait extends RoamingAction {
+  @override
+  final String name = 'take_family_portrait';
+
+  static final TakeFamilyPortrait singleton = TakeFamilyPortrait();
+
+  @override
+  List<String> get commandPathTemplate => ['family portrait', 'take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_bedroom') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed('search_bedroom'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: explain the family portrait\n\nI take the family portrait. It\'s kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.\n\n',
+        isRaw: true);
+    w.updateActorById(playerId,
+        (b) => b..inventory.equipShield(familyPortrait, c.player.anatomy));
+
+    return '${a.name} successfully performs TakeFamilyPortrait';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
 
 class UseCompass extends RoamingAction {
   @override
@@ -1131,11 +1205,8 @@ class UseCompass extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The compass leads me through twisty little passages to the servants room.\n\n',
+        'The compass leads me through twisty little passages to the servants room.\n',
         isRaw: true);
-    c.learnAbout(kbKeepServantsLocation);
-    c.movePlayer('keep_servants');
-
     return '${a.name} successfully performs UseCompass';
   }
 
@@ -1194,7 +1265,11 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('TBA + lady hope\n', isRaw: true);
+  s.add(
+      'TODO: describe Lady Hope, and add fight with her\n\nI take the katana.\n\n',
+      isRaw: true);
+  w.updateActorById(ladyHopeId, (b) => b..inventory.remove(katana));
+  c.giveNewItemToPlayer(katana);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2995,7 +3070,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '(To be done: actual battle. Assume you won.)\n\nI take a curious device from the ground. Some kind of a compass.\n\n',
+      'TODO: an actual battle with the goblins.\n\nI take a curious device from the ground. Some kind of a compass.\n\n',
       isRaw: true);
   c.markHappened(evGoblinCampCleared);
   c.giveNewItemToPlayer(compass);
@@ -3559,7 +3634,7 @@ final Room meadowFight = Room(
             throw StateError(
                 "Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
           })).apply(c);
-      w.updateActorById(playerId, (b) => b..inventory.add(letterFromFather));
+      c.giveNewItemToPlayer(letterFromFather);
     },
     whereDescription: 'among the trees',
     groundMaterial: '{earth|dirt}');
@@ -3812,7 +3887,7 @@ final allRooms = <Room>[
   oracleMain,
   jungleEntrance,
   deathlessVillage,
-  dragonEgg,
+  dragonEggRoom,
   knightsHqMain,
   elevator12,
   slopes,
@@ -3869,9 +3944,9 @@ final allApproaches = <Approach>[
   oracleMainFromKnightsHqMain,
   jungleEntranceFromDeathlessVillage,
   jungleEntranceFromStagingArea,
-  deathlessVillageFromDragonEgg,
+  deathlessVillageFromDragonEggRoom,
   deathlessVillageFromJungleEntrance,
-  dragonEggFromDeathlessVillage,
+  dragonEggRoomFromDeathlessVillage,
   knightsHqMainFromBattlefield,
   knightsHqMainFromElevator12,
   knightsHqMainFromOracleMain,
@@ -3922,7 +3997,8 @@ final allActions = <RoamingAction>[
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
   GiveLairOfGodStarToDeathless.singleton,
-  DebugSearchForKatana.singleton,
+  SearchBedroom.singleton,
+  TakeFamilyPortrait.singleton,
   UseCompass.singleton,
   TalkToKatAboutBrother.singleton,
   TalkToKatGreetings.singleton,

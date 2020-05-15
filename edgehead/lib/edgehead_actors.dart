@@ -21,6 +21,24 @@ final Actor edgeheadDarg = Actor.initialized(
   team: defaultEnemyTeam,
 );
 
+/// The orc sixty-fiver.
+final Actor sixtyFiverOrc = Actor.initialized(
+  sixtyFiverOrcId,
+  StatefulRandom(~sixtyFiverOrcId).next,
+  "sixty-fiver",
+  adjective: "orcish",
+  pronoun: Pronoun.HE,
+  currentRoomName: 'battlefield',
+  currentWeapon: Item.weapon(
+    sixtyFiverSwordId,
+    WeaponType.sword,
+    adjective: 'sixty-fiver',
+    firstOwnerId: sixtyFiverOrcId,
+  ),
+  currentShield: sixtyFiverShield,
+  team: defaultEnemyTeam,
+);
+
 /// A special actor responsible for changing the state of the world at given
 /// opportunities, moving the world forward. A "hand of god".
 ///
@@ -45,6 +63,7 @@ final Actor edgeheadLadyHope = Actor.initialized(
   dexterity: 130,
   poseMax: Pose.combat,
   currentRoomName: 'keep_dining',
+  currentWeapon: katana,
   team: defaultEnemyTeam,
 );
 

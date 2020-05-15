@@ -9,9 +9,18 @@ POS: 9, 86
 MAP_NAME: Dining Room
 
 FIRST_DESCRIPTION:
-TBA + lady hope
+TODO: describe Lady Hope, and add fight with her
+
+I take the katana.
+
+[[CODE]]
+// This can be removed once we implement the fight.
+w.updateActorById(ladyHopeId, (b)=> b..inventory.remove(katana));
+c.giveNewItemToPlayer(katana);
+[[ENDCODE]]
 
 DESCRIPTION: $NONE
+
 
 NOTES:
 // Vignette:

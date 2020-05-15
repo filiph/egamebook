@@ -1,5 +1,5 @@
 APPROACH: $deathless_village FROM $jungle_entrance
-APPROACH: $deathless_village FROM $dragon_egg
+APPROACH: $deathless_village FROM $dragon_egg_room
 
 // ---
 ROOM: $deathless_village

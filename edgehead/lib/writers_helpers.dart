@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:edgehead/edgehead_actors.dart';
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_simulation.dart';
@@ -28,16 +29,6 @@ bool bothAreAlive(Actor a, Actor b) {
 FightSituation generateBattlefieldFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  final redOrcId = w.randomInt();
-  final redOrc = Actor.initialized(redOrcId, w.randomInt, "orc",
-      adjective: 'red',
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
-          adjective: 'serrated', firstOwnerId: redOrcId),
-      constitution: 2,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   final leatherJerkinOrcId = w.randomInt();
   final leatherJerkinOrc = Actor.initialized(
       leatherJerkinOrcId, w.randomInt, "orc",
@@ -50,12 +41,12 @@ FightSituation generateBattlefieldFight(ActionContext c,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
-  w.actors.addAll([redOrc, leatherJerkinOrc]);
+  w.actors.addAll([sixtyFiverOrc, leatherJerkinOrc]);
 
   return FightSituation.initialized(
     w.randomInt(),
     party,
-    [redOrc, leatherJerkinOrc],
+    [sixtyFiverOrc, leatherJerkinOrc],
     "{battlefield|concrete} floor",
     roomRoamingSituation,
     {},

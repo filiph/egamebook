@@ -20,4 +20,6 @@ const int rockFromMeadowId = 77005;
 
 const int sixtyFiverShieldId = 77010;
 
+const int sixtyFiverSwordId = 77013;
+
 const int tamarasDaggerId = 77002;

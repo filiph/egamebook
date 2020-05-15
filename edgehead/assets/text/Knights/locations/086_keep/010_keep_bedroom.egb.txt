@@ -17,6 +17,45 @@ DESCRIPTION: $NONE
 
 
 // ---
+ACTION: $search_bedroom
+COMMAND: furniture >> search
+FOR_LOCATION: $keep_bedroom
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: explain the family portrait
+
+I take the dragon egg.
+
+[[CODE]]
+c.giveNewItemToPlayer(dragonEgg);
+[[ENDCODE]]
+
+[[CODE]]
+c.learnAbout(kbKeepServantsLocation);
+c.movePlayer('keep_servants');
+[[ENDCODE]]
+
+
+// ---
+ACTION: $take_family_portrait
+COMMAND: family portrait >> take
+FOR_LOCATION: $keep_bedroom
+PREREQUISITES:
+w.actionHasBeenPerformed('search_bedroom')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: explain the family portrait
+
+I take the family portrait. It's kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.
+
+[[CODE]]
+// TODO: check if the player has crippled off-hand
+w.updateActorById(playerId,
+      (b) => b..inventory.equipShield(familyPortrait, c.player.anatomy));
+[[ENDCODE]]
+
+
+// ---
 ACTION: $use_compass
 COMMAND: inventory >> compass >> use
 FOR_LOCATION: $keep_bedroom
@@ -25,10 +64,6 @@ FOR_LOCATION: $keep_bedroom
 COMPLETE_SUCCESS_DESCRIPTION:
 The compass leads me through twisty little passages to the servants room.
 
-[[CODE]]
-c.learnAbout(kbKeepServantsLocation);
-c.movePlayer('keep_servants');
-[[ENDCODE]]
 
 NOTES:
 // Vignette:
