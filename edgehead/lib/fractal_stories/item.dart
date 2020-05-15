@@ -22,12 +22,26 @@ abstract class Item extends Object
   ///
   /// If no [damageCapability] is provided, then the item will be
   /// of [WeaponType.harmless].
-  factory Item(int id,
-      {@required String name,
-      @required String adjective,
-      bool nameIsProperNoun = false,
-      DamageCapabilityBuilder damageCapability,
-      int firstOwnerId}) {
+  ///
+  /// Note that [adjective] must be provided, unless:
+  ///
+  /// * The item has a proper noun (such as "Excalibur"), and so
+  ///   [nameIsProperNoun] is `true`.
+  /// * The item is common (such as "fist"), and so [isCommon] is `true`.
+  factory Item(
+    int id, {
+    @required String name,
+    String adjective,
+    bool nameIsProperNoun = false,
+    bool isCommon = false,
+    DamageCapabilityBuilder damageCapability,
+    int firstOwnerId,
+  }) {
+    assert(
+        nameIsProperNoun || isCommon || adjective != null,
+        "Item must either be a proper noun, or common, if it doesn't provide "
+        "an adjective. This item ($name, $id) is neither.");
+
     return _$Item((b) => b
       ..id = id
       ..damageCapability =

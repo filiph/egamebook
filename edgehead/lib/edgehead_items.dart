@@ -51,7 +51,6 @@ final Item lairOfGodStar = Item(
   lairOfGodStarId,
   name: "Lair of God Star",
   nameIsProperNoun: true,
-  adjective: null,
 );
 
 final Item letterFromFather = Item(

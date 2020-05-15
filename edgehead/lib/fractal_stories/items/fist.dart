@@ -9,7 +9,7 @@ Item createFist(BodyPart part) {
       part.designation == BodyPartDesignation.secondaryHand);
   return Item(StatefulRandom(part.id << 2).next(),
       name: "fist",
-      adjective: null,
+      isCommon: true,
       damageCapability: part.damageCapability.toBuilder(),
       firstOwnerId: part.firstOwnerId);
 }
