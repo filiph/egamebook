@@ -1,19 +1,11 @@
 import 'package:edgehead/edgehead_director.dart';
-import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
-import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
-import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
-import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:edgehead/writers_input.compiled.dart';
-
-import 'edgehead_ids.dart';
 
 const String carelessMonsterFoldFunctionHandle = "carelessMonster";
 

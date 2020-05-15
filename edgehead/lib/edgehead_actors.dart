@@ -1,17 +1,51 @@
 import 'package:edgehead/edgehead_ids.dart';
+import 'package:edgehead/edgehead_items.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
+import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 
+/// The orc leader.
+final Actor edgeheadDarg = Actor.initialized(
+  dargId,
+  StatefulRandom(~dargId).next,
+  "Darg",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.HE,
+  currentRoomName: 'crowdsource',
+  currentWeapon: akxe,
+  team: defaultEnemyTeam,
+);
+
+/// A special actor responsible for changing the state of the world at given
+/// opportunities, moving the world forward. A "hand of god".
+///
+/// Not that [Actor.isDirector] is `true`, which means that the director
+/// will not participate in normal gameplay.
 final Actor edgeheadDirector = Actor.initialized(
   directorId,
   StatefulRandom(directorId + ~42).next,
   "DIRECTOR",
   isDirector: true,
+);
+
+/// Lady Hope.
+final Actor edgeheadLadyHope = Actor.initialized(
+  ladyHopeId,
+  StatefulRandom(~ladyHopeId).next,
+  "Lady Hope",
+  nameIsProperNoun: true,
+  isSurvivor: true,
+  pronoun: Pronoun.SHE,
+  constitution: 2,
+  dexterity: 130,
+  poseMax: Pose.combat,
+  currentRoomName: 'keep_dining',
+  team: defaultEnemyTeam,
 );
 
 /// Trader Joseph's son.
@@ -28,12 +62,13 @@ final Actor edgeheadLeroy = Actor.initialized(
       adjective: "peasant", firstOwnerId: leroyId),
 );
 
+/// The player.
 final Actor edgeheadPlayer = Actor.initialized(
   playerId,
   StatefulRandom(~playerId).next,
   "Aren",
-  isSurvivor: true,
   nameIsProperNoun: true,
+  isSurvivor: true,
   isPlayer: true,
   pronoun: Pronoun.I,
   constitution: 2,
@@ -44,6 +79,7 @@ final Actor edgeheadPlayer = Actor.initialized(
   currentRoomName: Simulation.preStartBookName,
 );
 
+/// Tamara, player's guide.
 final Actor edgeheadTamara = Actor.initialized(
   tamaraId,
   StatefulRandom(~tamaraId).next,

@@ -17,75 +17,8 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
-final Item akxe = Item.weapon(
-  akxeId,
-  WeaponType.axe,
-  name: 'akxe',
-  adjective: 'steel',
-  /* TODO: add firstOwnerId: Darg */
-  isCleaving: true,
-);
-
-final Item banner = Item(
-  bannerId,
-  name: 'banner',
-  adjective: 'red',
-);
-
-final Item compass = Item(
-  compassId,
-  name: 'compass',
-  adjective: 'iron',
-  /* TODO: add firstOwnerId: a goblin in the camp */
-);
-
-final Item dragonEgg = Item(
-  dragonEggId,
-  name: 'egg',
-  adjective: 'dragon',
-);
-
-final Item familyPortrait = Item.weapon(
-  familyPortraitId,
-  WeaponType.shield,
-  name: 'painting',
-  adjective: 'family',
-  /* TODO: add firstOwnerId: Lady Hope */
-  /* TODO: make this useless as a shield, except Lady Hope doesn't attack */
-);
-
-final Item katana = Item.weapon(
-  katanaId,
-  WeaponType.sword,
-  name: "katana",
-  adjective: "ancient",
-  /* TODO: add firstOwnerId: Lady Hope */
-  isCleaving: true,
-);
-
-final Item lairOfGodStar = Item(
-  lairOfGodStarId,
-  name: "Lair of God Star",
-  nameIsProperNoun: true,
-  adjective: null,
-);
-
-final Item letterFromFather =
-    Item(letterFromFatherId, name: "letter", adjective: "father's");
-
-final Item rockFromMeadow = Item.weapon(rockFromMeadowId, WeaponType.rock,
-    name: "rock", adjective: "moldy");
-
-final Item sixtyFiverShield = Item.weapon(
-  sixtyFiverShieldId,
-  WeaponType.shield,
-  name: 'shield',
-  adjective: '65er',
-  /* TODO: add firstOwnerId: sixty-fiver */
-);
-
-final Item tamarasDagger = Item.weapon(tamarasDaggerId, WeaponType.dagger,
-    name: "dagger", adjective: "long", firstOwnerId: tamaraId);
+export 'package:edgehead/edgehead_ids.dart';
+export 'package:edgehead/edgehead_items.dart';
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;

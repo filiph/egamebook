@@ -88,8 +88,6 @@ class WritersInputGenerator extends Generator {
         .add(cb.Directive.import('package:built_value/serializer.dart'));
     lib.directives
         .add(cb.Directive.import('package:edgehead/writers_helpers.dart'));
-    lib.directives
-        .add(cb.Directive.import('package:edgehead/edgehead_ids.dart'));
 
     lib.body.add(cb.Code("part '$fileName.compiled.g.dart';"));
 
@@ -134,7 +132,8 @@ class WritersInputGenerator extends Generator {
         "// ignore_for_file: unused_import\n"
         "// ignore_for_file: unnecessary_parenthesis\n"
         "// ignore_for_file: lines_longer_than_80_chars\n"
-        "// ignore_for_file: type_annotate_public_apis\n\n"
+        "// ignore_for_file: type_annotate_public_apis\n"
+        "// ignore_for_file: prefer_const_constructors\n\n"
         "$source";
 
     result.writeln(sourceWithUnusedLinterIgnore);

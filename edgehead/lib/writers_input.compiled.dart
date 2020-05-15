@@ -10,6 +10,7 @@
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: type_annotate_public_apis
+// ignore_for_file: prefer_const_constructors
 
 import 'package:edgehead/fractal_stories/context.dart' show ActionContext;
 import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
@@ -48,7 +49,6 @@ import 'package:edgehead/fractal_stories/world_state.dart' show WorldState;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/writers_helpers.dart';
-import 'package:edgehead/edgehead_ids.dart';
 part 'writers_input.compiled.g.dart';
 
 const bool DEV_MODE = false;

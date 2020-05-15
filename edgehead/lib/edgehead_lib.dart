@@ -250,8 +250,13 @@ class EdgeheadGame extends Book {
       final startingTime = DateTime.utc(1294, 5, 9, 10, 0);
 
       world = WorldState((b) => b
-        ..actors = SetBuilder<Actor>(
-            <Actor>[edgeheadPlayer, edgeheadTamara, edgeheadLeroy])
+        ..actors = SetBuilder<Actor>(<Actor>[
+          edgeheadPlayer,
+          edgeheadTamara,
+          edgeheadLeroy,
+          edgeheadLadyHope,
+          edgeheadDarg,
+        ])
         ..director = edgeheadDirector.toBuilder()
         ..situations =
             ListBuilder<Situation>(<Situation>[edgeheadInitialSituation])
