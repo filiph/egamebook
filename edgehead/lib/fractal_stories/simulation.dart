@@ -3,6 +3,7 @@ library stranded.world;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/ink_ast.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/room_approach.dart';
@@ -10,7 +11,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/util/throw_if_duplicate.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
-import 'package:edgehead/fractal_stories/ink_ast.dart';
 import 'package:edgehead/writers_input.compiled.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -54,6 +54,11 @@ class EventCallback {
 /// the behavior and immutable structure of the system goes here.
 @immutable
 class Simulation {
+  /// This is the name of the first room. It is never visited by the actor.
+  /// Writers should start their game with an implicit approach from the room
+  /// to the starting room of their adventure.
+  static const preStartBookName = 'pre_start_book';
+
   /// The (immutable) rooms of this world.
   ///
   /// Rooms are the same no matter what happens to the world.
@@ -163,13 +168,6 @@ class Simulation {
     }
   }
 
-  InkAst getInkByName(String inkAstName) {
-    if (!allInks.containsKey(inkAstName)) {
-      throw StateError('missing ink: $inkAstName');
-    }
-    return allInks[inkAstName];
-  }
-
   /// Lists all applicable approaches from [room] in current [world].
   ///
   /// Algorithm
@@ -221,6 +219,13 @@ class Simulation {
         }
       }
     }
+  }
+
+  InkAst getInkByName(String inkAstName) {
+    if (!allInks.containsKey(inkAstName)) {
+      throw StateError('missing ink: $inkAstName');
+    }
+    return allInks[inkAstName];
   }
 
   /// Fetches the [Room] with the [roomName].
