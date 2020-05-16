@@ -18,6 +18,5 @@ DESCRIPTION: $NONE
 
 NOTES:
 
+- Ada the farmer, Jisad's wife, Sven's mother.
 - A couple is having an argument and packing.
-- Smell of coffee
-- A variant much later: everyone's dead, only smell of coffee is still here.

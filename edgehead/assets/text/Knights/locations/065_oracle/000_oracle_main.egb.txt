@@ -11,9 +11,28 @@ MAP_NAME: Oracle's
 DESCRIPTION: 
 The Oracle is here.
 
+
+// ---
+ACTION: $ask_oracle_about_keep_gate
+COMMAND: Oracle >> "Can you help me open the Keep?"
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+c.playerHasVisited('keep_gate')
+// TODO: add "kbOracleWorkedInKeep"
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: describe
+// Should be INK
+
+[[CODE]]
+c.learnAbout(kbKeepGateUnlock);
+[[ENDCODE]]
+
 NOTES:
 
 // Maybe this is where we smell the coffee, and later the room is taken over, and the Oracle is dead, and all we smell is the coffee.
+
+- Oracle can give: kbKeepGateUnlock (she was working there as a child)
 
 // Vignette:
 

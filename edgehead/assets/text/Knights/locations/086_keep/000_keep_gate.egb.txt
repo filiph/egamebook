@@ -22,8 +22,68 @@ This is a lord's house, except it doesn't stand on top of a hill or next to a la
 DESCRIPTION: $NONE
 
 
+// ---
+ACTION: $examine_gate
+COMMAND: gate >> examine
+FOR_LOCATION: $keep_gate
+
+COMPLETE_SUCCESS_DESCRIPTION:
+// TODO: could be destroyed
+TODO: describe gate
+
+// Include some hints that Ada might know about it.
+
+A big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".
+
+
+// ---
+ACTION: $attempt_open_gate
+COMMAND: gate >> open
+FOR_LOCATION: $keep_gate
+PREREQUISITES:
+!c.hasHappened(evKeepDestroyedGate)
+&&
+!c.hasLearnedAbout(kbKeepGateUnlock)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I attempt to open the gate but it's closed tight. Maybe there's a trick to unlock it using some of the intricate woodwork, but my random mashing of various ornaments does nothing.
+
+I could also bring it down using an axe. It's wood, after all.
+
+
+// ---
+ACTION: $open_gate_unlock
+COMMAND: gate >> open
+FOR_LOCATION: $keep_gate
+PREREQUISITES:
+!c.hasHappened(evKeepDestroyedGate)
+&&
+c.hasLearnedAbout(kbKeepGateUnlock)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: describe unlocking of gate
+
+[[CODE]]
+w.recordCustom(evKeepUnlockedGate);
+[[ENDCODE]]
+
+// ---
+ACTION: $destroy_gate_with_axe
+COMMAND: gate >> destroy
+FOR_LOCATION: $keep_gate
+PREREQUISITES:
+c.player.inventory.hasWeapon(WeaponType.axe)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: describe chopping down of gate
+// This can happen even _after_ the player unlocked the gate.
+
+[[CODE]]
+w.recordCustom(evKeepDestroyedGate);
+[[ENDCODE]]
+
+
 NOTES:
-// TODO: $attempt_open_gate --> learn it's nailed down
 // TODO: the three different ways to get past the gate: Talk to someone and learn the access path; Use stamina to move open a nailed door, or use an axe.; Descend from way above
 
 // A patrol might come by at points.
@@ -45,9 +105,3 @@ There are the lord's quarters, which still has some coin. You can "rummage throu
 There are also servants quarters, with evidence of goblins.
 
 
-// Vignette
-"Eat the rich"
-
-> A big warning sign on the wall says "Haunted." Below the pain, an older, fainter sign says "Eat the rich".
-
-At the keep

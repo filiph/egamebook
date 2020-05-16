@@ -32,3 +32,7 @@ c.removeItemFromPlayer(lairOfGodStarId);
 NOTES:
 
 TODO: Make it harder to get here. Add at least one "twisty little passages" area in between jungle entrance and here. Or just "jungle floor", which is the place where you can meet lizard man
+
+TODO: raising a well-preserved marine should also trigger evDeathlessRespectGained
+
+TODO: killing the lizardman when he's in the Jungle should also trigger evDeathlessRespectGained

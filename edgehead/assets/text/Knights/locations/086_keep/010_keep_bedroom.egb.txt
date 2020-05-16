@@ -1,4 +1,9 @@
 APPROACH: $keep_bedroom FROM $keep_gate
+PREREQUISITES:
+c.hasHappened(evKeepUnlockedGate)
+||
+c.hasHappened(evKeepDestroyedGate)
+
 APPROACH: $keep_bedroom FROM $keep_dining
 APPROACH: $keep_bedroom FROM $keep_servants
 

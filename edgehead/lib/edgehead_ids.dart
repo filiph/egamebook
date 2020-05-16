@@ -28,6 +28,10 @@ const evKarlKilled = "evKarlKilled";
 
 const evKarlKilledViaNecromancy = "evKarlKilledViaNecromancy";
 
+const evKeepDestroyedGate = "evKeepDestroyedGate";
+
+const evKeepUnlockedGate = "evKeepUnlockedGate";
+
 const evOpenedDam = "evOpenedDam";
 
 const kbBlindGuide = "kbBlindGuide";
@@ -35,6 +39,8 @@ const kbBlindGuide = "kbBlindGuide";
 const kbGoblinCampSmoke = "kbGoblinCampSmoke";
 
 const kbJisadHatesMagic = "kbJisadHatesMagic";
+
+const kbKeepGateUnlock = "kbKeepGateUnlock";
 
 const kbKeepServantsLocation = "kbKeepServantsLocation";
 

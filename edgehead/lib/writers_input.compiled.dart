@@ -880,6 +880,72 @@ final Room battlefield = Room(
     whereDescription: 'among the columns');
 final Approach oracleMainFromKnightsHqMain =
     Approach('knights_hq_main', 'oracle_main', '', null);
+
+class AskOracleAboutKeepGate extends RoamingAction {
+  @override
+  final String name = 'ask_oracle_about_keep_gate';
+
+  static final AskOracleAboutKeepGate singleton = AskOracleAboutKeepGate();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Oracle', '"Can you help me open the Keep?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(c.playerHasVisited('keep_gate'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: describe\n\n', isRaw: true);
+    c.learnAbout(kbKeepGateUnlock);
+
+    return '${a.name} successfully performs AskOracleAboutKeepGate';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1166,6 +1232,262 @@ final Approach keepGateFromKeepBedroom =
     Approach('keep_bedroom', 'keep_gate', '', null);
 final Approach keepGateFromStagingArea =
     Approach('staging_area', 'keep_gate', '', null);
+
+class AttemptOpenGate extends RoamingAction {
+  @override
+  final String name = 'attempt_open_gate';
+
+  static final AttemptOpenGate singleton = AttemptOpenGate();
+
+  @override
+  List<String> get commandPathTemplate => ['gate', 'open'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_gate') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evKeepDestroyedGate) &&
+        !c.hasLearnedAbout(kbKeepGateUnlock))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I attempt to open the gate but it\'s closed tight. Maybe there\'s a trick to unlock it using some of the intricate woodwork, but my random mashing of various ornaments does nothing.\n\nI could also bring it down using an axe. It\'s wood, after all.\n',
+        isRaw: true);
+    return '${a.name} successfully performs AttemptOpenGate';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class DestroyGateWithAxe extends RoamingAction {
+  @override
+  final String name = 'destroy_gate_with_axe';
+
+  static final DestroyGateWithAxe singleton = DestroyGateWithAxe();
+
+  @override
+  List<String> get commandPathTemplate => ['gate', 'destroy'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_gate') != true) {
+      return false;
+    }
+    if (!(c.player.inventory.hasWeapon(WeaponType.axe))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: describe chopping down of gate\n\n', isRaw: true);
+    w.recordCustom(evKeepDestroyedGate);
+
+    return '${a.name} successfully performs DestroyGateWithAxe';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ExamineGate extends RoamingAction {
+  @override
+  final String name = 'examine_gate';
+
+  static final ExamineGate singleton = ExamineGate();
+
+  @override
+  List<String> get commandPathTemplate => ['gate', 'examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_gate') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: describe gate\n\n\nA big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".\n',
+        isRaw: true);
+    return '${a.name} successfully performs ExamineGate';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class OpenGateUnlock extends RoamingAction {
+  @override
+  final String name = 'open_gate_unlock';
+
+  static final OpenGateUnlock singleton = OpenGateUnlock();
+
+  @override
+  List<String> get commandPathTemplate => ['gate', 'open'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_gate') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evKeepDestroyedGate) &&
+        c.hasLearnedAbout(kbKeepGateUnlock))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: describe unlocking of gate\n\n', isRaw: true);
+    w.recordCustom(evKeepUnlockedGate);
+
+    return '${a.name} successfully performs OpenGateUnlock';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1194,7 +1516,14 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
 final Approach keepBedroomFromKeepDining =
     Approach('keep_dining', 'keep_bedroom', '', null);
 final Approach keepBedroomFromKeepGate =
-    Approach('keep_gate', 'keep_bedroom', '', null);
+    Approach('keep_gate', 'keep_bedroom', '', null,
+        isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return c.hasHappened(evKeepUnlockedGate) ||
+      c.hasHappened(evKeepDestroyedGate);
+});
 final Approach keepBedroomFromKeepServants =
     Approach('keep_servants', 'keep_bedroom', '', null);
 
@@ -4151,7 +4480,12 @@ final allActions = <RoamingAction>[
   KarlUseNecromancy.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
+  AskOracleAboutKeepGate.singleton,
   GiveLairOfGodStarToDeathless.singleton,
+  AttemptOpenGate.singleton,
+  DestroyGateWithAxe.singleton,
+  ExamineGate.singleton,
+  OpenGateUnlock.singleton,
   SearchBedroom.singleton,
   TakeFamilyPortrait.singleton,
   UseCompass.singleton,
