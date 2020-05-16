@@ -1204,8 +1204,6 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
         'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
 final Approach farmersVillageFromFloatingPoint =
     Approach('floating_point', 'farmers_village', '', null);
-final Approach farmersVillageFromPyramidEntrance =
-    Approach('pyramid_entrance', 'farmers_village', '', null);
 final Approach farmersVillageFromSlopes =
     Approach('slopes', 'farmers_village', '', null);
 final Approach farmersVillageFromStagingArea =
@@ -4442,7 +4440,6 @@ final allApproaches = <Approach>[
   stagingAreaFromKnightsHqMain,
   stagingAreaFromPyramidEntrance,
   farmersVillageFromFloatingPoint,
-  farmersVillageFromPyramidEntrance,
   farmersVillageFromSlopes,
   farmersVillageFromStagingArea,
   keepGateFromKeepBedroom,

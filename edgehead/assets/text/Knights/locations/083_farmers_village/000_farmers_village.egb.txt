@@ -1,5 +1,4 @@
 APPROACH: $farmers_village FROM $staging_area
-APPROACH: $farmers_village FROM $pyramid_entrance
 APPROACH: $farmers_village FROM $slopes
 APPROACH: $farmers_village FROM $floating_point
 
