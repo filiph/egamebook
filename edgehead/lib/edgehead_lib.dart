@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/edgehead_actors.dart';
+import 'package:edgehead/edgehead_director.dart';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;
@@ -247,8 +248,6 @@ class EdgeheadGame extends Book {
       load(saveGameSerialized);
     } else {
       // Creating a new game from start.
-      final startingTime = DateTime.utc(1294, 5, 9, 10, 0);
-
       world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(<Actor>[
           edgeheadPlayer,
@@ -263,7 +262,7 @@ class EdgeheadGame extends Book {
             ListBuilder<Situation>(<Situation>[edgeheadInitialSituation])
         ..global = global
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)
-        ..time = startingTime);
+        ..time = edgeheadStartingTime);
     }
 
     storyline = Storyline(referredEntities: world.actors);

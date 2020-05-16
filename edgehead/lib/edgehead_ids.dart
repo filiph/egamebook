@@ -34,6 +34,8 @@ const evKeepUnlockedGate = "evKeepUnlockedGate";
 
 const evOpenedDam = "evOpenedDam";
 
+const evQuake1 = "evQuake1";
+
 const kbBlindGuide = "kbBlindGuide";
 
 const kbGoblinCampSmoke = "kbGoblinCampSmoke";

@@ -39,18 +39,6 @@ final Actor sixtyFiverOrc = Actor.initialized(
   team: defaultEnemyTeam,
 );
 
-/// A special actor responsible for changing the state of the world at given
-/// opportunities, moving the world forward. A "hand of god".
-///
-/// Not that [Actor.isDirector] is `true`, which means that the director
-/// will not participate in normal gameplay.
-final Actor edgeheadDirector = Actor.initialized(
-  directorId,
-  StatefulRandom(directorId + ~42).next,
-  "DIRECTOR",
-  isDirector: true,
-);
-
 /// Lady Hope.
 final Actor edgeheadLadyHope = Actor.initialized(
   ladyHopeId,

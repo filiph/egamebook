@@ -1,10 +1,26 @@
+import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:edgehead/writers_helpers.dart';
 
 import 'edgehead_ids.dart';
+
+/// A special actor responsible for changing the state of the world at given
+/// opportunities, moving the world forward. A "hand of god".
+///
+/// Not that [Actor.isDirector] is `true`, which means that the director
+/// will not participate in normal gameplay.
+final Actor edgeheadDirector = Actor.initialized(
+  directorId,
+  StatefulRandom(directorId + ~42).next,
+  "DIRECTOR",
+  isDirector: true,
+);
+
+final DateTime edgeheadStartingTime = DateTime.utc(1294, 5, 9, 10, 0);
 
 final _default = Rule(_id++, 0, false, (ApplicabilityContext c) {
   return true;
@@ -62,6 +78,17 @@ final _playerHurt = Rule(_id++, 1, false, (ApplicabilityContext c) {
   s.add('I still hurt.', isRaw: true);
 });
 
+final _quake1 = Rule(_id++, 1, true, (ApplicabilityContext c) {
+  return !c.inRoomParent('conet') &&
+      c.world.time
+          .isAfter(edgeheadStartingTime.add(const Duration(minutes: 30)));
+}, (ActionContext c) {
+  final Storyline s = c.outputStoryline;
+  s.addParagraph();
+  s.add('Suddenly, a quake. TODO: describe', isRaw: true);
+  c.outputWorld.recordCustom(evQuake1);
+});
+
 /// These are the rules that the director in the game will be using
 /// whenever there is an idle moment.
 Ruleset get edgeheadDirectorRuleset {
@@ -70,5 +97,6 @@ Ruleset get edgeheadDirectorRuleset {
     _leroyQuits,
     _karlHeardFirstTime,
     _default,
+    _quake1,
   ]);
 }

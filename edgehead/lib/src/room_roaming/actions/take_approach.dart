@@ -119,6 +119,13 @@ class TakeApproachAction extends Action<RoomPath> {
   }
 
   @override
+  Duration getRecoveryDuration(ApplicabilityContext context, RoomPath _) {
+    // Moving around the map takes significantly more time than the ordinary
+    // action.
+    return const Duration(minutes: 10);
+  }
+
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, RoomPath path) =>
       "WARNING should not be user-visible";
 
