@@ -87,7 +87,10 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
       a.isPlayer &&
       a.pose >= Pose.standing &&
       world.actors
-              .where((o) => o.isAnimated && o.team.isFriendWith(enemy.team))
+              .where((o) =>
+                  o.isAnimated &&
+                  o.currentRoomName == a.currentRoomName &&
+                  o.team.isFriendWith(enemy.team))
               .length >=
           2 &&
       !enemy.isConfused;
