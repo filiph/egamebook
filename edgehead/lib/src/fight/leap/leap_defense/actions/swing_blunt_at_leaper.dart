@@ -13,6 +13,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
 
 class SwingBluntAtLeaper extends EnemyTargetAction {
@@ -132,6 +133,9 @@ class SwingBluntAtLeaper extends EnemyTargetAction {
           positive: true,
           actionThread: thread);
       s.add('something cracks');
+      final groundMaterial = getGroundMaterial(w);
+      enemy.report(s, "<subject> {crash<es> to|land<s> on} the $groundMaterial",
+          negative: true);
       killHumanoid(context, result.victim.id);
     }
 
