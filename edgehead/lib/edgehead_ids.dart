@@ -12,6 +12,10 @@ library edgehead.ids;
 part 'edgehead_ids_actors.dart';
 part 'edgehead_ids_items.dart';
 
+const evCaravanArrived = "evCaravanArrived";
+
+const evCaravanDeparted = "evCaravanDeparted";
+
 const evDeathlessRespectGained = "evDeathlessRespectGained";
 
 const evDirectorNoRuleApplicable = "evDirectorNoRuleApplicable";
@@ -34,7 +38,13 @@ const evKeepUnlockedGate = "evKeepUnlockedGate";
 
 const evOpenedDam = "evOpenedDam";
 
+const evOrcOffensive = "evOrcOffensive";
+
 const evQuake1 = "evQuake1";
+
+const evQuake2 = "evQuake2";
+
+const evQuake3 = "evQuake3";
 
 const kbBlindGuide = "kbBlindGuide";
 
