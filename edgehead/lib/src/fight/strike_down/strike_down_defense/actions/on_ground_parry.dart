@@ -53,9 +53,7 @@ class OnGroundParry extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    a.report(
-        s,
-        "<subject> tr<ies> to {parry|deflect it}");
+    a.report(s, "<subject> tr<ies> to {parry|deflect it}");
     Randomly.run(
         () => a.report(s, "<subject> {fail<s>|<does>n't succeed}", but: true),
         () => enemy.report(s, "<subject> <is> too quick for <object>",
