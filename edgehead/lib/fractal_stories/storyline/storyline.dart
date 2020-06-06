@@ -385,17 +385,21 @@ class Storyline {
         buf.write(" ");
       }
 
+      // Add adjective when appropriate.
+      String fullName = article.adjective == null
+          ? article.name
+          : "${article.adjective} ${article.name}";
       // Adds 'the', 'a', or nothing.
       // Code mostly copy-pasted from [_addParticles].
       String articleWithParticle;
       if (_hasBeenMentioned(article, time)) {
-        articleWithParticle = "the ${article.name}";
+        articleWithParticle = "the $fullName";
       } else {
         _firstMentions[article.id] = time;
-        if (article.name.startsWith(_vowelsRegExp)) {
-          articleWithParticle = "an ${article.name}";
+        if (fullName.startsWith(_vowelsRegExp)) {
+          articleWithParticle = "an $fullName";
         } else {
-          articleWithParticle = "a ${article.name}";
+          articleWithParticle = "a $fullName";
         }
       }
 
