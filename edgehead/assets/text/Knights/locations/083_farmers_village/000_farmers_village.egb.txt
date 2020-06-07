@@ -9,6 +9,7 @@ FLAGS: $IDLE
 
 POS: 35, 83
 MAP_NAME: Farmers' village
+HINT: A settlement of people who farm the vines that grow on the outside of the Pyramid.
 
 FIRST_MAP_NAME: A settled area
 FIRST_HINT: From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.

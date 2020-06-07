@@ -83,6 +83,11 @@ class GeneratedRoom extends GeneratedGameObject {
         isApplicable.bakeAsClosure()
       ]);
       namedArguments["prerequisite"] = prerequisite;
+
+      if (_map.containsKey('VARIANT_FIRST_DESCRIPTION')) {
+        namedArguments['variantFirstDescribe'] =
+            createDescriber(_map['VARIANT_FIRST_DESCRIPTION']);
+      }
     }
 
     if (_map.containsKey('FLAGS')) {

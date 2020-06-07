@@ -94,6 +94,12 @@ class Room {
   /// an [AssertionError] is thrown.
   final RoomDescriber describe;
 
+  /// The description for when the player has visited this place before
+  /// (they got the [firstDescribe], either from the main room, or a variant
+  /// of it) but this is the first time they are visiting _this particular_
+  /// variant.
+  final RoomDescriber variantFirstDescribe;
+
   /// Optionally, a [Room] can have a parent room. In that case, this room
   /// is a specialized version (variant) of the parent.
   ///
@@ -165,6 +171,7 @@ class Room {
     this.groundMaterial = "ground",
     this.parent,
     this.prerequisite,
+    this.variantFirstDescribe,
     this.afterMonstersCleared,
     this.whereDescription,
     this.isIdle = false,

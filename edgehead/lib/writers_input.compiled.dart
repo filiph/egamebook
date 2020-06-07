@@ -1263,25 +1263,33 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
     positionX: 35,
     positionY: 83,
     mapName: 'Farmers\' village',
-    firstMapName: 'A settled area');
-final Room farmersVillageQuake1 = Room('farmers_village_quake1',
+    firstMapName: 'A settled area',
+    hint:
+        'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
+    firstHint:
+        'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
+final Room farmersVillageQuake1 = Room(
+    'farmers_village_quake1',
     (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null,
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
     parent: 'farmers_village',
     prerequisite: Prerequisite(829538554, 2, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
@@ -1289,12 +1297,23 @@ final Room farmersVillageQuake1 = Room('farmers_village_quake1',
       final Actor a = c.actor;
       return c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived);
     }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The farmers look a lot more stressed. No more polite nods. Someone\'s repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
+          isRaw: true);
+    },
     isIdle: true,
     positionX: 35,
     positionY: 83,
     mapName: 'Farmers\' village',
     firstMapName: 'A settled area',
-    hint: null,
+    hint:
+        'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
     firstHint:
         'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.',
     afterMonstersCleared: null,

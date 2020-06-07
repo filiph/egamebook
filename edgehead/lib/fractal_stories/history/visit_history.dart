@@ -52,8 +52,17 @@ abstract class VisitHistory
     assert(room != null);
     final key = getKey(room);
     return SerialQueryResult(records[key].where((rec) {
+      if (rec.actorId != actor.id) return false;
       if (rec.roomName == room.name) return true;
-      if (includeVariants && rec.parentRoomName == room.name) return true;
+      if (includeVariants) {
+        if (rec.parentRoomName != null) {
+          if (rec.parentRoomName == room.name) return true;
+          if (rec.parentRoomName == room.parent) return true;
+        }
+        if (room.parent != null) {
+          if (rec.roomName == room.parent) return true;
+        }
+      }
       return false;
     }));
   }

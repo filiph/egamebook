@@ -129,20 +129,49 @@ abstract class RoomRoamingSituation extends Object
     w.recordVisit(a, room);
 
     if (!silent) {
-      if (room.firstDescribe == null ||
-          originalWorld.visitHistory.query(a, room).hasHappened) {
-        // Show short description if there is no long description or
-        // if the actor has been here.
+      final hasVisitedThisVariant =
+          originalWorld.visitHistory.query(a, room).hasHappened;
+      final hasVisitedAnyVariant = originalWorld.visitHistory
+          .query(a, room, includeVariants: true)
+          .hasHappened;
+
+      if (!hasVisitedAnyVariant) {
+        // The very first time here.
+        if (room.firstDescribe == null) {
+          // Show short description if there is no long description.
+          assert(
+              room.describe != null,
+              "$room visited for the second time but "
+              "no regular description available.");
+          room.describe(context);
+        } else {
+          // Otherwise, show long description.
+          s.addParagraph();
+          room.firstDescribe(context);
+          s.addParagraph();
+        }
+      } else if (!hasVisitedThisVariant) {
+        // First time in this particular variant of the room.
+        if (room.variantFirstDescribe == null) {
+          // Show short description if there is no long description.
+          assert(
+              room.describe != null,
+              "$room (variant) visited for the second time but "
+              "no regular description available.");
+          room.describe(context);
+        } else {
+          // Otherwise, show long variant description.
+          s.addParagraph();
+          room.variantFirstDescribe(context);
+          s.addParagraph();
+        }
+      } else {
+        // The player has been here, even in the current variant of the room.
         assert(
             room.describe != null,
             "$room visited for the second time but "
             "no regular description available.");
         room.describe(context);
-      } else {
-        // Otherwise, show long description.
-        s.addParagraph();
-        room.firstDescribe(context);
-        s.addParagraph();
       }
 
       final localCorpses = _getCorpses(w.build())
