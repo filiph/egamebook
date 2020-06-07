@@ -10,6 +10,9 @@ FLAGS: $IDLE
 POS: 35, 83
 MAP_NAME: Farmers' village
 
+FIRST_MAP_NAME: A settled area
+FIRST_HINT: From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.
+
 FIRST_DESCRIPTION:
 The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.
 

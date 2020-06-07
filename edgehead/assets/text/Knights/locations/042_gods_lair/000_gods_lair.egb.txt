@@ -32,17 +32,14 @@ ROOM: $gods_lair_after_necromancy
 
 VARIANT_OF: $gods_lair
 
-FLAGS: $IDLE
-
-POS: 35, 42
-MAP_NAME: God's Lair
-
 RULE: c.hasHappened(evKarlKilledViaNecromancy)
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 The gate is open. On it, there is a small star decoration.
 
 Beyond the gate, a giant's carcass lies. It's belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.
+
+DESCRIPTION: $NONE
 
 // ---
 
