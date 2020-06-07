@@ -59,7 +59,7 @@ class WritersInputGenerator extends Generator {
         final path = id.uri.toString();
         final List<String> lines =
             (await buildStep.readAsString(id)).split("\n");
-        final rawMaps = parseWritersOutput(lines);
+        final rawMaps = parseWritersOutput(lines, id);
         for (var rawMap in rawMaps) {
           if (rawMap.keys.contains("ROOM")) {
             var room = generateRoom(rawMap, path);
@@ -103,6 +103,7 @@ class WritersInputGenerator extends Generator {
     final List<GeneratedRoom> rooms =
         objects.whereType<GeneratedRoom>().toList(growable: false);
     for (final room in rooms) {
+      room.maybeInheritFromParent(rooms);
       room.registerReachableRooms(rooms.map((r) => r.writersName));
     }
 

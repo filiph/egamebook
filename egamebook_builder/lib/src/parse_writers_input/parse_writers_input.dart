@@ -1,5 +1,6 @@
 library parse_writers_input;
 
+import 'package:build/src/asset/id.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:logging/logging.dart';
 
@@ -52,7 +53,8 @@ Spec generateAllRooms(List<GeneratedGameObject> objects) {
 
 /// Parses a file and returns all objects specified in that file as a raw
 /// map of keys and values.
-Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
+Iterable<Map<String, String>> parseWritersOutput(
+    List<String> contents, AssetId id) sync* {
   var result = Map<String, String>();
   String currentKey;
   var currentValue = StringBuffer();
@@ -62,7 +64,8 @@ Iterable<Map<String, String>> parseWritersOutput(List<String> contents) sync* {
     var string = currentValue.toString().trim();
     if (string.isNotEmpty) {
       if (result.containsKey(currentKey)) {
-        log.severe("$currentKey defined more than once for $result");
+        log.severe("'$currentKey' defined with new value '$string' although it "
+            "is already defined once in $id: $result");
         return;
       }
       result[currentKey] = string;

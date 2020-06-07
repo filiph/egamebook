@@ -20,6 +20,23 @@ GeneratedGameObject generateRoom(Map<String, String> map, String dirPath) {
 }
 
 class GeneratedRoom extends GeneratedGameObject {
+  /// These are the keys that are going to be inherited by a variant from
+  /// its parent, if they're missing.
+  static const List<String> inheritableKeys = [
+    'FLAGS',
+    'POS',
+    'FIGHT_SITUATION',
+    'MAP_NAME',
+    'FIRST_MAP_NAME',
+    'HINT',
+    'FIRST_HINT',
+    'AFTER_MONSTERS_CLEARED',
+    'WHERE',
+    'GROUND_MATERIAL',
+    'FIRST_DESCRIPTION',
+    'DESCRIPTION'
+  ];
+
   final Map<String, String> _map;
 
   List<String> _reachableRooms;
@@ -27,6 +44,8 @@ class GeneratedRoom extends GeneratedGameObject {
   GeneratedRoom(Map<String, String> map, String path)
       : _map = map,
         super(map['ROOM'], reCase(map['ROOM']).camelCase, roomType, path);
+
+  bool get isVariant => _map.containsKey('VARIANT_OF');
 
   @override
   Iterable<Spec> finalizeAst() sync* {
@@ -42,8 +61,6 @@ class GeneratedRoom extends GeneratedGameObject {
     }
 
     final Map<String, Expression> namedArguments = {};
-
-    final isVariant = _map.containsKey('VARIANT_OF');
 
     if (isVariant) {
       if (!_map.containsKey('RULE')) {
@@ -140,6 +157,29 @@ class GeneratedRoom extends GeneratedGameObject {
     // TODO: investigate if okay to use assignFinal (or even const)
     var assignment = newInstance.assignFinal(instanceName, roomType);
     yield assignment.statement;
+  }
+
+  /// If this [isVariant], then we find the parent (the room of which this one
+  /// is a variant) in [rooms], go through [inheritableKeys] and copy
+  /// over values that are not in [_map].
+  void maybeInheritFromParent(List<GeneratedRoom> rooms) {
+    if (!isVariant) return;
+
+    final parentName =
+        GeneratedGameObject.validateAndRemoveDollarSign(_map['VARIANT_OF']);
+    final parent = rooms.singleWhere(
+        (candidate) => candidate.writersName == parentName,
+        orElse: () => null);
+
+    if (parent == null) {
+      log.severe('Room $name is defining a parent ($parentName) but '
+          'this is not in the rooms: $rooms.');
+      return;
+    }
+
+    for (final key in inheritableKeys) {
+      _map.putIfAbsent(key, () => parent._map[key]);
+    }
   }
 
   /// Registers the rooms that are reachable. This makes sure that we don't

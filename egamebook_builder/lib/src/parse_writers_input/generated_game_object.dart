@@ -30,4 +30,7 @@ abstract class GeneratedGameObject {
     }
     return writersName.substring(1);
   }
+
+  @override
+  String toString() => 'GeneratedGameObject<${type.symbol}, $writersName>';
 }
