@@ -1,0 +1,43 @@
+APPROACH: $pond FROM $jungle_entrance
+
+// ---
+ROOM: $pond
+
+POS: 14, 74
+MAP_NAME: Pond
+
+FIRST_DESCRIPTION:
+A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond.
+
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $pond_with_lizardman
+VARIANT_OF: $pond
+
+RULE:
+c.hasHappened(evOpenedDam)
+
+FIRST_DESCRIPTION:
+A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.
+
+VARIANT_FIRST_DESCRIPTION:
+A lizardman stands in front of the pond.
+
+
+
+// ---
+ACTION: $attack_lizard_near_pond
+FOR_LOCATION: $pond
+
+COMMAND: Lizardman >> Attack
+
+PREREQUISITES:
+c.hasHappened(evOpenedDam) && !c.hasHappened(evKilledLizardman)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: fight. Assuming victory.
+
+[[CODE]]
+c.markHappened(evKilledLizardman);
+[[ENDCODE]]

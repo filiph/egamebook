@@ -173,7 +173,7 @@ This is often caused by an earlier problem (for example, hitting save while
 your `egb.txt` files are in some in-between state), which makes the source
 generator build the files in the wrong order. The remedy is to run:
 
-    pub run build_runner clear
+    pub run build_runner clean
 
 After this, run the `pub run build_runner watch` command again and all should
 be good. 

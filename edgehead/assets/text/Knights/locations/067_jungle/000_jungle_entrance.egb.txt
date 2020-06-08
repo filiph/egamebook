@@ -1,5 +1,6 @@
 APPROACH: $jungle_entrance FROM $staging_area
 APPROACH: $jungle_entrance FROM $deathless_village
+APPROACH: $jungle_entrance FROM $pond
 
 // ---
 ROOM: $jungle_entrance
@@ -11,6 +12,19 @@ FIRST_DESCRIPTION:
 Corridors full of vegetation. Path through that, like a path in a forest, but indoors.
 
 DESCRIPTION: $NONE
+
+
+// ---
+ROOM: $jungle_entrance_muddy_footprints
+VARIANT_OF: $jungle_entrance
+
+RULE:
+c.hasHappened(evOpenedDam)
+
+VARIANT_FIRST_DESCRIPTION:
+Muddy footprints.
+
+
 
 NOTES:
 

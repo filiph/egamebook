@@ -36,6 +36,8 @@ const evKeepDestroyedGate = "evKeepDestroyedGate";
 
 const evKeepUnlockedGate = "evKeepUnlockedGate";
 
+const evKilledLizardman = "evKilledLizardman";
+
 const evOpenedDam = "evOpenedDam";
 
 const evOrcOffensive = "evOrcOffensive";

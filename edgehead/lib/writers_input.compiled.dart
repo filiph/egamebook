@@ -1022,6 +1022,8 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
     isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
 final Approach jungleEntranceFromDeathlessVillage =
     Approach('deathless_village', 'jungle_entrance', '', null);
+final Approach jungleEntranceFromPond =
+    Approach('pond', 'jungle_entrance', '', null);
 final Approach jungleEntranceFromStagingArea =
     Approach('staging_area', 'jungle_entrance', '', null);
 final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
@@ -1041,6 +1043,46 @@ final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 21, positionY: 72, mapName: 'Jungle');
+final Room jungleEntranceMuddyFootprints = Room(
+    'jungle_entrance_muddy_footprints',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Corridors full of vegetation. Path through that, like a path in a forest, but indoors.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'jungle_entrance',
+    prerequisite: Prerequisite(330398558, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOpenedDam);
+    }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('Muddy footprints.\n', isRaw: true);
+    },
+    positionX: 21,
+    positionY: 72,
+    mapName: 'Jungle');
 final Approach deathlessVillageFromDragonEggRoom =
     Approach('dragon_egg_room', 'deathless_village', '', null);
 final Approach deathlessVillageFromJungleEntrance =
@@ -1156,6 +1198,130 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 15, positionY: 67, mapName: 'Sacred Place');
+final Approach pondFromJungleEntrance =
+    Approach('jungle_entrance', 'pond', '', null);
+
+class AttackLizardNearPond extends RoamingAction {
+  @override
+  final String name = 'attack_lizard_near_pond';
+
+  static final AttackLizardNearPond singleton = AttackLizardNearPond();
+
+  @override
+  List<String> get commandPathTemplate => ['Lizardman', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pond') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evOpenedDam) && !c.hasHappened(evKilledLizardman))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: fight. Assuming victory.\n\n', isRaw: true);
+    c.markHappened(evKilledLizardman);
+
+    return '${a.name} successfully performs AttackLizardNearPond';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room pond = Room('pond', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond.\n',
+      isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null, positionX: 14, positionY: 74, mapName: 'Pond');
+final Room pondWithLizardman = Room(
+    'pond_with_lizardman',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'pond',
+    prerequisite: Prerequisite(984337484, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOpenedDam);
+    }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('A lizardman stands in front of the pond.\n', isRaw: true);
+    },
+    positionX: 14,
+    positionY: 74,
+    mapName: 'Pond');
 final Approach knightsHqMainFromBattlefield =
     Approach('battlefield', 'knights_hq_main', '', null);
 final Approach knightsHqMainFromElevator12 =
@@ -4519,8 +4685,11 @@ final allRooms = <Room>[
   battlefield,
   oracleMain,
   jungleEntrance,
+  jungleEntranceMuddyFootprints,
   deathlessVillage,
   dragonEggRoom,
+  pond,
+  pondWithLizardman,
   knightsHqMain,
   elevator12,
   slopes,
@@ -4581,10 +4750,12 @@ final allApproaches = <Approach>[
   battlefieldFromTrainingGrounds,
   oracleMainFromKnightsHqMain,
   jungleEntranceFromDeathlessVillage,
+  jungleEntranceFromPond,
   jungleEntranceFromStagingArea,
   deathlessVillageFromDragonEggRoom,
   deathlessVillageFromJungleEntrance,
   dragonEggRoomFromDeathlessVillage,
+  pondFromJungleEntrance,
   knightsHqMainFromBattlefield,
   knightsHqMainFromElevator12,
   knightsHqMainFromOracleMain,
@@ -4637,6 +4808,7 @@ final allActions = <RoamingAction>[
   ReservoirOpenDam.singleton,
   AskOracleAboutKeepGate.singleton,
   GiveLairOfGodStarToDeathless.singleton,
+  AttackLizardNearPond.singleton,
   AttemptOpenGate.singleton,
   DestroyGateWithAxe.singleton,
   ExamineGate.singleton,
