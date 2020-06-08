@@ -183,7 +183,9 @@ class GeneratedRoom extends GeneratedGameObject {
     }
 
     for (final key in inheritableKeys) {
-      _map.putIfAbsent(key, () => parent._map[key]);
+      if (!_map.containsKey(key) && parent._map.containsKey(key)) {
+        _map[key] = parent._map[key];
+      }
     }
   }
 
