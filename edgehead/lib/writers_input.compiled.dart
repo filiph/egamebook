@@ -682,9 +682,6 @@ final Room godsLairAfterNecromancy = Room(
     positionX: 35,
     positionY: 42,
     mapName: 'God\'s Lair',
-    firstMapName: null,
-    hint: null,
-    firstHint: null,
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -695,9 +692,7 @@ final Room godsLairAfterNecromancy = Room(
           'A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
           isRaw: true);
       c.markHappened(evKarlGuardsKilled);
-    },
-    whereDescription: null,
-    groundMaterial: null);
+    });
 final Approach junctionFromBarracks =
     Approach('barracks', 'junction', '', null);
 final Approach junctionFromCockroachFarm =
@@ -817,13 +812,7 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
     isIdle: true,
     positionX: 25,
     positionY: 48,
-    mapName: 'Reservoir',
-    firstMapName: null,
-    hint: null,
-    firstHint: null,
-    afterMonstersCleared: null,
-    whereDescription: null,
-    groundMaterial: null);
+    mapName: 'Reservoir');
 final Approach cockroachFarmFromJunction =
     Approach('junction', 'cockroach_farm', '', null);
 final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
@@ -843,6 +832,48 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 29, positionY: 52, mapName: 'Cockroach Farm');
+final Room cockroachFarmAfterOpenDam = Room(
+    'cockroach_farm_after_open_dam',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I am in a maze of twisty little passages, all alike. A few wet cockroaches are crawling around, but most of the place is empty.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'cockroach_farm',
+    prerequisite: Prerequisite(743707558, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOpenedDam);
+    }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The whole area is wet. There are puddles of water everywhere, and a few cockroaches scurrying between them.\n',
+          isRaw: true);
+    },
+    positionX: 29,
+    positionY: 52,
+    mapName: 'Cockroach Farm');
 final Approach trainingGroundsFromBattlefield =
     Approach('battlefield', 'training_grounds', '', null);
 final Approach trainingGroundsFromReservoir =
@@ -1315,10 +1346,7 @@ final Room farmersVillageQuake1 = Room(
     hint:
         'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
     firstHint:
-        'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.',
-    afterMonstersCleared: null,
-    whereDescription: null,
-    groundMaterial: null);
+        'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
 final Approach keepGateFromKeepBedroom =
     Approach('keep_bedroom', 'keep_gate', '', null);
 final Approach keepGateFromStagingArea =
@@ -3271,10 +3299,7 @@ final Room bleedsMainDuringCaravan = Room('bleeds_main_during_caravan',
     firstMapName: 'Some buildings',
     hint: 'This is a small village close the entrance to the Pyramid.',
     firstHint:
-        'There seems to be a village or at least a homestead next to the Pyramid.',
-    afterMonstersCleared: null,
-    whereDescription: null,
-    groundMaterial: null);
+        'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -4489,6 +4514,7 @@ final allRooms = <Room>[
   reservoir,
   reservoirAfterOpenDam,
   cockroachFarm,
+  cockroachFarmAfterOpenDam,
   trainingGrounds,
   battlefield,
   oracleMain,
