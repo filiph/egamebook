@@ -82,10 +82,7 @@ abstract class RoomRoamingSituation extends Object
     if (_player == null) return [];
 
     if (w.director != null) {
-      final room = sim.getRoomByName(currentRoomName);
-      if (room.isIdle) {
-        return [_player, w.director];
-      }
+      return [_player, w.director];
     }
 
     return [_player];
