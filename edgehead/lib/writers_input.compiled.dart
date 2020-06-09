@@ -267,6 +267,175 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 26, positionY: 12, mapName: 'Antechamber');
+final Approach dargTentFromBarracks =
+    Approach('barracks', 'darg_tent', '', null);
+
+class DargTentAttack extends RoamingAction {
+  @override
+  final String name = 'darg_tent_attack';
+
+  static final DargTentAttack singleton = DargTentAttack();
+
+  @override
+  List<String> get commandPathTemplate => ['Darg', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('darg_tent_after_darg_arrived') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evDargLeftCrowdsource) &&
+        !c.hasHappened(evKilledDarg))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: a fight with Darg and his one guard. Assume victory.\n\n',
+        isRaw: true);
+    c.giveNewItemToPlayer(akxe);
+    c.markHappened(evKilledDarg);
+
+    s.add('\nI take the akxe.\n', isRaw: true);
+    return '${a.name} successfully performs DargTentAttack';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room dargTent = Room('darg_tent', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'Tent outside, at the top of the elevator structure. Overlooking the bay.\n',
+      isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null, positionX: 33, positionY: 24, mapName: 'Darg\'s tent');
+final Room dargTentAfterDargArrived = Room(
+    'darg_tent_after_darg_arrived',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'darg_tent',
+    prerequisite: Prerequisite(910482930, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evDargLeftCrowdsource) &&
+          !c.hasHappened(evKilledDarg);
+    }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('Darg is here.\n', isRaw: true);
+    },
+    positionX: 33,
+    positionY: 24,
+    mapName: 'Darg\'s tent');
+final Room dargTentAfterDargKilled = Room(
+    'darg_tent_after_darg_killed',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Tent outside, at the top of the elevator structure. Overlooking the bay.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'darg_tent',
+    prerequisite: Prerequisite(831974385, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evKilledDarg);
+    }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('Darg won\'t be needing this tent anymore.\n', isRaw: true);
+    },
+    positionX: 33,
+    positionY: 24,
+    mapName: 'Darg\'s tent');
 final Approach topOfClimbFromBarracks =
     Approach('barracks', 'top_of_climb', '', null);
 final Approach topOfClimbFromBigOAntechamber =
@@ -293,15 +462,148 @@ final Approach crowdsourceFromBarracks =
     Approach('barracks', 'crowdsource', '', null);
 final Approach crowdsourceFromBigOAntechamber =
     Approach('big_o_antechamber', 'crowdsource', '', null);
+
+class CrowdsourceAttack extends RoamingAction {
+  @override
+  final String name = 'crowdsource_attack';
+
+  static final CrowdsourceAttack singleton = CrowdsourceAttack();
+
+  @override
+  List<String> get commandPathTemplate => ['Orcs', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('crowdsource') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evDargLeftCrowdsource) &&
+        !c.hasHappened(evKilledDarg))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: a big fight, probably lost cause unless player is really powerful. Assume victory here.\n\n',
+        isRaw: true);
+    c.giveNewItemToPlayer(akxe);
+    c.markHappened(evKilledDarg);
+
+    s.add('\nI take the akxe.\n', isRaw: true);
+    return '${a.name} successfully performs CrowdsourceAttack';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class CrowdsourceListen extends RoamingAction {
+  @override
+  final String name = 'crowdsource_listen';
+
+  static final CrowdsourceListen singleton = CrowdsourceListen();
+
+  @override
+  List<String> get commandPathTemplate => ['Orcs', 'Listen'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('crowdsource') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evDargLeftCrowdsource) &&
+        !c.hasHappened(evKilledDarg))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I hear Darg, the captain, arguing with the other Orcs. There\'s plenty of them.\n',
+        isRaw: true);
+    return '${a.name} successfully performs CrowdsourceListen';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A temple.\n\nTODO: fight with Darg.\n\nI take the akxe.\n\n',
-      isRaw: true);
-  c.giveNewItemToPlayer(akxe);
+  s.add('A temple. Some orcs are talking.\n', isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -310,8 +612,49 @@ final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 27, positionY: 29, mapName: 'Crowd\'s Temple');
+final Room crowdsourceAfterOrcsLeft = Room(
+    'crowdsource_after_orcs_left',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('A temple. Some orcs are talking.\n', isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'crowdsource',
+    prerequisite: Prerequisite(586291809, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evDargLeftCrowdsource) &&
+          !c.hasHappened(evKilledDarg);
+    }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The orcs are gone.\n', isRaw: true);
+    },
+    positionX: 27,
+    positionY: 29,
+    mapName: 'Crowd\'s Temple');
 final Approach barracksFromCrowdsource =
     Approach('crowdsource', 'barracks', '', null);
+final Approach barracksFromDargTent =
+    Approach('darg_tent', 'barracks', '', null);
 final Approach barracksFromJunction =
     Approach('junction', 'barracks', '', null);
 final Approach barracksFromTopOfClimb =
@@ -4845,8 +5188,12 @@ final allRooms = <Room>[
   testRandomEncounter,
   bigOObservatory,
   bigOAntechamber,
+  dargTent,
+  dargTentAfterDargArrived,
+  dargTentAfterDargKilled,
   topOfClimb,
   crowdsource,
+  crowdsourceAfterOrcsLeft,
   barracks,
   conet,
   conetAfterClearing,
@@ -4899,12 +5246,14 @@ final allApproaches = <Approach>[
   endOfRoamFromBigOObservatory,
   bigOAntechamberFromCrowdsource,
   bigOAntechamberFromTopOfClimb,
+  dargTentFromBarracks,
   topOfClimbFromBarracks,
   topOfClimbFromBigOAntechamber,
   topOfClimbFromKeepServants,
   crowdsourceFromBarracks,
   crowdsourceFromBigOAntechamber,
   barracksFromCrowdsource,
+  barracksFromDargTent,
   barracksFromJunction,
   barracksFromTopOfClimb,
   conetFromSmithy,
@@ -4982,6 +5331,9 @@ final allApproaches = <Approach>[
 final allActions = <RoamingAction>[
   ExamineAntechamberLock.singleton,
   OpenAntechamberLock.singleton,
+  DargTentAttack.singleton,
+  CrowdsourceAttack.singleton,
+  CrowdsourceListen.singleton,
   ConetAttack.singleton,
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,

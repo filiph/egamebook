@@ -11,6 +11,7 @@ import 'package:edgehead/writers_helpers.dart';
 import 'edgehead_ids.dart';
 
 part 'director/environmental/karl_heard.dart';
+part 'director/situational/darg_leaves_crowdsource.dart';
 part 'director/situational/leroy_quits.dart';
 part 'director/situational/player_hurts.dart';
 part 'director/temporal/caravan_arrival.dart';
@@ -57,6 +58,7 @@ Ruleset get edgeheadDirectorRuleset {
     // Situational.
     _default,
     _playerHurt,
+    _dargLeavesCrowdsource,
     _leroyQuits,
     // Environmental.
     _karlHeardFirstTime,

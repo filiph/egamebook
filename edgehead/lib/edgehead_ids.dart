@@ -18,6 +18,8 @@ const evCaravanDeparted = "evCaravanDeparted";
 
 const evConetDestroyed = "evConetDestroyed";
 
+const evDargLeftCrowdsource = "evDargLeftCrowdsource";
+
 const evDeathlessRespectGained = "evDeathlessRespectGained";
 
 const evDirectorNoRuleApplicable = "evDirectorNoRuleApplicable";
@@ -37,6 +39,8 @@ const evKarlKilledViaNecromancy = "evKarlKilledViaNecromancy";
 const evKeepDestroyedGate = "evKeepDestroyedGate";
 
 const evKeepUnlockedGate = "evKeepUnlockedGate";
+
+const evKilledDarg = "evKilledDarg";
 
 const evKilledLizardman = "evKilledLizardman";
 

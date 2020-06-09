@@ -446,6 +446,21 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return playerRoom == actorRoom;
   }
 
+  int minutesSinceFirstVisit(String roomName) {
+    final first = world.visitHistory
+        .query(player, simulation.getRoomByName(roomName))
+        .oldest;
+    if (first == null) {
+      // Player has never been to [roomName].
+      return -1;
+    }
+
+    final difference = world.time.difference(first.time);
+    final result = difference.inMinutes;
+
+    return result;
+  }
+
   /// Returns `true` if [actorId] is currently hurt.
   bool isHurt(int actorId) {
     final actor = world.getActorById(actorId);

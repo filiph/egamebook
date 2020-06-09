@@ -8,17 +8,50 @@ POS: 27, 29
 MAP_NAME: Crowd's Temple
 
 FIRST_DESCRIPTION:
-A temple.
+A temple. Some orcs are talking.
 
-TODO: fight with Darg.
+DESCRIPTION: $NONE
 
-I take the akxe.
+
+// ---
+ROOM: $crowdsource_after_orcs_left
+VARIANT_OF: $crowdsource
+
+// This happens ~10 minutes after the player first visited this room.
+RULE: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+
+VARIANT_FIRST_DESCRIPTION:
+The orcs are gone.
+
+
+// ---
+ACTION: $crowdsource_listen
+FOR_LOCATION: $crowdsource
+PREREQUISITES: !c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+
+COMMAND: Orcs >> Listen
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I hear Darg, the captain, arguing with the other Orcs. There's plenty of them.
+
+// TODO: show Darg's image
+
+// ---
+ACTION: $crowdsource_attack
+FOR_LOCATION: $crowdsource
+PREREQUISITES: !c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+
+COMMAND: Orcs >> Attack
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: a big fight, probably lost cause unless player is really powerful. Assume victory here.
 
 [[CODE]]
 c.giveNewItemToPlayer(akxe);
+c.markHappened(evKilledDarg);
 [[ENDCODE]]
 
-DESCRIPTION: $NONE
+I take the akxe.
 
 NOTES:
 - This is where you finally confront the Akxe orc (named captain - Darg).

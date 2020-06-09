@@ -1,0 +1,67 @@
+APPROACH: $darg_tent FROM $barracks
+
+// ---
+ROOM: $darg_tent
+
+POS: 33, 24
+MAP_NAME: Darg's tent
+
+FIRST_DESCRIPTION:
+Tent outside, at the top of the elevator structure. Overlooking the bay.
+
+DESCRIPTION: $NONE
+
+
+// ---
+ROOM: $darg_tent_after_darg_arrived
+VARIANT_OF: $darg_tent
+
+// This happens ~10 minutes after the player first visited crowdsource.
+RULE: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+
+FIRST_DESCRIPTION:
+Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.
+
+VARIANT_FIRST_DESCRIPTION:
+Darg is here.
+
+
+// ---
+ROOM: $darg_tent_after_darg_killed
+VARIANT_OF: $darg_tent
+
+RULE: c.hasHappened(evKilledDarg)
+
+FIRST_DESCRIPTION:
+Tent outside, at the top of the elevator structure. Overlooking the bay.
+
+VARIANT_FIRST_DESCRIPTION:
+Darg won't be needing this tent anymore.
+
+
+// ---
+ACTION: $darg_tent_attack
+FOR_LOCATION: $darg_tent_after_darg_arrived
+PREREQUISITES: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+
+COMMAND: Darg >> Attack
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: a fight with Darg and his one guard. Assume victory.
+
+[[CODE]]
+c.giveNewItemToPlayer(akxe);
+c.markHappened(evKilledDarg);
+[[ENDCODE]]
+
+I take the akxe.
+
+
+
+NOTES:
+- This is empty unless you've heard Darg talk in the source.
+
+- This is where you finally confront the Akxe orc (named captain - Darg).
+- Darg's head talks after you kill him. Big O is taunting you.
+- Darg's Akxe is the key to the antechamber.
+- You might see him before, but shouldn't be able to kill him.

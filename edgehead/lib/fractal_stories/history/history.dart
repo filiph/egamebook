@@ -22,6 +22,8 @@ abstract class Record {
 ///
 /// The counterpart class is [SingleQueryResult].
 class SerialQueryResult<T extends Record> implements QueryResult<T> {
+  /// Records are in reverse chronological order, so the first result is
+  /// the latest. See [new SerialQueryResult].
   final Iterable<T> _records;
 
   bool _walked = false;
@@ -54,6 +56,22 @@ class SerialQueryResult<T extends Record> implements QueryResult<T> {
     }
 
     return null;
+  }
+
+  /// The first time something happened.
+  T get oldest {
+    _checkUnwalked();
+
+    // We are dealing with an iterable, and getting a length of an iterable
+    // could consume it, preventing us from getting the record. So instead,
+    // we walk the iterable and return the last record in it (or null, if it
+    // was empty).
+    T result;
+    for (final record in _records) {
+      result = record;
+    }
+
+    return result;
   }
 
   /// Ensures that the [_records] iterable isn't walked more than once. This

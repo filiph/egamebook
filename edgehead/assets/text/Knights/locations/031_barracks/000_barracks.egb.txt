@@ -1,6 +1,7 @@
 APPROACH: $barracks FROM $top_of_climb
 APPROACH: $barracks FROM $crowdsource
 APPROACH: $barracks FROM $junction
+APPROACH: $barracks FROM $darg_tent
 
 // ---
 ROOM: $barracks
