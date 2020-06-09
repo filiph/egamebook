@@ -104,11 +104,7 @@ abstract class RoomRoamingSituation extends Object
   ///
   /// This will also print out the description of the room (or the short version
   /// as appropriate).
-  ///
-  /// [silent] is used when we are describing the move in a pre-written phrase
-  /// so describing it automatically would be a duplicate.
-  void moveActor(ActionContext context, String destinationRoomName,
-      {bool silent = false}) {
+  void moveActor(ActionContext context, String destinationRoomName) {
     final WorldState originalWorld = context.world;
     final Simulation sim = context.simulation;
     final Actor a = context.actor;
@@ -128,60 +124,58 @@ abstract class RoomRoamingSituation extends Object
     w.replaceSituationById(id, nextRoomSituation);
     w.recordVisit(a, room);
 
-    if (!silent) {
-      final hasVisitedThisVariant =
-          originalWorld.visitHistory.query(a, room).hasHappened;
-      final hasVisitedAnyVariant = originalWorld.visitHistory
-          .query(a, room, includeVariants: true)
-          .hasHappened;
+    final hasVisitedThisVariant =
+        originalWorld.visitHistory.query(a, room).hasHappened;
+    final hasVisitedAnyVariant = originalWorld.visitHistory
+        .query(a, room, includeVariants: true)
+        .hasHappened;
 
-      if (!hasVisitedAnyVariant) {
-        // The very first time here.
-        if (room.firstDescribe == null) {
-          // Show short description if there is no long description.
-          assert(
-              room.describe != null,
-              "$room visited for the second time but "
-              "no regular description available.");
-          room.describe(context);
-        } else {
-          // Otherwise, show long description.
-          s.addParagraph();
-          room.firstDescribe(context);
-          s.addParagraph();
-        }
-      } else if (!hasVisitedThisVariant) {
-        // First time in this particular variant of the room.
-        if (room.variantFirstDescribe == null) {
-          // Show short description if there is no long description.
-          assert(
-              room.describe != null,
-              "$room (variant) visited for the second time but "
-              "no regular description available.");
-          room.describe(context);
-        } else {
-          // Otherwise, show long variant description.
-          s.addParagraph();
-          room.variantFirstDescribe(context);
-          s.addParagraph();
-        }
-      } else {
-        // The player has been here, even in the current variant of the room.
+    if (!hasVisitedAnyVariant) {
+      // The very first time here.
+      if (room.firstDescribe == null) {
+        // Show short description if there is no long description.
         assert(
             room.describe != null,
             "$room visited for the second time but "
             "no regular description available.");
         room.describe(context);
+      } else {
+        // Otherwise, show long description.
+        s.addParagraph();
+        room.firstDescribe(context);
+        s.addParagraph();
       }
+    } else if (!hasVisitedThisVariant) {
+      // First time in this particular variant of the room.
+      if (room.variantFirstDescribe == null) {
+        // Show short description if there is no long description.
+        assert(
+            room.describe != null,
+            "$room (variant) visited for the second time but "
+            "no regular description available.");
+        room.describe(context);
+      } else {
+        // Otherwise, show long variant description.
+        s.addParagraph();
+        room.variantFirstDescribe(context);
+        s.addParagraph();
+      }
+    } else {
+      // The player has been here, even in the current variant of the room.
+      assert(
+          room.describe != null,
+          "$room visited for the second time but "
+          "no regular description available.");
+      room.describe(context);
+    }
 
-      final localCorpses = _getCorpses(w.build())
-          .where((a) => a.currentRoomName == parentRoom.name)
-          .toList();
-      if (localCorpses.isNotEmpty) {
-        s.addEnumeration(
-            "<subject> can <also> see the remains of", localCorpses, "here",
-            subject: _getPlayer(originalWorld));
-      }
+    final localCorpses = _getCorpses(w.build())
+        .where((a) => a.currentRoomName == parentRoom.name)
+        .toList();
+    if (localCorpses.isNotEmpty) {
+      s.addEnumeration(
+          "<subject> can <also> see the remains of", localCorpses, "here",
+          subject: _getPlayer(originalWorld));
     }
 
     // Move the actor and also all the other actors in the party.

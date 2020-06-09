@@ -327,8 +327,8 @@ Actor _makeOrc(WorldStateBuilder w,
 }
 
 extension ActionContextHelpers on ActionContext {
-  void movePlayer(String locationName, {bool silent = false}) {
-    getRoomRoaming().moveActor(this, locationName, silent: silent);
+  void movePlayer(String locationName) {
+    getRoomRoaming().moveActor(this, locationName);
   }
 
   /// _Learning_ about something means that someone has already .
