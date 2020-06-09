@@ -6,8 +6,36 @@ ROOM: $conet
 POS: 17, 34
 MAP_NAME: Conet
 
-DESCRIPTION:
-Some kobolds operating a large "woodpecker". 
+FIRST_DESCRIPTION:
+Some kobolds operating a large "woodpecker".
+
+DESCRIPTION: $NONE
+
+
+// ---
+ROOM: $conet_after_clearing
+VARIANT_OF: $conet
+
+RULE: c.hasHappened(evConetDestroyed)
+
+FIRST_DESCRIPTION:
+The room is silent.
+
+
+// ---
+ACTION: $conet_attack
+FOR_LOCATION: $conet
+
+COMMAND: Kobolds >> Attack
+
+COMPLETE_SUCCESS_DESCRIPTION:
+TODO: actual fight. Assuming victory.
+
+[[CODE]]
+c.markHappened(evConetDestroyed);
+[[ENDCODE]]
+
+
 
 NOTES:
 - Name inspired by https://en.wikipedia.org/wiki/The_Conet_Project.

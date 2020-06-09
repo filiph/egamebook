@@ -333,14 +333,108 @@ final Room barracks = Room('barracks', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null, positionX: 34, positionY: 31, mapName: 'Barracks');
 final Approach conetFromSmithy = Approach('smithy', 'conet', '', null);
-final Room conet = Room('conet', null, (ActionContext c) {
+
+class ConetAttack extends RoamingAction {
+  @override
+  final String name = 'conet_attack';
+
+  static final ConetAttack singleton = ConetAttack();
+
+  @override
+  List<String> get commandPathTemplate => ['Kobolds', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('conet') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: actual fight. Assuming victory.\n\n', isRaw: true);
+    c.markHappened(evConetDestroyed);
+
+    return '${a.name} successfully performs ConetAttack';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room conet = Room('conet', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('Some kobolds operating a large "woodpecker".\n', isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
 }, null, null, positionX: 17, positionY: 34, mapName: 'Conet');
+final Room conetAfterClearing = Room('conet_after_clearing', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The room is silent.\n', isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null,
+    parent: 'conet',
+    prerequisite: Prerequisite(357396258, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evConetDestroyed);
+    }),
+    positionX: 17,
+    positionY: 34,
+    mapName: 'Conet');
 final Approach maintenanceShaftFromElevator28 =
     Approach('elevator_28', 'maintenance_shaft', '', null);
 
@@ -4755,6 +4849,7 @@ final allRooms = <Room>[
   crowdsource,
   barracks,
   conet,
+  conetAfterClearing,
   maintenanceShaft,
   smithy,
   smithyAfterSarnSaved,
@@ -4887,6 +4982,7 @@ final allApproaches = <Approach>[
 final allActions = <RoamingAction>[
   ExamineAntechamberLock.singleton,
   OpenAntechamberLock.singleton,
+  ConetAttack.singleton,
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
   SaveSarn.singleton,

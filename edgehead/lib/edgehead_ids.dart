@@ -16,6 +16,8 @@ const evCaravanArrived = "evCaravanArrived";
 
 const evCaravanDeparted = "evCaravanDeparted";
 
+const evConetDestroyed = "evConetDestroyed";
+
 const evDeathlessRespectGained = "evDeathlessRespectGained";
 
 const evDirectorNoRuleApplicable = "evDirectorNoRuleApplicable";

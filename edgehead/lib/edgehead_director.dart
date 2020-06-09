@@ -62,10 +62,13 @@ Ruleset get edgeheadDirectorRuleset {
     _karlHeardFirstTime,
     // Temporal.
     _quake1,
+    _quake1FromAbove,
     _caravanArrival,
     _quake2,
+    _quake2FromAbove,
     _caravanDeparture,
     _orcOffensive,
     _quake3,
+    _quake3FromAbove,
   ]);
 }
