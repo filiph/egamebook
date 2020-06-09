@@ -70,3 +70,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire.
 
 Someone is not afraid to be found.
+
+NOTES:
+
+if c.hasHappened(evSavedSarn), then Sarn is here

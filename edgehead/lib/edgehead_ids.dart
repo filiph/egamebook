@@ -48,6 +48,8 @@ const evQuake2 = "evQuake2";
 
 const evQuake3 = "evQuake3";
 
+const evSavedSarn = "evSavedSarn";
+
 const kbBlindGuide = "kbBlindGuide";
 
 const kbGoblinCampSmoke = "kbGoblinCampSmoke";

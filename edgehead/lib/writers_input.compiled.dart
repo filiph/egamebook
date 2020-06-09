@@ -501,6 +501,71 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
     mapName: 'Maintenance Shaft above 28th Floor');
 final Approach smithyFromConet = Approach('conet', 'smithy', '', null);
 final Approach smithyFromJunction = Approach('junction', 'smithy', '', null);
+
+class SaveSarn extends RoamingAction {
+  @override
+  final String name = 'save_sarn';
+
+  static final SaveSarn singleton = SaveSarn();
+
+  @override
+  List<String> get commandPathTemplate => ['Jailer', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('smithy') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: fight. Assuming victory.\n\nI take Sarn through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to him, and walk out to The Bleeds.\n\n',
+        isRaw: true);
+    c.markHappened(evSavedSarn);
+    c.movePlayer('bleeds_main');
+
+    return '${a.name} successfully performs SaveSarn';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room smithy = Room('smithy', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -510,6 +575,25 @@ final Room smithy = Room('smithy', null, (ActionContext c) {
   s.add('My brother, Sarn, working for the orcs, forging weapons.\n',
       isRaw: true);
 }, null, null, positionX: 24, positionY: 40, mapName: 'Smithy');
+final Room smithyAfterSarnSaved = Room('smithy_after_sarn_saved', null,
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The smithy is empty and silent now.\n', isRaw: true);
+}, null, null,
+    parent: 'smithy',
+    prerequisite: Prerequisite(476050921, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evSavedSarn);
+    }),
+    positionX: 24,
+    positionY: 40,
+    mapName: 'Smithy');
 final Approach elevator28FromElevator12 =
     Approach('elevator_12', 'elevator_28', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -4673,6 +4757,7 @@ final allRooms = <Room>[
   conet,
   maintenanceShaft,
   smithy,
+  smithyAfterSarnSaved,
   elevator28,
   godsLair,
   godsLairAfterNecromancy,
@@ -4804,6 +4889,7 @@ final allActions = <RoamingAction>[
   OpenAntechamberLock.singleton,
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
+  SaveSarn.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
   AskOracleAboutKeepGate.singleton,
