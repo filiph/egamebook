@@ -300,6 +300,7 @@ class DargTentAttack extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add('TODO: a fight with Darg and his one guard. Assume victory.\n\n',
         isRaw: true);
+    w.updateActorById(dargId, (b) => b.inventory.remove(akxe));
     c.giveNewItemToPlayer(akxe);
     c.markHappened(evKilledDarg);
 
@@ -494,6 +495,7 @@ class CrowdsourceAttack extends RoamingAction {
     s.add(
         'TODO: a big fight, probably lost cause unless player is really powerful. Assume victory here.\n\n',
         isRaw: true);
+    w.updateActorById(dargId, (b) => b.inventory.remove(akxe));
     c.giveNewItemToPlayer(akxe);
     c.markHappened(evKilledDarg);
 
