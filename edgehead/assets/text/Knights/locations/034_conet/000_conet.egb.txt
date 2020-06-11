@@ -21,6 +21,9 @@ RULE: c.hasHappened(evConetDestroyed)
 FIRST_DESCRIPTION:
 The room is silent.
 
+VARIANT_FIRST_DESCRIPTION:
+Now, the room is silent.
+
 
 // ---
 ACTION: $conet_attack

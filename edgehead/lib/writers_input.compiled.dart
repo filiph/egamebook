@@ -755,21 +755,26 @@ final Room conet = Room('conet', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 17, positionY: 34, mapName: 'Conet');
-final Room conetAfterClearing = Room('conet_after_clearing', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The room is silent.\n', isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null,
+final Room conetAfterClearing = Room(
+    'conet_after_clearing',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The room is silent.\n', isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
     parent: 'conet',
     prerequisite: Prerequisite(357396258, 1, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
@@ -777,6 +782,14 @@ final Room conetAfterClearing = Room('conet_after_clearing', (ActionContext c) {
       final Actor a = c.actor;
       return c.hasHappened(evConetDestroyed);
     }),
+    variantFirstDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('Now, the room is silent.\n', isRaw: true);
+    },
     positionX: 17,
     positionY: 34,
     mapName: 'Conet');
