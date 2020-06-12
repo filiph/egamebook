@@ -32,6 +32,15 @@ void _quake2Apply(ActionContext c) {
   s.addParagraph();
   s.add('Suddenly, a quake. Outside the pyramid, a chilling human scream.',
       isRaw: true);
+
+  if (c.world.getActorById(leroyId).isAnimatedAndActive) {
+    // Move Leroy to Knights HQ.
+    c.outputWorld.updateActorById(leroyId, (b) {
+      b.npc.isHireable = true;
+      b.currentRoomName = 'knights_hq_main';
+    });
+  }
+
   c.outputWorld.recordCustom(evQuake2);
 }
 

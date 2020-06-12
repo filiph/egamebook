@@ -1910,7 +1910,7 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      '(NOTE FOR TESTERS: This area is very much in development.)\n\nI come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep, and the command tent.\n',
+      'I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1920,6 +1920,49 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
+    isIdle: true,
+    positionX: 37,
+    positionY: 70,
+    mapName: 'Knights Headquarters');
+final Room knightsHqQuake2 = Room(
+    'knights_hq_quake2',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final ifBlock_209ee6a07 =
+          c.inRoomWith(leroyId) ? '''Leroy is here as well.''' : '''''';
+      s.add(
+          'I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.\n\nMiguel, the knight from the entrance, is here.\n\n$ifBlock_209ee6a07\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'knights_hq_main',
+    prerequisite: Prerequisite(617622573, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('Miguel, the knight from the entrance, is here.\n', isRaw: true);
+    },
     isIdle: true,
     positionX: 37,
     positionY: 70,
@@ -5595,6 +5638,7 @@ final allRooms = <Room>[
   pond,
   pondWithLizardman,
   knightsHqMain,
+  knightsHqQuake2,
   elevator12,
   slopes,
   slopesQuake1,
