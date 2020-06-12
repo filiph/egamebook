@@ -265,7 +265,8 @@ class EdgeheadGame extends Book {
         ..time = edgeheadStartingTime);
     }
 
-    storyline = Storyline(referredEntities: world.actors);
+    storyline = Storyline(
+        referredEntities: world.actors.where((actor) => !actor.isDirector));
 
     playerCharacter = world.getActorById(playerId);
 

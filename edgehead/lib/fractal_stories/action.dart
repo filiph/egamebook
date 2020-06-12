@@ -175,7 +175,9 @@ abstract class Action<T> {
       final templateContainsObject = commandPathTemplate
           .any((part) => part.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP));
       // Realize the template, optionally with "<object>".
-      return (Storyline(referredEntities: context.world.actors)
+      return (Storyline(
+              referredEntities:
+                  context.world.actors.where((actor) => !actor.isDirector))
             ..add(commandPathTemplate.join(' >> '),
                 object: templateContainsObject ? object : null))
           .realizeAsString()
@@ -482,8 +484,9 @@ class Performance<T> {
     final initialWorld = output.build();
     final builder = _prepareWorldRecord(
         turn.actor, sim, initialWorld, object, isSuccess, isFailure);
-    final situationActors =
-        initialWorld.currentSituation.getActors(sim, initialWorld);
+    final situationActors = initialWorld.currentSituation
+        .getActors(sim, initialWorld)
+        .where((actor) => !actor.isDirector);
     final outputStoryline = Storyline(referredEntities: situationActors);
     // Remember situation as it can be changed during applySuccess.
     final situationId = initialWorld.currentSituation.id;

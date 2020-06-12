@@ -100,7 +100,9 @@ class PlanConsequence {
           world,
           null,
           null,
-          Storyline(referredEntities: world.actors),
+          Storyline(
+              referredEntities:
+                  world.actors.where((actor) => !actor.isDirector)),
           1.0,
           1,
           isInitial: true,
@@ -115,7 +117,8 @@ class PlanConsequence {
     return PlanConsequence._(
         world,
         consequence.performance,
-        Storyline()..concatenate(consequence.storyline),
+        Storyline(referredEntities: consequence.storyline.allEntities.values)
+          ..concatenate(consequence.storyline),
         consequence.probability,
         consequence.previousCumulativeProbability,
         consequence.choiceCount,
