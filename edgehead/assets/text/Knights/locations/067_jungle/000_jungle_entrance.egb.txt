@@ -18,8 +18,7 @@ DESCRIPTION: $NONE
 ROOM: $jungle_entrance_muddy_footprints
 VARIANT_OF: $jungle_entrance
 
-RULE:
-c.hasHappened(evOpenedDam)
+RULE: c.hasHappened(evOpenedDam)
 
 VARIANT_UPDATE_DESCRIPTION:
 Muddy footprints.

@@ -1,0 +1,11 @@
+// ---
+ROOM: $bleeds_main_after_quake_1
+
+VARIANT_OF: $bleeds_main
+
+RULE: c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived)
+
+VARIANT_UPDATE_DESCRIPTION:
+Small damage after the quake. But locals seem to take it in stride. Is this normal here?
+
+DESCRIPTION: $NONE

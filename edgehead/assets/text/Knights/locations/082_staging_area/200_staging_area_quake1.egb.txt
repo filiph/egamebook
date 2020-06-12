@@ -1,0 +1,14 @@
+// ---
+ROOM: $staging_area_quake1
+
+VARIANT_OF: $staging_area
+
+RULE: c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived)
+
+FIRST_DESCRIPTION:
+This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
+
+The quake has evidently toppled some of the furniture next to the wall, and a few knights are putting it back in order again.
+
+VARIANT_UPDATE_DESCRIPTION:
+Some of the furniture has been toppled by the quake, and the knights putting it back in order again, frustrated, looking for damage.

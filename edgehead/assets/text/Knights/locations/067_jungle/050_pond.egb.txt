@@ -15,8 +15,7 @@ DESCRIPTION: $NONE
 ROOM: $pond_with_lizardman
 VARIANT_OF: $pond
 
-RULE:
-c.hasHappened(evOpenedDam)
+RULE: c.hasHappened(evOpenedDam)
 
 FIRST_DESCRIPTION:
 A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.

@@ -9,4 +9,4 @@ FIRST_DESCRIPTION:
 The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.
 
 VARIANT_UPDATE_DESCRIPTION:
-The farmers look a lot more stressed. No more polite nods. Someone's repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.
+The farmers look a bit more stressed. No more polite nods. Someone's repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.

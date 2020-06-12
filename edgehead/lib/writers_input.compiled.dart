@@ -2006,6 +2006,54 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
         'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
     firstHint:
         'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
+final Room stagingAreaQuake1 = Room(
+    'staging_area_quake1',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.\n\nThe quake has evidently toppled some of the furniture next to the wall, and a few knights are putting it back in order again.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'staging_area',
+    prerequisite: Prerequisite(291483367, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Some of the furniture has been toppled by the quake, and the knights putting it back in order again, frustrated, looking for damage.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 23,
+    positionY: 82,
+    mapName: 'The Staging Area',
+    firstMapName: 'Up the stairs',
+    hint:
+        'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
+    firstHint:
+        'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
 final Approach farmersVillageFromFloatingPoint =
     Approach('floating_point', 'farmers_village', '', null);
 final Approach farmersVillageFromSlopes =
@@ -2074,7 +2122,7 @@ final Room farmersVillageQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The farmers look a lot more stressed. No more polite nods. Someone\'s repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
+          'The farmers look a bit more stressed. No more polite nods. Someone\'s repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
           isRaw: true);
     },
     isIdle: true,
@@ -4057,6 +4105,57 @@ final Room bleedsMainDuringCaravan = Room(
     hint: 'This is a small village close the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
+final Room bleedsMainAfterQuake1 = Room(
+    'bleeds_main_after_quake_1',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          isRaw: true);
+      c.learnAbout(kbTrader);
+      c.learnAbout(kbGoblinCampSmoke);
+
+      w.updateActorById(tamaraId, (b) => b.isActive = false);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'bleeds_main',
+    prerequisite: Prerequisite(477348122, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Small damage after the quake. But locals seem to take it in stride. Is this normal here?\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 37,
+    positionY: 98,
+    mapName: 'The Bleeds',
+    firstMapName: 'Some buildings',
+    hint: 'This is a small village close the entrance to the Pyramid.',
+    firstHint:
+        'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -5291,6 +5390,7 @@ final allRooms = <Room>[
   elevator12,
   slopes,
   stagingArea,
+  stagingAreaQuake1,
   farmersVillage,
   farmersVillageQuake1,
   keepGate,
@@ -5302,6 +5402,7 @@ final allRooms = <Room>[
   bleedsMain,
   bleedsTraderHut,
   bleedsMainDuringCaravan,
+  bleedsMainAfterQuake1,
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
   goblinSkirmishMain,
