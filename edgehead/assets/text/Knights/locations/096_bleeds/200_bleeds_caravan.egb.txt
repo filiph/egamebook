@@ -11,7 +11,10 @@ throw StateError("Player should have been to the Bleeds already.");
 [[ENDCODE]]
 
 VARIANT_UPDATE_DESCRIPTION:
-The streets are full of animals, and people are negotiating. A caravan has arrived.
+The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They're clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.
+
+There is some commotion around the trader's shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don't. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.
+// TODO: [[IF ]] He is the one I owe a large sum of money. [[ENDIF]]
 
 DESCRIPTION: $NONE
 

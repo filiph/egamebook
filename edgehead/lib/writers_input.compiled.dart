@@ -3461,7 +3461,7 @@ class BleedsMainObserveVillage extends RoamingAction {
     final ifBlock_646ab8e51 =
         !c.hasHappened(evQuake1) ? '''Something bad is happening.''' : '''''';
     Ruleset(
-        Rule(38731567, 2, false, (ApplicabilityContext c) {
+        Rule(635652871, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -3474,7 +3474,7 @@ class BleedsMainObserveVillage extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.\n\nThe talking and commotion is especially vivid near the local trader\'s building. On the other end of the liveliness spectrum, there\'s a small dwelling with a porch here that most people ignore. A blind man sits there on the porch, wearing a coat.\n',
+              'With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.\n\nThe talking and commotion is especially vivid near the local trader\'s building. On the other end of the liveliness spectrum, there\'s a small dwelling with a porch here that most people ignore. A blind man sits there, wearing a coat.\n',
               isRaw: true);
         }),
         Rule(35451700, 0, false, (ApplicabilityContext c) {
@@ -4168,7 +4168,7 @@ final Room bleedsMainDuringCaravan = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The streets are full of animals, and people are negotiating. A caravan has arrived.\n',
+          'The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They\'re clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.\n\nThere is some commotion around the trader\'s shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don\'t. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.\n',
           isRaw: true);
     },
     isIdle: true,

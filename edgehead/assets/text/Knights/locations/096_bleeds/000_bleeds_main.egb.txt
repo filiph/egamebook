@@ -56,7 +56,7 @@ c.hasHappened(evCaravanArrived) && !c.hasHappened(evCaravanDeparted)
 [[THEN]]
 With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.
 
-The talking and commotion is especially vivid near the local trader's building. On the other end of the liveliness spectrum, there's a small dwelling with a porch here that most people ignore. A blind man sits there on the porch, wearing a coat.
+The talking and commotion is especially vivid near the local trader's building. On the other end of the liveliness spectrum, there's a small dwelling with a porch here that most people ignore. A blind man sits there, wearing a coat.
 [[ENDRULE]]
 
 [[RULE]]
