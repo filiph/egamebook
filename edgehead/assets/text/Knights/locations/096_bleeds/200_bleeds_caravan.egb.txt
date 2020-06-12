@@ -5,8 +5,13 @@ VARIANT_OF: $bleeds_main
 
 RULE: c.hasHappened(evCaravanArrived) && !c.hasHappened(evCaravanDeparted)
 
+FIRST_DESCRIPTION:
+[[CODE]]
+throw StateError("Player should have been to the Bleeds already.");
+[[ENDCODE]]
+
 VARIANT_UPDATE_DESCRIPTION:
-The streets are full of animals, and there are some people negotiating.
+The streets are full of animals, and people are negotiating. A caravan has arrived.
 
 DESCRIPTION: $NONE
 

@@ -2723,7 +2723,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The two knights are still here.\n', isRaw: true);
+  s.add('', isRaw: true);
 }, null, null,
     isIdle: true,
     positionX: 26,
@@ -3298,6 +3298,55 @@ class TalkToMiguelGreetings extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Room pyramidEntranceDuringCaravan = Room(
+    'pyramid_entrance_during_caravan',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      throw StateError(
+          "Player should have been here, as the rule above stipulates.");
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'pyramid_entrance',
+    prerequisite: Prerequisite(230852794, 3, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evCaravanArrived) &&
+          !c.hasHappened(evCaravanDeparted) &&
+          c.playerHasVisited('pyramid_entrance', includeVariants: true);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Beasts of burden can be seen (and smelled) from here. The Bleeds is overflowing with them.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 26,
+    positionY: 94,
+    mapName: 'Pyramid\'s Entrance',
+    firstMapName: 'The Pyramid',
+    hint:
+        'This is the only side of the Pyramid that allows access from outside.',
+    firstHint:
+        'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
 final Approach bleedsMainFromBleedsTraderHut =
     Approach('bleeds_trader_hut', 'bleeds_main', '', null);
 final Approach bleedsMainFromGoblinSkirmishMain =
@@ -3409,9 +3458,40 @@ class BleedsMainObserveVillage extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. Something bad is happening.\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n\n',
-        isRaw: true);
+    final ifBlock_646ab8e51 =
+        !c.hasHappened(evQuake1) ? '''Something bad is happening.''' : '''''';
+    Ruleset(
+        Rule(38731567, 2, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.hasHappened(evCaravanArrived) &&
+              !c.hasHappened(evCaravanDeparted);
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.\n\nThe talking and commotion is especially vivid near the local trader\'s building. On the other end of the liveliness spectrum, there\'s a small dwelling with a porch here that most people ignore. A blind man sits there on the porch, wearing a coat.\n',
+              isRaw: true);
+        }),
+        Rule(35451700, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. $ifBlock_646ab8e51\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
+              isRaw: true);
+        })).apply(c);
     c.learnAbout(kbBlindGuide);
 
     return '${a.name} successfully performs BleedsMainObserveVillage';
@@ -4061,13 +4141,7 @@ final Room bleedsMainDuringCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add(
-          'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
-          isRaw: true);
-      c.learnAbout(kbTrader);
-      c.learnAbout(kbGoblinCampSmoke);
-
-      w.updateActorById(tamaraId, (b) => b.isActive = false);
+      throw StateError("Player should have been to the Bleeds already.");
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -4094,7 +4168,7 @@ final Room bleedsMainDuringCaravan = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The streets are full of animals, and there are some people negotiating.\n',
+          'The streets are full of animals, and people are negotiating. A caravan has arrived.\n',
           isRaw: true);
     },
     isIdle: true,
@@ -5399,6 +5473,7 @@ final allRooms = <Room>[
   keepServants,
   floatingPoint,
   pyramidEntrance,
+  pyramidEntranceDuringCaravan,
   bleedsMain,
   bleedsTraderHut,
   bleedsMainDuringCaravan,

@@ -8,6 +8,7 @@ ROOM: $pyramid_entrance
 FLAGS: $IDLE
 
 POS: 26, 94
+
 MAP_NAME: Pyramid's Entrance
 HINT: This is the only side of the Pyramid that allows access from outside.
 
@@ -23,8 +24,7 @@ Two knights, a woman and a man, are on guard.
 
 Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. 
 
-DESCRIPTION:
-The two knights are still here.
+DESCRIPTION: $NONE
 
 
 NOTES:

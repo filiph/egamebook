@@ -51,7 +51,7 @@
 		},
 		"map_to_dart_block": {
 			"patterns": [{
-				"begin": "^((PREREQUISITES|SUCCESS_EFFECT|RESCUE_PREREQUISITES|RESCUE_EFFECT|CONTINUATION_OF_FAILURE_EFFECT|FIGHT_SITUATION):)$",
+				"begin": "^((PREREQUISITES|SUCCESS_EFFECT|RESCUE_PREREQUISITES|RESCUE_EFFECT|CONTINUATION_OF_FAILURE_EFFECT|FIGHT_SITUATION|RULE):)$",
 				"end": "^$",
 				"beginCaptures": {
 					"1": {"name": "keyword.egb"}
