@@ -1970,6 +1970,92 @@ final Room slopes = Room('slopes', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, isIdle: true, positionX: 42, positionY: 78, mapName: 'Slopes');
+final Room slopesQuake1 = Room(
+    'slopes_quake1',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n\nSome of them are talking about how the quakes are getting more frequent.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'slopes',
+    prerequisite: Prerequisite(867577495, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'There is talk among the young men and women about how the quakes are getting more frequent.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 42,
+    positionY: 78,
+    mapName: 'Slopes');
+final Room slopesQuake2 = Room(
+    'slopes_quake2',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking mana pods on the slopes are all down on the ground, gathered around a dead body.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'slopes',
+    prerequisite: Prerequisite(25414194, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The young men and women are all down on the ground, gathered around a dead body.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 42,
+    positionY: 78,
+    mapName: 'Slopes');
 final Approach stagingAreaFromFarmersVillage =
     Approach('farmers_village', 'staging_area', '', null);
 final Approach stagingAreaFromJungleEntrance =
@@ -3337,6 +3423,54 @@ final Room pyramidEntranceDuringCaravan = Room(
       s.add(
           'Beasts of burden can be seen (and smelled) from here. The Bleeds is overflowing with them.\n',
           isRaw: true);
+    },
+    isIdle: true,
+    positionX: 26,
+    positionY: 94,
+    mapName: 'Pyramid\'s Entrance',
+    firstMapName: 'The Pyramid',
+    hint:
+        'This is the only side of the Pyramid that allows access from outside.',
+    firstHint:
+        'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
+final Room pyramidEntranceAfterQuake2 = Room(
+    'pyramid_entrance_after_quake2',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      throw StateError(
+          "Player should have been here. Quake 2 only happens after player is in the Pyramid, and this is the only entrance.");
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'pyramid_entrance',
+    prerequisite: Prerequisite(609066949, 4, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake2) &&
+          !c.hasHappened(evCaravanDeparted) &&
+          true &&
+          true;
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('Kat is alone. Miguel has left.\n', isRaw: true);
     },
     isIdle: true,
     positionX: 26,
@@ -5463,6 +5597,8 @@ final allRooms = <Room>[
   knightsHqMain,
   elevator12,
   slopes,
+  slopesQuake1,
+  slopesQuake2,
   stagingArea,
   stagingAreaQuake1,
   farmersVillage,
@@ -5474,6 +5610,7 @@ final allRooms = <Room>[
   floatingPoint,
   pyramidEntrance,
   pyramidEntranceDuringCaravan,
+  pyramidEntranceAfterQuake2,
   bleedsMain,
   bleedsTraderHut,
   bleedsMainDuringCaravan,

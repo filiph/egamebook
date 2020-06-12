@@ -1,0 +1,14 @@
+// ---
+ROOM: $slopes_quake1
+
+VARIANT_OF: $slopes
+
+RULE: c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived)
+
+FIRST_DESCRIPTION:
+The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.
+
+Some of them are talking about how the quakes are getting more frequent.
+
+VARIANT_UPDATE_DESCRIPTION:
+There is talk among the young men and women about how the quakes are getting more frequent.

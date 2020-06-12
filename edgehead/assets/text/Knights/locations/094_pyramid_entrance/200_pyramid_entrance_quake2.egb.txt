@@ -1,0 +1,21 @@
+// ---
+ROOM: $pyramid_entrance_after_quake2
+
+VARIANT_OF: $pyramid_entrance
+
+RULE:
+c.hasHappened(evQuake2) && 
+!c.hasHappened(evCaravanDeparted) &&
+// Making sure this has higher specificity than $pyramid_entrance_during_caravan
+true && true
+
+FIRST_DESCRIPTION:
+[[CODE]]
+throw StateError("Player should have been here. Quake 2 only happens after player is in the Pyramid, and this is the only entrance.");
+[[ENDCODE]]
+
+VARIANT_UPDATE_DESCRIPTION:
+Kat is alone. Miguel has left.
+
+// TODO: action: talk to kat "Where is Miguel?"
+

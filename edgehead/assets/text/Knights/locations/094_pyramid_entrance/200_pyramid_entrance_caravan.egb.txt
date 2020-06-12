@@ -15,5 +15,3 @@ throw StateError("Player should have been here, as the rule above stipulates.");
 
 VARIANT_UPDATE_DESCRIPTION:
 Beasts of burden can be seen (and smelled) from here. The Bleeds is overflowing with them.
-
-DESCRIPTION: $NONE

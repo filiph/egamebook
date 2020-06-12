@@ -1,0 +1,14 @@
+// ---
+ROOM: $slopes_quake2
+
+VARIANT_OF: $slopes
+
+RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
+
+FIRST_DESCRIPTION:
+The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking mana pods on the slopes are all down on the ground, gathered around a dead body.
+
+VARIANT_UPDATE_DESCRIPTION:
+The young men and women are all down on the ground, gathered around a dead body.
+
+// TODO: allow talking to someone about this
