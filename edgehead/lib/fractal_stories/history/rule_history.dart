@@ -15,6 +15,9 @@ abstract class RuleHistory implements Built<RuleHistory, RuleHistoryBuilder> {
 
   RuleHistory._();
 
+  @nullable
+  RuleRecord get latestRule;
+
   BuiltMap<int, RuleRecord> get records;
 
   SingleQueryResult<RuleRecord> query(int ruleId) {

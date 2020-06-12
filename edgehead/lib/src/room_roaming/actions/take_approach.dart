@@ -174,6 +174,7 @@ class TakeApproachAction extends Action<RoomPath> {
     // These are normalized to the parent (no variants here).
     final closed = <Room>{context.simulation.getRoomParent(startingRoom)};
 
+    int count = 0;
     while (open.isNotEmpty) {
       final current = open.first;
       open.remove(current);
@@ -212,10 +213,12 @@ class TakeApproachAction extends Action<RoomPath> {
         if (approach.isImplicit) {
           // Don't auto-travel through implicit approaches. Just yield it.
           yield newPath;
+          count++;
           continue;
         }
 
         yield newPath;
+        count++;
 
         if (context.world.visitHistory
             .query(context.actor, destination)
@@ -224,6 +227,9 @@ class TakeApproachAction extends Action<RoomPath> {
           open.add(newPath);
         }
       }
+    }
+    if (count == 0) {
+      _log.severe('No approach coming from $startingRoom');
     }
   }
 }

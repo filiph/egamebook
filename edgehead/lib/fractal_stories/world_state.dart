@@ -352,7 +352,9 @@ abstract class WorldStateBuilder
   }
 
   void recordRule(Rule rule) {
-    ruleHistory.records[rule.hash] = RuleRecord(ruleId: rule.hash, time: time);
+    final record = RuleRecord(ruleId: rule.hash, time: time);
+    ruleHistory.records[rule.hash] = record;
+    ruleHistory.latestRule = record.toBuilder();
   }
 
   void recordVisit(Actor actor, Room room) {

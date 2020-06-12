@@ -14,10 +14,10 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/direct.dart';
 import 'package:edgehead/src/room_roaming/actions/heal.dart';
 import 'package:edgehead/src/room_roaming/actions/hire_npc.dart';
+import 'package:edgehead/src/room_roaming/actions/raise_dead_idle.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
 import 'package:edgehead/src/room_roaming/actions/take_implicit_approach.dart';
-import 'package:edgehead/src/room_roaming/actions/raise_dead_idle.dart';
 import 'package:edgehead/writers_input.compiled.dart' as writers_input;
 
 part 'room_roaming_situation.g.dart';
@@ -188,6 +188,10 @@ abstract class RoomRoamingSituation extends Object
     final sim = context.simulation;
     assert(_assertInvincibleActorsAlive(world));
     assert(_assertNobodyInVariantRoom(world, sim));
+    assert(
+        _assertRoomVariantStillValid(context),
+        "The current room variant ($currentRoomName) ceased to be valid "
+        "after ${context.currentAction}.");
 
     // Move corpses to the parent room so they can be found more easily.
     final corpses = _getCorpses(world);
@@ -224,13 +228,6 @@ abstract class RoomRoamingSituation extends Object
     return true;
   }
 
-  Iterable<Actor> _getCorpses(WorldState world) =>
-      world.actors.where((a) => a.isActive && !a.isAnimated);
-
-  Actor _getPlayer(WorldState world) =>
-      world.actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive,
-          orElse: () => null);
-
   bool _assertNobodyInVariantRoom(WorldState world, Simulation sim) {
     for (final actor in world.actors) {
       if (actor.currentRoomName == null) continue;
@@ -246,4 +243,26 @@ abstract class RoomRoamingSituation extends Object
     }
     return true;
   }
+
+  /// Asserts that the room variant doesn't change "under" the player.
+  /// This would be a bad idea, since there's no way to report this change
+  /// and moving from here to another place could become impossible.
+  bool _assertRoomVariantStillValid(ActionContext context) {
+    final room = context.simulation.getRoomByName(currentRoomName);
+    if (room.prerequisite != null) {
+      final newContext = ApplicabilityContext(
+          context.outputWorld.getActorById(context.actor.id),
+          context.simulation,
+          context.outputWorld.build());
+      return room.prerequisite.isSatisfiedBy(newContext);
+    }
+    return true;
+  }
+
+  Iterable<Actor> _getCorpses(WorldState world) =>
+      world.actors.where((a) => a.isActive && !a.isAnimated);
+
+  Actor _getPlayer(WorldState world) =>
+      world.actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive,
+          orElse: () => null);
 }

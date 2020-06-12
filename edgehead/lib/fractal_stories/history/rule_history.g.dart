@@ -24,7 +24,12 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
           specifiedType: const FullType(BuiltMap,
               const [const FullType(int), const FullType(RuleRecord)])),
     ];
-
+    if (object.latestRule != null) {
+      result
+        ..add('latestRule')
+        ..add(serializers.serialize(object.latestRule,
+            specifiedType: const FullType(RuleRecord)));
+    }
     return result;
   }
 
@@ -39,6 +44,10 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'latestRule':
+          result.latestRule.replace(serializers.deserialize(value,
+              specifiedType: const FullType(RuleRecord)) as RuleRecord);
+          break;
         case 'records':
           result.records.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap, const [
@@ -101,12 +110,14 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
 
 class _$RuleHistory extends RuleHistory {
   @override
+  final RuleRecord latestRule;
+  @override
   final BuiltMap<int, RuleRecord> records;
 
   factory _$RuleHistory([void Function(RuleHistoryBuilder) updates]) =>
       (new RuleHistoryBuilder()..update(updates)).build();
 
-  _$RuleHistory._({this.records}) : super._() {
+  _$RuleHistory._({this.latestRule, this.records}) : super._() {
     if (records == null) {
       throw new BuiltValueNullFieldError('RuleHistory', 'records');
     }
@@ -122,23 +133,33 @@ class _$RuleHistory extends RuleHistory {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is RuleHistory && records == other.records;
+    return other is RuleHistory &&
+        latestRule == other.latestRule &&
+        records == other.records;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, records.hashCode));
+    return $jf($jc($jc(0, latestRule.hashCode), records.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('RuleHistory')..add('records', records))
+    return (newBuiltValueToStringHelper('RuleHistory')
+          ..add('latestRule', latestRule)
+          ..add('records', records))
         .toString();
   }
 }
 
 class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
   _$RuleHistory _$v;
+
+  RuleRecordBuilder _latestRule;
+  RuleRecordBuilder get latestRule =>
+      _$this._latestRule ??= new RuleRecordBuilder();
+  set latestRule(RuleRecordBuilder latestRule) =>
+      _$this._latestRule = latestRule;
 
   MapBuilder<int, RuleRecord> _records;
   MapBuilder<int, RuleRecord> get records =>
@@ -149,6 +170,7 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
 
   RuleHistoryBuilder get _$this {
     if (_$v != null) {
+      _latestRule = _$v.latestRule?.toBuilder();
       _records = _$v.records?.toBuilder();
       _$v = null;
     }
@@ -172,10 +194,14 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
   _$RuleHistory build() {
     _$RuleHistory _$result;
     try {
-      _$result = _$v ?? new _$RuleHistory._(records: records.build());
+      _$result = _$v ??
+          new _$RuleHistory._(
+              latestRule: _latestRule?.build(), records: records.build());
     } catch (_) {
       String _$failedField;
       try {
+        _$failedField = 'latestRule';
+        _latestRule?.build();
         _$failedField = 'records';
         records.build();
       } catch (e) {

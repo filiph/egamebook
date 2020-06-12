@@ -3718,6 +3718,11 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   c.learnAbout(kbGoblinCampSmoke);
 
   w.updateActorById(tamaraId, (b) => b.isActive = false);
+
+  if (!c.hasItem(letterFromFatherId)) {
+    c.giveNewItemToPlayer(letterFromFather);
+    c.giveNewItemToPlayer(rockFromMeadow);
+  }
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -4371,6 +4376,11 @@ final Room bleedsMainAfterQuake1 = Room(
       c.learnAbout(kbGoblinCampSmoke);
 
       w.updateActorById(tamaraId, (b) => b.isActive = false);
+
+      if (!c.hasItem(letterFromFatherId)) {
+        c.giveNewItemToPlayer(letterFromFather);
+        c.giveNewItemToPlayer(rockFromMeadow);
+      }
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;

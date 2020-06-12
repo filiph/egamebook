@@ -44,7 +44,8 @@ class DirectAction extends Action<Nothing> {
   @override
   String applySuccess(ActionContext context, void _) {
     context.simulation.directorRuleset.apply(context);
-    return "the director acted";
+    final usedRule = context.outputWorld.ruleHistory.latestRule.build();
+    return "the director acted: $usedRule";
   }
 
   @override
