@@ -35,9 +35,14 @@ VARIANT_OF: $gods_lair
 RULE: c.hasHappened(evKarlKilledViaNecromancy)
 
 FIRST_DESCRIPTION:
+// Note: This is the first time player is in the room (incl. parent), so we know they didn't kill the guards.
 The gate is open. On it, there is a small star decoration.
 
-Beyond the gate, a giant's carcass lies. It's belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.
+Beyond the gate, a giant's carcass lies. Its belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.
+
+VARIANT_UPDATE_DESCRIPTION:
+The gate is severly damaged. Through a crack, I can see a giant's carcass. Its belly is teared open from the inside, by a humanoid figure with a bird head.
+
 
 DESCRIPTION: $NONE
 

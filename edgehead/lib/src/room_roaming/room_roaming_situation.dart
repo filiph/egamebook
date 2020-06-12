@@ -144,7 +144,7 @@ abstract class RoomRoamingSituation extends Object
       }
     } else if (!hasVisitedThisVariant) {
       // First time in this particular variant of the room.
-      if (room.variantFirstDescribe == null) {
+      if (room.variantUpdateDescribe == null) {
         // Show short description if there is no long description.
         assert(
             room.describe != null,
@@ -154,7 +154,7 @@ abstract class RoomRoamingSituation extends Object
       } else {
         // Otherwise, show long variant description.
         s.addParagraph();
-        room.variantFirstDescribe(context);
+        room.variantUpdateDescribe(context);
         s.addParagraph();
       }
     } else {

@@ -25,9 +25,22 @@ PREREQUISITES:
 COMPLETE_SUCCESS_DESCRIPTION:
 Terrible roar and thrashing comes from beyond the gate.
 
-"What's going on?" the berserker asks and picks up his battle axe. "What's goind on with Karl?"
+[[RULESET]]
+[[RULE]]
+  !c.hasHappened(evKarlGuardsKilled)
+[[THEN]]
+
+"What's going on?" the berserker asks and picks up his battle axe. "What's going on with Karl?"
 
 They go in, and are killed. Then, some more thrashing, then silence.
+
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+// Nothing here. The guards are dead already.
+[[ENDRULE]]
+[[ENDRULESET]]
 
 [[CODE]]
 c.markHappened(evKarlKilled);

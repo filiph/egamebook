@@ -84,9 +84,12 @@ class GeneratedRoom extends GeneratedGameObject {
       ]);
       namedArguments["prerequisite"] = prerequisite;
 
-      if (_map.containsKey('VARIANT_FIRST_DESCRIPTION')) {
-        namedArguments['variantFirstDescribe'] =
-            createDescriber(_map['VARIANT_FIRST_DESCRIPTION']);
+      if (_map.containsKey('VARIANT_UPDATE_DESCRIPTION')) {
+        namedArguments['variantUpdateDescribe'] =
+            createDescriber(_map['VARIANT_UPDATE_DESCRIPTION']);
+      } else if (_map.containsKey('FIRST_DESCRIPTION')) {
+        log.warning('Variant $writersName includes FIRST_DESCRIPTION '
+            'but no VARIANT_UPDATE_DESCRIPTION.');
       }
     }
 

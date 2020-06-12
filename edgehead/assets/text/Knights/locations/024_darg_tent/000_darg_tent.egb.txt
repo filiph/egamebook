@@ -22,7 +22,7 @@ RULE: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
 FIRST_DESCRIPTION:
 Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.
 
-VARIANT_FIRST_DESCRIPTION:
+VARIANT_UPDATE_DESCRIPTION:
 Darg is here.
 
 
@@ -35,7 +35,7 @@ RULE: c.hasHappened(evKilledDarg)
 FIRST_DESCRIPTION:
 Tent outside, at the top of the elevator structure. Overlooking the bay.
 
-VARIANT_FIRST_DESCRIPTION:
+VARIANT_UPDATE_DESCRIPTION:
 Darg won't be needing this tent anymore.
 
 

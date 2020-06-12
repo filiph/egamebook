@@ -15,7 +15,7 @@ HINT: This is a small village close the entrance to the Pyramid.
 
 RULE: c.hasHappened(evCaravanArrived) && !c.hasHappened(evCaravanDeparted)
 
-FIRST_DESCRIPTION:
+VARIANT_UPDATE_DESCRIPTION:
 The streets are full of animals, and there are some people negotiating.
 
 DESCRIPTION: $NONE

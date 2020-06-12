@@ -21,7 +21,7 @@ c.hasHappened(evOpenedDam)
 FIRST_DESCRIPTION:
 A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.
 
-VARIANT_FIRST_DESCRIPTION:
+VARIANT_UPDATE_DESCRIPTION:
 A lizardman stands in front of the pond.
 
 

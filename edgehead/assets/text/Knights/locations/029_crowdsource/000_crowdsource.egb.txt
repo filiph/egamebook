@@ -20,7 +20,7 @@ VARIANT_OF: $crowdsource
 // This happens ~10 minutes after the player first visited this room.
 RULE: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
 
-VARIANT_FIRST_DESCRIPTION:
+VARIANT_UPDATE_DESCRIPTION:
 The orcs are gone.
 
 

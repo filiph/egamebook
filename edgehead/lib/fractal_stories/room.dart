@@ -97,8 +97,8 @@ class Room {
   /// The description for when the player has visited this place before
   /// (they got the [firstDescribe], either from the main room, or a variant
   /// of it) but this is the first time they are visiting _this particular_
-  /// variant.
-  final RoomDescriber variantFirstDescribe;
+  /// variant. They need an update on what's new here.
+  final RoomDescriber variantUpdateDescribe;
 
   /// Optionally, a [Room] can have a parent room. In that case, this room
   /// is a specialized version (variant) of the parent.
@@ -171,7 +171,7 @@ class Room {
     this.groundMaterial = "ground",
     this.parent,
     this.prerequisite,
-    this.variantFirstDescribe,
+    this.variantUpdateDescribe,
     this.afterMonstersCleared,
     this.whereDescription,
     this.isIdle = false,

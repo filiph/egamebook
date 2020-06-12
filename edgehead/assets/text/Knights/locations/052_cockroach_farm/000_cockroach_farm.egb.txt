@@ -21,7 +21,7 @@ RULE: c.hasHappened(evOpenedDam)
 FIRST_DESCRIPTION:
 I am in a maze of twisty little passages, all alike. A few wet cockroaches are crawling around, but most of the place is empty.
 
-VARIANT_FIRST_DESCRIPTION:
+VARIANT_UPDATE_DESCRIPTION:
 The whole area is wet. There are puddles of water everywhere, and a few cockroaches scurrying between them.
 
 DESCRIPTION: $NONE

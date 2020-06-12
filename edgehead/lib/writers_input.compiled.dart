@@ -386,7 +386,7 @@ final Room dargTentAfterDargArrived = Room(
       return c.hasHappened(evDargLeftCrowdsource) &&
           !c.hasHappened(evKilledDarg);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -426,7 +426,7 @@ final Room dargTentAfterDargKilled = Room(
       final Actor a = c.actor;
       return c.hasHappened(evKilledDarg);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -642,7 +642,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       return c.hasHappened(evDargLeftCrowdsource) &&
           !c.hasHappened(evKilledDarg);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -782,7 +782,7 @@ final Room conetAfterClearing = Room(
       final Actor a = c.actor;
       return c.hasHappened(evConetDestroyed);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -887,9 +887,36 @@ class KarlUseNecromancy extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'Terrible roar and thrashing comes from beyond the gate.\n\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s goind on with Karl?"\n\nThey go in, and are killed. Then, some more thrashing, then silence.\n\n',
+    s.add('Terrible roar and thrashing comes from beyond the gate.\n\n',
         isRaw: true);
+    Ruleset(
+        Rule(564758293, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return !c.hasHappened(evKarlGuardsKilled);
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s going on with Karl?"\n\nThey go in, and are killed. Then, some more thrashing, then silence.\n\n',
+              isRaw: true);
+        }),
+        Rule(775067539, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+        })).apply(c);
     c.markHappened(evKarlKilled);
     c.markHappened(evKarlGuardsKilled);
     c.markHappened(evKarlKilledViaNecromancy);
@@ -1194,7 +1221,7 @@ final Room godsLairAfterNecromancy = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The gate is open. On it, there is a small star decoration.\n\nBeyond the gate, a giant\'s carcass lies. It\'s belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.\n',
+          'The gate is open. On it, there is a small star decoration.\n\nBeyond the gate, a giant\'s carcass lies. Its belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -1214,6 +1241,16 @@ final Room godsLairAfterNecromancy = Room(
       final Actor a = c.actor;
       return c.hasHappened(evKarlKilledViaNecromancy);
     }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The gate is severly damaged. Through a crack, I can see a giant\'s carcass. Its belly is teared open from the inside, by a humanoid figure with a bird head.\n',
+          isRaw: true);
+    },
     isIdle: true,
     positionX: 35,
     positionY: 42,
@@ -1397,7 +1434,7 @@ final Room cockroachFarmAfterOpenDam = Room(
       final Actor a = c.actor;
       return c.hasHappened(evOpenedDam);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -1608,7 +1645,7 @@ final Room jungleEntranceMuddyFootprints = Room(
       final Actor a = c.actor;
       return c.hasHappened(evOpenedDam);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -1847,7 +1884,7 @@ final Room pondWithLizardman = Room(
       final Actor a = c.actor;
       return c.hasHappened(evOpenedDam);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -2030,7 +2067,7 @@ final Room farmersVillageQuake1 = Room(
       final Actor a = c.actor;
       return c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived);
     }),
-    variantFirstDescribe: (ActionContext c) {
+    variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
@@ -3968,24 +4005,32 @@ final Approach endOfRoamFromBleedsMain =
   final Storyline s = c.outputStoryline;
   s.add('You realize this adventuring life is not for you.\n', isRaw: true);
 });
-final Room bleedsMainDuringCaravan = Room('bleeds_main_during_caravan',
+final Room bleedsMainDuringCaravan = Room(
+    'bleeds_main_during_caravan',
     (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'The streets are full of animals, and there are some people negotiating.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null,
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          isRaw: true);
+      c.learnAbout(kbTrader);
+      c.learnAbout(kbGoblinCampSmoke);
+
+      w.updateActorById(tamaraId, (b) => b.isActive = false);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
     parent: 'bleeds_main',
     prerequisite: Prerequisite(1072163588, 2, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
@@ -3994,6 +4039,16 @@ final Room bleedsMainDuringCaravan = Room('bleeds_main_during_caravan',
       return c.hasHappened(evCaravanArrived) &&
           !c.hasHappened(evCaravanDeparted);
     }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The streets are full of animals, and there are some people negotiating.\n',
+          isRaw: true);
+    },
     isIdle: true,
     positionX: 37,
     positionY: 98,
