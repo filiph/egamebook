@@ -14,6 +14,8 @@ final _caravanDeparture = Rule(_id++, 2, true, (ApplicabilityContext c) {
       c.inRoomParent('staging_area') &&
       // Miguel newly available in the HQ area.
       c.inRoomParent('knights_hq_main') &&
+      // Not in a populated room, since caravan departure replaces Quake2.
+      !c.inPopulatedRoom &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 150)));
 }, (ActionContext c) {

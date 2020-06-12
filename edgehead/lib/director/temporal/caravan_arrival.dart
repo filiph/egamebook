@@ -11,6 +11,8 @@ final _caravanArrival = Rule(_id++, 2, true, (ApplicabilityContext c) {
       c.playerDistanceTo('bleeds_main') > 20 &&
       // We must be above.
       c.playerParentRoom.positionY < 90 &&
+      // Not in a populated room, since caravan replaces Quake1.
+      !c.inPopulatedRoom &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 90)));
 }, (ActionContext c) {

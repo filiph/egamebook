@@ -10,6 +10,10 @@ final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evCaravanDeparted) &&
       // Must be exploring above.
       c.playerRoom.positionY < 53 &&
+      // Not in a populated room, since caravan departure replaces caravan
+      // departure. This is likely redundant since we're above populated
+      // areas, just being defensive.
+      !c.inPopulatedRoom &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 190)));
 }, (ActionContext c) {
