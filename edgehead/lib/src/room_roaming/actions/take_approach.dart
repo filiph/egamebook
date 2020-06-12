@@ -167,7 +167,17 @@ class TakeApproachAction extends Action<RoomPath> {
   static Iterable<RoomPath> _walkApproaches(
       ApplicabilityContext context, Room startingRoom) sync* {
     // The unclosed paths that we yet have to explore.
-    final open = {RoomPath.start(startingRoom)};
+    final open = <RoomPath>{};
+
+    if (startingRoom.parent != null &&
+        startingRoom.prerequisite?.isSatisfiedBy(context) == false) {
+      // The [startingRoom] is no longer a valid variant. We need to use
+      // the parent instead.
+      open.add(RoomPath.start(context.simulation.getRoomParent(startingRoom)));
+    } else {
+      // This is either a parent room, or a valid variant. Just add it.
+      open.add(RoomPath.start(startingRoom));
+    }
 
     // Rooms that have been visited by the walk, and therefore shouldn't be
     // considered again.
