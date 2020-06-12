@@ -10,6 +10,10 @@ final _caravanDeparture = Rule(_id++, 2, true, (ApplicabilityContext c) {
       c.playerDistanceTo('bleeds_main') > 20 &&
       // We must be above.
       c.playerParentRoom.positionY < 90 &&
+      // Taheen appears in the staging area.
+      c.inRoomParent('staging_area') &&
+      // Miguel newly available in the HQ area.
+      c.inRoomParent('knights_hq_main') &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 150)));
 }, (ActionContext c) {
