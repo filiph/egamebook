@@ -43,8 +43,10 @@ Beyond the gate, a giant's carcass lies. Its belly is teared open from the insid
 VARIANT_UPDATE_DESCRIPTION:
 The gate is severly damaged. Through a crack, I can see a giant's carcass. Its belly is teared open from the inside, by a humanoid figure with a bird head.
 
-
 DESCRIPTION: $NONE
+
+FIGHT_SITUATION: null
+
 
 // ---
 

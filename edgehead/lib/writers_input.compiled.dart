@@ -1232,7 +1232,7 @@ final Room godsLairAfterNecromancy = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
-    generateGodsLairFight,
+    null,
     null,
     parent: 'gods_lair',
     prerequisite: Prerequisite(727361369, 1, true, (ApplicabilityContext c) {
