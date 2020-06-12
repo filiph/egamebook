@@ -19,6 +19,7 @@ import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
 import 'package:edgehead/src/room_roaming/actions/take_implicit_approach.dart';
 import 'package:edgehead/writers_input.compiled.dart' as writers_input;
+import 'package:logging/logging.dart';
 
 part 'room_roaming_situation.g.dart';
 
@@ -26,6 +27,8 @@ abstract class RoomRoamingSituation extends Object
     with SituationBaseBehavior
     implements Built<RoomRoamingSituation, RoomRoamingSituationBuilder> {
   static const String className = "RoomRoamingSituation";
+
+  static final _log = Logger('RoomRoamingSituation');
 
   static Serializer<RoomRoamingSituation> get serializer =>
       _$roomRoamingSituationSerializer;
@@ -188,10 +191,8 @@ abstract class RoomRoamingSituation extends Object
     final sim = context.simulation;
     assert(_assertInvincibleActorsAlive(world));
     assert(_assertNobodyInVariantRoom(world, sim));
-    assert(
-        _assertRoomVariantStillValid(context),
-        "The current room variant ($currentRoomName) ceased to be valid "
-        "after ${context.currentAction}.");
+
+    assert(_logIfRoomVariantNoLongerValid(context));
 
     // Move corpses to the parent room so they can be found more easily.
     final corpses = _getCorpses(world);
@@ -244,25 +245,39 @@ abstract class RoomRoamingSituation extends Object
     return true;
   }
 
-  /// Asserts that the room variant doesn't change "under" the player.
-  /// This would be a bad idea, since there's no way to report this change
-  /// and moving from here to another place could become impossible.
-  bool _assertRoomVariantStillValid(ActionContext context) {
-    final room = context.simulation.getRoomByName(currentRoomName);
-    if (room.prerequisite != null) {
-      final newContext = ApplicabilityContext(
-          context.outputWorld.getActorById(context.actor.id),
-          context.simulation,
-          context.outputWorld.build());
-      return room.prerequisite.isSatisfiedBy(newContext);
-    }
-    return true;
-  }
-
   Iterable<Actor> _getCorpses(WorldState world) =>
       world.actors.where((a) => a.isActive && !a.isAnimated);
 
   Actor _getPlayer(WorldState world) =>
       world.actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive,
           orElse: () => null);
+
+  /// Asserts that the room variant doesn't change "under" the player.
+  /// This would be a bad idea, since there's no way to report this change
+  /// and moving from here to another place could become impossible.
+  bool _logIfRoomVariantNoLongerValid(ActionContext context) {
+    final room = context.simulation.getRoomByName(currentRoomName);
+    if (room.prerequisite != null) {
+      final newContext = ApplicabilityContext(
+          context.outputWorld.getActorById(context.actor.id),
+          context.simulation,
+          context.outputWorld.build());
+      final stillSatisfied = room.prerequisite.isSatisfiedBy(newContext);
+
+      if (!stillSatisfied) {
+        _log.warning(
+            "The current room variant ($currentRoomName) ceased to be valid "
+            "after ${context.currentAction.name} by ${context.actor.name}.");
+        if (context.actor.isDirector) {
+          assert(
+              false,
+              "The director changed the room from under the player. "
+              "The current room variant ($currentRoomName) ceased to be valid "
+              "after a director move. How we got here: "
+              "${context.outputWorld.build().actionHistory.describe()}");
+        }
+      }
+    }
+    return true;
+  }
 }
