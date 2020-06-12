@@ -37,5 +37,6 @@ void _quake2Apply(ActionContext c) {
 
 bool _quake2BaseRequirements(ApplicabilityContext c) =>
     c.hasHappened(evCaravanArrived) &&
+    !c.inPopulatedRoom &&
     c.world.time
         .isAfter(edgeheadStartingTime.add(const Duration(minutes: 120)));

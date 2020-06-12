@@ -8,7 +8,8 @@ part of edgehead_director;
 ///   * Kat now available as a follower
 final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evCaravanDeparted) &&
-      c.playerDistanceTo('knights_hq_main') > 20 &&
+      // Must be exploring above.
+      c.playerRoom.positionY < 53 &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 190)));
 }, (ActionContext c) {

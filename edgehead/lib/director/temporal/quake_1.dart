@@ -6,6 +6,7 @@ part of edgehead_director;
 final _quake1 = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return !c.hasHappened(evConetDestroyed) &&
       !c.inRoomParent('conet') &&
+      !c.inPopulatedRoom &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 30)));
 }, _quake1Apply);

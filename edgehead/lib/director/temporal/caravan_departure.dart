@@ -17,7 +17,7 @@ final _caravanDeparture = Rule(_id++, 2, true, (ApplicabilityContext c) {
   s.addParagraph();
   s.add(
       'Once again, I can hear loud commotion from way below, '
-      'outside the Pyramid.',
+      'outside the Pyramid. And then the horn.',
       isRaw: true);
   c.outputWorld.recordCustom(evCaravanDeparted);
 });

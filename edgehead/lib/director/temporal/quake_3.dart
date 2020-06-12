@@ -34,5 +34,6 @@ void _quake3Apply(ActionContext c) {
 
 bool _quake3BaseRequirements(ApplicabilityContext c) =>
     c.hasHappened(evOrcOffensive) &&
+    !c.inPopulatedRoom &&
     c.world.time
         .isAfter(edgeheadStartingTime.add(const Duration(minutes: 210)));

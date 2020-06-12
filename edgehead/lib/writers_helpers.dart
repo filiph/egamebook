@@ -433,6 +433,14 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return parentRoom.name == roomName;
   }
 
+  bool get inPopulatedRoom =>
+      inRoomParent('bleeds_main') ||
+      inRoomParent('farmers_village') ||
+      inRoomParent('staging_area') ||
+      inRoomParent('slopes') ||
+      inRoomParent('knights_hq_main') ||
+      inRoomParent('deathless_village');
+
   /// Returns `true` if the player is currently in the same room as [actorId].
   ///
   /// Ignores variants, so it's safe even if one of the actors is in
