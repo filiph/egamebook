@@ -89,8 +89,12 @@ class TakeApproachAction extends Action<RoomPath> {
     }
 
     final wasVisited = _alreadyVisited(context, path.destination);
+    // Either provide the first or the following hint, or an empty string
+    // if both are missing.
+    final hint =
+        (wasVisited ? path.destination.hint : path.destination.firstHint) ?? '';
     return {
-      'hint': wasVisited ? path.destination.hint : path.destination.firstHint,
+      'hint': hint,
     };
   }
 
