@@ -253,6 +253,8 @@ class EdgeheadGame extends Book {
           edgeheadPlayer,
           edgeheadTamara,
           edgeheadLeroy,
+          edgeheadKat,
+          edgeheadMiguel,
           edgeheadLadyHope,
           edgeheadDarg,
           sixtyFiverOrc,

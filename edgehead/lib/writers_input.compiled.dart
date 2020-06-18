@@ -2844,7 +2844,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
+      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2949,7 +2949,9 @@ class TalkToKatAboutBrother extends RoamingAction {
     if (c.inRoomParent('pyramid_entrance') != true) {
       return false;
     }
-    if (!(w.actionHasBeenPerformed("talk_to_kat_greetings") &&
+    if (!(c.inRoomWith(miguelId) &&
+        c.inRoomWith(katId) &&
+        w.actionHasBeenPerformed("talk_to_kat_greetings") &&
         w.actionNeverUsed("talk_to_miguel_about_brother"))) {
       return false;
     }
@@ -3017,7 +3019,7 @@ class TalkToKatGreetings extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('pyramid_entrance') != true) {
+    if (!(c.inRoomWith(katId))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -3310,10 +3312,9 @@ class TalkToMiguelAboutBrother extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('pyramid_entrance') != true) {
-      return false;
-    }
-    if (!(w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
+    if (!(c.inRoomWith(miguelId) &&
+        c.inRoomWith(katId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
         w.actionNeverUsed("talk_to_kat_about_brother"))) {
       return false;
     }
@@ -3376,7 +3377,7 @@ class TalkToMiguelGreetings extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('pyramid_entrance') != true) {
+    if (!(c.inRoomWith(miguelId))) {
       return false;
     }
     return w.actionNeverUsed(name);

@@ -41,6 +41,11 @@ void _quake2Apply(ActionContext c) {
     });
   }
 
+  assert(c.world.getActorById(miguelId).isAnimatedAndActive);
+  c.outputWorld.updateActorById(miguelId, (b) {
+    b.currentRoomName = 'knights_hq_main';
+  });
+
   c.outputWorld.recordCustom(evQuake2);
 }
 

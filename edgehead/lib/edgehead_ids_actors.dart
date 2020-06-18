@@ -8,10 +8,16 @@ const int directorId = -1;
 /// The goblin at the start of Knights.
 const int firstGoblinId = 6003;
 
+/// Kat, the knight at the entrance.
+const int katId = 103;
+
 /// Lady Hope.
 const int ladyHopeId = 6004;
 
 const int leroyId = 101;
+
+/// Miguel, the antsy knight at the entrance.
+const int miguelId = 102;
 
 /// [edgeheadPlayer]'s [Actor.id].
 const int playerId = 1;

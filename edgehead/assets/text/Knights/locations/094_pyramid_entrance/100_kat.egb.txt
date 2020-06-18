@@ -1,7 +1,9 @@
 // ---
 ACTION: $talk_to_kat_greetings
 COMMAND: Guardswoman >> Talk >> "Greetings."
-FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(katId)
 
 INK:
 // Subtext: Kat is a bit self-conscious about her name. But she's professional.
@@ -31,6 +33,10 @@ COMMAND: Kat, the guardswoman >> Talk >> "I'm looking for a Sarn of Falling Rock
 FOR_LOCATION: $pyramid_entrance
 
 PREREQUISITES:
+c.inRoomWith(miguelId)
+&&
+c.inRoomWith(katId)
+&&
 w.actionHasBeenPerformed("talk_to_kat_greetings")
 &&
 w.actionNeverUsed("talk_to_miguel_about_brother")

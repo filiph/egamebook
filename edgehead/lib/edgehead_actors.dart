@@ -21,22 +21,17 @@ final Actor edgeheadDarg = Actor.initialized(
   team: defaultEnemyTeam,
 );
 
-/// The orc sixty-fiver.
-final Actor sixtyFiverOrc = Actor.initialized(
-  sixtyFiverOrcId,
-  StatefulRandom(~sixtyFiverOrcId).next,
-  "sixty-fiver",
-  adjective: "orcish",
-  pronoun: Pronoun.HE,
-  currentRoomName: 'battlefield',
-  currentWeapon: Item.weapon(
-    sixtyFiverSwordId,
-    WeaponType.sword,
-    adjective: 'sixty-fiver',
-    firstOwnerId: sixtyFiverOrcId,
-  ),
-  currentShield: sixtyFiverShield,
-  team: defaultEnemyTeam,
+/// Kat, the  knight at the entrance.
+final Actor edgeheadKat = Actor.initialized(
+  katId,
+  StatefulRandom(~katId).next,
+  "Kat",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.SHE,
+  currentRoomName: 'pyramid_entrance',
+  currentWeapon: Item.weapon(234313, WeaponType.sword,
+      adjective: "bastard", name: "sword", firstOwnerId: katId),
+  poseMax: Pose.combat,
 );
 
 /// Lady Hope.
@@ -69,6 +64,19 @@ final Actor edgeheadLeroy = Actor.initialized(
       adjective: "peasant", firstOwnerId: leroyId),
 );
 
+/// Miguel, the antsy knight at the entrance.
+final Actor edgeheadMiguel = Actor.initialized(
+  miguelId,
+  StatefulRandom(~miguelId).next,
+  "Miguel",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.HE,
+  currentRoomName: 'pyramid_entrance',
+  currentWeapon: Item.weapon(234312, WeaponType.axe,
+      adjective: "long", name: "halberd", firstOwnerId: miguelId),
+  poseMax: Pose.combat,
+);
+
 /// The player.
 final Actor edgeheadPlayer = Actor.initialized(
   playerId,
@@ -99,4 +107,22 @@ final Actor edgeheadTamara = Actor.initialized(
   followingActorId: playerId,
   currentWeapon: Item.weapon(2342341, WeaponType.sword,
       adjective: "mercenary", firstOwnerId: tamaraId),
+);
+
+/// The orc sixty-fiver.
+final Actor sixtyFiverOrc = Actor.initialized(
+  sixtyFiverOrcId,
+  StatefulRandom(~sixtyFiverOrcId).next,
+  "sixty-fiver",
+  adjective: "orcish",
+  pronoun: Pronoun.HE,
+  currentRoomName: 'battlefield',
+  currentWeapon: Item.weapon(
+    sixtyFiverSwordId,
+    WeaponType.sword,
+    adjective: 'sixty-fiver',
+    firstOwnerId: sixtyFiverOrcId,
+  ),
+  currentShield: sixtyFiverShield,
+  team: defaultEnemyTeam,
 );

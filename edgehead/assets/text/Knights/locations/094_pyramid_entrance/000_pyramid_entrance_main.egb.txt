@@ -22,6 +22,8 @@ As [we] approach, I can't stop looking up at the structure. The wind changes her
 
 Two knights, a woman and a man, are on guard.
 
+// TODO: add image
+
 Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. 
 
 DESCRIPTION: $NONE
