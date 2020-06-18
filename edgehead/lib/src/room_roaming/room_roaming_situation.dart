@@ -130,6 +130,24 @@ abstract class RoomRoamingSituation extends Object
         .query(a, room, includeVariants: true)
         .hasHappened;
 
+    // Move the actor and also all the other actors in the party.
+    for (final actor in getPartyOf(a, sim, w.build())) {
+      w.updateActorById(actor.id, (b) => b..currentRoomName = parentRoom.name);
+      w.recordVisit(actor, room);
+    }
+
+    // Make a copy of the context after the relocation has been applied,
+    // so that describers below can depend on the player and their entourage
+    // to already be where they're going.
+    final afterMoveContext = ActionContext(
+        context.currentAction,
+        w.getActorById(a.id),
+        context.simulation,
+        w.build(),
+        w,
+        context.outputStoryline,
+        context.successChance);
+
     if (!hasVisitedAnyVariant) {
       // The very first time here.
       if (room.firstDescribe == null) {
@@ -138,11 +156,11 @@ abstract class RoomRoamingSituation extends Object
             room.describe != null,
             "$room visited for the second time but "
             "no regular description available.");
-        room.describe(context);
+        room.describe(afterMoveContext);
       } else {
         // Otherwise, show long description.
         s.addParagraph();
-        room.firstDescribe(context);
+        room.firstDescribe(afterMoveContext);
         s.addParagraph();
       }
     } else if (!hasVisitedThisVariant) {
@@ -153,11 +171,11 @@ abstract class RoomRoamingSituation extends Object
             room.describe != null,
             "$room (variant) visited for the second time but "
             "no regular description available.");
-        room.describe(context);
+        room.describe(afterMoveContext);
       } else {
         // Otherwise, show long variant description.
         s.addParagraph();
-        room.variantUpdateDescribe(context);
+        room.variantUpdateDescribe(afterMoveContext);
         s.addParagraph();
       }
     } else {
@@ -166,7 +184,7 @@ abstract class RoomRoamingSituation extends Object
           room.describe != null,
           "$room visited for the second time but "
           "no regular description available.");
-      room.describe(context);
+      room.describe(afterMoveContext);
     }
 
     final localCorpses = _getCorpses(w.build())
@@ -176,12 +194,6 @@ abstract class RoomRoamingSituation extends Object
       s.addEnumeration(
           "<subject> can <also> see the remains of", localCorpses, "here",
           subject: _getPlayer(originalWorld));
-    }
-
-    // Move the actor and also all the other actors in the party.
-    for (final actor in getPartyOf(a, sim, w.build())) {
-      w.updateActorById(actor.id, (b) => b..currentRoomName = parentRoom.name);
-      w.recordVisit(actor, room);
     }
   }
 
