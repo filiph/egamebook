@@ -235,7 +235,7 @@ class TakeApproachAction extends Action<RoomPath> {
         count++;
 
         if (context.world.visitHistory
-            .query(context.actor, destination)
+            .query(context.actor, destination, includeVariants: true)
             .hasHappened) {
           // The actor has been here. They can "fast travel" through.
           open.add(newPath);
