@@ -33,6 +33,13 @@ void _quake2Apply(ActionContext c) {
   s.add('Suddenly, a quake. Outside the pyramid, a chilling human scream.',
       isRaw: true);
 
+  if (c.hasHappened(evConetDestroyed)) {
+    s.add(
+        "I thought I've destroyed the source of the quakes, "
+        "but apparently not.",
+        isRaw: true);
+  }
+
   if (c.world.getActorById(leroyId).isAnimatedAndActive) {
     // Move Leroy to Knights HQ.
     c.outputWorld.updateActorById(leroyId, (b) {

@@ -30,6 +30,14 @@ void _quake3Apply(ActionContext c) {
   s.addParagraph();
   s.add('Suddenly, a quake.', isRaw: true);
 
+  if (c.hasHappened(evConetDestroyed)) {
+    // TODO: check if we've said this in quake2, in which case skip this.
+    s.add(
+        "I thought I've destroyed the source of the quakes, "
+        "but apparently not.",
+        isRaw: true);
+  }
+
   final miguel = c.world.getActorById(miguelId);
   if (miguel.npc.followingActorId != c.player.id) {
     // Miguel wasn't hired, or was later "un-hired".
