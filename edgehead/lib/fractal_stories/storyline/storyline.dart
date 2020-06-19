@@ -392,7 +392,9 @@ class Storyline {
       // Adds 'the', 'a', or nothing.
       // Code mostly copy-pasted from [_addParticles].
       String articleWithParticle;
-      if (_hasBeenMentioned(article, time)) {
+      if (article.nameIsProperNoun) {
+        articleWithParticle = fullName;
+      } else if (_hasBeenMentioned(article, time)) {
         articleWithParticle = "the $fullName";
       } else {
         _firstMentions[article.id] = time;
