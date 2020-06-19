@@ -75,12 +75,9 @@ class WaitWhileRoamingAction extends Action<Nothing> {
       return false;
     }
 
-    var applicable = false;
-    assert(() {
-      // True only in DEBUG builds.
-      applicable = true;
-      return true;
-    }());
+    if (!a.isPlayer) return false;
+
+    var applicable = true;
     return applicable;
   }
 }
