@@ -68,7 +68,7 @@ class WaitWhileRoamingAction extends Action<Nothing> {
     final situation = w.currentSituation as RoomRoamingSituation;
     final room = sim.getRoomByName(situation.currentRoomName);
 
-    if (room.isSynthetic) return false;
+    if (room.isSynthetic || !room.isOnMap) return false;
 
     if (situation.monstersAlive) {
       // Don't allow healing when monsters in this room are still alive.
