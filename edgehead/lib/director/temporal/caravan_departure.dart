@@ -3,15 +3,13 @@ part of edgehead_director;
 /// Caravan Departure
 ///
 ///   * Caravan away
-///   * Taheen in the staging area
+///   * Taheen in the Bleeds
 ///   * Miguel now available as a follower
 final _caravanDeparture = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evQuake2) &&
       c.playerDistanceTo('bleeds_main') > 20 &&
       // We must be above.
       c.playerParentRoom.positionY < 90 &&
-      // Taheen appears in the staging area.
-      c.inRoomParent('staging_area') &&
       // Miguel newly available in the HQ area.
       c.inRoomParent('knights_hq_main') &&
       // Not in a populated room, since caravan departure replaces Quake2.

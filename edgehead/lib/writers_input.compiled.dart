@@ -1965,6 +1965,50 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
     positionX: 37,
     positionY: 70,
     mapName: 'Knights Headquarters');
+final Room knightsHqCaravanDeparture = Room(
+    'knights_hq_caravan_departure',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      throw StateError(
+          "Player should have been here, as the rule above stipulates.");
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'knights_hq_main',
+    prerequisite: Prerequisite(294899248, 3, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evCaravanDeparted) &&
+          !c.hasHappened(evOrcOffensive) &&
+          c.playerHasVisited(knights_hq_quake2);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The circle of women and men is no longer here. Most of them left.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 37,
+    positionY: 70,
+    mapName: 'Knights Headquarters');
 final Room knightsHqQuake2 = Room(
     'knights_hq_quake2',
     (ActionContext c) {
@@ -4838,6 +4882,54 @@ final Room bleedsMainDuringCaravan = Room(
     hint: 'This is a small village close the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
+final Room bleedsMainAfterCaravan = Room(
+    'bleeds_main_after_caravan',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      throw StateError("Player should have been to the Bleeds already.");
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'bleeds_main',
+    prerequisite: Prerequisite(497066215, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evCaravanDeparted) && !c.hasHappened(evOrcOffensive);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final ifBlock_405410045 = c.playerHasVisited("bleeds_main_during_caravan")
+          ? '''The caravan has left. The hawkman named Gadelon stays.'''
+          : '''A tall figure is standing near the trader's shop. At first it seems like the person has a cape, but the truth is they don't. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.''';
+      s.add(
+          'The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. $ifBlock_405410045\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 37,
+    positionY: 98,
+    mapName: 'The Bleeds',
+    firstMapName: 'Some buildings',
+    hint: 'This is a small village close the entrance to the Pyramid.',
+    firstHint:
+        'There seems to be a village or at least a homestead next to the Pyramid.');
 final Room bleedsMainAfterQuake1 = Room(
     'bleeds_main_after_quake_1',
     (ActionContext c) {
@@ -6184,6 +6276,7 @@ final allRooms = <Room>[
   pondWithLizardman,
   deathlessVillageQuake2,
   knightsHqMain,
+  knightsHqCaravanDeparture,
   knightsHqQuake2,
   elevator12,
   slopes,
@@ -6206,6 +6299,7 @@ final allRooms = <Room>[
   bleedsMain,
   bleedsTraderHut,
   bleedsMainDuringCaravan,
+  bleedsMainAfterCaravan,
   bleedsMainAfterQuake1,
   bleedsMainAfterQuake2,
   goblinSkirmishPatrol,

@@ -1,0 +1,20 @@
+// ---
+ROOM: $knights_hq_caravan_departure
+
+VARIANT_OF: $knights_hq_main
+
+RULE:
+c.hasHappened(evCaravanDeparted)
+&&
+!c.hasHappened(evOrcOffensive)
+&&
+// This only makes sense if the player has seen the "circle" of vigilantes.
+c.playerHasVisited(knights_hq_quake2)
+
+FIRST_DESCRIPTION:
+[[CODE]]
+throw StateError("Player should have been here, as the rule above stipulates.");
+[[ENDCODE]]
+
+VARIANT_UPDATE_DESCRIPTION:
+The circle of women and men is no longer here. Most of them left.

@@ -2,6 +2,10 @@ part of edgehead_director;
 
 final _leroyQuits = Rule(_id++, 2, true, (ApplicabilityContext c) {
   if (!c.isInIdleRoom) return false;
+  // After the second quake, Leroy is again available as a follower.
+  // This action is meant only to be Leroy after the clearing of the goblin
+  // camp.
+  if (c.hasHappened(evQuake2)) return false;
   final leroy = c.world.getActorById(leroyId);
   if (!leroy.isAnimatedAndActive) return false;
   if (leroy.anatomy.isUndead) return false;
