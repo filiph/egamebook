@@ -26,9 +26,26 @@ final _quake3FromAbove = Rule(
     _quake3Apply);
 
 void _quake3Apply(ActionContext c) {
-  final Storyline s = c.outputStoryline;
+  final s = c.outputStoryline;
   s.addParagraph();
   s.add('Suddenly, a quake.', isRaw: true);
+
+  final miguel = c.world.getActorById(miguelId);
+  if (miguel.npc.followingActorId != c.player.id) {
+    // Miguel wasn't hired, or was later "un-hired".
+    assert(miguel.isAnimatedAndActive);
+    // Move Miguel to the junction and kill him.
+    c.outputWorld.updateActorById(miguelId, (b) {
+      b.currentRoomName = 'junction';
+      b.hitpoints = 0;
+      if (b.inventory.currentWeapon != null) {
+        // TODO: move his weapon on the ground when we have a way to do that
+        // final weapon = b.inventory.currentWeapon;
+        // b.inventory.remove(weapon);
+      }
+    });
+  }
+
   c.outputWorld.recordCustom(evQuake3);
 }
 

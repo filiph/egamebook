@@ -29,7 +29,7 @@ c.hasHappened(evQuake2)
 w.actionHasBeenPerformed("talk_to_ada_greetings")
 
 INK:
-TODO: Ada asks for help. Knights are leaving. This is bad.
+TODO: Ada asks for help. "Knights are leaving. This is bad."
 
 
 NOTES:

@@ -10,5 +10,9 @@ The steep slope of the Pyramid is covered in vines from this point down. Young m
 
 Some of them are talking about how the quakes are getting more frequent.
 
+In the distance, a large group is traveling the main road, towards the Pyramid.
+
 VARIANT_UPDATE_DESCRIPTION:
 There is talk among the young men and women about how the quakes are getting more frequent.
+
+In the distance, a large group is traveling the main road, towards the Pyramid.

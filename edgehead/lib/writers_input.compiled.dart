@@ -2021,6 +2021,47 @@ final Room deathlessVillageQuake2 = Room(
     positionX: 18,
     positionY: 68,
     mapName: 'Village of the Deathless');
+final Room deathlessVillageQuake3 = Room(
+    'deathless_village_quake3',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'On a ledge overlooking the jungle, a village of cargo cultists. It is seriously damaged.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'deathless_village',
+    prerequisite: Prerequisite(1025683774, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake3);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The village has been seriously damaged by the latest quake.\n',
+          isRaw: true);
+    },
+    positionX: 18,
+    positionY: 68,
+    mapName: 'Village of the Deathless');
 final Approach knightsHqMainFromBattlefield =
     Approach('battlefield', 'knights_hq_main', '', null);
 final Approach knightsHqMainFromElevator12 =
@@ -2354,6 +2395,47 @@ final Room knightsHqQuake2 = Room(
     positionX: 37,
     positionY: 70,
     mapName: 'Knights Headquarters');
+final Room knightsHqQuake3 = Room(
+    'knights_hq_quake3',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the deserted bunks of the Knights of San Francisco.\n\nSilence. The knights have left.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'knights_hq_main',
+    prerequisite: Prerequisite(1010227962, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake3);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('Silence. The knights have left.\n', isRaw: true);
+    },
+    isIdle: true,
+    positionX: 37,
+    positionY: 70,
+    mapName: 'Knights Headquarters');
 final Approach elevator12FromElevator28 =
     Approach('elevator_28', 'elevator_12', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2409,7 +2491,7 @@ final Room slopesQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n\nSome of them are talking about how the quakes are getting more frequent.\n',
+          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n\nSome of them are talking about how the quakes are getting more frequent.\n\nIn the distance, a large group is traveling the main road, towards the Pyramid.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -2436,7 +2518,7 @@ final Room slopesQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'There is talk among the young men and women about how the quakes are getting more frequent.\n',
+          'There is talk among the young men and women about how the quakes are getting more frequent.\n\nIn the distance, a large group is traveling the main road, towards the Pyramid.\n',
           isRaw: true);
     },
     isIdle: true,
@@ -2899,7 +2981,7 @@ final talkToAdaAfterQuake2Ink = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: Ada asks for help. Knights are leaving. This is bad.\n',
+    s.add('TODO: Ada asks for help. "Knights are leaving. This is bad."\n',
         isRaw: true);
   }),
 ]);
@@ -6579,10 +6661,12 @@ final allRooms = <Room>[
   pondWithLizardman,
   deathlessVillageOrcOffensive,
   deathlessVillageQuake2,
+  deathlessVillageQuake3,
   knightsHqMain,
   knightsHqCaravanDeparture,
   knightsHqOrcOffensive,
   knightsHqQuake2,
+  knightsHqQuake3,
   elevator12,
   slopes,
   slopesQuake1,

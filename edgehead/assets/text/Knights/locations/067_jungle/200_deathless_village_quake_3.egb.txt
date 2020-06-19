@@ -1,0 +1,12 @@
+// ---
+ROOM: $deathless_village_quake3
+
+VARIANT_OF: $deathless_village
+
+RULE: c.hasHappened(evQuake3)
+
+FIRST_DESCRIPTION:
+On a ledge overlooking the jungle, a village of cargo cultists. It is seriously damaged.
+
+VARIANT_UPDATE_DESCRIPTION:
+The village has been seriously damaged by the latest quake.
