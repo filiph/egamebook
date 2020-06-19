@@ -8,13 +8,7 @@ RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
 FIRST_DESCRIPTION:
 I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.
 
-Miguel, the knight from the entrance, is here.
-
-[[IF c.inRoomWith(leroyId)]]Leroy is here as well.[[ENDIF]]
-
+There's a small circle of armed men and women talking excitedly in the middle of the room.
 
 VARIANT_UPDATE_DESCRIPTION:
-Miguel, the knight from the entrance, is here.
-
-// TODO: allow talking to Miguel
-// TODO: for consecutive variants (like after caravan departure), also say something about Miguel so that it's not lost on the player that he's here if they don't visit the HQ just after quake 2.
+There's a small circle of armed men and women talking excitedly in the middle of the room.

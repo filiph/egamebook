@@ -1932,10 +1932,8 @@ final Room knightsHqQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      final ifBlock_209ee6a07 =
-          c.inRoomWith(leroyId) ? '''Leroy is here as well.''' : '''''';
       s.add(
-          'I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.\n\nMiguel, the knight from the entrance, is here.\n\n$ifBlock_209ee6a07\n',
+          'I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.\n\nThere\'s a small circle of armed men and women talking excitedly in the middle of the room.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -1961,7 +1959,9 @@ final Room knightsHqQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('Miguel, the knight from the entrance, is here.\n', isRaw: true);
+      s.add(
+          'There\'s a small circle of armed men and women talking excitedly in the middle of the room.\n',
+          isRaw: true);
     },
     isIdle: true,
     positionX: 37,
