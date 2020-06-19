@@ -1006,7 +1006,7 @@ class SaveSarn extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: fight. Assuming victory.\n\nI take Sarn through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to him, and walk out to The Bleeds.\n\n',
+        'TODO: fight. Assuming victory.\n\nI take Sarn through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds.\n\n',
         isRaw: true);
     c.markHappened(evSavedSarn);
     c.movePlayer('bleeds_main');
@@ -5407,6 +5407,83 @@ final Approach endOfRoamFromBleedsMain =
   final Storyline s = c.outputStoryline;
   s.add('You realize this adventuring life is not for you.\n', isRaw: true);
 });
+final sarnSlapInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Sarn is unresponsive.\n', isRaw: true);
+  }),
+]);
+
+class SarnSlap extends RoamingAction {
+  @override
+  final String name = 'sarn_slap';
+
+  static final SarnSlap singleton = SarnSlap();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Sarn', 'Talk', '"What happened up there?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evSavedSarn))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "sarn_slap_ink",
+    ));
+    return '${a.name} successfully performs SarnSlap';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room bleedsMainDuringCaravan = Room(
     'bleeds_main_during_caravan',
     (ActionContext c) {
@@ -7018,6 +7095,7 @@ final allActions = <RoamingAction>[
   BleedsTraderGoblins.singleton,
   BleedsTraderGreet.singleton,
   BleedsTraderTellAboutClearedCamp.singleton,
+  SarnSlap.singleton,
   GoblinCampAttack.singleton,
   ListenContinue.singleton,
   ListenMore.singleton,
@@ -7039,5 +7117,6 @@ final allInks = <String, InkAst>{
   'talk_to_miguel_about_brother_ink': talkToMiguelAboutBrotherInk,
   'talk_to_miguel_greetings_ink': talkToMiguelGreetingsInk,
   'talk_to_kat_after_orc_offensive_ink': talkToKatAfterOrcOffensiveInk,
+  'sarn_slap_ink': sarnSlapInk,
   'start_ink_ink': startInkInk
 };

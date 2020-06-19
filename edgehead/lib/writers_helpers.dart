@@ -29,9 +29,13 @@ bool bothAreAlive(Actor a, Actor b) {
 FightSituation generateBattlefieldFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  final weak = _orcsLackCockroachesDescribe(c);
+  final weak = _orcsLackCockroaches(c);
   if (weak) {
-    c.outputStoryline.add('They seem famished.');
+    c.outputStoryline.add('They seem famished.', isRaw: true);
+  }
+  final stripped = _orcsLackWeapons(c);
+  if (stripped) {
+    c.outputStoryline.add('Their weapons look battered.', isRaw: true);
   }
   final leatherJerkinOrcId = w.randomInt();
   final leatherJerkinOrc = Actor.initialized(
@@ -81,9 +85,13 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
 FightSituation generateGodsLairFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  final weak = _orcsLackCockroachesDescribe(c);
+  final weak = _orcsLackCockroaches(c);
   if (weak) {
-    c.outputStoryline.add('They seem famished.');
+    c.outputStoryline.add('They seem famished.', isRaw: true);
+  }
+  final stripped = _orcsLackWeapons(c);
+  if (stripped) {
+    c.outputStoryline.add('Their weapons look battered.', isRaw: true);
   }
   final orcBerserkerId = w.randomInt();
   final orcBerserker = Actor.initialized(
@@ -337,13 +345,27 @@ Actor _makeOrc(WorldStateBuilder w,
 
 /// Returns `true` if the cockroach farm has been destroyed and so the orcs
 /// and goblins are weak.
-bool _orcsLackCockroachesDescribe(ApplicabilityContext c) {
+bool _orcsLackCockroaches(ApplicabilityContext c) {
   final event = c.world.customHistory.query(name: evOpenedDam).latest;
   if (event == null) return false;
 
   if (c.world.time.difference(event.time) > const Duration(minutes: 60)) {
     // It's been more than enough time for the lack of food to affect
     // performance.
+    return true;
+  }
+  return false;
+}
+
+/// Returns `true` if Sarn has been saved and so the orcs
+/// and goblins have worse weapons.
+bool _orcsLackWeapons(ApplicabilityContext c) {
+  final event = c.world.customHistory.query(name: evSavedSarn).latest;
+  if (event == null) return false;
+
+  if (c.world.time.difference(event.time) > const Duration(minutes: 60)) {
+    // It's been more than enough time for the lack of a smith to affect
+    // weaponry.
     return true;
   }
   return false;

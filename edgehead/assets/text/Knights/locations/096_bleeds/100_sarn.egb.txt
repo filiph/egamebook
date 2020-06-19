@@ -1,0 +1,10 @@
+// ---
+ACTION: $sarn_slap
+COMMAND: Sarn >> Talk >> "What happened up there?"
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+c.hasHappened(evSavedSarn)
+
+INK:
+Sarn is unresponsive.

@@ -34,7 +34,7 @@ I take Sarn through the Pyramid and outside, where he starts crying. I try to be
 
 As I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn't.
 
-I sigh and turn my back to him, and walk out to The Bleeds.
+I sigh and turn my back to them, and walk out to The Bleeds.
 
 [[CODE]]
 c.markHappened(evSavedSarn);
