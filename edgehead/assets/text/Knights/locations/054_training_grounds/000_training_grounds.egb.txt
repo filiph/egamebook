@@ -7,5 +7,22 @@ ROOM: $training_grounds
 POS: 21, 54
 MAP_NAME: Training Grounds
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 An army of orcs, goblins and kobolds, all training for war.
+
+DESCRIPTION: $NONE
+
+// ---
+ROOM: $training_grounds_after_dam_opened
+
+VARIANT_OF: $training_grounds
+
+RULE: c.hasHappened(evOpenedDam)
+
+FIRST_DESCRIPTION:
+An army of orcs, goblins and kobolds, all training for war.
+
+The training grounds are dripping wet.
+
+VARIANT_UPDATE_DESCRIPTION:
+The training grounds are dripping wet.

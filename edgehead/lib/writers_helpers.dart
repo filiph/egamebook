@@ -29,6 +29,10 @@ bool bothAreAlive(Actor a, Actor b) {
 FightSituation generateBattlefieldFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
+  final weak = _orcsLackCockroachesDescribe(c);
+  if (weak) {
+    c.outputStoryline.add('They seem famished.');
+  }
   final leatherJerkinOrcId = w.randomInt();
   final leatherJerkinOrc = Actor.initialized(
       leatherJerkinOrcId, w.randomInt, "orc",
@@ -38,6 +42,7 @@ FightSituation generateBattlefieldFight(ActionContext c,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
           adjective: 'battle', firstOwnerId: leatherJerkinOrcId),
       constitution: 1,
+      dexterity: weak ? 50 : 100,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
@@ -76,6 +81,10 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
 FightSituation generateGodsLairFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
+  final weak = _orcsLackCockroachesDescribe(c);
+  if (weak) {
+    c.outputStoryline.add('They seem famished.');
+  }
   final orcBerserkerId = w.randomInt();
   final orcBerserker = Actor.initialized(
       orcBerserkerId, w.randomInt, "berserker",
@@ -86,7 +95,7 @@ FightSituation generateGodsLairFight(ActionContext c,
           name: 'battle axe',
           adjective: 'berserker',
           firstOwnerId: orcBerserkerId),
-      constitution: 3,
+      constitution: weak ? 2 : 3,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
   final orcCaptainId = w.randomInt();
@@ -96,7 +105,7 @@ FightSituation generateGodsLairFight(ActionContext c,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
           adjective: 'labelled', firstOwnerId: orcCaptainId),
-      constitution: 2,
+      constitution: weak ? 1 : 2,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
@@ -324,6 +333,20 @@ Actor _makeOrc(WorldStateBuilder w,
       constitution: constitution,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
+}
+
+/// Returns `true` if the cockroach farm has been destroyed and so the orcs
+/// and goblins are weak.
+bool _orcsLackCockroachesDescribe(ApplicabilityContext c) {
+  final event = c.world.customHistory.query(name: evOpenedDam).latest;
+  if (event == null) return false;
+
+  if (c.world.time.difference(event.time) > const Duration(minutes: 60)) {
+    // It's been more than enough time for the lack of food to affect
+    // performance.
+    return true;
+  }
+  return false;
 }
 
 extension ActionContextHelpers on ActionContext {

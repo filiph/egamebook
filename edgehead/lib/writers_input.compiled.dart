@@ -1451,7 +1451,7 @@ final Approach trainingGroundsFromBattlefield =
     Approach('battlefield', 'training_grounds', '', null);
 final Approach trainingGroundsFromReservoir =
     Approach('reservoir', 'training_grounds', '', null);
-final Room trainingGrounds = Room('training_grounds', null, (ActionContext c) {
+final Room trainingGrounds = Room('training_grounds', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1459,7 +1459,54 @@ final Room trainingGrounds = Room('training_grounds', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('An army of orcs, goblins and kobolds, all training for war.\n',
       isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
 }, null, null, positionX: 21, positionY: 54, mapName: 'Training Grounds');
+final Room trainingGroundsAfterDamOpened = Room(
+    'training_grounds_after_dam_opened',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'An army of orcs, goblins and kobolds, all training for war.\n\nThe training grounds are dripping wet.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'training_grounds',
+    prerequisite: Prerequisite(254551937, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOpenedDam);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The training grounds are dripping wet.\n', isRaw: true);
+    },
+    positionX: 21,
+    positionY: 54,
+    mapName: 'Training Grounds');
 final Approach battlefieldFromKnightsHqMain =
     Approach('knights_hq_main', 'battlefield', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -6790,6 +6837,7 @@ final allRooms = <Room>[
   cockroachFarm,
   cockroachFarmAfterOpenDam,
   trainingGrounds,
+  trainingGroundsAfterDamOpened,
   battlefield,
   oracleMain,
   oracleAfterOrcOffensive,
