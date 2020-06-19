@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/direct.dart';
@@ -187,6 +188,14 @@ abstract class RoomRoamingSituation extends Object
       room.describe(afterMoveContext);
     }
 
+    final localNpcs = _getNpcs(w.build())
+        .where((a) => a.currentRoomName == parentRoom.name)
+        .toList();
+    if (localNpcs.isNotEmpty) {
+      s.addEnumeration("<subject> <also> see", localNpcs, "here",
+          subject: _getPlayer(originalWorld));
+    }
+
     final localCorpses = _getCorpses(w.build())
         .where((a) => a.currentRoomName == parentRoom.name)
         .toList();
@@ -256,6 +265,9 @@ abstract class RoomRoamingSituation extends Object
     }
     return true;
   }
+
+  Iterable<Actor> _getNpcs(WorldState world) =>
+      world.actors.where((a) => a.isAnimatedAndActive && !a.isPlayer);
 
   Iterable<Actor> _getCorpses(WorldState world) =>
       world.actors.where((a) => a.isActive && !a.isAnimated);
