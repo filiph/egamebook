@@ -1,0 +1,17 @@
+// ---
+ROOM: $bleeds_main_after_quake_2
+
+VARIANT_OF: $bleeds_main
+
+RULE:
+c.hasHappened(evQuake2)
+&&
+!c.hasHappened(evCaravanDeparted)
+&&
+// This is a cosmetic update. Don't prevent the player from learning about the caravan.
+c.playerHasVisited("bleeds_main_during_caravan")
+
+VARIANT_UPDATE_DESCRIPTION:
+The people are quite a bit more nervous than before. There is talk about a farmer falling to his death on the Slopes.
+
+DESCRIPTION: $NONE

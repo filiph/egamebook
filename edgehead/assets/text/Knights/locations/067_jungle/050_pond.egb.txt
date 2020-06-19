@@ -40,3 +40,9 @@ TODO: fight. Assuming victory.
 [[CODE]]
 c.markHappened(evKilledLizardman);
 [[ENDCODE]]
+
+
+
+NOTES:
+Helicopter: it was a machine that could fly like an insect. I never imagined it so big. This one is ruined. But it is also well preserved, and there are flowers and burned out candles on top of its metal nose.
+

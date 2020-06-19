@@ -1,0 +1,11 @@
+// ---
+ACTION: $talk_to_ada_greetings
+COMMAND: Old woman >> Talk >> "Greetings."
+FOR_LOCATION: $farmers_village
+
+INK:
+"Greetings to you, too, [young sir]. What's your name?"
+
+_"[Aren]."_
+
+"Good to meet you, [Aren]. My name is Ada."

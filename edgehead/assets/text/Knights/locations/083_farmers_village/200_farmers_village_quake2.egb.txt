@@ -1,0 +1,36 @@
+// ---
+ROOM: $farmers_village_quake2
+
+VARIANT_OF: $farmers_village
+
+RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
+
+FIRST_DESCRIPTION:
+The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.
+
+The farmers are in full panic. Someone's crying about a person on the Slopes. 
+
+Among all this, an old woman is frantically tying bags of produce together. She looks familiar.
+
+
+VARIANT_UPDATE_DESCRIPTION:
+The farmers are in full panic. Someone's crying about a person on the Slopes. 
+
+
+
+// ---
+ACTION: $talk_to_ada_after_quake_2
+COMMAND: Ada >> Talk >> "How are people coping?"
+FOR_LOCATION: $farmers_village
+
+PREREQUISITES:
+c.hasHappened(evQuake2)
+&&
+w.actionHasBeenPerformed("talk_to_ada_greetings")
+
+INK:
+TODO: Ada asks for help. Knights are leaving. This is bad.
+
+
+NOTES:
+- Ada should ask for help

@@ -1,0 +1,14 @@
+// ---
+ROOM: $deathless_village_quake2
+
+VARIANT_OF: $deathless_village
+
+RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
+
+FIRST_DESCRIPTION:
+On a ledge overlooking the jungle, a village of cargo cultists. 
+
+They are freaked out by the most recent quake.
+
+VARIANT_UPDATE_DESCRIPTION:
+The cargo cultists are freaked out by the most recent quake.

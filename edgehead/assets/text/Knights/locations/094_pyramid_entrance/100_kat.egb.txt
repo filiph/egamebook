@@ -51,3 +51,19 @@ w.pushSituation(InkSituation.initialized(
     "talk_to_miguel_about_brother_ink",
 ));
 [[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_kat_about_miguel_missing
+COMMAND: Kat, the guardswoman >> Talk >> "Why isn't Miguel here?"
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(katId)
+&&
+w.actionHasBeenPerformed("talk_to_kat_greetings")
+&&
+w.actionHasBeenPerformed("talk_to_miguel_greetings")
+
+COMPLETE_SUCCESS_DESCRIPTION:
+She shakes her head. "Left his post. Went inside."

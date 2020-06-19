@@ -1895,6 +1895,47 @@ final Room pondWithLizardman = Room(
     positionX: 14,
     positionY: 74,
     mapName: 'Pond');
+final Room deathlessVillageQuake2 = Room(
+    'deathless_village_quake2',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'On a ledge overlooking the jungle, a village of cargo cultists. \n\nThey are freaked out by the most recent quake.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'deathless_village',
+    prerequisite: Prerequisite(272717691, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The cargo cultists are freaked out by the most recent quake.\n',
+          isRaw: true);
+    },
+    positionX: 18,
+    positionY: 68,
+    mapName: 'Village of the Deathless');
 final Approach knightsHqMainFromBattlefield =
     Approach('battlefield', 'knights_hq_main', '', null);
 final Approach knightsHqMainFromElevator12 =
@@ -2056,6 +2097,108 @@ final Room slopesQuake1 = Room(
     positionX: 42,
     positionY: 78,
     mapName: 'Slopes');
+final talkToGreenWomanAboutSlopesDeathInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She clicks her tongue. "They should have been more careful, that\'s what happened."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command:
+          r""" "Was it the scream I heard, when the quake struck?" """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command:
+          r""" "Hard to be careful on the face of a building when a quake hits." """
+              .trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Maybe."\n', isRaw: true);
+  }),
+]);
+
+class TalkToGreenWomanAboutSlopesDeath extends RoamingAction {
+  @override
+  final String name = 'talk_to_green_woman_about_slopes_death';
+
+  static final TalkToGreenWomanAboutSlopesDeath singleton =
+      TalkToGreenWomanAboutSlopesDeath();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Green woman', 'Talk', '"What happened here?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('slopes') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_green_woman_about_slopes_death_ink",
+    ));
+    return '${a.name} successfully performs TalkToGreenWomanAboutSlopesDeath';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room slopesQuake2 = Room(
     'slopes_quake2',
     (ActionContext c) {
@@ -2065,7 +2208,7 @@ final Room slopesQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking mana pods on the slopes are all down on the ground, gathered around a dead body.\n',
+          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking mana pods on the slopes are all down on the ground, gathered around a dead body.\n\nA woman dressed in green is standing next to me, looking down.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -2092,7 +2235,7 @@ final Room slopesQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The young men and women are all down on the ground, gathered around a dead body.\n',
+          'The young men and women are all down on the ground, gathered around a dead body.\n\nA woman dressed in green is standing next to me, looking down.\n',
           isRaw: true);
     },
     isIdle: true,
@@ -2183,6 +2326,54 @@ final Room stagingAreaQuake1 = Room(
         'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
     firstHint:
         'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
+final Room stagingAreaQuake2 = Room(
+    'staging_area_quake2',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.\n\nThe new quake has toppled quite a few things. Nobody seems to care anymore. People just try to get out.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'staging_area',
+    prerequisite: Prerequisite(600200113, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The new quake has toppled quite a few things. Nobody seems to care anymore. People just try to get out.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 23,
+    positionY: 82,
+    mapName: 'The Staging Area',
+    firstMapName: 'Up the stairs',
+    hint:
+        'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
+    firstHint:
+        'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
 final Approach farmersVillageFromFloatingPoint =
     Approach('floating_point', 'farmers_village', '', null);
 final Approach farmersVillageFromSlopes =
@@ -2215,6 +2406,98 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
         'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
     firstHint:
         'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
+final talkToAdaGreetingsInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Greetings to you, too, young sir. What\'s your name?"\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('_"[Aren]."_\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Good to meet you, [Aren]. My name is Ada."\n', isRaw: true);
+  }),
+]);
+
+class TalkToAdaGreetings extends RoamingAction {
+  @override
+  final String name = 'talk_to_ada_greetings';
+
+  static final TalkToAdaGreetings singleton = TalkToAdaGreetings();
+
+  @override
+  List<String> get commandPathTemplate => ['Old woman', 'Talk', '"Greetings."'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('farmers_village') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_ada_greetings_ink",
+    ));
+    return '${a.name} successfully performs TalkToAdaGreetings';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room farmersVillageQuake1 = Room(
     'farmers_village_quake1',
     (ActionContext c) {
@@ -2224,7 +2507,7 @@ final Room farmersVillageQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nAn old woman is tying bags of produce together, and looks familiar.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -2252,6 +2535,133 @@ final Room farmersVillageQuake1 = Room(
       final Storyline s = c.outputStoryline;
       s.add(
           'The farmers look a bit more stressed. No more polite nods. Someone\'s repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 35,
+    positionY: 83,
+    mapName: 'Farmers\' village',
+    firstMapName: 'A settled area',
+    hint:
+        'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
+    firstHint:
+        'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
+final talkToAdaAfterQuake2Ink = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: Ada asks for help. Knights are leaving. This is bad.\n',
+        isRaw: true);
+  }),
+]);
+
+class TalkToAdaAfterQuake2 extends RoamingAction {
+  @override
+  final String name = 'talk_to_ada_after_quake_2';
+
+  static final TalkToAdaAfterQuake2 singleton = TalkToAdaAfterQuake2();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Ada', 'Talk', '"How are people coping?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('farmers_village') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evQuake2) &&
+        w.actionHasBeenPerformed("talk_to_ada_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_ada_after_quake_2_ink",
+    ));
+    return '${a.name} successfully performs TalkToAdaAfterQuake2';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room farmersVillageQuake2 = Room(
+    'farmers_village_quake2',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nThe farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\nAmong all this, an old woman is frantically tying bags of produce together. She looks familiar.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'farmers_village',
+    prerequisite: Prerequisite(876562067, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The farmers are in full panic. Someone\'s crying about a person on the Slopes.\n',
           isRaw: true);
     },
     isIdle: true,
@@ -2974,6 +3384,72 @@ class TalkToKatAboutBrother extends RoamingAction {
     ));
 
     return '${a.name} successfully performs TalkToKatAboutBrother';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToKatAboutMiguelMissing extends RoamingAction {
+  @override
+  final String name = 'talk_to_kat_about_miguel_missing';
+
+  static final TalkToKatAboutMiguelMissing singleton =
+      TalkToKatAboutMiguelMissing();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Kat, the guardswoman', 'Talk', '"Why isn\'t Miguel here?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(katId) &&
+        w.actionHasBeenPerformed("talk_to_kat_greetings") &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('She shakes her head. "Left his post. Went inside."\n', isRaw: true);
+    return '${a.name} successfully performs TalkToKatAboutMiguelMissing';
   }
 
   @override
@@ -4418,6 +4894,64 @@ final Room bleedsMainAfterQuake1 = Room(
     hint: 'This is a small village close the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
+final Room bleedsMainAfterQuake2 = Room(
+    'bleeds_main_after_quake_2',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          isRaw: true);
+      c.learnAbout(kbTrader);
+      c.learnAbout(kbGoblinCampSmoke);
+
+      w.updateActorById(tamaraId, (b) => b.isActive = false);
+
+      if (!c.hasItem(letterFromFatherId)) {
+        c.giveNewItemToPlayer(letterFromFather);
+        c.giveNewItemToPlayer(rockFromMeadow);
+      }
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'bleeds_main',
+    prerequisite: Prerequisite(580504930, 3, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evQuake2) &&
+          !c.hasHappened(evCaravanDeparted) &&
+          c.playerHasVisited("bleeds_main_during_caravan");
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The people are quite a bit more nervous than before. There is talk about a farmer falling to his death on the Slopes.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 37,
+    positionY: 98,
+    mapName: 'The Bleeds',
+    firstMapName: 'Some buildings',
+    hint: 'This is a small village close the entrance to the Pyramid.',
+    firstHint:
+        'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach goblinSkirmishPatrolFromBleedsMain =
     Approach('bleeds_main', 'goblin_skirmish_patrol', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -5648,6 +6182,7 @@ final allRooms = <Room>[
   dragonEggRoom,
   pond,
   pondWithLizardman,
+  deathlessVillageQuake2,
   knightsHqMain,
   knightsHqQuake2,
   elevator12,
@@ -5656,8 +6191,10 @@ final allRooms = <Room>[
   slopesQuake2,
   stagingArea,
   stagingAreaQuake1,
+  stagingAreaQuake2,
   farmersVillage,
   farmersVillageQuake1,
+  farmersVillageQuake2,
   keepGate,
   keepBedroom,
   keepDining,
@@ -5670,6 +6207,7 @@ final allRooms = <Room>[
   bleedsTraderHut,
   bleedsMainDuringCaravan,
   bleedsMainAfterQuake1,
+  bleedsMainAfterQuake2,
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
   goblinSkirmishMain,
@@ -5781,6 +6319,9 @@ final allActions = <RoamingAction>[
   AskOracleAboutKeepGate.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
+  TalkToGreenWomanAboutSlopesDeath.singleton,
+  TalkToAdaGreetings.singleton,
+  TalkToAdaAfterQuake2.singleton,
   AttemptOpenGate.singleton,
   DestroyGateWithAxe.singleton,
   ExamineGate.singleton,
@@ -5789,6 +6330,7 @@ final allActions = <RoamingAction>[
   TakeFamilyPortrait.singleton,
   UseCompass.singleton,
   TalkToKatAboutBrother.singleton,
+  TalkToKatAboutMiguelMissing.singleton,
   TalkToKatGreetings.singleton,
   TalkToMiguelAboutBrother.singleton,
   TalkToMiguelGreetings.singleton,
@@ -5811,6 +6353,10 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'talk_to_green_woman_about_slopes_death_ink':
+      talkToGreenWomanAboutSlopesDeathInk,
+  'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,
+  'talk_to_ada_after_quake_2_ink': talkToAdaAfterQuake2Ink,
   'talk_to_kat_greetings_ink': talkToKatGreetingsInk,
   'talk_to_miguel_about_brother_ink': talkToMiguelAboutBrotherInk,
   'talk_to_miguel_greetings_ink': talkToMiguelGreetingsInk,
