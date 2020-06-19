@@ -10,7 +10,7 @@ final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evCaravanDeparted) &&
       // Must be exploring above.
       c.playerRoom.positionY < 53 &&
-      // Not in a populated room, since caravan departure replaces caravan
+      // Not in a populated room, since orc offensive replaces caravan
       // departure. This is likely redundant since we're above populated
       // areas, just being defensive.
       !c.inPopulatedRoom &&
@@ -31,5 +31,12 @@ final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
       "in one of the ${isAbove ? 'lower' : 'higher'} floors, "
       "is engaging in combat.",
       isRaw: true);
+
+  assert(c.world.getActorById(miguelId).isAnimatedAndActive);
+  c.outputWorld.updateActorById(miguelId, (b) {
+    b.npc.isHireable = true;
+    assert(b.currentRoomName == 'knights_hq_main');
+  });
+
   c.outputWorld.recordCustom(evOrcOffensive);
 });
