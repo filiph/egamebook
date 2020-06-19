@@ -1938,6 +1938,48 @@ final Room pondWithLizardman = Room(
     positionX: 14,
     positionY: 74,
     mapName: 'Pond');
+final Room deathlessVillageOrcOffensive = Room(
+    'deathless_village_orc_offensive',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'On a ledge overlooking the jungle, a village of cargo cultists. \n\nThe tribe is in a state of disarray. They weild the few weapons that they have, and seem to be preparing for a siege.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'deathless_village',
+    prerequisite: Prerequisite(218483559, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOrcOffensive) && !c.hasHappened(evQuake3);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The tribe is in a state of disarray. They weild the few weapons that they have, and seem to be preparing for a siege.\n',
+          isRaw: true);
+    },
+    positionX: 18,
+    positionY: 68,
+    mapName: 'Village of the Deathless');
 final Room deathlessVillageQuake2 = Room(
     'deathless_village_quake2',
     (ActionContext c) {
@@ -6535,6 +6577,7 @@ final allRooms = <Room>[
   dragonEggRoom,
   pond,
   pondWithLizardman,
+  deathlessVillageOrcOffensive,
   deathlessVillageQuake2,
   knightsHqMain,
   knightsHqCaravanDeparture,
