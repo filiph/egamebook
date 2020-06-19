@@ -1,19 +1,14 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/room.dart';
-import 'package:edgehead/fractal_stories/room_approach.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
-import 'package:logging/logging.dart';
 
 class WaitWhileRoamingAction extends Action<Nothing> {
   static const String className = "WaitWhileRoamingAction";
 
   static final WaitWhileRoamingAction singleton = WaitWhileRoamingAction();
-
-  static final Logger _log = Logger('WaitWhileRoamingAction');
 
   @override
   List<String> get commandPathTemplate => ['DEBUG', 'Wait'];

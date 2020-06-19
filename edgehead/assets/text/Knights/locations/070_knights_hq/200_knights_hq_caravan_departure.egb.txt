@@ -9,7 +9,7 @@ c.hasHappened(evCaravanDeparted)
 !c.hasHappened(evOrcOffensive)
 &&
 // This only makes sense if the player has seen the "circle" of vigilantes.
-c.playerHasVisited(knights_hq_quake2)
+c.playerHasVisited("knights_hq_quake2")
 
 FIRST_DESCRIPTION:
 [[CODE]]
