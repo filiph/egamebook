@@ -77,15 +77,17 @@ class HireNpcAction extends OtherActorActionBase {
     final w = context.world;
     final sim = context.simulation;
 
-    final currentRoom = context.world
+    final currentRoomName = context.world
         .getSituationByName<RoomRoamingSituation>(
             RoomRoamingSituation.className)
         .currentRoomName;
+    final currentParentRoom =
+        sim.getRoomParent(sim.getRoomByName(currentRoomName));
     final currentParty = getPartyOf(context.actor, sim, w);
 
     return w.actors.where((a) =>
         a.isAnimatedAndActive &&
-        a.currentRoomName == currentRoom &&
+        a.currentRoomName == currentParentRoom.name &&
         a.npc.isHireable &&
         !currentParty.contains(a));
   }
