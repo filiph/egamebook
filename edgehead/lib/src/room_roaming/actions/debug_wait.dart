@@ -1,0 +1,91 @@
+import 'package:edgehead/fractal_stories/action.dart';
+import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/room.dart';
+import 'package:edgehead/fractal_stories/room_approach.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
+import 'package:logging/logging.dart';
+
+class WaitWhileRoamingAction extends Action<Nothing> {
+  static const String className = "WaitWhileRoamingAction";
+
+  static final WaitWhileRoamingAction singleton = WaitWhileRoamingAction();
+
+  static final Logger _log = Logger('WaitWhileRoamingAction');
+
+  @override
+  List<String> get commandPathTemplate => ['DEBUG', 'Wait'];
+
+  @override
+  String get helpMessage => null;
+
+  @override
+  bool get isAggressive => false;
+
+  @override
+  bool get isImplicit => false;
+
+  @override
+  bool get isProactive => true;
+
+  @override
+  String get name => className;
+
+  @override
+  bool get rerollable => false;
+
+  @override
+  Resource get rerollResource => null;
+
+  @override
+  String applyFailure(ActionContext context, Nothing _) {
+    throw UnimplementedError();
+  }
+
+  @override
+  String applySuccess(ActionContext context, Nothing _) {
+    context.outputStoryline.add('Waiting.');
+
+    return "Player waits (DEBUG)";
+  }
+
+  @override
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing _) {
+    // Moving around the map takes significantly more time than the ordinary
+    // action.
+    return const Duration(minutes: 10);
+  }
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, Nothing _) =>
+      "WARNING should not be user-visible";
+
+  @override
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w, Nothing _) =>
+      ReasonedSuccessChance.sureSuccess;
+
+  @override
+  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
+      WorldState w, Nothing _) {
+    final situation = w.currentSituation as RoomRoamingSituation;
+    final room = sim.getRoomByName(situation.currentRoomName);
+
+    if (room.isSynthetic) return false;
+
+    if (situation.monstersAlive) {
+      // Don't allow healing when monsters in this room are still alive.
+      return false;
+    }
+
+    var applicable = false;
+    assert(() {
+      // True only in DEBUG builds.
+      applicable = true;
+      return true;
+    }());
+    return applicable;
+  }
+}
