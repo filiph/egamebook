@@ -32,11 +32,5 @@ final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
       "is engaging in combat.",
       isRaw: true);
 
-  assert(c.world.getActorById(miguelId).isAnimatedAndActive);
-  c.outputWorld.updateActorById(miguelId, (b) {
-    b.npc.isHireable = true;
-    assert(b.currentRoomName == 'knights_hq_main');
-  });
-
   c.outputWorld.recordCustom(evOrcOffensive);
 });

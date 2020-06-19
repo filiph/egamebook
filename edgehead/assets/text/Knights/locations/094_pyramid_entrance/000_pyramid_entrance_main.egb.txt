@@ -24,6 +24,8 @@ Two knights, a woman and a man, are on guard.
 
 // TODO: add image
 
+// TODO: Miguel is crying
+
 Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. 
 
 DESCRIPTION: $NONE

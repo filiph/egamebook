@@ -1527,14 +1527,14 @@ class AskOracleAboutKeepGate extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['Oracle', '"Can you help me open the Keep?"'];
+      ['Oracle', 'Talk', '"Can you help me open the Keep?"'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (c.inRoomParent('oracle_main') != true) {
       return false;
     }
-    if (!(c.playerHasVisited('keep_gate'))) {
+    if (!(!c.hasHappened(evOrcOffensive) && c.playerHasVisited('keep_gate'))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -1593,6 +1593,49 @@ final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
   s.add('The Oracle is here.\n', isRaw: true);
 }, null, null,
     isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
+final Room oracleAfterOrcOffensive = Room(
+    'oracle_after_orc_offensive',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The place was recently ruined. Blood is everywhere. An old woman lies dead, and next to her, a dead bird.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The Oracle is here.\n', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'oracle_main',
+    prerequisite: Prerequisite(584629209, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOrcOffensive);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The place is ruined. Blood is everywhere. Oracle is dead, and so is the bird.\n\nSmell of coffee still lingers.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 39,
+    positionY: 65,
+    mapName: 'Oracle\'s');
 final Approach jungleEntranceFromDeathlessVillage =
     Approach('deathless_village', 'jungle_entrance', '', null);
 final Approach jungleEntranceFromPond =
@@ -1965,6 +2008,181 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
     positionX: 37,
     positionY: 70,
     mapName: 'Knights Headquarters');
+final talkToMiguelAboutDesertingInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"I can\'t just guard down there. What am I, an onlooker? I have to change things."\n',
+        isRaw: true);
+  }),
+]);
+final talkToMiguelAfterOrcOffensiveInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"It\'s the orcs. They attacked. They took over the Oracle\'s observatory, threatened to bring the fight here and below. The Knights of San Francisco are no more. What you see here is a joke. Look, if you are all in the business of hurting the orcs, take me with you."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    assert(c.world.getActorById(miguelId).isAnimatedAndActive);
+    c.outputWorld.updateActorById(miguelId, (b) {
+      b.npc.isHireable = true;
+      assert(b.currentRoomName == 'knights_hq_main');
+    });
+  }),
+]);
+
+class TalkToMiguelAboutDeserting extends RoamingAction {
+  @override
+  final String name = 'talk_to_miguel_about_deserting';
+
+  static final TalkToMiguelAboutDeserting singleton =
+      TalkToMiguelAboutDeserting();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Miguel, the guardsman', 'Talk', '"What are you doing here?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('knights_hq_main') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(miguelId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
+        c.hasHappened(evQuake2))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_miguel_about_deserting_ink",
+    ));
+    return '${a.name} successfully performs TalkToMiguelAboutDeserting';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToMiguelAfterOrcOffensive extends RoamingAction {
+  @override
+  final String name = 'talk_to_miguel_after_orc_offensive';
+
+  static final TalkToMiguelAfterOrcOffensive singleton =
+      TalkToMiguelAfterOrcOffensive();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Miguel, the guardsman', 'Talk', '"What happened here?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('knights_hq_main') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(miguelId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
+        c.hasHappened(evOrcOffensive))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_miguel_after_orc_offensive_ink",
+    ));
+    return '${a.name} successfully performs TalkToMiguelAfterOrcOffensive';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room knightsHqCaravanDeparture = Room(
     'knights_hq_caravan_departure',
     (ActionContext c) {
@@ -1993,7 +2211,7 @@ final Room knightsHqCaravanDeparture = Room(
       final Actor a = c.actor;
       return c.hasHappened(evCaravanDeparted) &&
           !c.hasHappened(evOrcOffensive) &&
-          c.playerHasVisited(knights_hq_quake2);
+          c.playerHasVisited("knights_hq_quake2");
     }),
     variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -2003,6 +2221,48 @@ final Room knightsHqCaravanDeparture = Room(
       final Storyline s = c.outputStoryline;
       s.add(
           'The circle of women and men is no longer here. Most of them left.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 37,
+    positionY: 70,
+    mapName: 'Knights Headquarters');
+final Room knightsHqOrcOffensive = Room(
+    'knights_hq_orc_offensive',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks.\n\nThere is a handful of wounded knights here, tended by a pair of servants.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'knights_hq_main',
+    prerequisite: Prerequisite(879699967, 2, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOrcOffensive) && !c.hasHappened(evQuake3);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('A handful of wounded knights are tended by a pair of servants.\n',
           isRaw: true);
     },
     isIdle: true,
@@ -3298,7 +3558,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
+      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -6268,6 +6528,7 @@ final allRooms = <Room>[
   trainingGrounds,
   battlefield,
   oracleMain,
+  oracleAfterOrcOffensive,
   jungleEntrance,
   jungleEntranceMuddyFootprints,
   deathlessVillage,
@@ -6277,6 +6538,7 @@ final allRooms = <Room>[
   deathlessVillageQuake2,
   knightsHqMain,
   knightsHqCaravanDeparture,
+  knightsHqOrcOffensive,
   knightsHqQuake2,
   elevator12,
   slopes,
@@ -6413,6 +6675,8 @@ final allActions = <RoamingAction>[
   AskOracleAboutKeepGate.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
+  TalkToMiguelAboutDeserting.singleton,
+  TalkToMiguelAfterOrcOffensive.singleton,
   TalkToGreenWomanAboutSlopesDeath.singleton,
   TalkToAdaGreetings.singleton,
   TalkToAdaAfterQuake2.singleton,
@@ -6447,6 +6711,8 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'talk_to_miguel_about_deserting_ink': talkToMiguelAboutDesertingInk,
+  'talk_to_miguel_after_orc_offensive_ink': talkToMiguelAfterOrcOffensiveInk,
   'talk_to_green_woman_about_slopes_death_ink':
       talkToGreenWomanAboutSlopesDeathInk,
   'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,

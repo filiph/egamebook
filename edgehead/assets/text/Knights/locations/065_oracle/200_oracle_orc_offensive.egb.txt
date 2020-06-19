@@ -1,0 +1,14 @@
+// ---
+ROOM: $oracle_after_orc_offensive
+
+VARIANT_OF: $oracle_main
+
+RULE: c.hasHappened(evOrcOffensive)
+
+FIRST_DESCRIPTION:
+The place was recently ruined. Blood is everywhere. An old woman lies dead, and next to her, a dead bird.
+
+VARIANT_UPDATE_DESCRIPTION:
+The place is ruined. Blood is everywhere. Oracle is dead, and so is the bird.
+
+Smell of coffee still lingers.

@@ -1,0 +1,14 @@
+// ---
+ROOM: $knights_hq_orc_offensive
+
+VARIANT_OF: $knights_hq_main
+
+RULE: c.hasHappened(evOrcOffensive) && !c.hasHappened(evQuake3)
+
+FIRST_DESCRIPTION:
+A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks.
+
+There is a handful of wounded knights here, tended by a pair of servants.
+
+VARIANT_UPDATE_DESCRIPTION:
+A handful of wounded knights are tended by a pair of servants.

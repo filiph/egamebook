@@ -1,0 +1,38 @@
+// ---
+ACTION: $talk_to_miguel_about_deserting
+COMMAND: Miguel, the guardsman >> Talk >> "What are you doing here?"
+FOR_LOCATION: $knights_hq_main
+
+PREREQUISITES:
+c.inRoomWith(miguelId)
+&&
+w.actionHasBeenPerformed("talk_to_miguel_greetings")
+&&
+c.hasHappened(evQuake2)
+
+INK:
+"I can't just guard down there. What am I, an onlooker? I have to change things."
+
+
+// ---
+ACTION: $talk_to_miguel_after_orc_offensive
+COMMAND: Miguel, the guardsman >> Talk >> "What happened here?"
+FOR_LOCATION: $knights_hq_main
+
+PREREQUISITES:
+c.inRoomWith(miguelId)
+&&
+w.actionHasBeenPerformed("talk_to_miguel_greetings")
+&&
+c.hasHappened(evOrcOffensive)
+
+INK:
+"It's the orcs. They attacked. They took over the Oracle's observatory, threatened to bring the fight here and below. The Knights of San Francisco are no more. What you see here is a joke. Look, if you are all in the business of hurting the orcs, take me with you."
+
+[[CODE]]
+assert(c.world.getActorById(miguelId).isAnimatedAndActive);
+c.outputWorld.updateActorById(miguelId, (b) {
+  b.npc.isHireable = true;
+  assert(b.currentRoomName == 'knights_hq_main');
+});
+[[ENDCODE]]
