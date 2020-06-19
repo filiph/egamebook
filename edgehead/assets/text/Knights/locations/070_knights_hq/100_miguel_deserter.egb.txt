@@ -15,8 +15,8 @@ INK:
 
 
 // ---
-ACTION: $talk_to_miguel_after_orc_offensive
-COMMAND: Miguel, the guardsman >> Talk >> "What happened here?"
+ACTION: $talk_to_miguel_after_caravan_departed
+COMMAND: Miguel, the guardsman >> Talk >> "Why are you still here?"
 FOR_LOCATION: $knights_hq_main
 
 PREREQUISITES:
@@ -24,10 +24,10 @@ c.inRoomWith(miguelId)
 &&
 w.actionHasBeenPerformed("talk_to_miguel_greetings")
 &&
-c.hasHappened(evOrcOffensive)
+c.hasHappened(evCaravanDeparted)
 
 INK:
-"It's the orcs. They attacked. They took over the Oracle's observatory, threatened to bring the fight here and below. The Knights of San Francisco are no more. What you see here is a joke. Look, if you are all in the business of hurting the orcs, take me with you."
+"The Knights of San Francisco are no more. Look, if you are in the business of hurting the orcs, take me with you."
 
 [[CODE]]
 assert(c.world.getActorById(miguelId).isAnimatedAndActive);

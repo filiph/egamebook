@@ -15,7 +15,4 @@ throw StateError("Player should have been here. Quake 2 only happens after playe
 [[ENDCODE]]
 
 VARIANT_UPDATE_DESCRIPTION:
-Kat is alone. Miguel has left.
-
-// TODO: action: talk to kat "Where is Miguel?"
-
+The guarswoman is alone. Her companion has left.

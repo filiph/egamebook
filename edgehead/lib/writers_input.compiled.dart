@@ -2103,7 +2103,7 @@ final talkToMiguelAboutDesertingInk = InkAst([
         isRaw: true);
   }),
 ]);
-final talkToMiguelAfterOrcOffensiveInk = InkAst([
+final talkToMiguelAfterCaravanDepartedInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -2111,7 +2111,7 @@ final talkToMiguelAfterOrcOffensiveInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"It\'s the orcs. They attacked. They took over the Oracle\'s observatory, threatened to bring the fight here and below. The Knights of San Francisco are no more. What you see here is a joke. Look, if you are all in the business of hurting the orcs, take me with you."\n',
+        '"The Knights of San Francisco are no more. Look, if you are in the business of hurting the orcs, take me with you."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -2197,16 +2197,16 @@ class TalkToMiguelAboutDeserting extends RoamingAction {
   bool get isAggressive => false;
 }
 
-class TalkToMiguelAfterOrcOffensive extends RoamingAction {
+class TalkToMiguelAfterCaravanDeparted extends RoamingAction {
   @override
-  final String name = 'talk_to_miguel_after_orc_offensive';
+  final String name = 'talk_to_miguel_after_caravan_departed';
 
-  static final TalkToMiguelAfterOrcOffensive singleton =
-      TalkToMiguelAfterOrcOffensive();
+  static final TalkToMiguelAfterCaravanDeparted singleton =
+      TalkToMiguelAfterCaravanDeparted();
 
   @override
   List<String> get commandPathTemplate =>
-      ['Miguel, the guardsman', 'Talk', '"What happened here?"'];
+      ['Miguel, the guardsman', 'Talk', '"Why are you still here?"'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -2215,7 +2215,7 @@ class TalkToMiguelAfterOrcOffensive extends RoamingAction {
     }
     if (!(c.inRoomWith(miguelId) &&
         w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
-        c.hasHappened(evOrcOffensive))) {
+        c.hasHappened(evCaravanDeparted))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -2230,9 +2230,9 @@ class TalkToMiguelAfterOrcOffensive extends RoamingAction {
     final Storyline s = c.outputStoryline;
     w.pushSituation(InkSituation.initialized(
       w.randomInt(),
-      "talk_to_miguel_after_orc_offensive_ink",
+      "talk_to_miguel_after_caravan_departed_ink",
     ));
-    return '${a.name} successfully performs TalkToMiguelAfterOrcOffensive';
+    return '${a.name} successfully performs TalkToMiguelAfterCaravanDeparted';
   }
 
   @override
@@ -4381,6 +4381,146 @@ final Room pyramidEntranceDuringCaravan = Room(
         'This is the only side of the Pyramid that allows access from outside.',
     firstHint:
         'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
+final talkToKatAfterOrcOffensiveInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"It\'s the orcs. They attacked. They took over the Oracle\'s observatory, threatened to bring the fight to the farmers. Miguel was right. I cannot leave it be. If you want my help, I\'ll follow you."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    assert(c.world.getActorById(katId).isAnimatedAndActive);
+    c.outputWorld.updateActorById(katId, (b) {
+      b.npc.isHireable = true;
+      assert(b.currentRoomName == 'pyramid_entrance');
+    });
+  }),
+]);
+
+class TalkToKatAfterOrcOffensive extends RoamingAction {
+  @override
+  final String name = 'talk_to_kat_after_orc_offensive';
+
+  static final TalkToKatAfterOrcOffensive singleton =
+      TalkToKatAfterOrcOffensive();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Kat, the guardswoman', 'Talk', '"What are you doing?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(katId) &&
+        w.actionHasBeenPerformed("talk_to_kat_greetings") &&
+        c.hasHappened(evOrcOffensive))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_kat_after_orc_offensive_ink",
+    ));
+    return '${a.name} successfully performs TalkToKatAfterOrcOffensive';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room pyramidEntranceAfterOrcOffensive = Room(
+    'pyramid_entrance_after_orc_offensive',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      throw StateError("Player should have been here.");
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    parent: 'pyramid_entrance',
+    prerequisite: Prerequisite(1038023870, 1, true, (ApplicabilityContext c) {
+      final WorldState w = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      return c.hasHappened(evOrcOffensive);
+    }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The guardswoman is no longer standing in front of the entrance. She is sitting down on a nearby rock, checking her weapon.\n',
+          isRaw: true);
+    },
+    isIdle: true,
+    positionX: 26,
+    positionY: 94,
+    mapName: 'Pyramid\'s Entrance',
+    firstMapName: 'The Pyramid',
+    hint:
+        'This is the only side of the Pyramid that allows access from outside.',
+    firstHint:
+        'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
 final Room pyramidEntranceAfterQuake2 = Room(
     'pyramid_entrance_after_quake2',
     (ActionContext c) {
@@ -4418,7 +4558,7 @@ final Room pyramidEntranceAfterQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('Kat is alone. Miguel has left.\n', isRaw: true);
+      s.add('The guarswoman is alone. Her companion has left.\n', isRaw: true);
     },
     isIdle: true,
     positionX: 26,
@@ -6684,6 +6824,7 @@ final allRooms = <Room>[
   floatingPoint,
   pyramidEntrance,
   pyramidEntranceDuringCaravan,
+  pyramidEntranceAfterOrcOffensive,
   pyramidEntranceAfterQuake2,
   bleedsMain,
   bleedsTraderHut,
@@ -6803,7 +6944,7 @@ final allActions = <RoamingAction>[
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
   TalkToMiguelAboutDeserting.singleton,
-  TalkToMiguelAfterOrcOffensive.singleton,
+  TalkToMiguelAfterCaravanDeparted.singleton,
   TalkToGreenWomanAboutSlopesDeath.singleton,
   TalkToAdaGreetings.singleton,
   TalkToAdaAfterQuake2.singleton,
@@ -6819,6 +6960,7 @@ final allActions = <RoamingAction>[
   TalkToKatGreetings.singleton,
   TalkToMiguelAboutBrother.singleton,
   TalkToMiguelGreetings.singleton,
+  TalkToKatAfterOrcOffensive.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
   BleedsBlindGuideGoblins.singleton,
@@ -6839,7 +6981,8 @@ final allActions = <RoamingAction>[
 ];
 final allInks = <String, InkAst>{
   'talk_to_miguel_about_deserting_ink': talkToMiguelAboutDesertingInk,
-  'talk_to_miguel_after_orc_offensive_ink': talkToMiguelAfterOrcOffensiveInk,
+  'talk_to_miguel_after_caravan_departed_ink':
+      talkToMiguelAfterCaravanDepartedInk,
   'talk_to_green_woman_about_slopes_death_ink':
       talkToGreenWomanAboutSlopesDeathInk,
   'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,
@@ -6847,5 +6990,6 @@ final allInks = <String, InkAst>{
   'talk_to_kat_greetings_ink': talkToKatGreetingsInk,
   'talk_to_miguel_about_brother_ink': talkToMiguelAboutBrotherInk,
   'talk_to_miguel_greetings_ink': talkToMiguelGreetingsInk,
+  'talk_to_kat_after_orc_offensive_ink': talkToKatAfterOrcOffensiveInk,
   'start_ink_ink': startInkInk
 };

@@ -1,0 +1,42 @@
+// ---
+ROOM: $pyramid_entrance_after_orc_offensive
+
+VARIANT_OF: $pyramid_entrance
+
+RULE:
+c.hasHappened(evOrcOffensive)
+
+FIRST_DESCRIPTION:
+[[CODE]]
+throw StateError("Player should have been here.");
+[[ENDCODE]]
+
+VARIANT_UPDATE_DESCRIPTION:
+The guardswoman is no longer standing in front of the entrance. She is sitting down on a nearby rock, checking her weapon.
+
+
+
+// ---
+ACTION: $talk_to_kat_after_orc_offensive
+COMMAND: Kat, the guardswoman >> Talk >> "What are you doing?"
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(katId)
+&&
+w.actionHasBeenPerformed("talk_to_kat_greetings")
+&&
+c.hasHappened(evOrcOffensive)
+
+INK:
+"It's the orcs. They attacked. They took over the Oracle's observatory, threatened to bring the fight to the farmers. Miguel was right. I cannot leave it be. If you want my help, I'll follow you."
+
+[[CODE]]
+assert(c.world.getActorById(katId).isAnimatedAndActive);
+c.outputWorld.updateActorById(katId, (b) {
+  b.npc.isHireable = true;
+  assert(b.currentRoomName == 'pyramid_entrance');
+});
+[[ENDCODE]]
+
+
