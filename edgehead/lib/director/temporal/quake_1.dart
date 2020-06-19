@@ -7,6 +7,7 @@ final _quake1 = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return !c.hasHappened(evConetDestroyed) &&
       !c.inRoomParent('conet') &&
       !c.inPopulatedRoom &&
+      c.playerHasVisited('bleeds_main') &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 30)));
 }, _quake1Apply);
@@ -14,6 +15,8 @@ final _quake1 = Rule(_id++, 2, true, (ApplicabilityContext c) {
 final _quake1FromAbove = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evConetDestroyed) &&
       !c.inRoomParent('big_o_observatory') &&
+      !c.inPopulatedRoom &&
+      c.playerHasVisited('bleeds_main') &&
       c.world.time
           .isAfter(edgeheadStartingTime.add(const Duration(minutes: 30)));
 }, _quake1Apply);

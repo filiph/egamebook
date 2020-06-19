@@ -6125,7 +6125,7 @@ final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
   s.add(
       'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
       isRaw: true);
-}, null, null, null, positionX: 0, positionY: 0, mapName: 'N/A');
+}, null, null, null);
 final Approach startFromStartTesterBuild = Approach('start_tester_build',
     'start', 'Set piece >> from the start of the game', null);
 final startInkInk = InkAst([

@@ -124,7 +124,6 @@ abstract class RoomRoamingSituation extends Object
         w.randomInt(), room, !visited && room.fightGenerator != null);
 
     w.replaceSituationById(id, nextRoomSituation);
-    w.recordVisit(a, room);
 
     final hasVisitedThisVariant =
         originalWorld.visitHistory.query(a, room).hasHappened;
@@ -135,7 +134,6 @@ abstract class RoomRoamingSituation extends Object
     // Move the actor and also all the other actors in the party.
     for (final actor in getPartyOf(a, sim, w.build())) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = parentRoom.name);
-      w.recordVisit(actor, room);
     }
 
     // Make a copy of the context after the relocation has been applied,
@@ -191,7 +189,17 @@ abstract class RoomRoamingSituation extends Object
 
     final localNpcs = _getNpcs(w.build())
         .where((a) => a.currentRoomName == parentRoom.name)
+        .where((a) => a.npc.followingActorId != a.id)
         .toList();
+    // First, let the overrides take place.
+    Set<Actor> overridden = {};
+    for (final npc in localNpcs) {
+      if (sim.maybeDescribeActor(afterMoveContext, npc)) {
+        overridden.add(npc);
+      }
+    }
+    localNpcs.removeWhere((element) => overridden.contains(element));
+
     if (localNpcs.isNotEmpty) {
       s.addEnumeration("<subject> <also> see", localNpcs, "here",
           subject: _getPlayer(originalWorld));
@@ -204,6 +212,11 @@ abstract class RoomRoamingSituation extends Object
       s.addEnumeration(
           "<subject> can <also> see the remains of", localCorpses, "here",
           subject: _getPlayer(originalWorld));
+    }
+
+    // Move the actor and also all the other actors in the party.
+    for (final actor in getPartyOf(a, sim, w.build())) {
+      w.recordVisit(actor, room);
     }
   }
 

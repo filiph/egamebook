@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_actors_describe_overrides.dart';
 import 'package:edgehead/edgehead_director.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/planner_recommendation.dart';
@@ -15,7 +16,12 @@ final Situation edgeheadInitialSituation =
     RoomRoamingSituation.initialized(100, _preStartBook, false);
 
 final Simulation edgeheadSimulation = Simulation(
-    _rooms, allApproaches, _foldFunctions, edgeheadDirectorRuleset, allInks);
+    _rooms,
+    allApproaches,
+    _foldFunctions,
+    edgeheadDirectorRuleset,
+    allInks,
+    edgeheadActorDescribeOverrides);
 
 final Map<String, FoldFunction> _foldFunctions = {
   normalFoldFunctionHandle: normalFoldFunction,

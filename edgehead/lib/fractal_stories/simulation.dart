@@ -82,12 +82,28 @@ class Simulation {
   /// that can be used for ranking actions.
   final Map<String, FoldFunction> foldFunctions;
 
+  /// This is a map from actor ids to describer functions. Every time the
+  /// simulation wants to describe a presence of an actor (such as when we
+  /// visit a room where the actor resides), we check this map.
+  ///
+  /// By default, actors in a room are described with something like
+  /// “John is here.” But oftentimes, we want to say this in
+  /// the description prose instead, or we want the actor to do
+  /// something (like, wave at the player).
+  ///
+  /// If the function behind the relevant [Actor.id] returns `true`, then
+  /// the simulation will not describe the presence of the actor
+  /// ("John is here."). The function can choose to add something to the
+  /// storyline ("John waves at me.").
+  final Map<int, bool Function(ActionContext)> actorDescribeOverrides;
+
   Simulation(
     Iterable<Room> rooms,
     Iterable<Approach> approaches,
     this.foldFunctions,
     this.directorRuleset,
     this.inks,
+    this.actorDescribeOverrides,
   )   : rooms = Set<Room>.from(rooms),
         approaches = Set<Approach>.from(approaches),
         assert(!hasDuplicities(rooms.map((r) => r.name))),
@@ -265,6 +281,14 @@ class Simulation {
       }
     }
     return room;
+  }
+
+  bool maybeDescribeActor(ActionContext context, Actor actor) {
+    if (!actorDescribeOverrides.containsKey(actor.id)) {
+      return false;
+    }
+
+    return actorDescribeOverrides[actor.id](context);
   }
 
   _ApproachRule _createApproachRule(Room room, Approach approach) {

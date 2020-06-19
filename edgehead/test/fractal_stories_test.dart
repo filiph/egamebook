@@ -50,8 +50,8 @@ void main() {
 
     group("Situation", () {
       Actor a, b;
-      final sim = Simulation(
-          const [], const [], const {}, const Ruleset.empty(), const {});
+      final sim = Simulation(const [], const [], const {},
+          const Ruleset.empty(), const {}, const {});
       final world = WorldState((b) => b
         ..actors = SetBuilder<Actor>(<Actor>[])
         ..situations = ListBuilder<Situation>(<Situation>[])
@@ -150,6 +150,7 @@ void main() {
           [creviceExit, forgeEntryAfterFire, forgeEntry, outsideExit],
           const {},
           const Ruleset.empty(),
+          const {},
           const {});
 
       final context = ApplicabilityContext(null, simulation, null);

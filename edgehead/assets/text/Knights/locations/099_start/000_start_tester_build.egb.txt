@@ -4,8 +4,5 @@ COMMAND: $IMPLICIT
 // ---
 ROOM: $start_tester_build
 
-POS: 0, 0
-MAP_NAME: N/A
-
 FIRST_DESCRIPTION:
 Welcome to the test build of this game. Thank you for taking the time to make the game better.
