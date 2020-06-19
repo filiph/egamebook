@@ -50,7 +50,10 @@ COMPLETE_SUCCESS_DESCRIPTION:
 TODO: a fight with Darg and his one guard. Assume victory.
 
 [[CODE]]
-w.updateActorById(dargId, (b) => b.inventory.remove(akxe));
+w.updateActorById(dargId, (b) => b
+  ..inventory.remove(akxe)
+  ..hitpoints = 0
+);
 c.giveNewItemToPlayer(akxe);
 c.markHappened(evKilledDarg);
 [[ENDCODE]]

@@ -47,7 +47,10 @@ COMPLETE_SUCCESS_DESCRIPTION:
 TODO: a big fight, probably lost cause unless player is really powerful. Assume victory here.
 
 [[CODE]]
-w.updateActorById(dargId, (b) => b.inventory.remove(akxe));
+w.updateActorById(dargId, (b) => b
+  ..inventory.remove(akxe)
+  ..hitpoints = 0
+);
 c.giveNewItemToPlayer(akxe);
 c.markHappened(evKilledDarg);
 [[ENDCODE]]
