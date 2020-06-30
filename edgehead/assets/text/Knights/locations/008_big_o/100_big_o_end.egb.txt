@@ -3,3 +3,8 @@ APPROACH: $__END_OF_ROAM__ FROM $big_o_observatory
 COMMAND: $IMPLICIT
 DESCRIPTION: 
 I have prevailed. I am the Dog Head.
+
+
+NOTES:
+
+But what was Conet for? What were these quakes for? ... In the distance, large figures are approaching.

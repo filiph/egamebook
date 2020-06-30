@@ -5269,7 +5269,8 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     }
     if (!(c.hasLearnedAbout(kbLeroy) &&
         c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke) &&
-        !c.hasHappened(evGoblinCampCleared))) {
+        !c.hasHappened(evGoblinCampCleared) &&
+        c.inRoomWith(leroyId))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -5346,7 +5347,8 @@ class BleedsTraderGoblins extends RoamingAction {
     if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
-    if (!(w.actionHasBeenPerformed("bleeds_trader_greet"))) {
+    if (!(w.actionHasBeenPerformed("bleeds_trader_greet") &&
+        c.inRoomWith(leroyId))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -5415,6 +5417,9 @@ class BleedsTraderGreet extends RoamingAction {
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (c.inRoomParent('bleeds_trader_hut') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(leroyId))) {
       return false;
     }
     return w.actionNeverUsed(name);

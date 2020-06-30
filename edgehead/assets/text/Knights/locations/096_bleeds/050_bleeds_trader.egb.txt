@@ -41,6 +41,9 @@ ACTION: $bleeds_trader_greet
 COMMAND: Trader >> “How is business?”
 FOR_LOCATION: $bleeds_trader_hut
 
+// TODO: rewrite so that we don't need Leroy here
+PREREQUISITES: c.inRoomWith(leroyId)
+
 COMPLETE_SUCCESS_DESCRIPTION:
 The trader shrugs.
 
@@ -70,6 +73,9 @@ FOR_LOCATION: $bleeds_trader_hut
 
 PREREQUISITES:
 w.actionHasBeenPerformed("bleeds_trader_greet")
+&&
+// TODO: rewrite so that we don't need Leroy here
+c.inRoomWith(leroyId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they're the worst. I fear we won't get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."
@@ -128,6 +134,8 @@ c.hasLearnedAbout(kbLeroy)
 c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke)
 &&
 !c.hasHappened(evGoblinCampCleared)
+&&
+c.inRoomWith(leroyId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
