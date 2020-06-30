@@ -1,6 +1,6 @@
 APPROACH: $keep_servants FROM $keep_bedroom
 PREREQUISITES:
-c.hasLearnedAbout(kbKeepServantsLocation)
+c.knows(kbKeepServantsLocation)
 
 APPROACH: $keep_servants FROM $top_of_climb
 

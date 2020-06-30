@@ -62,8 +62,6 @@ const kbGoblinCampSmoke = "kbGoblinCampSmoke";
 
 const kbJisadHatesMagic = "kbJisadHatesMagic";
 
-const kbKeepGateUnlock = "kbKeepGateUnlock";
-
 const kbKeepServantsLocation = "kbKeepServantsLocation";
 
 const kbKnightsLeaving = "kbKnightsLeaving";

@@ -31,8 +31,8 @@ Below the Pyramid there's a small village. It huddles around the entrance to the
 There is a trader's shop here. A mile to the west, I see a pillar of black smoke rising to the sky.
 
 [[CODE]]
-c.learnAbout(kbTrader);
-c.learnAbout(kbGoblinCampSmoke);
+c.learn(kbTrader);
+c.learn(kbGoblinCampSmoke);
 [[ENDCODE]]
 
 [[CODE]]
@@ -75,7 +75,7 @@ Every door is shut except for two. One is the entrance into the trader's shop. T
 [[ENDRULESET]]
 
 [[CODE]]
-c.learnAbout(kbBlindGuide);
+c.learn(kbBlindGuide);
 [[ENDCODE]]
 
 // ---

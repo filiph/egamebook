@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:edgehead/edgehead_actors.dart';
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
+import 'package:edgehead/edgehead_facts.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/elements/stat_update_element.dart';
@@ -20,6 +21,7 @@ import 'package:meta/meta.dart';
 
 export 'package:edgehead/edgehead_ids.dart';
 export 'package:edgehead/edgehead_items.dart';
+export 'package:edgehead/edgehead_facts_enums.dart';
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
@@ -376,27 +378,13 @@ extension ActionContextHelpers on ActionContext {
     getRoomRoaming().moveActor(this, locationName);
   }
 
-  /// _Learning_ about something means that someone has already .
-  void learnAbout(String topic) {
-    outputWorld.recordCustom("learns_about_$topic", actor: player);
-
-    // When someone learns about something, they automatically
-    // also _hear_ about it.
-    hearAbout(topic);
+  /// Learns a fact in a chain of facts.
+  void learn(Object o) {
+    ChainedFacts.singleton.learnFact(this, o);
   }
 
   void markHappened(String eventId) {
     outputWorld.recordCustom(eventId);
-  }
-
-  /// _Hearing_ about something means we have heard it mentioned, but
-  /// we haven't been told any details.
-  ///
-  /// For example, someone might have said "well and then there's the wizard"
-  /// and nothing else. Then we have just heard about the wizard, and we might
-  /// want to [learnAbout] him.
-  void hearAbout(String topic) {
-    outputWorld.recordCustom("hears_about_$topic", actor: player);
   }
 
   void giveStaminaToPlayer(int amount) {
@@ -440,6 +428,16 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return simulation.getRoomByName(player.currentRoomName);
   }
 
+  /// Checks if player knows this fact, or a higher fact.
+  ///
+  /// For example, if checking [Doghead.somethingCalledDoghead], this method
+  /// will return `true` if the player knows the whole
+  /// [Doghead.dogheadMyth]. Because of course if you know the whole Doghead
+  /// myth, you'll also know that there is something called Doghead.
+  bool knows(Object o) {
+    return ChainedFacts.singleton.knowsFact(this, o);
+  }
+
   /// Same as [playerRoom] if the player is in a "base" room. If they are in
   /// a variant room, then this getter returns the base (i.e. parent) room.
   Room get playerParentRoom {
@@ -454,20 +452,6 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   bool hasHappened(String eventId, {int actorId}) {
     return world.customHistory
         .query(name: eventId, actorId: actorId)
-        .hasHappened;
-  }
-
-  /// Queries the history of [hearAbout].
-  bool hasHeardAbout(String topic) {
-    return world.customHistory
-        .query(name: "hears_about_$topic", actorId: playerId)
-        .hasHappened;
-  }
-
-  /// Queries the history of [learnAbout].
-  bool hasLearnedAbout(String topic) {
-    return world.customHistory
-        .query(name: "learns_about_$topic", actorId: playerId)
         .hasHappened;
   }
 

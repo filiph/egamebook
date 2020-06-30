@@ -13,6 +13,23 @@ The Oracle is here.
 
 
 // ---
+ACTION: $ask_oracle_about_keep
+COMMAND: Oracle >> Talk >> "What can you tell me about the Keep?"
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"I worked there as a kid."
+
+[[CODE]]
+c.learn(KeepGateFacts.oracleWorkedInKeep);
+[[ENDCODE]]
+
+
+
+// ---
 ACTION: $ask_oracle_about_keep_gate
 COMMAND: Oracle >> Talk >> "Can you help me open the Keep?"
 FOR_LOCATION: $oracle_main
@@ -20,15 +37,14 @@ PREREQUISITES:
 // Oracle must live.
 !c.hasHappened(evOrcOffensive)
 &&
-c.playerHasVisited('keep_gate')
+c.knows(KeepGateFacts.oracleWorkedInKeep)
 // TODO: add "kbOracleWorkedInKeep"
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: describe
-// Should be INK
+Oracle describes a convoluted series of steps to open the gate.
 
 [[CODE]]
-c.learnAbout(kbKeepGateUnlock);
+c.learn(KeepGateFacts.keepGateUnlock);
 [[ENDCODE]]
 
 NOTES:

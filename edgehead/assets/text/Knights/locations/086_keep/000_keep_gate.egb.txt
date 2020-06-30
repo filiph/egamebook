@@ -43,7 +43,7 @@ FOR_LOCATION: $keep_gate
 PREREQUISITES:
 !c.hasHappened(evKeepDestroyedGate)
 &&
-!c.hasLearnedAbout(kbKeepGateUnlock)
+!c.knows(KeepGateFacts.keepGateUnlock)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 I attempt to open the gate but it's closed tight. Maybe there's a trick to unlock it using some of the intricate woodwork, but my random mashing of various ornaments does nothing.
@@ -58,10 +58,10 @@ FOR_LOCATION: $keep_gate
 PREREQUISITES:
 !c.hasHappened(evKeepDestroyedGate)
 &&
-c.hasLearnedAbout(kbKeepGateUnlock)
+c.knows(KeepGateFacts.keepGateUnlock)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: describe unlocking of gate
+I unlock the gate using the steps I learned.
 
 [[CODE]]
 w.recordCustom(evKeepUnlockedGate);
@@ -75,7 +75,7 @@ PREREQUISITES:
 c.player.inventory.hasWeapon(WeaponType.axe)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: describe chopping down of gate
+I chop down of gate.
 // This can happen even _after_ the player unlocked the gate.
 
 [[CODE]]

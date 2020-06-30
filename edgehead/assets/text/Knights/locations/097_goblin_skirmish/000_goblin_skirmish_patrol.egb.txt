@@ -1,7 +1,7 @@
 APPROACH: $goblin_skirmish_patrol FROM $bleeds_main
 DESCRIPTION: There is no path in the direction of the smoke. [We] go through the brush and step over logs and ancient rubble.
 PREREQUISITES:
-c.hasLearnedAbout(kbGoblinCampSmoke)
+c.knows(kbGoblinCampSmoke)
 &&
 !c.playerHasVisited("goblin_skirmish_patrol")
 

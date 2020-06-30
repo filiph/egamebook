@@ -1600,6 +1600,71 @@ final Room battlefield = Room(
 final Approach oracleMainFromKnightsHqMain =
     Approach('knights_hq_main', 'oracle_main', '', null);
 
+class AskOracleAboutKeep extends RoamingAction {
+  @override
+  final String name = 'ask_oracle_about_keep';
+
+  static final AskOracleAboutKeep singleton = AskOracleAboutKeep();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Oracle', 'Talk', '"What can you tell me about the Keep?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"I worked there as a kid."\n\n', isRaw: true);
+    c.learn(KeepGateFacts.oracleWorkedInKeep);
+
+    return '${a.name} successfully performs AskOracleAboutKeep';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class AskOracleAboutKeepGate extends RoamingAction {
   @override
   final String name = 'ask_oracle_about_keep_gate';
@@ -1615,7 +1680,8 @@ class AskOracleAboutKeepGate extends RoamingAction {
     if (c.inRoomParent('oracle_main') != true) {
       return false;
     }
-    if (!(!c.hasHappened(evOrcOffensive) && c.playerHasVisited('keep_gate'))) {
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        c.knows(KeepGateFacts.oracleWorkedInKeep))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -1628,8 +1694,9 @@ class AskOracleAboutKeepGate extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: describe\n\n', isRaw: true);
-    c.learnAbout(kbKeepGateUnlock);
+    s.add('Oracle describes a convoluted series of steps to open the gate.\n\n',
+        isRaw: true);
+    c.learn(KeepGateFacts.keepGateUnlock);
 
     return '${a.name} successfully performs AskOracleAboutKeepGate';
   }
@@ -3202,7 +3269,7 @@ class AttemptOpenGate extends RoamingAction {
       return false;
     }
     if (!(!c.hasHappened(evKeepDestroyedGate) &&
-        !c.hasLearnedAbout(kbKeepGateUnlock))) {
+        !c.knows(KeepGateFacts.keepGateUnlock))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -3279,7 +3346,7 @@ class DestroyGateWithAxe extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: describe chopping down of gate\n\n', isRaw: true);
+    s.add('I chop down of gate.\n\n', isRaw: true);
     w.recordCustom(evKeepDestroyedGate);
 
     return '${a.name} successfully performs DestroyGateWithAxe';
@@ -3392,7 +3459,7 @@ class OpenGateUnlock extends RoamingAction {
       return false;
     }
     if (!(!c.hasHappened(evKeepDestroyedGate) &&
-        c.hasLearnedAbout(kbKeepGateUnlock))) {
+        c.knows(KeepGateFacts.keepGateUnlock))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -3405,7 +3472,7 @@ class OpenGateUnlock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: describe unlocking of gate\n\n', isRaw: true);
+    s.add('I unlock the gate using the steps I learned.\n\n', isRaw: true);
     w.recordCustom(evKeepUnlockedGate);
 
     return '${a.name} successfully performs OpenGateUnlock';
@@ -3637,7 +3704,7 @@ class UseCompass extends RoamingAction {
     s.add(
         'The compass leads me through twisty little passages to the servants room.\n\n',
         isRaw: true);
-    c.learnAbout(kbKeepServantsLocation);
+    c.learn(kbKeepServantsLocation);
     c.movePlayer('keep_servants');
 
     return '${a.name} successfully performs UseCompass';
@@ -3718,7 +3785,7 @@ final Approach keepServantsFromKeepBedroom =
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return c.hasLearnedAbout(kbKeepServantsLocation);
+  return c.knows(kbKeepServantsLocation);
 });
 final Approach keepServantsFromTopOfClimb =
     Approach('top_of_climb', 'keep_servants', '', null);
@@ -4934,7 +5001,7 @@ class BleedsMainObserveVillage extends RoamingAction {
               'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. $ifBlock_646ab8e51\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
               isRaw: true);
         })).apply(c);
-    c.learnAbout(kbBlindGuide);
+    c.learn(kbBlindGuide);
 
     return '${a.name} successfully performs BleedsMainObserveVillage';
   }
@@ -4979,8 +5046,8 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   s.add(
       'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
       isRaw: true);
-  c.learnAbout(kbTrader);
-  c.learnAbout(kbGoblinCampSmoke);
+  c.learn(kbTrader);
+  c.learn(kbGoblinCampSmoke);
 
   w.updateActorById(tamaraId, (b) => b.isActive = false);
 
@@ -5112,7 +5179,7 @@ class BleedsBlindGuideGreet extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(c.hasLearnedAbout(kbBlindGuide))) {
+    if (!(c.knows(kbBlindGuide))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -5128,7 +5195,7 @@ class BleedsBlindGuideGreet extends RoamingAction {
     s.add(
         'I come over to the blind man and introduce myself.\n\n"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."\n\n_"Hilarious."_\n\n"So what brings you here?"\n\nI have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.\n\n\n_"I seek treasure."_\n\n"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."\n\n',
         isRaw: true);
-    c.learnAbout(kbBlindGuide);
+    c.learn(kbBlindGuide);
 
     return '${a.name} successfully performs BleedsBlindGuideGreet';
   }
@@ -5198,13 +5265,13 @@ class BleedsBlindGuideTerribleIdea extends RoamingAction {
     s.add(
         '"So you want to explore the Pyramid."\n\n_"I need something that\'s in there."_\n\n"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n\nI don\'t want to reveal more than needed. But "magic" is vague enough. So I just say yes.\n\nThe man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n\n',
         isRaw: true);
-    c.hearAbout(kbJisadHatesMagic);
+    c.learn(kbJisadHatesMagic);
 
     s.add(
         '\n_"What about it?"_\n\n"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."\n\n',
         isRaw: true);
-    c.hearAbout(kbOrcsInPyramid);
-    c.hearAbout(kbKnightsLeaving);
+    c.learn(kbOrcsInPyramid);
+    c.learn(kbKnightsLeaving);
 
     s.add(
         '\n_"And this is because of magic?"_\n\nThe otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."\n\nThe man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
@@ -5249,7 +5316,7 @@ final Approach bleedsTraderHutFromBleedsMain =
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return c.hasLearnedAbout(kbTrader);
+  return c.knows(kbTrader);
 });
 
 class BleedsTraderGoblinSmoke extends RoamingAction {
@@ -5267,8 +5334,8 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     if (c.inRoomParent('bleeds_trader_hut') != true) {
       return false;
     }
-    if (!(c.hasLearnedAbout(kbLeroy) &&
-        c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke) &&
+    if (!(c.knows(kbLeroy) &&
+        c.knows(kbLeroyKnowsGoblinSmoke) &&
         !c.hasHappened(evGoblinCampCleared) &&
         c.inRoomWith(leroyId))) {
       return false;
@@ -5288,7 +5355,7 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     s.add(
         '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
         isRaw: true);
-    c.hearAbout(kbKnightsLeaving);
+    c.learn(kbKnightsLeaving);
 
     s.add(
         '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! Sir, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
@@ -5369,7 +5436,7 @@ class BleedsTraderGoblins extends RoamingAction {
     s.add(
         '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
         isRaw: true);
-    c.learnAbout(kbLeroyKnowsGoblinSmoke);
+    c.learn(kbLeroyKnowsGoblinSmoke);
 
     return '${a.name} successfully performs BleedsTraderGoblins';
   }
@@ -5435,7 +5502,7 @@ class BleedsTraderGreet extends RoamingAction {
     s.add(
         'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
         isRaw: true);
-    c.learnAbout(kbLeroy);
+    c.learn(kbLeroy);
 
     return '${a.name} successfully performs BleedsTraderGreet';
   }
@@ -5894,8 +5961,8 @@ final Room bleedsMainAfterQuake1 = Room(
       s.add(
           'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
-      c.learnAbout(kbTrader);
-      c.learnAbout(kbGoblinCampSmoke);
+      c.learn(kbTrader);
+      c.learn(kbGoblinCampSmoke);
 
       w.updateActorById(tamaraId, (b) => b.isActive = false);
 
@@ -5950,8 +6017,8 @@ final Room bleedsMainAfterQuake2 = Room(
       s.add(
           'I finally see it. The Pyramid.\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
-      c.learnAbout(kbTrader);
-      c.learnAbout(kbGoblinCampSmoke);
+      c.learn(kbTrader);
+      c.learn(kbGoblinCampSmoke);
 
       w.updateActorById(tamaraId, (b) => b.isActive = false);
 
@@ -6013,7 +6080,7 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return c.hasLearnedAbout(kbGoblinCampSmoke) &&
+  return c.knows(kbGoblinCampSmoke) &&
       !c.playerHasVisited("goblin_skirmish_patrol");
 });
 final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
@@ -7370,6 +7437,7 @@ final allActions = <RoamingAction>[
   SaveSarn.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
+  AskOracleAboutKeep.singleton,
   AskOracleAboutKeepGate.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,

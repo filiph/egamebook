@@ -1,6 +1,6 @@
 APPROACH: $bleeds_trader_hut FROM $bleeds_main
 PREREQUISITES:
-c.hasLearnedAbout(kbTrader)
+c.knows(kbTrader)
 
 // ---
 ROOM: $bleeds_trader_hut
@@ -62,7 +62,7 @@ The trader shakes his head and interjects: "What awaits us anywhere else?"
 "Death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
 
 [[CODE]]
-c.learnAbout(kbLeroy);
+c.learn(kbLeroy);
 [[ENDCODE]]
 
 
@@ -103,7 +103,7 @@ The trader, obviously satisfied, turns back to me. "The suckers are closing in f
 Leroy seems genuinely surprised. "I thought you knew. Everyone knows."
 
 [[CODE]]
-c.learnAbout(kbLeroyKnowsGoblinSmoke);
+c.learn(kbLeroyKnowsGoblinSmoke);
 [[ENDCODE]]
 
 
@@ -129,9 +129,9 @@ COMMAND: Leroy >> “Can you tell me more about that goblin camp?”
 FOR_LOCATION: $bleeds_trader_hut
 
 PREREQUISITES:
-c.hasLearnedAbout(kbLeroy)
+c.knows(kbLeroy)
 &&
-c.hasLearnedAbout(kbLeroyKnowsGoblinSmoke)
+c.knows(kbLeroyKnowsGoblinSmoke)
 &&
 !c.hasHappened(evGoblinCampCleared)
 &&
@@ -147,7 +147,7 @@ assert(c.inRoomWith(leroyId));
 "But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 
 [[CODE]]
-c.hearAbout(kbKnightsLeaving);
+c.learn(kbKnightsLeaving);
 [[ENDCODE]]
 
 "Well, if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."

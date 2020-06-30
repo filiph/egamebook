@@ -61,7 +61,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 The compass leads me through twisty little passages to the servants room.
 
 [[CODE]]
-c.learnAbout(kbKeepServantsLocation);
+c.learn(kbKeepServantsLocation);
 c.movePlayer('keep_servants');
 [[ENDCODE]]
 
