@@ -1014,7 +1014,7 @@ class SaveSarn extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: fight. Assuming victory.\n\nI take Sarn through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds.\n\n',
+        'TODO: fight. Assuming victory.\n\nI take Sarn (and his hammer) through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds.\n\n',
         isRaw: true);
     c.markHappened(evSavedSarn);
     c.movePlayer('bleeds_main');
@@ -1053,7 +1053,7 @@ class SaveSarn extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room smithy = Room('smithy', null, (ActionContext c) {
+final Room smithy = Room('smithy', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1061,16 +1061,34 @@ final Room smithy = Room('smithy', null, (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('My brother, Sarn, working for the orcs, forging weapons.\n',
       isRaw: true);
-}, null, null, positionX: 24, positionY: 40, mapName: 'Smithy');
-final Room smithyAfterSarnSaved = Room('smithy_after_sarn_saved', null,
-    (ActionContext c) {
+}, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The smithy is empty and silent now.\n', isRaw: true);
-}, null, null,
+  s.add('', isRaw: true);
+}, null, null, positionX: 24, positionY: 40, mapName: 'Smithy');
+final Room smithyAfterSarnSaved = Room(
+    'smithy_after_sarn_saved',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The smithy is empty and silent.\n', isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
     parent: 'smithy',
     prerequisite: Prerequisite(476050921, 1, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
@@ -1078,6 +1096,14 @@ final Room smithyAfterSarnSaved = Room('smithy_after_sarn_saved', null,
       final Actor a = c.actor;
       return c.hasHappened(evSavedSarn);
     }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The smithy is empty and silent now.\n', isRaw: true);
+    },
     positionX: 24,
     positionY: 40,
     mapName: 'Smithy');
@@ -2870,7 +2896,7 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n',
+      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n\nAn old woman is tying bags of produce together, and looks familiar.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -5426,6 +5452,69 @@ final sarnSlapInk = InkAst([
   }),
 ]);
 
+class SarnExamineHisHammer extends RoamingAction {
+  @override
+  final String name = 'sarn_examine_his_hammer';
+
+  static final SarnExamineHisHammer singleton = SarnExamineHisHammer();
+
+  @override
+  List<String> get commandPathTemplate => ['Sarn\'s hammer', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evSavedSarn) &&
+        !w.actionHasBeenPerformed('sarn_take_his_hammer'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The hammer is extremely well done and menacing.\n', isRaw: true);
+    return '${a.name} successfully performs SarnExamineHisHammer';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class SarnSlap extends RoamingAction {
   @override
   final String name = 'sarn_slap';
@@ -5459,6 +5548,70 @@ class SarnSlap extends RoamingAction {
       "sarn_slap_ink",
     ));
     return '${a.name} successfully performs SarnSlap';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class SarnTakeHisHammer extends RoamingAction {
+  @override
+  final String name = 'sarn_take_his_hammer';
+
+  static final SarnTakeHisHammer singleton = SarnTakeHisHammer();
+
+  @override
+  List<String> get commandPathTemplate => ['Sarn\'s hammer', 'Take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evSavedSarn))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the hammer.\n\n', isRaw: true);
+    c.giveNewItemToPlayer(sarnHammer);
+
+    return '${a.name} successfully performs SarnTakeHisHammer';
   }
 
   @override
@@ -7103,7 +7256,9 @@ final allActions = <RoamingAction>[
   BleedsTraderGoblins.singleton,
   BleedsTraderGreet.singleton,
   BleedsTraderTellAboutClearedCamp.singleton,
+  SarnExamineHisHammer.singleton,
   SarnSlap.singleton,
+  SarnTakeHisHammer.singleton,
   GoblinCampAttack.singleton,
   ListenContinue.singleton,
   ListenMore.singleton,

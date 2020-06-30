@@ -66,6 +66,14 @@ final Item rockFromMeadow = Item.weapon(
   adjective: "moldy",
 );
 
+final Item sarnHammer = Item.weapon(
+  sarnHammerId,
+  WeaponType.club,
+  name: 'hammer',
+  adjective: 'giant',
+  bluntDamage: 2,
+);
+
 final Item sixtyFiverShield = Item.weapon(
   sixtyFiverShieldId,
   WeaponType.shield,

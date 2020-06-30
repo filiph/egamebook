@@ -7,8 +7,10 @@ ROOM: $smithy
 POS: 24, 40
 MAP_NAME: Smithy
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 My brother, Sarn, working for the orcs, forging weapons.
+
+DESCRIPTION: $NONE
 
 
 // ---
@@ -17,7 +19,10 @@ VARIANT_OF: $smithy
 
 RULE: c.hasHappened(evSavedSarn)
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
+The smithy is empty and silent.
+
+VARIANT_UPDATE_DESCRIPTION:
 The smithy is empty and silent now.
 
 
@@ -30,7 +35,7 @@ FOR_LOCATION: $smithy
 COMPLETE_SUCCESS_DESCRIPTION:
 TODO: fight. Assuming victory.
 
-I take Sarn through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He'll be safe at Jisad's.
+I take Sarn (and his hammer) through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He'll be safe at Jisad's.
 
 As I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn't.
 

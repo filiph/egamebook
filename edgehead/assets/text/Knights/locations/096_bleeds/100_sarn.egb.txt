@@ -8,3 +8,33 @@ c.hasHappened(evSavedSarn)
 
 INK:
 Sarn is unresponsive.
+
+
+// ---
+ACTION: $sarn_examine_his_hammer
+COMMAND: Sarn's hammer >> Examine
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+c.hasHappened(evSavedSarn)
+&&
+!w.actionHasBeenPerformed('sarn_take_his_hammer')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+The hammer is extremely well done and menacing.
+
+
+// ---
+ACTION: $sarn_take_his_hammer
+COMMAND: Sarn's hammer >> Take
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+c.hasHappened(evSavedSarn)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the hammer.
+
+[[CODE]]
+c.giveNewItemToPlayer(sarnHammer);
+[[ENDCODE]]

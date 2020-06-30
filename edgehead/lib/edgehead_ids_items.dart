@@ -18,6 +18,8 @@ const int letterFromFatherId = 77004;
 
 const int rockFromMeadowId = 77005;
 
+const int sarnHammerId = 770014;
+
 const int sixtyFiverShieldId = 77010;
 
 const int sixtyFiverSwordId = 77013;
