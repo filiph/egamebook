@@ -4,36 +4,17 @@ import 'package:edgehead/edgehead_facts_enums.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 
-void _checkObjectIsEnum(Object o) {
-  if (o is DogheadFacts ||
-      o is KnightsFacts ||
-      o is KeepGateFacts ||
-      o is ConetFacts ||
-      o is SarnFacts ||
-      o is LadyHopeFacts ||
-      o is BigOFacts ||
-      o is DragonEggFacts ||
-      o is ArtifactStarFacts ||
-      o is SixtyFiversFacts) {
-    return;
-  } else {
-    throw StateError('$o is not one of the knowledge chain enums');
-  }
-}
-
-Map<String, List<String>> _generateChains() {
-  return <String, List<String>>{
-    'ConetFacts': ConetFacts.values.map((e) => e.toString()).toList(),
-    'DogheadFacts': DogheadFacts.values.map((e) => e.toString()).toList(),
-    'DragonEggFacts': DragonEggFacts.values.map((e) => e.toString()).toList(),
-    'KeepGateFacts': KeepGateFacts.values.map((e) => e.toString()).toList(),
-    'KnightsFacts': KnightsFacts.values.map((e) => e.toString()).toList(),
-    'LadyHopeFacts': LadyHopeFacts.values.map((e) => e.toString()).toList(),
-    'SarnFacts': SarnFacts.values.map((e) => e.toString()).toList(),
-    'SixtyFiversFacts':
-        SixtyFiversFacts.values.map((e) => e.toString()).toList(),
-  };
-}
+/// Keep this map in sync with edgehead_facts_enums.dart.
+Map<Type, List<String>> _chainEnums = {
+  ConetFacts: ConetFacts.values.map((e) => e.toString()).toList(),
+  DogheadFacts: DogheadFacts.values.map((e) => e.toString()).toList(),
+  DragonEggFacts: DragonEggFacts.values.map((e) => e.toString()).toList(),
+  KeepGateFacts: KeepGateFacts.values.map((e) => e.toString()).toList(),
+  KnightsFacts: KnightsFacts.values.map((e) => e.toString()).toList(),
+  LadyHopeFacts: LadyHopeFacts.values.map((e) => e.toString()).toList(),
+  SarnFacts: SarnFacts.values.map((e) => e.toString()).toList(),
+  SixtyFiversFacts: SixtyFiversFacts.values.map((e) => e.toString()).toList(),
+};
 
 /// This class allows checking if the player has learned about something.
 /// It implements the "chained facts" idea from Inkle Studios, where some
@@ -44,7 +25,7 @@ Map<String, List<String>> _generateChains() {
 /// This is explained here:
 /// https://heavens-vault-game.tumblr.com/post/160306503785/what-dyknow
 class ChainedFacts {
-  static ChainedFacts singleton = ChainedFacts._();
+  static final ChainedFacts singleton = ChainedFacts._();
 
   final Map<String, List<String>> _chains;
 
@@ -107,5 +88,19 @@ class ChainedFacts {
     for (var i = factIndex + 1; i < chain.length; i++) {
       yield chain[i];
     }
+  }
+
+  static void _checkObjectIsEnum(Object o) {
+    for (final type in _chainEnums.keys) {
+      if (o.runtimeType == type) return;
+    }
+
+    throw StateError('$o is not one of the knowledge chain enums');
+  }
+
+  /// A copy of [_chainEnums], but the keys are strings instead of types.
+  static Map<String, List<String>> _generateChains() {
+    return Map<String, List<String>>.fromEntries(
+        _chainEnums.keys.map((e) => MapEntry(e.toString(), _chainEnums[e])));
   }
 }

@@ -22,6 +22,7 @@ import 'package:meta/meta.dart';
 export 'package:edgehead/edgehead_ids.dart';
 export 'package:edgehead/edgehead_items.dart';
 export 'package:edgehead/edgehead_facts_enums.dart';
+export 'package:edgehead/edgehead_facts_strings.dart';
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
