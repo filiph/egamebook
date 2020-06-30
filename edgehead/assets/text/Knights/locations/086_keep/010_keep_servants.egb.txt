@@ -13,9 +13,41 @@ POS: 19, 89
 MAP_NAME: Servants' quarters
 
 FIRST_DESCRIPTION:
-TBD: North skull
+Clear signs of goblin activity. But deserted. A curious device in the middle of the room.
 
 DESCRIPTION: $NONE
+
+
+
+// ---
+ACTION: $north_skull_examine
+COMMAND: Device >> Examine
+FOR_LOCATION: $keep_servants
+
+PREREQUISITES:
+!w.actionHasBeenPerformed('north_skull_take')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+This is human skull made into a device. 
+
+// TODO: image of north skull
+
+Next to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.
+
+[[IF c.hasItem(compassId)]]As I circle the "North Skull", the compass always points directly at it.[[ENDIF]]
+
+
+// ---
+ACTION: $north_skull_take
+COMMAND: North Skull >> Take
+FOR_LOCATION: $keep_servants
+
+PREREQUISITES:
+w.actionHasBeenPerformed('north_skull_examine')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the North Skull.
+
 
 NOTES:
 // Vignette

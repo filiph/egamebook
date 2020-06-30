@@ -3722,7 +3722,146 @@ final Approach keepServantsFromKeepBedroom =
 });
 final Approach keepServantsFromTopOfClimb =
     Approach('top_of_climb', 'keep_servants', '', null);
-final Room keepServants = Room('keep_servants', null, (ActionContext c) {
+
+class NorthSkullExamine extends RoamingAction {
+  @override
+  final String name = 'north_skull_examine';
+
+  static final NorthSkullExamine singleton = NorthSkullExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Device', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_servants') != true) {
+      return false;
+    }
+    if (!(!w.actionHasBeenPerformed('north_skull_take'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_465f63bbc = c.hasItem(compassId)
+        ? '''As I circle the "North Skull", the compass always points directly at it.'''
+        : '''''';
+    s.add(
+        'This is human skull made into a device. \n\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n$ifBlock_465f63bbc\n',
+        isRaw: true);
+    return '${a.name} successfully performs NorthSkullExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class NorthSkullTake extends RoamingAction {
+  @override
+  final String name = 'north_skull_take';
+
+  static final NorthSkullTake singleton = NorthSkullTake();
+
+  @override
+  List<String> get commandPathTemplate => ['North Skull', 'Take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('keep_servants') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed('north_skull_examine'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the North Skull.\n', isRaw: true);
+    return '${a.name} successfully performs NorthSkullTake';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room keepServants = Room('keep_servants', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'Clear signs of goblin activity. But deserted. A curious device in the middle of the room.\n',
+      isRaw: true);
+}, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -7241,6 +7380,8 @@ final allActions = <RoamingAction>[
   SearchBedroom.singleton,
   TakeFamilyPortrait.singleton,
   UseCompass.singleton,
+  NorthSkullExamine.singleton,
+  NorthSkullTake.singleton,
   TalkToKatAboutBrother.singleton,
   TalkToKatAboutMiguelMissing.singleton,
   TalkToKatGreetings.singleton,

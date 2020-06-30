@@ -16,6 +16,8 @@ const int lairOfGodStarId = 77003;
 
 const int letterFromFatherId = 77004;
 
+const int northSkullId = 770015;
+
 const int rockFromMeadowId = 77005;
 
 const int sarnHammerId = 770014;

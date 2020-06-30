@@ -59,6 +59,13 @@ final Item letterFromFather = Item(
   adjective: "father's",
 );
 
+final Item northSkull = Item.weapon(
+  northSkullId,
+  WeaponType.rock,
+  name: "North Skull",
+  nameIsProperNoun: true,
+);
+
 final Item rockFromMeadow = Item.weapon(
   rockFromMeadowId,
   WeaponType.rock,
