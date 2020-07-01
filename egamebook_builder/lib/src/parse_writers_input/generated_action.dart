@@ -273,11 +273,17 @@ class GeneratedAction extends GeneratedGameObject {
           '}');
       isApplicableBuilder.block.statements.add(rawIfStatement);
     }
-    // We only allow actions to be used once.
-    final actionNeverUsedCheck = refer(worldParameter.name)
-        .property('actionNeverUsed')
-        .call([refer('name')]);
-    isApplicableBuilder.block.addExpression(actionNeverUsedCheck.returned);
+
+    if (_map['REPEATABLE'] != '\$TRUE') {
+      // By default, we only allow actions to be used once.
+      final actionNeverUsedCheck = refer(worldParameter.name)
+          .property('actionNeverUsed')
+          .call([refer('name')]);
+      isApplicableBuilder.block.addExpression(actionNeverUsedCheck.returned);
+    } else {
+      // Otherwise, we can just return true here.
+      isApplicableBuilder.block.addExpression(literalBool(true).returned);
+    }
     return isApplicableBuilder.bake();
   }
 
