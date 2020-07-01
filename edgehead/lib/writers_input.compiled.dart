@@ -5777,6 +5777,71 @@ class SarnExamineHisHammer extends RoamingAction {
   bool get isAggressive => false;
 }
 
+class SarnReadLetter extends RoamingAction {
+  @override
+  final String name = 'sarn_read_letter';
+
+  static final SarnReadLetter singleton = SarnReadLetter();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['inventory', 'father\'s letter', 'read to Sarn'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evSavedSarn) && c.hasItem(letterFromFatherId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Sarn listens intently. There seems to be a little bit of recognition in his face. By the time I finish reading, he looks happier, though still out of it.\n',
+        isRaw: true);
+    return '${a.name} successfully performs SarnReadLetter';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class SarnSlap extends RoamingAction {
   @override
   final String name = 'sarn_slap';
@@ -7709,6 +7774,7 @@ final allActions = <RoamingAction>[
   BleedsTraderGreet.singleton,
   BleedsTraderTellAboutClearedCamp.singleton,
   SarnExamineHisHammer.singleton,
+  SarnReadLetter.singleton,
   SarnSlap.singleton,
   SarnTakeHisHammer.singleton,
   GoblinCampAttack.singleton,
