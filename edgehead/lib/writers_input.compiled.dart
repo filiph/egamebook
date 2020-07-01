@@ -1732,6 +1732,71 @@ class AskOracleAboutKeepGate extends RoamingAction {
   bool get isAggressive => false;
 }
 
+class OracleGiveNorthSkull extends RoamingAction {
+  @override
+  final String name = 'oracle_give_north_skull';
+
+  static final OracleGiveNorthSkull singleton = OracleGiveNorthSkull();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['inventory', 'North Skull', 'Give to Oracle'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive) && c.hasItem(northSkullId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Oracle is very thankful.\n\n', isRaw: true);
+    c.removeItemFromPlayer(northSkullId);
+
+    return '${a.name} successfully performs OracleGiveNorthSkull';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room oracleMain = Room('oracle_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7756,6 +7821,7 @@ final allActions = <RoamingAction>[
   ReservoirOpenDam.singleton,
   AskOracleAboutKeep.singleton,
   AskOracleAboutKeepGate.singleton,
+  OracleGiveNorthSkull.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
   TalkToMiguelAboutDeserting.singleton,

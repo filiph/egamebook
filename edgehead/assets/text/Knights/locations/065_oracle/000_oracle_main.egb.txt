@@ -15,7 +15,7 @@ The Oracle, an old woman, is here.
 c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
 [[ENDCODE]]
 
-DESCRIPTION: 
+DESCRIPTION:
 [[CODE]]
 c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
 [[ENDCODE]]
@@ -56,11 +56,28 @@ Oracle describes a convoluted series of steps to open the gate.
 c.learn(KeepGateFacts.keepGateUnlock);
 [[ENDCODE]]
 
+
+// ---
+ACTION: $oracle_give_north_skull
+COMMAND: inventory >> North Skull >> Give to Oracle
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+c.hasItem(northSkullId)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+Oracle is very thankful.
+
+[[CODE]]
+c.removeItemFromPlayer(northSkullId);
+[[ENDCODE]]
+
+
 NOTES:
 // Oracle has a pet crow that talks.
 // Maybe this is where we smell the coffee, and later the room is taken over, and the Oracle is dead, and all we smell is the coffee.
-
-- Oracle can give: kbKeepGateUnlock (she was working there as a child)
 
 // Vignette:
 
