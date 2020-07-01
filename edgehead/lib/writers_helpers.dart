@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:edgehead/edgehead_actors.dart';
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_facts.dart';
+import 'package:edgehead/edgehead_facts_strings.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/elements/stat_update_element.dart';
@@ -19,13 +20,93 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
-export 'package:edgehead/edgehead_ids.dart';
-export 'package:edgehead/edgehead_items.dart';
 export 'package:edgehead/edgehead_facts_enums.dart';
 export 'package:edgehead/edgehead_facts_strings.dart';
+export 'package:edgehead/edgehead_ids.dart';
+export 'package:edgehead/edgehead_items.dart';
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
+}
+
+/// Describes the usage of the compass.
+void describeCompass(ActionContext c) {
+  final w = c.world;
+  final s = c.outputStoryline;
+
+  assert(c.world.currentSituation is RoomRoamingSituation);
+  final room = c.playerRoom;
+  assert(room.isOnMap);
+
+  Room target;
+  if (c.hasItem(northSkullId)) {
+    // The skull is with the player.
+    target = room;
+  } else if (w.actionHasBeenPerformed('give_north_skull_to_oracle')) {
+    if (c.hasHappened(evOrcOffensive)) {
+      target = c.simulation.getRoomByName('big_o_observatory');
+    } else {
+      target = c.simulation.getRoomByName('oracle_main');
+    }
+  } else {
+    target = c.simulation.getRoomByName('keep_servants');
+  }
+  assert(target.isOnMap);
+
+  final dx = target.positionX - room.positionX;
+  final dy = target.positionY - room.positionY;
+
+  /// The direction computation is taken from package:piecemeal.
+  /// https://github.com/munificent/piecemeal/blob/71aa6567b75aad358328ee8eab0f062c1ea3ed2d/lib/src/vec.dart#L64-L102
+  String getDirection(int x, int y) {
+    if (x == 0) {
+      if (y < 0) {
+        return 'above';
+      } else if (y == 0) {
+        return 'to the skull-shaped device';
+      } else {
+        return 'below';
+      }
+    }
+
+    var slope = y / x;
+
+    if (x < 0) {
+      if (slope >= 2.0) {
+        return 'above';
+      } else if (slope >= 0.5) {
+        return 'above and to the west';
+      } else if (slope >= -0.5) {
+        return 'to the west';
+      } else if (slope >= -2.0) {
+        return 'below and to the west';
+      } else {
+        return 'below';
+      }
+    } else {
+      if (slope >= 2.0) {
+        return 'below';
+      } else if (slope >= 0.5) {
+        return 'below and to the east';
+      } else if (slope >= -0.5) {
+        return 'to the east';
+      } else if (slope >= -2.0) {
+        return 'above and to the east';
+      } else {
+        return 'above';
+      }
+    }
+  }
+
+  s.add('The compass points ${getDirection(dx, dy)}.', isRaw: true);
+
+  if (room.name == 'keep_bedroom' && !c.knows(kbKeepServantsLocation)) {
+    s.add('After a short while, I realize the compass is pointing to a hidden '
+        'door in the wall. I open it, and the compass leads me through '
+        'twisty little passages to the servants room.');
+    c.learn(kbKeepServantsLocation);
+    c.movePlayer('keep_servants');
+  }
 }
 
 /// Battlefield fight.

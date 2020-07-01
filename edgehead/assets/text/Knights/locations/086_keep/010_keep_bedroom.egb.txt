@@ -48,25 +48,9 @@ w.updateActorById(playerId,
       (b) => b..inventory.equipShield(familyPortrait, c.player.anatomy));
 [[ENDCODE]]
 
-
-// ---
-ACTION: $use_compass
-COMMAND: inventory >> compass >> use
-FOR_LOCATION: $keep_bedroom
-PREREQUISITES:
-c.hasItem(compassId)
-// TODO: remove FOR_LOCATION and allow this everywhere
-
-COMPLETE_SUCCESS_DESCRIPTION:
-The compass leads me through twisty little passages to the servants room.
-
-[[CODE]]
-c.learn(kbKeepServantsLocation);
-c.movePlayer('keep_servants');
-[[ENDCODE]]
-
-
 NOTES:
+In this room, the "Compass >> Use" action will lead to $keep_servants.
+
 // Vignette:
 // Wooden floor in the Keep
 

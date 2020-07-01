@@ -16,9 +16,53 @@ I take a curious device from the ground. Some kind of a compass.
 
 [[CODE]]
 c.markHappened(evGoblinCampCleared);
-c.giveNewItemToPlayer(compass);
 [[ENDCODE]]
 
 
 DESCRIPTION:
 The goblin camp is deserted.
+
+
+// ---
+ACTION: $compass_examine
+COMMAND: Device >> Examine
+FOR_LOCATION: $goblin_skirmish_main
+
+PREREQUISITES:
+!w.actionHasBeenPerformed('compass_take')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+A curious, crude device. Round as a pebble, slightly translucent, with a dark spot that moves as I rotate the device. The dark spot always points to one direction. It's like a compass. It currently points slightly upwards and toward the Pyramid.
+
+
+// ---
+ACTION: $compass_take
+COMMAND: Compass >> Take
+FOR_LOCATION: $goblin_skirmish_main
+
+PREREQUISITES:
+w.actionHasBeenPerformed('compass_examine')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the compass.
+
+[[CODE]]
+c.giveNewItemToPlayer(compass);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $compass_use
+COMMAND: inventory >> compass >> use
+
+PREREQUISITES:
+c.hasItem(compassId)
+&&
+c.playerRoom.isOnMap
+
+REPEATABLE: $TRUE
+
+COMPLETE_SUCCESS_DESCRIPTION:
+[[CODE]]
+describeCompass(c);
+[[ENDCODE]]

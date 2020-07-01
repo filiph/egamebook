@@ -13,7 +13,7 @@ POS: 19, 89
 MAP_NAME: Servants' quarters
 
 FIRST_DESCRIPTION:
-Clear signs of goblin activity. But deserted. A curious device in the middle of the room.
+Clear signs of goblin activity. But deserted. A curious skull-shaped device in the middle of the room.
 
 DESCRIPTION: $NONE
 
@@ -47,6 +47,10 @@ w.actionHasBeenPerformed('north_skull_examine')
 
 COMPLETE_SUCCESS_DESCRIPTION:
 I take the North Skull.
+
+[[CODE]]
+c.giveNewItemToPlayer(northSkull);
+[[ENDCODE]]
 
 
 NOTES:

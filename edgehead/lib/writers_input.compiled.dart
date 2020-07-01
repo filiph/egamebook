@@ -3674,73 +3674,6 @@ class TakeFamilyPortrait extends RoamingAction {
   bool get isAggressive => false;
 }
 
-class UseCompass extends RoamingAction {
-  @override
-  final String name = 'use_compass';
-
-  static final UseCompass singleton = UseCompass();
-
-  @override
-  List<String> get commandPathTemplate => ['inventory', 'compass', 'use'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('keep_bedroom') != true) {
-      return false;
-    }
-    if (!(c.hasItem(compassId))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'The compass leads me through twisty little passages to the servants room.\n\n',
-        isRaw: true);
-    c.learn(kbKeepServantsLocation);
-    c.movePlayer('keep_servants');
-
-    return '${a.name} successfully performs UseCompass';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
 final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3884,7 +3817,9 @@ class NorthSkullTake extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I take the North Skull.\n', isRaw: true);
+    s.add('I take the North Skull.\n\n', isRaw: true);
+    c.giveNewItemToPlayer(northSkull);
+
     return '${a.name} successfully performs NorthSkullTake';
   }
 
@@ -3926,7 +3861,7 @@ final Room keepServants = Room('keep_servants', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'Clear signs of goblin activity. But deserted. A curious device in the middle of the room.\n',
+      'Clear signs of goblin activity. But deserted. A curious skull-shaped device in the middle of the room.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -6459,6 +6394,195 @@ final Approach goblinSkirmishMainFromBleedsMain =
   final Actor a = c.actor;
   return c.hasHappened(evGoblinCampCleared);
 });
+
+class CompassExamine extends RoamingAction {
+  @override
+  final String name = 'compass_examine';
+
+  static final CompassExamine singleton = CompassExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Device', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
+      return false;
+    }
+    if (!(!w.actionHasBeenPerformed('compass_take'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'A curious, crude device. Round as a pebble, slightly translucent, with a dark spot that moves as I rotate the device. The dark spot always points to one direction. It\'s like a compass. It currently points slightly upwards and toward the Pyramid.\n',
+        isRaw: true);
+    return '${a.name} successfully performs CompassExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class CompassTake extends RoamingAction {
+  @override
+  final String name = 'compass_take';
+
+  static final CompassTake singleton = CompassTake();
+
+  @override
+  List<String> get commandPathTemplate => ['Compass', 'Take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed('compass_examine'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the compass.\n\n', isRaw: true);
+    c.giveNewItemToPlayer(compass);
+
+    return '${a.name} successfully performs CompassTake';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class CompassUse extends RoamingAction {
+  @override
+  final String name = 'compass_use';
+
+  static final CompassUse singleton = CompassUse();
+
+  @override
+  List<String> get commandPathTemplate => ['inventory', 'compass', 'use'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(c.hasItem(compassId) && c.playerRoom.isOnMap)) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    describeCompass(c);
+
+    return '${a.name} successfully performs CompassUse';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -6469,7 +6593,6 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
       'TODO: an actual battle with the goblins.\n\nI take a curious device from the ground. Some kind of a compass.\n\n',
       isRaw: true);
   c.markHappened(evGoblinCampCleared);
-  c.giveNewItemToPlayer(compass);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7452,7 +7575,6 @@ final allActions = <RoamingAction>[
   OpenGateUnlock.singleton,
   SearchBedroom.singleton,
   TakeFamilyPortrait.singleton,
-  UseCompass.singleton,
   NorthSkullExamine.singleton,
   NorthSkullTake.singleton,
   TalkToKatAboutBrother.singleton,
@@ -7478,6 +7600,9 @@ final allActions = <RoamingAction>[
   ListenMore.singleton,
   ListenToThemArguing.singleton,
   ObserveGoblinCamp.singleton,
+  CompassExamine.singleton,
+  CompassTake.singleton,
+  CompassUse.singleton,
   StartInk.singleton,
   ReadLetterFromFather.singleton,
   GuardpostAboveChurchTakeShield.singleton
