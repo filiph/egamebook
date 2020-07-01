@@ -64,3 +64,8 @@ I take the star. It fits into my palm. It says "Lair of God".
 [[CODE]]
 c.giveNewItemToPlayer(lairOfGodStar);
 [[ENDCODE]]
+
+
+NOTES:
+
+* The sound here is the same guttural growl that the player hears when exploring.

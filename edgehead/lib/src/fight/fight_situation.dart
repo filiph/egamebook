@@ -52,6 +52,7 @@ import 'package:edgehead/src/fight/actions/start_thrust_on_ground.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_shield.dart';
 import 'package:edgehead/src/fight/actions/take_dropped_weapon.dart';
 import 'package:edgehead/src/fight/actions/thrash_around_blind.dart';
+import 'package:edgehead/src/fight/actions/throw_grenade.dart';
 import 'package:edgehead/src/fight/actions/unconfuse.dart';
 import 'package:edgehead/src/fight/actions/wait.dart';
 import 'package:edgehead/src/fight/actions/wrestle_weapon_on_ground.dart';
@@ -153,6 +154,7 @@ abstract class FightSituation extends Object
         Scramble.singleton,
         RaiseDead.singleton,
         ThrashAroundBlind.singleton,
+        ThrowGrenade.singleton,
         Unconfuse.singleton,
         Wait.singleton,
         WrestleWeaponOnGround.singleton,
@@ -227,6 +229,10 @@ abstract class FightSituation extends Object
       if (actor.recoveringUntil.isBefore(readiest.recoveringUntil)) {
         readiest = actor;
       }
+    }
+
+    if (readiest == null) {
+      return ActorTurn.never;
     }
 
     return ActorTurn(readiest, world.time);

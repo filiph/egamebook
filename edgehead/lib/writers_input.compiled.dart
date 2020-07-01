@@ -1951,7 +1951,7 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The sacred place for the Deathless.\n\nTODO: explain the dragon egg\n\nI take the dragon egg.\n\n',
+      'The sacred place for the Deathless.\n\nTODO: explain the dragon egg\n\nI receive the dragon egg. The Deathless explain to me its operation.\n\n',
       isRaw: true);
   c.giveNewItemToPlayer(dragonEgg);
 }, (ActionContext c) {

@@ -33,7 +33,6 @@ enum DogheadFacts {
 enum DragonEggFacts {
   deathlessHaveSomething,
   deathlessHaveDragonEgg,
-  deathlessWillGiveDragonEgg,
 }
 
 enum KeepGateFacts {

@@ -13,7 +13,7 @@ The sacred place for the Deathless.
 
 TODO: explain the dragon egg
 
-I take the dragon egg.
+I receive the dragon egg. The Deathless explain to me its operation.
 
 [[CODE]]
 c.giveNewItemToPlayer(dragonEgg);
