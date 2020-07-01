@@ -50,7 +50,8 @@ final Item katana = Item.weapon(
 
 final Item lairOfGodStar = Item(
   lairOfGodStarId,
-  name: "Artifact Star",
+  name: "the Artifact Star",
+  nameIsProperNoun: true,
 );
 
 final Item letterFromFather = Item(
@@ -62,7 +63,8 @@ final Item letterFromFather = Item(
 final Item northSkull = Item.weapon(
   northSkullId,
   WeaponType.rock,
-  name: "North Skull",
+  name: "the North Skull",
+  nameIsProperNoun: true,
 );
 
 final Item rockFromMeadow = Item.weapon(
