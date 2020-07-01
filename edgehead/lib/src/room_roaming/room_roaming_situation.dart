@@ -188,8 +188,8 @@ abstract class RoomRoamingSituation extends Object
     }
 
     final localNpcs = _getNpcs(w.build())
-        .where((a) => a.currentRoomName == parentRoom.name)
-        .where((a) => a.npc.followingActorId != a.id)
+        .where((npc) => npc.currentRoomName == parentRoom.name)
+        .where((npc) => npc.npc.followingActorId != a.id)
         .toList();
     // First, let the overrides take place.
     Set<Actor> overridden = {};
