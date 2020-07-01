@@ -23,8 +23,9 @@ final Item compass = Item(
   adjective: 'iron',
 );
 
-final Item dragonEgg = Item(
+final Item dragonEgg = Item.weapon(
   dragonEggId,
+  WeaponType.rock,
   name: 'egg',
   adjective: 'dragon',
 );
@@ -49,8 +50,7 @@ final Item katana = Item.weapon(
 
 final Item lairOfGodStar = Item(
   lairOfGodStarId,
-  name: "Lair of God Star",
-  nameIsProperNoun: true,
+  name: "Artifact Star",
 );
 
 final Item letterFromFather = Item(
@@ -63,7 +63,6 @@ final Item northSkull = Item.weapon(
   northSkullId,
   WeaponType.rock,
   name: "North Skull",
-  nameIsProperNoun: true,
 );
 
 final Item rockFromMeadow = Item.weapon(

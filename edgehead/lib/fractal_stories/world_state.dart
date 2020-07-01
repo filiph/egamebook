@@ -12,6 +12,7 @@ import 'package:edgehead/fractal_stories/history/rule_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
@@ -340,7 +341,7 @@ abstract class WorldStateBuilder
     }
   }
 
-  void recordCustom(String eventName, {Object data, Actor actor}) {
+  void recordCustom(String eventName, {Object data, Entity actor}) {
     customHistory.records.add(
         CustomEventHistory.getKey(eventName),
         CustomEvent(

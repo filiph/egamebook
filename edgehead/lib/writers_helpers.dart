@@ -25,6 +25,26 @@ export 'package:edgehead/edgehead_facts_strings.dart';
 export 'package:edgehead/edgehead_ids.dart';
 export 'package:edgehead/edgehead_items.dart';
 
+final Entity cultists = Entity(
+  id: 978001,
+  name: "the Deathless",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.THEY,
+);
+
+final Entity farmers = Entity(
+  id: 978002,
+  name: "farmers",
+  pronoun: Pronoun.THEY,
+);
+
+final Entity oracle = Entity(
+  id: 978003,
+  name: "the Oracle",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.SHE,
+);
+
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
 }
@@ -487,6 +507,54 @@ extension ActionContextHelpers on ActionContext {
 
   Actor get player {
     return outputWorld.getActorById(playerId);
+  }
+
+  void describeWorthiness(
+      {@required Entity who,
+      @required List<int> what,
+      List<int> especially = const [],
+      String how = 'approvingly'}) {
+    const customEventName = "described_worthiness";
+
+    // Player's items that...
+    final items = player.inventory.items
+        // ... are impressing the [who] actor ...
+        .where((item) => what.contains(item.id))
+        // ... and haven't been mentioned by them.
+        .where((item) => !world.customHistory
+            .query(name: customEventName, actorId: who.id, data: item.id)
+            .hasHappened)
+        .toList(growable: false);
+
+    if (items.isEmpty) {
+      // Nothing to say.
+      return;
+    }
+
+    final especiallyItems = items
+        .where((item) => especially.contains(item.id))
+        .toList(growable: false);
+
+    outputStoryline.addEnumeration(
+      "<subject> <also> look<s> $how at",
+      items,
+      null,
+      subject: who,
+    );
+
+    if (especiallyItems.isNotEmpty && especiallyItems.length < items.length) {
+      outputStoryline.addEnumeration(
+        "<subject> <is> especially "
+        "{entranced|captivated|mesmerized|delighted} by",
+        especiallyItems,
+        null,
+        maxPerSentence: 5,
+      );
+    }
+
+    for (final item in items) {
+      outputWorld.recordCustom(customEventName, data: item.id, actor: who);
+    }
   }
 }
 

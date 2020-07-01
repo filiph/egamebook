@@ -20,7 +20,10 @@ The corridors here look more like streets. Painted walls on either side, with wo
 An old woman is tying bags of produce together, and looks familiar.
 
 
-DESCRIPTION: $NONE
+DESCRIPTION:
+[[CODE]]
+c.describeWorthiness(who: farmers, what: [akxeId, bannerId, dragonEggId, katanaId, lairOfGodStarId, sixtyFiverShieldId, sixtyFiverSwordId], especially: [katanaId, bannerId], how: "{approvingly|with respect}");
+[[ENDCODE]]
 
 NOTES:
 

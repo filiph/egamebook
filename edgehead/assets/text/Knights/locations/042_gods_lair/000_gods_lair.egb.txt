@@ -48,10 +48,12 @@ DESCRIPTION: $NONE
 FIGHT_SITUATION: null
 
 
+// TODO: examine_star action, only then Take
+
 // ---
 
 ACTION: $karl_take_star
-COMMAND: Star >> Take
+COMMAND: Artifact Star >> Take
 FOR_LOCATION: $gods_lair
 PREREQUISITES:
 c.isInIdleRoom

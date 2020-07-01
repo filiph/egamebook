@@ -8,8 +8,17 @@ FLAGS: $IDLE
 POS: 39, 65
 MAP_NAME: Oracle's
 
+FIRST_DESCRIPTION:
+The Oracle, an old woman, is here.
+
+[[CODE]]
+c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+[[ENDCODE]]
+
 DESCRIPTION: 
-The Oracle is here.
+[[CODE]]
+c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+[[ENDCODE]]
 
 
 // ---

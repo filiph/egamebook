@@ -10,11 +10,18 @@ MAP_NAME: Village of the Deathless
 FIRST_DESCRIPTION:
 On a ledge overlooking the jungle, a village of cargo cultists.
 
-DESCRIPTION: $NONE
+[[CODE]]
+c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId], especially: [lairOfGodStarId], how: "{approvingly|with respect}");
+[[ENDCODE]]
+
+DESCRIPTION:
+[[CODE]]
+c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId], especially: [lairOfGodStarId], how: "{approvingly|with respect}");
+[[ENDCODE]]
 
 // ---
 ACTION: $give_lair_of_god_star_to_deathless
-COMMAND: inventory >> Lair of God star >> give to the Deathless
+COMMAND: inventory >> Artifact Star >> give to the Deathless
 FOR_LOCATION: $deathless_village
 
 PREREQUISITES:

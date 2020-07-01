@@ -1151,7 +1151,7 @@ class KarlTakeStar extends RoamingAction {
   static final KarlTakeStar singleton = KarlTakeStar();
 
   @override
-  List<String> get commandPathTemplate => ['Star', 'Take'];
+  List<String> get commandPathTemplate => ['Artifact Star', 'Take'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -1732,13 +1732,43 @@ class AskOracleAboutKeepGate extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room oracleMain = Room('oracle_main', null, (ActionContext c) {
+final Room oracleMain = Room('oracle_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The Oracle is here.\n', isRaw: true);
+  s.add('The Oracle, an old woman, is here.\n\n', isRaw: true);
+  c.describeWorthiness(
+      who: oracle,
+      what: [
+        akxeId,
+        compassId,
+        dragonEggId,
+        lairOfGodStarId,
+        northSkullId,
+        sixtyFiverShieldId
+      ],
+      especially: [compassId, northSkullId],
+      how: "{approvingly|with respect}");
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  c.describeWorthiness(
+      who: oracle,
+      what: [
+        akxeId,
+        compassId,
+        dragonEggId,
+        lairOfGodStarId,
+        northSkullId,
+        sixtyFiverShieldId
+      ],
+      especially: [compassId, northSkullId],
+      how: "{approvingly|with respect}");
 }, null, null,
     isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
 final Room oracleAfterOrcOffensive = Room(
@@ -1759,7 +1789,18 @@ final Room oracleAfterOrcOffensive = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('The Oracle is here.\n', isRaw: true);
+      c.describeWorthiness(
+          who: oracle,
+          what: [
+            akxeId,
+            compassId,
+            dragonEggId,
+            lairOfGodStarId,
+            northSkullId,
+            sixtyFiverShieldId
+          ],
+          especially: [compassId, northSkullId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -1861,7 +1902,7 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['inventory', 'Lair of God star', 'give to the Deathless'];
+      ['inventory', 'Artifact Star', 'give to the Deathless'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -1925,15 +1966,24 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('On a ledge overlooking the jungle, a village of cargo cultists.\n',
+  s.add('On a ledge overlooking the jungle, a village of cargo cultists.\n\n',
       isRaw: true);
+  c.describeWorthiness(
+      who: cultists,
+      what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+      especially: [lairOfGodStarId],
+      how: "{approvingly|with respect}");
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
+  c.describeWorthiness(
+      who: cultists,
+      what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+      especially: [lairOfGodStarId],
+      how: "{approvingly|with respect}");
 }, null, null,
     positionX: 18, positionY: 68, mapName: 'Village of the Deathless');
 final Approach dragonEggRoomFromDeathlessVillage =
@@ -2104,7 +2154,11 @@ final Room deathlessVillageOrcOffensive = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+          especially: [lairOfGodStarId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -2146,7 +2200,11 @@ final Room deathlessVillageQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+          especially: [lairOfGodStarId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -2187,7 +2245,11 @@ final Room deathlessVillageQuake3 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+          especially: [lairOfGodStarId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -2971,7 +3033,19 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
+  c.describeWorthiness(
+      who: farmers,
+      what: [
+        akxeId,
+        bannerId,
+        dragonEggId,
+        katanaId,
+        lairOfGodStarId,
+        sixtyFiverShieldId,
+        sixtyFiverSwordId
+      ],
+      especially: [katanaId, bannerId],
+      how: "{approvingly|with respect}");
 }, null, null,
     isIdle: true,
     positionX: 35,
@@ -3092,7 +3166,19 @@ final Room farmersVillageQuake1 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: farmers,
+          what: [
+            akxeId,
+            bannerId,
+            dragonEggId,
+            katanaId,
+            lairOfGodStarId,
+            sixtyFiverShieldId,
+            sixtyFiverSwordId
+          ],
+          especially: [katanaId, bannerId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -3219,7 +3305,19 @@ final Room farmersVillageQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: farmers,
+          what: [
+            akxeId,
+            bannerId,
+            dragonEggId,
+            katanaId,
+            lairOfGodStarId,
+            sixtyFiverShieldId,
+            sixtyFiverSwordId
+          ],
+          especially: [katanaId, bannerId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -3572,7 +3670,9 @@ class SearchBedroom extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: explain the family portrait\n', isRaw: true);
+    s.add(
+        'TODO: explain the family portrait - the looters didn\'t touch it - superstition?\n',
+        isRaw: true);
     return '${a.name} successfully performs SearchBedroom';
   }
 
@@ -3912,7 +4012,11 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
+  c.describeWorthiness(
+      who: w.getActorById(miguelId),
+      what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+      especially: [sixtyFiverShieldId, bannerId],
+      how: "{approvingly|with respect}");
 }, null, null,
     isIdle: true,
     positionX: 26,
@@ -4571,7 +4675,11 @@ final Room pyramidEntranceDuringCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: w.getActorById(miguelId),
+          what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+          especially: [sixtyFiverShieldId, bannerId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -4713,7 +4821,11 @@ final Room pyramidEntranceAfterOrcOffensive = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: w.getActorById(miguelId),
+          what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+          especially: [sixtyFiverShieldId, bannerId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,
@@ -4760,7 +4872,11 @@ final Room pyramidEntranceAfterQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.describeWorthiness(
+          who: w.getActorById(miguelId),
+          what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+          especially: [sixtyFiverShieldId, bannerId],
+          how: "{approvingly|with respect}");
     },
     null,
     null,

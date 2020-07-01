@@ -27,7 +27,7 @@ COMMAND: furniture >> search
 FOR_LOCATION: $keep_bedroom
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: explain the family portrait
+TODO: explain the family portrait - the looters didn't touch it - superstition?
 
 
 // ---

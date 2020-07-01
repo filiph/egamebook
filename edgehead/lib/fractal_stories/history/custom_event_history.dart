@@ -78,15 +78,18 @@ abstract class CustomEventHistory
   ///
   /// If you provide [actorId], only events with a corresponding
   /// [CustomEvent.actorId] will be returned.
-  SerialQueryResult<CustomEvent> query({@required String name, int actorId}) {
+  SerialQueryResult<CustomEvent> query(
+      {@required String name, int actorId, Object data}) {
     final key = getKey(name);
     if (!records.containsKey(key)) return SerialQueryResult(const []);
-    if (actorId == null) {
-      return SerialQueryResult(records[key].reversed);
+    var results = records[key].reversed;
+    if (actorId != null) {
+      results = results.where((event) => event.actorId == actorId);
     }
-    final filtered =
-        records[key].reversed.where((event) => event.actorId == actorId);
-    return SerialQueryResult(filtered);
+    if (data != null) {
+      results = results.where((event) => event.data == data);
+    }
+    return SerialQueryResult(results);
   }
 
   static String getKey(String eventName) => eventName;

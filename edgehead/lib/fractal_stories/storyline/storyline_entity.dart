@@ -15,6 +15,7 @@ abstract class Entity {
     bool isPlayer,
     bool isCommon,
     int firstOwnerId,
+    int id,
   }) = _NonserializableEntity;
 
   /// A way to specify the entity more concretely than with just the [name].
@@ -179,6 +180,8 @@ class _NonserializableEntity extends Object
   @override
   final int firstOwnerId;
 
+  final int _id;
+
   _NonserializableEntity({
     @required this.name,
     this.adjective,
@@ -188,11 +191,13 @@ class _NonserializableEntity extends Object
     this.isPlayer = false,
     this.isCommon = false,
     this.firstOwnerId,
-  })  : team = team ?? neutralTeam,
+    int id,
+  })  : _id = id,
+        team = team ?? neutralTeam,
         pronoun = pronoun ?? Pronoun.IT;
 
   @override
-  int get id => hashCode;
+  int get id => _id ?? hashCode;
 
   @override
   bool get isActive => true;
