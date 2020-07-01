@@ -30,13 +30,11 @@ final Item dragonEgg = Item.weapon(
   adjective: 'dragon',
 );
 
-final Item familyPortrait = Item.weapon(
+final Item familyPortrait = Item(
   familyPortraitId,
-  WeaponType.shield,
   name: 'portrait',
   adjective: 'family',
   firstOwnerId: ladyHopeId,
-  /* TODO: make this useless as a shield, except Lady Hope doesn't attack */
 );
 
 final Item katana = Item.weapon(

@@ -3735,10 +3735,9 @@ class TakeFamilyPortrait extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: explain the family portrait\n\nI take the family portrait. It\'s kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.\n\n',
+        'I take the family portrait. It\'s kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.\n\n',
         isRaw: true);
-    w.updateActorById(playerId,
-        (b) => b..inventory.equipShield(familyPortrait, c.player.anatomy));
+    c.giveNewItemToPlayer(familyPortrait);
 
     return '${a.name} successfully performs TakeFamilyPortrait';
   }
@@ -3799,10 +3798,24 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'TODO: describe Lady Hope, and add fight with her\n\nI take the katana.\n\n',
+      'Lady Hope faces me and prepares for battle.\n\nSomeone is talking through her. Impressive. She is clearly undead, and talking undead is something I\'ve never even considered before.\n\n',
       isRaw: true);
+  if (c.hasItem(familyPortraitId)) {
+    s.add('Lady Hope seems taken aback by the portrait I have with me.',
+        isRaw: true);
+
+    w.updateActorById(
+        ladyHopeId,
+        (b) => b
+          ..initiative = 0
+          ..dexterity = b.dexterity ~/ 2);
+  }
+
+  s.add('\nTODO: fight\n\n', isRaw: true);
   w.updateActorById(ladyHopeId, (b) => b..inventory.remove(katana));
   c.giveNewItemToPlayer(katana);
+
+  s.add('\nI take the katana.\n', isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;

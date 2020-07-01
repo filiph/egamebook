@@ -40,6 +40,7 @@ c.giveNewItemToPlayer(sarnHammer);
 [[ENDCODE]]
 
 
+// ---
 ACTION: $sarn_read_letter
 COMMAND: inventory >> father's letter >> read to Sarn
 FOR_LOCATION: $bleeds_main

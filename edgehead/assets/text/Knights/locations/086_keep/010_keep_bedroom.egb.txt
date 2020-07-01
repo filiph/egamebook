@@ -38,14 +38,12 @@ PREREQUISITES:
 w.actionHasBeenPerformed('search_bedroom')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: explain the family portrait
+// TODO: make a separate action for looking at the family portrait
 
 I take the family portrait. It's kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.
 
 [[CODE]]
-// TODO: check if the player has crippled off-hand
-w.updateActorById(playerId,
-      (b) => b..inventory.equipShield(familyPortrait, c.player.anatomy));
+c.giveNewItemToPlayer(familyPortrait);
 [[ENDCODE]]
 
 NOTES:
