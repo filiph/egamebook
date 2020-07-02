@@ -1,0 +1,87 @@
+// ---
+ACTION: $talk_to_horseman_white_greetings
+COMMAND: Officer >> Talk >> "Greetings."
+FOR_LOCATION: $staging_area
+
+// TODO: add prerequisites so that the conversation is different after Sarn has been saved.
+
+INK:
+// Subtext: the knight is scared, he wants out
+
+"Greetings. What's your business here?" The knight takes a second good look at me. "You look far from home."
+
+* "I am far from home, yes."
+
+  "Let me guess, a backwater place somewhere to the East?" He snickers. "No matter. Why are you here?"
+
+  * * "I am searching for a Sarn of Falling Rock"
+
+* "I am looking for my brother, Sarn of Falling Rock."
+
+-
+
+"Why would Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."
+
+* "Yet you are here."
+
+"I wouldn't be a very good Knight if I fled from my company, would I. But if you ask me... Wait." The knight shouts some commands at the servants, makes a short note in his book, and continues. "If you ask me, the withdrawal from here cannot come fast enough. I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
+
+-
+
+* "I'm here to find my brother."
+
+"How old is he? Cannot he take care of himself?"
+
+-
+
+* "Maybe he can't."
+
+"So what? He's not your responsibility, kid. People think that but that's not how the world works. People don't owe each other nothing." He pauses. "Which brings me to the fact that <>
+
+* "I am not here to care for him."
+
+"A revenge, then?" He chuckles. "Amusing. Nevertheless, <>
+
+-
+
+<> I can't help you. I don't know anyone called Sarn. Or maybe I do but I don't remember. I am busy, as you can see."
+
+* "What's your name."
+
+"I am White. Horseman White."
+
+-
+
+* "I am Aren."
+
+"Okay. I will probably not remember that."
+
+
+// ---
+ACTION: $talk_to_horseman_white_doghead
+COMMAND: Horseman White >> Talk >> "Who is Doghead?"
+FOR_LOCATION: $staging_area
+
+PREREQUISITES:
+!c.knows(DogheadFacts.dogheadMyth)
+&&
+w.actionHasBeenPerformed("talk_to_horseman_white_greetings")
+
+INK:
+Horseman White seems offended. "Why are you asking me this?"
+
+* "There are writings on the wall with the name."
+
+"Not written by me, or any other Knight. <>
+
+* "You seem knowledgeable."
+
+Horseman White smirks. "Well done, kid. You might yet have a future in leadership. <>
+
+-
+
+<> Doghead is a local myth. A creature with a dog's head and a human's body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone's problems. It's magical thinking. Bullshit from centuries ago."
+
+[[CODE]]
+c.learn(DogheadFacts.dogheadMyth);
+[[ENDCODE]]

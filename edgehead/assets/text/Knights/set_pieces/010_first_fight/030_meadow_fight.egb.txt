@@ -42,6 +42,7 @@ The fight is over.
 [[ENDRULESET]]
 
 // TODO: stand up if Tamara ended the fight down, and isn't hurt
+// TODO: Tamara should take her sword if the player has it
 [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "I'll survive, [young sir]. But you might not." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "Come with me back to safety. I'll give you a discount for the way back."
 
 _"Thanks for your service, Tamara. But I've come this far."_

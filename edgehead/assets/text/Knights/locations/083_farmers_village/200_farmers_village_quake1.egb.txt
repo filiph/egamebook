@@ -8,7 +8,7 @@ RULE: c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived)
 FIRST_DESCRIPTION:
 The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.
 
-An old woman is tying bags of produce together, and looks familiar.
+An old woman is whittling a little dog-headed figure from wood. She looks familiar.
 
 
 VARIANT_UPDATE_DESCRIPTION:

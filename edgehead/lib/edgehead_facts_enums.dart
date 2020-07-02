@@ -26,7 +26,6 @@ enum ConetFacts {
 
 enum DogheadFacts {
   somethingCalledDoghead,
-  dogheadAppearance,
   dogheadMyth,
 }
 

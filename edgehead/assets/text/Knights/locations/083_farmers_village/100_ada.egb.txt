@@ -9,3 +9,43 @@ INK:
 _"[Aren]."_
 
 "Good to meet you, [Aren]. My name is Ada."
+
+
+// ---
+ACTION: $talk_to_ada_doghead_figure
+COMMAND: Old woman >> Talk >> "What's that dog-headed figure?"
+FOR_LOCATION: $farmers_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_ada_greetings")
+
+INK:
+"Ah, this? That's Doghead, of course. People in the Pyramid believe a creature with a human body and a dog's head will come and save us in our direst moment."
+
+* "Are there dog-headed creatures?"
+
+"I have never seen one. I know of hawkmen, of course, and lizardmen. I have never seen or heard of any tale of a dog-headed person, though. Except for this one." She shows me the wooden figure. "I can't know if it's true. <>
+
+* "What religion is that?"
+
+"It's not a religion. Doghead is not a god. A hero, yes, but not a god. If you're asking me where the tale came from, I can't tell. <>
+
+-
+
+<> All I know is that this has been said for generations. My mother taught me about Doghead"
+
+Ada looks around. "I think people need Doghead more today than ever before in my life."
+
+* "Why?"
+
+"The Knights are leaving. The demon at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."
+
+* "I guess so."
+
+Ada nods.
+
+-
+
+[[CODE]]
+c.learn(DogheadFacts.dogheadMyth);
+[[ENDCODE]]

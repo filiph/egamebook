@@ -6,6 +6,8 @@ import 'package:edgehead/fractal_stories/context.dart';
 
 /// Keep this map in sync with edgehead_facts_enums.dart.
 Map<Type, List<String>> _chainEnums = {
+  ArtifactStarFacts: ArtifactStarFacts.values.map((e) => e.toString()).toList(),
+  BigOFacts: BigOFacts.values.map((e) => e.toString()).toList(),
   ConetFacts: ConetFacts.values.map((e) => e.toString()).toList(),
   DogheadFacts: DogheadFacts.values.map((e) => e.toString()).toList(),
   DragonEggFacts: DragonEggFacts.values.map((e) => e.toString()).toList(),

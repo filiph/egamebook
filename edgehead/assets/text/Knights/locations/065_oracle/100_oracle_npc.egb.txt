@@ -1,0 +1,130 @@
+// ---
+ACTION: $talk_to_oracle_greetings
+COMMAND: Woman >> Talk >> "Greetings."
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+
+INK:
+"Greetings to you, too, [young sir]. I am Oracle. Bring me good information, and I will repay you with good information."
+
+
+// ---
+ACTION: $ask_oracle_about_keep
+COMMAND: Oracle >> Talk >> "What can you tell me about the Keep?"
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"I worked there as a kid."
+
+[[CODE]]
+c.learn(KeepGateFacts.oracleWorkedInKeep);
+[[ENDCODE]]
+
+
+
+// ---
+ACTION: $ask_oracle_about_keep_gate
+COMMAND: Oracle >> Talk >> "Can you help me open the Keep?"
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+&&
+c.knows(KeepGateFacts.oracleWorkedInKeep)
+// TODO: add "kbOracleWorkedInKeep"
+
+COMPLETE_SUCCESS_DESCRIPTION:
+Oracle describes a convoluted series of steps to open the gate.
+
+[[CODE]]
+c.learn(KeepGateFacts.keepGateUnlock);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $oracle_give_north_skull
+COMMAND: inventory >> North Skull >> Give to Oracle
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+&&
+c.hasItem(northSkullId)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+Oracle is very thankful.
+
+[[CODE]]
+c.removeItemFromPlayer(northSkullId);
+[[ENDCODE]]
+
+
+
+// ---
+ACTION: $talk_to_oracle_doghead
+COMMAND: Oracle >> Talk >> "Tell me about Doghead."
+FOR_LOCATION: $oracle_main
+
+PREREQUISITES:
+c.knows(DogheadFacts.somethingCalledDoghead)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+
+INK:
+"There's a tale. TODO"
+
+[[CODE]]
+c.learn(DogheadFacts.dogheadMyth);
+[[ENDCODE]]
+
+
+
+NOTES:
+// Oracle has a pet crow that talks.
+// Maybe this is where we smell the coffee, and later the room is taken over, and the Oracle is dead, and all we smell is the coffee.
+
+// Vignette:
+
+Someone (Oracle? A knight?) presses the legacy issue on the PC
+
+So, what are you trying to do?
+
+* Find my brother
+* Learn necromancy
+* Achieve independence
+
+-
+
+That's not a goal. It's a waypoint. What are you trying to do?
+
+* To be a better brother
+* To be a better person
+* To be better at what I do
+
+-
+
+That, again, is not a goal. It's a way to achieve something. What are you trying to do? What will 
+
+* 
+
+// Vignette
+
+They're still searching for unicorns down in the valley. They think the horns will make them rich. They are idiots. Unicorns are vicious beasts. White as snow — only until they're covered in blood.
+
+"I love this city," she says, motioning towards the overgrown ruins outside the window.
+
+
+// Idea
+
+You can play with some gadget and inadvertently fall down to a part of the jungle from here. You legs will get broken.

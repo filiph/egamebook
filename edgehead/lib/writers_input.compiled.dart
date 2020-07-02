@@ -1599,6 +1599,75 @@ final Room battlefield = Room(
     whereDescription: 'among the columns');
 final Approach oracleMainFromKnightsHqMain =
     Approach('knights_hq_main', 'oracle_main', '', null);
+final Room oracleMain = Room('oracle_main', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('The Oracle, an old woman, is here.\n\n', isRaw: true);
+  c.describeWorthiness(
+      who: oracle,
+      what: [
+        akxeId,
+        compassId,
+        dragonEggId,
+        lairOfGodStarId,
+        northSkullId,
+        sixtyFiverShieldId
+      ],
+      especially: [compassId, northSkullId],
+      how: "{approvingly|with respect}");
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  c.describeWorthiness(
+      who: oracle,
+      what: [
+        akxeId,
+        compassId,
+        dragonEggId,
+        lairOfGodStarId,
+        northSkullId,
+        sixtyFiverShieldId
+      ],
+      especially: [compassId, northSkullId],
+      how: "{approvingly|with respect}");
+}, null, null,
+    isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
+final talkToOracleDogheadInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"There\'s a tale. TODO"\n', isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DogheadFacts.dogheadMyth);
+  }),
+]);
+final talkToOracleGreetingsInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Greetings to you, too, young sir. I am Oracle. Bring me good information, and I will repay you with good information."\n',
+        isRaw: true);
+  }),
+]);
 
 class AskOracleAboutKeep extends RoamingAction {
   @override
@@ -1615,7 +1684,8 @@ class AskOracleAboutKeep extends RoamingAction {
     if (c.inRoomParent('oracle_main') != true) {
       return false;
     }
-    if (!(!c.hasHappened(evOrcOffensive))) {
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -1681,6 +1751,7 @@ class AskOracleAboutKeepGate extends RoamingAction {
       return false;
     }
     if (!(!c.hasHappened(evOrcOffensive) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings") &&
         c.knows(KeepGateFacts.oracleWorkedInKeep))) {
       return false;
     }
@@ -1747,7 +1818,9 @@ class OracleGiveNorthSkull extends RoamingAction {
     if (c.inRoomParent('oracle_main') != true) {
       return false;
     }
-    if (!(!c.hasHappened(evOrcOffensive) && c.hasItem(northSkullId))) {
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings") &&
+        c.hasItem(northSkullId))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -1797,45 +1870,138 @@ class OracleGiveNorthSkull extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room oracleMain = Room('oracle_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The Oracle, an old woman, is here.\n\n', isRaw: true);
-  c.describeWorthiness(
-      who: oracle,
-      what: [
-        akxeId,
-        compassId,
-        dragonEggId,
-        lairOfGodStarId,
-        northSkullId,
-        sixtyFiverShieldId
-      ],
-      especially: [compassId, northSkullId],
-      how: "{approvingly|with respect}");
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  c.describeWorthiness(
-      who: oracle,
-      what: [
-        akxeId,
-        compassId,
-        dragonEggId,
-        lairOfGodStarId,
-        northSkullId,
-        sixtyFiverShieldId
-      ],
-      especially: [compassId, northSkullId],
-      how: "{approvingly|with respect}");
-}, null, null,
-    isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
+class TalkToOracleDoghead extends RoamingAction {
+  @override
+  final String name = 'talk_to_oracle_doghead';
+
+  static final TalkToOracleDoghead singleton = TalkToOracleDoghead();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Oracle', 'Talk', '"Tell me about Doghead."'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(c.knows(DogheadFacts.somethingCalledDoghead) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_oracle_doghead_ink",
+    ));
+    return '${a.name} successfully performs TalkToOracleDoghead';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToOracleGreetings extends RoamingAction {
+  @override
+  final String name = 'talk_to_oracle_greetings';
+
+  static final TalkToOracleGreetings singleton = TalkToOracleGreetings();
+
+  @override
+  List<String> get commandPathTemplate => ['Woman', 'Talk', '"Greetings."'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_oracle_greetings_ink",
+    ));
+    return '${a.name} successfully performs TalkToOracleGreetings';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room oracleAfterOrcOffensive = Room(
     'oracle_after_orc_offensive',
     (ActionContext c) {
@@ -2747,8 +2913,9 @@ final Room slopes = Room('slopes', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n',
+      'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n\nA large writing on the wall says "Doghead will come".\n\n',
       isRaw: true);
+  c.learn(DogheadFacts.somethingCalledDoghead);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2954,7 +3121,49 @@ final Approach stagingAreaFromKeepGate =
 final Approach stagingAreaFromKnightsHqMain =
     Approach('knights_hq_main', 'staging_area', '', null);
 final Approach stagingAreaFromPyramidEntrance =
-    Approach('pyramid_entrance', 'staging_area', '', null);
+    Approach('pyramid_entrance', 'staging_area', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final ifBlock_6718c6f98 = c.knows(DogheadFacts.somethingCalledDoghead)
+      ? '''Doghead'''
+      : '''a "Doghead"''';
+  Ruleset(
+      Rule(253556709, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return !c.playerHasVisited("staging_area");
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            'As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to $ifBlock_6718c6f98. Messages like "Where is Doghead?" and "Doghead save us".\n\n',
+            isRaw: true);
+        c.learn(DogheadFacts.somethingCalledDoghead);
+
+        s.add(
+            '\nFinally I reach a point where the stairs are too damaged to continue up. There\'s a doorway, and I go through it.\n\n',
+            isRaw: true);
+      }),
+      Rule(389695249, 0, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+      })).apply(c);
+});
 final Room stagingArea = Room('staging_area', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2981,6 +3190,353 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
         'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
     firstHint:
         'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
+final talkToHorsemanWhiteDogheadInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Horseman White seems offended. "Why are you asking me this?"\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "There are writings on the wall with the name." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Not written by me, or any other Knight.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "You seem knowledgeable." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Horseman White smirks. "Well done, kid. You might yet have a future in leadership.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Doghead is a local myth. A creature with a dog\'s head and a human\'s body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone\'s problems. It\'s magical thinking. Bullshit from centuries ago."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DogheadFacts.dogheadMyth);
+  }),
+]);
+final talkToHorsemanWhiteGreetingsInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Greetings. What\'s your business here?" The knight takes a second good look at me. "You look far from home."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I am far from home, yes." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Let me guess, a backwater place somewhere to the East?" He snickers. "No matter. Why are you here?"\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command:
+                r""" "I am searching for a Sarn of Falling Rock" """.trim(),
+            consequence: [],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command:
+          r""" "I am looking for my brother, Sarn of Falling Rock." """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Why would Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Yet you are here." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"I wouldn\'t be a very good Knight if I fled from my company, would I. But if you ask me... Wait." The knight shouts some commands at the servants, makes a short note in his book, and continues. "If you ask me, the withdrawal from here cannot come fast enough. I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I'm here to find my brother." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"How old is he? Cannot he take care of himself?"\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Maybe he can't." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"So what? He\'s not your responsibility, kid. People think that but that\'s not how the world works. People don\'t owe each other nothing." He pauses. "Which brings me to the fact that\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "I am not here to care for him." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"A revenge, then?" He chuckles. "Amusing. Nevertheless,\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I can\'t help you. I don\'t know anyone called Sarn. Or maybe I do but I don\'t remember. I am busy, as you can see."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "What's your name." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"I am White. Horseman White."\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I am Aren." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Okay. I will probably not remember that."\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+]);
+
+class TalkToHorsemanWhiteDoghead extends RoamingAction {
+  @override
+  final String name = 'talk_to_horseman_white_doghead';
+
+  static final TalkToHorsemanWhiteDoghead singleton =
+      TalkToHorsemanWhiteDoghead();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Horseman White', 'Talk', '"Who is Doghead?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('staging_area') != true) {
+      return false;
+    }
+    if (!(!c.knows(DogheadFacts.dogheadMyth) &&
+        w.actionHasBeenPerformed("talk_to_horseman_white_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_horseman_white_doghead_ink",
+    ));
+    return '${a.name} successfully performs TalkToHorsemanWhiteDoghead';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToHorsemanWhiteGreetings extends RoamingAction {
+  @override
+  final String name = 'talk_to_horseman_white_greetings';
+
+  static final TalkToHorsemanWhiteGreetings singleton =
+      TalkToHorsemanWhiteGreetings();
+
+  @override
+  List<String> get commandPathTemplate => ['Officer', 'Talk', '"Greetings."'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('staging_area') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_horseman_white_greetings_ink",
+    ));
+    return '${a.name} successfully performs TalkToHorsemanWhiteGreetings';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room stagingAreaQuake1 = Room(
     'staging_area_quake1',
     (ActionContext c) {
@@ -3090,7 +3646,7 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n\nAn old woman is tying bags of produce together, and looks familiar.\n',
+      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3121,6 +3677,109 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
         'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
     firstHint:
         'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
+final talkToAdaDogheadFigureInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Ah, this? That\'s Doghead, of course. People in the Pyramid believe a creature with a human body and a dog\'s head will come and save us in our direst moment."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Are there dog-headed creatures?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"I have never seen one. I know of hawkmen, of course, and lizardmen. I have never seen or heard of any tale of a dog-headed person, though. Except for this one." She shows me the wooden figure. "I can\'t know if it\'s true.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What religion is that?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"It\'s not a religion. Doghead is not a god. A hero, yes, but not a god. If you\'re asking me where the tale came from, I can\'t tell.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'All I know is that this has been said for generations. My mother taught me about Doghead"\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Ada looks around. "I think people need Doghead more today than ever before in my life."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Why?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"The Knights are leaving. The demon at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "I guess so." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Ada nods.\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DogheadFacts.dogheadMyth);
+  }),
+]);
 final talkToAdaGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -3150,6 +3809,72 @@ final talkToAdaGreetingsInk = InkAst([
     s.add('"Good to meet you, [Aren]. My name is Ada."\n', isRaw: true);
   }),
 ]);
+
+class TalkToAdaDogheadFigure extends RoamingAction {
+  @override
+  final String name = 'talk_to_ada_doghead_figure';
+
+  static final TalkToAdaDogheadFigure singleton = TalkToAdaDogheadFigure();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Old woman', 'Talk', '"What\'s that dog-headed figure?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('farmers_village') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_ada_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_ada_doghead_figure_ink",
+    ));
+    return '${a.name} successfully performs TalkToAdaDogheadFigure';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
 
 class TalkToAdaGreetings extends RoamingAction {
   @override
@@ -3222,7 +3947,7 @@ final Room farmersVillageQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nAn old woman is tying bags of produce together, and looks familiar.\n',
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3361,7 +4086,7 @@ final Room farmersVillageQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nThe farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\nAmong all this, an old woman is frantically tying bags of produce together. She looks familiar.\n',
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nThe farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\nAmong all this, an old woman is whittling a little dog-headed figure from wood. She looks familiar.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3880,7 +4605,10 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
   w.updateActorById(ladyHopeId, (b) => b..inventory.remove(katana));
   c.giveNewItemToPlayer(katana);
 
-  s.add('\nI take the katana.\n', isRaw: true);
+  s.add(
+      '\nI take the katana.\n\n\nLady Hope\'s head: "I see you, young friend. I see your ambition. I see your talents. I see your brutality, which I like most of all. Too many young people limit themselves. Their effect on the world. You don\'t. But I warn you: you\'re not to cross me. You\'re not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die." And then, as if to illustrate the point, Lady Hope\'s face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.\n\n',
+      isRaw: true);
+  c.learn(DogheadFacts.somethingCalledDoghead);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7443,7 +8171,7 @@ class ReadLetterFromFather extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Zamora, despite everything. The plains may seem dull to your young heart, but they are safe, and bountiful.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training.\n\nAnd remember, revenge won\'t bring your brother back from the dead.\n\n- Father\n',
+        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Falling Rock, despite everything. The mountains may seem dull and remote to your young heart, but they are safe.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training. Don\'t follow your brother\'s footsteps. Don\'t make my my heart break for the third time.\n\n- Father\n',
         isRaw: true);
     return '${a.name} successfully performs ReadLetterFromFather';
   }
@@ -7822,11 +8550,16 @@ final allActions = <RoamingAction>[
   AskOracleAboutKeep.singleton,
   AskOracleAboutKeepGate.singleton,
   OracleGiveNorthSkull.singleton,
+  TalkToOracleDoghead.singleton,
+  TalkToOracleGreetings.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
   TalkToMiguelAboutDeserting.singleton,
   TalkToMiguelAfterCaravanDeparted.singleton,
   TalkToGreenWomanAboutSlopesDeath.singleton,
+  TalkToHorsemanWhiteDoghead.singleton,
+  TalkToHorsemanWhiteGreetings.singleton,
+  TalkToAdaDogheadFigure.singleton,
   TalkToAdaGreetings.singleton,
   TalkToAdaAfterQuake2.singleton,
   AttemptOpenGate.singleton,
@@ -7869,11 +8602,16 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
+  'talk_to_oracle_greetings_ink': talkToOracleGreetingsInk,
   'talk_to_miguel_about_deserting_ink': talkToMiguelAboutDesertingInk,
   'talk_to_miguel_after_caravan_departed_ink':
       talkToMiguelAfterCaravanDepartedInk,
   'talk_to_green_woman_about_slopes_death_ink':
       talkToGreenWomanAboutSlopesDeathInk,
+  'talk_to_horseman_white_doghead_ink': talkToHorsemanWhiteDogheadInk,
+  'talk_to_horseman_white_greetings_ink': talkToHorsemanWhiteGreetingsInk,
+  'talk_to_ada_doghead_figure_ink': talkToAdaDogheadFigureInk,
   'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,
   'talk_to_ada_after_quake_2_ink': talkToAdaAfterQuake2Ink,
   'talk_to_kat_greetings_ink': talkToKatGreetingsInk,

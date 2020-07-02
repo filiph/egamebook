@@ -38,7 +38,13 @@ c.giveNewItemToPlayer(katana);
 I take the katana.
 
 // TODO: post-fight description
-// Lady Hope's head: "I see you, young friend. I see your ambition. I see your talents. I see your brutality, which I like most of all. Too many young people limit themselves. Their effect on the world. You don't. But I warn you: you're not to cross me. You're not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die." And then, as if to illustrate the point, Lady Hope's face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.
+
+Lady Hope's head: "I see you, young friend. I see your ambition. I see your talents. I see your brutality, which I like most of all. Too many young people limit themselves. Their effect on the world. You don't. But I warn you: you're not to cross me. You're not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die." And then, as if to illustrate the point, Lady Hope's face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.
+
+[[CODE]]
+c.learn(DogheadFacts.somethingCalledDoghead);
+[[ENDCODE]]
+
 
 DESCRIPTION: $NONE
 

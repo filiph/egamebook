@@ -11,6 +11,12 @@ MAP_NAME: Slopes
 FIRST_DESCRIPTION:
 The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.
 
+A large writing on the wall says "Doghead will come".
+
+[[CODE]]
+c.learn(DogheadFacts.somethingCalledDoghead);
+[[ENDCODE]]
+
 DESCRIPTION: $NONE
 
 NOTES:
