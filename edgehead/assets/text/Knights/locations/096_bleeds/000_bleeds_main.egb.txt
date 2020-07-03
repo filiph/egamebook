@@ -75,7 +75,7 @@ Every door is shut except for two. One is the entrance into the trader's shop. T
 [[ENDRULESET]]
 
 [[CODE]]
-c.learn(kbBlindGuide);
+c.learn(JisadFacts.blindPerson);
 [[ENDCODE]]
 
 // ---

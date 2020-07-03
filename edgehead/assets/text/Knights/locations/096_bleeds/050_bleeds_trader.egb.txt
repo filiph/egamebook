@@ -147,7 +147,7 @@ assert(c.inRoomWith(leroyId));
 "But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 
 [[CODE]]
-c.learn(kbKnightsLeaving);
+c.learn(KnightsFacts.knightsAreLeaving);
 [[ENDCODE]]
 
 "Well, if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."

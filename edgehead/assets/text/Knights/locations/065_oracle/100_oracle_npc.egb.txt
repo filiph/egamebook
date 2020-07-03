@@ -70,7 +70,6 @@ c.removeItemFromPlayer(northSkullId);
 [[ENDCODE]]
 
 
-
 // ---
 ACTION: $talk_to_oracle_doghead
 COMMAND: Oracle >> Talk >> "Tell me about Doghead."
@@ -86,6 +85,26 @@ INK:
 
 [[CODE]]
 c.learn(DogheadFacts.dogheadMyth);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_oracle_orcs
+COMMAND: Oracle >> Talk >> "Tell me about the orcs."
+FOR_LOCATION: $oracle_main
+
+PREREQUISITES:
+c.knows(OrcsFacts.inPyramid)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+
+INK:
+// TODO: rewrite this draft to readable prose
+"There are still things I'd like to see, up there. The Lair of God is one. They say it was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."
+
+[[CODE]]
+c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
+c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
 [[ENDCODE]]
 
 
@@ -123,6 +142,9 @@ That, again, is not a goal. It's a way to achieve something. What are you trying
 They're still searching for unicorns down in the valley. They think the horns will make them rich. They are idiots. Unicorns are vicious beasts. White as snow — only until they're covered in blood.
 
 "I love this city," she says, motioning towards the overgrown ruins outside the window.
+
+
+"Aren't you bored of this talking? You're in San Francisco! People don't come to San Francisco to talk. People come here to slay."
 
 
 // Idea

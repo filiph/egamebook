@@ -37,6 +37,8 @@ TODO: fight. Assuming victory.
 
 I take Sarn (and his hammer) through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He'll be safe at Jisad's.
 
+// TODO: what if we haven't met Jisad yet? - quickly introduce and set kbBlindGuide
+
 As I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn't.
 
 I sigh and turn my back to them, and walk out to The Bleeds.
@@ -45,5 +47,3 @@ I sigh and turn my back to them, and walk out to The Bleeds.
 c.markHappened(evSavedSarn);
 c.movePlayer('bleeds_main');
 [[ENDCODE]]
-
-

@@ -6,7 +6,7 @@ VARIANT_OF: $deathless_village
 RULE: c.hasHappened(evOrcOffensive) && !c.hasHappened(evQuake3)
 
 FIRST_DESCRIPTION:
-On a ledge overlooking the jungle, a village of cargo cultists. 
+On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.
 
 The tribe is in a state of disarray. They weild the few weapons that they have, and seem to be preparing for a siege.
 

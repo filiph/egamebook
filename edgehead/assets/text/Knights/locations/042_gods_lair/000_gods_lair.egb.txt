@@ -65,6 +65,7 @@ I take the star. It fits into my palm. It says "Lair of God".
 
 [[CODE]]
 c.giveNewItemToPlayer(lairOfGodStar);
+c.learn(ArtifactStarFacts.artifactStarSeen);
 [[ENDCODE]]
 
 

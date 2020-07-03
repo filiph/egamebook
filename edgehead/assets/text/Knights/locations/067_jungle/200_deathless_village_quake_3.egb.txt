@@ -6,7 +6,9 @@ VARIANT_OF: $deathless_village
 RULE: c.hasHappened(evQuake3)
 
 FIRST_DESCRIPTION:
-On a ledge overlooking the jungle, a village of cargo cultists. It is seriously damaged.
+On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.
+
+The village is seriously damaged.
 
 VARIANT_UPDATE_DESCRIPTION:
 The village has been seriously damaged by the latest quake.

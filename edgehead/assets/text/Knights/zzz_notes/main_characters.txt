@@ -145,3 +145,21 @@ Contrast: superpowers -- powerless
 
 Theme: If you scope down your sphere of influence, you can have huge powers. But it doesn't matter. Say, a videogamer can have huge influence on a videogame world -- not real impact. A kid can play with an ant hill -- no real impact.
 
+
+## Argo, Deathless Child
+
+The leader of the Deathless. She is young, younger than Aren. The Deathless always have young leaders, because it is the children who have the best ability to understand the culture and the devices of the ancients. Once one gets older, that ability dissipates. She can project authority even when talking up.
+
+* "The Deathless, we don't have a lot in common with the rest here. We don't like the Orcs, no. We lost a few of ours to them. But the Orcs are now above the battlefield floor, and seem content with that border. We are content, too."
+* "I see. You'd like to see the Dragon Egg. I think you know that's not possible."
+* "There's only one thing the Deathless regret. The Lair of God was taken by the orcs long before I was born. They now use it as some kind of a prison, or a sty. Disgusting. But the temple had an artifact in it, a star made in the age of the ancients, and we think it's still there. That star means a lot to our people. Our Founder had it a hundred years ago, and it inspired her to bring the community to this place, to start the worship of the ancients, and to build the Lair of God." 
+* "Lol," the child says.
+
+Catchphrase: "I see."
+
+Contrast: child - leader
+
+Theme: Sometimes, opportunity to change the world is given. Even then it's hard to realize it's yours to weild. And it's easier not to weild it. The Child doesn't want to weild it until quake 3.
+
+
+

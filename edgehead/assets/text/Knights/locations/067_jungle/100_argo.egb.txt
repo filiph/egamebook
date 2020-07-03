@@ -1,0 +1,47 @@
+// Argo
+
+// ---
+ACTION: $argo_greet
+COMMAND: Child >> “Greetings!”
+FOR_LOCATION: $deathless_village
+
+INK:
+"Greetings, traveler. My name is Argo. I am of this tribe that calls itself the Deathless." The child is younger than me, and has to look up when speaking to me. Nevertheless, she holds herself as a queen.
+
+* "It is a pleasure to meet you, Argo."
+
+  She nods. "And what is <>
+
+* "Hi, Argo."
+
+  There's a murmur among the onlookers of the tribe. "You seem to think I am your lesser because of my age and my height. That is not how the Deathless think. Now, please will you tell me
+
+-
+
+<> your name?"
+
+* "Aren."
+
+  "Well met, Aren."
+
+* "Aren, your majesty."
+
+  She smiles. "Well met, sir."
+
+
+// ---
+ACTION: $argo_ask_deathless
+COMMAND: Argo >> “Who are the Deathless?”
+FOR_LOCATION: $deathless_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("argo_greet")
+
+INK:
+// TODO: massage into readable prose
+"There's only one thing the Deathless regret. The Lair of God was taken by the orcs long before I was born. They now use it as some kind of a prison, or a sty. Disgusting. But the temple had an artifact in it, a star made in the age of the ancients, and we think it's still there. That star means a lot to our people. Our Founder had it a hundred years ago, and it inspired her to bring the community to this place, to start the worship of the ancients, and to build the Lair of God." 
+
+[[CODE]]
+c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
+c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
+[[ENDCODE]]

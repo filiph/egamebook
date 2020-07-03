@@ -10,71 +10,92 @@
 
 // ---
 ACTION: $bleeds_blind_guide_greet
-COMMAND: Blind man >> “Hello!”
+COMMAND: Blind man >> “Greetings!”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
-c.knows(kbBlindGuide)
+c.knows(JisadFacts.blindPerson)
 
-COMPLETE_SUCCESS_DESCRIPTION:
-I come over to the blind man and introduce myself.
-
-"Nice to meet you! I am Jisad. But because I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."
-
-_"Hilarious."_
-
-"So what brings you here?"
-
-I have decided long ago that my skill in necromancy is best kept to myself. So is my quest for the Manual.
-
-// We can add branching here.
-
-_"I seek treasure."_
-
-"Ahh!" The man leans back, resting his back against the wall of his house. "A terrible idea."
+INK:
+"Hello there. Nice to meet you! I am Jisad, the blind guide." He smiles.
 
 [[CODE]]
-c.learn(kbBlindGuide);
+c.learn(JisadFacts.name);
 [[ENDCODE]]
+
+* "The blind guide?"
+
+  "I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."
+
+  * * "Hilarious."
+
+  He nods. "And your name?"
+
+  - -
+
+  * * "Aren."
+
+* "I am Aren."
+
+-
+
+"So, what brings you here?"
+
+* "I seek my brother, Sarn of Falling Rock."
+
+  "Family! A commendable motivation. Better than most I have heard." Jisad purses his lips. "Well, Aren, I hope you find your brother and get out of here as soon as possible."
+
+* "I seek treasure."
+
+  "Ahh!" The man leans back, resting against the wall of his house. "A terrible idea."
+
+-
+
+* "Why?""
+
+  "There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"
+
+-
+
+* "I already weild it."
+
+* "Yes."
+
+-
+
+The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.
 
 
 // ---
-ACTION: $bleeds_blind_guide_terrible_idea
-COMMAND: Blind Guide >> “Why is hunting for treasure in the Pyramid a terrible idea?”
+ACTION: $bleeds_blind_guide_whats_wrong
+COMMAND: Jisad >> “What's wrong here?”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
 w.actionHasBeenPerformed("bleeds_blind_guide_greet")
 
-COMPLETE_SUCCESS_DESCRIPTION:
-"So you want to explore the Pyramid."
-
-_"I need something that's in there."_
-
-"A lot of people think that. There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"
-
-I don't want to reveal more than needed. But "magic" is vague enough. So I just say yes.
-
-The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.
+INK:
+"Oh!" Jisad slaps his knee. "Everything! I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place."
 
 [[CODE]]
-c.learn(kbJisadHatesMagic);
+c.learn(KnightsFacts.knightsAreLeaving);
+c.learn(OrcsFacts.inPyramid);
+// Maybe goblins.
 [[ENDCODE]]
 
-_"What about it?"_
+* "Why?"
 
-"I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place, for no apparent reason."
+  "Because magic <>
 
-[[CODE]]
-c.learn(kbOrcsInPyramid);
-c.learn(kbKnightsLeaving);
-[[ENDCODE]]
+* "You blame magic for this?"
 
-_"And this is because of magic?"_
+  The otherwise calm face of the blind man twists with rage. "Of course I do. Magic <>
+  
+-
 
-The otherwise calm face of the blind man twists with rage. "Of course it is. Magic is power and power corrupts. This place is _infused_ with magic. And the world has noticed."
+<> is power, and power corrupts. This place is _infused_ with magic. And the world has noticed."
 
-The man calms down again and turns his unseeing face almost precisely to me. "Go away. Leave this place. Forgo the magic and keep your life."
+The man turns his unseeing face almost precisely at me. "Go away. Leave this place. Forgo the magic and keep your life."
 
 
 // ---
@@ -83,41 +104,52 @@ COMMAND: Blind Guide >> “The goblins are new here?”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
-w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+w.actionHasBeenPerformed("bleeds_blind_guide_whats_wrong")
 
-COMPLETE_SUCCESS_DESCRIPTION:
+INK:
 "Not completely, of course. There were always raiders. But not like this." The man shakes his head. "It's like the goblins are being drawn here."
 
-_"What do they want?"_
+* "What do they want?"
 
-"They're goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it's strange. They come in larger numbers than you would think makes sense. They'd get more slaves and more steel elsewhere."
+  "They're goblins. They want to raid. They want steel and slaves." He thinks for a while. "But it's strange. They come in larger numbers than you would think makes sense. They'd get more slaves and more steel elsewhere."
 
-_"They want into the Pyramid, perhaps?"_
+  * * "They want into the Pyramid, perhaps?"
 
-"Nonsense. Goblins fear these kinds of things. Even if they didn't, they'd probably get slaughtered by the orcs. Oh, that's something I'd like to see." He absentmindedly touches his face just under the left eye.
+    "Nonsense. Goblins fear these kinds of things. Even if they didn't, they'd probably get slaughtered by the orcs. Oh, that's something I'd like to see." He absentmindedly touches his face just under the left eye.
 
-[[RULESET]]
-[[RULE]]
-  !c.hasHappened(evGoblinCampCleared)
-[[THEN]]
+  * * "Do you have a theory?"
 
-"Anyway. The goblins aren't stupid, but they _are_ getting awfully bold. I've heard a band has made their camp not far from here. So close that people can see their campfire's smoke sometimes." He shudders. "Can you see it?"
+    "No. Well, I suspect there's some magic at play." He sighs.
 
-_"Yes."_
+* "I see."
 
-"It must be a harrowing sight. A herald of our own future, possibly."
+-
 
-[[ENDRULE]]
-[[RULE]]
-  $DEFAULT
-[[THEN]]
-// Nothing here. Aren already cleared the camp, so no need talking about it.
-[[ENDRULE]]
-[[ENDRULESET]]
+"Anyway. The goblins _are_ getting awfully bold. I've heard a band has made their camp not far from here. So close that people can see their campfire's smoke sometimes." He shudders. "Can you see it?"
 
-NOTES:
+* "Yes."
 
-// Vignette
+  "It must be a harrowing sight. A herald of our own future, possibly."
 
-Aren't you bored of this talking? You're in San Francisco! People don't come to San Francisco to talk. People come here to slay.
+* "No."
 
+  "Well, that's good to know."
+
+
+
+// ---
+ACTION: $bleeds_blind_guide_orcs
+COMMAND: Blind Guide >> “What are the orcs doing in the Pyramid?”
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+w.actionHasBeenPerformed("bleeds_blind_guide_whats_wrong")
+&&
+!c.knows(OrcsFacts.leadByBigO)
+
+INK:
+"I was here when the Orcs first came, when they took over the very top of the Pyramid. When they later pushed down, taking the Lair of God, desecrating it with some vile creature. I have been here for a long time, [young sir]. But I don't know why they came or what they are doing."
+
+[[CODE]]
+c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
+[[ENDCODE]]
