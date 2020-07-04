@@ -52,21 +52,20 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   @override
   void applyStart(Actor a, Simulation sim, WorldStateBuilder world, Storyline s,
       Actor enemy, Situation mainSituation) {
+    final leg = _getTargetLeg(enemy, world.time.millisecondsSinceEpoch);
     Randomly.run(
       () => a.report(
           s,
           "<subject> {swing<s>|slash<es>} at "
           "<objectOwner's> <object>",
-          object: Entity(name: 'leg', isCommon: true, firstOwnerId: enemy.id),
-          objectOwner: enemy,
+          object: leg,
           actionThread: mainSituation.id,
           startsThread: true),
       () => a.report(
           s,
           "<subject> swing<s> <object2> at "
           "<objectOwner's> <object>",
-          object: Entity(name: 'leg', isCommon: true, firstOwnerId: enemy.id),
-          objectOwner: enemy,
+          object: leg,
           object2: a.currentWeaponOrBodyPart,
           actionThread: mainSituation.id,
           startsThread: true),
