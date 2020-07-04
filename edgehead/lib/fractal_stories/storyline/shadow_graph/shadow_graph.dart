@@ -305,6 +305,15 @@ class ShadowGraph {
           set.removeAll(_getConflictingQualificationLevels(entity, entities));
         }
 
+        if (set.isEmpty && entity.isCommon) {
+          // This is something like "stance" or similar. It's possible there
+          // are two stances mentioned in the same storyline.
+          log.severe("The entity reached an empty set of IdentifierLevel, "
+              "but was also common, so we're adding one level back: $entity. "
+              "Report: $report");
+          set.add(IdentifierLevel.noun);
+        }
+
         assert(
             set.isNotEmpty,
             'The range of identifiers for $entity ($complement) '
