@@ -275,6 +275,10 @@ class GeneratedAction extends GeneratedGameObject {
     }
 
     if (_map['REPEATABLE'] != '\$TRUE') {
+      assert(!_map.containsKey('REPEATABLE'), "We only allow one value for "
+          "REPEATABLE, and that is \$TRUE. Instead, "
+          "${_map['REPEATABLE']} was provided in $name.");
+
       // By default, we only allow actions to be used once.
       final actionNeverUsedCheck = refer(worldParameter.name)
           .property('actionNeverUsed')
