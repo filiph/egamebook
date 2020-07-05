@@ -1677,7 +1677,7 @@ final talkToOracleOrcsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"There are still things I\'d like to see, up there. The Lair of God is one. They say it was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."\n',
+        '"There are still things I\'d like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {

@@ -100,7 +100,7 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 
 INK:
 // TODO: rewrite this draft to readable prose
-"There are still things I'd like to see, up there. The Lair of God is one. They say it was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."
+"There are still things I'd like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."
 
 [[CODE]]
 c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
