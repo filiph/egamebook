@@ -8260,7 +8260,7 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'TODO: an actual battle with the goblins.\n\nI take a curious device from the ground. Some kind of a compass.\n\n',
+      'TODO: an actual battle with the goblins.\n\nThere\'s a curious device on the ground. Some kind of a compass.\n\n',
       isRaw: true);
   c.markHappened(evGoblinCampCleared);
 }, (ActionContext c) {
