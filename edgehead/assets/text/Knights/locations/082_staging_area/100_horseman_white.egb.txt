@@ -26,6 +26,10 @@ INK:
 
 "I wouldn't be a very good Knight if I fled from my company, would I. But if you ask me... Wait." The knight shouts some commands at the servants, makes a short note in his book, and continues. "If you ask me, the withdrawal from here cannot come fast enough. I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
 
+[[CODE]]
+c.learn(KnightsFacts.knightsAreLeaving);
+[[ENDCODE]]
+
 -
 
 * "I'm here to find my brother."
@@ -84,4 +88,25 @@ Horseman White smirks. "Well done, kid. You might yet have a future in leadershi
 
 [[CODE]]
 c.learn(DogheadFacts.dogheadMyth);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_horseman_white_retreat
+COMMAND: Horseman White >> Talk >> "What are you retreating from?"
+FOR_LOCATION: $staging_area
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_horseman_white_greetings")
+&&
+c.knows(KnightsFacts.knightsAreLeaving)
+
+INK:
+"Take your pick, child." He starts counting with fingers. "The horde of Orcs at the upper floors? The wizard, Big O, at the very top? The goblins everywhere? The earthquakes, or whatever they are?" He wiggles the four fingers. "There's probably more I'm forgetting. The point is, the Knights were meant as a force to provide safety, to keep an occassional bandit or such in check."
+
+He pounds his chest. "We are not meant to be slaughtered like pigs."
+
+[[CODE]]
+c.learn(BigOFacts.isWizard);
+c.learn(OrcsFacts.inPyramid);
 [[ENDCODE]]

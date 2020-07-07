@@ -67,8 +67,22 @@ The man purses his lips. "I hate magic." He shifts on his stool and the wood cre
 
 
 // ---
+ACTION: $bleeds_blind_guide_brother
+COMMAND: Jisad >> Talk >> "I'm looking for a Sarn of Falling Rock."
+
+PREREQUISITES:
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+&&
+!c.hasHappened(evSavedSarn)
+
+INK:
+"I don't think I've met the fella. Ask around."
+
+
+
+// ---
 ACTION: $bleeds_blind_guide_whats_wrong
-COMMAND: Jisad >> “What's wrong here?”
+COMMAND: Jisad >> Talk >> “What's wrong here?”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
@@ -100,7 +114,7 @@ The man turns his unseeing face almost precisely at me. "Go away. Leave this pla
 
 // ---
 ACTION: $bleeds_blind_guide_goblins
-COMMAND: Blind Guide >> “The goblins are new here?”
+COMMAND: Jisad >> Talk >> “The goblins are new here?”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
@@ -139,7 +153,7 @@ INK:
 
 // ---
 ACTION: $bleeds_blind_guide_orcs
-COMMAND: Blind Guide >> “What are the orcs doing in the Pyramid?”
+COMMAND: Jisad >> Talk >> “What are the orcs doing in the Pyramid?”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
@@ -148,8 +162,49 @@ w.actionHasBeenPerformed("bleeds_blind_guide_whats_wrong")
 !c.knows(OrcsFacts.leadByBigO)
 
 INK:
-"I was here when the Orcs first came, when they took over the very top of the Pyramid. When they later pushed down, taking the Lair of God, desecrating it with some vile creature. I have been here for a long time, [young sir]. But I don't know why they came or what they are doing."
+"I was here when the Orcs first came, when they took over the very top of the Pyramid. I think they came with Big O." He sniffs. "They later pushed down, taking the Lair of God, desecrating it with some vile creature." 
+
+Jisad shakes his head.
+
+"I have been here for a long time, [young sir]. But I don't know why they came or what they are doing."
 
 [[CODE]]
 c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
+c.learn(OrcsFacts.leadByBigO);
+c.learn(BigOFacts.someoneCalledBigO);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $bleeds_blind_guide_big_o
+COMMAND: Jisad >> Talk >> “Who is Big O?”
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+c.knows(BigOFacts.someoneCalledBigO)
+&&
+!c.knows(BigOFacts.isWizard)
+
+INK:
+Jisad points to the top of the Pyramid, or at least where he thinks it is. He's not too far off, considering his blindness. "Osiris. The wizard." He puts his hand down and spits. "Or at least that's what everyone assumes."
+
+[[CODE]]
+c.learn(BigOFacts.isWizard);
+c.learn(OrcsFacts.leadByBigO);
+[[ENDCODE]]
+
+* "Assumes?"
+
+"Yeah, well, he's a secretive fella. All we <>
+
+* "You don't know him?"
+
+"He came with the Orcs, [young sir]. It's not like we could flag them down and ask as they marched by. And since then, the Orcs and Big O have kept upside. All I <>
+
+-
+
+<> know is that there's someone up there, above the Orcs. People say there are strange lights coming out of those top floors, during some nights."
+
+[[CODE]]
+c.learn(BigOFacts.unseen);
 [[ENDCODE]]

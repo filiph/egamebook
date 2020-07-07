@@ -49,3 +49,33 @@ Ada nods.
 [[CODE]]
 c.learn(DogheadFacts.dogheadMyth);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_ada_big_o
+COMMAND: Old woman >> Talk >> "Do you know anything about Big O?"
+FOR_LOCATION: $farmers_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_ada_greetings")
+&&
+c.knows(BigOFacts.someoneCalledBigO)
+
+INK:
+"As much as anyone here, [young sir]. When I was younger, we called him Osiris. Big O is a nickname that people gave him. He's a constant presence, even though we don't ever see him."
+
+* "What does he do?"
+
+"People say different things. At night, we can see the lights change. Dark red and bright violet, what have you. There are sounds and screams, sometimes, and they don't seem to be coming from the Orcs. I don't know <>
+
+* "How come you never see him?"
+
+" He's up there, at the very top. He never goes down, never shows. He's been locked up there for decades now, and nobody knows <>
+
+-
+
+<> what dark magic he's doing up there. I try not to think about it, to be honest."
+
+[[CODE]]
+c.learn(BigOFacts.unseen);
+[[ENDCODE]]

@@ -11,8 +11,9 @@ enum ArtifactStarFacts {
 }
 
 enum BigOFacts {
-  someoneEvilAtTop,
-  bigOName,
+  someoneCalledBigO,
+  isWizard,
+  unseen,
 }
 
 enum ConetFacts {
