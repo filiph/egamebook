@@ -65,133 +65,159 @@ class ShadowGraph {
   /// cannot be used because two of the entities use it.
   static final Entity noEntity = Entity(name: 'NO ENTITY');
 
-  /// For each report, this lists the possible identifiers to use.
+  /// All the entities mentioned in the original storyline's [Report]s
+  /// ([Report.subject], [Report.object], etc., for every report
+  /// in the storyline).
   ///
-  /// For example, the second sentence might be able to refer to its
-  /// subject with a pronoun or with the name (but not with "the other one").
+  /// This does not contain all the relevant entities (e.g. all the actors
+  /// that are alive in the world): those are in [_storylineEntities].
   ///
-  /// [ReportIdentifiers] for each report starts with everything allowed,
-  /// and the algorithm removes impossibilities.
-  List<ReportIdentifiers> _reportIdentifiers;
+  /// This also doesn't contain entities that are added later (e.g. because
+  /// some noun needs to be distinguished from another using
+  /// [Element.firstOwnerId], and so we need to add the first owner's entity
+  /// into the mix).
+  final Set<Entity> _mentionedEntities;
 
-  /// The way sentences are stringed together (with period, with comma,
-  /// or without anything).
+  /// All the entities that could be relevant but aren't necessarily mentioned
+  /// in the storyline.
   ///
-  /// A [_joiner] for index `i` describes how a [Report] at index `i` flows
-  /// from report at index `i - 1`.
-  ///
-  /// [_joiners] starts with everything allowed, and the algorithm removes
-  /// impossibilities (so that at the end, only a few or just one possibility
-  /// survives).
-  List<Set<SentenceJoinType>> _joiners;
-
-  /// The conjunction between two sentences (but or and).
-  ///
-  /// A [_conjunctions] for index `i` describes how a [Report] at
-  /// index `i` flows from report at index `i - 1`.
-  ///
-  /// [_conjunctions] starts as an empty set. The algorithm may add
-  /// [SentenceConjunction.and] or [SentenceConjunction.but].
-  List<Set<SentenceConjunction>> _conjunctions;
+  /// It's important to know them because they form the context of the
+  /// utterance. For example, we don't want to start the storyline by saying
+  /// "The goblin stands up" when there are 3 goblins present.
+  final UnmodifiableMapView<int, Entity> _storylineEntities;
 
   /// For each report, this maps from different concrete identifiers
   /// (such as "he" or "the goblin") to entities in that report.
   List<Map<Identifier, Entity>> _identifiers;
 
-  Set<Entity> _mentionedEntities;
+  /// These are the reports. They "shadow" the storyline's original [Report]s.
+  /// This provides a way to modify the nature of the reports (such as adding
+  /// an entity where needed) without modifying the underlying, immutable
+  /// reports.
+  List<ShadowReport> reports;
 
-  final UnmodifiableMapView<int, Entity> _storylineEntities;
+  /// The [ShadowGraph] sometimes must backtrack, and try constructing itself
+  /// again. For example, it might have to add a new entity to a report
+  /// in order to distinguish some object from another (e.g. there are two
+  /// swords, and to distinguish them, we need to bring in the owners
+  /// of those swords).
+  static const _maxIterations = 10;
 
-  ShadowGraph.from(Storyline storyline)
-      : _storylineEntities = storyline.allEntities {
-    // At first, all qualifications and all joiners are possible.
-    _reportIdentifiers = List.generate(
-      storyline.reports.length,
-      (_) => ReportIdentifiers(),
-      growable: false,
-    );
-    _joiners = List.generate(
-      storyline.reports.length,
-      (_) => SentenceJoinType.values.toSet(),
-      growable: false,
-    );
-    // No conjunction is possible at the start, we add possibilities
-    // as we go.
-    _conjunctions = List.generate(
-      storyline.reports.length,
-      (_) => {SentenceConjunction.nothing},
-      growable: false,
-    );
+  factory ShadowGraph.from(Storyline storyline) {
+    /// These are the reports we get from the storyline itself.
+    List<Report> reports = storyline.rawReports;
+    ShadowGraph graph;
 
-    _mentionedEntities = _getAllMentionedEntities(storyline.reports);
+    // Try at most ten times to construct the ShadowGraph.
+    for (var i = 0; i < _maxIterations; i++) {
+      final mentionedEntities = _getAllMentionedEntities(reports);
+      graph = ShadowGraph._(storyline, reports, mentionedEntities);
 
-    // TODO: allow pronouns for player
-    _fillForcedJoinersAndConjunctions(storyline.reports);
-    __assertAtLeastOneJoiner(storyline.reports);
-    _detectMissingProperNouns(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _detectReportsNotStartingWithSubject(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _detectMissingAdjectives(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _detectMissingOwners(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _forceOwners(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _detectFirstMentions(storyline.reports, _mentionedEntities);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _identifiers =
-        _getIdentifiersThroughoutStory(storyline.reports, _mentionedEntities);
-    _removeQualificationsWhereUnavailable(storyline.reports, _identifiers);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _findPositiveNegativeButConjunctions(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    __assertAtLeastOneJoiner(storyline.reports);
-    _find2JoinerOpportunitiesP0(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    __assertAtLeastOneJoiner(storyline.reports);
-    _find2JoinerOpportunitiesP1(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    __assertAtLeastOneJoiner(storyline.reports);
-    _fillOtherJoiners(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    __assertExactlyOnePossibleJoiner(storyline.reports);
-    _removeOmittedAtStartsOfSentences(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _detectForcedPronouns(storyline.reports);
-    __assertAtLeastOneIdentifier(storyline.reports);
-    _removeButsTooClose(storyline.reports);
+      if (!graph.entitiesHadToBeAdded) {
+        // No new entities were added by the ShadowGraph. We're done here.
+        break;
+      }
 
-    _retainTheLowestPossibleIdentifiers(storyline.reports);
-    _retainTheHighestPossibleConjunction(storyline.reports);
+      // The graph had to add entities. Run again with the added entities
+      // by replacing the previous reports with the new ones.
+      //
+      // The new reports have the added entities in the form of, for example,
+      // [ShadowReport.objectOwner].
+      reports = graph.reports;
+    }
+
+    return graph;
   }
+
+  /// The private constructor. Use the [ShadowGraph.from] factory.
+  ShadowGraph._(
+      Storyline storyline, List<Report> reports, this._mentionedEntities)
+      : _storylineEntities = storyline.allEntities {
+    this.reports = List.generate(
+      reports.length,
+      (index) => ShadowReport(reports[index], getEntityById),
+      growable: false,
+    );
+
+    _fillForcedJoinersAndConjunctions();
+    __assertAtLeastOneJoiner();
+    _detectMissingProperNouns();
+    __assertAtLeastOneIdentifier();
+    _detectReportsNotStartingWithSubject();
+    __assertAtLeastOneIdentifier();
+    _detectMissingAdjectives();
+    __assertAtLeastOneIdentifier();
+    _detectMissingOwners();
+    __assertAtLeastOneIdentifier();
+    _forceOwners();
+    __assertAtLeastOneIdentifier();
+    _detectFirstMentions();
+    __assertAtLeastOneIdentifier();
+    _identifiers = _getIdentifiersThroughoutStory();
+    _removeQualificationsWhereUnavailable(_identifiers);
+    __assertAtLeastOneIdentifier();
+    _findPositiveNegativeButConjunctions();
+    __assertAtLeastOneIdentifier();
+    __assertAtLeastOneJoiner();
+    _find2JoinerOpportunitiesP0();
+    __assertAtLeastOneIdentifier();
+    __assertAtLeastOneJoiner();
+    _find2JoinerOpportunitiesP1();
+    __assertAtLeastOneIdentifier();
+    __assertAtLeastOneJoiner();
+    _fillOtherJoiners();
+    __assertAtLeastOneIdentifier();
+    __assertExactlyOnePossibleJoiner();
+    _removeOmittedAtStartsOfSentences();
+    __assertAtLeastOneIdentifier();
+    _detectForcedPronouns();
+    __assertAtLeastOneIdentifier();
+    _removeButsTooClose();
+
+    _retainTheLowestPossibleIdentifiers();
+    _retainTheHighestPossibleConjunction();
+
+    final endMentionedEntities = _getAllMentionedEntities(this.reports);
+    final startIds = _mentionedEntities.map((e) => e.id).toSet();
+    final endIds = endMentionedEntities.map((e) => e.id).toSet();
+    if (startIds.containsAll(endIds)) {
+      _entitiesHadToBeAdded = false;
+    } else {
+      _entitiesHadToBeAdded = true;
+    }
+  }
+
+  bool _entitiesHadToBeAdded;
+
+  bool get entitiesHadToBeAdded => _entitiesHadToBeAdded;
 
   Set<Entity> get allMentionedEntities => _mentionedEntities;
 
   UnmodifiableListView<SentenceConjunction> get conjunctions =>
-      UnmodifiableListView(_conjunctions.map((set) => set.single));
+      UnmodifiableListView(
+          reports.map((report) => report._conjunctions.single));
 
   UnmodifiableListView<SentenceJoinType> get joiners =>
-      UnmodifiableListView(_joiners.map((set) => set.single));
+      UnmodifiableListView(reports.map((report) => report._joiners.single));
 
   UnmodifiableListView<ReportIdentifiers> get qualifications =>
-      UnmodifiableListView(_reportIdentifiers);
+      UnmodifiableListView(reports.map((report) => report._reportIdentifiers));
 
   String describe() {
     final buf = StringBuffer();
 
-    for (int i = 0; i < _reportIdentifiers.length; i++) {
-      final qual = _reportIdentifiers[i];
+    for (int i = 0; i < reports.length; i++) {
+      final qual = reports[i]._reportIdentifiers;
       buf.writeln('=== ${i + 1} ===');
       buf.writeln('subject: ${qual._subjectRange}');
       buf.writeln('object: ${qual._objectRange}');
       buf.writeln('object2: ${qual._object2Range}');
 
-      final ids = _identifiers[i];
+      final ids = reports[i]._identifiers;
       buf.writeln('identifiers: $ids');
 
-      buf.writeln(_joiners[i]);
-      buf.writeln(_conjunctions[i]);
+      buf.writeln(reports[i]._joiners);
+      buf.writeln(reports[i]._conjunctions);
       buf.writeln();
     }
     return buf.toString();
@@ -204,8 +230,8 @@ class ShadowGraph {
   /// to [_storylineEntities] (which are generally all entities in the Book).
   ///
   /// Returns `null` if the entity with [id] cannot be found.
-  Entity getEntityById(int id, Set<Entity> currentEntities) {
-    for (final entity in currentEntities) {
+  Entity getEntityById(int id) {
+    for (final entity in _mentionedEntities) {
       if (entity.id == id) return entity;
     }
 
@@ -213,22 +239,23 @@ class ShadowGraph {
     assert(
         result != null,
         'The entity with id=$id is missing from both '
-        'currentEntities=$currentEntities and from '
+        'currentEntities=$_mentionedEntities and from '
         '_storylineEntities=$_storylineEntities');
     return result;
   }
 
-  void __assertAtLeastOneIdentifier(UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < _reportIdentifiers.length; i++) {
+  void __assertAtLeastOneIdentifier() {
+    for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+      reports[i]._reportIdentifiers.forEachEntityIn(report,
+          (complement, entity, set) {
         assert(
             set.isNotEmpty,
             "We have an empty range ($set) for $entity ($complement) "
             "in $report (#$i).\n"
             "Reports: $reports\n\n"
-            "Identifiers: $_identifiers\n\n"
-            "ReportIdentifiers: $_reportIdentifiers");
+            "Identifiers: ${report._identifiers}\n\n"
+            "ReportIdentifiers: ${report._reportIdentifiers}");
         assert(
             complement == ComplementType.SUBJECT ||
                 set.difference(const {IdentifierLevel.omitted}).isNotEmpty,
@@ -238,49 +265,49 @@ class ShadowGraph {
     }
   }
 
-  void __assertAtLeastOneJoiner(UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < _joiners.length; i++) {
+  void __assertAtLeastOneJoiner() {
+    for (int i = 0; i < reports.length; i++) {
       assert(
-          _joiners[i].isNotEmpty,
+          reports[i]._joiners.isNotEmpty,
           "There should be at least one joiner "
           "for ${reports[i]} at this point "
-          "but instead there is: ${_joiners[i]}.");
+          "but instead there is: ${reports[i]._joiners}.");
     }
   }
 
-  void __assertExactlyOnePossibleJoiner(UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < _joiners.length; i++) {
+  void __assertExactlyOnePossibleJoiner() {
+    for (int i = 0; i < reports.length; i++) {
       assert(
-          _joiners[i].length == 1,
+          reports[i]._joiners.length == 1,
           "There should be a single joiner "
-          "for ${reports[i]} but instead there is: ${_joiners[i]}.");
+          "for ${reports[i]} but instead there is: ${reports[i]._joiners}.");
     }
   }
 
   void _allowAnd(int i) {
-    if (i < 0 || i >= _conjunctions.length) return;
-    _conjunctions[i].add(SentenceConjunction.and);
+    if (i < 0 || i >= reports.length) return;
+    reports[i]._conjunctions.add(SentenceConjunction.and);
   }
 
   void _allowBut(int i) {
-    if (i < 0 || i >= _conjunctions.length) return;
-    _conjunctions[i].add(SentenceConjunction.but);
+    if (i < 0 || i >= reports.length) return;
+    reports[i]._conjunctions.add(SentenceConjunction.but);
   }
 
   void _allowObjectPronoun(int i) {
-    _reportIdentifiers[i]._objectRange.add(IdentifierLevel.pronoun);
+    reports[i]._reportIdentifiers._objectRange.add(IdentifierLevel.pronoun);
   }
 
   /// In any storyline, the first time we mention anyone after a while,
   /// we cannot use pronouns or any other confusing identifiers.
-  void _detectFirstMentions(
-      UnmodifiableListView<Report> reports, Set<Entity> entities) {
+  void _detectFirstMentions() {
     final Set<int> everMentionedIds = {};
     // Maps from entity ID to the most recent report index it was referenced.
     final Map<int, int> lastMentionedTimes = {};
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+      reports[i]._reportIdentifiers.forEachEntityIn(report,
+          (complement, entity, set) {
         if (!entity.isPlayer && !everMentionedIds.contains(entity.id)) {
           // If this is the first time we mention this entity, call it by
           // at least the noun.
@@ -296,13 +323,14 @@ class ShadowGraph {
         assert(
             set.isNotEmpty,
             'The range of identifiers for $entity ($complement) '
-            'is already empty. Entities: $entities.');
+            'is already empty. Entities: $_mentionedEntities.');
 
         // Unless we just talked about the entity...
         if ((lastMentionedTimes[entity.id] ?? -1000) < i - 1) {
           // ... disallow any identifiers that might confuse this with
           // any other entity.
-          set.removeAll(_getConflictingQualificationLevels(entity, entities));
+          set.removeAll(
+              _getConflictingQualificationLevels(entity, _mentionedEntities));
         }
 
         if (set.isEmpty && entity.isCommon) {
@@ -317,36 +345,23 @@ class ShadowGraph {
         assert(
             set.isNotEmpty,
             'The range of identifiers for $entity ($complement) '
-            'is already empty. Entities: $entities.');
+            'is already empty. Entities: $_mentionedEntities.');
 
         lastMentionedTimes[entity.id] = i;
-
-        if (entity.firstOwnerId != null) {
-          // Also solve this for the owner of the entity.
-          final owner = getEntityById(entity.firstOwnerId, entities);
-
-          if (!owner.isPlayer && !everMentionedIds.contains(owner.id)) {
-            // If we haven't mentioned the owner yet, we can't use their
-            // pronoun.
-            set.removeAll([
-              IdentifierLevel.ownerPronounsNoun,
-            ]);
-          }
-        }
       });
     }
   }
 
   /// Detect "forced pronouns" (when the string says `<subjectPronoun>`
   /// but no `<subject>`, for example).
-  void _detectForcedPronouns(UnmodifiableListView<Report> reports) {
+  void _detectForcedPronouns() {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
 
       for (final complement in ComplementType.all) {
         if (report.string.contains(complement.pronoun) &&
             !report.string.contains(complement.generic)) {
-          _reportIdentifiers[i].getRangeByType(complement)
+          reports[i]._reportIdentifiers.getRangeByType(complement)
             ..clear()
             ..add(IdentifierLevel.pronoun);
         }
@@ -356,10 +371,11 @@ class ShadowGraph {
 
   /// Detects entities that have [Entity.adjective] == `null`, and removes
   /// the relevant [IdentifierLevel]s.
-  void _detectMissingAdjectives(UnmodifiableListView<Report> reports) {
+  void _detectMissingAdjectives() {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+      reports[i]._reportIdentifiers.forEachEntityIn(report,
+          (complement, entity, set) {
         if (entity.adjective == null) {
           set.removeAll(
               [IdentifierLevel.adjectiveOne, IdentifierLevel.adjectiveNoun]);
@@ -370,14 +386,17 @@ class ShadowGraph {
 
   /// Detects entities that have [Entity.firstOwnerId] == `null`, and removes
   /// the relevant [IdentifierLevel]s.
-  void _detectMissingOwners(UnmodifiableListView<Report> reports) {
+  ///
+  /// This does not preclude the existence of a separate [Report.owner],
+  /// for example. This is just for the [Entity.firstOwnerId]-related owners.
+  void _detectMissingOwners() {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+      reports[i]._reportIdentifiers.forEachEntityIn(report,
+          (complement, entity, set) {
         if (entity.firstOwnerId == null) {
           set.removeAll([
-            IdentifierLevel.ownerPronounsNoun,
-            IdentifierLevel.ownerNamesNoun,
+            IdentifierLevel.ownerNoun,
           ]);
         }
       });
@@ -386,10 +405,11 @@ class ShadowGraph {
 
   /// Detect missing proper nouns -- when an entity does not have a proper
   /// noun (e.g. "John").
-  void _detectMissingProperNouns(UnmodifiableListView<Report> reports) {
+  void _detectMissingProperNouns() {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+      reports[i]._reportIdentifiers.forEachEntityIn(report,
+          (complement, entity, set) {
         if (!entity.nameIsProperNoun) {
           set.remove(IdentifierLevel.properNoun);
         }
@@ -402,12 +422,14 @@ class ShadowGraph {
   ///
   /// For example, a sentence like "in the meantime, <subject> take<s> <object>"
   /// does not start with "<subject>", and so subject cannot be omitted.
-  void _detectReportsNotStartingWithSubject(
-      UnmodifiableListView<Report> reports) {
+  void _detectReportsNotStartingWithSubject() {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       if (!report.string.startsWith(ComplementType.SUBJECT.generic)) {
-        _reportIdentifiers[i]._subjectRange.remove(IdentifierLevel.omitted);
+        reports[i]
+            ._reportIdentifiers
+            ._subjectRange
+            .remove(IdentifierLevel.omitted);
       }
     }
   }
@@ -416,9 +438,9 @@ class ShadowGraph {
   ///
   /// * wholeSentence == none
   /// * isRaw == none
-  void _fillForcedJoinersAndConjunctions(UnmodifiableListView<Report> reports) {
+  void _fillForcedJoinersAndConjunctions() {
     // Always start with new sentence (no ", and" or period).
-    _joiners[0]
+    reports[0]._joiners
       ..clear()
       ..add(SentenceJoinType.none);
 
@@ -437,9 +459,9 @@ class ShadowGraph {
     }
   }
 
-  void _fillOtherJoiners(UnmodifiableListView<Report> reports) {
+  void _fillOtherJoiners() {
     for (int i = 0; i < reports.length; i++) {
-      final set = _joiners[i];
+      final set = reports[i]._joiners;
       if (set.length > 1) {
         if (set.contains(SentenceJoinType.period)) {
           set.retainAll([SentenceJoinType.period]);
@@ -455,15 +477,15 @@ class ShadowGraph {
   /// Find opportunities to join two sentences in one.
   ///
   /// P0 means these are the best ones, we should definitely go for them.
-  void _find2JoinerOpportunitiesP0(UnmodifiableListView<Report> reports) {
+  void _find2JoinerOpportunitiesP0() {
     for (final pair in _ReportPair.getPairs(reports)) {
       // The goblin tries to dodge and/but fails.
       if (pair.hasSameVerbType &&
           pair.hasSameSubject &&
           pair.first.object == null &&
           pair.second.object == null &&
-          _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].hasComma) {
+          reports[pair.index]._joiners.hasPeriodOrNone &&
+          reports[pair.index + 1]._joiners.hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToComma(pair.index + 1);
         _allowAnd(pair.index + 1);
@@ -473,8 +495,8 @@ class ShadowGraph {
       if (pair.hasSameVerbType &&
           pair.hasSameSubject &&
           pair.second.object == null &&
-          _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].hasComma) {
+          reports[pair.index]._joiners.hasPeriodOrNone &&
+          reports[pair.index + 1]._joiners.hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToComma(pair.index + 1);
         _allowAnd(pair.index + 1);
@@ -486,8 +508,8 @@ class ShadowGraph {
       if (pair.hasSameVerbType &&
           pair.hasSameSubject &&
           pair.hasSameObject &&
-          _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].hasComma) {
+          reports[pair.index]._joiners.hasPeriodOrNone &&
+          reports[pair.index + 1]._joiners.hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToComma(pair.index + 1);
         _allowObjectPronoun(pair.index + 1);
@@ -500,13 +522,13 @@ class ShadowGraph {
   /// Find opportunities to join two sentences in one.
   ///
   /// P1 means these are not as great at [_find2JoinerOpportunitiesP0].
-  void _find2JoinerOpportunitiesP1(UnmodifiableListView<Report> reports) {
+  void _find2JoinerOpportunitiesP1() {
     for (final pair in _ReportPair.getPairs(reports)) {
       // He has his dagger and his shield.
       if (pair.hasSameVerbType &&
           pair.hasSameSubject &&
-          _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].hasComma) {
+          reports[pair.index]._joiners.hasPeriodOrNone &&
+          reports[pair.index + 1]._joiners.hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToComma(pair.index + 1);
         _allowAnd(pair.index + 1);
@@ -517,8 +539,8 @@ class ShadowGraph {
       if (pair.hasSameVerbType &&
           pair.first.object != null &&
           pair.second.subject == pair.first.object &&
-          _joiners[pair.index].hasPeriodOrNone &&
-          _joiners[pair.index + 1].hasComma) {
+          reports[pair.index]._joiners.hasPeriodOrNone &&
+          reports[pair.index + 1]._joiners.hasComma) {
         _limitJoinerToPeriodOrNone(pair.index);
         _limitJoinerToComma(pair.index + 1);
         _allowAnd(pair.index + 1);
@@ -531,8 +553,7 @@ class ShadowGraph {
   /// they are "opposite sentiments". For example:
   ///
   ///     The goblin stands up but doesn't regain full balance.
-  void _findPositiveNegativeButConjunctions(
-      UnmodifiableListView<Report> reports) {
+  void _findPositiveNegativeButConjunctions() {
     for (final pair in _ReportPair.getPairs(reports)) {
       // The goblin stands up but doesn't regain full balance.
       if (pair.hasSameSubject && pair.positiveNegativeAreSwitched) {
@@ -551,45 +572,55 @@ class ShadowGraph {
     }
   }
 
-  /// Detects entities that have `<*wner>` before them, and removes
-  /// all irrelevant [IdentifierLevel]s.
+  /// Detects entities that have `<*wner>` before them, and that have
+  /// [Entity.firstOwnerId] set, and removes all irrelevant [IdentifierLevel]s.
   ///
   /// Entities with `<*wner>` before them cannot be just [IdentifierLevel.noun],
-  /// for example. They are forced to be either
-  /// [IdentifierLevel.ownerPronounsNoun] or
-  /// [IdentifierLevel.ownerNamesNounNoun].
-  void _forceOwners(UnmodifiableListView<Report> reports) {
+  /// for example. They are forced to be [IdentifierLevel.ownerNoun].
+  ///
+  /// This assures that the author can say
+  /// `"<subject> hits <objectOwner's> <object>"` without specifying
+  /// `objectOwner`. If `object` has [Entity.firstOwnerId], this storyline
+  /// will still be realized.
+  void _forceOwners() {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
 
       if (report.string.contains(ComplementType.OWNER.genericPossessive) &&
           report.subject.firstOwnerId != null) {
-        _reportIdentifiers[i]._subjectRange.retainAll([
-          IdentifierLevel.ownerPronounsNoun,
-          IdentifierLevel.ownerNamesNoun,
+        reports[i]._reportIdentifiers._subjectRange.retainAll([
+          IdentifierLevel.ownerNoun,
         ]);
       }
 
       if (report.string
               .contains(ComplementType.OBJECT_OWNER.genericPossessive) &&
           report.object.firstOwnerId != null) {
-        _reportIdentifiers[i]._objectRange.retainAll([
-          IdentifierLevel.ownerPronounsNoun,
-          IdentifierLevel.ownerNamesNoun,
+        reports[i]._reportIdentifiers._objectRange.retainAll([
+          IdentifierLevel.ownerNoun,
+        ]);
+      }
+
+      if (report.string
+              .contains(ComplementType.OBJECT2_OWNER.genericPossessive) &&
+          report.object2.firstOwnerId != null) {
+        reports[i]._reportIdentifiers._object2Range.retainAll([
+          IdentifierLevel.ownerNoun,
         ]);
       }
     }
   }
 
-  /// Gets all mentioned entities in [reports].
+  /// Gets all mentioned entities in [storylineReports].
   ///
-  /// The entities will be stored in their initial state (for example,
-  /// if an entity changes pronoun during [reports], this will
+  /// The entities will be stored in their initial state. For example,
+  /// if an entity changes pronoun during [storylineReports], this will
   /// not be reflected: only the original pronoun will be listed.
-  Set<Entity> _getAllMentionedEntities(UnmodifiableListView<Report> reports) {
+  static Set<Entity> _getAllMentionedEntities(
+      Iterable<Report> storylineReports) {
     final result = <Entity>{};
     final resultIds = <int>{};
-    for (final report in reports) {
+    for (final report in storylineReports) {
       for (final entity in report.allEntities) {
         if (!resultIds.contains(entity.id)) {
           result.add(entity);
@@ -637,9 +668,7 @@ class ShadowGraph {
     if (entity.firstOwnerId != null &&
         others.any((e) =>
             e.name == entity.name && e.firstOwnerId == entity.firstOwnerId)) {
-      // TODO: Also check for owner's pronoun equality, not just id equality.
-      yield IdentifierLevel.ownerPronounsNoun;
-      yield IdentifierLevel.ownerNamesNoun;
+      yield IdentifierLevel.ownerNoun;
     }
 
     if (entity.adjective != null &&
@@ -659,8 +688,7 @@ class ShadowGraph {
   ///
   /// For example, [Pronoun.HE] will not identify anything at first, until
   /// a report mentions an entity that uses the pronoun as [Entity.pronoun].
-  List<Map<Identifier, Entity>> _getIdentifiersThroughoutStory(
-      UnmodifiableListView<Report> reports, Set<Entity> entities) {
+  List<Map<Identifier, Entity>> _getIdentifiersThroughoutStory() {
     final result = List<Map<Identifier, Entity>>(reports.length);
     var previous = <Identifier, Entity>{};
 
@@ -669,8 +697,11 @@ class ShadowGraph {
 
     // Gets an entity, either from [entities] (mentioned in this
     // Storyline), or — if unavailable - in [_storylineEntities].
-    Entity getEntity(int id) => entities.singleWhere((e) => e.id == id,
-        orElse: () => _storylineEntities.values.singleWhere((e) => e.id == id));
+    Entity getEntity(int id) => _mentionedEntities.singleWhere(
+          (e) => e.id == id,
+          orElse: () =>
+              _storylineEntities.values.singleWhere((e) => e.id == id),
+        );
 
     // We start with a "minus first" report in order to populate [previous]
     // with all entities. This ensures that the first report of the storyline
@@ -714,7 +745,12 @@ class ShadowGraph {
         // in fact, multiple orcs present.
         reportEntities = UnmodifiableListView(_storylineEntities.values);
       } else {
-        reportEntities = UnmodifiableListView(reports[i].allEntities);
+        final allReportEntities = <Entity>[];
+        reports[i]._reportIdentifiers.forEachEntityIn(reports[i],
+            (complement, entity, set) {
+          allReportEntities.add(entity);
+        });
+        reportEntities = UnmodifiableListView(allReportEntities);
       }
 
       for (final entityInReport in reportEntities) {
@@ -750,15 +786,24 @@ class ShadowGraph {
         }
 
         if (entity.firstOwnerId != null) {
-          final owner = getEntityById(entity.firstOwnerId, entities);
+          final owner = getEntityById(entity.firstOwnerId);
 
-          final ownerPronounsNounId = Identifier.ownerPronounsNoun(
-              '${owner.pronoun.genitive} ${entity.name}');
-          assign(ownerPronounsNounId, entity);
-
-          final ownerNamesNounId =
-              Identifier.ownerNamesNoun('${owner.name}\'s ${entity.name}');
-          assign(ownerNamesNounId, entity);
+          // We're assuming the owner will be mentioned by name here.
+          // That might be problematic. What's actually happening is that
+          // the owner is "extracted" as [ShadowReport.objectOwner]. They will
+          // become a new entity in the report, which means they can be referred
+          // to as a pronoun, for example.
+          //
+          // The assumption is that this is okay. Here, we only need to verify
+          // that the identifier is unique: "Tamara's shield" versus
+          // "Leroy's shield" versus "Leroy's dagger".
+          //
+          // That said, there will be a false positive conflict when,
+          // for example, Leroy has two daggers. To solve that, we would
+          // have to have `Identifier.ownerAdjectiveNoun` or something similar.
+          final ownerNounId =
+              Identifier.ownerNoun('${owner.name}\'s ${entity.name}');
+          assign(ownerNounId, entity);
         }
 
         // TODO: theOtherNoun - by definition, this one will have 2 entities
@@ -789,22 +834,22 @@ class ShadowGraph {
   }
 
   void _limitJoinerToComma(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const {
+    if (i < 0 || i >= reports.length) return;
+    reports[i]._joiners.retainAll(const {
       SentenceJoinType.comma,
     });
   }
 
   void _limitJoinerToNone(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const {
+    if (i < 0 || i >= reports.length) return;
+    reports[i]._joiners.retainAll(const {
       SentenceJoinType.none,
     });
   }
 
   void _limitJoinerToPeriod(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i]
+    if (i < 0 || i >= reports.length) return;
+    reports[i]._joiners
       ..clear()
       ..addAll(const {
         SentenceJoinType.period,
@@ -812,45 +857,47 @@ class ShadowGraph {
   }
 
   void _limitJoinerToPeriodOrNone(int i) {
-    if (i < 0 || i >= _joiners.length) return;
-    _joiners[i].retainAll(const {
+    if (i < 0 || i >= reports.length) return;
+    reports[i]._joiners.retainAll(const {
       SentenceJoinType.none,
       SentenceJoinType.period,
     });
   }
 
   /// Removes buts when two of them are next to each other.
-  void _removeButsTooClose(UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < _conjunctions.length - 1; i++) {
-      if (_conjunctions[i].contains(SentenceConjunction.but) &&
-          _conjunctions[i + 1].contains(SentenceConjunction.but)) {
+  void _removeButsTooClose() {
+    for (int i = 0; i < reports.length - 1; i++) {
+      if (reports[i]._conjunctions.contains(SentenceConjunction.but) &&
+          reports[i + 1]._conjunctions.contains(SentenceConjunction.but)) {
         // Favor the forced "but".
         if (reports[i].but) {
-          _conjunctions[i + 1].removeAll(const {SentenceConjunction.but});
+          reports[i + 1]
+              ._conjunctions
+              .removeAll(const {SentenceConjunction.but});
           continue;
         }
         if (reports[i + 1].but) {
-          _conjunctions[i].removeAll(const {SentenceConjunction.but});
+          reports[i]._conjunctions.removeAll(const {SentenceConjunction.but});
           continue;
         }
 
         // Otherwise, go with the first "but" and remove the second.
-        _conjunctions[i + 1].removeAll(const {SentenceConjunction.but});
+        reports[i + 1]._conjunctions.removeAll(const {SentenceConjunction.but});
       }
     }
   }
 
-  void _removeOmittedAtStartsOfSentences(UnmodifiableListView<Report> reports) {
+  void _removeOmittedAtStartsOfSentences() {
     const startNewSentenceJoiners = [
       SentenceJoinType.period,
       SentenceJoinType.none,
     ];
 
-    for (int i = 0; i < _reportIdentifiers.length; i++) {
+    for (int i = 0; i < reports.length; i++) {
       // At this point, the final joiner must have been selected.
       final joiner = joiners[i];
       if (startNewSentenceJoiners.contains(joiner)) {
-        _reportIdentifiers[i].forEachEntityIn(reports[i],
+        reports[i]._reportIdentifiers.forEachEntityIn(reports[i],
             (complement, entity, set) {
           set.remove(IdentifierLevel.omitted);
         });
@@ -866,12 +913,12 @@ class ShadowGraph {
   /// entity in each report. Now we just need to update
   /// the [ReportIdentifiers] accordingly.
   void _removeQualificationsWhereUnavailable(
-      UnmodifiableListView<Report> reports,
       List<Map<Identifier, Entity>> identifiers) {
     for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
       final current = identifiers[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+      reports[i]._reportIdentifiers.forEachEntityIn(report,
+          (complement, entity, set) {
         // Take the identifiers that refer to the entity.
         // For example, in a particular sentence, "he" and "Aren" can
         // both be relevant identifiers for the actor named Aren.
@@ -899,11 +946,10 @@ class ShadowGraph {
     }
   }
 
-  void _retainTheHighestPossibleConjunction(
-      UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < _conjunctions.length; i++) {
+  void _retainTheHighestPossibleConjunction() {
+    for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      final conjunctions = _conjunctions[i];
+      final conjunctions = reports[i]._conjunctions;
       assert(conjunctions.isNotEmpty, "Missing conjunction for $report (#$i).");
       if (conjunctions.contains(SentenceConjunction.but)) {
         conjunctions.retainAll({SentenceConjunction.but});
@@ -917,11 +963,11 @@ class ShadowGraph {
 
   /// Only retain the lowest (i.e., least specific) qualification level
   /// for each entity in each report.
-  void _retainTheLowestPossibleIdentifiers(
-      UnmodifiableListView<Report> reports) {
-    for (int i = 0; i < _reportIdentifiers.length; i++) {
+  void _retainTheLowestPossibleIdentifiers() {
+    for (int i = 0; i < reports.length; i++) {
       final report = reports[i];
-      _reportIdentifiers[i].forEachEntityIn(report, (complement, entity, set) {
+      reports[i]._reportIdentifiers.forEachEntityIn(report,
+          (complement, entity, set) {
         assert(set.isNotEmpty,
             "We have an empty range ($set) for $entity in $report.");
         int j = 0;
@@ -932,5 +978,132 @@ class ShadowGraph {
         assert(set.length == 1);
       });
     }
+  }
+}
+
+/// This is a mutable wrapper around the immutable [Report].
+///
+/// [ShadowGraph] uses this class to represent the Storyline as it solves
+/// the NLG problem.
+class ShadowReport implements Report {
+  final Report wrapped;
+
+  /// A callback used by [forEachEntityIn()] to find entities by their `id`.
+  ///
+  /// This is important when we find out an entity such as
+  /// [objectOwner] should be added.
+  final Entity Function(int id) getEntityById;
+
+  /// For each report, this lists the possible identifiers to use.
+  ///
+  /// For example, the second sentence might be able to refer to its
+  /// subject with a pronoun or with the name (but not with "the other one").
+  ///
+  /// [ReportIdentifiers] for each report starts with everything allowed,
+  /// and the algorithm removes impossibilities.
+  final ReportIdentifiers _reportIdentifiers;
+
+  ReportIdentifiers get qualifications => _reportIdentifiers;
+
+  /// The way sentences are stringed together (with period, with comma,
+  /// or without anything).
+  ///
+  /// A [_joiners] describes how the [Report] flows from the report
+  /// that precedes it.
+  ///
+  /// [_joiners] starts with everything allowed, and the algorithm removes
+  /// impossibilities (so that at the end, only a few or just one possibility
+  /// survives).
+  final Set<SentenceJoinType> _joiners = SentenceJoinType.values.toSet();
+
+  /// The conjunction between this report and the previous one.
+  ///
+  /// No conjunction is possible at the start. The algorithm may add
+  /// [SentenceConjunction.and] or [SentenceConjunction.but].
+  final Set<SentenceConjunction> _conjunctions = {SentenceConjunction.nothing};
+
+  /// This maps from different concrete identifiers
+  /// (such as "he" or "the goblin") to entities in the report.
+  Map<Identifier, Entity> _identifiers;
+
+  ShadowReport(this.wrapped, this.getEntityById)
+      : _reportIdentifiers = ReportIdentifiers(getEntityById);
+
+  @override
+  int get actionThread => wrapped.actionThread;
+
+  @override
+  Iterable<Entity> get allEntities sync* {
+    if (subject != null) yield subject;
+    if (object != null) yield object;
+    if (object2 != null) yield object2;
+    if (owner != null) yield owner;
+    if (objectOwner != null) yield objectOwner;
+    if (object2Owner != null) yield object2Owner;
+  }
+
+  @override
+  bool get but => wrapped.but;
+
+  @override
+  bool get endSentence => wrapped.endSentence;
+
+  @override
+  bool get isRaw => wrapped.isRaw;
+
+  @override
+  bool get negative => wrapped.negative;
+
+  @override
+  Entity get object =>
+      _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT);
+
+  @override
+  Entity get object2 =>
+      _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT2);
+
+  @override
+  Entity get objectOwner =>
+      _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT_OWNER);
+
+  @override
+  Entity get object2Owner =>
+      _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT2_OWNER);
+
+  @override
+  Entity get owner =>
+      _reportIdentifiers.getEntityByType(wrapped, ComplementType.OWNER);
+
+  @override
+  bool get positive => wrapped.positive;
+
+  @override
+  bool get replacesThread => wrapped.replacesThread;
+
+  @override
+  bool get startSentence => wrapped.startSentence;
+
+  @override
+  bool get startsThread => wrapped.startsThread;
+
+  @override
+  String get string => wrapped.string;
+
+  @override
+  Entity get subject =>
+      _reportIdentifiers.getEntityByType(wrapped, ComplementType.SUBJECT);
+
+  @override
+  bool get subjectAndObjectAreEnemies => wrapped.subjectAndObjectAreEnemies;
+
+  @override
+  int get time => wrapped.time;
+
+  @override
+  bool get wholeSentence => wrapped.wholeSentence;
+
+  @override
+  Entity getEntityByType(ComplementType type) {
+    return _reportIdentifiers.getEntityByType(wrapped, type);
   }
 }

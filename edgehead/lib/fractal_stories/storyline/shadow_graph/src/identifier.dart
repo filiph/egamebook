@@ -8,8 +8,7 @@ part of storyline.shadow_graph;
 const List<IdentifierLevel> orderedQualificationLevels = [
   IdentifierLevel.properNoun,
   IdentifierLevel.adjectiveNoun,
-  IdentifierLevel.ownerNamesNoun,
-  IdentifierLevel.ownerPronounsNoun,
+  IdentifierLevel.ownerNoun,
   IdentifierLevel.noun,
   IdentifierLevel.adjectiveOne,
   IdentifierLevel.pronoun,
@@ -47,12 +46,8 @@ class Identifier {
         pronoun = null,
         string = null;
 
-  const Identifier.ownerNamesNoun(this.string)
-      : level = IdentifierLevel.ownerNamesNoun,
-        pronoun = null;
-
-  const Identifier.ownerPronounsNoun(this.string)
-      : level = IdentifierLevel.ownerPronounsNoun,
+  const Identifier.ownerNoun(this.string)
+      : level = IdentifierLevel.ownerNoun,
         pronoun = null;
 
   const Identifier.pronoun(this.pronoun)
@@ -97,11 +92,9 @@ enum IdentifierLevel {
   /// Something like "sword" or "apple".
   noun,
 
-  /// Something like "my sword" or "her shield".
-  ownerPronounsNoun,
-
-  /// Something like "Tamara's sword" or "the goblin's helmet".
-  ownerNamesNoun,
+  /// Same as [noun], but forces the addition of an owner. For example,
+  /// a "shield" becomes "Tamara's shield".
+  ownerNoun,
 
   /// Something like "the brown jacket" or "the long sword"
   adjectiveNoun,
@@ -114,13 +107,28 @@ enum IdentifierLevel {
 class ReportIdentifiers {
   final Set<IdentifierLevel> _subjectRange = IdentifierLevel.values.toSet();
 
-  final Set<IdentifierLevel> _objectRange = IdentifierLevel.values.toSet();
+  final Set<IdentifierLevel> _objectRange = IdentifierLevel.values.toSet()
+    ..remove(IdentifierLevel.omitted);
 
-  final Set<IdentifierLevel> _object2Range = IdentifierLevel.values.toSet();
+  final Set<IdentifierLevel> _object2Range = IdentifierLevel.values.toSet()
+    ..remove(IdentifierLevel.omitted);
 
-  final Set<IdentifierLevel> _ownerRange = IdentifierLevel.values.toSet();
+  final Set<IdentifierLevel> _ownerRange = IdentifierLevel.values.toSet()
+    ..remove(IdentifierLevel.omitted);
 
-  final Set<IdentifierLevel> _objectOwnerRange = IdentifierLevel.values.toSet();
+  final Set<IdentifierLevel> _objectOwnerRange = IdentifierLevel.values.toSet()
+    ..remove(IdentifierLevel.omitted);
+
+  final Set<IdentifierLevel> _object2OwnerRange = IdentifierLevel.values.toSet()
+    ..remove(IdentifierLevel.omitted);
+
+  /// A callback used by [forEachEntityIn()] to find entities by their `id`.
+  ///
+  /// This is important when we find out an entity such as
+  /// [objectOwner] should be added.
+  final Entity Function(int id) getEntityById;
+
+  ReportIdentifiers(this.getEntityById);
 
   IdentifierLevel get object => _ensureSingle(_objectRange, "_objectRange");
 
@@ -128,6 +136,9 @@ class ReportIdentifiers {
 
   IdentifierLevel get objectOwner =>
       _ensureSingle(_objectOwnerRange, "_objectOwnerRange");
+
+  IdentifierLevel get object2Owner =>
+      _ensureSingle(_object2OwnerRange, "_object2OwnerRange");
 
   IdentifierLevel get owner => _ensureSingle(_ownerRange, "_ownerRange");
 
@@ -149,13 +160,38 @@ class ReportIdentifiers {
     if (report.object2 != null) {
       callback(ComplementType.OBJECT2, report.object2, _object2Range);
     }
+
     if (report.owner != null) {
       callback(ComplementType.OWNER, report.owner, _ownerRange);
+    } else if (_ownerIsForcedByRange(report.subject, _subjectRange)) {
+      callback(ComplementType.OWNER, getEntityById(report.subject.firstOwnerId),
+          _ownerRange);
     }
     if (report.objectOwner != null) {
       callback(
           ComplementType.OBJECT_OWNER, report.objectOwner, _objectOwnerRange);
+    } else if (_ownerIsForcedByRange(report.object, _objectRange)) {
+      callback(ComplementType.OBJECT_OWNER,
+          getEntityById(report.object.firstOwnerId), _objectOwnerRange);
     }
+    if (report.object2Owner != null) {
+      callback(ComplementType.OBJECT2_OWNER, report.object2Owner,
+          _object2OwnerRange);
+    } else if (_ownerIsForcedByRange(report.object2, _object2Range)) {
+      // Object2 owner is forced via _object2Range.
+      callback(ComplementType.OBJECT2_OWNER,
+          getEntityById(report.object2.firstOwnerId), _object2OwnerRange);
+    }
+  }
+
+  /// Sometimes, [IdentifierLevel.ownerNoun] is the only available identifier
+  /// for the entity. In that case, we force the inclusion of an owner
+  /// in things.
+  bool _ownerIsForcedByRange(Entity entity, Set<IdentifierLevel> range) {
+    if (entity == null) return false;
+    if (entity.firstOwnerId == null) return false;
+    // If only [IdentifierLevel.ownerNoun] is available, then owner is forced.
+    return range.every((level) => level == IdentifierLevel.ownerNoun);
   }
 
   /// Given [type], return the [IdentifierLevel] assigned to it.
@@ -171,6 +207,40 @@ class ReportIdentifiers {
         return owner;
       case ComplementType.OBJECT_OWNER:
         return objectOwner;
+      case ComplementType.OBJECT2_OWNER:
+        return object2Owner;
+      default:
+        throw UnimplementedError('No entity for $type');
+    }
+  }
+
+  /// Given [type], return the [Entity].
+  Entity getEntityByType(Report report, ComplementType type) {
+    switch (type) {
+      case ComplementType.SUBJECT:
+        return report.subject;
+      case ComplementType.OBJECT:
+        return report.object;
+      case ComplementType.OBJECT2:
+        return report.object2;
+      case ComplementType.OWNER:
+        if (report.owner != null) return report.owner;
+        if (_ownerIsForcedByRange(report.subject, _subjectRange)) {
+          return getEntityById(report.subject.firstOwnerId);
+        }
+        return null;
+      case ComplementType.OBJECT_OWNER:
+        if (report.objectOwner != null) return report.objectOwner;
+        if (_ownerIsForcedByRange(report.object, _objectRange)) {
+          return getEntityById(report.object.firstOwnerId);
+        }
+        return null;
+      case ComplementType.OBJECT2_OWNER:
+        if (report.object2Owner != null) return report.object2Owner;
+        if (_ownerIsForcedByRange(report.object2, _object2Range)) {
+          return getEntityById(report.object2.firstOwnerId);
+        }
+        return null;
       default:
         throw UnimplementedError('No entity for $type');
     }
@@ -188,6 +258,8 @@ class ReportIdentifiers {
         return _ownerRange;
       case ComplementType.OBJECT_OWNER:
         return _objectOwnerRange;
+      case ComplementType.OBJECT2_OWNER:
+        return _object2OwnerRange;
       default:
         throw UnimplementedError('No entity for $type');
     }
@@ -212,18 +284,5 @@ class ReportIdentifiers {
       j += 1;
     }
     return set.single;
-  }
-
-  /// Replaces the identifier level of [complement] (e.g. subject or object)
-  /// with [level].
-  ///
-  /// This assumes the range of possible identifier levels has been already
-  /// collapsed to just one.
-  void patchByType(ComplementType complement, IdentifierLevel level) {
-    final set = getRangeByType(complement);
-    assert(set.length == 1);
-    set
-      ..clear()
-      ..add(level);
   }
 }

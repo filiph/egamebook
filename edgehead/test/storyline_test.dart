@@ -1125,6 +1125,24 @@ void main() {
         expect(result, contains('goblin\'s sword'));
       });
 
+      test(
+          'the unmentioned added entity is counted '
+          'for identifier resolution', () {
+        // Prevents: "The sixty-fiver slashes the undead's right shoulder.
+        // He freezes for a while and briefly looks at the wound, studying it."
+        storyline.add('<subject> wheel<s> around', subject: goblin);
+        storyline.add('<subject> do<es> the same', subject: aren);
+        storyline.add("<subject> slash<es> <objectOwner's> <object>",
+            subject: orc,
+            objectOwner: goblin,
+            object: goblin.anatomy.primaryWeaponAppendage);
+        storyline.add('<subject> freeze<s> for a while', subject: goblin);
+
+        final result = storyline.realizeAsString();
+        expect(result, contains("goblin's"));
+        expect(result, isNot(contains('he freezes')));
+      });
+
       test('isn\'t used when not needed', () {
         storyline.add('<subject> hit<s> <object> with <object2>',
             subject: aren, object: orcSword, object2: myAxe);

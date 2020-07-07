@@ -26,6 +26,9 @@ final Logger log = Logger('Storyline');
 ///
 /// These events are stringed together by [Storyline] to create a coherent,
 /// naturally sounding narrative.
+///
+/// This class is immutable. It is not declared as `@immutable` because we
+/// are implementing it with `ShadowReport`, which is mutable.
 class Report {
   final String string;
 
@@ -35,7 +38,8 @@ class Report {
   final Entity object2;
   final Entity owner;
   final Entity objectOwner;
-  bool but;
+  final Entity object2Owner;
+  final bool but;
   final bool positive;
   final bool negative;
   final bool subjectAndObjectAreEnemies;
@@ -87,6 +91,7 @@ class Report {
       this.object2,
       this.owner,
       this.objectOwner,
+      this.object2Owner,
       this.but = false,
       this.positive = false,
       this.negative = false,
@@ -100,20 +105,20 @@ class Report {
       this.replacesThread = false,
       this.time})
       : assert(_checkDifferentiated(
-            [subject, object, object2, owner, objectOwner])) {
-    if (actionThread == null) {
-      assert(startsThread == false, "actionThread is null");
-      assert(replacesThread == false, "actionThread is null");
-    }
-  }
+            [subject, object, object2, owner, objectOwner, object2Owner])),
+        assert(actionThread != null || startsThread == false,
+            "actionThread is null"),
+        assert(actionThread != null || replacesThread == false,
+            "actionThread is null");
 
-  Report.empty()
+  const Report.empty()
       : string = "",
         subject = null,
         object = null,
         object2 = null,
         owner = null,
         objectOwner = null,
+        object2Owner = null,
         but = false,
         positive = false,
         negative = false,
@@ -135,6 +140,7 @@ class Report {
     if (object2 != null) yield object2;
     if (owner != null) yield owner;
     if (objectOwner != null) yield objectOwner;
+    if (object2Owner != null) yield object2Owner;
   }
 
   /// Returns the [Entity] corresponding to [type].
@@ -155,6 +161,8 @@ class Report {
         return owner;
       case ComplementType.OBJECT_OWNER:
         return objectOwner;
+      case ComplementType.OBJECT2_OWNER:
+        return object2Owner;
       default:
         throw UnimplementedError('No entity for $type');
     }
@@ -223,7 +231,10 @@ class Storyline {
   static final _vowelsRegExp = RegExp(r"[aeiouy]", caseSensitive: false);
 
   /// Internal list of reports. This is constructed by filtering [_records].
-  List<Report> _reports;
+  List<Report> _immutableReports;
+
+  /// A list of [ShadowReport]s, provided by [ShadowGraph].
+  List<ShadowReport> _reports;
 
   /// Internal queue of records, mixing [Report] instances with custom
   /// elements (such as images, maps, stat updates, what have you).
@@ -279,8 +290,9 @@ class Storyline {
   bool get hasManyParagraphs =>
       _records.any((rec) => rec.report?.string == PARAGRAPH_NEWLINES);
 
-  /// A list of reports (see [_reports]).
-  UnmodifiableListView<Report> get reports => UnmodifiableListView(_reports);
+  /// A list of immutable reports (see [_immutableReports]).
+  UnmodifiableListView<Report> get rawReports =>
+      UnmodifiableListView(_immutableReports);
 
   /// Add another event to the story.
   ///
@@ -292,6 +304,7 @@ class Storyline {
       Entity object2,
       Entity owner,
       Entity objectOwner,
+      Entity object2Owner,
       bool but = false,
       bool positive = false,
       bool negative = false,
@@ -328,6 +341,7 @@ class Storyline {
         object2: object2,
         owner: owner,
         objectOwner: objectOwner,
+        object2Owner: object2Owner,
         but: but,
         positive: positive,
         negative: negative,
@@ -520,6 +534,8 @@ class Storyline {
     if (report.object != null) yield report.object;
     if (report.owner != null) yield report.owner;
     if (report.objectOwner != null) yield report.objectOwner;
+    if (report.object2Owner != null) yield report.object2Owner;
+    // Does not include object2, since that is generally an item.
   }
 
   /// When an entity should start the storyline as unmentioned, call this
@@ -580,17 +596,18 @@ class Storyline {
 
     // Distill _records into a list of only storyline reports (without
     // custom elements.
-    _reports =
+    _immutableReports =
         _records.where((rec) => rec.isReport).map((rec) => rec.report).toList();
 
-    final cleanedReports = _collapseThreads(_reports).toList(growable: false);
-    _reports.retainWhere(cleanedReports.contains);
+    final cleanedReports =
+        _collapseThreads(_immutableReports).toList(growable: false);
+    _immutableReports.retainWhere(cleanedReports.contains);
 
     final int length = onlyFirstParagraph && hasManyParagraphs
-        ? _reports.indexOf(
-                _reports.firstWhere((r) => r.string == PARAGRAPH_NEWLINES)) +
+        ? _immutableReports.indexOf(_immutableReports
+                .firstWhere((r) => r.string == PARAGRAPH_NEWLINES)) +
             1
-        : _reports.length;
+        : _immutableReports.length;
     // Same as above, but the index is in [_records].
     int lengthInRecords = 0;
     for (final rec in _records) {
@@ -600,6 +617,7 @@ class Storyline {
     if (length < 1) return const [];
 
     final shadowGraph = ShadowGraph.from(this);
+    _reports = shadowGraph.reports;
 
     for (int i = 0; i < length; i++) {
       final joiner = shadowGraph.joiners[i];
@@ -673,13 +691,10 @@ class Storyline {
             "${ComplementType.SUBJECT.generic} $VERB_HAVE ", "");
       }
 
-      final reportEntities = _reports[i].allEntities.toSet();
-      Entity getEntity(int id) => shadowGraph.getEntityById(id, reportEntities);
+      Entity getEntity(int id) => shadowGraph.getEntityById(id);
 
-      report = _removeOwnerStopwords(report, _reports[i]);
-      report = _extractMentionedOwnerStopwords(
-          report, _reports[i], qualifications,
-          getEntityFromId: getEntity);
+      report = _addOwnerStopwords(report, _reports[i]);
+      report = _consolidateStopwords(report, _reports[i]);
       report = _concretizeStopwords(report, _reports[i], qualifications);
       report = _preventPossessivesBeforePronouns(report, _reports[i]);
       report = _preventPossessivesBeforeProperNouns(report, _reports[i]);
@@ -876,6 +891,7 @@ class Storyline {
     maybeAddArticleToAny(ComplementType.OBJECT2);
     maybeAddArticleToAny(ComplementType.OWNER);
     maybeAddArticleToAny(ComplementType.OBJECT_OWNER);
+    maybeAddArticleToAny(ComplementType.OBJECT2_OWNER);
 
     return result;
   }
@@ -950,7 +966,7 @@ class Storyline {
     var result = string;
 
     void modifyForComplement(ComplementType complement) {
-      final entity = report.getEntityByType(complement);
+      final entity = qualifications.getEntityByType(report, complement);
 
       if (entity == null) {
         assert(
@@ -1017,6 +1033,9 @@ class Storyline {
             },
           );
           break;
+        // IdentifierLevel.ownerNoun renders the same as IdentifierLevel.noun.
+        // That level only forces owners to appear before the noun.
+        case IdentifierLevel.ownerNoun:
         case IdentifierLevel.noun:
           result = _replaceFirstThenAll(
             result,
@@ -1030,40 +1049,6 @@ class Storyline {
             },
           );
           break;
-
-        case IdentifierLevel.ownerPronounsNoun:
-          assert(entity.firstOwnerId != null);
-
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              complement.generic: complement.ownerPronounsNoun,
-              complement.genericPossessive:
-                  complement.ownerPronounsNounPossessive,
-            },
-            following: {
-              complement.generic: complement.pronoun,
-              complement.genericPossessive: complement.pronounPossessive,
-            },
-          );
-          break;
-
-        case IdentifierLevel.ownerNamesNoun:
-          assert(entity.firstOwnerId != null);
-
-          result = _replaceFirstThenAll(
-            result,
-            first: {
-              complement.generic: complement.ownerNamesNoun,
-              complement.genericPossessive: complement.ownerNamesNounPossessive,
-            },
-            following: {
-              complement.generic: complement.pronoun,
-              complement.genericPossessive: complement.pronounPossessive,
-            },
-          );
-          break;
-
         case IdentifierLevel.adjectiveNoun:
           result = _replaceFirstThenAll(
             result,
@@ -1105,6 +1090,7 @@ class Storyline {
     modifyForComplement(ComplementType.OBJECT2);
     modifyForComplement(ComplementType.OWNER);
     modifyForComplement(ComplementType.OBJECT_OWNER);
+    modifyForComplement(ComplementType.OBJECT2_OWNER);
 
     return result;
   }
@@ -1157,6 +1143,7 @@ class Storyline {
     maybeRemovePossessive(ComplementType.OBJECT2);
     maybeRemovePossessive(ComplementType.OWNER);
     maybeRemovePossessive(ComplementType.OBJECT_OWNER);
+    maybeRemovePossessive(ComplementType.OBJECT2_OWNER);
 
     return result;
   }
@@ -1285,27 +1272,6 @@ class Storyline {
       result = result.replaceAll(x.pronounPossessive, object.pronoun.genitive);
       result = result.replaceAll(
           x.adjectiveOnePossessive, "the ${object.adjective} one's");
-
-      if (object.firstOwnerId == null) {
-        // If firstOwnerId is null, then `result` shouldn't contain any
-        // of these.
-        assert(!result.contains(x.ownerPronounsNoun));
-        assert(!result.contains(x.ownerPronounsNounPossessive));
-        assert(!result.contains(x.ownerNamesNoun));
-        assert(!result.contains(x.ownerNamesNounPossessive));
-      } else {
-        final owner = getEntityFromId(object.firstOwnerId);
-        final the_ = owner.nameIsProperNoun ? '' : 'the ';
-
-        result = result.replaceAll(
-            x.ownerPronounsNoun, "${owner.pronoun.genitive} ${object.name}");
-        result = result.replaceAll(x.ownerPronounsNounPossessive,
-            "${owner.pronoun.genitive}'s ${object.name}'s");
-        result = result.replaceAll(
-            x.ownerNamesNoun, "$the_${owner.name}'s ${object.name}");
-        result = result.replaceAll(x.ownerNamesNounPossessive,
-            "$the_${owner.name}'s ${object.name}'s");
-      }
     }
 
     substituteForType(ComplementType.SUBJECT);
@@ -1313,6 +1279,7 @@ class Storyline {
     substituteForType(ComplementType.OBJECT2);
     substituteForType(ComplementType.OWNER);
     substituteForType(ComplementType.OBJECT_OWNER);
+    substituteForType(ComplementType.OBJECT2_OWNER);
 
     // Second pass after [substituteObject], now with possessives.
     // We need to do this in two parts because otherwise the
@@ -1337,6 +1304,7 @@ class Storyline {
     substituteObjectPossessive(ComplementType.OBJECT2);
     substituteObjectPossessive(ComplementType.OWNER);
     substituteObjectPossessive(ComplementType.OBJECT_OWNER);
+    substituteObjectPossessive(ComplementType.OBJECT2_OWNER);
 
     if (subject != null) {
       result = result.replaceAll(
@@ -1346,81 +1314,34 @@ class Storyline {
     return result;
   }
 
-  /// When something is [IdentifierLevel.ownerNamesNoun] or
-  /// [IdentifierLevel.ownerPronounsNoun], we don't need `<owner's>`
-  /// or `<objectOwner's>` before it anymore, since it will be extracted to
-  /// that.
-  String _removeOwnerStopwords(String string, Report report) {
+  /// When something is [IdentifierLevel.ownerNoun], we should add
+  /// the `"<*wner>` stopword before it (unless it's already there).
+  String _addOwnerStopwords(String string, ShadowReport report) {
     String result = string;
 
-    final ownerPossessives = [
-      ComplementType.OWNER.genericPossessive,
-      ComplementType.OBJECT_OWNER.genericPossessive,
-    ];
-
-    void maybeRemoveOwnerPossessiveBefore(ComplementType complement) {
+    void maybeAddOwnerPossessiveBefore(
+        ComplementType complement, ComplementType ownerComplement) {
       final entity = report.getEntityByType(complement);
       if (entity == null) return;
 
-      for (final possessive in ownerPossessives) {
-        result = result.replaceAll(
-            "$possessive ${complement.generic}", complement.generic);
-      }
+      if (report.qualifications.getByType(complement) !=
+          IdentifierLevel.ownerNoun) return;
+
+      result = result.replaceAll(complement.generic,
+          "${ownerComplement.genericPossessive} ${complement.generic}");
+
+      // Clear duplicates.
+      result = result.replaceAll(
+          "${ownerComplement.genericPossessive} "
+          "${ownerComplement.genericPossessive}",
+          ownerComplement.genericPossessive);
     }
 
-    maybeRemoveOwnerPossessiveBefore(ComplementType.SUBJECT);
-    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT);
-    maybeRemoveOwnerPossessiveBefore(ComplementType.OBJECT2);
-
-    return result;
-  }
-
-  /// When an entity's owner is already mentioned in the [report], we
-  /// extract it as a stopword. For example, if [Report.object] has
-  /// an [Entity.firstOwnerId] of the [Report.subject], then we'll modify
-  /// `<object>` to `<subject's> <object>`.
-  ///
-  /// This plays better with later methods, such as [_concretizeStopwords].
-  ///
-  /// TODO: Instead of doing this hack, add owners of entities into the report
-  ///       as full-fledged entities.
-  String _extractMentionedOwnerStopwords(
-    String string,
-    Report report,
-    ReportIdentifiers qualifications, {
-    @required Entity Function(int) getEntityFromId,
-  }) {
-    String result = string;
-
-    const identifierLevelsWithOwners = [
-      IdentifierLevel.ownerNamesNoun,
-      IdentifierLevel.ownerPronounsNoun
-    ];
-
-    void maybeAddStopwordBefore(ComplementType complement) {
-      final entity = report.getEntityByType(complement);
-      if (entity == null) return;
-
-      final identifierLevel = qualifications.getByType(complement);
-      if (!identifierLevelsWithOwners.contains(identifierLevel)) return;
-
-      assert(entity.firstOwnerId != null);
-
-      final owner = getEntityFromId(entity.firstOwnerId);
-
-      qualifications.forEachEntityIn(report,
-          (otherComplement, otherEntity, otherSet) {
-        if (owner.id == otherEntity.id) {
-          result = result.replaceAll(complement.generic,
-              '${otherComplement.genericPossessive} ${complement.generic}');
-          qualifications.patchByType(complement, IdentifierLevel.noun);
-        }
-      });
-    }
-
-    maybeAddStopwordBefore(ComplementType.SUBJECT);
-    maybeAddStopwordBefore(ComplementType.OBJECT);
-    maybeAddStopwordBefore(ComplementType.OBJECT2);
+    maybeAddOwnerPossessiveBefore(ComplementType.SUBJECT, ComplementType.OWNER);
+    maybeAddOwnerPossessiveBefore(
+        ComplementType.OBJECT, ComplementType.OBJECT_OWNER);
+    maybeAddOwnerPossessiveBefore(
+        ComplementType.OBJECT2, ComplementType.OBJECT2_OWNER);
 
     return result;
   }
@@ -1493,6 +1414,67 @@ class Storyline {
     for (final key in following.keys) {
       result = result.replaceAll(key, following[key]);
     }
+    return result;
+  }
+
+  /// Detects if two or more of the [report]'s entities are the same thing,
+  /// and replaces the stopwords.
+  ///
+  /// For example, a report like "<subject> draws <objectOwner's> <object>"
+  /// will be rewritten to "<subject> draws <subject's> <object>" if
+  /// the object's owner _is_ the subject.
+  String _consolidateStopwords(String string, ShadowReport report) {
+    var result = string;
+    void maybeReplace(ComplementType candidate, Entity candidateEntity,
+        ComplementType replacement, Entity replacementEntity) {
+      if (candidateEntity == null) return;
+      if (replacementEntity == null) return;
+      if (candidateEntity.id != replacementEntity.id) return;
+
+      result = result.replaceAll(candidate.generic, replacement.generic);
+      result = result.replaceAll(
+          candidate.genericPossessive, replacement.genericPossessive);
+    }
+
+    maybeReplace(ComplementType.OWNER, report.owner, ComplementType.OBJECT,
+        report.object);
+    maybeReplace(ComplementType.OWNER, report.owner, ComplementType.OBJECT2,
+        report.object2);
+    maybeReplace(ComplementType.OWNER, report.owner,
+        ComplementType.OBJECT_OWNER, report.objectOwner);
+    maybeReplace(ComplementType.OWNER, report.owner,
+        ComplementType.OBJECT2_OWNER, report.object2Owner);
+
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.SUBJECT, report.subject);
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.OBJECT2, report.object2);
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.OWNER, report.owner);
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.OBJECT2_OWNER, report.object2Owner);
+
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.SUBJECT, report.subject);
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.OBJECT, report.object);
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.OWNER, report.owner);
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.OBJECT_OWNER, report.objectOwner);
+
+    // We're not replacing OWNER with SUBJECT or OBJECT_OWNER with OBJECT,
+    // because that would lead to "<subject's> <subject>".
+    if (report.subject != null && report.owner != null) {
+      assert(report.subject.id != report.owner.id);
+    }
+    if (report.object != null && report.objectOwner != null) {
+      assert(report.object.id != report.objectOwner.id);
+    }
+    if (report.object2 != null && report.object2Owner != null) {
+      assert(report.object2.id != report.object2Owner.id);
+    }
+
     return result;
   }
 }
