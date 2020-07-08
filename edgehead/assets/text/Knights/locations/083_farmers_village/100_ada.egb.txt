@@ -13,7 +13,7 @@ _"[Aren]."_
 
 // ---
 ACTION: $talk_to_ada_doghead_figure
-COMMAND: Old woman >> Talk >> "What's that dog-headed figure?"
+COMMAND: Ada >> Talk >> "What's that dog-headed figure?"
 FOR_LOCATION: $farmers_village
 
 PREREQUISITES:
@@ -58,7 +58,7 @@ Ada nods.
 
 // ---
 ACTION: $talk_to_ada_big_o
-COMMAND: Old woman >> Talk >> "Do you know anything about Big O?"
+COMMAND: Ada >> Talk >> "Do you know anything about Big O?"
 FOR_LOCATION: $farmers_village
 
 PREREQUISITES:
@@ -88,7 +88,7 @@ c.learn(BigOFacts.unseen);
 
 // ---
 ACTION: $talk_to_ada_quake_1
-COMMAND: Old woman >> Talk >> "Was that an earthquake?"
+COMMAND: Ada >> Talk >> "Was that an earthquake?"
 FOR_LOCATION: $farmers_village
 
 PREREQUISITES:
@@ -120,7 +120,7 @@ c.learn(OracleFacts.someoneCalledOracle);
 
 // ---
 ACTION: $talk_to_ada_about_oracle
-COMMAND: Old woman >> Talk >> "Who's Oracle?"
+COMMAND: Ada >> Talk >> "Who's Oracle?"
 FOR_LOCATION: $farmers_village
 
 PREREQUISITES:
@@ -145,7 +145,7 @@ c.learn(OracleFacts.location);
 
 // ---
 ACTION: $talk_to_ada_about_delving
-COMMAND: Old woman >> Talk >> "Any advice for someone delving in the Pyramid?"
+COMMAND: Ada >> Talk >> "Any advice for someone delving in the Pyramid?"
 FOR_LOCATION: $farmers_village
 
 PREREQUISITES:
@@ -182,3 +182,17 @@ c.learn(KnightsFacts.knightsAreLeaving);
 c.learn(DragonEggFacts.anAncientWeapon);
 c.learn(DelvingFacts.knowledge);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_ada_about_dragon_egg
+COMMAND: Ada >> Talk >> "What do you know about the Dragon Egg?"
+FOR_LOCATION: $farmers_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_ada_greetings")
+&&
+c.knows(DragonEggFacts.anAncientWeapon)
+
+INK:
+"Oh, you should not ask an old woman about such things. I know it's a weapon. I know it's powerful. People have claimed it's somewhere in the Pyramid. But where? And what it is, exactly? I don't know."

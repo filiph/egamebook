@@ -215,6 +215,43 @@ c.learn(DeathlessFacts.location);
 "The Deathless are not dangerous. I think they want to live forever but... who doesn't."
 
 
+// ---
+ACTION: $talk_to_oracle_dragon_egg
+COMMAND: Oracle >> Talk >> "What can you tell me about the Dragon Egg?"
+FOR_LOCATION: $oracle_main
+
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+&&
+c.knows(DragonEggFacts.anAncientWeapon)
+&&
+!c.knows(DragonEggFacts.deathlessHaveIt)
+
+INK:
+"What can I tell you about the Dragon Egg! Ha! A small, powerful thing. An end to any dispute. Shame it's in the wrong hands."
+
+* "Whose hands?"
+
+  "The Deathless! They have had it for generations. It's ancient, after all. But in a remarkably good shape, I'll tell you. Something about this place just makes ancient things last."
+
+-
+
+[[CODE]]
+c.learn(DragonEggFacts.deathlessHaveIt);
+[[ENDCODE]]
+
+* "Why are Deathless the 'wrong hands' for it?"
+
+  "They won't use it. It's a relic for them."
+
+* "How can I get it?"
+
+  "Ha! You can't, [young sir]. The Deathless have been using it as a holy symbol for generations. They won't just give it away."
+
+
 // TODO: ask about BigO
 
 NOTES:

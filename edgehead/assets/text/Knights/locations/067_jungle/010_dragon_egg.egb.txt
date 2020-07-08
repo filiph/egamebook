@@ -17,6 +17,7 @@ I receive the dragon egg. The Deathless explain to me its operation.
 
 [[CODE]]
 c.giveNewItemToPlayer(dragonEgg);
+c.markHappened(evReceivedDragonEgg);
 [[ENDCODE]]
 
 DESCRIPTION: $NONE

@@ -279,3 +279,21 @@ INK:
   "And remember, you can always just turn around and run from here."
 
 -
+
+
+
+// ---
+ACTION: $bleeds_blind_guide_dragon_egg
+COMMAND: Jisad >> Talk >> “What do you know about the Dragon Egg?”
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+&&
+c.knows(DragonEggFacts.anAncientWeapon)
+
+INK:
+"It's supposed to be a powerful weapon. Not sure where it is, but I don't think anyone has it, or we'd know about it, I'm sure. Maybe it's lost somewhere. I kind of hope it is."
+
+// Optional: explore why he doesn't want it to be found.
+

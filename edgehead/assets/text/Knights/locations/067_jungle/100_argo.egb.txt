@@ -2,7 +2,7 @@
 
 // ---
 ACTION: $argo_greet
-COMMAND: Child >> “Greetings!”
+COMMAND: Child >> Talk >> “Greetings!”
 FOR_LOCATION: $deathless_village
 
 INK:
@@ -31,7 +31,7 @@ INK:
 
 // ---
 ACTION: $argo_ask_deathless
-COMMAND: Argo >> “Who are the Deathless?”
+COMMAND: Argo >> Talk >> “Who are the Deathless?”
 FOR_LOCATION: $deathless_village
 
 PREREQUISITES:
@@ -49,7 +49,7 @@ c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
 
 // ---
 ACTION: $argo_ask_quake_1
-COMMAND: Argo >> “Was that an earthquake?”
+COMMAND: Argo >> Talk >> “Was that an earthquake?”
 FOR_LOCATION: $deathless_village
 
 PREREQUISITES:
@@ -77,3 +77,19 @@ INK:
 [[CODE]]
 c.learn(ConetFacts.quakesOften);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $argo_ask_dragon_egg
+COMMAND: Argo >> Talk >> “You have the Dragon Egg?”
+FOR_LOCATION: $deathless_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("argo_greet")
+&&
+c.knows(DragonEggFacts.deathlessHaveIt)
+&&
+!c.hasHappened(evReceivedDragonEgg)
+
+INK:
+The child named Argo tries to conceal her pride. She says: "We do have the holy artifact you speak of. The Dragon Egg. We know many want it, for unholy reasons, so we keep it hidden."
