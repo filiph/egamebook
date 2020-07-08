@@ -110,3 +110,23 @@ He pounds his chest. "We are not meant to be slaughtered like pigs."
 c.learn(BigOFacts.isWizard);
 c.learn(OrcsFacts.inPyramid);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_horseman_white_quake_1
+COMMAND: Horseman White >> Talk >> "Was than an earthquake?"
+FOR_LOCATION: $staging_area
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_horseman_white_greetings")
+&&
+c.knows(ConetFacts.quakeHappened)
+&&
+!c.knows(ConetFacts.quakesOften)
+
+INK:
+"I don't think so, kid. Where I come from, there are earthquakes. I remember a few. A few, you hear? Maybe ten, in my whole life. Not an earthquake a day, sometimes more, like here."
+
+[[CODE]]
+c.learn(ConetFacts.quakesOften);
+[[ENDCODE]]

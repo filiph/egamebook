@@ -2478,6 +2478,68 @@ final argoAskDeathlessInk = InkAst([
     c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
   }),
 ]);
+final argoAskQuake1Ink = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"The Deathless are not afraid of quaking earth. The ancients weren\'t, either. They built this holy place here for a reason."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "None of your tribe is worried?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"It would be false to claim that. The quakes are getting frequent in the recent months.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "I've seen some real damage here." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"True. It is an incredible force. And it is coming on an almost daily basis these past few months. I have become accustomed to it.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Some of the older members remember quieter times. Of course, we are only people. We are afraid when bigger things happen to us. But we can trust the wisdom of the ancients."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(ConetFacts.quakesOften);
+  }),
+]);
 final argoGreetInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -2590,6 +2652,73 @@ class ArgoAskDeathless extends RoamingAction {
       "argo_ask_deathless_ink",
     ));
     return '${a.name} successfully performs ArgoAskDeathless';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ArgoAskQuake1 extends RoamingAction {
+  @override
+  final String name = 'argo_ask_quake_1';
+
+  static final ArgoAskQuake1 singleton = ArgoAskQuake1();
+
+  @override
+  List<String> get commandPathTemplate => ['Argo', '“Was that an earthquake?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('deathless_village') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("argo_greet") &&
+        c.knows(ConetFacts.quakeHappened) &&
+        !c.knows(ConetFacts.quakesOften))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "argo_ask_quake_1_ink",
+    ));
+    return '${a.name} successfully performs ArgoAskQuake1';
   }
 
   @override
@@ -3731,6 +3860,26 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
     ),
   ]),
 ]);
+final talkToHorsemanWhiteQuake1Ink = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"I don\'t think so, kid. Where I come from, there are earthquakes. I remember a few. A few, you hear? Maybe ten, in my whole life. Not an earthquake a day, sometimes more, like here."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(ConetFacts.quakesOften);
+  }),
+]);
 final talkToHorsemanWhiteRetreatInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -3862,6 +4011,75 @@ class TalkToHorsemanWhiteGreetings extends RoamingAction {
       "talk_to_horseman_white_greetings_ink",
     ));
     return '${a.name} successfully performs TalkToHorsemanWhiteGreetings';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToHorsemanWhiteQuake1 extends RoamingAction {
+  @override
+  final String name = 'talk_to_horseman_white_quake_1';
+
+  static final TalkToHorsemanWhiteQuake1 singleton =
+      TalkToHorsemanWhiteQuake1();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Horseman White', 'Talk', '"Was than an earthquake?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('staging_area') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_horseman_white_greetings") &&
+        c.knows(ConetFacts.quakeHappened) &&
+        !c.knows(ConetFacts.quakesOften))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_horseman_white_quake_1_ink",
+    ));
+    return '${a.name} successfully performs TalkToHorsemanWhiteQuake1';
   }
 
   @override
@@ -4103,6 +4321,36 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
         'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
     firstHint:
         'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
+final talkToAdaAboutOracleInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"She\'s the wisest person I know. Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor." Ada chuckles. "As high as possible without being quartered by the orcs. She likes the view."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(OracleFacts.location);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"She never had a kid. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."\n',
+        isRaw: true);
+  }),
+]);
 final talkToAdaBigOInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -4140,7 +4388,7 @@ final talkToAdaBigOInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '" He\'s up there, at the very top. He never goes down, never shows. He\'s been locked up there for decades now, and nobody knows\n',
+              '"He\'s up there, at the very top. He never goes down, never shows. He\'s been locked up there for decades now, and nobody knows\n',
               isRaw: true);
         }),
       ],
@@ -4218,7 +4466,14 @@ final talkToAdaDogheadFigureInk = InkAst([
         'All I know is that this has been said for generations. My mother taught me about Doghead"\n',
         isRaw: true);
   }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DogheadFacts.dogheadMyth);
+  }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -4240,8 +4495,17 @@ final talkToAdaDogheadFigureInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '"The Knights are leaving. The demon at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."\n',
+              '"The Knights are leaving. Big O at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."\n',
               isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(BigOFacts.someoneCalledBigO);
+          c.learn(ConetFacts.quakesOften);
         }),
       ],
     ),
@@ -4259,14 +4523,6 @@ final talkToAdaDogheadFigureInk = InkAst([
       ],
     ),
   ]),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    c.learn(DogheadFacts.dogheadMyth);
-  }),
 ]);
 final talkToAdaGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -4297,6 +4553,138 @@ final talkToAdaGreetingsInk = InkAst([
     s.add('"Good to meet you, [Aren]. My name is Ada."\n', isRaw: true);
   }),
 ]);
+final talkToAdaQuake1Ink = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Don\'t you worry, young sir, this is quite normal here. These past months there is seldom a single day when we don\'t have a quake."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(ConetFacts.quakesOften);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Aren't you worried?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She shrugs. "This one was stronger than most, but people will repair the damage."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Earthquake every day?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final ifBlock_23e6b75e = !c.hasHappened(evOrcOffensive)
+              ? '''She's very knowledgeable, Oracle. She knows a lot about this place. She reads books, you know.'''
+              : '''She was very knowledgeable, you know.''';
+          s.add(
+              '"I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. $ifBlock_23e6b75e"\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(OracleFacts.someoneCalledOracle);
+        }),
+      ],
+    ),
+  ]),
+]);
+
+class TalkToAdaAboutOracle extends RoamingAction {
+  @override
+  final String name = 'talk_to_ada_about_oracle';
+
+  static final TalkToAdaAboutOracle singleton = TalkToAdaAboutOracle();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Old woman', 'Talk', '"Who\'s Oracle?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('farmers_village') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_ada_greetings") &&
+        !c.hasHappened(evOrcOffensive) &&
+        c.knows(OracleFacts.someoneCalledOracle) &&
+        !c.knows(OracleFacts.personally))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_ada_about_oracle_ink",
+    ));
+    return '${a.name} successfully performs TalkToAdaAboutOracle';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
 
 class TalkToAdaBigO extends RoamingAction {
   @override
@@ -4460,6 +4848,74 @@ class TalkToAdaGreetings extends RoamingAction {
       "talk_to_ada_greetings_ink",
     ));
     return '${a.name} successfully performs TalkToAdaGreetings';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToAdaQuake1 extends RoamingAction {
+  @override
+  final String name = 'talk_to_ada_quake_1';
+
+  static final TalkToAdaQuake1 singleton = TalkToAdaQuake1();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Old woman', 'Talk', '"Was that an earthquake?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('farmers_village') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_ada_greetings") &&
+        c.knows(ConetFacts.quakeHappened) &&
+        !c.knows(ConetFacts.quakesOften))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_ada_quake_1_ink",
+    ));
+    return '${a.name} successfully performs TalkToAdaQuake1';
   }
 
   @override
@@ -6483,6 +6939,348 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
     hint: 'This is a small village close the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
+final Approach bleedsTraderHutFromBleedsMain =
+    Approach('bleeds_main', 'bleeds_trader_hut', '', null,
+        isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return c.knows(kbTrader);
+});
+
+class BleedsTraderGoblinSmoke extends RoamingAction {
+  @override
+  final String name = 'bleeds_trader_goblin_smoke';
+
+  static final BleedsTraderGoblinSmoke singleton = BleedsTraderGoblinSmoke();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Leroy', '“Can you tell me more about that goblin camp?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
+      return false;
+    }
+    if (!(c.knows(kbLeroy) &&
+        c.knows(kbLeroyKnowsGoblinSmoke) &&
+        !c.hasHappened(evGoblinCampCleared) &&
+        c.inRoomWith(leroyId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    assert(c.inRoomWith(leroyId));
+
+    s.add(
+        '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
+        isRaw: true);
+    c.learn(KnightsFacts.knightsAreLeaving);
+
+    s.add(
+        '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! Sir, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
+        isRaw: true);
+    w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
+
+    s.add(
+        '\n"The hell you can! You\'re a trader, Leroy! You\'re no fighter." Leroy\'s father is shaking. When he remembers that I\'m there with them, he apologizes, then turns back to Leroy. "Son, I forget that you are a grown man now. But... it is my wish that you don\'t go."\n',
+        isRaw: true);
+    return '${a.name} successfully performs BleedsTraderGoblinSmoke';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsTraderGoblins extends RoamingAction {
+  @override
+  final String name = 'bleeds_trader_goblins';
+
+  static final BleedsTraderGoblins singleton = BleedsTraderGoblins();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Trader', '“What\'s with all the goblins around here?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("bleeds_trader_greet") &&
+        c.inRoomWith(leroyId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they\'re the worst. I fear we won\'t get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."\n\n',
+        isRaw: true);
+    assert(c.inRoomWith(leroyId));
+
+    s.add(
+        '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
+        isRaw: true);
+    c.learn(kbLeroyKnowsGoblinSmoke);
+
+    return '${a.name} successfully performs BleedsTraderGoblins';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsTraderGreet extends RoamingAction {
+  @override
+  final String name = 'bleeds_trader_greet';
+
+  static final BleedsTraderGreet singleton = BleedsTraderGreet();
+
+  @override
+  List<String> get commandPathTemplate => ['Trader', '“How is business?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(leroyId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
+        isRaw: true);
+    c.learn(kbLeroy);
+
+    return '${a.name} successfully performs BleedsTraderGreet';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsTraderTellAboutClearedCamp extends RoamingAction {
+  @override
+  final String name = 'bleeds_trader_tell_about_cleared_camp';
+
+  static final BleedsTraderTellAboutClearedCamp singleton =
+      BleedsTraderTellAboutClearedCamp();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Trader', '“No need to worry about that camp anymore.”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_trader_hut') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("bleeds_trader_greet") &&
+        c.hasHappened(evGoblinCampCleared))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('“What happened?”\n\nI describe the battle to him.\n', isRaw: true);
+    return '${a.name} successfully performs BleedsTraderTellAboutClearedCamp';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      '$weSubstitutionCapitalized enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
+      isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+  s.add(
+      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n\n',
+      isRaw: true);
+  if (c.inRoomWith(leroyId) &&
+      w.getActorById(leroyId).anatomy.isUndead &&
+      !c.hasHappened(evJisadSeesUndeadLeroy)) {
+    s.add(
+        'He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Sir," he says, his eyes wet, "please have mercy on the soul of this young boy. Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.',
+        wholeSentence: true);
+    w.recordCustom(evJisadSeesUndeadLeroy);
+  }
+}, null, null,
+    isIdle: true,
+    positionX: 36,
+    positionY: 97,
+    mapName: 'Trader\'s Shop',
+    firstMapName: 'A building that says "Trader"',
+    hint:
+        'The shop of Joseph and his son, Leroy. Sells basic items for the inhabitants of The Bleeds, and the Farmers of the Pyramid.',
+    firstHint:
+        'A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.');
+final Approach endOfRoamFromBleedsMain =
+    Approach('bleeds_main', '__END_OF_ROAM__', 'go >> back home (ENDS GAME)',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('You realize this adventuring life is not for you.\n', isRaw: true);
+});
 final bleedsBlindGuideBigOInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -6850,6 +7648,56 @@ final bleedsBlindGuideOrcsInk = InkAst([
     c.learn(OrcsFacts.leadByBigO);
     c.learn(BigOFacts.someoneCalledBigO);
   }),
+]);
+final bleedsBlindGuideQuake1Ink = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Yes, young sir. We have these quite often, at least one a day. They don\'t seem to be too serious, thank the Eight Gods."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(ConetFacts.quakesOften);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Why are they happening?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Why does anything happen? Why is the wind blowing, ruffling our hair? Why is the sea, that nasty bitch, full of salt and hatred? Why are birds singing, instead of just yelling like the other animals?" He shrugs. "These are questions for the gods, not for a blind man."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Thank the Eight Gods." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Jisad nods.\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
 ]);
 final bleedsBlindGuideWhatsWrongInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -7252,6 +8100,73 @@ class BleedsBlindGuideOrcs extends RoamingAction {
   bool get isAggressive => false;
 }
 
+class BleedsBlindGuideQuake1 extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_quake_1';
+
+  static final BleedsBlindGuideQuake1 singleton = BleedsBlindGuideQuake1();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Jisad', 'Talk', '“Was that an earthquake?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(c.knows(ConetFacts.quakeHappened) &&
+        !c.knows(ConetFacts.quakesOften))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "bleeds_blind_guide_quake_1_ink",
+    ));
+    return '${a.name} successfully performs BleedsBlindGuideQuake1';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class BleedsBlindGuideWhatsWrong extends RoamingAction {
   @override
   final String name = 'bleeds_blind_guide_whats_wrong';
@@ -7319,348 +8234,6 @@ class BleedsBlindGuideWhatsWrong extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Approach bleedsTraderHutFromBleedsMain =
-    Approach('bleeds_main', 'bleeds_trader_hut', '', null,
-        isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return c.knows(kbTrader);
-});
-
-class BleedsTraderGoblinSmoke extends RoamingAction {
-  @override
-  final String name = 'bleeds_trader_goblin_smoke';
-
-  static final BleedsTraderGoblinSmoke singleton = BleedsTraderGoblinSmoke();
-
-  @override
-  List<String> get commandPathTemplate =>
-      ['Leroy', '“Can you tell me more about that goblin camp?”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('bleeds_trader_hut') != true) {
-      return false;
-    }
-    if (!(c.knows(kbLeroy) &&
-        c.knows(kbLeroyKnowsGoblinSmoke) &&
-        !c.hasHappened(evGoblinCampCleared) &&
-        c.inRoomWith(leroyId))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    assert(c.inRoomWith(leroyId));
-
-    s.add(
-        '\n"They are to the west. It doesn\'t seem like there is a lot of them. We thought the Knights would get rid of them for sure."\n\n"But the Knights are leaving." The trader looks at me for reaction and when he doesn\'t get any, he turns back to his son. "The Knights are leaving," he repeats.\n\n',
-        isRaw: true);
-    c.learn(KnightsFacts.knightsAreLeaving);
-
-    s.add(
-        '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! Sir, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
-        isRaw: true);
-    w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
-
-    s.add(
-        '\n"The hell you can! You\'re a trader, Leroy! You\'re no fighter." Leroy\'s father is shaking. When he remembers that I\'m there with them, he apologizes, then turns back to Leroy. "Son, I forget that you are a grown man now. But... it is my wish that you don\'t go."\n',
-        isRaw: true);
-    return '${a.name} successfully performs BleedsTraderGoblinSmoke';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class BleedsTraderGoblins extends RoamingAction {
-  @override
-  final String name = 'bleeds_trader_goblins';
-
-  static final BleedsTraderGoblins singleton = BleedsTraderGoblins();
-
-  @override
-  List<String> get commandPathTemplate =>
-      ['Trader', '“What\'s with all the goblins around here?”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('bleeds_trader_hut') != true) {
-      return false;
-    }
-    if (!(w.actionHasBeenPerformed("bleeds_trader_greet") &&
-        c.inRoomWith(leroyId))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'The trader bangs on the wooden counter, immediately angry. "Goblins! The suckers are getting cockier and cockier. Among all the problems we have, they\'re the worst. I fear we won\'t get a caravan anytime soon because of them. No caravan means no goods. No goods mean no trade."\n\n',
-        isRaw: true);
-    assert(c.inRoomWith(leroyId));
-
-    s.add(
-        '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
-        isRaw: true);
-    c.learn(kbLeroyKnowsGoblinSmoke);
-
-    return '${a.name} successfully performs BleedsTraderGoblins';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class BleedsTraderGreet extends RoamingAction {
-  @override
-  final String name = 'bleeds_trader_greet';
-
-  static final BleedsTraderGreet singleton = BleedsTraderGreet();
-
-  @override
-  List<String> get commandPathTemplate => ['Trader', '“How is business?”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('bleeds_trader_hut') != true) {
-      return false;
-    }
-    if (!(c.inRoomWith(leroyId))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
-        isRaw: true);
-    c.learn(kbLeroy);
-
-    return '${a.name} successfully performs BleedsTraderGreet';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-class BleedsTraderTellAboutClearedCamp extends RoamingAction {
-  @override
-  final String name = 'bleeds_trader_tell_about_cleared_camp';
-
-  static final BleedsTraderTellAboutClearedCamp singleton =
-      BleedsTraderTellAboutClearedCamp();
-
-  @override
-  List<String> get commandPathTemplate =>
-      ['Trader', '“No need to worry about that camp anymore.”'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('bleeds_trader_hut') != true) {
-      return false;
-    }
-    if (!(w.actionHasBeenPerformed("bleeds_trader_greet") &&
-        c.hasHappened(evGoblinCampCleared))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('“What happened?”\n\nI describe the battle to him.\n', isRaw: true);
-    return '${a.name} successfully performs BleedsTraderTellAboutClearedCamp';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
-  }
-
-  @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
-  }
-
-  @override
-  Resource get rerollResource => null;
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      '$weSubstitutionCapitalized enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
-  s.add(
-      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n\n',
-      isRaw: true);
-  if (c.inRoomWith(leroyId) &&
-      w.getActorById(leroyId).anatomy.isUndead &&
-      !c.hasHappened(evJisadSeesUndeadLeroy)) {
-    s.add(
-        'He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Sir," he says, his eyes wet, "please have mercy on the soul of this young boy. Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.',
-        wholeSentence: true);
-    w.recordCustom(evJisadSeesUndeadLeroy);
-  }
-}, null, null,
-    isIdle: true,
-    positionX: 36,
-    positionY: 97,
-    mapName: 'Trader\'s Shop',
-    firstMapName: 'A building that says "Trader"',
-    hint:
-        'The shop of Joseph and his son, Leroy. Sells basic items for the inhabitants of The Bleeds, and the Farmers of the Pyramid.',
-    firstHint:
-        'A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.');
-final Approach endOfRoamFromBleedsMain =
-    Approach('bleeds_main', '__END_OF_ROAM__', 'go >> back home (ENDS GAME)',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You realize this adventuring life is not for you.\n', isRaw: true);
-});
 final sarnSlapInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -9708,16 +10281,20 @@ final allActions = <RoamingAction>[
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
   ArgoAskDeathless.singleton,
+  ArgoAskQuake1.singleton,
   ArgoGreet.singleton,
   TalkToMiguelAboutDeserting.singleton,
   TalkToMiguelAfterCaravanDeparted.singleton,
   TalkToGreenWomanAboutSlopesDeath.singleton,
   TalkToHorsemanWhiteDoghead.singleton,
   TalkToHorsemanWhiteGreetings.singleton,
+  TalkToHorsemanWhiteQuake1.singleton,
   TalkToHorsemanWhiteRetreat.singleton,
+  TalkToAdaAboutOracle.singleton,
   TalkToAdaBigO.singleton,
   TalkToAdaDogheadFigure.singleton,
   TalkToAdaGreetings.singleton,
+  TalkToAdaQuake1.singleton,
   TalkToAdaAfterQuake2.singleton,
   AttemptOpenGate.singleton,
   DestroyGateWithAxe.singleton,
@@ -9735,16 +10312,17 @@ final allActions = <RoamingAction>[
   TalkToKatAfterOrcOffensive.singleton,
   BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
+  BleedsTraderGoblinSmoke.singleton,
+  BleedsTraderGoblins.singleton,
+  BleedsTraderGreet.singleton,
+  BleedsTraderTellAboutClearedCamp.singleton,
   BleedsBlindGuideBigO.singleton,
   BleedsBlindGuideBrother.singleton,
   BleedsBlindGuideGoblins.singleton,
   BleedsBlindGuideGreet.singleton,
   BleedsBlindGuideOrcs.singleton,
+  BleedsBlindGuideQuake1.singleton,
   BleedsBlindGuideWhatsWrong.singleton,
-  BleedsTraderGoblinSmoke.singleton,
-  BleedsTraderGoblins.singleton,
-  BleedsTraderGreet.singleton,
-  BleedsTraderTellAboutClearedCamp.singleton,
   SarnExamineHisHammer.singleton,
   SarnReadLetter.singleton,
   SarnSlap.singleton,
@@ -9766,6 +10344,7 @@ final allInks = <String, InkAst>{
   'talk_to_oracle_greetings_ink': talkToOracleGreetingsInk,
   'talk_to_oracle_orcs_ink': talkToOracleOrcsInk,
   'argo_ask_deathless_ink': argoAskDeathlessInk,
+  'argo_ask_quake_1_ink': argoAskQuake1Ink,
   'argo_greet_ink': argoGreetInk,
   'talk_to_miguel_about_deserting_ink': talkToMiguelAboutDesertingInk,
   'talk_to_miguel_after_caravan_departed_ink':
@@ -9774,10 +10353,13 @@ final allInks = <String, InkAst>{
       talkToGreenWomanAboutSlopesDeathInk,
   'talk_to_horseman_white_doghead_ink': talkToHorsemanWhiteDogheadInk,
   'talk_to_horseman_white_greetings_ink': talkToHorsemanWhiteGreetingsInk,
+  'talk_to_horseman_white_quake_1_ink': talkToHorsemanWhiteQuake1Ink,
   'talk_to_horseman_white_retreat_ink': talkToHorsemanWhiteRetreatInk,
+  'talk_to_ada_about_oracle_ink': talkToAdaAboutOracleInk,
   'talk_to_ada_big_o_ink': talkToAdaBigOInk,
   'talk_to_ada_doghead_figure_ink': talkToAdaDogheadFigureInk,
   'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,
+  'talk_to_ada_quake_1_ink': talkToAdaQuake1Ink,
   'talk_to_ada_after_quake_2_ink': talkToAdaAfterQuake2Ink,
   'talk_to_kat_greetings_ink': talkToKatGreetingsInk,
   'talk_to_miguel_about_brother_ink': talkToMiguelAboutBrotherInk,
@@ -9788,6 +10370,7 @@ final allInks = <String, InkAst>{
   'bleeds_blind_guide_goblins_ink': bleedsBlindGuideGoblinsInk,
   'bleeds_blind_guide_greet_ink': bleedsBlindGuideGreetInk,
   'bleeds_blind_guide_orcs_ink': bleedsBlindGuideOrcsInk,
+  'bleeds_blind_guide_quake_1_ink': bleedsBlindGuideQuake1Ink,
   'bleeds_blind_guide_whats_wrong_ink': bleedsBlindGuideWhatsWrongInk,
   'sarn_slap_ink': sarnSlapInk,
   'start_ink_ink': startInkInk

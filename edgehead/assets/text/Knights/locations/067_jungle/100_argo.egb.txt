@@ -45,3 +45,35 @@ INK:
 c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
 c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $argo_ask_quake_1
+COMMAND: Argo >> “Was that an earthquake?”
+FOR_LOCATION: $deathless_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("argo_greet")
+&&
+c.knows(ConetFacts.quakeHappened)
+&&
+!c.knows(ConetFacts.quakesOften)
+
+INK:
+"The Deathless are not afraid of quaking earth. The ancients weren't, either. They built this holy place here for a reason."
+
+* "None of your tribe is worried?"
+
+"It would be false to claim that. The quakes are getting frequent in the recent months. <>
+
+* "I've seen some real damage here."
+
+"True. It is an incredible force. And it is coming on an almost daily basis these past few months. I have become accustomed to it. <>
+
+-
+
+<> Some of the older members remember quieter times. Of course, we are only people. We are afraid when bigger things happen to us. But we can trust the wisdom of the ancients."
+
+[[CODE]]
+c.learn(ConetFacts.quakesOften);
+[[ENDCODE]]

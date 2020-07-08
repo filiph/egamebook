@@ -1,3 +1,7 @@
+// Oracle notes:
+// 
+// - Super excited. Optimistic. Positive. Joie de vivre.
+
 // ---
 ACTION: $talk_to_oracle_greetings
 COMMAND: Woman >> Talk >> "Greetings."

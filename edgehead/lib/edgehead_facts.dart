@@ -16,6 +16,7 @@ Map<Type, List<String>> _chainEnums = {
   KeepGateFacts: KeepGateFacts.values.map((e) => e.toString()).toList(),
   KnightsFacts: KnightsFacts.values.map((e) => e.toString()).toList(),
   LadyHopeFacts: LadyHopeFacts.values.map((e) => e.toString()).toList(),
+  OracleFacts: OracleFacts.values.map((e) => e.toString()).toList(),
   OrcsFacts: OrcsFacts.values.map((e) => e.toString()).toList(),
   SarnFacts: SarnFacts.values.map((e) => e.toString()).toList(),
   SixtyFiversFacts: SixtyFiversFacts.values.map((e) => e.toString()).toList(),

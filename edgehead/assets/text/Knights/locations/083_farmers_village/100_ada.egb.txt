@@ -34,21 +34,26 @@ INK:
 
 <> All I know is that this has been said for generations. My mother taught me about Doghead"
 
+[[CODE]]
+c.learn(DogheadFacts.dogheadMyth);
+[[ENDCODE]]
+
 Ada looks around. "I think people need Doghead more today than ever before in my life."
 
 * "Why?"
 
-"The Knights are leaving. The demon at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."
+"The Knights are leaving. Big O at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."
+
+[[CODE]]
+c.learn(BigOFacts.someoneCalledBigO);
+c.learn(ConetFacts.quakesOften);
+[[ENDCODE]]
 
 * "I guess so."
 
 Ada nods.
 
 -
-
-[[CODE]]
-c.learn(DogheadFacts.dogheadMyth);
-[[ENDCODE]]
 
 
 // ---
@@ -70,7 +75,7 @@ INK:
 
 * "How come you never see him?"
 
-" He's up there, at the very top. He never goes down, never shows. He's been locked up there for decades now, and nobody knows <>
+"He's up there, at the very top. He never goes down, never shows. He's been locked up there for decades now, and nobody knows <>
 
 -
 
@@ -79,3 +84,60 @@ INK:
 [[CODE]]
 c.learn(BigOFacts.unseen);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_ada_quake_1
+COMMAND: Old woman >> Talk >> "Was that an earthquake?"
+FOR_LOCATION: $farmers_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_ada_greetings")
+&&
+c.knows(ConetFacts.quakeHappened)
+&&
+!c.knows(ConetFacts.quakesOften)
+
+INK:
+"Don't you worry, [young sir], this is quite normal here. These past months there is seldom a single day when we don't have a quake."
+
+[[CODE]]
+c.learn(ConetFacts.quakesOften);
+[[ENDCODE]]
+
+* "Aren't you worried?"
+
+She shrugs. "This one was stronger than most, but people will repair the damage."
+
+* "Earthquake every day?"
+
+"I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. [[IF !c.hasHappened(evOrcOffensive)]]She's very knowledgeable, Oracle. She knows a lot about this place. She reads books, you know.[[ELSE]]She was very knowledgeable, you know.[[ENDIF]]"
+
+[[CODE]]
+c.learn(OracleFacts.someoneCalledOracle);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_ada_about_oracle
+COMMAND: Old woman >> Talk >> "Who's Oracle?"
+FOR_LOCATION: $farmers_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_ada_greetings")
+&&
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+c.knows(OracleFacts.someoneCalledOracle)
+&&
+!c.knows(OracleFacts.personally)
+
+INK:
+"She's the wisest person I know. Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor." Ada chuckles. "As high as possible without being quartered by the orcs. She likes the view."
+
+[[CODE]]
+c.learn(OracleFacts.location);
+[[ENDCODE]]
+
+"She never had a kid. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."

@@ -54,6 +54,7 @@ void _quake2Apply(ActionContext c) {
   });
 
   c.outputWorld.recordCustom(evQuake2);
+  c.learn(ConetFacts.quakesOften);
 }
 
 bool _quake2BaseRequirements(ApplicabilityContext c) =>

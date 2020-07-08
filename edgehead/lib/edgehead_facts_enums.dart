@@ -20,9 +20,7 @@ enum ConetFacts {
   quakeHappened,
   quakesOften,
   quakesFromTop,
-  conetExists,
   sawConet,
-  destroyedConet,
 }
 
 enum DeathlessFacts {
@@ -58,6 +56,12 @@ enum KnightsFacts {
 enum LadyHopeFacts {
   ladyInKeep,
   ladyHopeName,
+}
+
+enum OracleFacts {
+  someoneCalledOracle,
+  location,
+  personally,
 }
 
 enum OrcsFacts {

@@ -208,3 +208,29 @@ c.learn(OrcsFacts.leadByBigO);
 [[CODE]]
 c.learn(BigOFacts.unseen);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $bleeds_blind_guide_quake_1
+COMMAND: Jisad >> Talk >> “Was that an earthquake?”
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+c.knows(ConetFacts.quakeHappened)
+&&
+!c.knows(ConetFacts.quakesOften)
+
+INK:
+"Yes, [young sir]. We have these quite often, at least one a day. They don't seem to be too serious, thank the Eight Gods."
+
+[[CODE]]
+c.learn(ConetFacts.quakesOften);
+[[ENDCODE]]
+
+* "Why are they happening?"
+
+"Why does anything happen? Why is the wind blowing, ruffling our hair? Why is the sea, that nasty bitch, full of salt and hatred? Why are birds singing, instead of just yelling like the other animals?" He shrugs. "These are questions for the gods, not for a blind man."
+
+* "Thank the Eight Gods."
+
+Jisad nods.

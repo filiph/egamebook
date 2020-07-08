@@ -44,6 +44,7 @@ String escapeWritersText(String s, [List<IfBlock> ifBlocks = const []]) {
       // TODO: Actually change the substitutions according to player gender.
       .replaceAll(sirSubstitution, r'sir')
       .replaceAll(sirSubstitutionCapitalized, r'Sir')
+      // TODO: standing: child, young sir/lady, sir/lady, sir/lady Aren
       .replaceAll(youngSirSubstitution, r'young sir')
       .replaceAll(youngSirSubstitutionCapitalized, r'Young sir')
       .replaceAll('\n', r'\n')

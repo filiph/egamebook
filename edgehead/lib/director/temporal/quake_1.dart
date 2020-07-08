@@ -26,4 +26,5 @@ void _quake1Apply(ActionContext c) {
   s.addParagraph();
   s.add('Suddenly, a quake. TODO: describe', isRaw: true);
   c.outputWorld.recordCustom(evQuake1);
+  c.learn(ConetFacts.quakeHappened);
 }
