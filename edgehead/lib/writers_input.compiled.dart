@@ -1640,6 +1640,54 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
       how: "{approvingly|with respect}");
 }, null, null,
     isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
+final talkToOracleDeathlessInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"They are a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(OrcsFacts.inPyramid);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"They used to inhabit a lot more of the Pyramid. These days, they live in a village in the part known as the Jungle. It\'s the big hole in the building on the west side, overgrown with vegetation."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DeathlessFacts.location);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"The Deathless are not dangerous. I think they want to live forever but... who doesn\'t."\n',
+        isRaw: true);
+  }),
+]);
 final talkToOracleDogheadInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -1743,6 +1791,14 @@ final talkToOracleGreetingsInk = InkAst([
         '"Greetings to you, too, young sir. I am Oracle. Bring me good information, and I will repay you with good information."\n',
         isRaw: true);
   }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(OracleFacts.personally);
+  }),
 ]);
 final talkToOracleOrcsInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -1763,6 +1819,7 @@ final talkToOracleOrcsInk = InkAst([
     final Storyline s = c.outputStoryline;
     c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
     c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
+    c.learn(DeathlessFacts.somethingCalledDeathless);
   }),
 ]);
 final talkToOracleQuake1Ink = InkAst([
@@ -1952,6 +2009,74 @@ class OracleGiveNorthSkull extends RoamingAction {
     c.removeItemFromPlayer(northSkullId);
 
     return '${a.name} successfully performs OracleGiveNorthSkull';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToOracleDeathless extends RoamingAction {
+  @override
+  final String name = 'talk_to_oracle_deathless';
+
+  static final TalkToOracleDeathless singleton = TalkToOracleDeathless();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Oracle', 'Talk', '"Who are the Deathless?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings") &&
+        c.knows(DeathlessFacts.somethingCalledDeathless))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_oracle_deathless_ink",
+    ));
+    return '${a.name} successfully performs TalkToOracleDeathless';
   }
 
   @override
@@ -2521,6 +2646,8 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
   s.add(
       'On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.\n\n',
       isRaw: true);
+  c.learn(DeathlessFacts.sawDeathless);
+
   c.describeWorthiness(
       who: cultists,
       what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
@@ -10507,6 +10634,7 @@ final allActions = <RoamingAction>[
   AskOracleAboutKeep.singleton,
   AskOracleAboutKeepGate.singleton,
   OracleGiveNorthSkull.singleton,
+  TalkToOracleDeathless.singleton,
   TalkToOracleDoghead.singleton,
   TalkToOracleEarthquakes.singleton,
   TalkToOracleGreetings.singleton,
@@ -10574,6 +10702,7 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
   'talk_to_oracle_earthquakes_ink': talkToOracleEarthquakesInk,
   'talk_to_oracle_greetings_ink': talkToOracleGreetingsInk,

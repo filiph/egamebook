@@ -11,6 +11,10 @@ FIRST_DESCRIPTION:
 On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.
 
 [[CODE]]
+c.learn(DeathlessFacts.sawDeathless);
+[[ENDCODE]]
+
+[[CODE]]
 c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId], especially: [lairOfGodStarId], how: "{approvingly|with respect}");
 [[ENDCODE]]
 

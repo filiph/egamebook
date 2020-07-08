@@ -25,6 +25,8 @@ enum ConetFacts {
 
 enum DeathlessFacts {
   somethingCalledDeathless,
+  location,
+  sawDeathless,
 }
 
 enum DogheadFacts {

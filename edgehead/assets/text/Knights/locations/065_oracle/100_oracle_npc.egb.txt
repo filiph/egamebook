@@ -13,6 +13,10 @@ PREREQUISITES:
 INK:
 "Greetings to you, too, [young sir]. I am Oracle. Bring me good information, and I will repay you with good information."
 
+[[CODE]]
+c.learn(OracleFacts.personally);
+[[ENDCODE]]
+
 
 // ---
 ACTION: $ask_oracle_about_keep
@@ -115,6 +119,7 @@ INK:
 [[CODE]]
 c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
 c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
+c.learn(DeathlessFacts.somethingCalledDeathless);
 [[ENDCODE]]
 
 
@@ -180,6 +185,34 @@ c.learn(BigOFacts.someoneCalledBigO);
 c.learn(ConetFacts.quakesFromTop);
 [[ENDCODE]]
 
+
+// ---
+ACTION: $talk_to_oracle_deathless
+COMMAND: Oracle >> Talk >> "Who are the Deathless?"
+FOR_LOCATION: $oracle_main
+
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+&&
+c.knows(DeathlessFacts.somethingCalledDeathless)
+
+INK:
+"They are a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
+
+[[CODE]]
+c.learn(OrcsFacts.inPyramid);
+[[ENDCODE]]
+
+"They used to inhabit a lot more of the Pyramid. These days, they live in a village in the part known as the Jungle. It's the big hole in the building on the west side, overgrown with vegetation."
+
+[[CODE]]
+c.learn(DeathlessFacts.location);
+[[ENDCODE]]
+
+"The Deathless are not dangerous. I think they want to live forever but... who doesn't."
 
 
 // TODO: ask about BigO
