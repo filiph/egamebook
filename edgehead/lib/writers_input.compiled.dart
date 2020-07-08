@@ -754,7 +754,8 @@ final Room conet = Room('conet', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Some kobolds operating a large "woodpecker".\n', isRaw: true);
+  s.add('Some kobolds operating a large "woodpecker".\n\n', isRaw: true);
+  c.learn(ConetFacts.sawConet);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1657,6 +1658,80 @@ final talkToOracleDogheadInk = InkAst([
     c.learn(DogheadFacts.dogheadMyth);
   }),
 ]);
+final talkToOracleEarthquakesInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"The quakes." She stomps her foot on the ground and grins. "The quakes are terrible. Terrible! Fascinating. I have a little theory."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "What theory?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"A theory is when you have an explanation for something but can\'t prove it yet."\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "I knew that." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"Did you, now." Oracle looks at you with piercing eyes. "I guess you did, young sir." She smiles.\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "Tell me your earthquake theory." """.trim(),
+            consequence: [],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Tell me." """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"I think that Big O is behind the quakes. I think they\'re not earthquakes, really. I think that they\'re coming from the top of the Pyramid, not the ground."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(BigOFacts.someoneCalledBigO);
+    c.learn(ConetFacts.quakesFromTop);
+  }),
+]);
 final talkToOracleGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -1688,6 +1763,24 @@ final talkToOracleOrcsInk = InkAst([
     final Storyline s = c.outputStoryline;
     c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
     c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
+  }),
+]);
+final talkToOracleQuake1Ink = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"Ah yes, these happen quite often."\n', isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(ConetFacts.quakesOften);
   }),
 ]);
 
@@ -1907,7 +2000,8 @@ class TalkToOracleDoghead extends RoamingAction {
     if (c.inRoomParent('oracle_main') != true) {
       return false;
     }
-    if (!(c.knows(DogheadFacts.somethingCalledDoghead) &&
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        c.knows(DogheadFacts.somethingCalledDoghead) &&
         w.actionHasBeenPerformed("talk_to_oracle_greetings"))) {
       return false;
     }
@@ -1926,6 +2020,74 @@ class TalkToOracleDoghead extends RoamingAction {
       "talk_to_oracle_doghead_ink",
     ));
     return '${a.name} successfully performs TalkToOracleDoghead';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToOracleEarthquakes extends RoamingAction {
+  @override
+  final String name = 'talk_to_oracle_earthquakes';
+
+  static final TalkToOracleEarthquakes singleton = TalkToOracleEarthquakes();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Oracle', 'Talk', '"What can you tell me about the earthquakes here?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        c.knows(ConetFacts.quakesOften) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_oracle_earthquakes_ink",
+    ));
+    return '${a.name} successfully performs TalkToOracleEarthquakes';
   }
 
   @override
@@ -2039,7 +2201,8 @@ class TalkToOracleOrcs extends RoamingAction {
     if (c.inRoomParent('oracle_main') != true) {
       return false;
     }
-    if (!(c.knows(OrcsFacts.inPyramid) &&
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        c.knows(OrcsFacts.inPyramid) &&
         w.actionHasBeenPerformed("talk_to_oracle_greetings"))) {
       return false;
     }
@@ -2058,6 +2221,75 @@ class TalkToOracleOrcs extends RoamingAction {
       "talk_to_oracle_orcs_ink",
     ));
     return '${a.name} successfully performs TalkToOracleOrcs';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToOracleQuake1 extends RoamingAction {
+  @override
+  final String name = 'talk_to_oracle_quake_1';
+
+  static final TalkToOracleQuake1 singleton = TalkToOracleQuake1();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Oracle', 'Talk', '"Was that an earthquake?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings") &&
+        c.knows(ConetFacts.quakeHappened) &&
+        !c.knows(ConetFacts.quakesOften))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_oracle_quake_1_ink",
+    ));
+    return '${a.name} successfully performs TalkToOracleQuake1';
   }
 
   @override
@@ -10276,8 +10508,10 @@ final allActions = <RoamingAction>[
   AskOracleAboutKeepGate.singleton,
   OracleGiveNorthSkull.singleton,
   TalkToOracleDoghead.singleton,
+  TalkToOracleEarthquakes.singleton,
   TalkToOracleGreetings.singleton,
   TalkToOracleOrcs.singleton,
+  TalkToOracleQuake1.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
   ArgoAskDeathless.singleton,
@@ -10341,8 +10575,10 @@ final allActions = <RoamingAction>[
 ];
 final allInks = <String, InkAst>{
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
+  'talk_to_oracle_earthquakes_ink': talkToOracleEarthquakesInk,
   'talk_to_oracle_greetings_ink': talkToOracleGreetingsInk,
   'talk_to_oracle_orcs_ink': talkToOracleOrcsInk,
+  'talk_to_oracle_quake_1_ink': talkToOracleQuake1Ink,
   'argo_ask_deathless_ink': argoAskDeathlessInk,
   'argo_ask_quake_1_ink': argoAskQuake1Ink,
   'argo_greet_ink': argoGreetInk,

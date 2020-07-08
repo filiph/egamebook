@@ -80,6 +80,9 @@ COMMAND: Oracle >> Talk >> "Tell me about Doghead."
 FOR_LOCATION: $oracle_main
 
 PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
 c.knows(DogheadFacts.somethingCalledDoghead)
 &&
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
@@ -98,6 +101,9 @@ COMMAND: Oracle >> Talk >> "Tell me about the orcs."
 FOR_LOCATION: $oracle_main
 
 PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
 c.knows(OrcsFacts.inPyramid)
 &&
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
@@ -112,6 +118,71 @@ c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
 [[ENDCODE]]
 
 
+// ---
+ACTION: $talk_to_oracle_quake_1
+COMMAND: Oracle >> Talk >> "Was that an earthquake?"
+FOR_LOCATION: $oracle_main
+
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+&&
+c.knows(ConetFacts.quakeHappened)
+&&
+!c.knows(ConetFacts.quakesOften)
+
+INK:
+"Ah yes, these happen quite often."
+
+[[CODE]]
+c.learn(ConetFacts.quakesOften);
+[[ENDCODE]]
+
+// Optional: go on a complete tangent here.
+
+
+// ---
+ACTION: $talk_to_oracle_earthquakes
+COMMAND: Oracle >> Talk >> "What can you tell me about the earthquakes here?"
+FOR_LOCATION: $oracle_main
+
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+c.knows(ConetFacts.quakesOften)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+
+INK:
+"The quakes." She stomps her foot on the ground and grins. "The quakes are terrible. Terrible! Fascinating. I have a little theory."
+
+* "What theory?"
+
+  "A theory is when you have an explanation for something but can't prove it yet."
+
+  * * "I knew that."
+
+    "Did you, now." Oracle looks at you with piercing eyes. "I guess you did, [young sir]." She smiles.
+
+  * * "Tell me your earthquake theory."
+
+* "Tell me."
+
+-
+
+"I think that Big O is behind the quakes. I think they're not earthquakes, really. I think that they're coming from the top of the Pyramid, not the ground."
+
+[[CODE]]
+c.learn(BigOFacts.someoneCalledBigO);
+c.learn(ConetFacts.quakesFromTop);
+[[ENDCODE]]
+
+
+
+// TODO: ask about BigO
 
 NOTES:
 // Oracle has a pet crow that talks.

@@ -9,6 +9,11 @@ MAP_NAME: Conet
 FIRST_DESCRIPTION:
 Some kobolds operating a large "woodpecker".
 
+[[CODE]]
+c.learn(ConetFacts.sawConet);
+[[ENDCODE]]
+
+
 DESCRIPTION: $NONE
 
 
@@ -42,5 +47,5 @@ c.markHappened(evConetDestroyed);
 
 NOTES:
 - Name inspired by https://en.wikipedia.org/wiki/The_Conet_Project.
-- Attracting "evil" from far away.
+- Attracting "evil" / giants from far away.
 - This is on the 32nd floor (binary symbolism).
