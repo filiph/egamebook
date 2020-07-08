@@ -126,7 +126,7 @@ FOR_LOCATION: $farmers_village
 PREREQUISITES:
 w.actionHasBeenPerformed("talk_to_ada_greetings")
 &&
-// Oracle must live.
+// Oracle must live. Optional: remove this prerequisite, and instead change the description so that it works even after Oracle's death.
 !c.hasHappened(evOrcOffensive)
 &&
 c.knows(OracleFacts.someoneCalledOracle)
@@ -141,3 +141,44 @@ c.learn(OracleFacts.location);
 [[ENDCODE]]
 
 "She never had a kid. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."
+
+
+// ---
+ACTION: $talk_to_ada_about_delving
+COMMAND: Old woman >> Talk >> "Any advice for someone delving in the Pyramid?"
+FOR_LOCATION: $farmers_village
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_ada_greetings")
+
+INK:
+"Oh, please don't put yourself into more danger than you absolutely must. This building is full of dangers."
+
+* "Tell me about the dangers, then."
+
+"Orcs, monsters. Bad magic, from Big O at the very top. One person just cannot face it all alone. You should <>
+
+[[CODE]]
+c.learn(BigOFacts.someoneCalledBigO);
+[[ENDCODE]]
+
+* "How can I stay safe?"
+
+"If you _must_ go further, you mean? I hope you need not. But if you do, 
+
+-
+
+<> seek help from others. The Deathless have been friendly to us farmers. Oracle is a beautiful person. The Knights are leaving, but they are good people, at heart."
+
+[[CODE]]
+c.learn(DeathlessFacts.somethingCalledDeathless);
+c.learn(OracleFacts.someoneCalledOracle);
+c.learn(KnightsFacts.knightsAreLeaving);
+[[ENDCODE]]
+
+"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I've heard of the Dragon Egg, an ancient weapon of that sort."
+
+[[CODE]]
+c.learn(DragonEggFacts.anAncientWeapon);
+c.learn(DelvingFacts.knowledge);
+[[ENDCODE]]

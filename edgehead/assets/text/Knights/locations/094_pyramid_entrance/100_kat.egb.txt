@@ -67,3 +67,23 @@ w.actionHasBeenPerformed("talk_to_miguel_greetings")
 
 COMPLETE_SUCCESS_DESCRIPTION:
 She shakes her head. "Left his post. Went inside."
+
+
+// ---
+ACTION: $talk_to_kat_about_devling
+COMMAND: Kat, the guardswoman >> Talk >> “Any advice for someone delving in the Pyramid?”
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(katId)
+&&
+w.actionHasBeenPerformed("talk_to_kat_greetings")
+
+INK:
+"Don't underestimate it. There's a reason the Knights are leaving, and it's not because we are cowards."
+
+"You would do well to ask the locals. There's so much I don't know about this place."
+
+[[CODE]]
+c.learn(DelvingFacts.infoHelps);
+[[ENDCODE]]

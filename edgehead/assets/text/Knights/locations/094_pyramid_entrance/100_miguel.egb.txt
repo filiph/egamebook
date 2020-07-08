@@ -83,3 +83,22 @@ Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is, 
 The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.
 
 "This place is no longer safe. Unless you have business with one of the farmers, you shouldn't go in."
+
+
+// ---
+ACTION: $talk_to_miguel_about_devling
+COMMAND: Miguel, the guardsman >> Talk >> “Any advice for someone delving in the Pyramid?”
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(miguelId)
+&&
+w.actionHasBeenPerformed("talk_to_miguel_greetings")
+
+INK:
+"[[IF w.actionHasBeenPerformed("talk_to_kat_about_devling")]]What Kat said. I'd just add that[[ELSE]]You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that[[ENDIF]] I've heard locals talk of a device of war called the Dragon Egg. If I were you, no offense, I'd try to find any advantage possible against the Orcs and the other creatures of the upside."
+
+[[CODE]]
+c.learn(DragonEggFacts.anAncientWeapon);
+c.learn(DelvingFacts.infoHelps);
+[[ENDCODE]]

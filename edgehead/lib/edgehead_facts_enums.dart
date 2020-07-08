@@ -29,14 +29,20 @@ enum DeathlessFacts {
   sawDeathless,
 }
 
+enum DelvingFacts {
+  infoHelps,
+  knowledge,
+}
+
 enum DogheadFacts {
   somethingCalledDoghead,
   dogheadMyth,
 }
 
 enum DragonEggFacts {
-  deathlessHaveSomething,
-  deathlessHaveDragonEgg,
+  somethingCalledDragonEgg,
+  anAncientWeapon,
+  deathlessHaveIt,
 }
 
 enum JisadFacts {

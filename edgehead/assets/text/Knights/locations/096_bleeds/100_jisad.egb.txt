@@ -181,6 +181,8 @@ COMMAND: Jisad >> Talk >> “Who is Big O?”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+&&
 c.knows(BigOFacts.someoneCalledBigO)
 &&
 !c.knows(BigOFacts.isWizard)
@@ -216,6 +218,8 @@ COMMAND: Jisad >> Talk >> “Was that an earthquake?”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+&&
 c.knows(ConetFacts.quakeHappened)
 &&
 !c.knows(ConetFacts.quakesOften)
@@ -234,3 +238,44 @@ c.learn(ConetFacts.quakesOften);
 * "Thank the Eight Gods."
 
 Jisad nods.
+
+
+// ---
+ACTION: $bleeds_blind_guide_delving
+COMMAND: Jisad >> Talk >> “Any advice for someone delving in the Pyramid?”
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+
+INK:
+"Oh, you're still here? The first and foremost piece of advice I give to anyone who asks about being in this place: don't. Turn around. Be somewhere else."
+
+* "Okay."
+
+"Goodbye."
+
+* "And if I don't listen?"
+
+  Jisad sighs. "Know your limits. There are orcs on the higher floors. They are dangerous. They are well equipped, well fed, and well organized." He purses his lips and starts nodding.
+
+  * * "What about the goblins?"
+
+  "I wasn't finished, [young sir]. Goblins are dangerous, sure, but you're unlikely to find them in the Pyramid. <>
+
+  * * "How can someone like me beat them?"
+
+  "I'd tell you if you let me finish. Eight Gods, I like young enthusiasm but sometimes... Anyway. <>
+
+  - -
+
+  <> You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it's best to find friends, allies. There are powerful weapons to be had, in the Pyramid, like the Dragon Egg or a katana."
+
+  [[CODE]]
+  c.learn(DragonEggFacts.anAncientWeapon);
+  c.learn(DelvingFacts.knowledge);
+  [[ENDCODE]]
+
+  "And remember, you can always just turn around and run from here."
+
+-

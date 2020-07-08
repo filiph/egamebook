@@ -10,6 +10,7 @@ final Map<Type, List<String>> _chainEnums = {
   BigOFacts: BigOFacts.values.map((e) => e.toString()).toList(),
   ConetFacts: ConetFacts.values.map((e) => e.toString()).toList(),
   DeathlessFacts: DeathlessFacts.values.map((e) => e.toString()).toList(),
+  DelvingFacts: DelvingFacts.values.map((e) => e.toString()).toList(),
   DogheadFacts: DogheadFacts.values.map((e) => e.toString()).toList(),
   DragonEggFacts: DragonEggFacts.values.map((e) => e.toString()).toList(),
   JisadFacts: JisadFacts.values.map((e) => e.toString()).toList(),

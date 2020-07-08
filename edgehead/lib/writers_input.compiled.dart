@@ -4272,6 +4272,73 @@ final talkToHorsemanWhiteRetreatInk = InkAst([
   }),
 ]);
 
+class TalkToHorsemanWhiteAboutDevling extends RoamingAction {
+  @override
+  final String name = 'talk_to_horseman_white_about_devling';
+
+  static final TalkToHorsemanWhiteAboutDevling singleton =
+      TalkToHorsemanWhiteAboutDevling();
+
+  @override
+  List<String> get commandPathTemplate => [
+        'Horseman White',
+        'Talk',
+        '“Any advice for someone delving in the Pyramid?”'
+      ];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('staging_area') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_horseman_white_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"No."\n', isRaw: true);
+    return '${a.name} successfully performs TalkToHorsemanWhiteAboutDevling';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class TalkToHorsemanWhiteDoghead extends RoamingAction {
   @override
   final String name = 'talk_to_horseman_white_doghead';
@@ -4680,6 +4747,98 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
         'A settlement of people who farm the vines that grow on the outside of the Pyramid.',
     firstHint:
         'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
+final talkToAdaAboutDelvingInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Oh, please don\'t put yourself into more danger than you absolutely must. This building is full of dangers."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Tell me about the dangers, then." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Orcs, monsters. Bad magic, from Big O at the very top. One person just cannot face it all alone. You should\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(BigOFacts.someoneCalledBigO);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "How can I stay safe?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"If you _must_ go further, you mean? I hope you need not. But if you do,\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'seek help from others. The Deathless have been friendly to us farmers. Oracle is a beautiful person. The Knights are leaving, but they are good people, at heart."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DeathlessFacts.somethingCalledDeathless);
+    c.learn(OracleFacts.someoneCalledOracle);
+    c.learn(KnightsFacts.knightsAreLeaving);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I\'ve heard of the Dragon Egg, an ancient weapon of that sort."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DragonEggFacts.anAncientWeapon);
+    c.learn(DelvingFacts.knowledge);
+  }),
+]);
 final talkToAdaAboutOracleInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -4975,6 +5134,72 @@ final talkToAdaQuake1Ink = InkAst([
     ),
   ]),
 ]);
+
+class TalkToAdaAboutDelving extends RoamingAction {
+  @override
+  final String name = 'talk_to_ada_about_delving';
+
+  static final TalkToAdaAboutDelving singleton = TalkToAdaAboutDelving();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Old woman', 'Talk', '"Any advice for someone delving in the Pyramid?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('farmers_village') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_ada_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_ada_about_delving_ink",
+    ));
+    return '${a.name} successfully performs TalkToAdaAboutDelving';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
 
 class TalkToAdaAboutOracle extends RoamingAction {
   @override
@@ -6203,6 +6428,37 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
         'This is the only side of the Pyramid that allows access from outside.',
     firstHint:
         'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
+final talkToKatAboutDevlingInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Don\'t underestimate it. There\'s a reason the Knights are leaving, and it\'s not because we are cowards."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"You would do well to ask the locals. There\'s so much I don\'t know about this place."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DelvingFacts.infoHelps);
+  }),
+]);
 final talkToKatGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -6314,6 +6570,76 @@ class TalkToKatAboutBrother extends RoamingAction {
     ));
 
     return '${a.name} successfully performs TalkToKatAboutBrother';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToKatAboutDevling extends RoamingAction {
+  @override
+  final String name = 'talk_to_kat_about_devling';
+
+  static final TalkToKatAboutDevling singleton = TalkToKatAboutDevling();
+
+  @override
+  List<String> get commandPathTemplate => [
+        'Kat, the guardswoman',
+        'Talk',
+        '“Any advice for someone delving in the Pyramid?”'
+      ];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(katId) &&
+        w.actionHasBeenPerformed("talk_to_kat_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_kat_about_devling_ink",
+    ));
+    return '${a.name} successfully performs TalkToKatAboutDevling';
   }
 
   @override
@@ -6663,6 +6989,31 @@ final talkToMiguelAboutBrotherInk = InkAst([
         isRaw: true);
   }),
 ]);
+final talkToMiguelAboutDevlingInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_e7f3070f = w
+            .actionHasBeenPerformed("talk_to_kat_about_devling")
+        ? '''What Kat said. I'd just add that'''
+        : '''You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that''';
+    s.add(
+        '"$ifBlock_e7f3070f I\'ve heard locals talk of a device of war called the Dragon Egg. If I were you, no offense, I\'d try to find any advantage possible against the Orcs and the other creatures of the upside."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(DragonEggFacts.anAncientWeapon);
+    c.learn(DelvingFacts.infoHelps);
+  }),
+]);
 final talkToMiguelGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -6739,6 +7090,76 @@ class TalkToMiguelAboutBrother extends RoamingAction {
       "talk_to_miguel_about_brother_ink",
     ));
     return '${a.name} successfully performs TalkToMiguelAboutBrother';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToMiguelAboutDevling extends RoamingAction {
+  @override
+  final String name = 'talk_to_miguel_about_devling';
+
+  static final TalkToMiguelAboutDevling singleton = TalkToMiguelAboutDevling();
+
+  @override
+  List<String> get commandPathTemplate => [
+        'Miguel, the guardsman',
+        'Talk',
+        '“Any advice for someone delving in the Pyramid?”'
+      ];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(miguelId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_miguel_about_devling_ink",
+    ));
+    return '${a.name} successfully performs TalkToMiguelAboutDevling';
   }
 
   @override
@@ -7719,6 +8140,109 @@ final bleedsBlindGuideBrotherInk = InkAst([
     s.add('"I don\'t think I\'ve met the fella. Ask around."\n', isRaw: true);
   }),
 ]);
+final bleedsBlindGuideDelvingInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Oh, you\'re still here? The first and foremost piece of advice I give to anyone who asks about being in this place: don\'t. Turn around. Be somewhere else."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Okay." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Goodbye."\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "And if I don't listen?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Jisad sighs. "Know your limits. There are orcs on the higher floors. They are dangerous. They are well equipped, well fed, and well organized." He purses his lips and starts nodding.\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "What about the goblins?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"I wasn\'t finished, young sir. Goblins are dangerous, sure, but you\'re unlikely to find them in the Pyramid.\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "How can someone like me beat them?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"I\'d tell you if you let me finish. Eight Gods, I like young enthusiasm but sometimes... Anyway.\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+        ]),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it\'s best to find friends, allies. There are powerful weapons to be had, in the Pyramid, like the Dragon Egg or a katana."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(DragonEggFacts.anAncientWeapon);
+          c.learn(DelvingFacts.knowledge);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"And remember, you can always just turn around and run from here."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+]);
 final bleedsBlindGuideGoblinsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -8145,7 +8669,8 @@ class BleedsBlindGuideBigO extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(c.knows(BigOFacts.someoneCalledBigO) &&
+    if (!(w.actionHasBeenPerformed("bleeds_blind_guide_greet") &&
+        c.knows(BigOFacts.someoneCalledBigO) &&
         !c.knows(BigOFacts.isWizard))) {
       return false;
     }
@@ -8228,6 +8753,72 @@ class BleedsBlindGuideBrother extends RoamingAction {
       "bleeds_blind_guide_brother_ink",
     ));
     return '${a.name} successfully performs BleedsBlindGuideBrother';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsBlindGuideDelving extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_delving';
+
+  static final BleedsBlindGuideDelving singleton = BleedsBlindGuideDelving();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Jisad', 'Talk', '“Any advice for someone delving in the Pyramid?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("bleeds_blind_guide_greet"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "bleeds_blind_guide_delving_ink",
+    ));
+    return '${a.name} successfully performs BleedsBlindGuideDelving';
   }
 
   @override
@@ -8474,7 +9065,8 @@ class BleedsBlindGuideQuake1 extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(c.knows(ConetFacts.quakeHappened) &&
+    if (!(w.actionHasBeenPerformed("bleeds_blind_guide_greet") &&
+        c.knows(ConetFacts.quakeHappened) &&
         !c.knows(ConetFacts.quakesOften))) {
       return false;
     }
@@ -10648,10 +11240,12 @@ final allActions = <RoamingAction>[
   TalkToMiguelAboutDeserting.singleton,
   TalkToMiguelAfterCaravanDeparted.singleton,
   TalkToGreenWomanAboutSlopesDeath.singleton,
+  TalkToHorsemanWhiteAboutDevling.singleton,
   TalkToHorsemanWhiteDoghead.singleton,
   TalkToHorsemanWhiteGreetings.singleton,
   TalkToHorsemanWhiteQuake1.singleton,
   TalkToHorsemanWhiteRetreat.singleton,
+  TalkToAdaAboutDelving.singleton,
   TalkToAdaAboutOracle.singleton,
   TalkToAdaBigO.singleton,
   TalkToAdaDogheadFigure.singleton,
@@ -10667,9 +11261,11 @@ final allActions = <RoamingAction>[
   NorthSkullExamine.singleton,
   NorthSkullTake.singleton,
   TalkToKatAboutBrother.singleton,
+  TalkToKatAboutDevling.singleton,
   TalkToKatAboutMiguelMissing.singleton,
   TalkToKatGreetings.singleton,
   TalkToMiguelAboutBrother.singleton,
+  TalkToMiguelAboutDevling.singleton,
   TalkToMiguelGreetings.singleton,
   TalkToKatAfterOrcOffensive.singleton,
   BleedsMainObserveSmoke.singleton,
@@ -10680,6 +11276,7 @@ final allActions = <RoamingAction>[
   BleedsTraderTellAboutClearedCamp.singleton,
   BleedsBlindGuideBigO.singleton,
   BleedsBlindGuideBrother.singleton,
+  BleedsBlindGuideDelving.singleton,
   BleedsBlindGuideGoblins.singleton,
   BleedsBlindGuideGreet.singleton,
   BleedsBlindGuideOrcs.singleton,
@@ -10720,18 +11317,22 @@ final allInks = <String, InkAst>{
   'talk_to_horseman_white_greetings_ink': talkToHorsemanWhiteGreetingsInk,
   'talk_to_horseman_white_quake_1_ink': talkToHorsemanWhiteQuake1Ink,
   'talk_to_horseman_white_retreat_ink': talkToHorsemanWhiteRetreatInk,
+  'talk_to_ada_about_delving_ink': talkToAdaAboutDelvingInk,
   'talk_to_ada_about_oracle_ink': talkToAdaAboutOracleInk,
   'talk_to_ada_big_o_ink': talkToAdaBigOInk,
   'talk_to_ada_doghead_figure_ink': talkToAdaDogheadFigureInk,
   'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,
   'talk_to_ada_quake_1_ink': talkToAdaQuake1Ink,
   'talk_to_ada_after_quake_2_ink': talkToAdaAfterQuake2Ink,
+  'talk_to_kat_about_devling_ink': talkToKatAboutDevlingInk,
   'talk_to_kat_greetings_ink': talkToKatGreetingsInk,
   'talk_to_miguel_about_brother_ink': talkToMiguelAboutBrotherInk,
+  'talk_to_miguel_about_devling_ink': talkToMiguelAboutDevlingInk,
   'talk_to_miguel_greetings_ink': talkToMiguelGreetingsInk,
   'talk_to_kat_after_orc_offensive_ink': talkToKatAfterOrcOffensiveInk,
   'bleeds_blind_guide_big_o_ink': bleedsBlindGuideBigOInk,
   'bleeds_blind_guide_brother_ink': bleedsBlindGuideBrotherInk,
+  'bleeds_blind_guide_delving_ink': bleedsBlindGuideDelvingInk,
   'bleeds_blind_guide_goblins_ink': bleedsBlindGuideGoblinsInk,
   'bleeds_blind_guide_greet_ink': bleedsBlindGuideGreetInk,
   'bleeds_blind_guide_orcs_ink': bleedsBlindGuideOrcsInk,

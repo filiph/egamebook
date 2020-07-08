@@ -130,3 +130,15 @@ INK:
 [[CODE]]
 c.learn(ConetFacts.quakesOften);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_horseman_white_about_devling
+COMMAND: Horseman White >> Talk >> “Any advice for someone delving in the Pyramid?”
+FOR_LOCATION: $staging_area
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_horseman_white_greetings")
+
+COMPLETE_SUCCESS_DESCRIPTION:
+"No."
