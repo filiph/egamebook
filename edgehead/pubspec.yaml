@@ -13,7 +13,7 @@ dependencies:
   cli_menu: ^0.2.2
   egamebook_builder:
     path: ../egamebook_builder
-  meta: ^1.1.6
+  meta: 1.1.8  # Pinning meta because of https://github.com/dart-lang/test/issues/1294
   logging: ^0.11.3
   path: ^1.6.2
   quiver: ^2.0.0+1
@@ -23,6 +23,5 @@ dev_dependencies:
   args: ^1.5.0
   build_runner: ^1.0.0
   built_value_generator: ^6.7.0
-  meta: 1.1.8  # Pinning meta because of https://github.com/dart-lang/test/issues/1294
   pedantic: ^1.8.0
   test: ^1.3.0
