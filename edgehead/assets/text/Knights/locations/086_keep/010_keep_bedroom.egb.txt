@@ -31,14 +31,30 @@ TODO: explain the family portrait - the looters didn't touch it - superstition?
 
 
 // ---
-ACTION: $take_family_portrait
-COMMAND: family portrait >> take
+ACTION: $examine_family_portrait
+COMMAND: family portrait >> examine
 FOR_LOCATION: $keep_bedroom
 PREREQUISITES:
 w.actionHasBeenPerformed('search_bedroom')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-// TODO: make a separate action for looking at the family portrait
+The portrait depicts an aristocratic family. Handsome people.
+
+A young, striking lady stands in the front. Kind of bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription say "For our beloved Lady Hope".
+
+[[CODE]]
+c.learn(LadyHopeFacts.ladyHopeName);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $take_family_portrait
+COMMAND: family portrait >> take
+FOR_LOCATION: $keep_bedroom
+PREREQUISITES:
+w.actionHasBeenPerformed('examine_family_portrait')
+
+COMPLETE_SUCCESS_DESCRIPTION:
 
 I take the family portrait. It's kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.
 
@@ -46,9 +62,8 @@ I take the family portrait. It's kind of unwieldy and awkward to hold, so I keep
 c.giveNewItemToPlayer(familyPortrait);
 [[ENDCODE]]
 
-NOTES:
-In this room, the "Compass >> Use" action will lead to $keep_servants.
 
+NOTES:
 // Vignette:
 // Wooden floor in the Keep
 

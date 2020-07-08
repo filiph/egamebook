@@ -112,3 +112,23 @@ c.knows(DragonEggFacts.anAncientWeapon)
 
 INK:
 "It's an ancient weapon, somewhere in the Pyramid." He shrugs. "If I knew more, I'd go find it, [young sir]."
+
+
+// ---
+ACTION: $talk_to_miguel_about_lady
+COMMAND: Miguel, the guardsman >> Talk >> “Who's that lady up there?”
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(miguelId)
+&&
+c.knows(LadyHopeFacts.ladyInKeep)
+&&
+!c.knows(LadyHopeFacts.ladyHopeName)
+
+INK:
+"Lady Hope."
+
+[[CODE]]
+c.learn(LadyHopeFacts.ladyHopeName);
+[[ENDCODE]]

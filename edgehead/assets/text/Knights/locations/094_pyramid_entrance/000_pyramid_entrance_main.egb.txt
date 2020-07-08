@@ -28,6 +28,11 @@ Two knights, a woman and a man, are on guard.
 
 Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. 
 
+[[CODE]]
+c.learn(LadyHopeFacts.ladyInKeep);
+[[ENDCODE]]
+
+
 DESCRIPTION:
 [[CODE]]
 c.describeWorthiness(who: w.getActorById(miguelId), what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId], especially: [sixtyFiverShieldId, bannerId], how: "{approvingly|with respect}");

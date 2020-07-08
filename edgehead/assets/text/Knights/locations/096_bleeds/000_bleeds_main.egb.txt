@@ -94,3 +94,5 @@ Someone is not afraid to be found.
 NOTES:
 
 if c.hasHappened(evSavedSarn), then Sarn is here
+
+* We could examine the pyramid from here, and see Lady Hope, and some other details.

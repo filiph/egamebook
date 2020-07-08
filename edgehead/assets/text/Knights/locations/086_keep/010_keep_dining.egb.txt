@@ -9,7 +9,11 @@ POS: 9, 86
 MAP_NAME: Dining Room
 
 FIRST_DESCRIPTION:
-Lady Hope faces me and prepares for battle.
+[[IF c.knows(LadyHopeFacts.ladyHopeName)]]Lady Hope faces me and prepares for battle.[[ELSE]]An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.[[ENDIF]]
+
+[[CODE]]
+c.learn(LadyHopeFacts.ladyHopeName);
+[[ENDCODE]]
 
 Someone is talking through her. Impressive. She is clearly undead, and talking undead is something I've never even considered before.
 

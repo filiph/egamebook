@@ -87,3 +87,46 @@ INK:
 [[CODE]]
 c.learn(DelvingFacts.infoHelps);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $talk_to_kat_about_lady
+COMMAND: Kat, the guardswoman >> Talk >> “Who's that lady up there?”
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(katId)
+&&
+w.actionHasBeenPerformed("talk_to_kat_greetings")
+&&
+c.knows(LadyHopeFacts.ladyInKeep)
+&&
+!c.knows(LadyHopeFacts.ladyHopeName)
+
+INK:
+"That's Lady Hope. Our local ghost."
+
+* "A ghost?"
+
+  "Well, I should say <>
+
+* "Ghost don't exist."
+
+  "They don't? How are you so sure?"
+
+  * * "When people die, they don't become transparent and floaty."
+
+    "True, they become meat and bone. I guess you'd know, even in your young age. Let me correct myself, then. Lady Hope is <>
+
+  * * "Everyone knows."
+
+    "Well, okay then. I'm going to say Lady Hope is <>
+
+-
+
+<> an undead aristocrat. In life, she was a powerful young lady in these parts. A daughter of a lord. Today, she's just standing there, watching night and day, with that katana of hers."
+
+[[CODE]]
+c.learn(LadyHopeFacts.ladyHopeName);
+[[ENDCODE]]
+
