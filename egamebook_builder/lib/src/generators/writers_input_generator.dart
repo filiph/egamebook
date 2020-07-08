@@ -128,6 +128,7 @@ class WritersInputGenerator extends Generator {
     // TODO: add at the top as static code
     final sourceWithUnusedLinterIgnore =
         "// ignore_for_file: constant_identifier_names\n"
+        "// ignore_for_file: non_constant_identifier_names\n"
         "// ignore_for_file: unused_local_variable\n"
         "// ignore_for_file: unused_import\n"
         "// ignore_for_file: unnecessary_parenthesis\n"

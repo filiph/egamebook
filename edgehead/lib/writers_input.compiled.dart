@@ -5,6 +5,7 @@
 // **************************************************************************
 
 // ignore_for_file: constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unused_local_variable
 // ignore_for_file: unused_import
 // ignore_for_file: unnecessary_parenthesis
