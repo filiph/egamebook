@@ -88,6 +88,7 @@ class EdgeheadGame extends Book {
   final bool randomizeAfterPlayerChoice;
 
   /// The latest savegame, for debug use.
+  /// ignore: unused_field
   String _latestSavegameDebug = '';
 
   /// Create a new Edgehead game.
