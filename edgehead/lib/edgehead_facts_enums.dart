@@ -40,7 +40,6 @@ enum DogheadFacts {
 }
 
 enum DragonEggFacts {
-  somethingCalledDragonEgg,
   anAncientWeapon,
   deathlessHaveIt,
 }
@@ -56,7 +55,6 @@ enum KeepGateFacts {
 }
 
 enum KnightsFacts {
-  knightsArePolice,
   knightsAreLeaving,
   powerVacuum,
 }
@@ -74,7 +72,6 @@ enum OracleFacts {
 
 enum OrcsFacts {
   inPyramid,
-  leadByBigO,
 }
 
 enum SarnFacts {
