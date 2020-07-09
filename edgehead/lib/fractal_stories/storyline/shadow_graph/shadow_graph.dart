@@ -906,12 +906,27 @@ class ShadowGraph {
         final relevantIdentifiers = current.entries
             .where((entry) => entry.value.id == entity.id)
             .map((entry) => entry.key)
-            .toList(growable: false);
+            .toList();
 
-        assert(
-            relevantIdentifiers.isNotEmpty,
-            "relevantIdentifiers for $entity are empty in $report: "
-            "$current");
+        // It is possible for an entity to appear which wasn't in the
+        // list of entities in [_getIdentifiersThroughoutStory].
+        //
+        // For example, the algorithm here can realize
+        // that a `leg` (subject) needs a `goblin's` (owner) because there are
+        // two legs at play in the given storyline. Suddenly, the report
+        // "<subject> goes limp" also includes a [Report.owner] that
+        // wasn't there before. This means we have no [relevantIdentifiers]
+        // to play with.
+        //
+        // Thankfully, the algorithm is iterative, so the next iteration
+        // will have the goblin from the start. Here, all we can do is to
+        // fully qualify the goblin.
+        if (relevantIdentifiers.isEmpty) {
+          log.warning("relevantIdentifiers for $entity are empty in $report: "
+              "$current");
+          relevantIdentifiers.add(
+              Identifier.adjectiveNoun('${entity.adjective} ${entity.name}'));
+        }
 
         // Retain only the part of the entity's current range
         // (`Set<QualificationLevel>`) that is supported by one of
