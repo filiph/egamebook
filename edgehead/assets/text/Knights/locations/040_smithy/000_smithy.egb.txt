@@ -10,6 +10,10 @@ MAP_NAME: Smithy
 FIRST_DESCRIPTION:
 My brother, Sarn, working for the orcs, forging weapons.
 
+[[CODE]]
+c.learn(SarnFacts.seenPersonally);
+[[ENDCODE]]
+
 DESCRIPTION: $NONE
 
 

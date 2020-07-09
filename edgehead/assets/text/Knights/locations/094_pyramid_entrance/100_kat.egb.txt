@@ -33,23 +33,18 @@ COMMAND: Kat, the guardswoman >> Talk >> "I'm looking for a Sarn of Falling Rock
 FOR_LOCATION: $pyramid_entrance
 
 PREREQUISITES:
-c.inRoomWith(miguelId)
-&&
 c.inRoomWith(katId)
 &&
 w.actionHasBeenPerformed("talk_to_kat_greetings")
-&&
-w.actionNeverUsed("talk_to_miguel_about_brother")
 
 COMPLETE_SUCCESS_DESCRIPTION:
-"Sarn of Falling Rock," she repeats. But before she can continue, the man steps in. Kat looks at him. "You know a Sarn of Falling Rock, Miguel?"
+"Sarn of Falling Rock," she repeats. "I don't think I remember that name."
+
+// TODO: mentioned the color of the eyes, as set up in the beginning
+She looks closer at me. "But those eyes. They look familiar." She nods. "Yes, I think I've seen those eyes around here, though I didn't know their name."
 
 [[CODE]]
-// Miguel just jumps in.
-w.pushSituation(InkSituation.initialized(
-    w.randomInt(),
-    "talk_to_miguel_about_brother_ink",
-));
+c.learn(SarnFacts.wasHere);
 [[ENDCODE]]
 
 

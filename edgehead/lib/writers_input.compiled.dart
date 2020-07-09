@@ -1063,8 +1063,9 @@ final Room smithy = Room('smithy', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('My brother, Sarn, working for the orcs, forging weapons.\n',
+  s.add('My brother, Sarn, working for the orcs, forging weapons.\n\n',
       isRaw: true);
+  c.learn(SarnFacts.seenPersonally);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -4467,7 +4468,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "What's your name." """.trim(),
+      command: r""" "Can you just look in your book?" """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -4475,11 +4476,102 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('"I am White. Horseman White."\n', isRaw: true);
+          s.add(
+              'Horseman White\'s face reddens, but he swallows a retort and flips through the pages.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "You don't remember your subordinates?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Look, kid. There are hundreds of Knights in this place. They come and go. I can\'t know all of them." He scratches his nose. Then he looks down on his book and opens it at a page in the back.\n',
+              isRaw: true);
         }),
       ],
     ),
   ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Sarn? Of Falling Rock? Yes." He pauses with his finger on the page. "I\'m afraid he\'s in here. He\'s marked as... captured."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Who captured him?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"The Orcs, of course."\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "So, he's not dead?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"He probably is. We just mark him as captured because that\'s what we know for sure. But the Orcs, they don\'t seem the sort that takes good care of their prisoners, if you know what I mean."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What happened?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"I don\'t know. There were a lot of skirmishes with the Orcs lately. Looks like your Sarn of Falling Rock was unlucky enough to be caught in one of them."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(OrcsFacts.inPyramid);
+    c.learn(SarnFacts.wasCaptured);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The officer sighs, and his expression softens. "Look, kid. This is the kind of thing I have to say to people every day. Someone died. You cared for them. That\'s the bullshit we live in. The sooner we all get out of here, the better." He extends an arm. "I am White. Horseman White."\n',
+        isRaw: true);
+  }),
   InkForkNode([
     InkChoiceNode(
       command: r""" "I am Aren." """.trim(),
@@ -4491,6 +4583,19 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add('"Okay. I will probably not remember that."\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "I don't care." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Okay."\n', isRaw: true);
         }),
       ],
     ),
@@ -7139,10 +7244,8 @@ class TalkToKatAboutBrother extends RoamingAction {
     if (c.inRoomParent('pyramid_entrance') != true) {
       return false;
     }
-    if (!(c.inRoomWith(miguelId) &&
-        c.inRoomWith(katId) &&
-        w.actionHasBeenPerformed("talk_to_kat_greetings") &&
-        w.actionNeverUsed("talk_to_miguel_about_brother"))) {
+    if (!(c.inRoomWith(katId) &&
+        w.actionHasBeenPerformed("talk_to_kat_greetings"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -7156,12 +7259,9 @@ class TalkToKatAboutBrother extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Sarn of Falling Rock," she repeats. But before she can continue, the man steps in. Kat looks at him. "You know a Sarn of Falling Rock, Miguel?"\n\n',
+        '"Sarn of Falling Rock," she repeats. "I don\'t think I remember that name."\n\nShe looks closer at me. "But those eyes. They look familiar." She nods. "Yes, I think I\'ve seen those eyes around here, though I didn\'t know their name."\n\n',
         isRaw: true);
-    w.pushSituation(InkSituation.initialized(
-      w.randomInt(),
-      "talk_to_miguel_about_brother_ink",
-    ));
+    c.learn(SarnFacts.wasHere);
 
     return '${a.name} successfully performs TalkToKatAboutBrother';
   }
@@ -7600,8 +7700,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('He looks to the woman. "Do you know of a mender called Sarn?"\n',
-        isRaw: true);
+    s.add('"Well, I don\'t know of a mender called Sarn."\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -7610,54 +7709,34 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"No," she says.\n', isRaw: true);
-  }),
-  InkForkNode([
-    InkChoiceNode(
-      command: r""" "But he might be in." """.trim(),
-      consequence: [],
-    ),
-  ]),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is, you would not want to get in. You would want to get out."\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '"This place is no longer safe. Orcs, goblins. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    c.learn(OrcsFacts.inPyramid);
+    Ruleset(
+        Rule(336492451, 2, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.inRoomParent('pyramid_entrance') && c.inRoomWith(katId);
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is in there, you would not want to get in. You would want to get out."\nThe woman looks at him with a mix of puzzlement and exasperation, then she turns to me.\n"This place is no longer safe. Orcs, goblins. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
+              isRaw: true);
+        }),
+        Rule(389695249, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+        })).apply(c);
   }),
 ]);
 final talkToMiguelAboutDevlingInk = InkAst([
@@ -7772,7 +7851,6 @@ class TalkToMiguelAboutBrother extends RoamingAction {
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (!(c.inRoomWith(miguelId) &&
-        c.inRoomWith(katId) &&
         w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
         w.actionNeverUsed("talk_to_kat_about_brother"))) {
       return false;

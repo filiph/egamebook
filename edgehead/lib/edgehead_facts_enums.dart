@@ -75,10 +75,9 @@ enum OrcsFacts {
 }
 
 enum SarnFacts {
-  sarnIsBrotherBlacksmith,
-  lookingForSarn,
-  sarnWasHere,
-  sarnWasCaptured,
+  wasHere,
+  wasCaptured,
+  seenPersonally,
 }
 
 enum SixtyFiversFacts {

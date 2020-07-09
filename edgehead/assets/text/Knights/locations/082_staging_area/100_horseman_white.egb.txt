@@ -53,15 +53,46 @@ c.learn(KnightsFacts.knightsAreLeaving);
 
 <> I can't help you. I don't know anyone called Sarn. Or maybe I do but I don't remember. I am busy, as you can see."
 
-* "What's your name."
+* "Can you just look in your book?"
 
-"I am White. Horseman White."
+Horseman White's face reddens, but he swallows a retort and flips through the pages. <>
+
+* "You don't remember your subordinates?"
+
+"Look, kid. There are hundreds of Knights in this place. They come and go. I can't know all of them." He scratches his nose. Then he looks down on his book and opens it at a page in the back. <>
 
 -
+
+<> "Sarn? Of Falling Rock? Yes." He pauses with his finger on the page. "I'm afraid he's in here. He's marked as... captured."
+
+* "Who captured him?"
+
+"The Orcs, of course."
+
+* "So, he's not dead?"
+
+"He probably is. We just mark him as captured because that's what we know for sure. But the Orcs, they don't seem the sort that takes good care of their prisoners, if you know what I mean."
+
+* "What happened?"
+
+"I don't know. There were a lot of skirmishes with the Orcs lately. Looks like your Sarn of Falling Rock was unlucky enough to be caught in one of them."
+
+-
+
+[[CODE]]
+c.learn(OrcsFacts.inPyramid);
+c.learn(SarnFacts.wasCaptured);
+[[ENDCODE]]
+
+The officer sighs, and his expression softens. "Look, kid. This is the kind of thing I have to say to people every day. Someone died. You cared for them. That's the bullshit we live in. The sooner we all get out of here, the better." He extends an arm. "I am White. Horseman White."
 
 * "I am Aren."
 
 "Okay. I will probably not remember that."
+
+* "I don't care."
+
+"Okay."
 
 
 // ---
