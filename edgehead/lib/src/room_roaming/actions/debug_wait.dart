@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -65,6 +66,11 @@ class WaitWhileRoamingAction extends Action<Nothing> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, Nothing _) {
+    if (!(w.global as EdgeheadGlobalState).isInTesterMode) {
+      // Not available in normal gameplay.
+      return false;
+    }
+
     final situation = w.currentSituation as RoomRoamingSituation;
     final room = sim.getRoomByName(situation.currentRoomName);
 

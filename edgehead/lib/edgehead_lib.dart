@@ -39,6 +39,11 @@ class EdgeheadGame extends Book {
   /// is `true`).
   static final Random _randomizeAfterPlayerChoiceRandom = Random();
 
+  /// When this is `true`, new games will be started with
+  /// [EdgeheadGlobalState.isInTesterMode] on. This means some tester
+  /// conveniences will be enabled.
+  static const bool startNewGamesInTesterMode = true;
+
   final Logger log = Logger('KnightsGame');
 
   @override
@@ -67,10 +72,10 @@ class EdgeheadGame extends Book {
   Actor playerCharacter;
 
   WorldState world;
-
   Simulation simulation;
   PlanConsequence consequence;
   Storyline storyline;
+
   final Stat<double> hitpoints = Stat<double>(hitpointsSetting, 0.0);
 
   final Stat<int> stamina = Stat<int>(staminaSetting, 1);
@@ -245,7 +250,8 @@ class EdgeheadGame extends Book {
   /// Sets up the game, either as a load from [saveGameSerialized] or
   /// as a new game from scratch.
   void _setup(String saveGameSerialized, int randomSeed) {
-    var global = EdgeheadGlobalState();
+    var global = EdgeheadGlobalState(
+        (b) => b.isInTesterMode = startNewGamesInTesterMode);
 
     if (saveGameSerialized != null) {
       // Updates [world] from savegame.

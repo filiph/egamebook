@@ -17,4 +17,6 @@ abstract class EdgeheadGlobalState
       _$EdgeheadGlobalState;
 
   EdgeheadGlobalState._();
+
+  bool get isInTesterMode;
 }
