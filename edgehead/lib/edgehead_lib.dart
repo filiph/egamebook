@@ -87,6 +87,9 @@ class EdgeheadGame extends Book {
   /// playthrough, because the system is completely deterministic.
   final bool randomizeAfterPlayerChoice;
 
+  /// The latest savegame, for debug use.
+  String _latestSavegameDebug = '';
+
   /// Create a new Edgehead game.
   ///
   /// The optional [actionPattern] will stop the automated playthrough
@@ -480,9 +483,12 @@ class EdgeheadGame extends Book {
         };
         choices.add(choice);
       }
+      final serializedSavegame = json.encode(edgehead_serializer.serializers
+          .serializeWith(WorldState.serializer, world));
+      // Save for debug use. Overwrites the previous savegame.
+      _latestSavegameDebug = serializedSavegame;
       final savegame = SaveGameBuilder()
-        ..saveGameSerialized = json.encode(edgehead_serializer.serializers
-            .serializeWith(WorldState.serializer, world));
+        ..saveGameSerialized = serializedSavegame;
       final choiceBlock = ChoiceBlock((b) => b
         ..choices = choices
         ..saveGame = savegame);
