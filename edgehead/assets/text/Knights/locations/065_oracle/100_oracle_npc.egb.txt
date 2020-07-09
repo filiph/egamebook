@@ -261,6 +261,39 @@ c.learn(DragonEggFacts.deathlessHaveIt);
   "Ha! You can't, [young sir]. The Deathless have been using it as a holy symbol for generations. They won't just give it away."
 
 
+// ---
+ACTION: $talk_to_oracle_sixty_fiver
+COMMAND: Oracle >> Talk >> "What's the significance of '65'?"
+FOR_LOCATION: $oracle_main
+
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed("talk_to_oracle_greetings")
+&&
+c.knows(SixtyFiversFacts.shieldSeen)
+&&
+!c.knows(SixtyFiversFacts.significance)
+
+INK:
+"These are artifacts left by the ancients that puzzle the good and delight the evil. Why would the ancients, in their wisdom, leave behind such beatiful renditions of an evil number?"
+
+* "Why is 65 evil?"
+
+  "You know the two forces, four directions, eight gods, and so on. All the good things, all the true things, come in perfect numbers. Sixty four is one of them. Sixty four callings. Sixty five is a spit in the face of truth. It's like taking a symbol of Tengri, but putting it upside down. We don't know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason." Oracle runs her fingers through her hair.
+
+* "Do you have a theory?"
+
+-
+
+"I think the orcs love it. It gives them a way to say: Look! The ancients had evil in them. The culture you so revere is a failed, evil empire. Something like that."
+
+[[CODE]]
+c.learn(SixtyFiversFacts.significance);
+[[ENDCODE]]
+
+
 // TODO: ask about BigO
 
 NOTES:

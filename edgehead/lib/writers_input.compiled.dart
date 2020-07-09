@@ -1577,6 +1577,7 @@ final Room battlefield = Room(
           'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."\n\nThe two orcs attack.\n\n',
           isRaw: true);
       c.learn(OrcsFacts.inPyramid);
+      c.learn(SixtyFiversFacts.shieldSeen);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -1943,6 +1944,58 @@ final talkToOracleQuake1Ink = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     c.learn(ConetFacts.quakesOften);
+  }),
+]);
+final talkToOracleSixtyFiverInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"These are artifacts left by the ancients that puzzle the good and delight the evil. Why would the ancients, in their wisdom, leave behind such beatiful renditions of an evil number?"\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Why is 65 evil?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"You know the two forces, four directions, eight gods, and so on. All the good things, all the true things, come in perfect numbers. Sixty four is one of them. Sixty four callings. Sixty five is a spit in the face of truth. It\'s like taking a symbol of Tengri, but putting it upside down. We don\'t know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason." Oracle runs her fingers through her hair.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Do you have a theory?" """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"I think the orcs love it. It gives them a way to say: Look! The ancients had evil in them. The culture you so revere is a failed, evil empire. Something like that."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(SixtyFiversFacts.significance);
   }),
 ]);
 
@@ -2589,6 +2642,75 @@ class TalkToOracleQuake1 extends RoamingAction {
       "talk_to_oracle_quake_1_ink",
     ));
     return '${a.name} successfully performs TalkToOracleQuake1';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToOracleSixtyFiver extends RoamingAction {
+  @override
+  final String name = 'talk_to_oracle_sixty_fiver';
+
+  static final TalkToOracleSixtyFiver singleton = TalkToOracleSixtyFiver();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Oracle', 'Talk', '"What\'s the significance of \'65\'?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        w.actionHasBeenPerformed("talk_to_oracle_greetings") &&
+        c.knows(SixtyFiversFacts.shieldSeen) &&
+        !c.knows(SixtyFiversFacts.significance))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_oracle_sixty_fiver_ink",
+    ));
+    return '${a.name} successfully performs TalkToOracleSixtyFiver';
   }
 
   @override
@@ -12479,6 +12601,7 @@ final allActions = <RoamingAction>[
   TalkToOracleGreetings.singleton,
   TalkToOracleOrcs.singleton,
   TalkToOracleQuake1.singleton,
+  TalkToOracleSixtyFiver.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
   ArgoAskDeathless.singleton,
@@ -12562,6 +12685,7 @@ final allInks = <String, InkAst>{
   'talk_to_oracle_greetings_ink': talkToOracleGreetingsInk,
   'talk_to_oracle_orcs_ink': talkToOracleOrcsInk,
   'talk_to_oracle_quake_1_ink': talkToOracleQuake1Ink,
+  'talk_to_oracle_sixty_fiver_ink': talkToOracleSixtyFiverInk,
   'argo_ask_deathless_ink': argoAskDeathlessInk,
   'argo_ask_dragon_egg_ink': argoAskDragonEggInk,
   'argo_ask_quake_1_ink': argoAskQuake1Ink,

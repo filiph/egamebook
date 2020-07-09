@@ -24,6 +24,7 @@ The two orcs attack.
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
+c.learn(SixtyFiversFacts.shieldSeen);
 [[ENDCODE]]
 
 
