@@ -77,7 +77,41 @@ w.actionHasBeenPerformed("bleeds_blind_guide_greet")
 !c.hasHappened(evSavedSarn)
 
 INK:
-"I don't think I've met the fella. Ask around."
+"I don't think I've met the fella. Sorry. Ask around."
+
+* "Who can help me?"
+
+  "That depends. What was your brother doing here?"
+
+  * * "He came here to join the Knights."
+
+    "Well, then, ask the Knights. Most of them are still here, though the lot is leaving as we speak." Jisad shrugs. 
+
+    [[CODE]]
+    c.learn(KnightsFacts.knightsAreLeaving);
+    [[ENDCODE]]
+
+    "You can also always <>
+
+  * * "I don't really know."
+
+    Jisad nods solemnly. "Well then, you will have to ask everybody, won't you. Or, of course, if you make it that far, you can <>
+
+  - -
+
+  <> ask Oracle. She's the most knowledgeable of us all." 
+
+  [[CODE]]
+  c.learn(OracleFacts.someoneCalledOracle);
+  [[ENDCODE]]
+
+* "I will."
+
+"Finding anyone in this mess is tough. If you make it that far, you should ask Oracle. She's the one who makes it her job to _know_ things."
+
+[[CODE]]
+c.learn(OracleFacts.someoneCalledOracle);
+[[ENDCODE]]
 
 
 
@@ -297,4 +331,40 @@ INK:
 "It's supposed to be a powerful weapon. Not sure where it is, but I don't think anyone has it, or we'd know about it, I'm sure. Maybe it's lost somewhere. I kind of hope it is."
 
 // Optional: explore why he doesn't want it to be found.
+
+
+// ---
+ACTION: $bleeds_blind_guide_oracle
+COMMAND: Jisad >> Talk >> "Who's Oracle?"
+FOR_LOCATION: $bleeds_main
+
+PREREQUISITES:
+w.actionHasBeenPerformed("bleeds_blind_guide_greet")
+&&
+c.knows(OracleFacts.someoneCalledOracle)
+&&
+!c.knows(OracleFacts.personally)
+
+INK:
+"What, you're still here? Damn, [young sir], you're persistent." Jisad clicks with his tongue. "Oracle. She's not been here as long as I, but she knows more about all this place than I or anyone else."
+
+* "How come?"
+
+  "Books." Jisad shrugs and points at where his eyes once were. "She reads them. And then she trades that information for even more information from others."
+
+  He sighs. "You'll find her <>
+
+* "She came recently?"
+
+  "No," he chuckles. "She came as a young woman, working as a servant in the Keep on the fifth floor. But, I'm at least as old as she is, and I was born here."
+
+  He shifts. "I remember more. But, the books she reads remember yet more. She trades that information, and other she acquires, <>
+
+-
+
+<> on the East side of the Pyramid. She has a room just below the battlefield floor. Quite dangerous, this close to the Orcs. But the height gives her an advantage. A better view of the surroundings."
+
+[[CODE]]
+c.learn(OracleFacts.location);
+[[ENDCODE]]
 

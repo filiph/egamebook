@@ -4216,6 +4216,26 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
         'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
     firstHint:
         'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
+final talkToHorsemanWhiteAboutOracleInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"An old woman with books. She insists on living on the fifteenth floor. I told her several times she\'s practically asking to be killed by a rogue orc skirmisher, living that close to them." He waves his hand. "Bah."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(OracleFacts.location);
+  }),
+]);
 final talkToHorsemanWhiteDogheadInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -4263,7 +4283,7 @@ final talkToHorsemanWhiteDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Doghead is a local myth. A creature with a dog\'s head and a human\'s body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone\'s problems. It\'s magical thinking. Bullshit from centuries ago."\n',
+        'Doghead is a local myth. A creature with a dog\'s head and a human\'s body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone\'s problems. It\'s magical thinking. Bullshit from centuries ago. Go ask Oracle."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -4273,6 +4293,7 @@ final talkToHorsemanWhiteDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     c.learn(DogheadFacts.dogheadMyth);
+    c.learn(OracleFacts.someoneCalledOracle);
   }),
 ]);
 final talkToHorsemanWhiteGreetingsInk = InkAst([
@@ -4526,6 +4547,75 @@ class TalkToHorsemanWhiteAboutDevling extends RoamingAction {
     final Storyline s = c.outputStoryline;
     s.add('"No."\n', isRaw: true);
     return '${a.name} successfully performs TalkToHorsemanWhiteAboutDevling';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TalkToHorsemanWhiteAboutOracle extends RoamingAction {
+  @override
+  final String name = 'talk_to_horseman_white_about_oracle';
+
+  static final TalkToHorsemanWhiteAboutOracle singleton =
+      TalkToHorsemanWhiteAboutOracle();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Horseman White', 'Talk', '“Who is Oracle?”'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('staging_area') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("talk_to_horseman_white_greetings") &&
+        c.knows(OracleFacts.someoneCalledOracle) &&
+        !c.knows(OracleFacts.personally))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_horseman_white_about_oracle_ink",
+    ));
+    return '${a.name} successfully performs TalkToHorsemanWhiteAboutOracle';
   }
 
   @override
@@ -6854,7 +6944,7 @@ final talkToKatAboutLadyInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" "Ghost don't exist." """.trim(),
+      command: r""" "Ghosts don't exist." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -8827,8 +8917,113 @@ final bleedsBlindGuideBrotherInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"I don\'t think I\'ve met the fella. Ask around."\n', isRaw: true);
+    s.add('"I don\'t think I\'ve met the fella. Sorry. Ask around."\n',
+        isRaw: true);
   }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Who can help me?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"That depends. What was your brother doing here?"\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "He came here to join the Knights." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"Well, then, ask the Knights. Most of them are still here, though the lot is leaving as we speak." Jisad shrugs.\n',
+                    isRaw: true);
+              }),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                c.learn(KnightsFacts.knightsAreLeaving);
+              }),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('"You can also always\n', isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "I don't really know." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'Jisad nods solemnly. "Well then, you will have to ask everybody, won\'t you. Or, of course, if you make it that far, you can\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+        ]),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('ask Oracle. She\'s the most knowledgeable of us all."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(OracleFacts.someoneCalledOracle);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "I will." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Finding anyone in this mess is tough. If you make it that far, you should ask Oracle. She\'s the one who makes it her job to _know_ things."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(OracleFacts.someoneCalledOracle);
+        }),
+      ],
+    ),
+  ]),
 ]);
 final bleedsBlindGuideDelvingInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -9190,6 +9385,88 @@ final bleedsBlindGuideGreetInk = InkAst([
     s.add(
         'The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n',
         isRaw: true);
+  }),
+]);
+final bleedsBlindGuideOracleInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"What, you\'re still here? Damn, young sir, you\'re persistent." Jisad clicks with his tongue. "Oracle. She\'s not been here as long as I, but she knows more about all this place than I or anyone else."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "How come?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Books." Jisad shrugs and points at where his eyes once were. "She reads them. And then she trades that information for even more information from others."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('He sighs. "You\'ll find her\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "She came recently?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"No," he chuckles. "She came as a young woman, working as a servant in the Keep on the fifth floor. But, I\'m at least as old as she is, and I was born here."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'He shifts. "I remember more. But, the books she reads remember yet more. She trades that information, and other she acquires,\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'on the East side of the Pyramid. She has a room just below the battlefield floor. Quite dangerous, this close to the Orcs. But the height gives her an advantage. A better view of the surroundings."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(OracleFacts.location);
   }),
 ]);
 final bleedsBlindGuideOrcsInk = InkAst([
@@ -9723,6 +10000,73 @@ class BleedsBlindGuideGreet extends RoamingAction {
       "bleeds_blind_guide_greet_ink",
     ));
     return '${a.name} successfully performs BleedsBlindGuideGreet';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BleedsBlindGuideOracle extends RoamingAction {
+  @override
+  final String name = 'bleeds_blind_guide_oracle';
+
+  static final BleedsBlindGuideOracle singleton = BleedsBlindGuideOracle();
+
+  @override
+  List<String> get commandPathTemplate => ['Jisad', 'Talk', '"Who\'s Oracle?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("bleeds_blind_guide_greet") &&
+        c.knows(OracleFacts.someoneCalledOracle) &&
+        !c.knows(OracleFacts.personally))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "bleeds_blind_guide_oracle_ink",
+    ));
+    return '${a.name} successfully performs BleedsBlindGuideOracle';
   }
 
   @override
@@ -12016,6 +12360,7 @@ final allActions = <RoamingAction>[
   TalkToMiguelAfterCaravanDeparted.singleton,
   TalkToGreenWomanAboutSlopesDeath.singleton,
   TalkToHorsemanWhiteAboutDevling.singleton,
+  TalkToHorsemanWhiteAboutOracle.singleton,
   TalkToHorsemanWhiteDoghead.singleton,
   TalkToHorsemanWhiteGreetings.singleton,
   TalkToHorsemanWhiteQuake1.singleton,
@@ -12060,6 +12405,7 @@ final allActions = <RoamingAction>[
   BleedsBlindGuideDragonEgg.singleton,
   BleedsBlindGuideGoblins.singleton,
   BleedsBlindGuideGreet.singleton,
+  BleedsBlindGuideOracle.singleton,
   BleedsBlindGuideOrcs.singleton,
   BleedsBlindGuideQuake1.singleton,
   BleedsBlindGuideWhatsWrong.singleton,
@@ -12096,6 +12442,7 @@ final allInks = <String, InkAst>{
       talkToMiguelAfterCaravanDepartedInk,
   'talk_to_green_woman_about_slopes_death_ink':
       talkToGreenWomanAboutSlopesDeathInk,
+  'talk_to_horseman_white_about_oracle_ink': talkToHorsemanWhiteAboutOracleInk,
   'talk_to_horseman_white_doghead_ink': talkToHorsemanWhiteDogheadInk,
   'talk_to_horseman_white_greetings_ink': talkToHorsemanWhiteGreetingsInk,
   'talk_to_horseman_white_quake_1_ink': talkToHorsemanWhiteQuake1Ink,
@@ -12123,6 +12470,7 @@ final allInks = <String, InkAst>{
   'bleeds_blind_guide_dragon_egg_ink': bleedsBlindGuideDragonEggInk,
   'bleeds_blind_guide_goblins_ink': bleedsBlindGuideGoblinsInk,
   'bleeds_blind_guide_greet_ink': bleedsBlindGuideGreetInk,
+  'bleeds_blind_guide_oracle_ink': bleedsBlindGuideOracleInk,
   'bleeds_blind_guide_orcs_ink': bleedsBlindGuideOrcsInk,
   'bleeds_blind_guide_quake_1_ink': bleedsBlindGuideQuake1Ink,
   'bleeds_blind_guide_whats_wrong_ink': bleedsBlindGuideWhatsWrongInk,

@@ -22,6 +22,8 @@ INK:
 
 "Why would Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."
 
+// TODO: another option here
+
 * "Yet you are here."
 
 "I wouldn't be a very good Knight if I fled from my company, would I. But if you ask me... Wait." The knight shouts some commands at the servants, makes a short note in his book, and continues. "If you ask me, the withdrawal from here cannot come fast enough. I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
@@ -32,6 +34,7 @@ c.learn(KnightsFacts.knightsAreLeaving);
 
 -
 
+// TODO: more options here
 * "I'm here to find my brother."
 
 "How old is he? Cannot he take care of himself?"
@@ -84,10 +87,11 @@ Horseman White smirks. "Well done, kid. You might yet have a future in leadershi
 
 -
 
-<> Doghead is a local myth. A creature with a dog's head and a human's body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone's problems. It's magical thinking. Bullshit from centuries ago."
+<> Doghead is a local myth. A creature with a dog's head and a human's body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone's problems. It's magical thinking. Bullshit from centuries ago. Go ask Oracle."
 
 [[CODE]]
 c.learn(DogheadFacts.dogheadMyth);
+c.learn(OracleFacts.someoneCalledOracle);
 [[ENDCODE]]
 
 
@@ -142,3 +146,24 @@ w.actionHasBeenPerformed("talk_to_horseman_white_greetings")
 
 COMPLETE_SUCCESS_DESCRIPTION:
 "No."
+
+
+// ---
+ACTION: $talk_to_horseman_white_about_oracle
+COMMAND: Horseman White >> Talk >> “Who is Oracle?”
+FOR_LOCATION: $staging_area
+
+PREREQUISITES:
+w.actionHasBeenPerformed("talk_to_horseman_white_greetings")
+&&
+c.knows(OracleFacts.someoneCalledOracle)
+&&
+!c.knows(OracleFacts.personally)
+
+INK:
+"An old woman with books. She insists on living on the fifteenth floor. I told her several times she's practically asking to be killed by a rogue orc skirmisher, living that close to them." He waves his hand. "Bah."
+
+[[CODE]]
+c.learn(OracleFacts.location);
+[[ENDCODE]]
+
