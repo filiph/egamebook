@@ -69,6 +69,7 @@ The man purses his lips. "I hate magic." He shifts on his stool and the wood cre
 // ---
 ACTION: $bleeds_blind_guide_brother
 COMMAND: Jisad >> Talk >> "I'm looking for a Sarn of Falling Rock."
+FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
 w.actionHasBeenPerformed("bleeds_blind_guide_greet")
