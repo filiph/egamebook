@@ -66,6 +66,13 @@ class ShadowGraph {
   /// cannot be used because two of the entities use it.
   static final Entity noEntity = Entity(name: 'NO ENTITY');
 
+  /// The [ShadowGraph] sometimes must backtrack, and try constructing itself
+  /// again. For example, it might have to add a new entity to a report
+  /// in order to distinguish some object from another (e.g. there are two
+  /// swords, and to distinguish them, we need to bring in the owners
+  /// of those swords).
+  static const _maxIterations = 10;
+
   /// All the entities mentioned in the original storyline's [Report]s
   /// ([Report.subject], [Report.object], etc., for every report
   /// in the storyline).
@@ -97,12 +104,7 @@ class ShadowGraph {
   /// reports.
   List<ShadowReport> reports;
 
-  /// The [ShadowGraph] sometimes must backtrack, and try constructing itself
-  /// again. For example, it might have to add a new entity to a report
-  /// in order to distinguish some object from another (e.g. there are two
-  /// swords, and to distinguish them, we need to bring in the owners
-  /// of those swords).
-  static const _maxIterations = 10;
+  bool _entitiesHadToBeAdded;
 
   factory ShadowGraph.from(Storyline storyline) {
     /// These are the reports we get from the storyline itself.
@@ -188,15 +190,13 @@ class ShadowGraph {
     }
   }
 
-  bool _entitiesHadToBeAdded;
-
-  bool get entitiesHadToBeAdded => _entitiesHadToBeAdded;
-
   Set<Entity> get allMentionedEntities => _mentionedEntities;
 
   UnmodifiableListView<SentenceConjunction> get conjunctions =>
       UnmodifiableListView(
           reports.map((report) => report._conjunctions.single));
+
+  bool get entitiesHadToBeAdded => _entitiesHadToBeAdded;
 
   UnmodifiableListView<SentenceJoinType> get joiners =>
       UnmodifiableListView(reports.map((report) => report._joiners.single));
@@ -612,26 +612,6 @@ class ShadowGraph {
     }
   }
 
-  /// Gets all mentioned entities in [storylineReports].
-  ///
-  /// The entities will be stored in their initial state. For example,
-  /// if an entity changes pronoun during [storylineReports], this will
-  /// not be reflected: only the original pronoun will be listed.
-  static Set<Entity> _getAllMentionedEntities(
-      Iterable<Report> storylineReports) {
-    final result = <Entity>{};
-    final resultIds = <int>{};
-    for (final report in storylineReports) {
-      for (final entity in report.allEntities) {
-        if (!resultIds.contains(entity.id)) {
-          result.add(entity);
-          resultIds.add(entity.id);
-        }
-      }
-    }
-    return result;
-  }
-
   /// Returns a set of [IdentifierLevel] where [entity] clashes with
   /// any other entity in [allEntities].
   ///
@@ -980,6 +960,26 @@ class ShadowGraph {
       });
     }
   }
+
+  /// Gets all mentioned entities in [storylineReports].
+  ///
+  /// The entities will be stored in their initial state. For example,
+  /// if an entity changes pronoun during [storylineReports], this will
+  /// not be reflected: only the original pronoun will be listed.
+  static Set<Entity> _getAllMentionedEntities(
+      Iterable<Report> storylineReports) {
+    final result = <Entity>{};
+    final resultIds = <int>{};
+    for (final report in storylineReports) {
+      for (final entity in report.allEntities) {
+        if (!resultIds.contains(entity.id)) {
+          result.add(entity);
+          resultIds.add(entity.id);
+        }
+      }
+    }
+    return result;
+  }
 }
 
 /// This is a mutable wrapper around the immutable [Report].
@@ -1003,8 +1003,6 @@ class ShadowReport implements Report {
   /// [ReportIdentifiers] for each report starts with everything allowed,
   /// and the algorithm removes impossibilities.
   final ReportIdentifiers _reportIdentifiers;
-
-  ReportIdentifiers get qualifications => _reportIdentifiers;
 
   /// The way sentences are stringed together (with period, with comma,
   /// or without anything).
@@ -1064,12 +1062,12 @@ class ShadowReport implements Report {
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT2);
 
   @override
-  Entity get objectOwner =>
-      _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT_OWNER);
-
-  @override
   Entity get object2Owner =>
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT2_OWNER);
+
+  @override
+  Entity get objectOwner =>
+      _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT_OWNER);
 
   @override
   Entity get owner =>
@@ -1077,6 +1075,8 @@ class ShadowReport implements Report {
 
   @override
   bool get positive => wrapped.positive;
+
+  ReportIdentifiers get qualifications => _reportIdentifiers;
 
   @override
   bool get replacesThread => wrapped.replacesThread;

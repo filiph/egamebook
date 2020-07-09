@@ -134,11 +134,11 @@ class ReportIdentifiers {
 
   IdentifierLevel get object2 => _ensureSingle(_object2Range, "_object2Range");
 
-  IdentifierLevel get objectOwner =>
-      _ensureSingle(_objectOwnerRange, "_objectOwnerRange");
-
   IdentifierLevel get object2Owner =>
       _ensureSingle(_object2OwnerRange, "_object2OwnerRange");
+
+  IdentifierLevel get objectOwner =>
+      _ensureSingle(_objectOwnerRange, "_objectOwnerRange");
 
   IdentifierLevel get owner => _ensureSingle(_ownerRange, "_ownerRange");
 
@@ -182,16 +182,6 @@ class ReportIdentifiers {
       callback(ComplementType.OBJECT2_OWNER,
           getEntityById(report.object2.firstOwnerId), _object2OwnerRange);
     }
-  }
-
-  /// Sometimes, [IdentifierLevel.ownerNoun] is the only available identifier
-  /// for the entity. In that case, we force the inclusion of an owner
-  /// in things.
-  bool _ownerIsForcedByRange(Entity entity, Set<IdentifierLevel> range) {
-    if (entity == null) return false;
-    if (entity.firstOwnerId == null) return false;
-    // If only [IdentifierLevel.ownerNoun] is available, then owner is forced.
-    return range.every((level) => level == IdentifierLevel.ownerNoun);
   }
 
   /// Given [type], return the [IdentifierLevel] assigned to it.
@@ -268,6 +258,16 @@ class ReportIdentifiers {
   @override
   String toString() => "$runtimeType<subject=$_subjectRange, "
       "object=$_objectRange, object2=$_object2Range>";
+
+  /// Sometimes, [IdentifierLevel.ownerNoun] is the only available identifier
+  /// for the entity. In that case, we force the inclusion of an owner
+  /// in things.
+  bool _ownerIsForcedByRange(Entity entity, Set<IdentifierLevel> range) {
+    if (entity == null) return false;
+    if (entity.firstOwnerId == null) return false;
+    // If only [IdentifierLevel.ownerNoun] is available, then owner is forced.
+    return range.every((level) => level == IdentifierLevel.ownerNoun);
+  }
 
   static IdentifierLevel _ensureSingle(
       Set<IdentifierLevel> set, String debugLabel) {

@@ -44,13 +44,13 @@ class _ReportPair {
           !first.string.contains(Storyline.VERB_BE_NOT) &&
           !second.string.contains(Storyline.VERB_BE_NOT));
 
-  bool get positiveNegativeAreSwitched =>
-      (first.positive && second.negative) ||
-      (second.positive && first.negative);
-
   bool get positiveNegativeAreSame =>
       (first.positive && second.positive) ||
       (first.negative && second.negative);
+
+  bool get positiveNegativeAreSwitched =>
+      (first.positive && second.negative) ||
+      (second.positive && first.negative);
 
   /// The opposite of [firstSubjectIsSecondObject].
   bool get secondSubjectIsFirstObject =>
