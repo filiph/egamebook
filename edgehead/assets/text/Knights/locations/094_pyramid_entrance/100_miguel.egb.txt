@@ -36,9 +36,9 @@ INK:
 // Subtext: The knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.
 "Sarn? Doesn't ring the bell. Who is he?"
 
-* "He came here with the Knights."
+* "He came here to join the Knights."
 
-    Miguel looks surprised. "He's a knight, then?"
+    Miguel looks surprised. "He's a warrior, then?"
 
     * * "No, a blacksmith."
 
@@ -82,7 +82,11 @@ Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is, 
 
 The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.
 
-"This place is no longer safe. Unless you have business with one of the farmers, you shouldn't go in."
+"This place is no longer safe. Orcs, goblins. Unless you have business with one of the farmers, you shouldn't go in."
+
+[[CODE]]
+c.learn(OrcsFacts.inPyramid);
+[[ENDCODE]]
 
 
 // ---
@@ -96,6 +100,7 @@ INK:
 "[[IF w.actionHasBeenPerformed("talk_to_kat_about_devling")]]What Kat said. I'd just add that[[ELSE]]You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that[[ENDIF]] I've heard locals talk of a device of war called the Dragon Egg. If I were you, no offense, I'd try to find any advantage possible against the Orcs and the other creatures of the upside."
 
 [[CODE]]
+c.learn(OrcsFacts.inPyramid);
 c.learn(DragonEggFacts.anAncientWeapon);
 c.learn(DelvingFacts.infoHelps);
 [[ENDCODE]]

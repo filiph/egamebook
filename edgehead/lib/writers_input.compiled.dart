@@ -454,8 +454,10 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A huge, dark pit. The bottom is unseen, in complete darkness.\n',
+  s.add(
+      'A huge, dark pit. The bottom is unseen, in complete darkness.\n\nOrc language is heard from behind the walls.\n\n',
       isRaw: true);
+  c.learn(OrcsFacts.inPyramid);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1137,8 +1139,9 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
       ? '''Brutal laughter from the east.'''
       : '''''';
   s.add(
-      'Orc noises from all around, but thankfully no orc in sight. $ifBlock_753ddd0b\n',
+      'Orc noises from all around, but thankfully no orc in sight. $ifBlock_753ddd0b\n\n',
       isRaw: true);
+  c.learn(OrcsFacts.inPyramid);
 }, null, null,
     positionX: 32,
     positionY: 42,
@@ -1570,8 +1573,9 @@ final Room battlefield = Room(
       final weSubstitution =
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."\n\nThe two orcs attack.\n',
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."\n\nThe two orcs attack.\n\n',
           isRaw: true);
+      c.learn(OrcsFacts.inPyramid);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -1696,7 +1700,9 @@ final talkToOracleDogheadInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"There\'s a tale. TODO"\n', isRaw: true);
+    s.add(
+        '"There\'s a prophesy. A man with a dog\'s head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."\n',
+        isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -1704,7 +1710,37 @@ final talkToOracleDogheadInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    c.learn(OrcsFacts.inPyramid);
     c.learn(DogheadFacts.dogheadMyth);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"The Knights have been stationed here for generations, but even a force such as that cannot fully prevent peril in a place like San Francisco. The woods have been always crawling with vile creatures. The power of the Pyramid has always attracted the corrupt and the evil. I think the villagers and the farmers clinged to this tale. It gives them hope."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Now, with the Orcs and Big O and goblins, the popularity of the tale of the Doghead is only getting stronger."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(BigOFacts.someoneCalledBigO);
   }),
 ]);
 final talkToOracleDragonEggInk = InkAst([
@@ -6897,10 +6933,18 @@ final talkToKatAboutDevlingInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Don\'t underestimate it. There\'s a reason the Knights are leaving, and it\'s not because we are cowards."\n',
+        '"Don\'t underestimate it. There\'s a reason the Knights are leaving, and it\'s not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."\n',
         isRaw: true);
   }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(KnightsFacts.knightsAreLeaving);
+    c.learn(OrcsFacts.inPyramid);
+  }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -7432,7 +7476,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "He came here with the Knights." """.trim(),
+      command: r""" "He came here to join the Knights." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -7440,7 +7484,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('Miguel looks surprised. "He\'s a knight, then?"\n',
+          s.add('Miguel looks surprised. "He\'s a warrior, then?"\n',
               isRaw: true);
         }),
         InkForkNode([
@@ -7604,8 +7648,16 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"This place is no longer safe. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
+        '"This place is no longer safe. Orcs, goblins. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
         isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(OrcsFacts.inPyramid);
   }),
 ]);
 final talkToMiguelAboutDevlingInk = InkAst([
@@ -7629,6 +7681,7 @@ final talkToMiguelAboutDevlingInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    c.learn(OrcsFacts.inPyramid);
     c.learn(DragonEggFacts.anAncientWeapon);
     c.learn(DelvingFacts.infoHelps);
   }),
@@ -8849,7 +8902,7 @@ final bleedsBlindGuideBigOInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Jisad points to the top of the Pyramid, or at least where he thinks it is. He\'s not too far off, considering his blindness. "Osiris. The wizard." He puts his hand down and spits. "Or at least that\'s what everyone assumes."\n',
+        'Jisad points to the top of the Pyramid, or at least where he thinks it is. He\'s not too far off, considering his blindness. "The wizard." He puts his hand down and spits. "Or at least that\'s what everyone assumes."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -8859,7 +8912,6 @@ final bleedsBlindGuideBigOInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     c.learn(BigOFacts.isWizard);
-    c.learn(OrcsFacts.leadByBigO);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -9507,7 +9559,6 @@ final bleedsBlindGuideOrcsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
-    c.learn(OrcsFacts.leadByBigO);
     c.learn(BigOFacts.someoneCalledBigO);
   }),
 ]);
@@ -10116,7 +10167,7 @@ class BleedsBlindGuideOrcs extends RoamingAction {
       return false;
     }
     if (!(w.actionHasBeenPerformed("bleeds_blind_guide_whats_wrong") &&
-        !c.knows(OrcsFacts.leadByBigO))) {
+        c.knows(OrcsFacts.inPyramid))) {
       return false;
     }
     return w.actionNeverUsed(name);

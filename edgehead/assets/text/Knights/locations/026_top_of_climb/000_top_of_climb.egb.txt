@@ -11,4 +11,10 @@ MAP_NAME: Top of the climb
 FIRST_DESCRIPTION:
 A huge, dark pit. The bottom is unseen, in complete darkness.
 
+Orc language is heard from behind the walls.
+
+[[CODE]]
+c.learn(OrcsFacts.inPyramid);
+[[ENDCODE]]
+
 DESCRIPTION: $NONE

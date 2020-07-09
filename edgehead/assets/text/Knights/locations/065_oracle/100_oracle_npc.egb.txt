@@ -92,10 +92,19 @@ c.knows(DogheadFacts.somethingCalledDoghead)
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
 
 INK:
-"There's a tale. TODO"
+"There's a prophesy. A man with a dog's head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."
 
 [[CODE]]
+c.learn(OrcsFacts.inPyramid);
 c.learn(DogheadFacts.dogheadMyth);
+[[ENDCODE]]
+
+"The Knights have been stationed here for generations, but even a force such as that cannot fully prevent peril in a place like San Francisco. The woods have been always crawling with vile creatures. The power of the Pyramid has always attracted the corrupt and the evil. I think the villagers and the farmers clinged to this tale. It gives them hope."
+
+"Now, with the Orcs and Big O and goblins, the popularity of the tale of the Doghead is only getting stronger."
+
+[[CODE]]
+c.learn(BigOFacts.someoneCalledBigO);
 [[ENDCODE]]
 
 

@@ -80,7 +80,12 @@ c.inRoomWith(katId)
 w.actionHasBeenPerformed("talk_to_kat_greetings")
 
 INK:
-"Don't underestimate it. There's a reason the Knights are leaving, and it's not because we are cowards."
+"Don't underestimate it. There's a reason the Knights are leaving, and it's not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."
+
+[[CODE]]
+c.learn(KnightsFacts.knightsAreLeaving);
+c.learn(OrcsFacts.inPyramid);
+[[ENDCODE]]
 
 "You would do well to ask the locals. There's so much I don't know about this place."
 

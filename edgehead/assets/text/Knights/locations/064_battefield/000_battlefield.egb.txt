@@ -22,6 +22,11 @@ As soon as [we] climb the last stair and enter the floor proper, two orcs step o
 
 The two orcs attack.
 
+[[CODE]]
+c.learn(OrcsFacts.inPyramid);
+[[ENDCODE]]
+
+
 FIGHT_SITUATION:
 generateBattlefieldFight
 

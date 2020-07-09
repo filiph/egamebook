@@ -194,7 +194,7 @@ FOR_LOCATION: $bleeds_main
 PREREQUISITES:
 w.actionHasBeenPerformed("bleeds_blind_guide_whats_wrong")
 &&
-!c.knows(OrcsFacts.leadByBigO)
+c.knows(OrcsFacts.inPyramid)
 
 INK:
 "I was here when the Orcs first came, when they took over the very top of the Pyramid. I think they came with Big O." He sniffs. "They later pushed down, taking the Lair of God, desecrating it with some vile creature." 
@@ -205,7 +205,6 @@ Jisad shakes his head.
 
 [[CODE]]
 c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
-c.learn(OrcsFacts.leadByBigO);
 c.learn(BigOFacts.someoneCalledBigO);
 [[ENDCODE]]
 
@@ -223,20 +222,19 @@ c.knows(BigOFacts.someoneCalledBigO)
 !c.knows(BigOFacts.isWizard)
 
 INK:
-Jisad points to the top of the Pyramid, or at least where he thinks it is. He's not too far off, considering his blindness. "Osiris. The wizard." He puts his hand down and spits. "Or at least that's what everyone assumes."
+Jisad points to the top of the Pyramid, or at least where he thinks it is. He's not too far off, considering his blindness. "The wizard." He puts his hand down and spits. "Or at least that's what everyone assumes."
 
 [[CODE]]
 c.learn(BigOFacts.isWizard);
-c.learn(OrcsFacts.leadByBigO);
 [[ENDCODE]]
 
 * "Assumes?"
 
-"Yeah, well, he's a secretive fella. All we <>
+  "Yeah, well, he's a secretive fella. All we <>
 
 * "You don't know him?"
 
-"He came with the Orcs, [young sir]. It's not like we could flag them down and ask as they marched by. And since then, the Orcs and Big O have kept upside. All I <>
+  "He came with the Orcs, [young sir]. It's not like we could flag them down and ask as they marched by. And since then, the Orcs and Big O have kept upside. All I <>
 
 -
 
