@@ -1,6 +1,7 @@
 library storyline.shadow_graph;
 
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:built_value/built_value.dart' show $jf, $jc;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
@@ -1106,4 +1107,9 @@ class ShadowReport implements Report {
   Entity getEntityByType(ComplementType type) {
     return _reportIdentifiers.getEntityByType(wrapped, type);
   }
+
+  @override
+  String toString() => "ShadowReport"
+      "<${string.substring(0, min(string.length, 90))}...,"
+      "thread=$actionThread${replacesThread ? '(sum)' : ''}>";
 }
