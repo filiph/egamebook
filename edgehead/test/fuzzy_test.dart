@@ -85,6 +85,7 @@ Future<void> testWithStopWords(
     final runner = CliRunner(true, true, logFile, logLevel: logLevel);
     await runner.initialize(EdgeheadGame(
       saveGameSerialized: savegame == null ? null : defaultSavegames[savegame],
+      randomizeAfterPlayerChoice: false,
     ));
     try {
       runner.startBook();

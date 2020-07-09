@@ -673,11 +673,11 @@ class ShadowGraph {
     final result = List<Map<Identifier, Entity>>(reports.length);
     var previous = <Identifier, Entity>{};
 
-    // Used to ensure that no two unrelated entities have the same id.
+    /// Used to ensure that no two unrelated entities have the same id.
     final assertionIdMap = <int, Type>{};
 
-    // Gets an entity, either from [entities] (mentioned in this
-    // Storyline), or — if unavailable - in [_storylineEntities].
+    /// Gets an entity, either from [entities] (mentioned in this
+    /// Storyline), or — if unavailable - in [_storylineEntities].
     Entity getEntity(int id) => _mentionedEntities.singleWhere(
           (e) => e.id == id,
           orElse: () =>

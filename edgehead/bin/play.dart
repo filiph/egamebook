@@ -84,6 +84,7 @@ Future<void> main(List<String> args) async {
     await runner.initialize(EdgeheadGame(
       actionPattern: actionPattern,
       saveGameSerialized: savegame,
+      randomizeAfterPlayerChoice: false,
     ));
     try {
       runner.startBook();
