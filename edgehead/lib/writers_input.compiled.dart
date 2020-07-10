@@ -7519,7 +7519,7 @@ final talkToKatGreetingsInk = InkAst([
             consequence: [],
           ),
           InkChoiceNode(
-            command: r""" "Kat with a K. Like Katherine?" """.trim(),
+            command: r""" "Kat with a K, like Katherine?" """.trim(),
             consequence: [
               InkParagraphNode((ActionContext c) {
                 final WorldState originalWorld = c.world;
