@@ -24,6 +24,7 @@ export 'package:edgehead/edgehead_facts_enums.dart';
 export 'package:edgehead/edgehead_facts_strings.dart';
 export 'package:edgehead/edgehead_ids.dart';
 export 'package:edgehead/edgehead_items.dart';
+export 'package:edgehead/src/fight/common/necromancy.dart';
 
 final Entity cultists = Entity(
   id: 978001,

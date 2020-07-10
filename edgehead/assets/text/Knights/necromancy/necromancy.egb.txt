@@ -1,0 +1,27 @@
+ACTION: $perform_necromancy_elsewhere
+COMMAND: skills >> raise the dead
+
+PREREQUISITES:
+!(c.world.currentSituation as RoomRoamingSituation).monstersAlive
+&&
+!c.playerRoom.isSynthetic
+&&
+c.playerRoom.isOnMap
+
+REPEATABLE: $TRUE
+
+COMPLETE_SUCCESS_PROBABILITY:
+final c = ApplicabilityContext(a, sim, w);
+if (isFollowedByAnUndead(c, a)) {
+    return ReasonedSuccessChance.sureFailure;
+}
+return const ReasonedSuccessChance<void>(0.8);
+
+COMPLETE_SUCCESS_DESCRIPTION:
+[[CODE]]
+raiseDead(c);
+[[ENDCODE]]
+
+FAILURE_BEGINNING_DESCRIPTION:
+Nothing happens.
+

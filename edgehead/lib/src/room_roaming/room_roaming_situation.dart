@@ -15,7 +15,6 @@ import 'package:edgehead/src/room_roaming/actions/debug_wait.dart';
 import 'package:edgehead/src/room_roaming/actions/direct.dart';
 import 'package:edgehead/src/room_roaming/actions/heal.dart';
 import 'package:edgehead/src/room_roaming/actions/hire_npc.dart';
-import 'package:edgehead/src/room_roaming/actions/raise_dead_idle.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
 import 'package:edgehead/src/room_roaming/actions/take_implicit_approach.dart';
@@ -57,7 +56,6 @@ abstract class RoomRoamingSituation extends Object
         TakeImplicitApproachAction.singleton,
         HireNpcAction.singleton,
         HealAction.singleton,
-        RaiseDeadIdle.singleton,
         ...writers_input.allActions,
       ];
 

@@ -8,7 +8,6 @@ import 'generated_game_object.dart';
 import 'method_builders.dart';
 import 'parameters.dart';
 import 'parse_code_blocks.dart';
-import 'parse_percent.dart';
 import 'recase.dart';
 import 'types.dart';
 
@@ -84,32 +83,19 @@ class GeneratedAction extends GeneratedGameObject {
     Method isApplicableBuilder = _createIsApplicableBuilder(forLocation);
     classBuilder.methods.add(isApplicableBuilder);
 
-    var successChance =
-        parsePercent(_map['COMPLETE_SUCCESS_PROBABILITY'] ?? '100%');
+    var successChance = _map['COMPLETE_SUCCESS_PROBABILITY'] ??
+        'return ReasonedSuccessChance.sureSuccess;';
 
-    Method applySuccessBuilder =
-        _createApplySuccessBuilder(successChance, className);
+    Method applySuccessBuilder = _createApplySuccessBuilder(className);
     classBuilder.methods.add(applySuccessBuilder);
 
     Method applyFailureBuilder = _createApplyFailureBuilder(
-        successChance, hasRescue, rescueSituationClassName, className);
+        hasRescue, rescueSituationClassName, className);
     classBuilder.methods.add(applyFailureBuilder);
 
-    Expression reasonedChance;
-    if (successChance == 1.0) {
-      reasonedChance = reasonedSuccessChanceType.property('sureSuccess');
-    } else if (successChance == 0.0) {
-      reasonedChance = reasonedSuccessChanceType.property('sureFailure');
-    } else {
-      assert(0.0 < successChance);
-      assert(successChance < 1.0);
-      reasonedChance = reasonedSuccessChanceOfNothingType
-          .constInstance([literal(successChance)]);
-    }
-
     final successChanceBuilder = createActorSimWorldVoidMethod(
-        'getSuccessChance', reasonedSuccessChanceOfNothingType)
-      ..block.addExpression(reasonedChance.returned);
+        'getSuccessChance', reasonedSuccessChanceOfVoidType)
+      ..block.statements.add(Code(successChance));
     classBuilder.methods.add(successChanceBuilder.bake());
 
     classBuilder.methods.add(_createGetter('rerollable', boolType, false));
@@ -162,77 +148,67 @@ class GeneratedAction extends GeneratedGameObject {
     }
   }
 
-  Method _createApplyFailureBuilder(num successChance, bool hasRescue,
-      String rescueSituationClassName, String className) {
+  Method _createApplyFailureBuilder(
+      bool hasRescue, String rescueSituationClassName, String className) {
     var applyFailureBuilder =
         createActionContextVoidMethod('applyFailure', stringType);
-    if (successChance == 1.0) {
-      applyFailureBuilder.block.statements
-          .add(stateErrorThrow('Success chance is 100%'));
+    var failureBeginningDescription = _map['FAILURE_BEGINNING_DESCRIPTION'];
+    applyFailureBuilder.block.statements
+        .addAll(createDescriptionStatements(failureBeginningDescription ?? ''));
+    if (hasRescue) {
+      applyFailureBuilder.block
+          .addExpression(refer('w').property('pushSituation').call([
+        refer(rescueSituationClassName).newInstanceNamed(
+            'initialized', [refer('w').property('randomInt').call([])])
+      ]));
     } else {
-      var failureBeginningDescription = _map['FAILURE_BEGINNING_DESCRIPTION'];
-      applyFailureBuilder.block.statements.addAll(
-          createDescriptionStatements(failureBeginningDescription ?? ''));
-      if (hasRescue) {
-        applyFailureBuilder.block
-            .addExpression(refer('w').property('pushSituation').call([
-          refer(rescueSituationClassName).newInstanceNamed(
-              'initialized', [refer('w').property('randomInt').call([])])
-        ]));
-      } else {
-        // No rescue, but we might have FAILURE_EFFECT and FAILURE_DESCRIPTION
-        var failureDescription = _map['FAILURE_DESCRIPTION'];
-        applyFailureBuilder.block.statements
-            .addAll(createDescriptionStatements(failureDescription ?? ''));
-        if (_map.containsKey('FAILURE_EFFECT')) {
-          addStatements(_map['FAILURE_EFFECT'], applyFailureBuilder.block);
-        }
+      // No rescue, but we might have FAILURE_EFFECT and FAILURE_DESCRIPTION
+      var failureDescription = _map['FAILURE_DESCRIPTION'];
+      applyFailureBuilder.block.statements
+          .addAll(createDescriptionStatements(failureDescription ?? ''));
+      if (_map.containsKey('FAILURE_EFFECT')) {
+        addStatements(_map['FAILURE_EFFECT'], applyFailureBuilder.block);
       }
-      applyFailureBuilder.block.addExpression(
-          literal('\${a.name} fails to perform $className').returned);
     }
+    applyFailureBuilder.block.addExpression(
+        literal('\${a.name} fails to perform $className').returned);
     return applyFailureBuilder.bake();
   }
 
-  Method _createApplySuccessBuilder(num successChance, String className) {
+  Method _createApplySuccessBuilder(String className) {
     final applySuccessBuilder =
         createActionContextVoidMethod('applySuccess', stringType);
 
-    if (successChance == 0) {
+    assert(
+        _map.containsKey('COMPLETE_SUCCESS_DESCRIPTION') ||
+            _map.containsKey('INK'),
+        "$name is missing COMPLETE_SUCCESS_DESCRIPTION or INK: $_map");
+
+    if (_map['COMPLETE_SUCCESS_DESCRIPTION'] != null) {
+      var successDescription = _map['COMPLETE_SUCCESS_DESCRIPTION'];
       applySuccessBuilder.block.statements
-          .add(stateErrorThrow('Success chance is 0%.'));
-    } else {
-      assert(
-          _map.containsKey('COMPLETE_SUCCESS_DESCRIPTION') ||
-              _map.containsKey('INK'),
-          "$name is missing COMPLETE_SUCCESS_DESCRIPTION or INK: $_map");
-
-      if (_map['COMPLETE_SUCCESS_DESCRIPTION'] != null) {
-        var successDescription = _map['COMPLETE_SUCCESS_DESCRIPTION'];
-        applySuccessBuilder.block.statements
-            .addAll(createDescriptionStatements(successDescription ?? ''));
-      }
-
-      if (_map['SUCCESS_EFFECT'] != null) {
-        String successEffectBlock = _map['SUCCESS_EFFECT'];
-        addStatements(successEffectBlock, applySuccessBuilder.block);
-      }
-
-      if (_map['INK'] != null) {
-        assert(ink != null);
-        // Push the InkSituation with the correct name at
-        // the end of applySuccess.
-        addStatements(
-            'w.pushSituation(InkSituation.initialized('
-            'w.randomInt(),'
-            '"${ink.writersName}",'
-            '));',
-            applySuccessBuilder.block);
-      }
-
-      applySuccessBuilder.block.addExpression(
-          literal('\${a.name} successfully performs $className').returned);
+          .addAll(createDescriptionStatements(successDescription ?? ''));
     }
+
+    if (_map['SUCCESS_EFFECT'] != null) {
+      String successEffectBlock = _map['SUCCESS_EFFECT'];
+      addStatements(successEffectBlock, applySuccessBuilder.block);
+    }
+
+    if (_map['INK'] != null) {
+      assert(ink != null);
+      // Push the InkSituation with the correct name at
+      // the end of applySuccess.
+      addStatements(
+          'w.pushSituation(InkSituation.initialized('
+          'w.randomInt(),'
+          '"${ink.writersName}",'
+          '));',
+          applySuccessBuilder.block);
+    }
+
+    applySuccessBuilder.block.addExpression(
+        literal('\${a.name} successfully performs $className').returned);
     return applySuccessBuilder.bake();
   }
 

@@ -58,6 +58,8 @@ COMMAND: inventory >> compass >> use
 PREREQUISITES:
 c.hasItem(compassId)
 &&
+!c.playerRoom.isSynthetic
+&&
 c.playerRoom.isOnMap
 
 REPEATABLE: $TRUE

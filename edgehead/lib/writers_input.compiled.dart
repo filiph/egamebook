@@ -154,11 +154,11 @@ class ExamineAntechamberLock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ExamineAntechamberLock';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -219,11 +219,11 @@ class OpenAntechamberLock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform OpenAntechamberLock';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -314,11 +314,11 @@ class DargTentAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform DargTentAttack';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -520,11 +520,11 @@ class CrowdsourceAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform CrowdsourceAttack';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -585,11 +585,11 @@ class CrowdsourceListen extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform CrowdsourceListen';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -772,11 +772,11 @@ class ConetAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ConetAttack';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -834,11 +834,11 @@ class ConetExamine extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ConetExamine';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -958,11 +958,11 @@ class KarlListenToGuards extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform KarlListenToGuards';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -1054,11 +1054,11 @@ class KarlUseNecromancy extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform KarlUseNecromancy';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -1144,11 +1144,11 @@ class SaveSarn extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform SaveSarn';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -1308,11 +1308,11 @@ class KarlExamineStar extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform KarlExamineStar';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -1372,11 +1372,11 @@ class KarlTakeStar extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform KarlTakeStar';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -1562,11 +1562,11 @@ class ReservoirOpenDam extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ReservoirOpenDam';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2244,11 +2244,11 @@ class AskOracleAboutKeep extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform AskOracleAboutKeep';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2312,11 +2312,11 @@ class AskOracleAboutKeepGate extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform AskOracleAboutKeepGate';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2379,11 +2379,11 @@ class OracleGiveNorthSkull extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform OracleGiveNorthSkull';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2447,11 +2447,11 @@ class TalkToOracleDeathless extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleDeathless';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2515,11 +2515,11 @@ class TalkToOracleDoghead extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleDoghead';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2584,11 +2584,11 @@ class TalkToOracleDragonEgg extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleDragonEgg';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2652,11 +2652,11 @@ class TalkToOracleEarthquakes extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleEarthquakes';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2717,11 +2717,11 @@ class TalkToOracleGreetings extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleGreetings';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2785,11 +2785,11 @@ class TalkToOracleOrcs extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleOrcs';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2854,11 +2854,11 @@ class TalkToOracleQuake1 extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleQuake1';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -2923,11 +2923,11 @@ class TalkToOracleSixtyFiver extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToOracleSixtyFiver';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -3114,11 +3114,11 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform GiveLairOfGodStarToDeathless';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -3237,11 +3237,11 @@ class AttackLizardNearPond extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform AttackLizardNearPond';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -3537,11 +3537,11 @@ class ArgoAskDeathless extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ArgoAskDeathless';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -3605,11 +3605,11 @@ class ArgoAskDragonEgg extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ArgoAskDragonEgg';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -3673,11 +3673,11 @@ class ArgoAskQuake1 extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ArgoAskQuake1';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -3735,11 +3735,11 @@ class ArgoGreet extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ArgoGreet';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -4006,11 +4006,11 @@ class TalkToMiguelAboutDeserting extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToMiguelAboutDeserting';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -4075,11 +4075,11 @@ class TalkToMiguelAfterCaravanDeparted extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToMiguelAfterCaravanDeparted';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -4437,11 +4437,11 @@ class TalkToGreenWomanAboutSlopesDeath extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToGreenWomanAboutSlopesDeath';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -5026,11 +5026,11 @@ class TalkToHorsemanWhiteAboutDevling extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToHorsemanWhiteAboutDevling';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -5095,11 +5095,11 @@ class TalkToHorsemanWhiteAboutOracle extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToHorsemanWhiteAboutOracle';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -5163,11 +5163,11 @@ class TalkToHorsemanWhiteDoghead extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToHorsemanWhiteDoghead';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -5226,11 +5226,11 @@ class TalkToHorsemanWhiteGreetings extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToHorsemanWhiteGreetings';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -5295,11 +5295,11 @@ class TalkToHorsemanWhiteQuake1 extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToHorsemanWhiteQuake1';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -5363,11 +5363,11 @@ class TalkToHorsemanWhiteRetreat extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToHorsemanWhiteRetreat';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -5969,11 +5969,11 @@ class TalkToAdaAboutDelving extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaAboutDelving';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6036,11 +6036,11 @@ class TalkToAdaAboutDragonEgg extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaAboutDragonEgg';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6104,11 +6104,11 @@ class TalkToAdaAboutOracle extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaAboutOracle';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6171,11 +6171,11 @@ class TalkToAdaBigO extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaBigO';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6237,11 +6237,11 @@ class TalkToAdaDogheadFigure extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaDogheadFigure';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6299,11 +6299,11 @@ class TalkToAdaGreetings extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaGreetings';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6367,11 +6367,11 @@ class TalkToAdaQuake1 extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaQuake1';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6506,11 +6506,11 @@ class TalkToAdaAfterQuake2 extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToAdaAfterQuake2';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6636,11 +6636,11 @@ class AttemptOpenGate extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform AttemptOpenGate';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6700,11 +6700,11 @@ class DestroyGateWithAxe extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform DestroyGateWithAxe';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6761,11 +6761,11 @@ class ExamineGate extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ExamineGate';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6826,11 +6826,11 @@ class OpenGateUnlock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform OpenGateUnlock';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6931,11 +6931,11 @@ class ExamineFamilyPortrait extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ExamineFamilyPortrait';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -6992,11 +6992,11 @@ class SearchBedroom extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform SearchBedroom';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7058,11 +7058,11 @@ class TakeFamilyPortrait extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TakeFamilyPortrait';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7199,11 +7199,11 @@ class NorthSkullExamine extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform NorthSkullExamine';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7263,11 +7263,11 @@ class NorthSkullTake extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform NorthSkullTake';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7604,11 +7604,11 @@ class TalkToKatAboutBrother extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToKatAboutBrother';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7674,11 +7674,11 @@ class TalkToKatAboutDevling extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToKatAboutDevling';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7743,11 +7743,11 @@ class TalkToKatAboutLady extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToKatAboutLady';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7809,11 +7809,11 @@ class TalkToKatAboutMiguelMissing extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToKatAboutMiguelMissing';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -7872,11 +7872,11 @@ class TalkToKatGreetings extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToKatGreetings';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8210,11 +8210,11 @@ class TalkToMiguelAboutBrother extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToMiguelAboutBrother';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8276,11 +8276,11 @@ class TalkToMiguelAboutDevling extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToMiguelAboutDevling';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8343,11 +8343,11 @@ class TalkToMiguelAboutDragonEgg extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToMiguelAboutDragonEgg';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8411,11 +8411,11 @@ class TalkToMiguelAboutLady extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToMiguelAboutLady';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8473,11 +8473,11 @@ class TalkToMiguelGreetings extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToMiguelGreetings';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8620,11 +8620,11 @@ class TalkToKatAfterOrcOffensive extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform TalkToKatAfterOrcOffensive';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8797,11 +8797,11 @@ class BleedsMainObserveSmoke extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsMainObserveSmoke';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -8891,11 +8891,11 @@ class BleedsMainObserveVillage extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsMainObserveVillage';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -9014,11 +9014,11 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsTraderGoblinSmoke';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -9087,11 +9087,11 @@ class BleedsTraderGoblins extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsTraderGoblins';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -9153,11 +9153,11 @@ class BleedsTraderGreet extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsTraderGreet';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -9218,11 +9218,11 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsTraderTellAboutClearedCamp';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10125,11 +10125,11 @@ class BleedsBlindGuideBigO extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideBigO';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10192,11 +10192,11 @@ class BleedsBlindGuideBrother extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideBrother';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10258,11 +10258,11 @@ class BleedsBlindGuideDelving extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideDelving';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10326,11 +10326,11 @@ class BleedsBlindGuideDragonEgg extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideDragonEgg';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10392,11 +10392,11 @@ class BleedsBlindGuideGoblins extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideGoblins';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10457,11 +10457,11 @@ class BleedsBlindGuideGreet extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideGreet';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10524,11 +10524,11 @@ class BleedsBlindGuideOracle extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideOracle';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10591,11 +10591,11 @@ class BleedsBlindGuideOrcs extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideOrcs';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10659,11 +10659,11 @@ class BleedsBlindGuideQuake1 extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideQuake1';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10726,11 +10726,11 @@ class BleedsBlindGuideWhatsWrong extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform BleedsBlindGuideWhatsWrong';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10800,11 +10800,11 @@ class SarnExamineHisHammer extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform SarnExamineHisHammer';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10865,11 +10865,11 @@ class SarnReadLetter extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform SarnReadLetter';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10931,11 +10931,11 @@ class SarnSlap extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform SarnSlap';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -10995,11 +10995,11 @@ class SarnTakeHisHammer extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform SarnTakeHisHammer';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11320,11 +11320,11 @@ class GoblinCampAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform GoblinCampAttack';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11384,11 +11384,11 @@ class ListenContinue extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ListenContinue';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11448,11 +11448,11 @@ class ListenMore extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ListenMore';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11509,11 +11509,11 @@ class ListenToThemArguing extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ListenToThemArguing';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11572,11 +11572,11 @@ class ObserveGoblinCamp extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ObserveGoblinCamp';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11663,11 +11663,11 @@ class CompassExamine extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform CompassExamine';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11727,11 +11727,11 @@ class CompassTake extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform CompassTake';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11762,7 +11762,9 @@ class CompassUse extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(c.hasItem(compassId) && c.playerRoom.isOnMap)) {
+    if (!(c.hasItem(compassId) &&
+        !c.playerRoom.isSynthetic &&
+        c.playerRoom.isOnMap)) {
       return false;
     }
     return true;
@@ -11787,11 +11789,11 @@ class CompassUse extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform CompassUse';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -11829,6 +11831,75 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The goblin camp is deserted.\n', isRaw: true);
 }, null, null, positionX: 11, positionY: 97, mapName: 'The Goblin Camp');
+
+class PerformNecromancyElsewhere extends RoamingAction {
+  @override
+  final String name = 'perform_necromancy_elsewhere';
+
+  static final PerformNecromancyElsewhere singleton =
+      PerformNecromancyElsewhere();
+
+  @override
+  List<String> get commandPathTemplate => ['skills', 'raise the dead'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(!(c.world.currentSituation as RoomRoamingSituation).monstersAlive &&
+        !c.playerRoom.isSynthetic &&
+        c.playerRoom.isOnMap)) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    raiseDead(c);
+
+    return '${a.name} successfully performs PerformNecromancyElsewhere';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Nothing happens.\n', isRaw: true);
+    return '${a.name} fails to perform PerformNecromancyElsewhere';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    final c = ApplicabilityContext(a, sim, w);
+    if (isFollowedByAnUndead(c, a)) {
+      return ReasonedSuccessChance.sureFailure;
+    }
+    return const ReasonedSuccessChance<void>(0.8);
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Approach startFromPreStartBook =
     Approach('pre_start_book', 'start', r'$IMPLICIT', null);
 final startInkInk = InkAst([
@@ -12226,11 +12297,11 @@ class StartInk extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform StartInk';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -12412,11 +12483,11 @@ class ReadLetterFromFather extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    throw StateError("Success chance is 100%");
+    return '${a.name} fails to perform ReadLetterFromFather';
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     return ReasonedSuccessChance.sureSuccess;
   }
@@ -12486,9 +12557,9 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   }
 
   @override
-  ReasonedSuccessChance<Nothing> getSuccessChance(
+  ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
-    return const ReasonedSuccessChance<Nothing>(0.3);
+    return const ReasonedSuccessChance<void>(0.8);
   }
 
   @override
@@ -12856,6 +12927,7 @@ final allActions = <RoamingAction>[
   CompassExamine.singleton,
   CompassTake.singleton,
   CompassUse.singleton,
+  PerformNecromancyElsewhere.singleton,
   StartInk.singleton,
   ReadLetterFromFather.singleton,
   GuardpostAboveChurchTakeShield.singleton

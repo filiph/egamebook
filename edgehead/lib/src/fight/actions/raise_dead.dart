@@ -1,26 +1,29 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 
-class RaiseDead extends OtherActorActionBase {
+class RaiseDead extends Action<Nothing> {
   static final RaiseDead singleton = RaiseDead();
 
   static const String className = "RaiseDead";
 
   @override
-  List<String> get commandPathTemplate =>
-      ["<object's> corpse", "raise the dead"];
+  List<String> get commandPathTemplate => ["skills", "raise the dead"];
 
   @override
-  String get helpMessage => "Raising the dead will make them fight for me.";
+  String get helpMessage => "Raising the dead will make them fight for me. "
+      "I do not know in advance which corpse will rise. "
+      "I cannot do this if I am already followed by an undead. "
+      "My powers are not strong enough to hold two unliving minds.";
 
   @override
   bool get isAggressive => false;
+
+  @override
+  bool get isImplicit => false;
 
   @override
   bool get isProactive => true;
@@ -32,73 +35,43 @@ class RaiseDead extends OtherActorActionBase {
   bool get rerollable => true;
 
   @override
+  // TODO: change to sanity
   Resource get rerollResource => Resource.stamina;
 
   @override
-  String get rollReasonTemplate => "will <subject> turn <object> undead";
-
-  @override
-  String applyFailure(ActionContext context, Actor corpse) {
+  String applyFailure(ActionContext context, void _) {
     final a = context.actor;
     final s = context.outputStoryline;
-    a.report(s, "<subject> tr<ies> to raise <object> from the dead",
-        object: corpse);
+
+    a.report(s, "<subject> perform<s> the necromantic incantation");
     a.report(s, "<subject> fail<s>", but: true);
+
     s.add("nothing happens");
 
-    return "${a.name} failed to turn ${corpse.name} undead";
+    return "${a.name} failed to raise the dead";
   }
 
   @override
-  String applySuccess(ActionContext context, Actor corpse) {
-    final a = context.actor;
-    final s = context.outputStoryline;
-    final w = context.outputWorld;
-    final situation = context.world.currentSituation as FightSituation;
-
-    reportRaiseDead(a, s, corpse);
-
-    w.recordCustom(CustomEvent.actorTurningUndead, actor: corpse);
-
-    final raisedCorpse = raiseDead(a, corpse);
-    w.updateActorById(corpse.id, (b) => b.replace(raisedCorpse));
-
-    // Place actor in the correct team.
-    w.replaceSituationById<FightSituation>(situation.id, situation.rebuild((b) {
-      if (a.isPlayer) {
-        b.playerTeamIds.add(corpse.id);
-        b.enemyTeamIds.remove(corpse.id);
-      } else {
-        b.enemyTeamIds.add(corpse.id);
-        b.playerTeamIds.remove(corpse.id);
-      }
-    }));
-
-    return "${a.name} turned ${corpse.name} undead";
+  String applySuccess(ActionContext context, void _) {
+    return raiseDead(context);
   }
 
   @override
-  Iterable<Actor> generateObjects(ApplicabilityContext context) {
-    final w = context.world;
-    final situation = context.world.currentSituation as FightSituation;
-
-    final corpses = w.actors.where((Actor actor) =>
-        actor.isActive &&
-        !actor.isAnimated &&
-        (situation.playerTeamIds.contains(actor.id) ||
-            situation.enemyTeamIds.contains(actor.id)));
-
-    return corpses;
-  }
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
+      "Will <subject> raise anything?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Actor object) {
+      Actor a, Simulation sim, WorldState w, void _) {
+    final c = ApplicabilityContext(a, sim, w);
+    if (isFollowedByAnUndead(c, a)) {
+      return ReasonedSuccessChance.sureFailure;
+    }
     return const ReasonedSuccessChance<void>(0.8);
   }
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
-          WorldState w, Actor object) =>
-      a.isPlayer && !isFollowedByAnUndead(c, a);
+          WorldState w, void _) =>
+      a.isPlayer;
 }

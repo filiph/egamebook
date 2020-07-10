@@ -33,7 +33,7 @@ final allNeededTypes = <TypeReference>[
   inkSituationType,
   nothingType,
   prerequisiteType,
-  reasonedSuccessChanceOfNothingType,
+  reasonedSuccessChanceOfVoidType,
   resourceType,
   roomRoamingSituationType,
   roomType,
@@ -118,9 +118,9 @@ final prerequisiteType = TypeReference((b) => b
   ..symbol = 'Prerequisite'
   ..url = 'package:edgehead/ruleset/ruleset.dart');
 
-final reasonedSuccessChanceOfNothingType = TypeReference((b) => b
+final reasonedSuccessChanceOfVoidType = TypeReference((b) => b
   ..symbol = 'ReasonedSuccessChance'
-  ..types = ListBuilder<Reference>([nothingType])
+  ..types = ListBuilder<Reference>([voidType])
   ..url = 'package:edgehead/fractal_stories/action.dart');
 
 final reasonedSuccessChanceType = TypeReference((b) => b

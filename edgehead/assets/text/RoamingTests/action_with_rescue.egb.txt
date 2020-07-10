@@ -16,7 +16,8 @@ w.actionNeverUsed(name)
 FOR_LOCATION: $guardpost_above_church
 
 
-COMPLETE_SUCCESS_PROBABILITY: 30%
+COMPLETE_SUCCESS_PROBABILITY:
+return const ReasonedSuccessChance<void>(0.8);
 
 
 COMPLETE_SUCCESS_DESCRIPTION: 

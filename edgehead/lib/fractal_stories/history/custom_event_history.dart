@@ -17,6 +17,10 @@ abstract class CustomEvent
   /// Marks the turning of [actorId].
   static const String actorTurningUndead = 'actor_turning_undead';
 
+  /// Marks a successful necromancy when nowhere near a normal corpse
+  /// (which results in raising an insect, like a housefly).
+  static const String actorRaisedInsect = 'raised_insect';
+
   static Serializer<CustomEvent> get serializer => _$customEventSerializer;
 
   factory CustomEvent({
