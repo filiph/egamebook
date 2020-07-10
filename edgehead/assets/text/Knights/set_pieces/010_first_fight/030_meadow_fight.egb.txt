@@ -36,7 +36,7 @@ The fight is over.
 [[RULE]]
   $DEFAULT
 [[THEN]]
-"Well, that was (TBD)."
+"Well, that was something."
 
 [[ENDRULE]]
 [[ENDRULESET]]

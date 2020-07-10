@@ -98,7 +98,7 @@ final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: fight with Osiris\n\nTODO: win\n',
+      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: A device similar to Conet is here.\n\nTODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n\nTODO: fight with Osiris. Assuming a win (otherwise, death).\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -115,7 +115,9 @@ final Approach endOfRoamFromBigOObservatory = Approach(
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('I have prevailed. I am the Dog Head.\n', isRaw: true);
+  s.add(
+      'I have prevailed.\n\nTODO: an end, in which Aren (the player) shows the Dog\'s head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn\'s mind, and he is no longer insane. He explains his past mistakes, and apologizes.\n\nThe end.\n',
+      isRaw: true);
 });
 final Approach bigOAntechamberFromCrowdsource =
     Approach('crowdsource', 'big_o_antechamber', '', null);
@@ -309,7 +311,9 @@ class DargTentAttack extends RoamingAction {
     c.giveNewItemToPlayer(akxe);
     c.markHappened(evKilledDarg);
 
-    s.add('\nI take the akxe.\n', isRaw: true);
+    s.add(
+        '\nTODO: After I defeat him, Darg\'s head starts to talk. There is no question that this is a necromancer talking through the newly deceased Darg. I am (once again?) impressed that a necromancer can be so precise at their craft. The necromancer discourages me from going to the very top of the Pyramid. "Last chance to turn around."\n\nI take Darg\'s akxe.\n',
+        isRaw: true);
     return '${a.name} successfully performs DargTentAttack';
   }
 
@@ -351,7 +355,7 @@ final Room dargTent = Room('darg_tent', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'Tent outside, at the top of the elevator structure. Overlooking the bay.\n',
+      'Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -370,7 +374,7 @@ final Room dargTentAfterDargArrived = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.\n',
+          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.\n\nTODO: Image of Darg, a huge orc with a big axe ("akxe").\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -397,7 +401,9 @@ final Room dargTentAfterDargArrived = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('Darg is here.\n', isRaw: true);
+      s.add(
+          'Darg is here.\n\nTODO: Image of Darg, a huge orc with a big axe ("akxe").\n',
+          isRaw: true);
     },
     positionX: 33,
     positionY: 24,
@@ -411,7 +417,7 @@ final Room dargTentAfterDargKilled = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay.\n',
+          'Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -485,7 +491,8 @@ class CrowdsourceAttack extends RoamingAction {
     if (c.inRoomParent('crowdsource') != true) {
       return false;
     }
-    if (!(!c.hasHappened(evDargLeftCrowdsource) &&
+    if (!(w.actionHasBeenPerformed('crowdsource_listen') &&
+        !c.hasHappened(evDargLeftCrowdsource) &&
         !c.hasHappened(evKilledDarg))) {
       return false;
     }
@@ -500,7 +507,7 @@ class CrowdsourceAttack extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: a big fight, probably lost cause unless player is really powerful. Assume victory here.\n\n',
+        'TODO: a big fight, probably lost cause unless player is really powerful. Debug assumes victory here (because the alternative is always death).\n\n',
         isRaw: true);
     w.updateActorById(
         dargId,
@@ -510,7 +517,9 @@ class CrowdsourceAttack extends RoamingAction {
     c.giveNewItemToPlayer(akxe);
     c.markHappened(evKilledDarg);
 
-    s.add('\nI take the akxe.\n', isRaw: true);
+    s.add(
+        '\nTODO: After I defeat him, Darg\'s head starts to talk. There is no question that this is a necromancer talking through the newly deceased Darg. I am (once again?) impressed that a necromancer can be so precise at their craft. The necromancer discourages me from going to the very top of the Pyramid. "Last chance to turn around."\n\nI take Darg\'s akxe.\n',
+        isRaw: true);
     return '${a.name} successfully performs CrowdsourceAttack';
   }
 
@@ -574,7 +583,7 @@ class CrowdsourceListen extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I hear Darg, the captain, arguing with the other Orcs. There\'s plenty of them.\n',
+        'I hear a heated debate. There\'s the leader of the orcs, called Darg. There is another orc, and a high-ranking goblin.\n\nThe others are trying to persuade Darg to open the antechamber\n\nTODO: Image of Darg, a huge orc with a big axe ("akxe").\n\nTODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.\n',
         isRaw: true);
     return '${a.name} successfully performs CrowdsourceListen';
   }
@@ -616,7 +625,11 @@ final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A temple. Some orcs are talking.\n', isRaw: true);
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      'A temple. Some orcs are talking. $weSubstitutionCapitalized stay hidden.\n',
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -633,7 +646,11 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('A temple. Some orcs are talking.\n', isRaw: true);
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
+      s.add(
+          'A temple. Some orcs are talking. $weSubstitutionCapitalized stay hidden.\n',
+          isRaw: true);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -678,7 +695,10 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A large room taking up two floors. Bunk beds, and a dining area.\n',
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      'A large room taking up two floors. Bunk beds, and a dining area. $weSubstitutionCapitalized stay hidden.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -689,6 +709,36 @@ final Room barracks = Room('barracks', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null, positionX: 34, positionY: 31, mapName: 'Barracks');
 final Approach conetFromSmithy = Approach('smithy', 'conet', '', null);
+final conetExamineInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: Explain that this device is obviously what makes the quakes. There are massive stones being lifted. There are cracks in the walls and the floor, radiating from the center of the device.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The kobolds are complaining about being worked to death this day.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(ConetFacts.sawConet);
+  }),
+]);
 
 class ConetAttack extends RoamingAction {
   @override
@@ -698,6 +748,72 @@ class ConetAttack extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate => ['Kobolds', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('conet') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed('conet_examine'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: actual fight. Assuming victory.\n\nTODO: one of the kobolds is actually undead. He talks to me during the fight and after I kill him. It is obvious that the talking is done remotely, by some necromancer with amazing skill. The necromancer is discouraging me from getting involved.\n\n',
+        isRaw: true);
+    c.markHappened(evConetDestroyed);
+
+    return '${a.name} successfully performs ConetAttack';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ConetExamine extends RoamingAction {
+  @override
+  final String name = 'conet_examine';
+
+  static final ConetExamine singleton = ConetExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Kobolds', 'Examine'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -714,10 +830,11 @@ class ConetAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: actual fight. Assuming victory.\n\n', isRaw: true);
-    c.markHappened(evConetDestroyed);
-
-    return '${a.name} successfully performs ConetAttack';
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "conet_examine_ink",
+    ));
+    return '${a.name} successfully performs ConetExamine';
   }
 
   @override
@@ -757,8 +874,11 @@ final Room conet = Room('conet', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Some kobolds operating a large "woodpecker".\n\n', isRaw: true);
-  c.learn(ConetFacts.sawConet);
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
+  s.add(
+      'Some kobolds operating a large device. They are turning a huge wheel, drawing some kind of spring, and lifting huge rocks into position.\n\nA primitive writing on the entrance says "Conet".\n\n$weSubstitutionCapitalized stay hidden.\n',
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -836,7 +956,7 @@ class KarlListenToGuards extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The two are laughing.\n\n"He ate it whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole taheen in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
+        'The two are laughing.\n\n"He ate it whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
         isRaw: true);
     return '${a.name} successfully performs KarlListenToGuards';
   }
@@ -899,10 +1019,11 @@ class KarlUseNecromancy extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Terrible roar and thrashing comes from beyond the gate.\n\n',
+    s.add(
+        'TODO: I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, terrible roar and thrashing comes from beyond the gate.\n\n',
         isRaw: true);
     Ruleset(
-        Rule(564758293, 1, false, (ApplicabilityContext c) {
+        Rule(715270306, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -914,7 +1035,7 @@ class KarlUseNecromancy extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s going on with Karl?"\n\nThey go in, and are killed. Then, some more thrashing, then silence.\n\n',
+              '\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s going on with Karl?"\n\nTODO: They go in, and are killed. Then, some more thrashing, then silence.\n\n',
               isRaw: true);
         }),
         Rule(775067539, 0, false, (ApplicabilityContext c) {
@@ -985,7 +1106,7 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('Musty, dark place.\n', isRaw: true);
+  s.add('', isRaw: true);
 }, null, null,
     positionX: 34,
     positionY: 40,
@@ -1018,7 +1139,7 @@ class SaveSarn extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: fight. Assuming victory.\n\nI take Sarn (and his hammer) through the Pyramid and outside, where he starts crying. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds.\n\n',
+        'TODO: fight. Assuming victory.\n\nTODO: I try to talk to Sarn, but he doesn\'t respond. He\'s trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.\n\nTODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.\n\n',
         isRaw: true);
     c.markHappened(evSavedSarn);
     c.movePlayer('bleeds_main');
@@ -1063,9 +1184,14 @@ final Room smithy = Room('smithy', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('My brother, Sarn, working for the orcs, forging weapons.\n\n',
+  s.add(
+      'My brother, Sarn, working for the orcs, forging weapons. He seems not fully aware of his surroundings.\n\n',
       isRaw: true);
   c.learn(SarnFacts.seenPersonally);
+
+  s.add(
+      '\nHe is being guarded by an orcish jailer.\n\nTODO: Image of the two.\n',
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -1150,14 +1276,14 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
 final Approach godsLairFromElevator28 =
     Approach('elevator_28', 'gods_lair', '', null);
 
-class KarlTakeStar extends RoamingAction {
+class KarlExamineStar extends RoamingAction {
   @override
-  final String name = 'karl_take_star';
+  final String name = 'karl_examine_star';
 
-  static final KarlTakeStar singleton = KarlTakeStar();
+  static final KarlExamineStar singleton = KarlExamineStar();
 
   @override
-  List<String> get commandPathTemplate => ['Artifact Star', 'Take'];
+  List<String> get commandPathTemplate => ['star decoration', 'Examine'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -1177,10 +1303,74 @@ class KarlTakeStar extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I take the star. It fits into my palm. It says "Lair of God".\n\n\n',
+    s.add(
+        'The star is small enough to fit into my palm. It says "Lair of God".\n\nTODO: image of a "Lamb of God" christmas star, but the writing is so mangled that it could be mistaken for "Lair of God"\n\n',
         isRaw: true);
-    c.giveNewItemToPlayer(lairOfGodStar);
     c.learn(ArtifactStarFacts.artifactStarSeen);
+
+    return '${a.name} successfully performs KarlExamineStar';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    throw StateError("Success chance is 100%");
+  }
+
+  @override
+  ReasonedSuccessChance<Nothing> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will you be successful?';
+  }
+
+  @override
+  Resource get rerollResource => null;
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class KarlTakeStar extends RoamingAction {
+  @override
+  final String name = 'karl_take_star';
+
+  static final KarlTakeStar singleton = KarlTakeStar();
+
+  @override
+  List<String> get commandPathTemplate => ['Artifact Star', 'Take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('gods_lair') != true) {
+      return false;
+    }
+    if (!(c.isInIdleRoom && w.actionHasBeenPerformed("karl_examine_star"))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the star.\n\n', isRaw: true);
+    c.giveNewItemToPlayer(lairOfGodStar);
 
     return '${a.name} successfully performs KarlTakeStar';
   }
@@ -1234,7 +1424,7 @@ final Room godsLair = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('The gate to God\'s lair.\n', isRaw: true);
+      s.add('', isRaw: true);
     },
     generateGodsLairFight,
     null,
@@ -1242,6 +1432,11 @@ final Room godsLair = Room(
     positionX: 35,
     positionY: 42,
     mapName: 'God\'s Lair',
+    firstMapName: 'A guard room',
+    hint:
+        'A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.',
+    firstHint:
+        'An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -1296,6 +1491,11 @@ final Room godsLairAfterNecromancy = Room(
     positionX: 35,
     positionY: 42,
     mapName: 'God\'s Lair',
+    firstMapName: 'A guard room',
+    hint:
+        'A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.',
+    firstHint:
+        'An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -1402,7 +1602,9 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A filthy pool covered with a layer of green sludge.\n', isRaw: true);
+  s.add(
+      'A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality.\n\nThere\'s an iron dam here.\n',
+      isRaw: true);
 }, null, null,
     isIdle: true, positionX: 25, positionY: 48, mapName: 'Reservoir');
 final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
@@ -1574,7 +1776,7 @@ final Room battlefield = Room(
       final weSubstitution =
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."\n\nThe two orcs attack.\n\n',
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two orcs attack.\n\n',
           isRaw: true);
       c.learn(OrcsFacts.inPyramid);
       c.learn(SixtyFiversFacts.shieldSeen);
@@ -1601,7 +1803,7 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner\n\nI take the banner.\n\n',
+          '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner - an important source of pride for the Knights\n\nI take the banner.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(banner);
     },
@@ -1614,7 +1816,7 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('The Oracle, an old woman, is here.\n\n', isRaw: true);
+  s.add('An old woman is here.\n\n', isRaw: true);
   c.describeWorthiness(
       who: oracle,
       what: [
@@ -1895,6 +2097,17 @@ final talkToOracleGreetingsInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add(
         '"Greetings to you, too, young sir. I am Oracle. Bring me good information, and I will repay you with good information."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: she has a raven who can talk and sometimes interrupts conversation\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -2830,7 +3043,7 @@ final Room jungleEntranceMuddyFootprints = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Corridors full of vegetation. Path through that, like a path in a forest, but indoors.\n',
+          'Corridors full of vegetation. Path through that, like a path in a forest, but indoors. Muddy footprints.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -2895,7 +3108,9 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('They are happy.\n\n', isRaw: true);
+    s.add(
+        'They are extremely happy.\n\nTODO: explain how I gained there respect, and they allow me to visit their shrine\n\n',
+        isRaw: true);
     c.markHappened(evDeathlessRespectGained);
     c.removeItemFromPlayer(lairOfGodStarId);
 
@@ -2977,7 +3192,7 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The sacred place for the Deathless.\n\nTODO: explain the dragon egg\n\nI receive the dragon egg. The Deathless explain to me its operation.\n\n',
+      'The sacred shrine of the Deathless.\n\nTODO: Image of Dragon Egg - a frag grenade on a pedestal.\n\nTODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It\'s a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It\'s a frag grenade.)\n\n',
       isRaw: true);
   c.giveNewItemToPlayer(dragonEgg);
   c.markHappened(evReceivedDragonEgg);
@@ -3063,7 +3278,7 @@ final Room pond = Room('pond', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond.\n',
+      'A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3082,7 +3297,7 @@ final Room pondWithLizardman = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.\n',
+          'A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.\n\nTODO: image of the lizardman\n\nNext to the Lizardman, a dead member of the Deathless tribe.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3108,7 +3323,9 @@ final Room pondWithLizardman = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('A lizardman stands in front of the pond.\n', isRaw: true);
+      s.add(
+          'A lizardman stands in front of the pond.\n\nTODO: image of the lizardman\n\nNext to the Lizardman, a dead member of the Deathless tribe.\n',
+          isRaw: true);
     },
     positionX: 14,
     positionY: 74,
@@ -4098,7 +4315,7 @@ final Room slopes = Room('slopes', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n\nA large writing on the wall says "Doghead will come".\n\n',
+      'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.\n\nA large writing on the wall says "Doghead will come".\n\n',
       isRaw: true);
   c.learn(DogheadFacts.somethingCalledDoghead);
 }, (ActionContext c) {
@@ -4118,7 +4335,7 @@ final Room slopesQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.\n\nSome of them are talking about how the quakes are getting more frequent.\n\nIn the distance, a large group is traveling the main road, towards the Pyramid.\n',
+          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.\n\nSome of them are talking about how the quakes are getting more frequent.\n\nIn the distance, a large group is traveling the main road, towards the Pyramid.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -4263,7 +4480,7 @@ final Room slopesQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking mana pods on the slopes are all down on the ground, gathered around a dead body.\n\nA woman dressed in green is standing next to me, looking down.\n',
+          'The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking Fruit on the slopes are all down on the ground, gathered around a dead body.\n\nA woman dressed in green is standing next to me, looking down.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -6542,7 +6759,7 @@ class ExamineGate extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: describe gate\n\n\nA big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".\n',
+        'TODO: describe gate - a fine piece of carpentry. Obviously expensive to build.\n\n\nA big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".\n',
         isRaw: true);
     return '${a.name} successfully performs ExamineGate';
   }
@@ -6773,7 +6990,7 @@ class SearchBedroom extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: explain the family portrait - the looters didn\'t touch it - superstition?\n',
+        'TODO: Everything is gone. Except: a family portrait. The looters didn\'t touch it - superstition?\n',
         isRaw: true);
     return '${a.name} successfully performs SearchBedroom';
   }
@@ -6837,7 +7054,7 @@ class TakeFamilyPortrait extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I take the family portrait. It\'s kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.\n\n',
+        'I take the family portrait. It\'s kind of unwieldy and awkward to hold, so I keep it in front of me.\n\n',
         isRaw: true);
     c.giveNewItemToPlayer(familyPortrait);
 
@@ -6881,7 +7098,9 @@ final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('TBA\n', isRaw: true);
+  s.add(
+      'This is where the aristocracy lived, the Lord\'s quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.\n',
+      isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -6906,7 +7125,7 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
   c.learn(LadyHopeFacts.ladyHopeName);
 
   s.add(
-      '\nSomeone is talking through her. Impressive. She is clearly undead, and talking undead is something I\'ve never even considered before.\n\n',
+      '\nSomeone is talking through her. Impressive. She is clearly undead, and talking undead is something I\'ve never even considered before. It is obviously necromancy of some higher level. TODO: the necromancer taunts me.\n\n',
       isRaw: true);
   if (c.hasItem(familyPortraitId)) {
     s.add('Lady Hope seems taken aback by the portrait I have with me.',
@@ -6924,7 +7143,7 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
   c.giveNewItemToPlayer(katana);
 
   s.add(
-      '\nI take the katana.\n\n\nLady Hope\'s head: "I see you, young friend. I see your ambition. I see your talents. I see your brutality, which I like most of all. Too many young people limit themselves. Their effect on the world. You don\'t. But I warn you: you\'re not to cross me. You\'re not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die." And then, as if to illustrate the point, Lady Hope\'s face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.\n\n',
+      '\nI take the katana.\n\n\nLady Hope is dead, but for a while, her head is still talking. Lady Hope\'s head: "I see you, young friend. I see your ambition. I see your talents. I see your brutality, which I like most of all. Too many young people limit themselves. Their effect on the world. You don\'t. But I warn you: you\'re not to cross me. You\'re not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die." And then, as if to illustrate the point, Lady Hope\'s face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.\n\n',
       isRaw: true);
   c.learn(DogheadFacts.somethingCalledDoghead);
 }, (ActionContext c) {
@@ -6978,7 +7197,7 @@ class NorthSkullExamine extends RoamingAction {
         ? '''As I circle the "North Skull", the compass always points directly at it.'''
         : '''''';
     s.add(
-        'This is human skull made into a device. \n\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n$ifBlock_465f63bbc\n',
+        'This is human skull made into a device. \n\nTODO: image of north skull - some kind of device inset in a human skull\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n$ifBlock_465f63bbc\n',
         isRaw: true);
     return '${a.name} successfully performs NorthSkullExamine';
   }
@@ -7128,7 +7347,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. \n\n',
+      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nTODO: Image of the two guards\n\nThe man has been crying, judging from his eyes.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. \n\n',
       isRaw: true);
   c.learn(LadyHopeFacts.ladyInKeep);
 }, (ActionContext c) {
@@ -9137,7 +9356,7 @@ final bleedsBlindGuideBigOInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '"He came with the Orcs, young sir. It\'s not like we could flag them down and ask as they marched by. And since then, the Orcs and Big O have kept upside. All I\n',
+              '"He\'s all the way up there, young sir. It\'s not like we can pay him a visit, and he has not come down my entire life. All I\n',
               isRaw: true);
         }),
       ],
@@ -9729,7 +9948,7 @@ final bleedsBlindGuideOrcsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"I was here when the Orcs first came, when they took over the very top of the Pyramid. I think they came with Big O." He sniffs. "They later pushed down, taking the Lair of God, desecrating it with some vile creature."\n',
+        '"I was here when the Orcs first came, when they took over the very top of the Pyramid. I think they came with Big O, or at least their coming woke Big O to activity." He sniffs. "The Orcs later pushed down, taking the Lair of God, desecrating it with some vile creature."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12140,7 +12359,7 @@ final Room meadowFight = Room(
                 'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
                 isRaw: true);
           }),
-          Rule(708888700, 1, false, (ApplicabilityContext c) {
+          Rule(314778602, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -12152,7 +12371,7 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add('\nThe fight is over.\n\n', isRaw: true);
-            Ruleset(Rule(827330017, 0, false, (ApplicabilityContext c) {
+            Ruleset(Rule(994547605, 0, false, (ApplicabilityContext c) {
               final WorldState w = c.world;
               final Simulation sim = c.simulation;
               final Actor a = c.actor;
@@ -12163,7 +12382,7 @@ final Room meadowFight = Room(
               final Actor a = c.actor;
               final WorldStateBuilder w = c.outputWorld;
               final Storyline s = c.outputStoryline;
-              s.add('"Well, that was (TBD)."\n\n', isRaw: true);
+              s.add('"Well, that was something."\n\n', isRaw: true);
             })).apply(c);
             s.add(
                 '\n$ifBlock_3c0f034e2 "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
@@ -12586,9 +12805,11 @@ final allActions = <RoamingAction>[
   CrowdsourceAttack.singleton,
   CrowdsourceListen.singleton,
   ConetAttack.singleton,
+  ConetExamine.singleton,
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
   SaveSarn.singleton,
+  KarlExamineStar.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
   AskOracleAboutKeep.singleton,
@@ -12678,6 +12899,7 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'conet_examine_ink': conetExamineInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
   'talk_to_oracle_dragon_egg_ink': talkToOracleDragonEggInk,

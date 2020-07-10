@@ -7,7 +7,7 @@ POS: 14, 74
 MAP_NAME: Pond
 
 FIRST_DESCRIPTION:
-A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond.
+A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond.
 
 DESCRIPTION: $NONE
 
@@ -18,11 +18,19 @@ VARIANT_OF: $pond
 RULE: c.hasHappened(evOpenedDam)
 
 FIRST_DESCRIPTION:
-A crashed carcass of a helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.
+A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.
+
+TODO: image of the lizardman
+
+Next to the Lizardman, a dead member of the Deathless tribe.
+
 
 VARIANT_UPDATE_DESCRIPTION:
 A lizardman stands in front of the pond.
 
+TODO: image of the lizardman
+
+Next to the Lizardman, a dead member of the Deathless tribe.
 
 
 // ---

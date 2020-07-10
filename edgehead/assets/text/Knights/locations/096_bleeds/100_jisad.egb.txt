@@ -197,7 +197,7 @@ w.actionHasBeenPerformed("bleeds_blind_guide_whats_wrong")
 c.knows(OrcsFacts.inPyramid)
 
 INK:
-"I was here when the Orcs first came, when they took over the very top of the Pyramid. I think they came with Big O." He sniffs. "They later pushed down, taking the Lair of God, desecrating it with some vile creature." 
+"I was here when the Orcs first came, when they took over the very top of the Pyramid. I think they came with Big O, or at least their coming woke Big O to activity." He sniffs. "The Orcs later pushed down, taking the Lair of God, desecrating it with some vile creature." 
 
 Jisad shakes his head.
 
@@ -234,7 +234,7 @@ c.learn(BigOFacts.isWizard);
 
 * "You don't know him?"
 
-  "He came with the Orcs, [young sir]. It's not like we could flag them down and ask as they marched by. And since then, the Orcs and Big O have kept upside. All I <>
+  "He's all the way up there, [young sir]. It's not like we can pay him a visit, and he has not come down my entire life. All I <>
 
 -
 

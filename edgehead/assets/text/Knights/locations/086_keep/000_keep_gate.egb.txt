@@ -29,7 +29,7 @@ FOR_LOCATION: $keep_gate
 
 COMPLETE_SUCCESS_DESCRIPTION:
 // TODO: could be destroyed
-TODO: describe gate
+TODO: describe gate - a fine piece of carpentry. Obviously expensive to build.
 
 // Include some hints that Ada might know about it.
 

@@ -32,7 +32,9 @@ PREREQUISITES:
 c.hasItem(lairOfGodStarId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-They are happy.
+They are extremely happy.
+
+TODO: explain how I gained there respect, and they allow me to visit their shrine
 
 [[CODE]]
 c.markHappened(evDeathlessRespectGained);

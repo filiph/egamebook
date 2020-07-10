@@ -9,7 +9,7 @@ POS: 42, 78
 MAP_NAME: Slopes
 
 FIRST_DESCRIPTION:
-The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.
+The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.
 
 A large writing on the wall says "Doghead will come".
 

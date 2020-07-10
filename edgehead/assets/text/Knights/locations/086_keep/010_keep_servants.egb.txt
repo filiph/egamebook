@@ -30,9 +30,9 @@ PREREQUISITES:
 COMPLETE_SUCCESS_DESCRIPTION:
 This is human skull made into a device. 
 
-// TODO: image of north skull
+TODO: image of north skull - some kind of device inset in a human skull
 
-Next to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.
+Next to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.
 
 [[IF c.hasItem(compassId)]]As I circle the "North Skull", the compass always points directly at it.[[ENDIF]]
 

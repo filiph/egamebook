@@ -11,8 +11,7 @@ Musty, dark place. Through cracks, I can see rooms under me.
 
 [[IF !c.hasHappened(evKarlGuardsKilled)]]Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.[[ENDIF]]
 
-DESCRIPTION: 
-Musty, dark place.
+DESCRIPTION: $NONE
 
 
 // --
@@ -23,7 +22,7 @@ PREREQUISITES:
 !c.hasHappened(evKarlKilled)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-Terrible roar and thrashing comes from beyond the gate.
+TODO: I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, terrible roar and thrashing comes from beyond the gate.
 
 [[RULESET]]
 [[RULE]]
@@ -32,7 +31,7 @@ Terrible roar and thrashing comes from beyond the gate.
 
 "What's going on?" the berserker asks and picks up his battle axe. "What's going on with Karl?"
 
-They go in, and are killed. Then, some more thrashing, then silence.
+TODO: They go in, and are killed. Then, some more thrashing, then silence.
 
 [[ENDRULE]]
 [[RULE]]
@@ -47,6 +46,7 @@ c.markHappened(evKarlKilled);
 c.markHappened(evKarlGuardsKilled);
 c.markHappened(evKarlKilledViaNecromancy);
 [[ENDCODE]]
+
 
 // --
 ACTION: $karl_listen_to_guards
@@ -68,4 +68,4 @@ The two are laughing.
 
 The berserker nods. "Even better, it looks like we don't need to worry about chopping the carcasses from now on."
 
-"Yah. A whole taheen in one swallow." The captain shakes his head. "Karl is full of surprises, isn't he."
+"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn't he."

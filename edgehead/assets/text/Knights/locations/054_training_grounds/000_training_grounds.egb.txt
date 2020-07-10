@@ -26,3 +26,7 @@ The training grounds are dripping wet.
 
 VARIANT_UPDATE_DESCRIPTION:
 The training grounds are dripping wet.
+
+NOTES:
+
+* someone can talk about Darg's akxe, and how it's actually a key.

@@ -7,7 +7,7 @@ POS: 33, 24
 MAP_NAME: Darg's tent
 
 FIRST_DESCRIPTION:
-Tent outside, at the top of the elevator structure. Overlooking the bay.
+Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.
 
 DESCRIPTION: $NONE
 
@@ -17,23 +17,31 @@ ROOM: $darg_tent_after_darg_arrived
 VARIANT_OF: $darg_tent
 
 // This happens ~10 minutes after the player first visited crowdsource.
-RULE: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+RULE:
+c.hasHappened(evDargLeftCrowdsource)
+&&
+!c.hasHappened(evKilledDarg)
 
 FIRST_DESCRIPTION:
 Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.
 
+TODO: Image of Darg, a huge orc with a big axe ("akxe").
+
 VARIANT_UPDATE_DESCRIPTION:
 Darg is here.
+
+TODO: Image of Darg, a huge orc with a big axe ("akxe").
 
 
 // ---
 ROOM: $darg_tent_after_darg_killed
 VARIANT_OF: $darg_tent
 
-RULE: c.hasHappened(evKilledDarg)
+RULE:
+c.hasHappened(evKilledDarg)
 
 FIRST_DESCRIPTION:
-Tent outside, at the top of the elevator structure. Overlooking the bay.
+Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.
 
 VARIANT_UPDATE_DESCRIPTION:
 Darg won't be needing this tent anymore.
@@ -42,7 +50,10 @@ Darg won't be needing this tent anymore.
 // ---
 ACTION: $darg_tent_attack
 FOR_LOCATION: $darg_tent_after_darg_arrived
-PREREQUISITES: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+PREREQUISITES:
+c.hasHappened(evDargLeftCrowdsource)
+&&
+!c.hasHappened(evKilledDarg)
 
 COMMAND: Darg >> Attack
 
@@ -58,7 +69,9 @@ c.giveNewItemToPlayer(akxe);
 c.markHappened(evKilledDarg);
 [[ENDCODE]]
 
-I take the akxe.
+TODO: After I defeat him, Darg's head starts to talk. There is no question that this is a necromancer talking through the newly deceased Darg. I am (once again?) impressed that a necromancer can be so precise at their craft. The necromancer discourages me from going to the very top of the Pyramid. "Last chance to turn around."
+
+I take Darg's akxe.
 
 
 

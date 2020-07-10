@@ -2,9 +2,13 @@
 APPROACH: $__END_OF_ROAM__ FROM $big_o_observatory
 COMMAND: $IMPLICIT
 DESCRIPTION: 
-I have prevailed. I am the Dog Head.
+I have prevailed.
+
+TODO: an end, in which Aren (the player) shows the Dog's head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn's mind, and he is no longer insane. He explains his past mistakes, and apologizes.
+
+The end.
 
 
 NOTES:
 
-But what was Conet for? What were these quakes for? ... In the distance, large figures are approaching.
+* But what was Conet for? What were these quakes for? ... In the distance, large figures are approaching. -- this is cool, but it could be seen as a cheap trick - an obvious cliffhanger. Instead, focus on making the ending deliver, emotionally.

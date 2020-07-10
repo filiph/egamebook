@@ -6,15 +6,20 @@ ROOM: $gods_lair
 FLAGS: $IDLE
 
 POS: 35, 42
+
 MAP_NAME: God's Lair
+HINT: A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.
+
+FIRST_MAP_NAME: A guard room
+FIRST_HINT: An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.
+
 
 FIRST_DESCRIPTION: 
 Two orcs, a berserker and a captain, watch me approach in amazement.
 
 "You!" the captain bellows. "Stand still so I can chop off your head."
 
-DESCRIPTION:
-The gate to God's lair.
+DESCRIPTION: $NONE
 
 FIGHT_SITUATION:
 generateGodsLairFight
@@ -35,37 +40,52 @@ VARIANT_OF: $gods_lair
 RULE: c.hasHappened(evKarlKilledViaNecromancy)
 
 FIRST_DESCRIPTION:
-// Note: This is the first time player is in the room (incl. parent), so we know they didn't kill the guards.
+// Note: This is the first time player is in the room (incl. parent), so we know they didn't kill the guards themselves.
 The gate is open. On it, there is a small star decoration.
 
 Beyond the gate, a giant's carcass lies. Its belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.
 
+
 VARIANT_UPDATE_DESCRIPTION:
 The gate is severly damaged. Through a crack, I can see a giant's carcass. Its belly is teared open from the inside, by a humanoid figure with a bird head.
+
+// TODO: allow opening the gate and bringing the taheen with us as a companion.
 
 DESCRIPTION: $NONE
 
 FIGHT_SITUATION: null
 
-
-// TODO: examine_star action, only then Take
-
 // ---
-
-ACTION: $karl_take_star
-COMMAND: Artifact Star >> Take
+ACTION: $karl_examine_star
+COMMAND: star decoration >> Examine
 FOR_LOCATION: $gods_lair
 PREREQUISITES:
 c.isInIdleRoom
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I take the star. It fits into my palm. It says "Lair of God".
+The star is small enough to fit into my palm. It says "Lair of God".
 
-// TODO: image of "Lamb of God"
+TODO: image of a "Lamb of God" christmas star, but the writing is so mangled that it could be mistaken for "Lair of God"
+
+[[CODE]]
+c.learn(ArtifactStarFacts.artifactStarSeen);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $karl_take_star
+COMMAND: Artifact Star >> Take
+FOR_LOCATION: $gods_lair
+PREREQUISITES:
+c.isInIdleRoom
+&&
+w.actionHasBeenPerformed("karl_examine_star")
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the star.
 
 [[CODE]]
 c.giveNewItemToPlayer(lairOfGodStar);
-c.learn(ArtifactStarFacts.artifactStarSeen);
 [[ENDCODE]]
 
 

@@ -10,7 +10,9 @@ MAP_NAME: Reservoir
 FLAGS: $IDLE
 
 DESCRIPTION:
-A filthy pool covered with a layer of green sludge.
+A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality.
+
+There's an iron dam here. 
 
 
 // ---

@@ -1,5 +1,6 @@
 library edgehead_director;
 
+import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';

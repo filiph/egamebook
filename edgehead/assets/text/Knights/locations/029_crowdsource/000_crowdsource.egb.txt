@@ -8,7 +8,7 @@ POS: 27, 29
 MAP_NAME: Crowd's Temple
 
 FIRST_DESCRIPTION:
-A temple. Some orcs are talking.
+A temple. Some orcs are talking. [We] stay hidden.
 
 DESCRIPTION: $NONE
 
@@ -17,8 +17,11 @@ DESCRIPTION: $NONE
 ROOM: $crowdsource_after_orcs_left
 VARIANT_OF: $crowdsource
 
-// This happens ~10 minutes after the player first visited this room.
-RULE: c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+// This happens after the player listened ($crowdsource_listen) and left the room.
+RULE:
+c.hasHappened(evDargLeftCrowdsource)
+&&
+!c.hasHappened(evKilledDarg)
 
 VARIANT_UPDATE_DESCRIPTION:
 The orcs are gone.
@@ -27,24 +30,37 @@ The orcs are gone.
 // ---
 ACTION: $crowdsource_listen
 FOR_LOCATION: $crowdsource
-PREREQUISITES: !c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+PREREQUISITES:
+!c.hasHappened(evDargLeftCrowdsource)
+&&
+!c.hasHappened(evKilledDarg)
 
 COMMAND: Orcs >> Listen
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I hear Darg, the captain, arguing with the other Orcs. There's plenty of them.
+I hear a heated debate. There's the leader of the orcs, called Darg. There is another orc, and a high-ranking goblin.
 
-// TODO: show Darg's image
+The others are trying to persuade Darg to open the antechamber
+
+TODO: Image of Darg, a huge orc with a big axe ("akxe").
+
+TODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.
+
 
 // ---
 ACTION: $crowdsource_attack
 FOR_LOCATION: $crowdsource
-PREREQUISITES: !c.hasHappened(evDargLeftCrowdsource) && !c.hasHappened(evKilledDarg)
+PREREQUISITES:
+w.actionHasBeenPerformed('crowdsource_listen')
+&&
+!c.hasHappened(evDargLeftCrowdsource)
+&&
+!c.hasHappened(evKilledDarg)
 
 COMMAND: Orcs >> Attack
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: a big fight, probably lost cause unless player is really powerful. Assume victory here.
+TODO: a big fight, probably lost cause unless player is really powerful. Debug assumes victory here (because the alternative is always death).
 
 [[CODE]]
 w.updateActorById(dargId, (b) => b
@@ -55,7 +71,12 @@ c.giveNewItemToPlayer(akxe);
 c.markHappened(evKilledDarg);
 [[ENDCODE]]
 
-I take the akxe.
+TODO: After I defeat him, Darg's head starts to talk. There is no question that this is a necromancer talking through the newly deceased Darg. I am (once again?) impressed that a necromancer can be so precise at their craft. The necromancer discourages me from going to the very top of the Pyramid. "Last chance to turn around."
+
+I take Darg's akxe.
+
+
+
 
 NOTES:
 - This is where you finally confront the Akxe orc (named captain - Darg).

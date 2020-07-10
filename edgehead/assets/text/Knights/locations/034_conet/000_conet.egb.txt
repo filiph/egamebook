@@ -7,11 +7,11 @@ POS: 17, 34
 MAP_NAME: Conet
 
 FIRST_DESCRIPTION:
-Some kobolds operating a large "woodpecker".
+Some kobolds operating a large device. They are turning a huge wheel, drawing some kind of spring, and lifting huge rocks into position.
 
-[[CODE]]
-c.learn(ConetFacts.sawConet);
-[[ENDCODE]]
+A primitive writing on the entrance says "Conet".
+
+[We] stay hidden.
 
 
 DESCRIPTION: $NONE
@@ -31,13 +31,34 @@ Now, the room is silent.
 
 
 // ---
+ACTION: $conet_examine
+FOR_LOCATION: $conet
+
+COMMAND: Kobolds >> Examine
+
+INK:
+TODO: Explain that this device is obviously what makes the quakes. There are massive stones being lifted. There are cracks in the walls and the floor, radiating from the center of the device.
+
+The kobolds are complaining about being worked to death this day.
+
+[[CODE]]
+c.learn(ConetFacts.sawConet);
+[[ENDCODE]]
+
+
+// ---
 ACTION: $conet_attack
 FOR_LOCATION: $conet
+
+PREREQUISITES:
+w.actionHasBeenPerformed('conet_examine')
 
 COMMAND: Kobolds >> Attack
 
 COMPLETE_SUCCESS_DESCRIPTION:
 TODO: actual fight. Assuming victory.
+
+TODO: one of the kobolds is actually undead. He talks to me during the fight and after I kill him. It is obvious that the talking is done remotely, by some necromancer with amazing skill. The necromancer is discouraging me from getting involved.
 
 [[CODE]]
 c.markHappened(evConetDestroyed);
@@ -49,3 +70,4 @@ NOTES:
 - Name inspired by https://en.wikipedia.org/wiki/The_Conet_Project.
 - Attracting "evil" / giants from far away.
 - This is on the 32nd floor (binary symbolism).
+

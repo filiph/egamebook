@@ -16,7 +16,7 @@ POS: 15, 86
 MAP_NAME: Lord's quarters
 
 FIRST_DESCRIPTION:
-TBA
+This is where the aristocracy lived, the Lord's quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.
 
 DESCRIPTION: $NONE
 
@@ -27,7 +27,7 @@ COMMAND: furniture >> search
 FOR_LOCATION: $keep_bedroom
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: explain the family portrait - the looters didn't touch it - superstition?
+TODO: Everything is gone. Except: a family portrait. The looters didn't touch it - superstition?
 
 
 // ---
@@ -56,7 +56,7 @@ w.actionHasBeenPerformed('examine_family_portrait')
 
 COMPLETE_SUCCESS_DESCRIPTION:
 
-I take the family portrait. It's kind of unwieldy and awkward to hold, so I keep it in front of me, as a shield.
+I take the family portrait. It's kind of unwieldy and awkward to hold, so I keep it in front of me.
 
 [[CODE]]
 c.giveNewItemToPlayer(familyPortrait);

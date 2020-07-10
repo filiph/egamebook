@@ -9,11 +9,11 @@ POS: 15, 67
 MAP_NAME: Sacred Place
 
 FIRST_DESCRIPTION:
-The sacred place for the Deathless.
+The sacred shrine of the Deathless.
 
-TODO: explain the dragon egg
+TODO: Image of Dragon Egg - a frag grenade on a pedestal.
 
-I receive the dragon egg. The Deathless explain to me its operation.
+TODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It's a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It's a frag grenade.)
 
 [[CODE]]
 c.giveNewItemToPlayer(dragonEgg);

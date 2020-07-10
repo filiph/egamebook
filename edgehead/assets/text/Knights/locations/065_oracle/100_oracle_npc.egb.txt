@@ -13,6 +13,8 @@ PREREQUISITES:
 INK:
 "Greetings to you, too, [young sir]. I am Oracle. Bring me good information, and I will repay you with good information."
 
+TODO: she has a raven who can talk and sometimes interrupts conversation
+
 [[CODE]]
 c.learn(OracleFacts.personally);
 [[ENDCODE]]

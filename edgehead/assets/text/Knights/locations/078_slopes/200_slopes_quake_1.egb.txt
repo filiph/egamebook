@@ -6,7 +6,7 @@ VARIANT_OF: $slopes
 RULE: c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived)
 
 FIRST_DESCRIPTION:
-The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking mana pods.
+The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.
 
 Some of them are talking about how the quakes are getting more frequent.
 

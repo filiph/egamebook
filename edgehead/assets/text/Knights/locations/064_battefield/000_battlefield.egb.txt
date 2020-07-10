@@ -18,7 +18,7 @@ As soon as [we] climb the last stair and enter the floor proper, two orcs step o
 
 "Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."
 
-"Big mistake for him," the leather jerkin agrees. "But good news for us. XYZ rewards human scalps."
+"Big mistake for him," the leather jerkin agrees. "But good news for us. Darg rewards human scalps."
 
 The two orcs attack.
 
@@ -40,7 +40,7 @@ A glorious battle this was, I'm sure. It became a scab.
 
 Whatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.
 
-TODO: explain the banner
+TODO: explain the banner - an important source of pride for the Knights
 
 I take the banner.
 
