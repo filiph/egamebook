@@ -11,41 +11,9 @@ Musty, dark place. Through cracks, I can see rooms under me.
 
 [[IF !c.hasHappened(evKarlGuardsKilled)]]Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.[[ENDIF]]
 
+// TODO: if Karl still here and alive, hear a guttural breating "just beyond the gate"
+
 DESCRIPTION: $NONE
-
-
-// --
-ACTION: $karl_use_necromancy
-COMMAND: Skills >> Necromancy
-FOR_LOCATION: $maintenance_shaft
-PREREQUISITES:
-!c.hasHappened(evKarlKilled)
-
-COMPLETE_SUCCESS_DESCRIPTION:
-TODO: I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, terrible roar and thrashing comes from beyond the gate.
-
-[[RULESET]]
-[[RULE]]
-  !c.hasHappened(evKarlGuardsKilled)
-[[THEN]]
-
-"What's going on?" the berserker asks and picks up his battle axe. "What's going on with Karl?"
-
-TODO: They go in, and are killed. Then, some more thrashing, then silence.
-
-[[ENDRULE]]
-[[RULE]]
-  $DEFAULT
-[[THEN]]
-// Nothing here. The guards are dead already.
-[[ENDRULE]]
-[[ENDRULESET]]
-
-[[CODE]]
-c.markHappened(evKarlKilled);
-c.markHappened(evKarlGuardsKilled);
-c.markHappened(evKarlKilledViaNecromancy);
-[[ENDCODE]]
 
 
 // --
@@ -60,7 +28,7 @@ PREREQUISITES:
 COMPLETE_SUCCESS_DESCRIPTION:
 The two are laughing.
 
-"He ate it whole, didn't he?" the orc captain says. "I've never seen Karl do that."
+"He ate him whole, didn't he?" the orc captain says. "I've never seen Karl do that."
 
 "We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."
 

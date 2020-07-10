@@ -46,6 +46,20 @@ final Entity oracle = Entity(
   pronoun: Pronoun.SHE,
 );
 
+/// Returns `true` if the current room has a special Necromancy action
+/// attached. This has precedence over the usual necromancy in idle room.
+///
+/// For example, a puzzle might call for the player to raise dead at a specific
+/// room. In that case, we don't want the menu to show _two_ necromancy actions.
+bool storyNecromanyHasPrecedence(ApplicabilityContext c) {
+  if (c.playerRoom.name == 'maintenance_shaft' &&
+      !c.world.actionHasBeenPerformedSuccessfully('karl_use_necromancy')) {
+    return true;
+  }
+
+  return false;
+}
+
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
 }

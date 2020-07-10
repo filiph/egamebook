@@ -89,6 +89,8 @@ c.giveNewItemToPlayer(lairOfGodStar);
 [[ENDCODE]]
 
 
+// TODO: if Aren killed the guards, allow taheen necromancy, and opening the gate
+
 NOTES:
 
 * The sound here is the same guttural growl that the player hears when exploring.

@@ -10,6 +10,8 @@ PREREQUISITES:
 !c.playerRoom.isSynthetic
 &&
 c.playerRoom.isOnMap
+&&
+!storyNecromanyHasPrecedence(c)
 
 REPEATABLE: $TRUE
 

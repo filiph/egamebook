@@ -946,7 +946,7 @@ class KarlListenToGuards extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The two are laughing.\n\n"He ate it whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
+        'The two are laughing.\n\n"He ate him whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
         isRaw: true);
     return '${a.name} successfully performs KarlListenToGuards';
   }
@@ -982,6 +982,30 @@ class KarlListenToGuards extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final ifBlock_373b22f49 = !c.hasHappened(evKarlGuardsKilled)
+      ? '''Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.'''
+      : '''''';
+  s.add(
+      'Musty, dark place. Through cracks, I can see rooms under me.\n\n$ifBlock_373b22f49\n',
+      isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null,
+    positionX: 34,
+    positionY: 40,
+    mapName: 'Maintenance Shaft above 28th Floor');
+
 class KarlUseNecromancy extends RoamingAction {
   @override
   final String name = 'karl_use_necromancy';
@@ -996,10 +1020,11 @@ class KarlUseNecromancy extends RoamingAction {
     if (c.inRoomParent('maintenance_shaft') != true) {
       return false;
     }
-    if (!(!c.hasHappened(evKarlKilled))) {
+    if (!(!c.hasHappened(evKarlKilled) &&
+        !w.actionHasBeenPerformedSuccessfully('karl_use_necromancy'))) {
       return false;
     }
-    return w.actionNeverUsed(name);
+    return true;
   }
 
   @override
@@ -1054,13 +1079,23 @@ class KarlUseNecromancy extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_4d7298c01 = isFollowedByAnUndead(c, a)
+        ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
+        : '''''';
+    s.add(
+        'I perform the necromantic incantation but I fail. Nothing happens. $ifBlock_4d7298c01\n',
+        isRaw: true);
     return '${a.name} fails to perform KarlUseNecromancy';
   }
 
   @override
   ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
+    final c = ApplicabilityContext(a, sim, w);
+    if (isFollowedByAnUndead(c, a)) {
+      return ReasonedSuccessChance.sureFailure;
+    }
+    return const ReasonedSuccessChance<void>(0.8);
   }
 
   @override
@@ -1073,34 +1108,12 @@ class KarlUseNecromancy extends RoamingAction {
   @override
   Resource get rerollResource => null;
   @override
-  String get helpMessage => null;
+  String get helpMessage =>
+      'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
   @override
   bool get isAggressive => false;
 }
 
-final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final ifBlock_373b22f49 = !c.hasHappened(evKarlGuardsKilled)
-      ? '''Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.'''
-      : '''''';
-  s.add(
-      'Musty, dark place. Through cracks, I can see rooms under me.\n\n$ifBlock_373b22f49\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null,
-    positionX: 34,
-    positionY: 40,
-    mapName: 'Maintenance Shaft above 28th Floor');
 final Approach smithyFromConet = Approach('conet', 'smithy', '', null);
 final Approach smithyFromJunction = Approach('junction', 'smithy', '', null);
 
@@ -11850,7 +11863,8 @@ class PerformNecromancyElsewhere extends RoamingAction {
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (!(!(c.world.currentSituation as RoomRoamingSituation).monstersAlive &&
         !c.playerRoom.isSynthetic &&
-        c.playerRoom.isOnMap)) {
+        c.playerRoom.isOnMap &&
+        !storyNecromanyHasPrecedence(c))) {
       return false;
     }
     return true;
