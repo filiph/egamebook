@@ -911,21 +911,33 @@ class ShadowGraph {
         // It is possible for an entity to appear which wasn't in the
         // list of entities in [_getIdentifiersThroughoutStory].
         //
-        // For example, the algorithm here can realize
+        // For example, the algorithm here in
+        // _removeQualificationsWhereUnavailable can realize
         // that a `leg` (subject) needs a `goblin's` (owner) because there are
         // two legs at play in the given storyline. Suddenly, the report
         // "<subject> goes limp" also includes a [Report.owner] that
         // wasn't there before. This means we have no [relevantIdentifiers]
-        // to play with.
+        // to work with.
         //
-        // Thankfully, the algorithm is iterative, so the next iteration
-        // will have the goblin from the start. Here, all we can do is to
-        // fully qualify the goblin.
+        // Thankfully, the algorithm is iterative. This iteration will fail
+        // (because it ends with more entities than it started with) and
+        // the next iteration will have the goblin from the start.
+        // Here, all we can do is to give the goblin all the identifiers.
         if (relevantIdentifiers.isEmpty) {
           log.warning("relevantIdentifiers for $entity are empty in $report: "
               "$current");
-          relevantIdentifiers.add(
-              Identifier.adjectiveNoun('${entity.adjective} ${entity.name}'));
+          relevantIdentifiers.addAll([
+            // All identifiers, except for omitted. Omitted doesn't make sense
+            // for anything other than subject, and an added entity
+            // is never the subject of the sentence.
+            if (entity.adjective != null)
+              Identifier.adjectiveNoun('${entity.adjective} ${entity.name}'),
+            if (entity.adjective != null)
+              Identifier.adjectiveOne(entity.adjective),
+            if (!entity.nameIsProperNoun) Identifier.noun(entity.name),
+            Identifier.pronoun(entity.pronoun),
+            if (entity.nameIsProperNoun) Identifier.properNoun(entity.name),
+          ]);
         }
 
         // Retain only the part of the entity's current range
