@@ -11871,7 +11871,9 @@ class PerformNecromancyElsewhere extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Nothing happens.\n', isRaw: true);
+    s.add(
+        'I perform the necromantic incantation but I fail. Nothing happens.\n',
+        isRaw: true);
     return '${a.name} fails to perform PerformNecromancyElsewhere';
   }
 

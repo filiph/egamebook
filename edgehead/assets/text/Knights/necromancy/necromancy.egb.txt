@@ -11,6 +11,7 @@ c.playerRoom.isOnMap
 REPEATABLE: $TRUE
 
 COMPLETE_SUCCESS_PROBABILITY:
+// Keep in sync with FightSituation's RaiseDead.getSuccessChance.
 final c = ApplicabilityContext(a, sim, w);
 if (isFollowedByAnUndead(c, a)) {
     return ReasonedSuccessChance.sureFailure;
@@ -23,5 +24,5 @@ raiseDead(c);
 [[ENDCODE]]
 
 FAILURE_BEGINNING_DESCRIPTION:
-Nothing happens.
-
+// Keep in sync with FightSituation's RaiseDead.applyFailure.
+I perform the necromantic incantation but I fail. Nothing happens.
