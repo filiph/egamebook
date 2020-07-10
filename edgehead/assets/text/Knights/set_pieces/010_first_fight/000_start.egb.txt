@@ -1,5 +1,9 @@
-APPROACH: $start FROM $start_tester_build
-COMMAND: Set piece >> from the start of the game
+// APPROACH: $start FROM $start_tester_build
+// COMMAND: Set piece >> from the start of the game
+
+APPROACH: $start FROM $pre_start_book
+COMMAND: $IMPLICIT
+
 
 // ---
 ROOM: $start

@@ -63,16 +63,6 @@ final Approach endOfRoamFromTestRandomEncounter =
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
-final Approach testRandomEncounterFromStartTesterBuild =
-    Approach('start_tester_build', 'test_random_encounter', 'Random encounter',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
 final Room testRandomEncounter = Room('test_random_encounter',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -8766,18 +8756,6 @@ final Approach bleedsMainFromMeadowFight =
     Approach('meadow_fight', 'bleeds_main', '', null);
 final Approach bleedsMainFromPyramidEntrance =
     Approach('pyramid_entrance', 'bleeds_main', '', null);
-final Approach bleedsMainFromStartTesterBuild = Approach(
-    'start_tester_build',
-    'bleeds_main',
-    'Set piece >> from the start of the game, skipping the first fight',
-    (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-});
 
 class BleedsMainObserveSmoke extends RoamingAction {
   @override
@@ -11851,20 +11829,8 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The goblin camp is deserted.\n', isRaw: true);
 }, null, null, positionX: 11, positionY: 97, mapName: 'The Goblin Camp');
-final Approach startTesterBuildFromPreStartBook =
-    Approach('pre_start_book', 'start_tester_build', r'$IMPLICIT', null);
-final Room startTesterBuild = Room('start_tester_build', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'Welcome to the test build of this game. Thank you for taking the time to make the game better.\n',
-      isRaw: true);
-}, null, null, null);
-final Approach startFromStartTesterBuild = Approach('start_tester_build',
-    'start', 'Set piece >> from the start of the game', null);
+final Approach startFromPreStartBook =
+    Approach('pre_start_book', 'start', r'$IMPLICIT', null);
 final startInkInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -12705,13 +12671,11 @@ final allRooms = <Room>[
   goblinSkirmishPatrol,
   goblinSkirmishSneak,
   goblinSkirmishMain,
-  startTesterBuild,
   start,
   meadowFight
 ];
 final allApproaches = <Approach>[
   endOfRoamFromTestRandomEncounter,
-  testRandomEncounterFromStartTesterBuild,
   bigOObservatoryFromBigOAntechamber,
   endOfRoamFromBigOObservatory,
   bigOAntechamberFromCrowdsource,
@@ -12787,15 +12751,13 @@ final allApproaches = <Approach>[
   bleedsMainFromGoblinSkirmishSneak,
   bleedsMainFromMeadowFight,
   bleedsMainFromPyramidEntrance,
-  bleedsMainFromStartTesterBuild,
   bleedsTraderHutFromBleedsMain,
   endOfRoamFromBleedsMain,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishSneakFromBleedsMain,
   goblinSkirmishSneakFromGoblinSkirmishPatrol,
   goblinSkirmishMainFromBleedsMain,
-  startTesterBuildFromPreStartBook,
-  startFromStartTesterBuild,
+  startFromPreStartBook,
   meadowFightFromStart
 ];
 final allActions = <RoamingAction>[

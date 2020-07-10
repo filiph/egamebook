@@ -7,10 +7,10 @@ MAP_NAME: N/A
 FIGHT_SITUATION:
 generateRandomEncounter
 
-// ---
-APPROACH: $test_random_encounter FROM $start_tester_build
-COMMAND: Random encounter
-DESCRIPTION: $NONE
+// // ---
+// APPROACH: $test_random_encounter FROM $start_tester_build
+// COMMAND: Random encounter
+// DESCRIPTION: $NONE
 
 
 // ---

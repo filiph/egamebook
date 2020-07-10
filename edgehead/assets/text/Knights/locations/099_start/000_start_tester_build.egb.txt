@@ -1,8 +1,8 @@
-APPROACH: $start_tester_build FROM $pre_start_book
-COMMAND: $IMPLICIT
+// APPROACH: $start_tester_build FROM $pre_start_book
+// COMMAND: $IMPLICIT
 
-// ---
-ROOM: $start_tester_build
+// // ---
+// ROOM: $start_tester_build
 
-FIRST_DESCRIPTION:
-Welcome to the test build of this game. Thank you for taking the time to make the game better.
+// FIRST_DESCRIPTION:
+// Welcome to the test build of this game. Thank you for taking the time to make the game better.
