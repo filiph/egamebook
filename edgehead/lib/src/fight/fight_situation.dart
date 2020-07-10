@@ -17,6 +17,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/assume_stance.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
+import 'package:edgehead/src/fight/actions/debug_kill_enemies.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/equip_weapon.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
@@ -158,6 +159,8 @@ abstract class FightSituation extends Object
         Unconfuse.singleton,
         Wait.singleton,
         WrestleWeaponOnGround.singleton,
+        // Debug & testing
+        DebugKillEnemies.singleton,
       ];
 
   /// The items dropped by combatants, or lying around from the beginning of

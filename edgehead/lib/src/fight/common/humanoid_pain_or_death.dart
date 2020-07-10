@@ -88,7 +88,9 @@ void inflictPain(
   }
 }
 
-/// Report's a humanoid's death and drops their items.
+/// Reports a humanoid's death and drops their items. Does _not_ actually
+/// set [Actor.hitpoints] to `0` (that is expected to have happened
+/// in something like `executeSlashingHit`).
 ///
 /// Special case is for invincible actors, who will never die, only lose
 /// consciousness.
