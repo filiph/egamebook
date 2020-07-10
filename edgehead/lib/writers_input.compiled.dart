@@ -11840,7 +11840,7 @@ class PerformNecromancyElsewhere extends RoamingAction {
       PerformNecromancyElsewhere();
 
   @override
-  List<String> get commandPathTemplate => ['skills', 'raise the dead'];
+  List<String> get commandPathTemplate => ['skills', 'necromancy'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -11897,7 +11897,8 @@ class PerformNecromancyElsewhere extends RoamingAction {
   @override
   Resource get rerollResource => null;
   @override
-  String get helpMessage => null;
+  String get helpMessage =>
+      'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
   @override
   bool get isAggressive => false;
 }

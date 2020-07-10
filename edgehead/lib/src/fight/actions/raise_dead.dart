@@ -11,7 +11,7 @@ class RaiseDead extends Action<Nothing> {
   static const String className = "RaiseDead";
 
   @override
-  List<String> get commandPathTemplate => ["skills", "raise the dead"];
+  List<String> get commandPathTemplate => ["skills", "necromancy"];
 
   @override
   String get helpMessage => "Raising the dead will make them fight for me. "
@@ -58,7 +58,7 @@ class RaiseDead extends Action<Nothing> {
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
-      "Will <subject> raise anything?";
+      "Will I raise anything?";
 
   @override
   ReasonedSuccessChance getSuccessChance(
