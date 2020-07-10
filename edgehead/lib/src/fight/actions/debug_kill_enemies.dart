@@ -46,16 +46,27 @@ class DebugKillEnemies extends Action<Nothing> {
 
     s.add(
         '(A demon called Debug appears '
-        'and brings instant death to my enemies.)',
+        'and brings instant death to any of my enemies in this place.)',
         isRaw: true);
 
     final situation = context.world.currentSituation as FightSituation;
     final animatedEnemies = context.world.actors.where((e) =>
-        e.isAnimatedAndActive && (situation.enemyTeamIds.contains(e.id)));
+        e.isAnimatedAndActive &&
+        !e.isInvincible &&
+        (situation.enemyTeamIds.contains(e.id)));
 
     for (final enemy in animatedEnemies) {
       context.outputWorld.updateActorById(enemy.id, (b) => b.hitpoints = 0);
       killHumanoid(context, enemy.id);
+    }
+
+    final survivingEnemies = context.outputWorld.build().actors.where((e) =>
+        e.isAnimatedAndActive && (situation.enemyTeamIds.contains(e.id)));
+    if (survivingEnemies.isNotEmpty) {
+      s.add(
+          '(Actually, one or more enemies survived because of their '
+          'temporary plot armor. Try again later.)',
+          isRaw: true);
     }
 
     return "${a.name} debug-kill all enemies";
