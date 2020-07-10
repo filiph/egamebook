@@ -20,6 +20,7 @@ import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/debug_kill_enemies.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
 import 'package:edgehead/src/fight/actions/equip_weapon.dart';
+import 'package:edgehead/src/fight/actions/drop_current_weapon.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
 import 'package:edgehead/src/fight/actions/punch_on_ground.dart';
 import 'package:edgehead/src/fight/actions/raise_dead.dart';
@@ -149,6 +150,7 @@ abstract class FightSituation extends Object
         // simple ones
         AssumeStance.singleton,
         Cower.singleton,
+        DropCurrentWeapon.singleton,
         KickItemOutOfReach.singleton,
         RegainBalance.singleton,
         StandUp.singleton,
