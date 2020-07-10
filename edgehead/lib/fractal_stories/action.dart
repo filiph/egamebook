@@ -186,7 +186,7 @@ abstract class Action<T> {
     } else {
       assert(
           !commandPathTemplate
-              .any((string) => string.contains(RegExp(r'<[\w]>'))),
+              .any((string) => string.contains(RegExp(r'<[\w]+>'))),
           "Action is of type Action<$T> yet it expect Storyline to work.");
       return commandPathTemplate;
     }
