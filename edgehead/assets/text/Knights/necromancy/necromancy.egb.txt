@@ -28,4 +28,4 @@ raiseDead(c);
 
 FAILURE_BEGINNING_DESCRIPTION:
 // Keep in sync with FightSituation's RaiseDead.applyFailure.
-I perform the necromantic incantation but I fail. Nothing happens.
+I perform the necromantic incantation but I fail. Nothing happens. [[IF isFollowedByAnUndead(c, a)]]My powers are not strong enough to hold two unliving minds, and I already have an undead follower.[[ENDIF]]

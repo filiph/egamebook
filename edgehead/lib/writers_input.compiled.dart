@@ -8249,7 +8249,8 @@ class TalkToMiguelAboutDevling extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(c.inRoomWith(miguelId))) {
+    if (!(c.inRoomWith(miguelId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -8316,7 +8317,9 @@ class TalkToMiguelAboutDragonEgg extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(c.inRoomWith(miguelId) && c.knows(DragonEggFacts.anAncientWeapon))) {
+    if (!(c.inRoomWith(miguelId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
+        c.knows(DragonEggFacts.anAncientWeapon))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -8383,6 +8386,7 @@ class TalkToMiguelAboutLady extends RoamingAction {
       return false;
     }
     if (!(c.inRoomWith(miguelId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
         c.knows(LadyHopeFacts.ladyInKeep) &&
         !c.knows(LadyHopeFacts.ladyHopeName))) {
       return false;
@@ -11871,8 +11875,11 @@ class PerformNecromancyElsewhere extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_4d7298c01 = isFollowedByAnUndead(c, a)
+        ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
+        : '''''';
     s.add(
-        'I perform the necromantic incantation but I fail. Nothing happens.\n',
+        'I perform the necromantic incantation but I fail. Nothing happens. $ifBlock_4d7298c01\n',
         isRaw: true);
     return '${a.name} fails to perform PerformNecromancyElsewhere';
   }
