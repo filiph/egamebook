@@ -33,7 +33,7 @@ class EquipWeapon extends Action<Item> {
 
   @override
   List<String> get commandPathTemplate =>
-      ["self", "<objectNounWithAdjective>", "equip"];
+      ["inventory", "<objectNounWithAdjective>", "equip"];
 
   @override
   String get name => className;

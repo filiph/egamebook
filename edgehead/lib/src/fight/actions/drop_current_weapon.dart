@@ -34,7 +34,7 @@ class DropCurrentWeapon extends Action<Item> {
 
   @override
   List<String> get commandPathTemplate =>
-      ["self", "<objectNounWithAdjective>", "drop"];
+      ["inventory", "<objectNounWithAdjective>", "drop"];
 
   @override
   String get name => className;
