@@ -24,8 +24,7 @@ Actor buildCorpse(Actor necromancer, Actor corpse) {
     // something like "feral goblin undead undead".
     adjective = corpse.adjective;
     name = corpse.name;
-  }
-  else if (corpse.nameIsProperNoun) {
+  } else if (corpse.nameIsProperNoun) {
     // Tamara become "undead Tamara" (but since we mostly don't use adjectives
     // unless necessary, she will be reported as "Tamara").
     adjective = 'undead';
