@@ -21,6 +21,9 @@ abstract class CustomEvent
   /// Marks the raising of [actorId].
   static const String actorRaisingUndead = 'actor_turning_undead';
 
+  /// Marks when an insect was put to rest.
+  static const String actorPuttingInsectToRest = 'put_insect_to_rest';
+
   /// Marks putting an undead actor to rest.
   static const String actorPuttingUndeadToRest = 'actor_undead_put_to_rest';
 

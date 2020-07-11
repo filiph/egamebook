@@ -15,6 +15,7 @@ import 'package:edgehead/src/room_roaming/actions/debug_wait.dart';
 import 'package:edgehead/src/room_roaming/actions/direct.dart';
 import 'package:edgehead/src/room_roaming/actions/heal.dart';
 import 'package:edgehead/src/room_roaming/actions/hire_npc.dart';
+import 'package:edgehead/src/room_roaming/actions/put_insect_to_rest.dart';
 import 'package:edgehead/src/room_roaming/actions/put_to_rest.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/actions/take_approach.dart';
@@ -53,6 +54,7 @@ abstract class RoomRoamingSituation extends Object
         WaitWhileRoamingAction.singleton,
         DirectAction.singleton,
         PutToRest.singleton,
+        PutInsectToRest.singleton,
         SlayMonstersAction.singleton,
         TakeApproachAction.singleton,
         TakeImplicitApproachAction.singleton,

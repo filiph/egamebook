@@ -4,11 +4,9 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
 
-/// Turns a corpse undead. To be used when we are roaming or in an idle room.
-/// Use [TurnUndead] in combat.
+/// Turns an undead back into a corpse.
 class PutToRest extends OtherActorActionBase {
   static final PutToRest singleton = PutToRest();
 
@@ -52,8 +50,6 @@ class PutToRest extends OtherActorActionBase {
     final a = context.actor;
     final s = context.outputStoryline;
     final w = context.outputWorld;
-
-    // TODO - create a "cosmetic" version for putting an insect to rest
 
     w.recordCustom(CustomEvent.actorPuttingUndeadToRest, actor: undead);
 
