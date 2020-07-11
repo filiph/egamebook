@@ -19,7 +19,13 @@ Actor buildCorpse(Actor necromancer, Actor corpse) {
 
   String adjective, name;
 
-  if (corpse.nameIsProperNoun) {
+  if (corpse.name == 'undead') {
+    // The corpse was already raised at least once. Let's not name them
+    // something like "feral goblin undead undead".
+    adjective = corpse.adjective;
+    name = corpse.name;
+  }
+  else if (corpse.nameIsProperNoun) {
     // Tamara become "undead Tamara" (but since we mostly don't use adjectives
     // unless necessary, she will be reported as "Tamara").
     adjective = 'undead';
@@ -101,7 +107,7 @@ String raiseDead(ActionContext context) {
 
   reportRaiseDead(a, s, corpse);
 
-  w.recordCustom(CustomEvent.actorTurningUndead, actor: corpse);
+  w.recordCustom(CustomEvent.actorRaisingUndead, actor: corpse);
 
   final raisedCorpse = buildCorpse(a, corpse);
   w.updateActorById(corpse.id, (b) => b.replace(raisedCorpse));

@@ -511,7 +511,7 @@ abstract class Actor extends Object
     }
 
     int turnUndeadRecency = w.timeSinceLastCustomRecord(
-        name: CustomEvent.actorTurningUndead, actorId: other.id);
+        name: CustomEvent.actorRaisingUndead, actorId: other.id);
 
     if (turnUndeadRecency != null && turnUndeadRecency <= recency) {
       // The other actor turned undead since the last time they hurt

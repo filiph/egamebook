@@ -14,12 +14,15 @@ abstract class CustomEvent
   /// An event that marks death of an actor with [actorId].
   static const String actorDeath = 'actor_death';
 
-  /// Marks the turning of [actorId].
-  static const String actorTurningUndead = 'actor_turning_undead';
-
   /// Marks a successful necromancy when nowhere near a normal corpse
   /// (which results in raising an insect, like a housefly).
   static const String actorRaisedInsect = 'raised_insect';
+
+  /// Marks the raising of [actorId].
+  static const String actorRaisingUndead = 'actor_turning_undead';
+
+  /// Marks putting an undead actor to rest.
+  static const String actorPuttingUndeadToRest = 'actor_undead_put_to_rest';
 
   static Serializer<CustomEvent> get serializer => _$customEventSerializer;
 
