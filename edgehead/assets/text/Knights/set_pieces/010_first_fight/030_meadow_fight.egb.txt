@@ -32,14 +32,9 @@ But this, this was something different entirely. Fast. Violent. Messy. This was 
 
 The fight is over.
 
-[[RULESET]]
-[[RULE]]
-  $DEFAULT
-[[THEN]]
 "Well, that was something."
 
-[[ENDRULE]]
-[[ENDRULESET]]
+// TODO: reiterate Brother here. We need to make sure the player knows what their goal is.
 
 // TODO: stand up if Tamara ended the fight down, and isn't hurt
 // TODO: Tamara should take her sword if the player has it
@@ -81,7 +76,6 @@ throw StateError("Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}
 [[ENDCODE]]
 
 [[ENDRULE]]
-
 [[ENDRULESET]]
 
 [[CODE]]

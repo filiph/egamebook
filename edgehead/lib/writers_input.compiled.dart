@@ -12420,7 +12420,7 @@ final Room meadowFight = Room(
                 'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
                 isRaw: true);
           }),
-          Rule(314778602, 1, false, (ApplicabilityContext c) {
+          Rule(142543437, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -12431,22 +12431,8 @@ final Room meadowFight = Room(
             final Actor a = c.actor;
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
-            s.add('\nThe fight is over.\n\n', isRaw: true);
-            Ruleset(Rule(994547605, 0, false, (ApplicabilityContext c) {
-              final WorldState w = c.world;
-              final Simulation sim = c.simulation;
-              final Actor a = c.actor;
-              return true;
-            }, (ActionContext c) {
-              final WorldState originalWorld = c.world;
-              final Simulation sim = c.simulation;
-              final Actor a = c.actor;
-              final WorldStateBuilder w = c.outputWorld;
-              final Storyline s = c.outputStoryline;
-              s.add('"Well, that was something."\n\n', isRaw: true);
-            })).apply(c);
             s.add(
-                '\n$ifBlock_3c0f034e2 "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+                '\nThe fight is over.\n\n"Well, that was something."\n\n\n$ifBlock_3c0f034e2 "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
                 isRaw: true);
             w.updateActorById(tamaraId, (b) => b.isActive = false);
           }),
