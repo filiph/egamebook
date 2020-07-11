@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
+import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 /// Turns an undead back into a corpse.
 class PutToRest extends OtherActorActionBase {
@@ -81,6 +82,17 @@ class PutToRest extends OtherActorActionBase {
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
-          WorldState w, Actor object) =>
-      a.isPlayer && isFollowedByAnUndead(c, a);
+      WorldState w, Actor object) {
+    final situation = w.currentSituation as RoomRoamingSituation;
+    final room = sim.getRoomByName(situation.currentRoomName);
+
+    if (room.isSynthetic) return false;
+
+    if (situation.monstersAlive) {
+      // Don't allow putting to rest when monsters in this room are still alive.
+      return false;
+    }
+
+    return a.isPlayer && isFollowedByAnUndead(c, a);
+  }
 }
