@@ -98,15 +98,34 @@ class GeneratedAction extends GeneratedGameObject {
       ..block.statements.add(Code(successChance));
     classBuilder.methods.add(successChanceBuilder.bake());
 
-    classBuilder.methods.add(_createGetter('rerollable', boolType, false));
+    if (_map.containsKey('REROLL_RESOURCE')) {
+      // This action is rerollable.
+      String resourceName;
+      switch (_map['REROLL_RESOURCE']) {
+        case r'$SANITY':
+          resourceName = 'sanity';
+          break;
+        case r'$STAMINA':
+          resourceName = 'stamina';
+          break;
+      }
 
+      classBuilder.methods.add(_createGetter('rerollable', boolType, true));
+      classBuilder.methods.add(_createGetterExpression('rerollResource',
+          resourceType, refer('Resource').property(resourceName)));
+    } else {
+      // This action is not rerollable.
+      classBuilder.methods.add(_createGetter('rerollable', boolType, false));
+      classBuilder.methods
+          .add(_createGetter('rerollResource', resourceType, null));
+    }
+
+    // Roll reason will just not be used it the action is non-rerollable.
+    // So it's okay to define it for every action.
     var rollReasonBuilder =
         createActorSimWorldVoidMethod('getRollReason', stringType)
-          ..block.addExpression(literal('Will you be successful?').returned);
+          ..block.addExpression(literal('Will I be successful?').returned);
     classBuilder.methods.add(rollReasonBuilder.bake());
-
-    classBuilder.methods
-        .add(_createGetter('rerollResource', resourceType, null));
 
     String helpMessage = _map['HINT'];
     if (helpMessage != null &&
@@ -219,6 +238,16 @@ class GeneratedAction extends GeneratedGameObject {
       ..returns = type
       ..annotations.add(overrideAnnotation)
       ..body = literal(returnValue).code);
+  }
+
+  Method _createGetterExpression(
+      String name, TypeReference type, Expression expression) {
+    return Method((b) => b
+      ..type = MethodType.getter
+      ..name = name
+      ..returns = type
+      ..annotations.add(overrideAnnotation)
+      ..body = expression.code);
   }
 
   /// Generates a piece of code that will return literal [returnValue]

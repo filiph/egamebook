@@ -29,7 +29,7 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
   final bool rerollable = true;
 
   @override
-  final Resource rerollResource = Resource.stamina;
+  final Resource rerollResource = Resource.sanity;
 
   @override
   CombatCommandType get combatCommandType => CombatCommandType.mental;

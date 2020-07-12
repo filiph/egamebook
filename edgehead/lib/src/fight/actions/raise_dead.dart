@@ -35,8 +35,7 @@ class RaiseDead extends Action<Nothing> {
   bool get rerollable => true;
 
   @override
-  // TODO: change to sanity
-  Resource get rerollResource => Resource.stamina;
+  Resource get rerollResource => Resource.sanity;
 
   @override
   String applyFailure(ActionContext context, void _) {
@@ -67,7 +66,7 @@ class RaiseDead extends Action<Nothing> {
     if (isFollowedByAnUndead(c, a)) {
       return ReasonedSuccessChance.sureFailure;
     }
-    return const ReasonedSuccessChance<void>(0.8);
+    return const ReasonedSuccessChance<void>(0.6);
   }
 
   @override

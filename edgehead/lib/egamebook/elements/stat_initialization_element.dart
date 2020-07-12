@@ -33,9 +33,20 @@ abstract class StatInitialization<T> extends ElementBase
   /// This is a safety/convenience getter to prevent string-checking
   /// (`name == "stamina"`) in client code.
   StatInitializationType get type {
-    // The book currently only ever shows stamina.
-    assert(name == "stamina");
-    return StatInitializationType.stamina;
+    switch (name) {
+      case "stamina":
+        return StatInitializationType.stamina;
+      case "sanity":
+        return StatInitializationType.sanity;
+    }
+    throw StateError('unsupported type: name=$name');
+  }
+
+  /// Creates a sanity initialization.
+  static StatInitialization sanity(int initial) {
+    return StatInitialization<int>((b) => b
+      ..name = "sanity"
+      ..initialValue = initial);
   }
 
   /// Creates a stamina initialization.
@@ -47,5 +58,6 @@ abstract class StatInitialization<T> extends ElementBase
 }
 
 enum StatInitializationType {
+  sanity,
   stamina,
 }

@@ -166,12 +166,12 @@ class ExamineAntechamberLock extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -231,12 +231,12 @@ class OpenAntechamberLock extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -326,12 +326,12 @@ class DargTentAttack extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -532,12 +532,12 @@ class CrowdsourceAttack extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -597,12 +597,12 @@ class CrowdsourceListen extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -784,12 +784,12 @@ class ConetAttack extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -846,12 +846,12 @@ class ConetExamine extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -970,12 +970,12 @@ class KarlListenToGuards extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -1101,12 +1101,12 @@ class KarlUseNecromancy extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage =>
       'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
@@ -1169,12 +1169,12 @@ class SaveSarn extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -1333,12 +1333,12 @@ class KarlExamineStar extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -1397,12 +1397,12 @@ class KarlTakeStar extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -1587,12 +1587,12 @@ class ReservoirOpenDam extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2269,12 +2269,12 @@ class AskOracleAboutKeep extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2337,12 +2337,12 @@ class AskOracleAboutKeepGate extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2404,12 +2404,12 @@ class OracleGiveNorthSkull extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2472,12 +2472,12 @@ class TalkToOracleDeathless extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2540,12 +2540,12 @@ class TalkToOracleDoghead extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2609,12 +2609,12 @@ class TalkToOracleDragonEgg extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2677,12 +2677,12 @@ class TalkToOracleEarthquakes extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2742,12 +2742,12 @@ class TalkToOracleGreetings extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2810,12 +2810,12 @@ class TalkToOracleOrcs extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2879,12 +2879,12 @@ class TalkToOracleQuake1 extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -2948,12 +2948,12 @@ class TalkToOracleSixtyFiver extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -3139,12 +3139,12 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -3262,12 +3262,12 @@ class AttackLizardNearPond extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -3562,12 +3562,12 @@ class ArgoAskDeathless extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -3630,12 +3630,12 @@ class ArgoAskDragonEgg extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -3698,12 +3698,12 @@ class ArgoAskQuake1 extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -3760,12 +3760,12 @@ class ArgoGreet extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -4031,12 +4031,12 @@ class TalkToMiguelAboutDeserting extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -4100,12 +4100,12 @@ class TalkToMiguelAfterCaravanDeparted extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -4462,12 +4462,12 @@ class TalkToGreenWomanAboutSlopesDeath extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -5051,12 +5051,12 @@ class TalkToHorsemanWhiteAboutDevling extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -5120,12 +5120,12 @@ class TalkToHorsemanWhiteAboutOracle extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -5188,12 +5188,12 @@ class TalkToHorsemanWhiteDoghead extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -5251,12 +5251,12 @@ class TalkToHorsemanWhiteGreetings extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -5320,12 +5320,12 @@ class TalkToHorsemanWhiteQuake1 extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -5388,12 +5388,12 @@ class TalkToHorsemanWhiteRetreat extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -5994,12 +5994,12 @@ class TalkToAdaAboutDelving extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6061,12 +6061,12 @@ class TalkToAdaAboutDragonEgg extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6129,12 +6129,12 @@ class TalkToAdaAboutOracle extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6196,12 +6196,12 @@ class TalkToAdaBigO extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6262,12 +6262,12 @@ class TalkToAdaDogheadFigure extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6324,12 +6324,12 @@ class TalkToAdaGreetings extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6392,12 +6392,12 @@ class TalkToAdaQuake1 extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6531,12 +6531,12 @@ class TalkToAdaAfterQuake2 extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6661,12 +6661,12 @@ class AttemptOpenGate extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6725,12 +6725,12 @@ class DestroyGateWithAxe extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6786,12 +6786,12 @@ class ExamineGate extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6851,12 +6851,12 @@ class OpenGateUnlock extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -6956,12 +6956,12 @@ class ExamineFamilyPortrait extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7017,12 +7017,12 @@ class SearchBedroom extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7083,12 +7083,12 @@ class TakeFamilyPortrait extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7224,12 +7224,12 @@ class NorthSkullExamine extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7288,12 +7288,12 @@ class NorthSkullTake extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7629,12 +7629,12 @@ class TalkToKatAboutBrother extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7699,12 +7699,12 @@ class TalkToKatAboutDevling extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7768,12 +7768,12 @@ class TalkToKatAboutLady extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7834,12 +7834,12 @@ class TalkToKatAboutMiguelMissing extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -7897,12 +7897,12 @@ class TalkToKatGreetings extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8235,12 +8235,12 @@ class TalkToMiguelAboutBrother extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8302,12 +8302,12 @@ class TalkToMiguelAboutDevling extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8371,12 +8371,12 @@ class TalkToMiguelAboutDragonEgg extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8440,12 +8440,12 @@ class TalkToMiguelAboutLady extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8502,12 +8502,12 @@ class TalkToMiguelGreetings extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8649,12 +8649,12 @@ class TalkToKatAfterOrcOffensive extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8826,12 +8826,12 @@ class BleedsMainObserveSmoke extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -8920,12 +8920,12 @@ class BleedsMainObserveVillage extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -9043,12 +9043,12 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -9116,12 +9116,12 @@ class BleedsTraderGoblins extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -9182,12 +9182,12 @@ class BleedsTraderGreet extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -9247,12 +9247,12 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10154,12 +10154,12 @@ class BleedsBlindGuideBigO extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10221,12 +10221,12 @@ class BleedsBlindGuideBrother extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10287,12 +10287,12 @@ class BleedsBlindGuideDelving extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10355,12 +10355,12 @@ class BleedsBlindGuideDragonEgg extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10421,12 +10421,12 @@ class BleedsBlindGuideGoblins extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10486,12 +10486,12 @@ class BleedsBlindGuideGreet extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10553,12 +10553,12 @@ class BleedsBlindGuideOracle extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10620,12 +10620,12 @@ class BleedsBlindGuideOrcs extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10688,12 +10688,12 @@ class BleedsBlindGuideQuake1 extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10755,12 +10755,12 @@ class BleedsBlindGuideWhatsWrong extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10829,12 +10829,12 @@ class SarnExamineHisHammer extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10894,12 +10894,12 @@ class SarnReadLetter extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -10960,12 +10960,12 @@ class SarnSlap extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11024,12 +11024,12 @@ class SarnTakeHisHammer extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11349,12 +11349,12 @@ class GoblinCampAttack extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11413,12 +11413,12 @@ class ListenContinue extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11477,12 +11477,12 @@ class ListenMore extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11538,12 +11538,12 @@ class ListenToThemArguing extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11601,12 +11601,12 @@ class ObserveGoblinCamp extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11692,12 +11692,12 @@ class CompassExamine extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11756,12 +11756,12 @@ class CompassTake extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11818,12 +11818,12 @@ class CompassUse extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -11909,14 +11909,14 @@ class PerformNecromancyElsewhere extends RoamingAction {
   }
 
   @override
-  bool get rerollable => false;
+  bool get rerollable => true;
+  @override
+  Resource get rerollResource => Resource.sanity;
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage =>
       'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
@@ -12333,12 +12333,12 @@ class StartInk extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -12505,12 +12505,12 @@ class ReadLetterFromFather extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage => null;
   @override
@@ -12575,12 +12575,12 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
   @override
   bool get rerollable => false;
   @override
+  Resource get rerollResource => null;
+  @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will you be successful?';
+    return 'Will I be successful?';
   }
 
-  @override
-  Resource get rerollResource => null;
   @override
   String get helpMessage =>
       'The goblin is asleep, but not soundly — the floor here is cold and uncomfortable, and the wall isn’t much of a headrest. Taking the shield from the goblin\'s lap will likely wake him up.';

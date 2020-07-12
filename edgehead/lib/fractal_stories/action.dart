@@ -622,13 +622,14 @@ class ReasonedSuccessChance<R> {
 /// This enum defines all the different resources (Stats) that player can use
 /// to reroll action throws.
 ///
-/// Ideas: weaponGrip (throw sword), shield (let the shield break).
+/// Ideas: weaponGrip (throw sword), shield (let the shield break),
+/// balance (go off balance after move).
 enum Resource {
+  /// Moves that are intellectual or pertain to necromancy can be rerolled
+  /// with sanity.
+  sanity,
+
   /// Using stamina means exerting extra physical energy. Useful for power
   /// moves, running away unscathed, etc.
   stamina,
-
-  /// Some moves can be rerolled by 'spending' balance. A kick will land,
-  /// but the player will go off-balance or even fall down.
-  balance,
 }

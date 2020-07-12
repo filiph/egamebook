@@ -61,6 +61,7 @@ abstract class Actor extends Object
     int constitution = 1,
     int dexterity = 100,
     int stamina = 0,
+    int sanity = 3,
     int initiative = 0,
     Anatomy anatomy,
     int gold = 0,
@@ -105,6 +106,7 @@ abstract class Actor extends Object
       ..constitution = constitution ?? 1
       ..dexterity = dexterity
       ..stamina = stamina
+      ..sanity = sanity
       ..initiative = initiative
       ..anatomy = currentAnatomy.toBuilder()
       ..gold = gold
@@ -343,14 +345,21 @@ abstract class Actor extends Object
   /// 5 seconds in the future. Until that time, they cannot do another move.
   DateTime get recoveringUntil;
 
+  int get sanity;
+
   int get stamina;
 
   @override
   Team get team;
 
   bool hasResource(Resource resource) {
-    assert(resource == Resource.stamina, "Only stamina implemented");
-    return stamina >= 1;
+    switch (resource) {
+      case Resource.stamina:
+        return stamina >= 1;
+      case Resource.sanity:
+        return sanity >= 1;
+    }
+    throw StateError('unsupported resource: $resource');
   }
 
   /// When an [Actor] hates another actor, they will be willing and eager to

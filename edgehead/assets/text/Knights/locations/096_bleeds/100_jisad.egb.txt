@@ -366,3 +366,7 @@ INK:
 c.learn(OracleFacts.location);
 [[ENDCODE]]
 
+
+NOTES:
+
+Jisad should make it clear that Aren is welcome to regain his stamina: sleep.

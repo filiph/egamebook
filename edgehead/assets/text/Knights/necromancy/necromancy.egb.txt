@@ -23,6 +23,8 @@ if (isFollowedByAnUndead(c, a)) {
 }
 return const ReasonedSuccessChance<void>(0.8);
 
+REROLL_RESOURCE: $SANITY
+
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
 raiseDead(c);

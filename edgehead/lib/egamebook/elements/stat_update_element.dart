@@ -30,9 +30,21 @@ abstract class StatUpdate<T> extends ElementBase
   /// This is a safety/convenience getter to prevent string-checking
   /// (`name == "stamina"`) in client code.
   StatUpdateType get type {
-    // The book currently only ever changes stamina.
-    assert(name == "stamina");
-    return StatUpdateType.stamina;
+    switch (name) {
+      case "stamina":
+        return StatUpdateType.stamina;
+      case "sanity":
+        return StatUpdateType.sanity;
+    }
+    throw StateError('unsupported type: name=$name');
+  }
+
+  /// Creates a sanity update.
+  static StatUpdate sanity(int initial, int change) {
+    return StatUpdate<int>((b) => b
+      ..name = "sanity"
+      ..change = change
+      ..newValue = initial + change);
   }
 
   /// Creates a stamina update.
@@ -45,5 +57,6 @@ abstract class StatUpdate<T> extends ElementBase
 }
 
 enum StatUpdateType {
+  sanity,
   stamina,
 }

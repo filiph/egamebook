@@ -510,6 +510,11 @@ extension ActionContextHelpers on ActionContext {
     outputWorld.updateActorById(playerId, (b) => b..stamina += amount);
   }
 
+  void giveSanityToPlayer(int amount) {
+    outputStoryline.addCustomElement(StatUpdate.sanity(player.sanity, amount));
+    outputWorld.updateActorById(playerId, (b) => b..sanity += amount);
+  }
+
   void giveNewItemToPlayer(Item item) {
     outputWorld.updateActorById(playerId, (b) => b..inventory.add(item));
   }

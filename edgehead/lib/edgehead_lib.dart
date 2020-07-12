@@ -28,11 +28,11 @@ import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:logging/logging.dart';
 
 class EdgeheadGame extends Book {
-  static final StatSetting<double> hitpointsSetting = StatSetting<double>(
-      "hitpoints", "The health of the player.", (v) => "$v HP");
+  static final StatSetting<int> sanitySetting = StatSetting<int>(
+      "sanity", "The mental state of the player's mind.", (v) => "$v Sa", 3);
 
-  static final StatSetting<int> staminaSetting = StatSetting<int>(
-      "stamina", "The physical energy that the player can use.", (v) => "$v S");
+  static final StatSetting<int> staminaSetting = StatSetting<int>("stamina",
+      "The physical energy that the player can use.", (v) => "$v St", 5);
 
   /// This is the random generator used to scramble randomness just after
   /// the player has selected an option (assuming [randomizeAfterPlayerChoice]
@@ -76,9 +76,9 @@ class EdgeheadGame extends Book {
   PlanConsequence consequence;
   Storyline storyline;
 
-  final Stat<double> hitpoints = Stat<double>(hitpointsSetting, 0.0);
-
   final Stat<int> stamina = Stat<int>(staminaSetting, 1);
+
+  final Stat<int> sanity = Stat<int>(sanitySetting, 1);
 
   /// An instance that can be reused to generate randomness, provided that
   /// it's always seeded with a new state before use.
@@ -151,6 +151,7 @@ class EdgeheadGame extends Book {
   void start() {
     // Send initial state.
     elementsSink.add(StatInitialization.stamina(stamina.value));
+    elementsSink.add(StatInitialization.sanity(sanity.value));
 
     update();
   }
@@ -178,17 +179,13 @@ class EdgeheadGame extends Book {
     } else {
       var resourceName =
           performance.action.rerollResource.toString().split('.').last;
-      assert(
-          !performance.action.rerollable ||
-              performance.action.rerollResource == Resource.stamina,
-          'Non-stamina resource needed for ${performance.action.name}');
       var result = await showSlotMachine(
           chance.toDouble(),
           performance.action
               .getRollReason(actor, simulation, world, performance.object),
           rerollable: performance.action.rerollable &&
               actor.hasResource(performance.action.rerollResource),
-          rerollEffectDescription: "use $resourceName");
+          rerollEffectDescription: "drain $resourceName");
       consequence =
           consequences.where((c) => c.isSuccess == result.isSuccess).single;
 
@@ -198,15 +195,24 @@ class EdgeheadGame extends Book {
             performance.action.rerollResource != null,
             "Action.rerollable is true but "
             "no Action.rerollResource is specified.");
-        assert(performance.action.rerollResource == Resource.stamina,
-            "Only stamina is supported as reroll resource right now.");
-        assert(consequence.world.getActorById(actor.id).stamina > 0,
-            "Tried using stamina when ${actor.name} had none left.");
+
         // It would be better to do without modifying world outside planner,
-        // but I can think of no other way.
+        // but I can't think of any other way.
         final builder = consequence.world.toBuilder();
-        storyline.addCustomElement(StatUpdate.stamina(actor.stamina, -1));
-        builder.updateActorById(actor.id, (b) => b..stamina -= 1);
+        switch (performance.action.rerollResource) {
+          case Resource.sanity:
+            assert(consequence.world.getActorById(actor.id).sanity > 0,
+                "Tried using sanity when ${actor.name} had none left.");
+            storyline.addCustomElement(StatUpdate.sanity(actor.sanity, -1));
+            builder.updateActorById(actor.id, (b) => b..sanity -= 1);
+            break;
+          case Resource.stamina:
+            assert(consequence.world.getActorById(actor.id).stamina > 0,
+                "Tried using stamina when ${actor.name} had none left.");
+            storyline.addCustomElement(StatUpdate.stamina(actor.stamina, -1));
+            builder.updateActorById(actor.id, (b) => b..stamina -= 1);
+            break;
+        }
         world = builder.build();
         consequence = PlanConsequence.withUpdatedWorld(consequence, world);
       }
@@ -282,8 +288,8 @@ class EdgeheadGame extends Book {
 
     playerCharacter = world.getActorById(playerId);
 
-    hitpoints.value = playerCharacter.hitpoints / playerCharacter.maxHitpoints;
     stamina.value = playerCharacter.stamina;
+    sanity.value = playerCharacter.sanity;
 
     simulation = edgeheadSimulation;
 
@@ -303,8 +309,8 @@ class EdgeheadGame extends Book {
     }
 
     var currentPlayer = world.getActorById(playerCharacter.id);
-    hitpoints.value = currentPlayer.hitpoints / currentPlayer.maxHitpoints;
     stamina.value = currentPlayer.stamina;
+    sanity.value = currentPlayer.sanity;
 
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {

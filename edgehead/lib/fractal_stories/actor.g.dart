@@ -80,6 +80,8 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'recoveringUntil',
       serializers.serialize(object.recoveringUntil,
           specifiedType: const FullType(DateTime)),
+      'sanity',
+      serializers.serialize(object.sanity, specifiedType: const FullType(int)),
       'stamina',
       serializers.serialize(object.stamina, specifiedType: const FullType(int)),
       'team',
@@ -218,6 +220,10 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           result.recoveringUntil = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime;
           break;
+        case 'sanity':
+          result.sanity = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'stamina':
           result.stamina = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -285,6 +291,8 @@ class _$Actor extends Actor {
   @override
   final DateTime recoveringUntil;
   @override
+  final int sanity;
+  @override
   final int stamina;
   @override
   final Team team;
@@ -318,6 +326,7 @@ class _$Actor extends Actor {
       this.poseMax,
       this.pronoun,
       this.recoveringUntil,
+      this.sanity,
       this.stamina,
       this.team})
       : super._() {
@@ -387,6 +396,9 @@ class _$Actor extends Actor {
     if (recoveringUntil == null) {
       throw new BuiltValueNullFieldError('Actor', 'recoveringUntil');
     }
+    if (sanity == null) {
+      throw new BuiltValueNullFieldError('Actor', 'sanity');
+    }
     if (stamina == null) {
       throw new BuiltValueNullFieldError('Actor', 'stamina');
     }
@@ -431,6 +443,7 @@ class _$Actor extends Actor {
         poseMax == other.poseMax &&
         pronoun == other.pronoun &&
         recoveringUntil == other.recoveringUntil &&
+        sanity == other.sanity &&
         stamina == other.stamina &&
         team == other.team;
   }
@@ -455,24 +468,24 @@ class _$Actor extends Actor {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc(0, adjective.hashCode), anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), director.hashCode), foldFunctionHandle.hashCode), gold.hashCode),
-                                                                                hitpoints.hashCode),
-                                                                            id.hashCode),
-                                                                        initiative.hashCode),
-                                                                    inventory.hashCode),
-                                                                isActive.hashCode),
-                                                            isConfused.hashCode),
-                                                        isInvincible.hashCode),
-                                                    isPlayer.hashCode),
-                                                isSurvivor.hashCode),
-                                            maxHitpoints.hashCode),
-                                        name.hashCode),
-                                    nameIsProperNoun.hashCode),
-                                npc.hashCode),
-                            pose.hashCode),
-                        poseMax.hashCode),
-                    pronoun.hashCode),
-                recoveringUntil.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, adjective.hashCode), anatomy.hashCode), constitution.hashCode), currentRoomName.hashCode), dexterity.hashCode), director.hashCode), foldFunctionHandle.hashCode), gold.hashCode), hitpoints.hashCode),
+                                                                                id.hashCode),
+                                                                            initiative.hashCode),
+                                                                        inventory.hashCode),
+                                                                    isActive.hashCode),
+                                                                isConfused.hashCode),
+                                                            isInvincible.hashCode),
+                                                        isPlayer.hashCode),
+                                                    isSurvivor.hashCode),
+                                                maxHitpoints.hashCode),
+                                            name.hashCode),
+                                        nameIsProperNoun.hashCode),
+                                    npc.hashCode),
+                                pose.hashCode),
+                            poseMax.hashCode),
+                        pronoun.hashCode),
+                    recoveringUntil.hashCode),
+                sanity.hashCode),
             stamina.hashCode),
         team.hashCode));
   }
@@ -588,6 +601,10 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   set recoveringUntil(DateTime recoveringUntil) =>
       _$this._recoveringUntil = recoveringUntil;
 
+  int _sanity;
+  int get sanity => _$this._sanity;
+  set sanity(int sanity) => _$this._sanity = sanity;
+
   int _stamina;
   int get stamina => _$this._stamina;
   set stamina(int stamina) => _$this._stamina = stamina;
@@ -625,6 +642,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
       _poseMax = _$v.poseMax;
       _pronoun = _$v.pronoun?.toBuilder();
       _recoveringUntil = _$v.recoveringUntil;
+      _sanity = _$v.sanity;
       _stamina = _$v.stamina;
       _team = _$v.team?.toBuilder();
       _$v = null;
@@ -676,6 +694,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               poseMax: poseMax,
               pronoun: pronoun.build(),
               recoveringUntil: recoveringUntil,
+              sanity: sanity,
               stamina: stamina,
               team: team.build());
     } catch (_) {

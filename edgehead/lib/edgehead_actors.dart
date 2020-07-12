@@ -89,6 +89,7 @@ final Actor edgeheadPlayer = Actor.initialized(
   constitution: 2,
   dexterity: 150,
   stamina: 3,
+  sanity: 2,
   initiative: 1000,
   poseMax: Pose.combat,
   currentRoomName: Simulation.preStartBookName,
