@@ -1,0 +1,39 @@
+// ---
+ACTION: $oracle_apple_examine
+COMMAND: Red apple >> Examine
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+
+INK:
+The apple is one of the Fruits grown on the slopes of the Pyramid. This one is especially large and extremely red.
+
+"You can have it if you want," Oracle says. "You need it more than I do."
+
+* "Is it dangerous?"
+
+  "Only if you do something stupid with all the energy it gives you. The Fruits of the Pyramid are indeed miraculous."
+
+* "Thank you."
+
+  "You're welcome. I have all the energy I need."
+
+
+// ---
+ACTION: $oracle_apple_take
+COMMAND: Red apple >> Take
+FOR_LOCATION: $oracle_main
+PREREQUISITES:
+// Oracle must live.
+!c.hasHappened(evOrcOffensive)
+&&
+w.actionHasBeenPerformed('oracle_apple_examine')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take it.
+
+[[CODE]]
+c.giveNewItemToPlayer(oracleApple);
+[[ENDCODE]]
+

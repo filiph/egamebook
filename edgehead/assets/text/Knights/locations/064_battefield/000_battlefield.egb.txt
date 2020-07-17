@@ -48,6 +48,12 @@ I take the banner.
 c.giveNewItemToPlayer(banner);
 [[ENDCODE]]
 
+Searching through the orc's posession, I find a stale bread.
+
+[[CODE]]
+c.giveNewItemToPlayer(staleBread);
+[[ENDCODE]]
+
 NOTES: 
 
 - The 65er + goblin is here.

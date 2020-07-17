@@ -4,11 +4,17 @@ const int akxeId = 77012;
 
 const int bannerId = 77009;
 
+const int barbecuedBatId = 770020;
+
+const int barbecuedSquirrelId = 770017;
+
 const int compassId = 77007;
 
 const int dragonEggId = 77008;
 
 const int familyPortraitId = 77011;
+
+const int jisadAppleId = 770016;
 
 const int katanaId = 77006;
 
@@ -18,6 +24,8 @@ const int letterFromFatherId = 77004;
 
 const int northSkullId = 770015;
 
+const int oracleAppleId = 770018;
+
 const int rockFromMeadowId = 77005;
 
 const int sarnHammerId = 770014;
@@ -25,5 +33,7 @@ const int sarnHammerId = 770014;
 const int sixtyFiverShieldId = 77010;
 
 const int sixtyFiverSwordId = 77013;
+
+const int staleBreadId = 770019;
 
 const int tamarasDaggerId = 77002;

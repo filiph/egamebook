@@ -21,6 +21,9 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       'damageCapability',
       serializers.serialize(object.damageCapability,
           specifiedType: const FullType(DamageCapability)),
+      'edibility',
+      serializers.serialize(object.edibility,
+          specifiedType: const FullType(Edibility)),
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'name',
@@ -74,6 +77,10 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
                   specifiedType: const FullType(DamageCapability))
               as DamageCapability);
           break;
+        case 'edibility':
+          result.edibility.replace(serializers.deserialize(value,
+              specifiedType: const FullType(Edibility)) as Edibility);
+          break;
         case 'firstOwnerId':
           result.firstOwnerId = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -105,6 +112,8 @@ class _$Item extends Item {
   @override
   final DamageCapability damageCapability;
   @override
+  final Edibility edibility;
+  @override
   final int firstOwnerId;
   @override
   final int id;
@@ -120,6 +129,7 @@ class _$Item extends Item {
       {this.adjective,
       this.bodyPart,
       this.damageCapability,
+      this.edibility,
       this.firstOwnerId,
       this.id,
       this.name,
@@ -127,6 +137,9 @@ class _$Item extends Item {
       : super._() {
     if (damageCapability == null) {
       throw new BuiltValueNullFieldError('Item', 'damageCapability');
+    }
+    if (edibility == null) {
+      throw new BuiltValueNullFieldError('Item', 'edibility');
     }
     if (id == null) {
       throw new BuiltValueNullFieldError('Item', 'id');
@@ -153,6 +166,7 @@ class _$Item extends Item {
         adjective == other.adjective &&
         bodyPart == other.bodyPart &&
         damageCapability == other.damageCapability &&
+        edibility == other.edibility &&
         firstOwnerId == other.firstOwnerId &&
         id == other.id &&
         name == other.name &&
@@ -165,8 +179,10 @@ class _$Item extends Item {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, adjective.hashCode), bodyPart.hashCode),
-                        damageCapability.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, adjective.hashCode), bodyPart.hashCode),
+                            damageCapability.hashCode),
+                        edibility.hashCode),
                     firstOwnerId.hashCode),
                 id.hashCode),
             name.hashCode),
@@ -190,6 +206,11 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
       _$this._damageCapability ??= new DamageCapabilityBuilder();
   set damageCapability(DamageCapabilityBuilder damageCapability) =>
       _$this._damageCapability = damageCapability;
+
+  EdibilityBuilder _edibility;
+  EdibilityBuilder get edibility =>
+      _$this._edibility ??= new EdibilityBuilder();
+  set edibility(EdibilityBuilder edibility) => _$this._edibility = edibility;
 
   int _firstOwnerId;
   int get firstOwnerId => _$this._firstOwnerId;
@@ -215,6 +236,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
       _adjective = _$v.adjective;
       _bodyPart = _$v.bodyPart?.toBuilder();
       _damageCapability = _$v.damageCapability?.toBuilder();
+      _edibility = _$v.edibility?.toBuilder();
       _firstOwnerId = _$v.firstOwnerId;
       _id = _$v.id;
       _name = _$v.name;
@@ -246,6 +268,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
               adjective: adjective,
               bodyPart: _bodyPart?.build(),
               damageCapability: damageCapability.build(),
+              edibility: edibility.build(),
               firstOwnerId: firstOwnerId,
               id: id,
               name: name,
@@ -257,6 +280,8 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
         _bodyPart?.build();
         _$failedField = 'damageCapability';
         damageCapability.build();
+        _$failedField = 'edibility';
+        edibility.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'Item', _$failedField, e.toString());

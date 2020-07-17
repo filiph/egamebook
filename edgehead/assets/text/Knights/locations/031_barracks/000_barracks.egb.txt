@@ -12,7 +12,24 @@ MAP_NAME: Barracks
 FIRST_DESCRIPTION:
 A large room taking up two floors. Bunk beds, and a dining area. [We] stay hidden.
 
+I find a barbecued bat on a stool out of sight.
+
+
 DESCRIPTION: $NONE
+
+
+// ---
+ACTION: $barracks_take_barbecued_bat
+COMMAND: Barbecued bat
+FOR_LOCATION: $barracks
+
+INK:
+The bat has been broiled well. Maybe too well. But there's enough meat on it.
+
+[[CODE]]
+c.giveNewItemToPlayer(barbecuedBat);
+[[ENDCODE]]
+
 
 NOTES:
 

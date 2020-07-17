@@ -13,6 +13,7 @@ import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/debug_wait.dart';
 import 'package:edgehead/src/room_roaming/actions/direct.dart';
+import 'package:edgehead/src/room_roaming/actions/eat.dart';
 import 'package:edgehead/src/room_roaming/actions/heal.dart';
 import 'package:edgehead/src/room_roaming/actions/hire_npc.dart';
 import 'package:edgehead/src/room_roaming/actions/put_insect_to_rest.dart';
@@ -51,8 +52,8 @@ abstract class RoomRoamingSituation extends Object
   /// All actions that player can do while exploring.
   @override
   List<Action> get actions => [
-        WaitWhileRoamingAction.singleton,
         DirectAction.singleton,
+        Eat.singleton,
         PutToRest.singleton,
         PutInsectToRest.singleton,
         SlayMonstersAction.singleton,
@@ -61,6 +62,8 @@ abstract class RoomRoamingSituation extends Object
         HireNpcAction.singleton,
         HealAction.singleton,
         ...writers_input.allActions,
+        // Debug
+        WaitWhileRoamingAction.singleton,
       ];
 
   String get currentRoomName;

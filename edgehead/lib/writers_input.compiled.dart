@@ -679,6 +679,89 @@ final Approach barracksFromJunction =
     Approach('junction', 'barracks', '', null);
 final Approach barracksFromTopOfClimb =
     Approach('top_of_climb', 'barracks', '', null);
+final barracksTakeBarbecuedBatInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The bat has been broiled well. Maybe too well. But there\'s enough meat on it.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.giveNewItemToPlayer(barbecuedBat);
+  }),
+]);
+
+class BarracksTakeBarbecuedBat extends RoamingAction {
+  @override
+  final String name = 'barracks_take_barbecued_bat';
+
+  static final BarracksTakeBarbecuedBat singleton = BarracksTakeBarbecuedBat();
+
+  @override
+  List<String> get commandPathTemplate => ['Barbecued bat'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('barracks') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "barracks_take_barbecued_bat_ink",
+    ));
+    return '${a.name} successfully performs BarracksTakeBarbecuedBat';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform BarracksTakeBarbecuedBat';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room barracks = Room('barracks', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -688,7 +771,7 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'A large room taking up two floors. Bunk beds, and a dining area. $weSubstitutionCapitalized stay hidden.\n',
+      'A large room taking up two floors. Bunk beds, and a dining area. $weSubstitutionCapitalized stay hidden.\n\nI find a barbecued bat on a stool out of sight.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1809,6 +1892,11 @@ final Room battlefield = Room(
           '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner - an important source of pride for the Knights\n\nI take the banner.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(banner);
+
+      s.add(
+          '\nSearching through the orc\'s posession, I find a stale bread.\n\n',
+          isRaw: true);
+      c.giveNewItemToPlayer(staleBread);
     },
     whereDescription: 'among the columns');
 final Approach oracleMainFromKnightsHqMain =
@@ -1819,7 +1907,8 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('An old woman is here.\n\n', isRaw: true);
+  s.add('An old woman is here. A ridiculously red apple sits on the table.\n\n',
+      isRaw: true);
   c.describeWorthiness(
       who: oracle,
       what: [
@@ -2937,6 +3026,191 @@ class TalkToOracleSixtyFiver extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     return '${a.name} fails to perform TalkToOracleSixtyFiver';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final oracleAppleExamineInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The apple is one of the Fruits grown on the slopes of the Pyramid. This one is especially large and extremely red.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"You can have it if you want," Oracle says. "You need it more than I do."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Is it dangerous?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Only if you do something stupid with all the energy it gives you. The Fruits of the Pyramid are indeed miraculous."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Thank you." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"You\'re welcome. I have all the energy I need."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+]);
+
+class OracleAppleExamine extends RoamingAction {
+  @override
+  final String name = 'oracle_apple_examine';
+
+  static final OracleAppleExamine singleton = OracleAppleExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Red apple', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "oracle_apple_examine_ink",
+    ));
+    return '${a.name} successfully performs OracleAppleExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform OracleAppleExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class OracleAppleTake extends RoamingAction {
+  @override
+  final String name = 'oracle_apple_take';
+
+  static final OracleAppleTake singleton = OracleAppleTake();
+
+  @override
+  List<String> get commandPathTemplate => ['Red apple', 'Take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('oracle_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOrcOffensive) &&
+        w.actionHasBeenPerformed('oracle_apple_examine'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take it.\n\n', isRaw: true);
+    c.giveNewItemToPlayer(oracleApple);
+
+    return '${a.name} successfully performs OracleAppleTake';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform OracleAppleTake';
   }
 
   @override
@@ -9759,6 +10033,21 @@ final bleedsBlindGuideGreetInk = InkAst([
               }),
             ],
           ),
+          InkChoiceNode(
+            command: r""" "I'm sorry." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'He shrugs. "I don\'t mind it. At least they acknowledge I\'m useful. I wouldn\'t trade nicknames with {Flatfoot Herman|Ham Fist Felix} over there, for example." He nods in the general direction of the center of the village and laughs. "What\'s your name?"\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
         ]),
         InkForkNode([
           InkChoiceNode(
@@ -9780,11 +10069,24 @@ final bleedsBlindGuideGreetInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"So, what brings you here?"\n', isRaw: true);
+    s.add(
+        '"Welcome to San Francisco, Aren." Jisad spreads his arms and pretends to look around with his unseeing eyes. "Beautiful, no?" He grins. I take in the ruins, overgrown with redwood trees, and the shacks of the Bleeds nestled among them.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"You just arrived. Must be tired. I\'ll give you this." He pulls up a green apple. "It\'s a fruit grown on the slopes of the Pyramid."\n',
+        isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "I seek my brother, Sarn of Falling Rock." """.trim(),
+      command: r""" "Looks like an ordinary apple." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -9793,13 +10095,13 @@ final bleedsBlindGuideGreetInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '"Family! A commendable motivation. Better than most I have heard." Jisad purses his lips. "Well, Aren, I hope you find your brother and get out of here as soon as possible."\n',
+              'He laughs. "And it isn\'t! Much more invigorating than a normal fruit, you\'ll find."\n',
               isRaw: true);
         }),
       ],
     ),
     InkChoiceNode(
-      command: r""" "I seek treasure." """.trim(),
+      command: r""" "Thank you." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -9807,38 +10109,9 @@ final bleedsBlindGuideGreetInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add(
-              '"Ahh!" The man leans back, resting against the wall of his house. "A terrible idea."\n',
-              isRaw: true);
+          s.add('"You are welcome."\n', isRaw: true);
         }),
       ],
-    ),
-  ]),
-  InkForkNode([
-    InkChoiceNode(
-      command: r""" "Why?"" """.trim(),
-      consequence: [
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add(
-              '"There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"\n',
-              isRaw: true);
-        }),
-      ],
-    ),
-  ]),
-  InkForkNode([
-    InkChoiceNode(
-      command: r""" "I already weild it." """.trim(),
-      consequence: [],
-    ),
-    InkChoiceNode(
-      command: r""" "Yes." """.trim(),
-      consequence: [],
     ),
   ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -9848,9 +10121,23 @@ final bleedsBlindGuideGreetInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.\n',
-        isRaw: true);
+    s.add('I take the apple.\n', isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.giveNewItemToPlayer(jisadApple);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"The next one will not be for free, Aren."\n', isRaw: true);
   }),
 ]);
 final bleedsBlindGuideOracleInk = InkAst([
@@ -10440,7 +10727,7 @@ class BleedsBlindGuideGreet extends RoamingAction {
   static final BleedsBlindGuideGreet singleton = BleedsBlindGuideGreet();
 
   @override
-  List<String> get commandPathTemplate => ['Blind man', '“Greetings!”'];
+  List<String> get commandPathTemplate => ['Blind man', '“Greetings.”'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -11840,6 +12127,9 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
       'TODO: an actual battle with the goblins.\n\nThere\'s a curious device on the ground. Some kind of a compass.\n\n',
       isRaw: true);
   c.markHappened(evGoblinCampCleared);
+
+  s.add('\nThere\'s a squirrel on a stick. I take it.\n\n', isRaw: true);
+  c.giveNewItemToPlayer(barbecuedSquirrel);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -12847,6 +13137,7 @@ final allActions = <RoamingAction>[
   DargTentAttack.singleton,
   CrowdsourceAttack.singleton,
   CrowdsourceListen.singleton,
+  BarracksTakeBarbecuedBat.singleton,
   ConetAttack.singleton,
   ConetExamine.singleton,
   KarlListenToGuards.singleton,
@@ -12866,6 +13157,8 @@ final allActions = <RoamingAction>[
   TalkToOracleOrcs.singleton,
   TalkToOracleQuake1.singleton,
   TalkToOracleSixtyFiver.singleton,
+  OracleAppleExamine.singleton,
+  OracleAppleTake.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
   ArgoAskDeathless.singleton,
@@ -12943,6 +13236,7 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
@@ -12952,6 +13246,7 @@ final allInks = <String, InkAst>{
   'talk_to_oracle_orcs_ink': talkToOracleOrcsInk,
   'talk_to_oracle_quake_1_ink': talkToOracleQuake1Ink,
   'talk_to_oracle_sixty_fiver_ink': talkToOracleSixtyFiverInk,
+  'oracle_apple_examine_ink': oracleAppleExamineInk,
   'argo_ask_deathless_ink': argoAskDeathlessInk,
   'argo_ask_dragon_egg_ink': argoAskDragonEggInk,
   'argo_ask_quake_1_ink': argoAskQuake1Ink,

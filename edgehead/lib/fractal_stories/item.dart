@@ -4,6 +4,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
+import 'package:edgehead/fractal_stories/items/edibility.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
@@ -35,6 +36,7 @@ abstract class Item extends Object
     bool nameIsProperNoun = false,
     bool isCommon = false,
     DamageCapabilityBuilder damageCapability,
+    EdibilityBuilder edibility,
     int firstOwnerId,
   }) {
     assert(
@@ -46,6 +48,7 @@ abstract class Item extends Object
       ..id = id
       ..damageCapability =
           damageCapability ?? DamageCapability(WeaponType.harmless).toBuilder()
+      ..edibility = edibility ?? Edibility.inedible.toBuilder()
       ..name = name
       ..nameIsProperNoun = nameIsProperNoun
       ..adjective = adjective
@@ -72,6 +75,7 @@ abstract class Item extends Object
       ..id = id
       ..bodyPart = part.toBuilder()
       ..damageCapability = DamageCapability(weaponType).toBuilder()
+      ..edibility = Edibility.disgusting.toBuilder()
       ..name = name
       ..nameIsProperNoun = false
       ..adjective = 'severed'
@@ -103,6 +107,7 @@ abstract class Item extends Object
         nameIsProperNoun: nameIsProperNoun,
         adjective: adjective,
         damageCapability: damageCapability.toBuilder(),
+        edibility: Edibility.inedible.toBuilder(),
         firstOwnerId: firstOwnerId);
   }
 
@@ -120,6 +125,8 @@ abstract class Item extends Object
   DamageCapability get damageCapability;
 
   String get description => throw UnimplementedError();
+
+  Edibility get edibility;
 
   @override
   @nullable

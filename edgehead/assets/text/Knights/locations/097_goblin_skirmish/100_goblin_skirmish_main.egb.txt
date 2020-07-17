@@ -18,6 +18,13 @@ There's a curious device on the ground. Some kind of a compass.
 c.markHappened(evGoblinCampCleared);
 [[ENDCODE]]
 
+// TODO: make this into an action once we implement the attack
+There's a squirrel on a stick. I take it.
+
+[[CODE]]
+c.giveNewItemToPlayer(barbecuedSquirrel);
+[[ENDCODE]]
+
 
 DESCRIPTION:
 The goblin camp is deserted.

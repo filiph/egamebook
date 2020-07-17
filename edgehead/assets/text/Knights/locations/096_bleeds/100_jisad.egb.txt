@@ -10,7 +10,7 @@
 
 // ---
 ACTION: $bleeds_blind_guide_greet
-COMMAND: Blind man >> “Greetings!”
+COMMAND: Blind man >> “Greetings.”
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
@@ -29,7 +29,11 @@ c.learn(JisadFacts.name);
 
   * * "Hilarious."
 
-  He nods. "And your name?"
+    He nods. "And your name?"
+
+  * * "I'm sorry."
+
+    He shrugs. "I don't mind it. At least they acknowledge I'm useful. I wouldn't trade nicknames with {Flatfoot Herman|Ham Fist Felix} over there, for example." He nods in the general direction of the center of the village and laughs. "What's your name?"
 
   - -
 
@@ -39,31 +43,27 @@ c.learn(JisadFacts.name);
 
 -
 
-"So, what brings you here?"
+"Welcome to San Francisco, Aren." Jisad spreads his arms and pretends to look around with his unseeing eyes. "Beautiful, no?" He grins. I take in the ruins, overgrown with redwood trees, and the shacks of the Bleeds nestled among them.
 
-* "I seek my brother, Sarn of Falling Rock."
+"You just arrived. Must be tired. I'll give you this." He pulls up a green apple. "It's a fruit grown on the slopes of the Pyramid."
 
-  "Family! A commendable motivation. Better than most I have heard." Jisad purses his lips. "Well, Aren, I hope you find your brother and get out of here as soon as possible."
+* "Looks like an ordinary apple."
 
-* "I seek treasure."
+  He laughs. "And it isn't! Much more invigorating than a normal fruit, you'll find."
 
-  "Ahh!" The man leans back, resting against the wall of his house. "A terrible idea."
+* "Thank you."
 
--
-
-* "Why?""
-
-  "There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"
+  "You are welcome."
 
 -
 
-* "I already weild it."
+I take the apple.
 
-* "Yes."
+[[CODE]]
+c.giveNewItemToPlayer(jisadApple);
+[[ENDCODE]]
 
--
-
-The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.
+"The next one will not be for free, Aren."
 
 
 // ---
@@ -370,3 +370,33 @@ c.learn(OracleFacts.location);
 NOTES:
 
 Jisad should make it clear that Aren is welcome to regain his stamina: sleep.
+
+
+
+
+"So, what brings you here?"
+
+* "I seek my brother, Sarn of Falling Rock."
+
+  "Family! A commendable motivation. Better than most I have heard." Jisad purses his lips. "Well, Aren, I hope you find your brother and get out of here as soon as possible."
+
+
+* "I want to learn."
+
+  "Ahh!" The man leans back, resting against the wall of his house. "A terrible idea."
+
+-
+
+* "Why?""
+
+  "There are whole religions built on the idea that there is _something_ in this building. Something that made it survive the ages. You seek magic?"
+
+-
+
+* "I already weild it."
+
+* "Yes."
+
+-
+
+The man purses his lips. "I hate magic." He shifts on his stool and the wood creaks. "Even though I built my life on knowing this ancient place, I hate magic. For a while it seems useful, in small doses. But something happens, and everything goes to hell. Look at this place." He gestures around.
