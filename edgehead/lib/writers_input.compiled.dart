@@ -9217,13 +9217,6 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
       isRaw: true);
   c.learn(kbTrader);
   c.learn(kbGoblinCampSmoke);
-
-  w.updateActorById(tamaraId, (b) => b.isActive = false);
-
-  if (!c.hasItem(letterFromFatherId)) {
-    c.giveNewItemToPlayer(letterFromFather);
-    c.giveNewItemToPlayer(rockFromMeadow);
-  }
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -11430,13 +11423,6 @@ final Room bleedsMainAfterQuake1 = Room(
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
-
-      w.updateActorById(tamaraId, (b) => b.isActive = false);
-
-      if (!c.hasItem(letterFromFatherId)) {
-        c.giveNewItemToPlayer(letterFromFather);
-        c.giveNewItemToPlayer(rockFromMeadow);
-      }
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -11486,13 +11472,6 @@ final Room bleedsMainAfterQuake2 = Room(
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
-
-      w.updateActorById(tamaraId, (b) => b.isActive = false);
-
-      if (!c.hasItem(letterFromFatherId)) {
-        c.giveNewItemToPlayer(letterFromFather);
-        c.giveNewItemToPlayer(rockFromMeadow);
-      }
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;

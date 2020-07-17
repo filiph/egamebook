@@ -35,18 +35,6 @@ c.learn(kbTrader);
 c.learn(kbGoblinCampSmoke);
 [[ENDCODE]]
 
-[[CODE]]
-// Making sure that Tamara is not active by now, in case we skip
-// the initial fight during debug.
-w.updateActorById(tamaraId, (b) => b.isActive = false);
-
-// Giving items from the first fight to the player.
-if (!c.hasItem(letterFromFatherId)) {
-  c.giveNewItemToPlayer(letterFromFather);
-  c.giveNewItemToPlayer(rockFromMeadow);
-}
-[[ENDCODE]]
-
 DESCRIPTION: $NONE
 
 
