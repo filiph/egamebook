@@ -5,6 +5,7 @@ import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_facts.dart';
 import 'package:edgehead/edgehead_facts_strings.dart';
 import 'package:edgehead/edgehead_ids.dart';
+import 'package:edgehead/edgehead_lib.dart';
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/elements/stat_update_element.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -45,20 +46,6 @@ final Entity oracle = Entity(
   nameIsProperNoun: true,
   pronoun: Pronoun.SHE,
 );
-
-/// Returns `true` if the current room has a special Necromancy action
-/// attached. This has precedence over the usual necromancy in idle room.
-///
-/// For example, a puzzle might call for the player to raise dead at a specific
-/// room. In that case, we don't want the menu to show _two_ necromancy actions.
-bool storyNecromanyHasPrecedence(ApplicabilityContext c) {
-  if (c.playerRoom.name == 'maintenance_shaft' &&
-      !c.world.actionHasBeenPerformedSuccessfully('karl_use_necromancy')) {
-    return true;
-  }
-
-  return false;
-}
 
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
@@ -429,6 +416,20 @@ String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
   }
 }
 
+/// Returns `true` if the current room has a special Necromancy action
+/// attached. This has precedence over the usual necromancy in idle room.
+///
+/// For example, a puzzle might call for the player to raise dead at a specific
+/// room. In that case, we don't want the menu to show _two_ necromancy actions.
+bool storyNecromanyHasPrecedence(ApplicabilityContext c) {
+  if (c.playerRoom.name == 'maintenance_shaft' &&
+      !c.world.actionHasBeenPerformedSuccessfully('karl_use_necromancy')) {
+    return true;
+  }
+
+  return false;
+}
+
 Actor _makeGoblin(WorldStateBuilder w,
     {int id,
     bool spear = false,
@@ -505,14 +506,35 @@ extension ActionContextHelpers on ActionContext {
   }
 
   void giveStaminaToPlayer(int amount) {
+    var staminaUpdate = amount;
+    final newStamina = player.stamina + staminaUpdate;
+    if (newStamina < 0) {
+      // Don't go below 0. Just remove all current stamina.
+      staminaUpdate = -player.stamina;
+    } else if (newStamina > EdgeheadGame.staminaSetting.maxValue) {
+      // Don't go over max value.
+      staminaUpdate = EdgeheadGame.staminaSetting.maxValue - player.stamina;
+    }
+
     outputStoryline
-        .addCustomElement(StatUpdate.stamina(player.stamina, amount));
-    outputWorld.updateActorById(playerId, (b) => b..stamina += amount);
+        .addCustomElement(StatUpdate.stamina(player.stamina, staminaUpdate));
+    outputWorld.updateActorById(playerId, (b) => b..stamina += staminaUpdate);
   }
 
   void giveSanityToPlayer(int amount) {
-    outputStoryline.addCustomElement(StatUpdate.sanity(player.sanity, amount));
-    outputWorld.updateActorById(playerId, (b) => b..sanity += amount);
+    var sanityUpdate = amount;
+    final newSanity = player.sanity + sanityUpdate;
+    if (newSanity < 0) {
+      // Don't go below 0. Just remove all current sanity.
+      sanityUpdate = -player.sanity;
+    } else if (newSanity > EdgeheadGame.sanitySetting.maxValue) {
+      // Don't go over max value.
+      sanityUpdate = EdgeheadGame.sanitySetting.maxValue - player.stamina;
+    }
+
+    outputStoryline
+        .addCustomElement(StatUpdate.sanity(player.sanity, sanityUpdate));
+    outputWorld.updateActorById(playerId, (b) => b..sanity += sanityUpdate);
   }
 
   void giveNewItemToPlayer(Item item) {
@@ -527,6 +549,33 @@ extension ActionContextHelpers on ActionContext {
 
   Actor get player {
     return outputWorld.getActorById(playerId);
+  }
+
+  void increaseSanityFromPeople() {
+    if (player.sanity >= EdgeheadGame.sanitySetting.maxValue) {
+      // Already at max.
+      return;
+    }
+
+    /// Minutes between this works again.
+    const coolOffMinutes = 30;
+    const customEventName = "increased_sanity_from_people";
+
+    final latest = world.customHistory
+        .query(name: customEventName, actorId: playerId)
+        .latest;
+
+    if (latest != null &&
+        latest.time.difference(world.time).inMinutes < coolOffMinutes) {
+      // Too soon. Do nothing.
+      return;
+    }
+
+    giveSanityToPlayer(2);
+    outputWorld.recordCustom(customEventName, actor: player);
+
+    outputStoryline.add('Being around people lifts a weight from my mind.',
+        isRaw: true);
   }
 
   void describeWorthiness(

@@ -14,4 +14,6 @@ c.playerHasVisited("bleeds_main_during_caravan")
 VARIANT_UPDATE_DESCRIPTION:
 The people are quite a bit more nervous than before. There is talk about a farmer falling to his death on the Slopes.
 
-DESCRIPTION: $NONE
+[[CODE]]
+c.increaseSanityFromPeople();
+[[ENDCODE]]

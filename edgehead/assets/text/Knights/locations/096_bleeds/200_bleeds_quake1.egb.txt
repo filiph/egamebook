@@ -8,4 +8,6 @@ RULE: c.hasHappened(evQuake1) && !c.hasHappened(evCaravanArrived)
 VARIANT_UPDATE_DESCRIPTION:
 Small damage after the quake. But locals seem to take it in stride. Is this normal here?
 
-DESCRIPTION: $NONE
+[[CODE]]
+c.increaseSanityFromPeople();
+[[ENDCODE]]

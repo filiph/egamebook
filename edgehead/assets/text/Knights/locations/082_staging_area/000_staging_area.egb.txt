@@ -41,4 +41,8 @@ HINT: This is a large room without doors which the Knights of San Francisco are 
 FIRST_DESCRIPTION:
 This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
 
-DESCRIPTION: $NONE
+DESCRIPTION:
+
+[[CODE]]
+c.increaseSanityFromPeople();
+[[ENDCODE]]

@@ -12,3 +12,9 @@ They are freaked out by the most recent quake.
 
 VARIANT_UPDATE_DESCRIPTION:
 The cargo cultists are freaked out by the most recent quake.
+
+[[CODE]]
+c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId], especially: [lairOfGodStarId], how: "{approvingly|with respect}");
+
+c.increaseSanityFromPeople();
+[[ENDCODE]]

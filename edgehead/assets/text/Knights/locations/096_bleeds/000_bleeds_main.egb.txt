@@ -35,7 +35,11 @@ c.learn(kbTrader);
 c.learn(kbGoblinCampSmoke);
 [[ENDCODE]]
 
-DESCRIPTION: $NONE
+DESCRIPTION:
+
+[[CODE]]
+c.increaseSanityFromPeople();
+[[ENDCODE]]
 
 
 // ---

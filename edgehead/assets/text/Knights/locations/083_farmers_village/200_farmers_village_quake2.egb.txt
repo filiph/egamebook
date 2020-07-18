@@ -16,6 +16,12 @@ Among all this, an old woman is whittling a little dog-headed figure from wood. 
 VARIANT_UPDATE_DESCRIPTION:
 The farmers are in full panic. Someone's crying about a person on the Slopes. 
 
+[[CODE]]
+c.describeWorthiness(who: farmers, what: [akxeId, bannerId, dragonEggId, katanaId, lairOfGodStarId, sixtyFiverShieldId, sixtyFiverSwordId], especially: [katanaId, bannerId], how: "{approvingly|with respect}");
+
+c.increaseSanityFromPeople();
+[[ENDCODE]]
+
 
 
 // ---

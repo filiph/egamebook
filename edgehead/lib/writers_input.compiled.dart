@@ -3452,6 +3452,8 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
       what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
       especially: [lairOfGodStarId],
       how: "{approvingly|with respect}");
+
+  c.increaseSanityFromPeople();
 }, null, null,
     positionX: 18, positionY: 68, mapName: 'Village of the Deathless');
 final Approach dragonEggRoomFromDeathlessVillage =
@@ -4069,6 +4071,8 @@ final Room deathlessVillageOrcOffensive = Room(
           what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
           especially: [lairOfGodStarId],
           how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -4086,8 +4090,15 @@ final Room deathlessVillageOrcOffensive = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The tribe is in a state of disarray. They weild the few weapons that they have, and seem to be preparing for a siege.\n',
+          'The tribe is in a state of disarray. They weild the few weapons that they have, and seem to be preparing for a siege.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+          especially: [lairOfGodStarId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     positionX: 18,
     positionY: 68,
@@ -4115,6 +4126,8 @@ final Room deathlessVillageQuake2 = Room(
           what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
           especially: [lairOfGodStarId],
           how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -4131,8 +4144,15 @@ final Room deathlessVillageQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('The cargo cultists are freaked out by the most recent quake.\n',
+      s.add('The cargo cultists are freaked out by the most recent quake.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+          especially: [lairOfGodStarId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     positionX: 18,
     positionY: 68,
@@ -4160,6 +4180,8 @@ final Room deathlessVillageQuake3 = Room(
           what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
           especially: [lairOfGodStarId],
           how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -4176,8 +4198,15 @@ final Room deathlessVillageQuake3 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('The village has been seriously damaged by the latest quake.\n',
+      s.add('The village has been seriously damaged by the latest quake.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
+          especially: [lairOfGodStarId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     positionX: 18,
     positionY: 68,
@@ -4858,7 +4887,7 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
+  c.increaseSanityFromPeople();
 }, null, null,
     isIdle: true,
     positionX: 23,
@@ -5692,7 +5721,7 @@ final Room stagingAreaQuake1 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -5740,7 +5769,7 @@ final Room stagingAreaQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -5804,6 +5833,8 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
       ],
       especially: [katanaId, bannerId],
       how: "{approvingly|with respect}");
+
+  c.increaseSanityFromPeople();
 }, null, null,
     isIdle: true,
     positionX: 35,
@@ -6709,6 +6740,8 @@ final Room farmersVillageQuake1 = Room(
           ],
           especially: [katanaId, bannerId],
           how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -6726,8 +6759,23 @@ final Room farmersVillageQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The farmers look a bit more stressed. No more polite nods. Someone\'s repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n',
+          'The farmers look a bit more stressed. No more polite nods. Someone\'s repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: farmers,
+          what: [
+            akxeId,
+            bannerId,
+            dragonEggId,
+            katanaId,
+            lairOfGodStarId,
+            sixtyFiverShieldId,
+            sixtyFiverSwordId
+          ],
+          especially: [katanaId, bannerId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     isIdle: true,
     positionX: 35,
@@ -6848,6 +6896,8 @@ final Room farmersVillageQuake2 = Room(
           ],
           especially: [katanaId, bannerId],
           how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -6865,8 +6915,23 @@ final Room farmersVillageQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The farmers are in full panic. Someone\'s crying about a person on the Slopes.\n',
+          'The farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: farmers,
+          what: [
+            akxeId,
+            bannerId,
+            dragonEggId,
+            katanaId,
+            lairOfGodStarId,
+            sixtyFiverShieldId,
+            sixtyFiverSwordId
+          ],
+          especially: [katanaId, bannerId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     isIdle: true,
     positionX: 35,
@@ -9223,7 +9288,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
+  c.increaseSanityFromPeople();
 }, null, null,
     isIdle: true,
     positionX: 37,
@@ -11332,7 +11397,7 @@ final Room bleedsMainDuringCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -11351,8 +11416,9 @@ final Room bleedsMainDuringCaravan = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They\'re clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.\n\nThere is some commotion around the trader\'s shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don\'t. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.\n',
+          'The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They\'re clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.\n\nThere is some commotion around the trader\'s shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don\'t. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.\n\n',
           isRaw: true);
+      c.increaseSanityFromPeople();
     },
     isIdle: true,
     positionX: 37,
@@ -11378,7 +11444,7 @@ final Room bleedsMainAfterCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -11399,8 +11465,9 @@ final Room bleedsMainAfterCaravan = Room(
           ? '''The caravan has left. The hawkman named Gadelon stays.'''
           : '''A tall figure is standing near the trader's shop. At first it seems like the person has a cape, but the truth is they don't. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.''';
       s.add(
-          'The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. $ifBlock_405410045\n',
+          'The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. $ifBlock_405410045\n\n',
           isRaw: true);
+      c.increaseSanityFromPeople();
     },
     isIdle: true,
     positionX: 37,
@@ -11430,7 +11497,7 @@ final Room bleedsMainAfterQuake1 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -11448,8 +11515,9 @@ final Room bleedsMainAfterQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Small damage after the quake. But locals seem to take it in stride. Is this normal here?\n',
+          'Small damage after the quake. But locals seem to take it in stride. Is this normal here?\n\n',
           isRaw: true);
+      c.increaseSanityFromPeople();
     },
     isIdle: true,
     positionX: 37,
@@ -11479,7 +11547,7 @@ final Room bleedsMainAfterQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('', isRaw: true);
+      c.increaseSanityFromPeople();
     },
     null,
     null,
@@ -11499,8 +11567,9 @@ final Room bleedsMainAfterQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The people are quite a bit more nervous than before. There is talk about a farmer falling to his death on the Slopes.\n',
+          'The people are quite a bit more nervous than before. There is talk about a farmer falling to his death on the Slopes.\n\n',
           isRaw: true);
+      c.increaseSanityFromPeople();
     },
     isIdle: true,
     positionX: 37,

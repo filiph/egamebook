@@ -16,7 +16,9 @@ The road that leads from the Pyramid entrance, between the buildings of the Blee
 There is some commotion around the trader's shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don't. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.
 // TODO: [[IF ]] He is the one I owe a large sum of money. [[ENDIF]]
 
-DESCRIPTION: $NONE
+[[CODE]]
+c.increaseSanityFromPeople();
+[[ENDCODE]]
 
 
 NOTES:
