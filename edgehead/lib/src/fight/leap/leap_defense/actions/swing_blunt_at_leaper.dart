@@ -79,6 +79,9 @@ class SwingBluntAtLeaper extends EnemyTargetAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
+
+    final groundMaterial = getGroundMaterial(w);
+
     final thread = getThreadId(sim, w, leapSituationName);
     a.report(s, "<subject> swing<s> <object2> at <object>",
         object: enemy,
@@ -106,6 +109,8 @@ class SwingBluntAtLeaper extends EnemyTargetAction {
           object: result.victim,
           positive: true,
           actionThread: thread);
+      enemy.report(s, "<subject> {crash<es> to|land<s> on} the $groundMaterial",
+          negative: true);
       if (result.disabled &&
           (result.touchedPart.function == BodyPartFunction.damageDealing ||
               result.touchedPart.function == BodyPartFunction.mobile ||
@@ -133,7 +138,6 @@ class SwingBluntAtLeaper extends EnemyTargetAction {
           positive: true,
           actionThread: thread);
       s.add('something cracks');
-      final groundMaterial = getGroundMaterial(w);
       enemy.report(s, "<subject> {crash<es> to|land<s> on} the $groundMaterial",
           negative: true);
       killHumanoid(context, result.victim.id);
