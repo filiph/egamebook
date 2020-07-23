@@ -124,9 +124,10 @@ abstract class RoomRoamingSituation extends Object
     // Find if monsters were slain by seeing if there was a [TakeApproach]
     // action record leading to this room.
     bool visited = originalWorld.visitHistory.query(a, room).hasHappened;
+    bool monstersAlive = !visited && room.fightGenerator != null;
 
-    var nextRoomSituation = RoomRoamingSituation.initialized(
-        w.randomInt(), room, !visited && room.fightGenerator != null);
+    var nextRoomSituation =
+        RoomRoamingSituation.initialized(w.randomInt(), room, monstersAlive);
 
     w.replaceSituationById(id, nextRoomSituation);
 
@@ -139,6 +140,8 @@ abstract class RoomRoamingSituation extends Object
     // Move the actor and also all the other actors in the party.
     for (final actor in getPartyOf(a, sim, w.build())) {
       w.updateActorById(actor.id, (b) => b..currentRoomName = parentRoom.name);
+      // Do not record the visit just yet. It could mess with the reporting
+      // below. We record the visit at the end of this method.
     }
 
     // Make a copy of the context after the relocation has been applied,
@@ -192,35 +195,40 @@ abstract class RoomRoamingSituation extends Object
       room.describe(afterMoveContext);
     }
 
-    final localNpcs = _getNpcs(w.build())
-        .where((npc) => npc.currentRoomName == parentRoom.name)
-        .where((npc) => npc.npc.followingActorId != a.id)
-        .toList();
-    // First, let the overrides take place.
-    Set<Actor> overridden = {};
-    for (final npc in localNpcs) {
-      if (sim.maybeDescribeActor(afterMoveContext, npc)) {
-        overridden.add(npc);
+    // Only talk about NPCs and corpses _after_ the initial fight.
+    if (!monstersAlive) {
+      final localNpcs = _getNpcs(w.build())
+          .where((npc) => npc.currentRoomName == parentRoom.name)
+          .where((npc) => npc.npc.followingActorId != a.id)
+          .toList();
+      // First, let the overrides take place.
+      Set<Actor> overridden = {};
+      for (final npc in localNpcs) {
+        if (sim.maybeDescribeActor(afterMoveContext, npc)) {
+          overridden.add(npc);
+        }
+      }
+      localNpcs.removeWhere((element) => overridden.contains(element));
+
+      if (localNpcs.isNotEmpty) {
+        s.addEnumeration("<subject> <also> see", localNpcs, "here",
+            subject: _getPlayer(originalWorld));
+      }
+
+      final localCorpses = _getCorpses(w.build())
+          .where((a) => a.currentRoomName == parentRoom.name)
+          .toList();
+      if (localCorpses.isNotEmpty) {
+        s.addEnumeration(
+            "<subject> can <also> see the remains of", localCorpses, "here",
+            subject: _getPlayer(originalWorld));
       }
     }
-    localNpcs.removeWhere((element) => overridden.contains(element));
 
-    if (localNpcs.isNotEmpty) {
-      s.addEnumeration("<subject> <also> see", localNpcs, "here",
-          subject: _getPlayer(originalWorld));
-    }
-
-    final localCorpses = _getCorpses(w.build())
-        .where((a) => a.currentRoomName == parentRoom.name)
-        .toList();
-    if (localCorpses.isNotEmpty) {
-      s.addEnumeration(
-          "<subject> can <also> see the remains of", localCorpses, "here",
-          subject: _getPlayer(originalWorld));
-    }
-
-    // Move the actor and also all the other actors in the party.
+    // Record the visit of the actor and also all the other actors in the party.
     for (final actor in getPartyOf(a, sim, w.build())) {
+      // The actors have already been moved at the start of method.
+      // Here we just record their visit.
       w.recordVisit(actor, room);
     }
   }
