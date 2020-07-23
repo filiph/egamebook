@@ -12243,7 +12243,7 @@ class PerformNecromancyElsewhere extends RoamingAction {
     if (isFollowedByAnUndead(c, a)) {
       return ReasonedSuccessChance.sureFailure;
     }
-    return const ReasonedSuccessChance<void>(0.8);
+    return const ReasonedSuccessChance<void>(0.6);
   }
 
   @override

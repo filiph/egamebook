@@ -21,7 +21,7 @@ final c = ApplicabilityContext(a, sim, w);
 if (isFollowedByAnUndead(c, a)) {
     return ReasonedSuccessChance.sureFailure;
 }
-return const ReasonedSuccessChance<void>(0.8);
+return const ReasonedSuccessChance<void>(0.6);
 
 REROLL_RESOURCE: $SANITY
 
