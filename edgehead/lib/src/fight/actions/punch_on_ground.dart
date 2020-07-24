@@ -92,6 +92,7 @@ class PunchOnGround extends EnemyTargetAction with CombatCommandPath {
           WorldState world, Actor enemy) =>
       a.isOnGround &&
       a.holdsNoWeapon &&
+      enemy.isOnGround &&
       !StandUp.singleton.isApplicable(c, a, sim, world, null) &&
       !WrestleWeaponOnGround.singleton.isApplicable(c, a, sim, world, enemy);
 }

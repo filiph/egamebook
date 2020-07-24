@@ -83,5 +83,5 @@ class JumpBackFromThrust extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      !a.anatomy.isBlind && !a.anatomy.hasCrippledLegs;
+      !a.anatomy.isBlind && !a.anatomy.hasCrippledLegs && !a.isOnGround;
 }
