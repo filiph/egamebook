@@ -19,13 +19,13 @@ INK:
   
   "Yes. But don't call me that. And your name is..."
   
-  * * * "[Aren]."
+  * * * "Aren."
 
-* "Mine's [Aren]."
+* "Mine's Aren."
 
 -
 
-"Good to meet you, [Aren]."
+"Good to meet you, Aren."
 
 // ---
 ACTION: $talk_to_kat_about_brother

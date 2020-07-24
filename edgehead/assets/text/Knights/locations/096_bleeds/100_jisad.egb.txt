@@ -29,7 +29,7 @@ c.learn(JisadFacts.name);
 
   * * "Hilarious."
 
-    He nods. "And your name?"
+    He nods. "[[IF c.playerHasWoodenFoot]]I'm guessing you've heard your share of jokes like that, and worse, judging from the sound one of your feet makes. [[ENDIF]]And your name?"
 
   * * "I'm sorry."
 
@@ -39,7 +39,7 @@ c.learn(JisadFacts.name);
 
   * * "Aren."
 
-* "I am Aren."
+* "I am Aren." [[IF c.playerHasAsthma]]I have a fit of cough but soon get it under control.[[ENDIF]]
 
 -
 

@@ -115,8 +115,8 @@ Once again, the woman looks at him. But this time she says nothing.
 
 // "_Yes_ glory in being a glorified fence, Miguel. Glory in protecting innocents from harm." She turns to me. "I am sorry, we should introduce ourselves. I am Kat. This is Miguel."
 
-* "I am [Aren]."
-* "Nice to meet you, Kat and Miguel. I am [Aren]."
+* "I am Aren."
+* "Nice to meet you, Kat and Miguel. I am Aren."
 
 "Nice to meet you, too. <>
 

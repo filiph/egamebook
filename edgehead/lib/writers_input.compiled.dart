@@ -6176,7 +6176,7 @@ final talkToAdaGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('_"[Aren]."_\n', isRaw: true);
+    s.add('_"Aren."_\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -6185,7 +6185,7 @@ final talkToAdaGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"Good to meet you, [Aren]. My name is Ada."\n', isRaw: true);
+    s.add('"Good to meet you, Aren. My name is Ada."\n', isRaw: true);
   }),
 ]);
 final talkToAdaQuake1Ink = InkAst([
@@ -7892,7 +7892,7 @@ final talkToKatGreetingsInk = InkAst([
               }),
               InkForkNode([
                 InkChoiceNode(
-                  command: r""" "[Aren]." """.trim(),
+                  command: r""" "Aren." """.trim(),
                   consequence: [],
                 ),
               ]),
@@ -7902,7 +7902,7 @@ final talkToKatGreetingsInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" "Mine's [Aren]." """.trim(),
+      command: r""" "Mine's Aren." """.trim(),
       consequence: [],
     ),
   ]),
@@ -7913,7 +7913,7 @@ final talkToKatGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"Good to meet you, [Aren]."\n', isRaw: true);
+    s.add('"Good to meet you, Aren."\n', isRaw: true);
   }),
 ]);
 
@@ -8508,7 +8508,7 @@ final talkToMiguelGreetingsInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "I am [Aren]." """.trim(),
+      command: r""" "I am Aren." """.trim(),
       consequence: [],
     ),
     InkChoiceNode(
@@ -10099,7 +10099,11 @@ final bleedsBlindGuideGreetInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('He nods. "And your name?"\n', isRaw: true);
+                final ifBlock_3c961d43e = c.playerHasWoodenFoot
+                    ? '''I'm guessing you've heard your share of jokes like that, and worse, judging from the sound one of your feet makes. '''
+                    : '''''';
+                s.add('He nods. "$ifBlock_3c961d43eAnd your name?"\n',
+                    isRaw: true);
               }),
             ],
           ),
@@ -10128,7 +10132,9 @@ final bleedsBlindGuideGreetInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" "I am Aren." """.trim(),
+      command:
+          r""" "I am Aren." [[IF c.playerHasAsthma]]I have a fit of cough but soon get it under control.[[ENDIF]] """
+              .trim(),
       consequence: [],
     ),
   ]),
