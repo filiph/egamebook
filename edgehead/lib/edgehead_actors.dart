@@ -1,5 +1,6 @@
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_items.dart';
+import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -19,6 +20,7 @@ final Actor edgeheadDarg = Actor.initialized(
   currentRoomName: 'crowdsource',
   currentWeapon: akxe,
   team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
 /// Kat, the  knight at the entrance.
@@ -95,6 +97,23 @@ final Actor edgeheadPlayer = Actor.initialized(
   currentRoomName: Simulation.preStartBookName,
 );
 
+final Actor firstGoblin = Actor.initialized(
+  firstGoblinId, StatefulRandom(~firstGoblinId).next, "goblin",
+  adjective: "feral",
+  pronoun: Pronoun.HE,
+  currentRoomName: 'meadow_fight',
+  currentWeapon: Item.weapon(rustySwordId, WeaponType.sword,
+      name: "sword", adjective: "rusty", firstOwnerId: firstGoblinId),
+  dexterity: 150,
+  // The goblin starts the fight.
+  initiative: 2000,
+  // For the first 2 rounds, the goblin is invincible. We don't want
+  // Tamara to kill him before the player has any chance to do something.
+  isInvincible: true,
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 /// Tamara, player's guide.
 final Actor edgeheadTamara = Actor.initialized(
   tamaraId,
@@ -126,4 +145,5 @@ final Actor sixtyFiverOrc = Actor.initialized(
   ),
   currentShield: sixtyFiverShield,
   team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );

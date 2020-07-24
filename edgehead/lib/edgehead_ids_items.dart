@@ -28,6 +28,8 @@ const int oracleAppleId = 770018;
 
 const int rockFromMeadowId = 77005;
 
+const int rustySwordId = 770022;
+
 const int sarnHammerId = 770014;
 
 const int sixtyFiverShieldId = 77010;
@@ -35,5 +37,7 @@ const int sixtyFiverShieldId = 77010;
 const int sixtyFiverSwordId = 77013;
 
 const int staleBreadId = 770019;
+
+const int startBranchId = 770021;
 
 const int tamarasDaggerId = 77002;

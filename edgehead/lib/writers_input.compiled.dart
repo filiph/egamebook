@@ -26,6 +26,7 @@ import 'package:edgehead/fractal_stories/ink_ast.dart' show InkForkNode;
 import 'package:edgehead/fractal_stories/ink_ast.dart' show InkParagraphNode;
 import 'package:edgehead/src/ink/ink_situation.dart' show InkSituation;
 import 'package:edgehead/fractal_stories/action.dart' show Nothing;
+import 'package:edgehead/fractal_stories/pose.dart' show Pose;
 import 'package:edgehead/ruleset/ruleset.dart' show Prerequisite;
 import 'package:edgehead/fractal_stories/action.dart'
     show ReasonedSuccessChance;
@@ -12565,7 +12566,8 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I am also a necromancer. Which might come in handy around here.\n',
+    s.add(
+        'I am also a necromancer. I can raise the dead, although not very well yet.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12575,14 +12577,55 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final youngSirSubstitution = c.playerSalutation;
+    final ifBlock_a590cf34 = c.playerIsMale ? '''his''' : '''her''';
     s.add(
-        '"This place is dangerous, $youngSirSubstitution." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a major city. The air is damp and raw.\n',
+        'I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on $ifBlock_a590cf34 own.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Tamara has just finished telling me, for the hundredth time, what a stupid idea it is for me to come here. I tell her there\'s nothing to be worried about. I tell her the tales about goblins and orcs in the woods of San Francisco are exaggerated.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Which, of course, is immediately refuted by what happens next.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('[ Image of a ferocious goblin ]\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us. I look around to see if there\'s more but no. He is alone. What gives the predator such confidence?\n',
         isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "Dangerous? This place? What an insight!" """.trim(),
+      command: r""" Run """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -12590,54 +12633,11 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('Tamara gives me a look. "Extremely funny," she whispers.\n',
-              isRaw: true);
-        }),
-        InkForkNode([
-          InkChoiceNode(
-            command:
-                r""" "It can't be more dangerous than the journey here." """
-                    .trim(),
-            consequence: [
-              InkParagraphNode((ActionContext c) {
-                final WorldState originalWorld = c.world;
-                final Simulation sim = c.simulation;
-                final Actor a = c.actor;
-                final WorldStateBuilder w = c.outputWorld;
-                final Storyline s = c.outputStoryline;
-                s.add('Then again, I _have_ seen\n', isRaw: true);
-              }),
-            ],
-          ),
-          InkChoiceNode(
-            command: r""" "Sorry." """.trim(),
-            consequence: [
-              InkParagraphNode((ActionContext c) {
-                final WorldState originalWorld = c.world;
-                final Simulation sim = c.simulation;
-                final Actor a = c.actor;
-                final WorldStateBuilder w = c.outputWorld;
-                final Storyline s = c.outputStoryline;
-                s.add(
-                    'Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I\'ve seen\n',
-                    isRaw: true);
-              }),
-            ],
-          ),
-        ]),
-      ],
-    ),
-    InkChoiceNode(
-      command: r""" "Do you see anything?" """.trim(),
-      consequence: [
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
+          final ifBlock_549bd7b58 = c.playerHasWoodenFoot
+              ? '''My wooden stump doesn't help.'''
+              : '''''';
           s.add(
-              '"No," she whispers. "Trees and leaves and fog. And corpses."\n',
+              'Tamara seems pleased with this course of action at first. But the agile goblin is faster in the overgrowth. $ifBlock_549bd7b58 A few heartbeats later, he\'s almost upon us.\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12647,13 +12647,33 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('It\'s true. I\'ve also seen\n', isRaw: true);
+          final ifBlock_72e7100f8 = c.playerHasAsthma
+              ? '''I wheeze and cough. The damn asthma.'''
+              : '''''';
+          s.add(
+              'He slashes Tamara\'s leg and she goes down. There is no more running now. $ifBlock_72e7100f8 But I am able to pick up a solid branch from the ground and I have the initiative now.\n',
+              isRaw: true);
         }),
-      ],
-    ),
-    InkChoiceNode(
-      command: r""" "I will keep my eyes open." """.trim(),
-      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+// Make Tamara fall and lose initiative.
+          w.updateActorById(
+              tamaraId,
+              (b) => b
+                ..pose = Pose.onGround
+                ..initiative = 0
+                ..inventory.add(tamarasDagger));
+// TODO: Add the cut to Tamara's anatomy
+// Make goblin also lose initiative.
+          w.updateActorById(firstGoblinId, (b) => b.initiative = 10);
+// Give branch to player.
+          w.updateActorById(
+              playerId, (b) => b.inventory.equip(startBranch, a.anatomy));
+        }),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -12661,9 +12681,112 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'Tamara nods. "Good," she whispers, and starts walking again. I look around, at the thick overgrowth. I\'ve seen\n',
+              'The goblin growls like a wolf, standing above Tamara. She\'s had time to draw her mercenary sword but not much else. The goblin\n',
               isRaw: true);
         }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" Attack """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final youngSirSubstitution = c.playerSalutation;
+          s.add(
+              '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, $youngSirSubstitution."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          w.updateActorById(playerId, (b) => b.inventory.add(tamarasDagger));
+          w.updateActorById(firstGoblinId, (b) => b.initiative = 0);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The goblin is out of the brush and ready to fight. He\'s gnashing his teeth and growls like a wolf. He\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" Wait """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final youngSirSubstitution = c.playerSalutation;
+          s.add(
+              'Tamara nods. She points her mercenary sword at the goblin but doesn\'t move. "Take my dagger, $youngSirSubstitution," she tells me and moves her hip a little, to indicate where it\'s strapped.\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" Take the dagger. """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                w.updateActorById(playerId,
+                    (b) => b.inventory.equip(tamarasDagger, a.anatomy));
+              }),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it, the goblin attacks. As he runs towards us, he\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" Take a rock from the ground instead. """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                w.updateActorById(
+                    tamaraId, (b) => b.inventory.add(tamarasDagger));
+                w.updateActorById(playerId,
+                    (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
+              }),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'I pick up a moldy rock that lies right next to my {left|right} foot. It\'s hard and heavy in my palm. As soon as I straighten up, the goblin attacks. As he runs towards us, he\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+        ]),
       ],
     ),
   ]),
@@ -12673,124 +12796,7 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'quite a few corpses in the few hours we have been here. (All of them way too old and blood-dry to raise, though.)\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'Tamara stops. For a moment, she\'s as still as a painting, and I try to mirror her. Then, she nods in the direction of a brush just ahead. It\'s shaking. Then something, something evil and fierce, steps right out of it.\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('[IMAGE alt="A ferocious goblin is stepping out of hiding"]\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'Keeping her teeth together, Tamara says: "I might need your help with this. Take my dagger."\n',
-        isRaw: true);
-  }),
-  InkForkNode([
-    InkChoiceNode(
-      command: r""" "No. I'm not a warrior." """.trim(),
-      consequence: [
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
-        }),
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add(
-              'Tamara purses her lips but says nothing. Then, without warning,\n',
-              isRaw: true);
-        }),
-      ],
-    ),
-    InkChoiceNode(
-      command: r""" "Keep it. I'll improvise." """.trim(),
-      consequence: [
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          w.updateActorById(
-              playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
-          w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
-        }),
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add(
-              'I pick up a moldy rock that lies right next to my {left|right} foot. It\'s hard and heavy in my palm. As soon as I straighten up,\n',
-              isRaw: true);
-        }),
-      ],
-    ),
-    InkChoiceNode(
-      command: r""" "Thanks, I'll take it." """.trim(),
-      consequence: [
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          w.updateActorById(
-              playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
-        }),
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add(
-              'I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it,\n',
-              isRaw: true);
-        }),
-      ],
-    ),
-  ]),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'the goblin is out of the brush and ready to attack. He\'s gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.\n',
+    s.add('taps his thigh with the blunt side of a rusty sword, grinning.\n',
         isRaw: true);
   }),
 ]);
@@ -12894,14 +12900,16 @@ final Room meadowFight = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       final youngSirSubstitution = c.playerSalutation;
-      final ifBlock_3c0f034e2 = c.isHurt(tamaraId)
-          ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, $youngSirSubstitution. But you might not." She winces, and looks at me.'''
+      final ifBlock_52e534a1a = c.isHurt(tamaraId)
+          ? '''Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, $youngSirSubstitution. And I say it's not for you, either." She winces, and looks at me.'''
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
+      final ifBlock_781966055 =
+          c.isHurt(tamaraId) ? '''She slowly stands up, and shrugs.''' : '''''';
       s.add(
           'My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. \n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking.\n\n\n',
           isRaw: true);
       Ruleset(
-          Rule(1072603126, 2, false, (ApplicabilityContext c) {
+          Rule(175509328, 2, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -12914,10 +12922,10 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                '"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n',
+                '"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n\nNo time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n',
                 isRaw: true);
           }),
-          Rule(906032650, 2, false, (ApplicabilityContext c) {
+          Rule(852520620, 2, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -12930,10 +12938,10 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me.\n',
+                'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n',
                 isRaw: true);
           }),
-          Rule(142543437, 1, false, (ApplicabilityContext c) {
+          Rule(832916590, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -12945,7 +12953,7 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                '\nThe fight is over.\n\n"Well, that was something."\n\n\n$ifBlock_3c0f034e2 "Come with me back to safety. I\'ll give you a discount for the way back."\n\n_"Thanks for your service, Tamara. But I\'ve come this far."_\n\nTamara nods, and leaves without ceremony. In a few moments, she disappears among the trees and the bushes.\n\n',
+                '\nThe fight is over.\n\n\n$ifBlock_52e534a1a "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n\nI remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n\nTamara understands. $ifBlock_781966055 "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
                 isRaw: true);
             w.updateActorById(tamaraId, (b) => b.isActive = false);
           }),

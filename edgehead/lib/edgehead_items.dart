@@ -145,6 +145,13 @@ final Item staleBread = Item(
       .toBuilder(),
 );
 
+final Item startBranch = Item.weapon(
+  startBranchId,
+  WeaponType.club,
+  name: 'branch',
+  adjective: 'redwood',
+);
+
 final Item tamarasDagger = Item.weapon(
   tamarasDaggerId,
   WeaponType.dagger,

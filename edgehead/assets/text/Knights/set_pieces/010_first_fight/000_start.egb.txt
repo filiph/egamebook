@@ -25,7 +25,6 @@ COMMAND: N/A
 INK:
 Here I am in the ancient ruins of San Francisco. After a month long journey, I have finally reached my destination. My brother is here, somewhere.
 
-// TODO: make this work - character preferences are saved and used
 
 * I am a young woman >> with curly black hair >> and a large debt.
 
@@ -135,72 +134,76 @@ c.recordCharacterChoice(1, 2, 1);
 c.recordCharacterChoice(1, 2, 2);
 [[ENDCODE]]
 
+-
+
+
+I am also a necromancer. I can raise the dead, although not very well yet.
+
+I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on [[IF c.playerIsMale]]his[[ELSE]]her[[ENDIF]] own.
+
+Tamara has just finished telling me, for the hundredth time, what a stupid idea it is for me to come here. I tell her there's nothing to be worried about. I tell her the tales about goblins and orcs in the woods of San Francisco are exaggerated.
+
+Which, of course, is immediately refuted by what happens next.
+
+[ Image of a ferocious goblin ]
+
+A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us. I look around to see if there's more but no. He is alone. What gives the predator such confidence?
+
+* Run
+
+    Tamara seems pleased with this course of action at first. But the agile goblin is faster in the overgrowth. [[IF c.playerHasWoodenFoot]]My wooden stump doesn't help.[[ENDIF]] A few heartbeats later, he's almost upon us.
+
+    He slashes Tamara's leg and she goes down. There is no more running now. [[IF c.playerHasAsthma]]I wheeze and cough. The damn asthma.[[ENDIF]] But I am able to pick up a solid branch from the ground and I have the initiative now.
+
+    [[CODE]]
+    // Make Tamara fall and lose initiative.
+    w.updateActorById(
+        tamaraId,
+        (b) => b
+        ..pose = Pose.onGround
+        ..initiative = 0
+        ..inventory.add(tamarasDagger));
+    // TODO: Add the cut to Tamara's anatomy
+    // Make goblin also lose initiative.
+    w.updateActorById(firstGoblinId, (b) => b.initiative = 10);
+    // Give branch to player.
+    w.updateActorById(playerId, (b) => b.inventory.equip(startBranch, a.anatomy));
+    [[ENDCODE]]
+
+    The goblin growls like a wolf, standing above Tamara. She's had time to draw her mercenary sword but not much else. The goblin <>
+
+* Attack
+
+    "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
+
+    [[CODE]]
+    w.updateActorById(playerId, (b) => b.inventory.add(tamarasDagger));
+    w.updateActorById(firstGoblinId, (b) => b.initiative = 0);
+    [[ENDCODE]]
+
+    The goblin is out of the brush and ready to fight. He's gnashing his teeth and growls like a wolf. He <>
+
+* Wait
+
+    Tamara nods. She points her mercenary sword at the goblin but doesn't move. "Take my dagger, [young sir]," she tells me and moves her hip a little, to indicate where it's strapped.
+
+    * * Take the dagger.
+
+        [[CODE]]
+        w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
+        [[ENDCODE]]
+
+        I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it, the goblin attacks. As he runs towards us, he <>
+
+    * * Take a rock from the ground instead.
+
+        [[CODE]]
+        w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
+        w.updateActorById(playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
+        [[ENDCODE]]
+
+        I pick up a moldy rock that lies right next to my {left|right} foot. It's hard and heavy in my palm. As soon as I straighten up, the goblin attacks. As he runs towards us, he <>
 
 -
 
-I am also a necromancer. Which might come in handy around here.
-
-"This place is dangerous, [young sir]." This is Tamara, my hired guide. She's walking a few paces in front of me, trying to see through the fog and the wild forest that was once a major city. The air is damp and raw.
-
-* "Dangerous? This place? What an insight!"
-
-    Tamara gives me a look. "Extremely funny," she whispers.
-
-    * * "It can't be more dangerous than the journey here."
-
-        Then again, I _have_ seen <>
-
-    * * "Sorry."
-
-        Tamara shrugs, and starts walking again. I look around, at the thick overgrowth. I've seen <>
-
-* "Do you see anything?"
-
-    "No," she whispers. "Trees and leaves and fog. And corpses."
-
-    It's true. I've also seen <>
-
-* "I will keep my eyes open."
-
-    Tamara nods. "Good," she whispers, and starts walking again. I look around, at the thick overgrowth. I've seen <>
-
--
-
-<> quite a few corpses in the few hours we have been here. (All of them way too old and blood-dry to raise, though.)
-
-Tamara stops. For a moment, she's as still as a painting, and I try to mirror her. Then, she nods in the direction of a brush just ahead. It's shaking. Then something, something evil and fierce, steps right out of it.
-
-[IMAGE alt="A ferocious goblin is stepping out of hiding"]
-
-Keeping her teeth together, Tamara says: "I might need your help with this. Take my dagger."
-
-// TODO: make this work - dagger / rock must be held
-
-* "No. I'm not a warrior."
-
-    [[CODE]]
-    w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
-    [[ENDCODE]]
-
-    Tamara purses her lips but says nothing. Then, without warning, <>
-
-* "Keep it. I'll improvise."
-
-    [[CODE]]
-    w.updateActorById(playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
-    w.updateActorById(tamaraId, (b) => b.inventory.add(tamarasDagger));
-    [[ENDCODE]]
-
-    I pick up a moldy rock that lies right next to my {left|right} foot. It's hard and heavy in my palm. As soon as I straighten up, <>
-
-* "Thanks, I'll take it."
-
-    [[CODE]]
-    w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
-    [[ENDCODE]]
-
-    I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it, <>
-
--
-
-<> the goblin is out of the brush and ready to attack. He's gnashing his teeth and growls like a wolf. He taps his thigh with the blunt side of a rusty sword.
+<> taps his thigh with the blunt side of a rusty sword, grinning.

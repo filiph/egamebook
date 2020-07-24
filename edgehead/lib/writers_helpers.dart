@@ -375,21 +375,6 @@ FightSituation generateRandomEncounter(ActionContext c,
 FightSituation generateStartFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  var firstGoblin = Actor.initialized(firstGoblinId, w.randomInt, "goblin",
-      adjective: "feral",
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
-          name: "sword", adjective: "rusty", firstOwnerId: firstGoblinId),
-      dexterity: 150,
-      // The goblin starts the fight.
-      initiative: 2000,
-      // For the first 2 rounds, the goblin is invincible. We don't want
-      // Tamara to kill him before the player has any chance to do something.
-      isInvincible: true,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  w.actors.add(firstGoblin);
   return FightSituation.initialized(
     w.randomInt(),
     party,
@@ -397,8 +382,8 @@ FightSituation generateStartFight(ActionContext c,
     "{muddy |wet |}ground",
     roomRoamingSituation,
     {
-      3: start_make_goblin_not_invincible,
       2: start_tamara_bellows,
+      3: start_make_goblin_not_invincible,
     },
   );
 }

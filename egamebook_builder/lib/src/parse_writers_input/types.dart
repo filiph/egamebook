@@ -32,6 +32,7 @@ final allNeededTypes = <TypeReference>[
   inkParagraphNodeType,
   inkSituationType,
   nothingType,
+  poseType,
   prerequisiteType,
   reasonedSuccessChanceOfVoidType,
   resourceType,
@@ -113,6 +114,10 @@ final nothingType = TypeReference((b) => b
   ..url = 'package:edgehead/fractal_stories/action.dart');
 
 final numType = TypeReference((b) => b..symbol = 'num');
+
+final poseType = TypeReference((b) => b
+  ..symbol = 'Pose'
+  ..url = 'package:edgehead/fractal_stories/pose.dart');
 
 final prerequisiteType = TypeReference((b) => b
   ..symbol = 'Prerequisite'
