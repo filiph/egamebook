@@ -35,7 +35,7 @@ ReasonedSuccessChance computeBluntSwingAtHeadPlayer(
 
 EnemyTargetAction startBluntSwingAtHead() => StartDefensibleAction(
       name: "StartBluntSwingAtHead",
-      combatCommandType: CombatCommandType.stance,
+      combatCommandType: CombatCommandType.body,
       commandPathTailGenerator: (w, a, target) =>
           "swing ${weaponAsObject2InCommandPath(a)} at <objectPronoun's> head",
       helpMessage: startBluntSwingAtHeadHelpMessage,
