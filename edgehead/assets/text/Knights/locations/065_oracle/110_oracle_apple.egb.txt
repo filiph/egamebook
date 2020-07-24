@@ -9,7 +9,7 @@ PREREQUISITES:
 INK:
 The apple is one of the Fruits grown on the slopes of the Pyramid. This one is especially large and extremely red.
 
-"You can have it if you want," Oracle says. "You need it more than I do."
+"You can have it if you want," Oracle says[[IF c.playerHasWoodenFoot]], glancing at the wooden stump I have for a foot[[ENDIF]][[IF c.playerHasAsthma]] while I have a little fit of cough[[ENDIF]]. "You need it more than I do."
 
 * "Is it dangerous?"
 
@@ -31,7 +31,7 @@ PREREQUISITES:
 w.actionHasBeenPerformed('oracle_apple_examine')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I take it.
+It feels strangely heavy in my palm.
 
 [[CODE]]
 c.giveNewItemToPlayer(oracleApple);

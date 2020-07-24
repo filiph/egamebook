@@ -89,7 +89,7 @@ final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: A device similar to Conet is here.\n\nTODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n\nTODO: fight with Osiris. Assuming a win (otherwise, death).\n',
+      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: A device similar to Conet is here.\n\nTODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n\n\nTODO: fight with Osiris. Assuming a win (otherwise, death).\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3071,8 +3071,13 @@ final oracleAppleExamineInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_77cb64ee3 = c.playerHasWoodenFoot
+        ? ''', glancing at the wooden stump I have for a foot'''
+        : '''''';
+    final ifBlock_5daa17d61 =
+        c.playerHasAsthma ? ''' while I have a little fit of cough''' : '''''';
     s.add(
-        '"You can have it if you want," Oracle says. "You need it more than I do."\n',
+        '"You can have it if you want," Oracle says$ifBlock_77cb64ee3$ifBlock_5daa17d61. "You need it more than I do."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -3201,7 +3206,7 @@ class OracleAppleTake extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I take it.\n\n', isRaw: true);
+    s.add('It feels strangely heavy in my palm.\n\n', isRaw: true);
     c.giveNewItemToPlayer(oracleApple);
 
     return '${a.name} successfully performs OracleAppleTake';
@@ -3749,7 +3754,6 @@ final argoGreetInk = InkAst([
       ],
     ),
   ]),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -4989,8 +4993,10 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_5f310b46e =
+        c.playerHasWoodenFoot ? ''', especially at my wooden foot''' : '''''';
     s.add(
-        '"Greetings. What\'s your business here?" The knight takes a second good look at me. "You look far from home."\n',
+        '"Greetings. What\'s your business here?" The knight takes a second good look at me$ifBlock_5f310b46e. "You look far from home."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -5111,8 +5117,9 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_46055ee7b = c.playerHasAsthma ? '''Stop coughing.''' : '''''';
     s.add(
-        'I can\'t help you. I don\'t know anyone called Sarn. Or maybe I do but I don\'t remember. I am busy, as you can see."\n',
+        'I can\'t help you. I don\'t know anyone called Sarn. Or maybe I do but I don\'t remember. $ifBlock_46055ee7b I am busy, as you can see."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -6169,15 +6176,12 @@ final talkToAdaGreetingsInk = InkAst([
         '"Greetings to you, too, $youngSirSubstitution. What\'s your name?"\n',
         isRaw: true);
   }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('_"Aren."_\n', isRaw: true);
-  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Aren." """.trim(),
+      consequence: [],
+    ),
+  ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;

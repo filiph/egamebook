@@ -8,7 +8,7 @@ FOR_LOCATION: $staging_area
 INK:
 // Subtext: the knight is scared, he wants out
 
-"Greetings. What's your business here?" The knight takes a second good look at me. "You look far from home."
+"Greetings. What's your business here?" The knight takes a second good look at me[[IF c.playerHasWoodenFoot]], especially at my wooden foot[[ENDIF]]. "You look far from home."
 
 * "I am far from home, yes."
 
@@ -51,7 +51,7 @@ c.learn(KnightsFacts.knightsAreLeaving);
 
 -
 
-<> I can't help you. I don't know anyone called Sarn. Or maybe I do but I don't remember. I am busy, as you can see."
+<> I can't help you. I don't know anyone called Sarn. Or maybe I do but I don't remember. [[IF c.playerHasAsthma]]Stop coughing.[[ENDIF]] I am busy, as you can see."
 
 * "Can you just look in your book?"
 

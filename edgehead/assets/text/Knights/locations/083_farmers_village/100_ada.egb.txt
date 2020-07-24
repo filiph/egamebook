@@ -6,7 +6,9 @@ FOR_LOCATION: $farmers_village
 INK:
 "Greetings to you, too, [young sir]. What's your name?"
 
-_"Aren."_
+* "Aren."
+
+-
 
 "Good to meet you, Aren. My name is Ada."
 
