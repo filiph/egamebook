@@ -22,23 +22,23 @@ final RegExp _multipleSpaces = RegExp(r'\s+');
 String escapeWritersText(String s, [List<IfBlock> ifBlocks = const []]) {
   String result = s;
   for (final block in ifBlocks) {
-    result = result.replaceFirst(block.fullString, "\$${block.identifier}");
+    result = result.replaceFirst(block.fullString, "\${${block.identifier}}");
   }
 
   if (r"$".allMatches(result).length >
-      "\$${IfBlock.identifierStart}".allMatches(result).length) {
+      "\${${IfBlock.identifierStart}".allMatches(result).length) {
     // There is more "$" than $ifBlock_xyz account for.
     _log.warning("String contains a dollar sign: '''$s'''");
     result = result.replaceAll(r'$', r"(DOLLAR_SIGN)");
   }
 
-  result = result.replaceAll(weSubstitution, r'$weSubstitution');
+  result = result.replaceAll(weSubstitution, r'${weSubstitution}');
   result = result.replaceAll(
-      weSubstitutionCapitalized, r'$weSubstitutionCapitalized');
+      weSubstitutionCapitalized, r'${weSubstitutionCapitalized}');
 
-  result = result.replaceAll(youngSirSubstitution, r'$youngSirSubstitution');
+  result = result.replaceAll(youngSirSubstitution, r'${youngSirSubstitution}');
   result = result.replaceAll(
-      youngSirSubstitutionCapitalized, r'$youngSirSubstitutionCapitalized');
+      youngSirSubstitutionCapitalized, r'${youngSirSubstitutionCapitalized}');
 
   return result
       .replaceAll('\n', r'\n')
