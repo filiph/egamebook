@@ -62,8 +62,12 @@ class CounterTackle extends EnemyTargetAction {
         () => a.report(s, "<subject> go<es> wide", but: true),
         () =>
             enemy.report(s, "<subject> {evade<s>|sidestep<s>} it", but: true));
+    assert(enemy.anatomy.isHumanoid,
+        "The next report assumes humanoid anatomy with feet.");
     a.report(
-        s, "<subject> land<s> on the ${getGroundMaterial(w)} next to <object>",
+        s,
+        "<subject> land<s> on the ${getGroundMaterial(w)} "
+        "next to <object's> feet",
         object: enemy);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     return "${a.name} fails to tackle ${enemy.name}";
