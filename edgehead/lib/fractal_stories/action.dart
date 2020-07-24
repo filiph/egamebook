@@ -187,7 +187,7 @@ abstract class Action<T> {
       assert(
           !commandPathTemplate
               .any((string) => string.contains(RegExp(r'<[\w]+>'))),
-          "Action is of type Action<$T> yet it expect Storyline to work.");
+          "Action is of type Action<$T> yet it expects Storyline to work.");
       return commandPathTemplate;
     }
   }
@@ -209,6 +209,16 @@ abstract class Action<T> {
     }
 
     return getCommandPath(context, object).last;
+  }
+
+  /// Returns the help message given [context] and [object].
+  ///
+  /// Generally, actions don't need to override this method, because a single
+  /// help message (provided by [helpMessage]) is enough. But some actions
+  /// might change the help message according to context or the nature
+  /// of [object].
+  String getHelpMessage(ApplicabilityContext context, T object) {
+    return helpMessage;
   }
 
   /// The time it takes the actor to be available again after performing

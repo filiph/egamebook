@@ -477,7 +477,8 @@ class EdgeheadGame extends Book {
         final choice = Choice((b) => b
           ..commandPath = ListBuilder<String>(performance.commandPath)
           ..commandSentence = performance.commandSentence
-          ..helpMessage = performance.action.helpMessage
+          ..helpMessage = performance.action
+              .getHelpMessage(performance.context, performance.object)
           ..successChance = performance.successChance.value
           ..actionName = performance.action.name
           ..additionalData = ListBuilder<int>(performance.additionalData)

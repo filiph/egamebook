@@ -4,20 +4,6 @@ import 'package:meta/meta.dart';
 class InkAst extends InkSequenceNode {
   const InkAst(List<InkNode> children) : super(children);
 
-  InkNode getNodeAt(Iterable<int> path) {
-    InkNode current = this;
-    for (final position in path) {
-      assert(
-          current is InkSequenceNode,
-          "Path asks for a position ($position) "
-          "but $current is not an InkSequenceNode "
-          "(it's a ${current.runtimeType})");
-
-      current = (current as InkSequenceNode).children[position];
-    }
-    return current;
-  }
-
   List<int> getNextPosition(List<int> path) {
     final node = getNodeAt(path);
 
@@ -47,6 +33,20 @@ class InkAst extends InkSequenceNode {
 
     return parentPath.followedBy([nextIndexInParent]).toList();
   }
+
+  InkNode getNodeAt(Iterable<int> path) {
+    InkNode current = this;
+    for (final position in path) {
+      assert(
+          current is InkSequenceNode,
+          "Path asks for a position ($position) "
+          "but $current is not an InkSequenceNode "
+          "(it's a ${current.runtimeType})");
+
+      current = (current as InkSequenceNode).children[position];
+    }
+    return current;
+  }
 }
 
 class InkChoiceNode extends InkSequenceNode {
@@ -60,7 +60,22 @@ class InkChoiceNode extends InkSequenceNode {
     this.isApplicable,
   }) : super(consequence);
 
+  List<String> get commandPath {
+    // Remove the ((help message)), if any.
+    final commandItself = command.split('((').first;
+    return commandItself.split('>>');
+  }
+
   List<InkNode> get consequence => children;
+
+  String get helpMessage {
+    final helpMessageStart = command.indexOf('((');
+    if (helpMessageStart == -1) return null;
+    final helpMessageEnd = command.indexOf('))');
+    assert(helpMessageStart < helpMessageEnd,
+        'Command start a helpMessage region but never closes it: $command');
+    return command.substring(helpMessageStart + '(('.length, helpMessageEnd);
+  }
 }
 
 class InkForkNode extends InkSequenceNode {

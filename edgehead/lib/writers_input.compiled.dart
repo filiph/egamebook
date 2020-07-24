@@ -11,6 +11,7 @@
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: type_annotate_public_apis
+// ignore_for_file: unnecessary_brace_in_string_interps
 // ignore_for_file: prefer_const_constructors
 
 import 'package:edgehead/fractal_stories/context.dart' show ActionContext;
@@ -143,7 +144,7 @@ class ExamineAntechamberLock extends RoamingAction {
         ? '''After a few moments, I realize the shape of the lock reminds me of something ancient. I look at the akxe and its hilt. It will fit.'''
         : '''''';
     s.add(
-        'It is a long slit with an irregular shape. If it\'s meant to be opened by a key, the key must be massive, and weirdly shaped.\n\n\n$ifBlock_6892af2b6\n',
+        'It is a long slit with an irregular shape. If it\'s meant to be opened by a key, the key must be massive, and weirdly shaped.\n\n\n${ifBlock_6892af2b6}\n',
         isRaw: true);
     return '${a.name} successfully performs ExamineAntechamberLock';
   }
@@ -619,7 +620,7 @@ final Room crowdsource = Room('crowdsource', (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'A temple. Some orcs are talking. $weSubstitutionCapitalized stay hidden.\n',
+      'A temple. Some orcs are talking. ${weSubstitutionCapitalized} stay hidden.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -640,7 +641,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'A temple. Some orcs are talking. $weSubstitutionCapitalized stay hidden.\n',
+          'A temple. Some orcs are talking. ${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -772,7 +773,7 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'A large room taking up two floors. Bunk beds, and a dining area. $weSubstitutionCapitalized stay hidden.\n\nI find a barbecued bat on a stool out of sight.\n',
+      'A large room taking up two floors. Bunk beds, and a dining area. ${weSubstitutionCapitalized} stay hidden.\n\nI find a barbecued bat on a stool out of sight.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -951,7 +952,7 @@ final Room conet = Room('conet', (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'Some kobolds operating a large device. They are turning a huge wheel, drawing some kind of spring, and lifting huge rocks into position.\n\nA primitive writing on the entrance says "Conet".\n\n$weSubstitutionCapitalized stay hidden.\n',
+      'Some kobolds operating a large device. They are turning a huge wheel, drawing some kind of spring, and lifting huge rocks into position.\n\nA primitive writing on the entrance says "Conet".\n\n${weSubstitutionCapitalized} stay hidden.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1076,7 +1077,7 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
       ? '''Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.'''
       : '''''';
   s.add(
-      'Musty, dark place. Through cracks, I can see rooms under me.\n\n$ifBlock_373b22f49\n',
+      'Musty, dark place. Through cracks, I can see rooms under me.\n\n${ifBlock_373b22f49}\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1167,7 +1168,7 @@ class KarlUseNecromancy extends RoamingAction {
         ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
         : '''''';
     s.add(
-        'I perform the necromantic incantation but I fail. Nothing happens. $ifBlock_4d7298c01\n',
+        'I perform the necromantic incantation but I fail. Nothing happens. ${ifBlock_4d7298c01}\n',
         isRaw: true);
     return '${a.name} fails to perform KarlUseNecromancy';
   }
@@ -1334,7 +1335,8 @@ final Approach elevator28FromElevator12 =
   final Storyline s = c.outputStoryline;
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add('$weSubstitutionCapitalized climb up using an ancient rusty ladder.\n',
+  s.add(
+      '${weSubstitutionCapitalized} climb up using an ancient rusty ladder.\n',
       isRaw: true);
 });
 final Approach elevator28FromGodsLair =
@@ -1353,7 +1355,7 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
       ? '''Brutal laughter from the east.'''
       : '''''';
   s.add(
-      'Orc noises from all around, but thankfully no orc in sight. $ifBlock_753ddd0b\n\n',
+      'Orc noises from all around, but thankfully no orc in sight. ${ifBlock_753ddd0b}\n\n',
       isRaw: true);
   c.learn(OrcsFacts.inPyramid);
 }, null, null,
@@ -1612,7 +1614,7 @@ final Room junction = Room('junction', null, (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'A place of increased orc foot traffic. $weSubstitutionCapitalized stay hidden.\n',
+      'A place of increased orc foot traffic. ${weSubstitutionCapitalized} stay hidden.\n',
       isRaw: true);
 }, null, null, positionX: 27, positionY: 45, mapName: 'Junction on 26th Floor');
 final Approach reservoirFromJunction =
@@ -1847,7 +1849,7 @@ final Approach battlefieldFromKnightsHqMain =
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      '$weSubstitutionCapitalized climb up the stairs to the sixteenth floor.\n',
+      '${weSubstitutionCapitalized} climb up the stairs to the sixteenth floor.\n',
       isRaw: true);
 });
 final Approach battlefieldFromTrainingGrounds =
@@ -1863,7 +1865,7 @@ final Room battlefield = Room(
       final weSubstitution =
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as $weSubstitution climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two orcs attack.\n\n',
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.\n\n"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the leather jerkin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two orcs attack.\n\n',
           isRaw: true);
       c.learn(OrcsFacts.inPyramid);
       c.learn(SixtyFiversFacts.shieldSeen);
@@ -1890,7 +1892,7 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          '$weSubstitutionCapitalized stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner - an important source of pride for the Knights\n\nI take the banner.\n\n',
+          '${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner - an important source of pride for the Knights\n\nI take the banner.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(banner);
 
@@ -2101,7 +2103,7 @@ final talkToOracleDragonEggInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"Ha! You can\'t, $youngSirSubstitution. The Deathless have been using it as a holy symbol for generations. They won\'t just give it away."\n',
+              '"Ha! You can\'t, ${youngSirSubstitution}. The Deathless have been using it as a holy symbol for generations. They won\'t just give it away."\n',
               isRaw: true);
         }),
       ],
@@ -2145,7 +2147,7 @@ final talkToOracleEarthquakesInk = InkAst([
                 final Storyline s = c.outputStoryline;
                 final youngSirSubstitution = c.playerSalutation;
                 s.add(
-                    '"Did you, now." Oracle looks at you with piercing eyes. "I guess you did, $youngSirSubstitution." She smiles.\n',
+                    '"Did you, now." Oracle looks at you with piercing eyes. "I guess you did, ${youngSirSubstitution}." She smiles.\n',
                     isRaw: true);
               }),
             ],
@@ -2192,7 +2194,7 @@ final talkToOracleGreetingsInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Greetings to you, too, $youngSirSubstitution. I am Oracle. Bring me good information, and I will repay you with good information."\n',
+        '"Greetings to you, too, ${youngSirSubstitution}. I am Oracle. Bring me good information, and I will repay you with good information."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3077,7 +3079,7 @@ final oracleAppleExamineInk = InkAst([
     final ifBlock_5daa17d61 =
         c.playerHasAsthma ? ''' while I have a little fit of cough''' : '''''';
     s.add(
-        '"You can have it if you want," Oracle says$ifBlock_77cb64ee3$ifBlock_5daa17d61. "You need it more than I do."\n',
+        '"You can have it if you want," Oracle says${ifBlock_77cb64ee3}${ifBlock_5daa17d61}. "You need it more than I do."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -4603,7 +4605,7 @@ final Approach elevator12FromElevator28 =
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      '$weSubstitutionCapitalized climb down using an ancient rusty ladder.\n',
+      '${weSubstitutionCapitalized} climb down using an ancient rusty ladder.\n',
       isRaw: true);
 });
 final Approach elevator12FromKnightsHqMain =
@@ -4859,7 +4861,7 @@ final Approach stagingAreaFromPyramidEntrance =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
         s.add(
-            'As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to $ifBlock_6718c6f98. Messages like "Where is Doghead?" and "Doghead save us".\n\n',
+            'As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to ${ifBlock_6718c6f98}. Messages like "Where is Doghead?" and "Doghead save us".\n\n',
             isRaw: true);
         c.learn(DogheadFacts.somethingCalledDoghead);
 
@@ -4996,7 +4998,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
     final ifBlock_5f310b46e =
         c.playerHasWoodenFoot ? ''', especially at my wooden foot''' : '''''';
     s.add(
-        '"Greetings. What\'s your business here?" The knight takes a second good look at me$ifBlock_5f310b46e. "You look far from home."\n',
+        '"Greetings. What\'s your business here?" The knight takes a second good look at me${ifBlock_5f310b46e}. "You look far from home."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -5119,7 +5121,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
     final Storyline s = c.outputStoryline;
     final ifBlock_46055ee7b = c.playerHasAsthma ? '''Stop coughing.''' : '''''';
     s.add(
-        'I can\'t help you. I don\'t know anyone called Sarn. Or maybe I do but I don\'t remember. $ifBlock_46055ee7b I am busy, as you can see."\n',
+        'I can\'t help you. I don\'t know anyone called Sarn. Or maybe I do but I don\'t remember. ${ifBlock_46055ee7b} I am busy, as you can see."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -5999,7 +6001,7 @@ final talkToAdaBigOInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"As much as anyone here, $youngSirSubstitution. When I was younger, we called him Osiris. Big O is a nickname that people gave him. He\'s a constant presence, even though we don\'t ever see him."\n',
+        '"As much as anyone here, ${youngSirSubstitution}. When I was younger, we called him Osiris. Big O is a nickname that people gave him. He\'s a constant presence, even though we don\'t ever see him."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -6173,7 +6175,7 @@ final talkToAdaGreetingsInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Greetings to you, too, $youngSirSubstitution. What\'s your name?"\n',
+        '"Greetings to you, too, ${youngSirSubstitution}. What\'s your name?"\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -6201,7 +6203,7 @@ final talkToAdaQuake1Ink = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Don\'t you worry, $youngSirSubstitution, this is quite normal here. These past months there is seldom a single day when we don\'t have a quake."\n',
+        '"Don\'t you worry, ${youngSirSubstitution}, this is quite normal here. These past months there is seldom a single day when we don\'t have a quake."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -6241,7 +6243,7 @@ final talkToAdaQuake1Ink = InkAst([
               ? '''She's very knowledgeable, Oracle. She knows a lot about this place. She reads books, you know.'''
               : '''She was very knowledgeable, you know.''';
           s.add(
-              '"I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. $ifBlock_23e6b75e"\n',
+              '"I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. ${ifBlock_23e6b75e}"\n',
               isRaw: true);
         }),
         InkParagraphNode((ActionContext c) {
@@ -7475,7 +7477,7 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
   final ifBlock_1d766ac55 = c.knows(LadyHopeFacts.ladyHopeName)
       ? '''Lady Hope faces me and prepares for battle.'''
       : '''An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.''';
-  s.add('$ifBlock_1d766ac55\n\n', isRaw: true);
+  s.add('${ifBlock_1d766ac55}\n\n', isRaw: true);
   c.learn(LadyHopeFacts.ladyHopeName);
 
   s.add(
@@ -7551,7 +7553,7 @@ class NorthSkullExamine extends RoamingAction {
         ? '''As I circle the "North Skull", the compass always points directly at it.'''
         : '''''';
     s.add(
-        'This is human skull made into a device. \n\nTODO: image of north skull - some kind of device inset in a human skull\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n$ifBlock_465f63bbc\n',
+        'This is human skull made into a device. \n\nTODO: image of north skull - some kind of device inset in a human skull\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n${ifBlock_465f63bbc}\n',
         isRaw: true);
     return '${a.name} successfully performs NorthSkullExamine';
   }
@@ -7701,7 +7703,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As $weSubstitution approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nTODO: Image of the two guards\n\nThe man has been crying, judging from his eyes.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. \n\n',
+      'As ${weSubstitution} approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\nTODO: Image of the two guards\n\nThe man has been crying, judging from his eyes.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. \n\n',
       isRaw: true);
   c.learn(LadyHopeFacts.ladyInKeep);
 }, (ActionContext c) {
@@ -8446,7 +8448,7 @@ final talkToMiguelAboutDevlingInk = InkAst([
         ? '''What Kat said. I'd just add that'''
         : '''You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that''';
     s.add(
-        '"$ifBlock_e7f3070f I\'ve heard locals talk of a device of war called the Dragon Egg. If I were you, no offense, I\'d try to find any advantage possible against the Orcs and the other creatures of the upside."\n',
+        '"${ifBlock_e7f3070f} I\'ve heard locals talk of a device of war called the Dragon Egg. If I were you, no offense, I\'d try to find any advantage possible against the Orcs and the other creatures of the upside."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -8469,7 +8471,7 @@ final talkToMiguelAboutDragonEggInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"It\'s an ancient weapon, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it, $youngSirSubstitution."\n',
+        '"It\'s an ancient weapon, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it, ${youngSirSubstitution}."\n',
         isRaw: true);
   }),
 ]);
@@ -9245,7 +9247,7 @@ class BleedsMainObserveVillage extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. $ifBlock_646ab8e51\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
+              'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. ${ifBlock_646ab8e51}\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
               isRaw: true);
         })).apply(c);
     c.learn(JisadFacts.blindPerson);
@@ -9360,7 +9362,7 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     c.learn(KnightsFacts.knightsAreLeaving);
 
     s.add(
-        '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! $ifBlock_191880c16, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
+        '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! ${ifBlock_191880c16}, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
         isRaw: true);
     w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
 
@@ -9614,7 +9616,7 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      '$weSubstitutionCapitalized enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
+      '${weSubstitutionCapitalized} enter a small building made of stone. It\'s dark in here but cozy.\nA gray haired trader greets me and gestures around.\n\n"Everything is for sale. And for good price, too."\n\nI don\'t really have any money, so I just nod and smile.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -9624,7 +9626,7 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'The trader {nods|pretends to smile} as $weSubstitution enter his shop.\n\n',
+      'The trader {nods|pretends to smile} as ${weSubstitution} enter his shop.\n\n',
       isRaw: true);
   if (c.inRoomWith(leroyId) &&
       w.getActorById(leroyId).anatomy.isUndead &&
@@ -9698,7 +9700,7 @@ final bleedsBlindGuideBigOInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"He\'s all the way up there, $youngSirSubstitution. It\'s not like we can pay him a visit, and he has not come down my entire life. All I\n',
+              '"He\'s all the way up there, ${youngSirSubstitution}. It\'s not like we can pay him a visit, and he has not come down my entire life. All I\n',
               isRaw: true);
         }),
       ],
@@ -9888,7 +9890,7 @@ final bleedsBlindGuideDelvingInk = InkAst([
                 final Storyline s = c.outputStoryline;
                 final youngSirSubstitution = c.playerSalutation;
                 s.add(
-                    '"I wasn\'t finished, $youngSirSubstitution. Goblins are dangerous, sure, but you\'re unlikely to find them in the Pyramid.\n',
+                    '"I wasn\'t finished, ${youngSirSubstitution}. Goblins are dangerous, sure, but you\'re unlikely to find them in the Pyramid.\n',
                     isRaw: true);
               }),
             ],
@@ -10106,7 +10108,7 @@ final bleedsBlindGuideGreetInk = InkAst([
                 final ifBlock_3c961d43e = c.playerHasWoodenFoot
                     ? '''I'm guessing you've heard your share of jokes like that, and worse, judging from the sound one of your feet makes. '''
                     : '''''';
-                s.add('He nods. "$ifBlock_3c961d43eAnd your name?"\n',
+                s.add('He nods. "${ifBlock_3c961d43e}And your name?"\n',
                     isRaw: true);
               }),
             ],
@@ -10229,7 +10231,7 @@ final bleedsBlindGuideOracleInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"What, you\'re still here? Damn, $youngSirSubstitution, you\'re persistent." Jisad clicks with his tongue. "Oracle. She\'s not been here as long as I, but she knows more about all this place than I or anyone else."\n',
+        '"What, you\'re still here? Damn, ${youngSirSubstitution}, you\'re persistent." Jisad clicks with his tongue. "Oracle. She\'s not been here as long as I, but she knows more about all this place than I or anyone else."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -10332,7 +10334,7 @@ final bleedsBlindGuideOrcsInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"I have been here for a long time, $youngSirSubstitution. But I don\'t know why they came or what they are doing."\n',
+        '"I have been here for a long time, ${youngSirSubstitution}. But I don\'t know why they came or what they are doing."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -10354,7 +10356,7 @@ final bleedsBlindGuideQuake1Ink = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Yes, $youngSirSubstitution. We have these quite often, at least one a day. They don\'t seem to be too serious, thank the Eight Gods."\n',
+        '"Yes, ${youngSirSubstitution}. We have these quite often, at least one a day. They don\'t seem to be too serious, thank the Eight Gods."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -11490,7 +11492,7 @@ final Room bleedsMainAfterCaravan = Room(
           ? '''The caravan has left. The hawkman named Gadelon stays.'''
           : '''A tall figure is standing near the trader's shop. At first it seems like the person has a cape, but the truth is they don't. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.''';
       s.add(
-          'The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. $ifBlock_405410045\n\n',
+          'The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. ${ifBlock_405410045}\n\n',
           isRaw: true);
       c.increaseSanityFromPeople();
     },
@@ -11614,7 +11616,7 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'There is no path in the direction of the smoke. $weSubstitutionCapitalized go through the brush and step over logs and ancient rubble.\n',
+      'There is no path in the direction of the smoke. ${weSubstitutionCapitalized} go through the brush and step over logs and ancient rubble.\n',
       isRaw: true);
 }, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
@@ -11632,7 +11634,7 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'When $weSubstitution come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
+      'When ${weSubstitution} come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
       isRaw: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null,
     positionX: 15,
@@ -11683,7 +11685,7 @@ class GoblinCampAttack extends RoamingAction {
     final weSubstitutionCapitalized =
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '$weSubstitutionCapitalized come out of the hiding and charge the goblins.\n\n',
+        '${weSubstitutionCapitalized} come out of the hiding and charge the goblins.\n\n',
         isRaw: true);
     c.movePlayer('goblin_skirmish_main');
 
@@ -11937,7 +11939,7 @@ class ObserveGoblinCamp extends RoamingAction {
     final weSubstitutionCapitalized =
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '$weSubstitutionCapitalized find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
+        '${weSubstitutionCapitalized} find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
         isRaw: true);
     return '${a.name} successfully performs ObserveGoblinCamp';
   }
@@ -12256,7 +12258,7 @@ class PerformNecromancyElsewhere extends RoamingAction {
         ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
         : '''''';
     s.add(
-        'I perform the necromantic incantation but I fail. Nothing happens. $ifBlock_4d7298c01\n',
+        'I perform the necromantic incantation but I fail. Nothing happens. ${ifBlock_4d7298c01}\n',
         isRaw: true);
     return '${a.name} fails to perform PerformNecromancyElsewhere';
   }
@@ -12303,7 +12305,7 @@ final startInkInk = InkAst([
   InkForkNode([
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with curly black hair >> and a large debt. """
+          r""" I am a young woman >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12318,7 +12320,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot. """
+          r""" I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12333,7 +12335,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with curly black hair >> and asthma. """
+          r""" I am a young woman >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12348,7 +12350,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> and a large debt. """
+          r""" I am a young woman >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12363,7 +12365,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot. """
+          r""" I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12378,7 +12380,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> and asthma. """
+          r""" I am a young woman >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12393,7 +12395,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> and a large debt. """
+          r""" I am a young woman >> with long blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12408,7 +12410,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot. """
+          r""" I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12423,7 +12425,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> and asthma. """
+          r""" I am a young woman >> with long blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12438,7 +12440,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with curly black hair >> and a large debt. """
+          r""" I am a young man >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12453,7 +12455,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with curly black hair >> and a wooden stump instead of the left foot. """
+          r""" I am a young man >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12467,8 +12469,9 @@ final startInkInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" I am a young man >> with curly black hair >> and asthma. """
-          .trim(),
+      command:
+          r""" I am a young man >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+              .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -12482,7 +12485,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> and a large debt. """
+          r""" I am a young man >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12497,7 +12500,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot. """
+          r""" I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12511,8 +12514,9 @@ final startInkInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" I am a young man >> with wavy brown hair >> and asthma. """
-          .trim(),
+      command:
+          r""" I am a young man >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+              .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -12526,7 +12530,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> and a large debt. """
+          r""" I am a young man >> with short blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12541,7 +12545,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> and a wooden stump instead of the left foot. """
+          r""" I am a young man >> with short blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -12555,8 +12559,9 @@ final startInkInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" I am a young man >> with short blond hair >> and asthma. """
-          .trim(),
+      command:
+          r""" I am a young man >> with short blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+              .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -12589,7 +12594,7 @@ final startInkInk = InkAst([
     final Storyline s = c.outputStoryline;
     final ifBlock_a590cf34 = c.playerIsMale ? '''his''' : '''her''';
     s.add(
-        'I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on $ifBlock_a590cf34 own.\n',
+        'I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on ${ifBlock_a590cf34} own.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12635,7 +12640,9 @@ final startInkInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" Run """.trim(),
+      command:
+          r""" Run ((This is a goblin: a killing machine. No one would fault me for leaving a fight I may hardly win.)) """
+              .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -12647,7 +12654,7 @@ final startInkInk = InkAst([
               ? '''My wooden stump doesn't help.'''
               : '''''';
           s.add(
-              'Tamara seems pleased with this course of action at first. But the agile goblin is faster in the overgrowth. $ifBlock_549bd7b58 A few heartbeats later, he\'s almost upon us.\n',
+              'Tamara seems pleased with this course of action at first. But the agile goblin is faster in the overgrowth. ${ifBlock_549bd7b58} A few heartbeats later, he\'s almost upon us.\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12661,7 +12668,7 @@ final startInkInk = InkAst([
               ? '''I wheeze and cough. The damn asthma.'''
               : '''''';
           s.add(
-              'He slashes Tamara\'s leg and she goes down. There is no more running now. $ifBlock_72e7100f8 But I am able to pick up a solid branch from the ground and I have the initiative now.\n',
+              'He slashes Tamara\'s leg and she goes down. There is no more running now. ${ifBlock_72e7100f8} But I am able to pick up a solid branch from the ground and I have the initiative now.\n',
               isRaw: true);
         }),
         InkParagraphNode((ActionContext c) {
@@ -12697,7 +12704,9 @@ final startInkInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" Attack """.trim(),
+      command:
+          r""" Attack ((There is no way around this. The goblin is clearly set on fighting us. May as well seize initiative before more of them show up.)) """
+              .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -12707,7 +12716,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, $youngSirSubstitution."\n',
+              '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, ${youngSirSubstitution}."\n',
               isRaw: true);
         }),
         InkParagraphNode((ActionContext c) {
@@ -12732,7 +12741,9 @@ final startInkInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" Wait """.trim(),
+      command:
+          r""" Wait ((It could be a trap. Or the goblin could decide we are more than he can chew. In either case, caution might save our necks.)) """
+              .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -12742,7 +12753,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              'Tamara nods. She points her mercenary sword at the goblin but doesn\'t move. "Take my dagger, $youngSirSubstitution," she tells me and moves her hip a little, to indicate where it\'s strapped.\n',
+              'Tamara nods. She points her mercenary sword at the goblin but doesn\'t move. "Take my dagger, ${youngSirSubstitution}," she tells me and moves her hip a little, to indicate where it\'s strapped.\n',
               isRaw: true);
         }),
         InkForkNode([
@@ -12911,7 +12922,7 @@ final Room meadowFight = Room(
       final Storyline s = c.outputStoryline;
       final youngSirSubstitution = c.playerSalutation;
       final ifBlock_52e534a1a = c.isHurt(tamaraId)
-          ? '''Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, $youngSirSubstitution. And I say it's not for you, either." She winces, and looks at me.'''
+          ? '''Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, ${youngSirSubstitution}. And I say it's not for you, either." She winces, and looks at me.'''
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
       final ifBlock_781966055 =
           c.isHurt(tamaraId) ? '''She slowly stands up, and shrugs.''' : '''''';
@@ -12963,7 +12974,7 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                '\nThe fight is over.\n\n\n$ifBlock_52e534a1a "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n\nI remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n\nTamara understands. $ifBlock_781966055 "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
+                '\nThe fight is over.\n\n\n${ifBlock_52e534a1a} "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n\nI remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n\nTamara understands. ${ifBlock_781966055} "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
                 isRaw: true);
             w.updateActorById(tamaraId, (b) => b.isActive = false);
           }),

@@ -37,7 +37,14 @@ class InkChoose extends Action<InkChoicePointer> {
       throw StateError('This action implements own getCommandPath');
 
   @override
-  String get helpMessage => null;
+  String get helpMessage =>
+      throw StateError('This action implements own getHelpMessage');
+
+  @override
+  String getHelpMessage(
+      ApplicabilityContext context, InkChoicePointer pointer) {
+    return pointer.choice.helpMessage;
+  }
 
   @override
   bool get isAggressive => false;
@@ -119,7 +126,7 @@ class InkChoose extends Action<InkChoicePointer> {
   @override
   List<String> getCommandPath(
       ApplicabilityContext context, InkChoicePointer pointer) {
-    return pointer.choice.command.split('>>');
+    return pointer.choice.commandPath;
   }
 
   @override

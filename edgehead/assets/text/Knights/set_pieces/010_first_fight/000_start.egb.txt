@@ -26,109 +26,109 @@ INK:
 Here I am in the ancient ruins of San Francisco. After a month long journey, I have finally reached my destination. My brother is here, somewhere.
 
 
-* I am a young woman >> with curly black hair >> and a large debt.
+* I am a young woman >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 0, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot.
+* I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 0, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with curly black hair >> and asthma.
+* I am a young woman >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 0, 2);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> and a large debt.
+* I am a young woman >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot.
+* I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> and asthma.
+* I am a young woman >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 2);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> and a large debt.
+* I am a young woman >> with long blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot.
+* I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> and asthma.
+* I am a young woman >> with long blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 2);
 [[ENDCODE]]
 
-* I am a young man >> with curly black hair >> and a large debt.
+* I am a young man >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 0, 0);
 [[ENDCODE]]
 
-* I am a young man >> with curly black hair >> and a wooden stump instead of the left foot.
+* I am a young man >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 0, 1);
 [[ENDCODE]]
 
-* I am a young man >> with curly black hair >> and asthma.
+* I am a young man >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 0, 2);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> and a large debt.
+* I am a young man >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 0);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot.
+* I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 1);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> and asthma.
+* I am a young man >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 2);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> and a large debt.
+* I am a young man >> with short blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 0);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> and a wooden stump instead of the left foot.
+* I am a young man >> with short blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 1);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> and asthma.
+* I am a young man >> with short blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 2);
@@ -149,7 +149,7 @@ Which, of course, is immediately refuted by what happens next.
 
 A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us. I look around to see if there's more but no. He is alone. What gives the predator such confidence?
 
-* Run
+* Run ((This is a goblin: a killing machine. No one would fault me for leaving a fight I may hardly win.))
 
     Tamara seems pleased with this course of action at first. But the agile goblin is faster in the overgrowth. [[IF c.playerHasWoodenFoot]]My wooden stump doesn't help.[[ENDIF]] A few heartbeats later, he's almost upon us.
 
@@ -172,7 +172,7 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
 
     The goblin growls like a wolf, standing above Tamara. She's had time to draw her mercenary sword but not much else. The goblin <>
 
-* Attack
+* Attack ((There is no way around this. The goblin is clearly set on fighting us. May as well seize initiative before more of them show up.))
 
     "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
 
@@ -183,7 +183,7 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
 
     The goblin is out of the brush and ready to fight. He's gnashing his teeth and growls like a wolf. He <>
 
-* Wait
+* Wait ((It could be a trap. Or the goblin could decide we are more than he can chew. In either case, caution might save our necks.))
 
     Tamara nods. She points her mercenary sword at the goblin but doesn't move. "Take my dagger, [young sir]," she tells me and moves her hip a little, to indicate where it's strapped.
 
