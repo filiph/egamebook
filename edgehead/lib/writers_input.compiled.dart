@@ -2098,8 +2098,9 @@ final talkToOracleDragonEggInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
+          final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"Ha! You can\'t, young sir. The Deathless have been using it as a holy symbol for generations. They won\'t just give it away."\n',
+              '"Ha! You can\'t, $youngSirSubstitution. The Deathless have been using it as a holy symbol for generations. They won\'t just give it away."\n',
               isRaw: true);
         }),
       ],
@@ -2141,8 +2142,9 @@ final talkToOracleEarthquakesInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
+                final youngSirSubstitution = c.playerSalutation;
                 s.add(
-                    '"Did you, now." Oracle looks at you with piercing eyes. "I guess you did, young sir." She smiles.\n',
+                    '"Did you, now." Oracle looks at you with piercing eyes. "I guess you did, $youngSirSubstitution." She smiles.\n',
                     isRaw: true);
               }),
             ],
@@ -2187,8 +2189,9 @@ final talkToOracleGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Greetings to you, too, young sir. I am Oracle. Bring me good information, and I will repay you with good information."\n',
+        '"Greetings to you, too, $youngSirSubstitution. I am Oracle. Bring me good information, and I will repay you with good information."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -5986,8 +5989,9 @@ final talkToAdaBigOInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"As much as anyone here, young sir. When I was younger, we called him Osiris. Big O is a nickname that people gave him. He\'s a constant presence, even though we don\'t ever see him."\n',
+        '"As much as anyone here, $youngSirSubstitution. When I was younger, we called him Osiris. Big O is a nickname that people gave him. He\'s a constant presence, even though we don\'t ever see him."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -6159,7 +6163,9 @@ final talkToAdaGreetingsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"Greetings to you, too, young sir. What\'s your name?"\n',
+    final youngSirSubstitution = c.playerSalutation;
+    s.add(
+        '"Greetings to you, too, $youngSirSubstitution. What\'s your name?"\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -6188,8 +6194,9 @@ final talkToAdaQuake1Ink = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Don\'t you worry, young sir, this is quite normal here. These past months there is seldom a single day when we don\'t have a quake."\n',
+        '"Don\'t you worry, $youngSirSubstitution, this is quite normal here. These past months there is seldom a single day when we don\'t have a quake."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -8455,8 +8462,9 @@ final talkToMiguelAboutDragonEggInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"It\'s an ancient weapon, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it, young sir."\n',
+        '"It\'s an ancient weapon, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it, $youngSirSubstitution."\n',
         isRaw: true);
   }),
 ]);
@@ -9338,6 +9346,7 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_191880c16 = c.playerIsMale ? '''Sir''' : '''Lady''';
     assert(c.inRoomWith(leroyId));
 
     s.add(
@@ -9346,7 +9355,7 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     c.learn(KnightsFacts.knightsAreLeaving);
 
     s.add(
-        '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! Sir, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
+        '\n"Well, if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! $ifBlock_191880c16, you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
         isRaw: true);
     w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
 
@@ -9682,8 +9691,9 @@ final bleedsBlindGuideBigOInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
+          final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"He\'s all the way up there, young sir. It\'s not like we can pay him a visit, and he has not come down my entire life. All I\n',
+              '"He\'s all the way up there, $youngSirSubstitution. It\'s not like we can pay him a visit, and he has not come down my entire life. All I\n',
               isRaw: true);
         }),
       ],
@@ -9871,8 +9881,9 @@ final bleedsBlindGuideDelvingInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
+                final youngSirSubstitution = c.playerSalutation;
                 s.add(
-                    '"I wasn\'t finished, young sir. Goblins are dangerous, sure, but you\'re unlikely to find them in the Pyramid.\n',
+                    '"I wasn\'t finished, $youngSirSubstitution. Goblins are dangerous, sure, but you\'re unlikely to find them in the Pyramid.\n',
                     isRaw: true);
               }),
             ],
@@ -10205,8 +10216,9 @@ final bleedsBlindGuideOracleInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"What, you\'re still here? Damn, young sir, you\'re persistent." Jisad clicks with his tongue. "Oracle. She\'s not been here as long as I, but she knows more about all this place than I or anyone else."\n',
+        '"What, you\'re still here? Damn, $youngSirSubstitution, you\'re persistent." Jisad clicks with his tongue. "Oracle. She\'s not been here as long as I, but she knows more about all this place than I or anyone else."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -10307,8 +10319,9 @@ final bleedsBlindGuideOrcsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"I have been here for a long time, young sir. But I don\'t know why they came or what they are doing."\n',
+        '"I have been here for a long time, $youngSirSubstitution. But I don\'t know why they came or what they are doing."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -10328,8 +10341,9 @@ final bleedsBlindGuideQuake1Ink = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Yes, young sir. We have these quite often, at least one a day. They don\'t seem to be too serious, thank the Eight Gods."\n',
+        '"Yes, $youngSirSubstitution. We have these quite often, at least one a day. They don\'t seem to be too serious, thank the Eight Gods."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -12278,111 +12292,270 @@ final startInkInk = InkAst([
   InkForkNode([
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with black curly hair >> and a large debt. """
+          r""" I am a young woman >> with curly black hair >> and a large debt. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 0, 0);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with black curly hair >> and a wooden stump for a leg. """
+          r""" I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 0, 1);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with black curly hair >> and tuberculosis. """
+          r""" I am a young woman >> with curly black hair >> and asthma. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 0, 2);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with straight white hair >> and a large debt. """
+          r""" I am a young woman >> with wavy brown hair >> and a large debt. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 1, 0);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with straight white hair >> and a wooden stump for a leg. """
+          r""" I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 1, 1);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with straight white hair >> and tuberculosis. """
+          r""" I am a young woman >> with wavy brown hair >> and asthma. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 1, 2);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with blond wavy hair >> and a large debt. """
+          r""" I am a young woman >> with long blond hair >> and a large debt. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 2, 0);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with blond wavy hair >> and a wooden stump for a leg. """
+          r""" I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 2, 1);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with blond wavy hair >> and tuberculosis. """
+          r""" I am a young woman >> with long blond hair >> and asthma. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(0, 2, 2);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with black curly hair >> and a large debt. """
+          r""" I am a young man >> with curly black hair >> and a large debt. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 0, 0);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with black curly hair >> and a wooden stump for a leg. """
+          r""" I am a young man >> with curly black hair >> and a wooden stump instead of the left foot. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 0, 1);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" I am a young man >> with curly black hair >> and asthma. """
+          .trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 0, 2);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with black curly hair >> and tuberculosis. """
+          r""" I am a young man >> with wavy brown hair >> and a large debt. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 1, 0);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with straight white hair >> and a large debt. """
+          r""" I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 1, 1);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" I am a young man >> with wavy brown hair >> and asthma. """
+          .trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 1, 2);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with straight white hair >> and a wooden stump for a leg. """
+          r""" I am a young man >> with short blond hair >> and a large debt. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 2, 0);
+        }),
+      ],
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with straight white hair >> and tuberculosis. """
+          r""" I am a young man >> with short blond hair >> and a wooden stump instead of the left foot. """
               .trim(),
-      consequence: [],
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 2, 1);
+        }),
+      ],
     ),
     InkChoiceNode(
-      command:
-          r""" I am a young man >> with blond wavy hair >> and a large debt. """
-              .trim(),
-      consequence: [],
-    ),
-    InkChoiceNode(
-      command:
-          r""" I am a young man >> with blond wavy hair >> and a wooden stump for a leg. """
-              .trim(),
-      consequence: [],
-    ),
-    InkChoiceNode(
-      command:
-          r""" I am a young man >> with blond wavy hair >> and tuberculosis. """
-              .trim(),
-      consequence: [],
+      command: r""" I am a young man >> with short blond hair >> and asthma. """
+          .trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.recordCharacterChoice(1, 2, 2);
+        }),
+      ],
     ),
   ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12402,8 +12575,9 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"This place is dangerous, young sir." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a major city. The air is damp and raw.\n',
+        '"This place is dangerous, $youngSirSubstitution." This is Tamara, my hired guide. She\'s walking a few paces in front of me, trying to see through the fog and the wild forest that was once a major city. The air is damp and raw.\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -12719,8 +12893,9 @@ final Room meadowFight = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      final youngSirSubstitution = c.playerSalutation;
       final ifBlock_3c0f034e2 = c.isHurt(tamaraId)
-          ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, young sir. But you might not." She winces, and looks at me.'''
+          ? '''Tamara is sitting on the ground now and tending to her wounds. "I'll survive, $youngSirSubstitution. But you might not." She winces, and looks at me.'''
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
       s.add(
           'My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. \n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking.\n\n\n',

@@ -578,20 +578,72 @@ extension ActionContextHelpers on ActionContext {
         isRaw: true);
   }
 
+  /// The default is female. This is the name of the custom event that sets
+  /// this to male.
+  static const String _playerIsMale = "player_is_male";
+
+  static const String _playerHairColor = "player_hair_color";
+
+  static const String _playerHasDebt = "player_has_debt";
+
+  static const String _playerHasWoodenFoot = "player_has_wooden_foot";
+
+  static const String _playerHasAsthma = "player_has_asthma";
+
+  void recordCharacterChoice(int gender, int hair, int debilitation) {
+    void set(String name, [String value]) {
+      outputWorld.recordCustom(name, data: value);
+    }
+
+    switch (gender) {
+      case 0:
+        // Player is female by default, nothing to do here.
+        break;
+      case 1:
+        set(_playerIsMale);
+        break;
+    }
+
+    switch (hair) {
+      case 0:
+        set(_playerHairColor, "black");
+        break;
+      case 1:
+        set(_playerHairColor, "brown");
+        break;
+      case 2:
+        set(_playerHairColor, "blond");
+        break;
+    }
+
+    switch (debilitation) {
+      case 0:
+        set(_playerHasDebt);
+        break;
+      case 1:
+        set(_playerHasWoodenFoot);
+        break;
+      case 2:
+        set(_playerHasAsthma);
+        break;
+    }
+  }
+
+  static const String _describedWorthinessEvent = "described_worthiness";
+
   void describeWorthiness(
       {@required Entity who,
       @required List<int> what,
       List<int> especially = const [],
       String how = 'approvingly'}) {
-    const customEventName = "described_worthiness";
-
     // Player's items that...
     final items = player.inventory.items
         // ... are impressing the [who] actor ...
         .where((item) => what.contains(item.id))
         // ... and haven't been mentioned by them.
         .where((item) => !world.customHistory
-            .query(name: customEventName, actorId: who.id, data: item.id)
+            .query(
+                name: _describedWorthinessEvent, actorId: who.id, data: item.id)
             .hasHappened)
         .toList(growable: false);
 
@@ -622,7 +674,8 @@ extension ActionContextHelpers on ActionContext {
     }
 
     for (final item in items) {
-      outputWorld.recordCustom(customEventName, data: item.id, actor: who);
+      outputWorld.recordCustom(_describedWorthinessEvent,
+          data: item.id, actor: who);
     }
   }
 }
@@ -635,6 +688,59 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     final situation = world.currentSituation as RoomRoamingSituation;
     if (situation.monstersAlive) return false;
     return simulation.getRoomByName(situation.currentRoomName).isIdle;
+  }
+
+  bool get playerIsMale {
+    final query =
+        world.customHistory.query(name: ActionContextHelpers._playerIsMale);
+    return query.hasHappened;
+  }
+
+  String get playerHairColor {
+    final query =
+        world.customHistory.query(name: ActionContextHelpers._playerHairColor);
+    return query.latest.data as String;
+  }
+
+  bool get playerHasDebt {
+    final query =
+        world.customHistory.query(name: ActionContextHelpers._playerHasDebt);
+    return query.hasHappened;
+  }
+
+  bool get playerHasWoodenFoot {
+    final query = world.customHistory
+        .query(name: ActionContextHelpers._playerHasWoodenFoot);
+    return query.hasHappened;
+  }
+
+  bool get playerHasAsthma {
+    final query =
+        world.customHistory.query(name: ActionContextHelpers._playerHasAsthma);
+    return query.hasHappened;
+  }
+
+  int get playerWorthiness {
+    final query = world.customHistory
+        .query(name: ActionContextHelpers._describedWorthinessEvent);
+    final count = query.count;
+    return min(count ~/ 2, 3);
+  }
+
+  String get playerSalutation {
+    final worthiness = playerWorthiness;
+    final isMale = playerIsMale;
+    switch (worthiness) {
+      case 0:
+        return isMale ? 'boy' : 'girl';
+      case 1:
+        return 'young one';
+      case 2:
+        return isMale ? 'young sir' : 'young lady';
+      case 3:
+        return isMale ? 'sir Aren' : 'lady Aren';
+    }
+    throw StateError('Wrong worthiness: $worthiness');
   }
 
   Actor get player {

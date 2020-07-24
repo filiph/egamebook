@@ -36,6 +36,13 @@ class SerialQueryResult<T extends Record> implements QueryResult<T> {
   /// The first member must be the latest one.
   SerialQueryResult(Iterable<T> records) : _records = records;
 
+  /// Counts the number of events in the query.
+  int get count {
+    _checkUnwalked();
+
+    return _records.length;
+  }
+
   @override
   bool get hasHappened {
     _checkUnwalked();

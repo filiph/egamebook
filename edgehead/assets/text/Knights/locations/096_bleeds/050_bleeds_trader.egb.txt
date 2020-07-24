@@ -154,7 +154,7 @@ c.learn(KnightsFacts.knightsAreLeaving);
 
 The trader groans. "Don't be stupid, Leroy."
 
-"I mean it! [Sir], you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."
+"I mean it! [[IF c.playerIsMale]]Sir[[ELSE]]Lady[[ENDIF]], you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."
 
 [[CODE]]
 w.updateActorById(leroyId, (b) => b.npc.isHireable = true);

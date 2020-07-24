@@ -27,24 +27,114 @@ Here I am in the ancient ruins of San Francisco. After a month long journey, I h
 
 // TODO: make this work - character preferences are saved and used
 
-* I am a young woman >> with black curly hair >> and a large debt.
-* I am a young woman >> with black curly hair >> and a wooden stump for a leg.
-* I am a young woman >> with black curly hair >> and tuberculosis.
-* I am a young woman >> with straight white hair >> and a large debt.
-* I am a young woman >> with straight white hair >> and a wooden stump for a leg.
-* I am a young woman >> with straight white hair >> and tuberculosis.
-* I am a young woman >> with blond wavy hair >> and a large debt.
-* I am a young woman >> with blond wavy hair >> and a wooden stump for a leg.
-* I am a young woman >> with blond wavy hair >> and tuberculosis.
-* I am a young man >> with black curly hair >> and a large debt.
-* I am a young man >> with black curly hair >> and a wooden stump for a leg.
-* I am a young man >> with black curly hair >> and tuberculosis.
-* I am a young man >> with straight white hair >> and a large debt.
-* I am a young man >> with straight white hair >> and a wooden stump for a leg.
-* I am a young man >> with straight white hair >> and tuberculosis.
-* I am a young man >> with blond wavy hair >> and a large debt.
-* I am a young man >> with blond wavy hair >> and a wooden stump for a leg.
-* I am a young man >> with blond wavy hair >> and tuberculosis.
+* I am a young woman >> with curly black hair >> and a large debt.
+
+[[CODE]]
+c.recordCharacterChoice(0, 0, 0);
+[[ENDCODE]]
+
+* I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot.
+
+[[CODE]]
+c.recordCharacterChoice(0, 0, 1);
+[[ENDCODE]]
+
+* I am a young woman >> with curly black hair >> and asthma.
+
+[[CODE]]
+c.recordCharacterChoice(0, 0, 2);
+[[ENDCODE]]
+
+* I am a young woman >> with wavy brown hair >> and a large debt.
+
+[[CODE]]
+c.recordCharacterChoice(0, 1, 0);
+[[ENDCODE]]
+
+* I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot.
+
+[[CODE]]
+c.recordCharacterChoice(0, 1, 1);
+[[ENDCODE]]
+
+* I am a young woman >> with wavy brown hair >> and asthma.
+
+[[CODE]]
+c.recordCharacterChoice(0, 1, 2);
+[[ENDCODE]]
+
+* I am a young woman >> with long blond hair >> and a large debt.
+
+[[CODE]]
+c.recordCharacterChoice(0, 2, 0);
+[[ENDCODE]]
+
+* I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot.
+
+[[CODE]]
+c.recordCharacterChoice(0, 2, 1);
+[[ENDCODE]]
+
+* I am a young woman >> with long blond hair >> and asthma.
+
+[[CODE]]
+c.recordCharacterChoice(0, 2, 2);
+[[ENDCODE]]
+
+* I am a young man >> with curly black hair >> and a large debt.
+
+[[CODE]]
+c.recordCharacterChoice(1, 0, 0);
+[[ENDCODE]]
+
+* I am a young man >> with curly black hair >> and a wooden stump instead of the left foot.
+
+[[CODE]]
+c.recordCharacterChoice(1, 0, 1);
+[[ENDCODE]]
+
+* I am a young man >> with curly black hair >> and asthma.
+
+[[CODE]]
+c.recordCharacterChoice(1, 0, 2);
+[[ENDCODE]]
+
+* I am a young man >> with wavy brown hair >> and a large debt.
+
+[[CODE]]
+c.recordCharacterChoice(1, 1, 0);
+[[ENDCODE]]
+
+* I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot.
+
+[[CODE]]
+c.recordCharacterChoice(1, 1, 1);
+[[ENDCODE]]
+
+* I am a young man >> with wavy brown hair >> and asthma.
+
+[[CODE]]
+c.recordCharacterChoice(1, 1, 2);
+[[ENDCODE]]
+
+* I am a young man >> with short blond hair >> and a large debt.
+
+[[CODE]]
+c.recordCharacterChoice(1, 2, 0);
+[[ENDCODE]]
+
+* I am a young man >> with short blond hair >> and a wooden stump instead of the left foot.
+
+[[CODE]]
+c.recordCharacterChoice(1, 2, 1);
+[[ENDCODE]]
+
+* I am a young man >> with short blond hair >> and asthma.
+
+[[CODE]]
+c.recordCharacterChoice(1, 2, 2);
+[[ENDCODE]]
+
 
 -
 

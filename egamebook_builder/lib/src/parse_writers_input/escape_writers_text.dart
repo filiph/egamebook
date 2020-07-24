@@ -1,10 +1,6 @@
 import 'package:egamebook_builder/src/parse_writers_input/if_block.dart';
 import 'package:logging/logging.dart';
 
-final Pattern sirSubstitution = "[sir]";
-
-final Pattern sirSubstitutionCapitalized = "[Sir]";
-
 final Pattern weSubstitution = "[we]";
 
 final Pattern weSubstitutionCapitalized = "[We]";
@@ -40,13 +36,11 @@ String escapeWritersText(String s, [List<IfBlock> ifBlocks = const []]) {
   result = result.replaceAll(
       weSubstitutionCapitalized, r'$weSubstitutionCapitalized');
 
+  result = result.replaceAll(youngSirSubstitution, r'$youngSirSubstitution');
+  result = result.replaceAll(
+      youngSirSubstitutionCapitalized, r'$youngSirSubstitutionCapitalized');
+
   return result
-      // TODO: Actually change the substitutions according to player gender.
-      .replaceAll(sirSubstitution, r'sir')
-      .replaceAll(sirSubstitutionCapitalized, r'Sir')
-      // TODO: standing: child, young sir/lady, sir/lady, sir/lady Aren
-      .replaceAll(youngSirSubstitution, r'young sir')
-      .replaceAll(youngSirSubstitutionCapitalized, r'Young sir')
       .replaceAll('\n', r'\n')
       .replaceAll('\r', '')
       .replaceAll(_multipleSpaces, ' ');

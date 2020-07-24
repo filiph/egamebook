@@ -53,6 +53,14 @@ Iterable<Code> createDescriptionStatements(String text) sync* {
         r"getWeOrI(a, sim, originalWorld, capitalized: true);");
   }
 
+  if (text.contains(youngSirSubstitution)) {
+    yield Code(r"final youngSirSubstitution = c.playerSalutation;");
+  }
+  if (text.contains(youngSirSubstitutionCapitalized)) {
+    yield Code(r"final youngSirSubstitutionCapitalized = "
+        r"Storyline.capitalize(c.playerSalutation);");
+  }
+
   // Define if-block substitutions if needed.
   final ifBlocks = IfBlock.parse(text).toList(growable: false);
   for (final block in ifBlocks) {
