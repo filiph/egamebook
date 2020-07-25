@@ -42,12 +42,14 @@ final _default = Rule(_id++, 0, false, (ApplicabilityContext c) {
   // Nothing here. Let's at least "log" this.
   c.outputWorld.recordCustom(evDirectorNoRuleApplicable);
 
-  // For now, also write out the time.
-  final debugTime = c.world.time.difference(edgeheadStartingTime);
-  c.outputStoryline.addParagraph();
-  c.outputStoryline.add(
-      '(DEBUG: It is ~${debugTime.inMinutes} minutes after I arrived.)',
-      isRaw: true);
+  if ((c.world.global as EdgeheadGlobalState).isInTesterMode) {
+    // For now, also write out the time.
+    final debugTime = c.world.time.difference(edgeheadStartingTime);
+    c.outputStoryline.addParagraph();
+    c.outputStoryline.add(
+        '(DEBUG: It is ~${debugTime.inMinutes} minutes after I arrived.)',
+        isRaw: true);
+  }
 });
 
 int _id = 100000;
