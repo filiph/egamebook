@@ -39,7 +39,9 @@ c.learn(JisadFacts.name);
 
   * * "Aren."
 
-* "I am Aren." [[IF c.playerHasAsthma]]I have a fit of cough but soon get it under control.[[ENDIF]]
+* "I am Aren."
+
+[[IF c.playerHasAsthma]]I have a fit of cough but soon get it under control.[[ENDIF]]
 
 -
 

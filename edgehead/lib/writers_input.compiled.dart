@@ -10138,10 +10138,20 @@ final bleedsBlindGuideGreetInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command:
-          r""" "I am Aren." [[IF c.playerHasAsthma]]I have a fit of cough but soon get it under control.[[ENDIF]] """
-              .trim(),
-      consequence: [],
+      command: r""" "I am Aren." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final ifBlock_78853861c = c.playerHasAsthma
+              ? '''I have a fit of cough but soon get it under control.'''
+              : '''''';
+          s.add('${ifBlock_78853861c}\n', isRaw: true);
+        }),
+      ],
     ),
   ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
