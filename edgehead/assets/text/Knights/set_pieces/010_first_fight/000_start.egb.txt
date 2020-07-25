@@ -139,7 +139,8 @@ c.recordCharacterChoice(1, 2, 2);
 
 I am also a necromancer. I can raise the dead, although not very well yet.
 
-I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on [[IF c.playerIsMale]]his[[ELSE]]her[[ENDIF]] own.
+// The IF ELSE statement in the following paragraph must build the outputWorld (instead of just using c.playerIsMale) because the custom event for 'player_is_male' was set earlier this action (it's not yet in originalWorld).
+I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on [[IF c.outputWorld.build().customHistory.query(name: 'player_is_male').hasHappened]]his[[ELSE]]her[[ENDIF]] own.
 
 Tamara has just finished telling me, for the hundredth time, what a stupid idea it is for me to come here. I tell her there's nothing to be worried about. I tell her the tales about goblins and orcs in the woods of San Francisco are exaggerated.
 

@@ -12592,9 +12592,15 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_a590cf34 = c.playerIsMale ? '''his''' : '''her''';
+    final ifBlock_a78affd5 = c.outputWorld
+            .build()
+            .customHistory
+            .query(name: 'player_is_male')
+            .hasHappened
+        ? '''his'''
+        : '''her''';
     s.add(
-        'I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on ${ifBlock_a590cf34} own.\n',
+        'I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on ${ifBlock_a78affd5} own.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
