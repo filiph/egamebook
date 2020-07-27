@@ -3496,6 +3496,61 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
 }, null, null, positionX: 15, positionY: 67, mapName: 'Sacred Place');
 final Approach pondFromJungleEntrance =
     Approach('jungle_entrance', 'pond', '', null);
+final pondHelicopterExamineInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The object is dark green, and larger than any animal, but made from metal. It has some windows in the front but it is not a house. It is deformed and scorched, broken. Long dark prongs extend from its back to the sides, like a firefly\'s wings.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The color and proportions are different, but after a few moments I recognize the vehicle. It is the same that can be found miles above Falling Rock, in the permanent snow. That one is white and red, and it still has ancient people in it, preserved by the cold. The elders call it Hell Compter. No one is to touch it or go anywhere near it.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" Take a closer look """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The vehicle sits above the calm surface of the pond, and almost blends with the surrounding vegetation. It looks like it was destroyed in the ancient times, when thing like it could still fly. I can see the path it took, all those millennia ago, through the structure of the Pyramid. Its demise made room for this jungle.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'There are flowers and burned out candles on top of its metal nose.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" Leave it be """.trim(),
+      consequence: [],
+    ),
+  ]),
+]);
 
 class AttackLizardNearPond extends RoamingAction {
   @override
@@ -3561,14 +3616,78 @@ class AttackLizardNearPond extends RoamingAction {
   bool get isAggressive => false;
 }
 
+class PondHelicopterExamine extends RoamingAction {
+  @override
+  final String name = 'pond_helicopter_examine';
+
+  static final PondHelicopterExamine singleton = PondHelicopterExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Object', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pond') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "pond_helicopter_examine_ink",
+    ));
+    return '${a.name} successfully performs PondHelicopterExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform PondHelicopterExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room pond = Room('pond', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond.\n',
+      '${weSubstitutionCapitalized} follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3586,8 +3705,10 @@ final Room pondWithLizardman = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.\n\nTODO: image of the lizardman\n\nNext to the Lizardman, a dead member of the Deathless tribe.\n',
+          '${weSubstitutionCapitalized} follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.\n\nIn front of the pond, a lizardman.\n\nTODO: image of the lizardman\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3614,7 +3735,7 @@ final Room pondWithLizardman = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'A lizardman stands in front of the pond.\n\nTODO: image of the lizardman\n\nNext to the Lizardman, a dead member of the Deathless tribe.\n',
+          'A lizardman stands in front of the pond.\n\nTODO: image of the lizardman\n',
           isRaw: true);
     },
     positionX: 14,
@@ -13431,6 +13552,7 @@ final allActions = <RoamingAction>[
   OracleAppleTake.singleton,
   GiveLairOfGodStarToDeathless.singleton,
   AttackLizardNearPond.singleton,
+  PondHelicopterExamine.singleton,
   ArgoAskDeathless.singleton,
   ArgoAskDragonEgg.singleton,
   ArgoAskQuake1.singleton,
@@ -13517,6 +13639,7 @@ final allInks = <String, InkAst>{
   'talk_to_oracle_quake_1_ink': talkToOracleQuake1Ink,
   'talk_to_oracle_sixty_fiver_ink': talkToOracleSixtyFiverInk,
   'oracle_apple_examine_ink': oracleAppleExamineInk,
+  'pond_helicopter_examine_ink': pondHelicopterExamineInk,
   'argo_ask_deathless_ink': argoAskDeathlessInk,
   'argo_ask_dragon_egg_ink': argoAskDragonEggInk,
   'argo_ask_quake_1_ink': argoAskQuake1Ink,

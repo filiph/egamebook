@@ -7,7 +7,7 @@ POS: 14, 74
 MAP_NAME: Pond
 
 FIRST_DESCRIPTION:
-A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond.
+[We] follow a narrow path through the foliage, smelling  the crispness of pine needles and  the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
 
 DESCRIPTION: $NONE
 
@@ -18,11 +18,11 @@ VARIANT_OF: $pond
 RULE: c.hasHappened(evOpenedDam)
 
 FIRST_DESCRIPTION:
-A crashed army helicopter in a clearing in the jungle. Below the vehicle, a pond. In front of the pond, a lizardman.
+[We] follow a narrow path through the foliage, smelling  the crispness of pine needles and  the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
+
+In front of the pond, a lizardman.
 
 TODO: image of the lizardman
-
-Next to the Lizardman, a dead member of the Deathless tribe.
 
 
 VARIANT_UPDATE_DESCRIPTION:
@@ -30,8 +30,27 @@ A lizardman stands in front of the pond.
 
 TODO: image of the lizardman
 
-Next to the Lizardman, a dead member of the Deathless tribe.
 
+// ---
+ACTION: $pond_helicopter_examine
+FOR_LOCATION: $pond
+
+COMMAND: Object >> Examine
+
+INK:
+The object is dark green, and larger than any animal, but made from metal. It has some windows in the front but it is not a house. It is deformed and scorched, broken. Long dark prongs extend from its back to the sides, like a firefly's wings.
+
+The color and proportions are different, but after a few moments I recognize the vehicle. It is the same that can be found miles above Falling Rock, in the permanent snow. That one is white and red, and it still has ancient people in it, preserved by the cold. The elders call it Hell Compter. No one is to touch it or go anywhere near it.
+
+* Take a closer look
+
+    The vehicle sits above the calm surface of the pond, and almost blends with the  surrounding vegetation. It looks like it was destroyed in the ancient times, when thing like it could still fly. I can see the path it took, all those millennia ago, through the structure of the Pyramid. Its demise made room for this jungle.
+
+    There are flowers and burned out candles on top of its metal nose.
+
+* Leave it be
+
+-
 
 // ---
 ACTION: $attack_lizard_near_pond
