@@ -178,7 +178,7 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
     "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
 
     [[CODE]]
-    w.updateActorById(playerId, (b) => b.inventory.add(tamarasDagger));
+    w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
     w.updateActorById(firstGoblinId, (b) => b.initiative = 0);
     [[ENDCODE]]
 

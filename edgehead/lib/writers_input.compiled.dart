@@ -12862,7 +12862,8 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          w.updateActorById(playerId, (b) => b.inventory.add(tamarasDagger));
+          w.updateActorById(
+              playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
           w.updateActorById(firstGoblinId, (b) => b.initiative = 0);
         }),
         InkParagraphNode((ActionContext c) {
