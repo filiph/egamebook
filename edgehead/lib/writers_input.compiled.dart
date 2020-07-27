@@ -9647,7 +9647,7 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
     firstHint:
         'A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.');
 final Approach endOfRoamFromBleedsMain =
-    Approach('bleeds_main', '__END_OF_ROAM__', 'go >> back home (ENDS GAME)',
+    Approach('bleeds_main', '__END_OF_ROAM__', 'Go >> back home (ENDS GAME)',
         (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;

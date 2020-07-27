@@ -140,4 +140,39 @@ void main() {
 
     expect(tree.root.order, equals(0));
   });
+
+  test("capitalization is preserved", () {
+    final choice1 = _buildChoice('Horseman White >> talk >> "Greetings."');
+    final choice2 = _buildChoice('Horseman White >> talk >> "I need you."');
+
+    final choiceBlock = (ChoiceBlockBuilder()
+          ..choices.addAll([
+            choice1,
+            choice2,
+          ])
+          ..saveGame = emptySaveGame)
+        .build();
+
+    final tree = ChoiceTree(choiceBlock);
+
+    expect(tree.root.groups.single.prefix, "Horseman White");
+  });
+
+  test("leaf nodes are trimmed", () {
+    final choice1 = _buildChoice('Horseman White >> talk >> "Greetings."');
+    final choice2 = _buildChoice('Horseman White >> talk >> "I need you."');
+
+    final choiceBlock = (ChoiceBlockBuilder()
+          ..choices.addAll([
+            choice1,
+            choice2,
+          ])
+          ..saveGame = emptySaveGame)
+        .build();
+
+    final tree = ChoiceTree(choiceBlock);
+
+    expect(tree.root.groups.single.groups.single.choices.first,
+        isNot(startsWith(' ')));
+  });
 }

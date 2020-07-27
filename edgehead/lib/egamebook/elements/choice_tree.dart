@@ -48,7 +48,7 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
         "Trying to get prefix of $choice at order $order, "
         "which is out of bounds of ${choice.commandPath}");
     final prefix = choice.commandPath[order - 1];
-    return prefix.toLowerCase();
+    return prefix.trim();
   }
 
   // Group all non-single choices by current prefix.
