@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
@@ -17,11 +18,15 @@ const String startSlashOnGroundHelpMessage =
 ReasonedSuccessChance computeStartSlashOnGroundPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   assert(a.isPlayer);
-  return getCombatMoveChance(a, enemy, 0.1, [
-    const Modifier(20, CombatReason.dexterity),
-    const Penalty(60, CombatReason.targetHasShield),
-    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
-  ]);
+  final standingChance = computeStartSlashAtBodyPartGenerator(
+      enemy.anatomy.torso, a, sim, w, enemy);
+
+  return ReasonedSuccessChance<void>(
+    // A bit harder to pull of on the ground.
+    standingChance.value * 0.9,
+    successReasons: standingChance.successReasons,
+    failureReasons: standingChance.failureReasons,
+  );
 }
 
 EnemyTargetAction startSlashOnGroundBuilder() => StartDefensibleAction(

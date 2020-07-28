@@ -146,7 +146,6 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
         return 1.0;
       }
       return 0.0;
-      throw StateError("Forgotten logic branch"); // ignore: dead_code
     case CombatReason.performerIsPlayer:
       if (performer.isPlayer) {
         return 1.0;

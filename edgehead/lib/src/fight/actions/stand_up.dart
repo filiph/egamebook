@@ -14,7 +14,9 @@ class StandUp extends Action<Nothing> {
   static const String className = "StandUp";
 
   @override
-  final String helpMessage = null;
+  final String helpMessage = "Being on the ground is very bad in a fight. "
+      "A prone warrior is easier to hit, easier to disarm, and has a harder "
+      "time reaching anything.";
 
   @override
   final bool isAggressive = false;

@@ -15,7 +15,7 @@ class AssumeStance extends Action<Nothing> {
 
   @override
   final String helpMessage = "When in proper combat stance, the enemy has "
-      "fewer opportunities for attack.";
+      "fewer opportunities for attack, and my own attacks are faster.";
 
   @override
   final bool isAggressive = false;

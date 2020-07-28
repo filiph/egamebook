@@ -22,7 +22,7 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
 
   @override
   final String helpMessage = "A lesser known talent of necromancers is "
-      "to channel the horror of death to the target's mind. It makes "
+      "to channel visions of death to the target's mind. It makes "
       "the target rabid and disoriented. They might attack their own.";
 
   @override
