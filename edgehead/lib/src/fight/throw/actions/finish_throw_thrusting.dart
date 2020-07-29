@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -93,8 +94,7 @@ class FinishThrowThrusting extends OtherActorAction {
       if (result.willFall) {
         result.victim.report(s, "<subject> fall<s>{| down| to the ground}",
             negative: true, actionThread: thread);
-        w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
-        w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
+        makeActorFall(context.world, w, s, result.victim);
       }
       inflictPain(context, enemy.id,
           projectile.damageCapability.thrustingDamage, result.touchedPart,

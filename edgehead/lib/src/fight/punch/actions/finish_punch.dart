@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -91,7 +92,10 @@ class FinishPunch extends OtherActorAction {
             object: enemy,
             actionThread: thread,
             positive: true);
-        w.recordCustom(fellToGroundCustomEventName, actor: enemy);
+        // This repeats the b.pose = Pose.onGround line, but also
+        // adds standard falling functionality, like reminding player
+        // about lying down being bad.
+        makeActorFall(context.world, w, s, enemy);
         break;
     }
     return "${a.name} punches ${enemy.name} to $updatedPose";

@@ -11,6 +11,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -143,9 +144,8 @@ class SwingBluntAtLeaper extends EnemyTargetAction {
       killHumanoid(context, result.victim.id);
     }
 
-    w.updateActorById(enemy.id, (b) => b.pose = Pose.onGround);
     // Mark this as "fell to ground" because the leap didn't go well.
-    w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
+    makeActorFall(context.world, w, s, result.victim);
 
     w.popSituationsUntil("FightSituation", context);
     return "${a.name} swings blunt weapon at ${enemy.name}";

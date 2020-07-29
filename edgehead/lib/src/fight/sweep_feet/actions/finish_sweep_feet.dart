@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/sweep_feet/sweep_feet_situation.dart';
@@ -82,8 +83,7 @@ class FinishSweepFeet extends OtherActorAction {
     enemy.report(s, "<subject> fall<s> to the $groundMaterial",
         actionThread: threadId, replacesThread: true, negative: true);
 
-    w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
-    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
+    makeActorFall(context.world, w, s, enemy);
     return "${a.name} sweeps ${enemy.name} off feet";
   }
 

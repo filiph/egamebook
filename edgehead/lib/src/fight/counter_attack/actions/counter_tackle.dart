@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
@@ -79,8 +80,7 @@ class CounterTackle extends EnemyTargetAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> tackle<s> <object> to the ground", object: enemy);
-    w.updateActorById(enemy.id, (b) => b..pose = Pose.onGround);
-    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
+    makeActorFall(context.world, w, s, enemy);
     w.updateActorById(a.id, (b) => b..pose = Pose.onGround);
     return "${a.name} tackles ${enemy.name}";
   }

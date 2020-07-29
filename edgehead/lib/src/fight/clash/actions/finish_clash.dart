@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/clash/clash_situation.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -106,8 +107,7 @@ class FinishClash extends OtherActorAction {
         subject: MoveEntity.getFromAttackerSituation(context.world),
         object: enemy,
         actionThread: thread);
-    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
-    w.updateActorById(enemy.id, (b) => b..pose = newStance);
+    makeActorFall(context.world, w, s, enemy);
 
     return "${a.name} pounds ${enemy.name} to the ground";
   }

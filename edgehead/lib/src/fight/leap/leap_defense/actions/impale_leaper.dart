@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
@@ -94,12 +95,7 @@ class ImpaleLeaper extends EnemyTargetAction {
     enemy.report(s, "<subject> {leap<s>|run<s>|lunge<s>} right into it",
         negative: true);
     final damage = enemy.isInvincible ? 0 : 1;
-    w.updateActorById(
-        enemy.id,
-        (b) => b
-          ..hitpoints -= damage
-          ..pose = Pose.onGround);
-    w.recordCustom(fellToGroundCustomEventName, actor: enemy);
+    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAnimated && !enemy.isInvincible;
     if (!killed) {
@@ -108,9 +104,10 @@ class ImpaleLeaper extends EnemyTargetAction {
           "<subject> {cut<s> into|pierce<s>|go<es> into} "
           "<object's> flesh",
           object: updatedEnemy);
-      updatedEnemy.report(s, "<subject> fall<s> to the ground");
       inflictPain(context, enemy.id, damage,
           enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
+      updatedEnemy.report(s, "<subject> fall<s> to the ground");
+      makeActorFall(context.world, w, s, updatedEnemy);
     } else {
       a.currentWeaponOrBodyPart.report(
           s,
@@ -118,6 +115,7 @@ class ImpaleLeaper extends EnemyTargetAction {
           "bore<s> through} <object's> {body|chest|stomach|neck}",
           object: updatedEnemy);
       updatedEnemy.report(s, "<subject> go<es> down", negative: true);
+      makeActorFall(context.world, w, s, updatedEnemy);
       killHumanoid(context, enemy.id);
     }
 

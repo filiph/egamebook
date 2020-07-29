@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
+import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
@@ -73,8 +74,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
     if (result.willFall) {
       result.victim.report(s, "<subject> collapse<s>",
           negative: true, actionThread: thread);
-      w.updateActorById(result.victim.id, (b) => b.pose = Pose.onGround);
-      w.recordCustom(fellToGroundCustomEventName, actor: result.victim);
+      makeActorFall(context.world, w, s, result.victim);
     }
 
     inflictPain(context, result.victim.id, damage, result.touchedPart);
