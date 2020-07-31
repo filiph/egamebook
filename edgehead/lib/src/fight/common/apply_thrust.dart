@@ -43,7 +43,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
       }
       _placeBodyPartOnGround(w, result.severedPart);
     } else {
-      a.report(
+      weapon.report(
           s,
           "<subject> $verbs <object's> "
           "${result.touchedPart.randomDesignation}",
@@ -81,7 +81,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
       result.victim.report(s, "<subject> <is> now blind", negative: true);
     }
   } else {
-    a.report(
+    weapon.report(
         s,
         "<subject> $verbs "
         "<object's> "
