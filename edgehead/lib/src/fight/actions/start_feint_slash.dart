@@ -79,6 +79,7 @@ class FeintSlash extends StartDefensibleActionBase {
         "<subject> tr<ies> to ruin <object's> stance "
         "with a feinted $attackVerb",
         object: enemy,
+        startsThread: true,
         actionThread: mainSituation.id);
   }
 

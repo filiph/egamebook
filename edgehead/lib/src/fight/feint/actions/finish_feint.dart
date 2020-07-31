@@ -74,7 +74,12 @@ class FinishFeint extends OtherActorAction {
     final thread = getThreadId(sim, w, feintSituationName);
     final feint = MoveEntity.getFromAttackerSituation(context.world);
     feint.report(s, "<subject> is successful", actionThread: thread);
-    enemy.report(s, "<subject> expose<s> <subject's> arm", negative: true);
+
+    a.report(s, "<subject> feint<s> a $stringType",
+        replacesThread: true, actionThread: thread, positive: true);
+
+    enemy.report(s, "<subject> expose<s> <subject's> arm",
+        actionThread: thread, negative: true);
 
     w.updateActorById(enemy.id, (b) => b..pose = Pose.extended);
     w.recordCustom(lostStanceCustomEvent, actor: enemy);
