@@ -25,7 +25,7 @@ ReasonedSuccessChance computeStartBiteAtBodyPartGenerator(
     BodyPart bodyPart, Actor a, Simulation sim, WorldState w, Actor enemy) {
   assert(a.isPlayer);
 
-  const minBase = 0.01;
+  const minBase = 0.2;
   const maxBase = 0.5;
   final relativeBiteSurface = math.min(
       math.max(bodyPart.swingSurfaceLeft, bodyPart.swingSurfaceRight) / 10, 1);
@@ -35,12 +35,7 @@ ReasonedSuccessChance computeStartBiteAtBodyPartGenerator(
     const Modifier(30, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(30, CombatReason.balance),
-    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
-    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
+    ...disabledModifiers,
   ]);
 }
 

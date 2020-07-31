@@ -14,10 +14,7 @@ ReasonedSuccessChance computeCounterClash(
   return getCombatMoveChance(a, enemy, 0.2, const [
     Modifier(20, CombatReason.dexterity),
     Modifier(20, CombatReason.balance),
-    Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
-    Bonus(30, CombatReason.targetHasOneLegDisabled),
-    Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    Bonus(90, CombatReason.targetHasAllEyesDisabled),
+    ...disabledModifiers,
   ]);
 }
 

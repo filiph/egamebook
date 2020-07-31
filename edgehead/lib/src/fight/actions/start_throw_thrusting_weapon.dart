@@ -29,12 +29,7 @@ ReasonedSuccessChance computeThrowThrustingWeaponPlayer(
     Modifier(hasThrowingWeapon ? 20 : 10, CombatReason.dexterity),
     const Penalty(20, CombatReason.targetHasShield),
     Modifier(hasThrowingWeapon ? 20 : 10, CombatReason.balance),
-    const Bonus(10, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(10, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(20, CombatReason.targetHasOneLegDisabled),
-    const Bonus(50, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(20, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(80, CombatReason.targetHasAllEyesDisabled),
+    ...disabledModifiers,
   ]);
 }
 

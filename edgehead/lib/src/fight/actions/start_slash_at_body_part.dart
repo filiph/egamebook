@@ -29,22 +29,18 @@ ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
     BodyPart bodyPart, Actor a, Simulation sim, WorldState w, Actor enemy) {
   assert(a.isPlayer);
 
-  const minBase = 0.01;
-  const maxBase = 0.5;
+  const minBase = 0.1;
+  const maxBase = 0.7;
   final relativeSlashSurface = math.min(
       math.max(bodyPart.swingSurfaceLeft, bodyPart.swingSurfaceRight) / 10, 1);
   final base = minBase + maxBase * relativeSlashSurface;
 
-  return getCombatMoveChance(a, enemy, base, [
-    const Modifier(30, CombatReason.dexterity),
-    const Penalty(30, CombatReason.targetHasShield),
-    const Modifier(30, CombatReason.balance),
-    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
-    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
+  return getCombatMoveChance(a, enemy, base, const [
+    Modifier(30, CombatReason.dexterity),
+    Modifier(30, CombatReason.balance),
+    Modifier(30, CombatReason.weaponReach),
+    Penalty(30, CombatReason.targetHasShield),
+    ...disabledModifiers,
   ]);
 }
 

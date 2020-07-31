@@ -20,11 +20,7 @@ ReasonedSuccessChance computeStartFeint(
   return getCombatMoveChance(a, enemy, 0.8, const [
     Modifier(95, CombatReason.dexterity),
     Modifier(50, CombatReason.balance),
-    Bonus(20, CombatReason.targetHasPrimaryArmDisabled),
-    Bonus(30, CombatReason.targetHasOneLegDisabled),
-    Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    Bonus(50, CombatReason.targetHasAllEyesDisabled),
-    Bonus(50, CombatReason.performerIsPlayer),
+    ...disabledModifiers,
   ]);
 }
 

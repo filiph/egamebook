@@ -14,7 +14,7 @@ ReasonedSuccessChance computeDodgeThrow(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.6, [
     const Modifier(60, CombatReason.dexterity),
-    const Modifier(50, CombatReason.balance),
+    const Modifier(30, CombatReason.balance),
     const Penalty(100, CombatReason.performerHasLimitedVision),
     const Penalty(50, CombatReason.performerHasLimitedMobility),
   ]);

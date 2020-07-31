@@ -15,12 +15,7 @@ ReasonedSuccessChance computeOpportunityThrust(
     const Modifier(20, CombatReason.dexterity),
     const Penalty(20, CombatReason.targetHasShield),
     const Modifier(20, CombatReason.balance),
-    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
-    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
+    ...disabledModifiers,
   ]);
 }
 

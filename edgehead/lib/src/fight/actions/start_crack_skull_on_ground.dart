@@ -21,10 +21,7 @@ ReasonedSuccessChance computeCrackSkullOnGroundChance(
       const Modifier(50, CombatReason.dexterity),
       Penalty(a.currentDamageCapability.length >= 2 ? 40 : 90,
           CombatReason.targetHasWeapon),
-      const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
-      const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
-      const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-      const Bonus(100, CombatReason.targetHasAllEyesDisabled),
+      ...disabledModifiers,
     ]);
 
 EnemyTargetAction startCrackSkullOnGroundBuilder() => StartDefensibleAction(

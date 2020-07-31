@@ -19,11 +19,7 @@ ReasonedSuccessChance computeStartPullDown(
   return getCombatMoveChance(a, enemy, 0.05, [
     const Modifier(20, CombatReason.dexterity),
     const Modifier(10, CombatReason.balance),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
-    const Bonus(10, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(30, CombatReason.targetHasAllEyesDisabled),
-    const Penalty(50, CombatReason.performerHasLimitedMobility),
-    const Penalty(50, CombatReason.performerHasLimitedVision),
+    ...disabledModifiers,
   ]);
 }
 

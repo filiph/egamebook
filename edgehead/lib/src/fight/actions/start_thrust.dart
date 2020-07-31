@@ -25,20 +25,16 @@ ReasonedSuccessChance computeThrustAtBodyPartChance(
   assert(a.isPlayer);
   final bodyPart = enemy.anatomy.findByDesignation(designation);
 
-  const minBase = 0.01;
-  const maxBase = 0.3;
+  const minBase = 0.3;
+  const maxBase = 0.6;
   final base = lerpDouble(bodyPart.thrustSurface, 0, 8, minBase, maxBase);
 
   return getCombatMoveChance(a, enemy, base, [
     const Modifier(30, CombatReason.dexterity),
+    const Modifier(30, CombatReason.weaponReach),
     const Penalty(30, CombatReason.targetHasShield),
-    const Modifier(30, CombatReason.balance),
-    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
-    const Bonus(90, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
+    const Modifier(40, CombatReason.balance),
+    ...disabledModifiers,
   ]);
 }
 

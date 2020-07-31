@@ -3,6 +3,24 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:meta/meta.dart';
 
+/// Modifiers applicable to most combat situations. These will make it easier
+/// for the performer to succeed when the target has disabled legs or arms
+/// or eyes, and harder to succeed when the _performer_ has limited mobility
+/// or visibility.
+///
+/// This does not take into account anything else, such as shields, dexterity,
+/// weapon reach, etc.
+const disabledModifiers = [
+  Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
+  Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
+  Bonus(30, CombatReason.targetHasOneLegDisabled),
+  Bonus(90, CombatReason.targetHasAllLegsDisabled),
+  Bonus(50, CombatReason.targetHasOneEyeDisabled),
+  Bonus(90, CombatReason.targetHasAllEyesDisabled),
+  Penalty(30, CombatReason.performerHasLimitedMobility),
+  Penalty(30, CombatReason.performerHasLimitedVision),
+];
+
 @visibleForTesting
 const List<CombatReason> reasonsRequiringBonuses = [
   CombatReason.performerIsPlayer,
@@ -18,7 +36,8 @@ const List<CombatReason> reasonsRequiringBonuses = [
 const List<CombatReason> reasonsRequiringModifiers = [
   CombatReason.dexterity,
   CombatReason.balance,
-  CombatReason.height
+  CombatReason.height,
+  CombatReason.weaponReach,
 ];
 
 @visibleForTesting
@@ -146,6 +165,11 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
         return 1.0;
       }
       return 0.0;
+    case CombatReason.weaponReach:
+      final performerReach = performer.currentDamageCapability.length;
+      final targetReach = target.currentDamageCapability.length;
+      final difference = (performerReach - targetReach).clamp(-2, 2);
+      return difference / 2;
     case CombatReason.performerIsPlayer:
       if (performer.isPlayer) {
         return 1.0;
@@ -276,6 +300,11 @@ enum CombatReason {
   /// the standing actor is in balance or not).
   height,
 
+  /// Advantage for the actor whose weapon has a longer reach. For example,
+  /// a knife-wielding combatant should have a disadvantage when fighting
+  /// a sword-wielding one.
+  weaponReach,
+
   /// Some moves should just be way easier for the player, to make the game more
   /// fun. For example, nobody wants to consistently fail at withstanding
   /// a feint attack. But the player _will_ want to make others see fail
@@ -325,7 +354,6 @@ enum CombatReason {
   targetHasAllEyesDisabled,
 
   // TODO: weaponDexterity /// Lightness of weapon
-  // TODO: reach /// Advantage of longer limbs and longer weapons
   // TODO: strength /// Brute force (e.g. withstanding a kick, still standing)
 }
 

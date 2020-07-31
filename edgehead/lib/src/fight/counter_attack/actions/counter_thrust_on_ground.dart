@@ -18,10 +18,7 @@ ReasonedSuccessChance computeCounterThrustOnGround(
   return getCombatMoveChance(a, enemy, 0.4, [
     const Modifier(30, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
-    const Bonus(20, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(50, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(90, CombatReason.targetHasAllEyesDisabled),
+    ...disabledModifiers,
   ]);
 }
 

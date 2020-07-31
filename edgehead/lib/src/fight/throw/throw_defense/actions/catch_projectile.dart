@@ -12,7 +12,6 @@ ReasonedSuccessChance computeCatchProjectile(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   return getCombatMoveChance(a, enemy, 0.05, [
     const Modifier(30, CombatReason.dexterity),
-    const Modifier(10, CombatReason.balance),
     const Penalty(30, CombatReason.performerHasLimitedVision),
   ]);
 }

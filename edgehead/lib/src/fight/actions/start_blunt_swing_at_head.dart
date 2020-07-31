@@ -24,12 +24,7 @@ ReasonedSuccessChance computeBluntSwingAtHeadPlayer(
     const Modifier(30, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(20, CombatReason.balance),
-    const Bonus(10, CombatReason.targetHasSecondaryArmDisabled),
-    const Bonus(10, CombatReason.targetHasPrimaryArmDisabled),
-    const Bonus(30, CombatReason.targetHasOneLegDisabled),
-    const Bonus(50, CombatReason.targetHasAllLegsDisabled),
-    const Bonus(50, CombatReason.targetHasOneEyeDisabled),
-    const Bonus(80, CombatReason.targetHasAllEyesDisabled),
+    ...disabledModifiers,
   ]);
 }
 
