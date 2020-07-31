@@ -125,7 +125,7 @@ final Actor edgeheadTamara = Actor.initialized(
   currentRoomName: Simulation.preStartBookName,
   followingActorId: playerId,
   currentWeapon: Item.weapon(2342341, WeaponType.sword,
-      adjective: "mercenary", firstOwnerId: tamaraId),
+      adjective: "dented", firstOwnerId: tamaraId),
 );
 
 /// The orc sixty-fiver.

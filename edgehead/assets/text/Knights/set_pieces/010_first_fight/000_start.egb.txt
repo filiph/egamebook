@@ -171,11 +171,11 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
     w.updateActorById(playerId, (b) => b.inventory.equip(startBranch, a.anatomy));
     [[ENDCODE]]
 
-    The goblin growls like a wolf, standing above Tamara. She's had time to draw her mercenary sword but not much else. The goblin <>
+    The goblin growls like a wolf, standing above Tamara. She's had time to draw her dented sword but not much else. The goblin <>
 
 * Attack ((There is no way around this. The goblin is clearly set on fighting us. May as well seize initiative before more of them show up.))
 
-    "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
+    "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her dented sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
 
     [[CODE]]
     w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
@@ -186,7 +186,7 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
 
 * Wait ((It could be a trap. Or the goblin could decide we are more than he can chew. In either case, caution might save our necks.))
 
-    Tamara nods. She points her mercenary sword at the goblin but doesn't move. "Take my dagger, [young sir]," she tells me and moves her hip a little, to indicate where it's strapped.
+    Tamara nods. She points her dented sword at the goblin but doesn't move. "Take my dagger, [young sir]," she tells me and moves her hip a little, to indicate where it's strapped.
 
     * * Take the dagger.
 

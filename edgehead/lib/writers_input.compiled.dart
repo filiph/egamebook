@@ -12852,7 +12852,7 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'The goblin growls like a wolf, standing above Tamara. She\'s had time to draw her mercenary sword but not much else. The goblin\n',
+              'The goblin growls like a wolf, standing above Tamara. She\'s had time to draw her dented sword but not much else. The goblin\n',
               isRaw: true);
         }),
       ],
@@ -12870,7 +12870,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her mercenary sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, ${youngSirSubstitution}."\n',
+              '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her dented sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, ${youngSirSubstitution}."\n',
               isRaw: true);
         }),
         InkParagraphNode((ActionContext c) {
@@ -12908,7 +12908,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              'Tamara nods. She points her mercenary sword at the goblin but doesn\'t move. "Take my dagger, ${youngSirSubstitution}," she tells me and moves her hip a little, to indicate where it\'s strapped.\n',
+              'Tamara nods. She points her dented sword at the goblin but doesn\'t move. "Take my dagger, ${youngSirSubstitution}," she tells me and moves her hip a little, to indicate where it\'s strapped.\n',
               isRaw: true);
         }),
         InkForkNode([
