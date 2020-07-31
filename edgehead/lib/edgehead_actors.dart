@@ -104,7 +104,6 @@ final Actor firstGoblin = Actor.initialized(
   currentRoomName: 'meadow_fight',
   currentWeapon: Item.weapon(rustySwordId, WeaponType.sword,
       name: "sword", adjective: "rusty", firstOwnerId: firstGoblinId),
-  dexterity: 150,
   // The goblin starts the fight.
   initiative: 2000,
   // For the first 2 rounds, the goblin is invincible. We don't want
