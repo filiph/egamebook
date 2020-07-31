@@ -42,6 +42,8 @@ import 'package:edgehead/fractal_stories/simulation.dart' show Simulation;
 import 'package:edgehead/fractal_stories/situation.dart'
     show SituationBaseBehavior;
 import 'package:edgehead/fractal_stories/situation.dart' show Situation;
+import 'package:edgehead/egamebook/elements/stat_update_element.dart'
+    show StatUpdate;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart'
     show Storyline;
 import 'package:edgehead/fractal_stories/items/weapon_type.dart'
@@ -12373,6 +12375,8 @@ class PerformNecromancyElsewhere extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
+    c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
     raiseDead(c);
 
     return '${a.name} successfully performs PerformNecromancyElsewhere';
@@ -12385,11 +12389,13 @@ class PerformNecromancyElsewhere extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_6c782c6c =
+        a.sanity < 1 ? '''My sanity is already gone.''' : '''''';
     final ifBlock_4d7298c01 = isFollowedByAnUndead(c, a)
         ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
         : '''''';
     s.add(
-        'I perform the necromantic incantation but I fail. Nothing happens. ${ifBlock_4d7298c01}\n',
+        'I try to perform the necromantic incantation but I fail. ${ifBlock_6c782c6c}${ifBlock_4d7298c01} Nothing happens.\n',
         isRaw: true);
     return '${a.name} fails to perform PerformNecromancyElsewhere';
   }
@@ -12401,13 +12407,13 @@ class PerformNecromancyElsewhere extends RoamingAction {
     if (isFollowedByAnUndead(c, a)) {
       return ReasonedSuccessChance.sureFailure;
     }
-    return const ReasonedSuccessChance<void>(0.6);
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
-  bool get rerollable => true;
+  bool get rerollable => false;
   @override
-  Resource get rerollResource => Resource.sanity;
+  Resource get rerollResource => null;
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
     return 'Will I be successful?';

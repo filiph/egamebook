@@ -21,15 +21,15 @@ final c = ApplicabilityContext(a, sim, w);
 if (isFollowedByAnUndead(c, a)) {
     return ReasonedSuccessChance.sureFailure;
 }
-return const ReasonedSuccessChance<void>(0.6);
-
-REROLL_RESOURCE: $SANITY
+return ReasonedSuccessChance.sureSuccess;
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
+c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
+c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 raiseDead(c);
 [[ENDCODE]]
 
 FAILURE_BEGINNING_DESCRIPTION:
 // Keep in sync with FightSituation's RaiseDead.applyFailure.
-I perform the necromantic incantation but I fail. Nothing happens. [[IF isFollowedByAnUndead(c, a)]]My powers are not strong enough to hold two unliving minds, and I already have an undead follower.[[ENDIF]]
+I try to perform the necromantic incantation but I fail. [[IF a.sanity < 1]]My sanity is already gone.[[ENDIF]][[IF isFollowedByAnUndead(c, a)]]My powers are not strong enough to hold two unliving minds, and I already have an undead follower.[[ENDIF]] Nothing happens.

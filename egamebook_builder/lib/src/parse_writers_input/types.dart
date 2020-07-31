@@ -44,6 +44,7 @@ final allNeededTypes = <TypeReference>[
   simulationType,
   situationBaseBehaviorType,
   situationType,
+  statUpdateType,
   storylineType,
   weaponTypeType,
   worldStateBuilderType,
@@ -175,6 +176,10 @@ final situationBaseBehaviorType = TypeReference((b) => b
 final situationType = TypeReference((b) => b
   ..symbol = 'Situation'
   ..url = 'package:edgehead/fractal_stories/situation.dart');
+
+final statUpdateType = TypeReference((b) => b
+  ..symbol = 'StatUpdate'
+  ..url = 'package:edgehead/egamebook/elements/stat_update_element.dart');
 
 final storylineType = TypeReference((b) => b
   ..symbol = 'Storyline'
