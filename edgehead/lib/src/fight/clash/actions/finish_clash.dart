@@ -9,7 +9,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/clash/clash_situation.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/fall.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/off_balance_opportunity_situation.dart';

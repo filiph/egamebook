@@ -5,6 +5,7 @@ import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/common/necromancy.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
 class PutInsectToRest extends Action<String> {
@@ -62,34 +63,13 @@ class PutInsectToRest extends Action<String> {
 
   @override
   Iterable<String> generateObjects(ApplicabilityContext context) {
-    final latestRaising = context.world.customHistory
-        .query(name: CustomEvent.actorRaisedInsect)
-        .latest;
+    final name = getUndeadInsectName(context);
 
-    if (latestRaising == null) {
-      // No insect ever raised.
-      return const [];
-    }
-
-    final name = latestRaising.data as String;
-
-    final latestPuttingToRest = context.world.customHistory
-        .query(
-            name: CustomEvent.actorPuttingInsectToRest,
-            data: latestRaising.data)
-        .latest;
-
-    if (latestPuttingToRest == null) {
-      // No putting to rest.
+    if (name != null) {
       return [name];
     }
 
-    if (latestPuttingToRest.time.isAfter(latestRaising.time)) {
-      // The insect was put to rest since it was raised.
-      return const [];
-    }
-
-    return [name];
+    return const [];
   }
 
   @override

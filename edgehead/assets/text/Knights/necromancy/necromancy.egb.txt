@@ -18,13 +18,16 @@ REPEATABLE: $TRUE
 COMPLETE_SUCCESS_PROBABILITY:
 // Keep in sync with FightSituation's RaiseDead.getSuccessChance.
 final c = ApplicabilityContext(a, sim, w);
-if (isFollowedByAnUndead(c, a)) {
-    return ReasonedSuccessChance.sureFailure;
+if (a.sanity < 1 ||
+    isFollowedByUndeadActor(c, a) ||
+    isFollowedByUndeadInsect(c)) {
+  return ReasonedSuccessChance.sureFailure;
 }
 return ReasonedSuccessChance.sureSuccess;
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
+// Keep in sync with FightSituation's RaiseDead.applySuccess.
 c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
 c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 raiseDead(c);
@@ -32,4 +35,4 @@ raiseDead(c);
 
 FAILURE_BEGINNING_DESCRIPTION:
 // Keep in sync with FightSituation's RaiseDead.applyFailure.
-I try to perform the necromantic incantation but I fail. [[IF a.sanity < 1]]My sanity is already gone.[[ENDIF]][[IF isFollowedByAnUndead(c, a)]]My powers are not strong enough to hold two unliving minds, and I already have an undead follower.[[ENDIF]] Nothing happens.
+I try to perform the necromantic incantation but I fail. [[IF a.sanity < 1]]My sanity is already gone.[[ENDIF]][[IF isFollowedByUndeadActor(c, a) || isFollowedByUndeadInsect(c)]]My powers are not strong enough to hold two unliving minds, and I already have an undead follower.[[ENDIF]] Nothing happens.

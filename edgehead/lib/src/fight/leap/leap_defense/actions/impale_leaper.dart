@@ -11,7 +11,6 @@ import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/leap/leap_situation.dart';
 
 class ImpaleLeaper extends EnemyTargetAction {

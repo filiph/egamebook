@@ -93,6 +93,6 @@ class PutToRest extends OtherActorActionBase {
       return false;
     }
 
-    return a.isPlayer && isFollowedByAnUndead(c, a);
+    return a.isPlayer && isFollowedByUndeadActor(c, a);
   }
 }

@@ -3,7 +3,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_tearing_damage.dart';
 import 'package:edgehead/fractal_stories/context.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -12,7 +11,6 @@ import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
 class FinishBite extends OtherActorAction {
   static final FinishBite singleton = FinishBite();

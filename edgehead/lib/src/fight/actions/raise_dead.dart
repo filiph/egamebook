@@ -50,7 +50,7 @@ class RaiseDead extends Action<Nothing> {
 
     if (a.sanity < 1) {
       a.report(s, "<subject's> sanity is already gone");
-    } else if (isFollowedByAnUndead(c, a)) {
+    } else if (isFollowedByUndeadActor(c, a) || isFollowedByUndeadInsect(c)) {
       a.report(
           s,
           "<subject's> powers are not strong enough "
@@ -84,7 +84,9 @@ class RaiseDead extends Action<Nothing> {
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     final c = ApplicabilityContext(a, sim, w);
-    if (a.sanity < 1 || isFollowedByAnUndead(c, a)) {
+    if (a.sanity < 1 ||
+        isFollowedByUndeadActor(c, a) ||
+        isFollowedByUndeadInsect(c)) {
       return ReasonedSuccessChance.sureFailure;
     }
     return ReasonedSuccessChance.sureSuccess;

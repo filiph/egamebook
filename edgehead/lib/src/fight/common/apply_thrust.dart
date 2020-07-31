@@ -3,13 +3,11 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/pose.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
-import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
 /// Applies a successful thrust to [enemy], given [result].

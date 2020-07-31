@@ -1122,8 +1122,11 @@ class KarlUseNecromancy extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, terrible roar and thrashing comes from beyond the gate.\n\n',
+        'I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, terrible roar and thrashing comes from beyond the gate.\n\n',
         isRaw: true);
+    c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
+    c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
+
     Ruleset(
         Rule(715270306, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
@@ -1166,11 +1169,14 @@ class KarlUseNecromancy extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_4d7298c01 = isFollowedByAnUndead(c, a)
+    final ifBlock_6c782c6c =
+        a.sanity < 1 ? '''My sanity is already gone.''' : '''''';
+    final ifBlock_4fd98517e = isFollowedByUndeadActor(c, a) ||
+            isFollowedByUndeadInsect(c)
         ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
         : '''''';
     s.add(
-        'I perform the necromantic incantation but I fail. Nothing happens. ${ifBlock_4d7298c01}\n',
+        'I try to perform the necromantic incantation but I fail. ${ifBlock_6c782c6c}${ifBlock_4fd98517e} Nothing happens.\n',
         isRaw: true);
     return '${a.name} fails to perform KarlUseNecromancy';
   }
@@ -1179,10 +1185,12 @@ class KarlUseNecromancy extends RoamingAction {
   ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     final c = ApplicabilityContext(a, sim, w);
-    if (isFollowedByAnUndead(c, a)) {
+    if (a.sanity < 1 ||
+        isFollowedByUndeadActor(c, a) ||
+        isFollowedByUndeadInsect(c)) {
       return ReasonedSuccessChance.sureFailure;
     }
-    return const ReasonedSuccessChance<void>(0.8);
+    return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
@@ -12391,11 +12399,12 @@ class PerformNecromancyElsewhere extends RoamingAction {
     final Storyline s = c.outputStoryline;
     final ifBlock_6c782c6c =
         a.sanity < 1 ? '''My sanity is already gone.''' : '''''';
-    final ifBlock_4d7298c01 = isFollowedByAnUndead(c, a)
+    final ifBlock_4fd98517e = isFollowedByUndeadActor(c, a) ||
+            isFollowedByUndeadInsect(c)
         ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
         : '''''';
     s.add(
-        'I try to perform the necromantic incantation but I fail. ${ifBlock_6c782c6c}${ifBlock_4d7298c01} Nothing happens.\n',
+        'I try to perform the necromantic incantation but I fail. ${ifBlock_6c782c6c}${ifBlock_4fd98517e} Nothing happens.\n',
         isRaw: true);
     return '${a.name} fails to perform PerformNecromancyElsewhere';
   }
@@ -12404,7 +12413,9 @@ class PerformNecromancyElsewhere extends RoamingAction {
   ReasonedSuccessChance<void> getSuccessChance(
       Actor a, Simulation sim, WorldState w, void _) {
     final c = ApplicabilityContext(a, sim, w);
-    if (isFollowedByAnUndead(c, a)) {
+    if (a.sanity < 1 ||
+        isFollowedByUndeadActor(c, a) ||
+        isFollowedByUndeadInsect(c)) {
       return ReasonedSuccessChance.sureFailure;
     }
     return ReasonedSuccessChance.sureSuccess;

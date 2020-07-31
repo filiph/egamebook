@@ -67,10 +67,50 @@ Actor buildCorpse(Actor necromancer, Actor corpse) {
   return corpseBuilder.build();
 }
 
-bool isFollowedByAnUndead(ApplicabilityContext context, Actor necromancer) {
+/// Necromancy in places with no dead humanoids will result in raising
+/// an insect. This returns that insect's name if it's still following the
+/// player, or `null` if there's no undead insect right now.
+String getUndeadInsectName(ApplicabilityContext context) {
+  final latestRaising = context.world.customHistory
+      .query(name: CustomEvent.actorRaisedInsect)
+      .latest;
+
+  if (latestRaising == null) {
+    // No insect ever raised.
+    return null;
+  }
+
+  final name = latestRaising.data as String;
+
+  final latestPuttingToRest = context.world.customHistory
+      .query(
+          name: CustomEvent.actorPuttingInsectToRest, data: latestRaising.data)
+      .latest;
+
+  if (latestPuttingToRest == null) {
+    // No putting to rest.
+    return name;
+  }
+
+  if (latestPuttingToRest.time.isAfter(latestRaising.time)) {
+    // The insect was put to rest since it was raised.
+    return null;
+  }
+
+  return name;
+}
+
+/// Returns true if there is a (humanoid) undead in the party.
+///
+/// You should also check [isFollowedByUndeadInsect] if you want to know
+/// whether the player is followed by _any_ undead.
+bool isFollowedByUndeadActor(ApplicabilityContext context, Actor necromancer) {
   final party = getPartyOf(necromancer, context.simulation, context.world);
   return party.any((actor) => actor.anatomy.isUndead);
 }
+
+bool isFollowedByUndeadInsect(ApplicabilityContext context) =>
+    getUndeadInsectName(context) != null;
 
 /// Raises one of the [corpses] and reports on it.
 ///

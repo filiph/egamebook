@@ -108,6 +108,10 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
   if (a.isOnGround) return false;
   if (enemy.isOnGround) return false;
   if (a.anatomy.isBlind) return false;
+  // TODO: remove this, if the designation is a hand (I can slash hands with
+  //  a knife). Maybe work with length, and allow all slashes with short
+  // slashing weapons (like knife) if the enemy doesn't have a longer one.
+  // Also, make knifes slashing.
   if (!a.currentDamageCapability.isSlashing) return false;
   if (enemy.holdsSomeWeapon) {
     // When armed, only allow torso slashes when enemy is (at least) extended.
@@ -118,6 +122,7 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     // When armed, only allow decapitation when enemy is (at least) off balance.
     if (designation == BodyPartDesignation.neck &&
         enemy.pose > Pose.offBalance) {
+      // TODO: remove this, and instead make it very unlikely
       return false;
     }
   }

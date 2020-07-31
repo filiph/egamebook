@@ -7,7 +7,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/start_slash_at_body_part.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
-import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/slash_on_ground/slash_on_ground_defense/slash_on_ground_defense_situation.dart';
 import 'package:edgehead/src/fight/slash_on_ground/slash_on_ground_situation.dart';
