@@ -145,13 +145,12 @@ class EdgeheadGame extends Book {
       log.severe(parseErrorMessage);
       throw EdgeheadSaveGameParseException('Couldn\'t parse savegame', e);
     }
+    _sendInitialStats();
   }
 
   @override
   void start() {
-    // Send initial state.
-    elementsSink.add(StatInitialization.stamina(stamina.value));
-    elementsSink.add(StatInitialization.sanity(sanity.value));
+    _sendInitialStats();
 
     update();
   }
@@ -253,12 +252,14 @@ class EdgeheadGame extends Book {
     });
   }
 
+  void _sendInitialStats() {
+    elementsSink.add(StatInitialization.stamina(stamina.value));
+    elementsSink.add(StatInitialization.sanity(sanity.value));
+  }
+
   /// Sets up the game, either as a load from [saveGameSerialized] or
   /// as a new game from scratch.
   void _setup(String saveGameSerialized, int randomSeed) {
-    var global = EdgeheadGlobalState(
-        (b) => b.isInTesterMode = startNewGamesInTesterMode);
-
     if (saveGameSerialized != null) {
       // Updates [world] from savegame.
       load(saveGameSerialized);
@@ -279,7 +280,8 @@ class EdgeheadGame extends Book {
         ..director = edgeheadDirector.toBuilder()
         ..situations =
             ListBuilder<Situation>(<Situation>[edgeheadInitialSituation])
-        ..global = global
+        ..global = EdgeheadGlobalState(
+            (b) => b.isInTesterMode = startNewGamesInTesterMode)
         ..statefulRandomState = randomSeed ?? Random().nextInt(0xffffffff)
         ..time = edgeheadStartingTime);
     }
@@ -289,8 +291,7 @@ class EdgeheadGame extends Book {
 
     playerCharacter = world.getActorById(playerId);
 
-    stamina.value = playerCharacter.stamina;
-    sanity.value = playerCharacter.sanity;
+    _updateStatsFromWorld();
 
     simulation = edgeheadSimulation;
 
@@ -309,9 +310,7 @@ class EdgeheadGame extends Book {
       return;
     }
 
-    var currentPlayer = world.getActorById(playerCharacter.id);
-    stamina.value = currentPlayer.stamina;
-    sanity.value = currentPlayer.sanity;
+    _updateStatsFromWorld();
 
     log.info("update() for world at time ${world.time}");
     if (world.situations.isEmpty) {
@@ -529,6 +528,13 @@ class EdgeheadGame extends Book {
 
     // Run the next step asynchronously.
     Timer.run(update);
+  }
+
+  /// Updates [stamina] and [sanity] from the current [world].
+  void _updateStatsFromWorld() {
+    var currentPlayer = world.getActorById(playerCharacter.id);
+    stamina.value = currentPlayer.stamina;
+    sanity.value = currentPlayer.sanity;
   }
 }
 
