@@ -378,7 +378,6 @@ abstract class Actor extends Object
   /// Returns the intensity of hate towards the actor. Very high when
   /// this actor is rabid. About `1.0` for actors of enemy team. `0.0` for
   /// neutrals or friends.
-  @memoized
   ///
   /// When [other] is the player _and_ an enemy (which means [this] is
   /// a monster), then we return `10.0` to make monsters target the player
