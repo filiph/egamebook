@@ -379,6 +379,10 @@ abstract class Actor extends Object
   /// this actor is rabid. About `1.0` for actors of enemy team. `0.0` for
   /// neutrals or friends.
   @memoized
+  ///
+  /// When [other] is the player _and_ an enemy (which means [this] is
+  /// a monster), then we return `10.0` to make monsters target the player
+  /// more.
   double hateTowards(Actor other, WorldState w) {
     if (isConfused && team.isFriendWith(other.team)) {
       return 1000.0;
@@ -388,7 +392,16 @@ abstract class Actor extends Object
       return 2.0;
     }
 
-    return team.isEnemyWith(other.team) ? 1.0 : 0.0;
+    if (team.isEnemyWith(other.team)) {
+      if (other.isPlayer) {
+        // Extra hatred for player by monsters, to make combat more interesting.
+        return 10.0;
+      } else {
+        return 1.0;
+      }
+    }
+
+    return 0.0;
   }
 
   /// Scores the state of the [world] in the eyes of [this] Actor.
@@ -437,7 +450,7 @@ abstract class Actor extends Object
     var enemy = world.actors.fold(0, (num sum, Actor a) {
       final aliveScore = a.isAnimatedAndActive ? 1 : 0;
       final hitpointScore = a.hitpoints;
-      final stanceScore = a.pose.differenceFrom(Pose.onGround) / 2;
+      final stanceScore = a.pose.differenceFrom(Pose.onGround);
       final enemyScore = aliveScore + hitpointScore + stanceScore;
       final weightedScore = enemyScore * hateTowards(a, world);
       return sum + weightedScore;
