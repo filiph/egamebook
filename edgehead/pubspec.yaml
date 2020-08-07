@@ -19,6 +19,9 @@ dependencies:
   quiver: ^2.0.0+1
   slot_machine: ^5.0.1
 
+dependency_overrides:
+  analyzer: 0.39.14 # This is here because of https://github.com/flutter/flutter/issues/56779
+
 dev_dependencies:
   args: ^1.5.0
   build_runner: ^1.9.0
