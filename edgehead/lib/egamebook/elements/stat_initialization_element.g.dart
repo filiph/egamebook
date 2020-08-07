@@ -6,18 +6,19 @@ part of egamebook.element.stat_initialization;
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<StatInitialization> _$statInitializationSerializer =
+Serializer<StatInitialization<Object>> _$statInitializationSerializer =
     new _$StatInitializationSerializer();
 
 class _$StatInitializationSerializer
-    implements StructuredSerializer<StatInitialization> {
+    implements StructuredSerializer<StatInitialization<Object>> {
   @override
   final Iterable<Type> types = const [StatInitialization, _$StatInitialization];
   @override
   final String wireName = 'StatInitialization';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, StatInitialization object,
+  Iterable<Object> serialize(
+      Serializers serializers, StatInitialization<Object> object,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
@@ -36,7 +37,7 @@ class _$StatInitializationSerializer
   }
 
   @override
-  StatInitialization deserialize(
+  StatInitialization<Object> deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =

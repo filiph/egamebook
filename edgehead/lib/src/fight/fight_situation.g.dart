@@ -69,26 +69,24 @@ class _$FightSituationSerializer
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'droppedItemsOutOfReach':
           result.droppedItemsOutOfReach.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'enemyTeamIds':
           result.enemyTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<dynamic>);
+              as BuiltSet<Object>);
           break;
         case 'events':
           result.events.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltMap, const [
-                const FullType(int),
-                const FullType(EventCallback)
-              ])) as BuiltMap<dynamic, dynamic>);
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(int), const FullType(EventCallback)])));
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -102,7 +100,7 @@ class _$FightSituationSerializer
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<dynamic>);
+              as BuiltSet<Object>);
           break;
         case 'roomRoamingSituationId':
           result.roomRoamingSituationId = serializers.deserialize(value,

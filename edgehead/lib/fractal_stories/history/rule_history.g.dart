@@ -50,10 +50,8 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
           break;
         case 'records':
           result.records.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltMap, const [
-                const FullType(int),
-                const FullType(RuleRecord)
-              ])) as BuiltMap<dynamic, dynamic>);
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(int), const FullType(RuleRecord)])));
           break;
       }
     }

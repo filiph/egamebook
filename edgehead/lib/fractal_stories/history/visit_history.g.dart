@@ -45,7 +45,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(VisitRecord)
-              ])) as BuiltListMultimap<dynamic, dynamic>);
+              ])));
           break;
       }
     }

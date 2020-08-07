@@ -64,7 +64,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
           result.items.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'weaponInPrimaryAppendage':
           result.weaponInPrimaryAppendage = serializers.deserialize(value,

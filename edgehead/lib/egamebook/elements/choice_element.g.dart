@@ -71,20 +71,18 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           result.additionalData.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'additionalStrings':
           result.additionalStrings.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltMap, const [
-                const FullType(String),
-                const FullType(String)
-              ])) as BuiltMap<dynamic, dynamic>);
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(String), const FullType(String)])));
           break;
         case 'commandPath':
           result.commandPath.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(String)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'commandSentence':
           result.commandSentence = serializers.deserialize(value,

@@ -79,7 +79,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           result.actors.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(Actor)]))
-              as BuiltSet<dynamic>);
+              as BuiltSet<Object>);
           break;
         case 'customHistory':
           result.customHistory.replace(serializers.deserialize(value,
@@ -103,7 +103,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           result.situations.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(Situation)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'statefulRandomState':
           result.statefulRandomState = serializers.deserialize(value,

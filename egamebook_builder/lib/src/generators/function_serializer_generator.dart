@@ -95,7 +95,8 @@ class FunctionSerializerGenerator extends Generator {
           for (final element in globbedLibrary.allElements) {
             if (element is! FunctionElement) continue;
             final func = element as FunctionElement;
-            if (!func.type.isAssignableTo(functionType)) continue;
+            if (!globbedLibraryElement.typeSystem
+                .isAssignableTo(func.type, functionType)) continue;
 
             result.writeln("'${func.name}': ${func.name},");
 

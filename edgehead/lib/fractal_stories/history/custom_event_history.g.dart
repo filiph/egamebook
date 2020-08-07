@@ -112,7 +112,7 @@ class _$CustomEventHistorySerializer
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(CustomEvent)
-              ])) as BuiltListMultimap<dynamic, dynamic>);
+              ])));
           break;
       }
     }

@@ -19,7 +19,7 @@ class InstanceSerializerGenerator extends Generator {
   Future<String> generate(
       LibraryReader gatherLibrary, BuildStep buildStep) async {
     final result = StringBuffer();
-    final typeSystem = gatherLibrary.element.context.typeSystem;
+    final typeSystem = gatherLibrary.element.typeSystem;
 
     log.fine("InstanceSerializer for: $gatherLibrary");
 
@@ -50,13 +50,14 @@ class InstanceSerializerGenerator extends Generator {
             "Type of variable must be InstanceSerializer<T>");
       }
       final interfaceType = variable.type as InterfaceType;
-      if (interfaceType.name != 'InstanceSerializer') {
+      if (interfaceType.getDisplayString().split('<').first !=
+          'InstanceSerializer') {
         // TODO: find out how to create a DartType() and use it to check
         //       via interfaceType.isAssignableTo(functionSerializerType)
         throw InvalidGenerationSourceError(
             "Top level declarations with the @GatherInstancesFrom "
             "annotation need to be of type InstanceSerializer, but we found "
-            "one with type ${interfaceType.name}");
+            "one with type ${interfaceType.getDisplayString()}");
       }
 
       final typeArguments = interfaceType.typeArguments;
@@ -69,7 +70,8 @@ class InstanceSerializerGenerator extends Generator {
       }
 
       final instanceType = typeArguments.single;
-      final instanceTypeName = instanceType.name;
+      // TODO: get the name from instanceType more elegantly
+      final instanceTypeName = instanceType.getDisplayString().split('<').first;
       final variableName =
           "_\$" "${ReCase(instanceTypeName).camelCase}" "Serializer";
 
@@ -143,7 +145,7 @@ class InstanceSerializerGenerator extends Generator {
         // ]
         result.writeln(", additionalTypes: [");
         for (final type in additionalTypes) {
-          result.write(type.name);
+          result.write(type.getDisplayString());
           result.writeln(",");
         }
         result.write("]");

@@ -55,7 +55,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -65,7 +65,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,

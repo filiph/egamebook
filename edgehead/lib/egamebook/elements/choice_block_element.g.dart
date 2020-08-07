@@ -49,7 +49,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
           result.choices.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Choice)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
       }
     }

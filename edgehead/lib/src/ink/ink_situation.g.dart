@@ -50,7 +50,7 @@ class _$InkSituationSerializer implements StructuredSerializer<InkSituation> {
           result.currentPath.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,

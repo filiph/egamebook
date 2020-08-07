@@ -6,16 +6,18 @@ part of egamebook.element.stat_update;
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<StatUpdate> _$statUpdateSerializer = new _$StatUpdateSerializer();
+Serializer<StatUpdate<Object>> _$statUpdateSerializer =
+    new _$StatUpdateSerializer();
 
-class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
+class _$StatUpdateSerializer
+    implements StructuredSerializer<StatUpdate<Object>> {
   @override
   final Iterable<Type> types = const [StatUpdate, _$StatUpdate];
   @override
   final String wireName = 'StatUpdate';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, StatUpdate object,
+  Iterable<Object> serialize(Serializers serializers, StatUpdate<Object> object,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
@@ -36,7 +38,8 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
   }
 
   @override
-  StatUpdate deserialize(Serializers serializers, Iterable<Object> serialized,
+  StatUpdate<Object> deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;

@@ -68,14 +68,14 @@ class _$DefenseSituationSerializer
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(EnemyTargetAction)]))
-                  as BuiltList<dynamic>);
+                  as BuiltList<Object>);
           break;
         case 'builtOtherActorActionGenerators':
           result.builtOtherActorActionGenerators.replace(
               serializers.deserialize(value,
                       specifiedType: const FullType(
                           BuiltList, const [const FullType(OtherActorAction)]))
-                  as BuiltList<dynamic>);
+                  as BuiltList<Object>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,

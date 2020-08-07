@@ -52,23 +52,19 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
       switch (key) {
         case 'latestByActorId':
           result.latestByActorId.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltMap, const [
-                const FullType(int),
-                const FullType(DateTime)
-              ])) as BuiltMap<dynamic, dynamic>);
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(int), const FullType(DateTime)])));
           break;
         case 'latestProactiveByActorId':
           result.latestProactiveByActorId.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltMap, const [
-                const FullType(int),
-                const FullType(DateTime)
-              ])) as BuiltMap<dynamic, dynamic>);
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(int), const FullType(DateTime)])));
           break;
         case 'records':
           result.records.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(ActionRecord)]))
-              as BuiltList<dynamic>);
+              as BuiltList<Object>);
           break;
       }
     }
@@ -155,7 +151,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           result.sufferers.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<dynamic>);
+              as BuiltSet<Object>);
           break;
         case 'time':
           result.time = serializers.deserialize(value,
