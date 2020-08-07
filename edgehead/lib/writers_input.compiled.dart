@@ -12779,7 +12779,9 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('[ Image of a ferocious goblin ]\n', isRaw: true);
+    s.add(
+        '![A ferocious goblin is stepping out of a bush, holding a sword](goblin.jpg)\n',
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
