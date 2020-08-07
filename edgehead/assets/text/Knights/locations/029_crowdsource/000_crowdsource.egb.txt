@@ -42,7 +42,7 @@ I hear a heated debate. There's the leader of the orcs, called Darg. There is an
 
 The others are trying to persuade Darg to open the antechamber
 
-TODO: Image of Darg, a huge orc with a big axe ("akxe").
+![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.jpg)
 
 TODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.
 

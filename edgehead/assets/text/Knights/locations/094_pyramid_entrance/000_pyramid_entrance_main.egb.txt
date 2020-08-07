@@ -22,7 +22,7 @@ As [we] approach, I can't stop looking up at the structure. The wind changes her
 
 Two knights, a woman and a man, are on guard.
 
-TODO: Image of the two guards
+![Illustration of two knights: a woman with a sword and a man with a halberd](guards.jpg)
 
 The man has been crying, judging from his eyes.
 

@@ -97,6 +97,21 @@ final Actor edgeheadPlayer = Actor.initialized(
   currentRoomName: Simulation.preStartBookName,
 );
 
+/// Tamara, player's guide.
+final Actor edgeheadTamara = Actor.initialized(
+  tamaraId,
+  StatefulRandom(~tamaraId).next,
+  "Tamara",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.SHE,
+  // Slightly quicker than the player but not quicker than the first goblin.
+  initiative: 1500,
+  currentRoomName: Simulation.preStartBookName,
+  followingActorId: playerId,
+  currentWeapon: Item.weapon(2342341, WeaponType.sword,
+      adjective: "dented", firstOwnerId: tamaraId),
+);
+
 final Actor firstGoblin = Actor.initialized(
   firstGoblinId, StatefulRandom(~firstGoblinId).next, "goblin",
   adjective: "feral",
@@ -113,33 +128,18 @@ final Actor firstGoblin = Actor.initialized(
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
-/// Tamara, player's guide.
-final Actor edgeheadTamara = Actor.initialized(
-  tamaraId,
-  StatefulRandom(~tamaraId).next,
-  "Tamara",
-  nameIsProperNoun: true,
-  pronoun: Pronoun.SHE,
-  // Slightly quicker than the player but not quicker than the first goblin.
-  initiative: 1500,
-  currentRoomName: Simulation.preStartBookName,
-  followingActorId: playerId,
-  currentWeapon: Item.weapon(2342341, WeaponType.sword,
-      adjective: "dented", firstOwnerId: tamaraId),
-);
-
 /// The orc sixty-fiver.
 final Actor sixtyFiverOrc = Actor.initialized(
   sixtyFiverOrcId,
   StatefulRandom(~sixtyFiverOrcId).next,
-  "sixty-fiver",
-  adjective: "orcish",
+  "orc",
+  adjective: "huge",
   pronoun: Pronoun.HE,
   currentRoomName: 'battlefield',
   currentWeapon: Item.weapon(
     sixtyFiverSwordId,
     WeaponType.sword,
-    adjective: 'sixty-fiver',
+    adjective: 'serrated',
     firstOwnerId: sixtyFiverOrcId,
   ),
   currentShield: sixtyFiverShield,

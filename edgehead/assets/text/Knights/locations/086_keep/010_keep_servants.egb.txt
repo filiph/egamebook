@@ -30,7 +30,7 @@ PREREQUISITES:
 COMPLETE_SUCCESS_DESCRIPTION:
 This is human skull made into a device. 
 
-TODO: image of north skull - some kind of device inset in a human skull
+![Illustration of some kind of device inset in a human skull.](northskull.jpg)
 
 Next to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.
 

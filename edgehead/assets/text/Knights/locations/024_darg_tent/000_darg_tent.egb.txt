@@ -25,12 +25,12 @@ c.hasHappened(evDargLeftCrowdsource)
 FIRST_DESCRIPTION:
 Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.
 
-TODO: Image of Darg, a huge orc with a big axe ("akxe").
+![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.jpg)
 
 VARIANT_UPDATE_DESCRIPTION:
 Darg is here.
 
-TODO: Image of Darg, a huge orc with a big axe ("akxe").
+![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.jpg)
 
 
 // ---

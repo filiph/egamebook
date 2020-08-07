@@ -19,9 +19,9 @@ WHERE: among the trees
 GROUND_MATERIAL: {earth|dirt}
 
 AFTER_MONSTERS_CLEARED:
-My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly. The lying in the earth. The peaceful, waiting death. 
+My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.
 
-But this, this was something different entirely. Fast. Violent. Messy. This was the wild and savage face of death that I have not seen before. My hands are still shaking.
+But this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.
 
 // TODO: let Tamara hang around (camp?), or even follow Aren to The Bleeds. Move the content below to separate actions.
 

@@ -9,7 +9,11 @@ POS: 39, 65
 MAP_NAME: Oracle's
 
 FIRST_DESCRIPTION:
-An old woman is here. A ridiculously red apple sits on the table.
+A woman is here. She seems deep in though, walking up and down the room, over debris.
+
+![Illustration of an old woman with a staff.](oracle.jpg)
+
+A ridiculously red apple sits on the table.
 
 [[CODE]]
 c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");

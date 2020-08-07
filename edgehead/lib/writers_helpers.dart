@@ -143,25 +143,27 @@ FightSituation generateBattlefieldFight(ActionContext c,
   if (stripped) {
     c.outputStoryline.add('Their weapons look battered.', isRaw: true);
   }
-  final leatherJerkinOrcId = w.randomInt();
-  final leatherJerkinOrc = Actor.initialized(
-      leatherJerkinOrcId, w.randomInt, "orc",
-      adjective: 'ordinary',
+  final battlefieldGoblinId = w.randomInt();
+  final battlefieldGoblin = Actor.initialized(
+      battlefieldGoblinId, w.randomInt, "goblin",
+      adjective: 'angry',
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
-          adjective: 'battle', firstOwnerId: leatherJerkinOrcId),
+          name: 'hatchet',
+          adjective: 'bone',
+          firstOwnerId: battlefieldGoblinId),
       constitution: 1,
       dexterity: weak ? 50 : 100,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 
-  w.actors.addAll([sixtyFiverOrc, leatherJerkinOrc]);
+  w.actors.addAll([sixtyFiverOrc, battlefieldGoblin]);
 
   return FightSituation.initialized(
     w.randomInt(),
     party,
-    [sixtyFiverOrc, leatherJerkinOrc],
+    [sixtyFiverOrc, battlefieldGoblin],
     "{battlefield|concrete} floor",
     roomRoamingSituation,
     {},

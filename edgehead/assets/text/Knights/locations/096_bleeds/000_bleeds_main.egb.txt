@@ -24,7 +24,7 @@ HINT: This is a small village close the entrance to the Pyramid.
 FIRST_DESCRIPTION:
 I finally see it. The Pyramid.
 
-// TODO: add image
+![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.jpg)
 
 Below the Pyramid there's a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.
 

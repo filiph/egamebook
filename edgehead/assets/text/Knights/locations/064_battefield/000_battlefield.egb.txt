@@ -14,13 +14,17 @@ WHERE: among the columns
 FIRST_DESCRIPTION:
 It's very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can't quite place.
 
-As soon as [we] climb the last stair and enter the floor proper, two orcs step out from behind the columns. One of them is wearing a red tunic and wields a serrated sword. Possibly a captain of some kind. The other one has the usual brown leather jerkin and wields a battle axe.
+As soon as [we] climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc, the other a goblin.
 
-"Big mistake," the red orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."
+![Illustration of an orc and a goblin. The orc is wielding a huge serrated sword and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.jpg)
 
-"Big mistake for him," the leather jerkin agrees. "But good news for us. Darg rewards human scalps."
+The goblin's face contorts with hatred as soon as he sees me, but the orc just laughs.
 
-The two orcs attack.
+"Big mistake," the orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."
+
+"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalps."
+
+The two attack.
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
@@ -53,7 +57,3 @@ Searching through the orc's posession, I find a stale bread.
 [[CODE]]
 c.giveNewItemToPlayer(staleBread);
 [[ENDCODE]]
-
-NOTES: 
-
-- The 65er + goblin is here.
