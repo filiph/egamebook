@@ -1,5 +1,5 @@
 ACTION: $read_letter_from_father
-COMMAND: inventory >> letter from my father >> read
+COMMAND: Inventory >> letter from my father >> read
 
 PREREQUISITES:
 c.isInIdleRoom

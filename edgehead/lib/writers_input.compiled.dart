@@ -12364,7 +12364,7 @@ class PerformNecromancyElsewhere extends RoamingAction {
       PerformNecromancyElsewhere();
 
   @override
-  List<String> get commandPathTemplate => ['skills', 'necromancy'];
+  List<String> get commandPathTemplate => ['Skills', 'necromancy'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -13163,7 +13163,7 @@ class ReadLetterFromFather extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['inventory', 'letter from my father', 'read'];
+      ['Inventory', 'letter from my father', 'read'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {

@@ -1,6 +1,6 @@
 NOTES:
 ACTION: $read_letter_from_mentor
-COMMAND: inventory >> letter from mentor >> read
+COMMAND: Inventory >> letter from mentor >> read
 
 PREREQUISITES:
 c.isInIdleRoom
