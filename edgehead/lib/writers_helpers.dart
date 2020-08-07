@@ -516,7 +516,7 @@ extension ActionContextHelpers on ActionContext {
       sanityUpdate = -player.sanity;
     } else if (newSanity > EdgeheadGame.sanitySetting.maxValue) {
       // Don't go over max value.
-      sanityUpdate = EdgeheadGame.sanitySetting.maxValue - player.stamina;
+      sanityUpdate = EdgeheadGame.sanitySetting.maxValue - player.sanity;
     }
 
     outputStoryline
