@@ -934,11 +934,9 @@ class ShadowGraph {
               Identifier.adjectiveNoun('${entity.adjective} ${entity.name}'),
             if (entity.adjective != null)
               Identifier.adjectiveOne(entity.adjective),
-            if (!entity.nameIsProperNoun)
-              Identifier.noun(entity.name),
+            if (!entity.nameIsProperNoun) Identifier.noun(entity.name),
             Identifier.pronoun(entity.pronoun),
-            if (entity.nameIsProperNoun)
-              Identifier.properNoun(entity.name),
+            if (entity.nameIsProperNoun) Identifier.properNoun(entity.name),
           ]);
         }
 
