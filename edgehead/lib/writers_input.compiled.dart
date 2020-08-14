@@ -9256,7 +9256,13 @@ final Approach bleedsMainFromGoblinSkirmishMain =
 final Approach bleedsMainFromGoblinSkirmishSneak =
     Approach('goblin_skirmish_sneak', 'bleeds_main', '', null);
 final Approach bleedsMainFromMeadowFight =
-    Approach('meadow_fight', 'bleeds_main', '', null);
+    Approach('meadow_fight', 'bleeds_main', '', null,
+        isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return c.playerHasVisited('bleeds_main');
+});
 final Approach bleedsMainFromPyramidEntrance =
     Approach('pyramid_entrance', 'bleeds_main', '', null);
 
@@ -12355,89 +12361,6 @@ final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('The goblin camp is deserted.\n', isRaw: true);
 }, null, null, positionX: 11, positionY: 97, mapName: 'The Goblin Camp');
-
-class PerformNecromancyElsewhere extends RoamingAction {
-  @override
-  final String name = 'perform_necromancy_elsewhere';
-
-  static final PerformNecromancyElsewhere singleton =
-      PerformNecromancyElsewhere();
-
-  @override
-  List<String> get commandPathTemplate => ['Skills', 'necromancy'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(!(c.world.currentSituation as RoomRoamingSituation).monstersAlive &&
-        !c.playerRoom.isSynthetic &&
-        c.playerRoom.isOnMap &&
-        !storyNecromanyHasPrecedence(c))) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
-    c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
-    raiseDead(c);
-
-    return '${a.name} successfully performs PerformNecromancyElsewhere';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    final ifBlock_6c782c6c =
-        a.sanity < 1 ? '''My sanity is already gone.''' : '''''';
-    final ifBlock_4fd98517e = isFollowedByUndeadActor(c, a) ||
-            isFollowedByUndeadInsect(c)
-        ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
-        : '''''';
-    s.add(
-        'I try to perform the necromantic incantation but I fail. ${ifBlock_6c782c6c}${ifBlock_4fd98517e} Nothing happens.\n',
-        isRaw: true);
-    return '${a.name} fails to perform PerformNecromancyElsewhere';
-  }
-
-  @override
-  ReasonedSuccessChance<void> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    final c = ApplicabilityContext(a, sim, w);
-    if (a.sanity < 1 ||
-        isFollowedByUndeadActor(c, a) ||
-        isFollowedByUndeadInsect(c)) {
-      return ReasonedSuccessChance.sureFailure;
-    }
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  Resource get rerollResource => null;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will I be successful?';
-  }
-
-  @override
-  String get helpMessage =>
-      'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
-  @override
-  bool get isAggressive => false;
-}
-
 final Approach startFromPreStartBook =
     Approach('pre_start_book', 'start', r'$IMPLICIT', null);
 final startInkInk = InkAst([
@@ -13053,8 +12976,74 @@ final Room start = Room('start', (ActionContext c) {
     "start_ink_ink",
   ));
 }, null, null, null);
+final Approach meadowFightFromBleedsMain =
+    Approach('bleeds_main', 'meadow_fight', '', null);
 final Approach meadowFightFromStart =
     Approach('start', 'meadow_fight', r'$IMPLICIT', null);
+
+class FirstPyramidApproach extends RoamingAction {
+  @override
+  final String name = 'first_pyramid_approach';
+
+  static final FirstPyramidApproach singleton = FirstPyramidApproach();
+
+  @override
+  List<String> get commandPathTemplate => ['Path', 'Press onwards'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('meadow_fight') != true) {
+      return false;
+    }
+    if (!(!c.getRoomRoaming().monstersAlive)) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.movePlayer('bleeds_main');
+
+    return '${a.name} successfully performs FirstPyramidApproach';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform FirstPyramidApproach';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room meadowFight = Room(
     'meadow_fight',
     null,
@@ -13070,8 +13059,9 @@ final Room meadowFight = Room(
     null,
     positionX: 49,
     positionY: 99,
-    mapName: 'Meadow',
-    hint: 'The clearing in the forest of San Francisco where we were ambushed.',
+    mapName: 'Forest clearing',
+    hint:
+        'The clearing in the forest of San Francisco where Tamara and I were ambushed.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -13154,6 +13144,88 @@ final Room meadowFight = Room(
     },
     whereDescription: 'among the trees',
     groundMaterial: '{earth|dirt}');
+
+class PerformNecromancyElsewhere extends RoamingAction {
+  @override
+  final String name = 'perform_necromancy_elsewhere';
+
+  static final PerformNecromancyElsewhere singleton =
+      PerformNecromancyElsewhere();
+
+  @override
+  List<String> get commandPathTemplate => ['Skills', 'necromancy'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(!(c.world.currentSituation as RoomRoamingSituation).monstersAlive &&
+        !c.playerRoom.isSynthetic &&
+        c.playerRoom.isOnMap &&
+        !storyNecromanyHasPrecedence(c))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
+    c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
+    raiseDead(c);
+
+    return '${a.name} successfully performs PerformNecromancyElsewhere';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_6c782c6c =
+        a.sanity < 1 ? '''My sanity is already gone.''' : '''''';
+    final ifBlock_4fd98517e = isFollowedByUndeadActor(c, a) ||
+            isFollowedByUndeadInsect(c)
+        ? '''My powers are not strong enough to hold two unliving minds, and I already have an undead follower.'''
+        : '''''';
+    s.add(
+        'I try to perform the necromantic incantation but I fail. ${ifBlock_6c782c6c}${ifBlock_4fd98517e} Nothing happens.\n',
+        isRaw: true);
+    return '${a.name} fails to perform PerformNecromancyElsewhere';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    final c = ApplicabilityContext(a, sim, w);
+    if (a.sanity < 1 ||
+        isFollowedByUndeadActor(c, a) ||
+        isFollowedByUndeadInsect(c)) {
+      return ReasonedSuccessChance.sureFailure;
+    }
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage =>
+      'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
+  @override
+  bool get isAggressive => false;
+}
 
 class ReadLetterFromFather extends RoamingAction {
   @override
@@ -13541,6 +13613,7 @@ final allApproaches = <Approach>[
   goblinSkirmishSneakFromGoblinSkirmishPatrol,
   goblinSkirmishMainFromBleedsMain,
   startFromPreStartBook,
+  meadowFightFromBleedsMain,
   meadowFightFromStart
 ];
 final allActions = <RoamingAction>[
@@ -13643,8 +13716,9 @@ final allActions = <RoamingAction>[
   CompassExamine.singleton,
   CompassTake.singleton,
   CompassUse.singleton,
-  PerformNecromancyElsewhere.singleton,
   StartInk.singleton,
+  FirstPyramidApproach.singleton,
+  PerformNecromancyElsewhere.singleton,
   ReadLetterFromFather.singleton,
   GuardpostAboveChurchTakeShield.singleton
 ];

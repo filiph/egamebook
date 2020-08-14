@@ -166,3 +166,12 @@ NOTES:
 // TODO: Put the trader vs son conflict into context. 
 //       Trader talk is to the point. You can even buy stuff.
 //       You can talk to Leroy without even talking to his father.
+
+
+I enter the shop. It's less of a hut than most buildings in this place, but still pretty basic. Light streams through a single window to the left. When my eyes adjust, I see an old man behind a narrow counter, and a young man next to the window. The young man is polishing boots, checking his work in the stream of light.
+
+"Welcome," says the old man with a big tired smile.
+
+The young man scoffs. He nods at me, then returns to his work.
+
+

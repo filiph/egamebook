@@ -1,13 +1,15 @@
 APPROACH: $meadow_fight FROM $start
 COMMAND: $IMPLICIT
 
+APPROACH: $meadow_fight FROM $bleeds_main
+
 // ---
 ROOM: $meadow_fight
 
 POS: 49, 99
 
-MAP_NAME: Meadow
-HINT: The clearing in the forest of San Francisco where we were ambushed.
+MAP_NAME: Forest clearing
+HINT: The clearing in the forest of San Francisco where Tamara and I were ambushed.
 
 DESCRIPTION: $NONE
 
@@ -81,3 +83,22 @@ throw StateError("Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}
 [[CODE]]
 c.giveNewItemToPlayer(letterFromFather);
 [[ENDCODE]]
+
+
+// ---
+ACTION: $first_pyramid_approach
+COMMAND: Path >> Press onwards
+FOR_LOCATION: $meadow_fight
+
+PREREQUISITES:
+!c.getRoomRoaming().monstersAlive
+
+COMPLETE_SUCCESS_DESCRIPTION:
+[[CODE]]
+c.movePlayer('bleeds_main');
+[[ENDCODE]]
+
+
+NOTES:
+
+* idea: after some time, someone takes the goblin's corpse from here
