@@ -16,7 +16,7 @@ It's very different from the other floors. There are no walls, and from the stai
 
 As soon as [we] climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc, the other a goblin.
 
-![Illustration of an orc and a goblin. The orc is wielding a huge serrated sword and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.jpg)
+![Illustration of an orc and a goblin. The orc is wielding a huge serrated sword and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)
 
 The goblin's face contorts with hatred as soon as he sees me, but the orc just laughs.
 

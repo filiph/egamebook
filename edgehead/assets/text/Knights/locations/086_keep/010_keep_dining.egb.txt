@@ -15,7 +15,7 @@ FIRST_DESCRIPTION:
 c.learn(LadyHopeFacts.ladyHopeName);
 [[ENDCODE]]
 
-![Illustration of Lady Hope, an undead woman with a katana.](hope.jpg)
+![Illustration of Lady Hope, an undead woman with a katana.](hope.png)
 
 Someone is talking through her. Impressive. She is clearly undead, and talking undead is something I've never even considered before. It is obviously necromancy of some higher level. TODO: the necromancer taunts me.
 

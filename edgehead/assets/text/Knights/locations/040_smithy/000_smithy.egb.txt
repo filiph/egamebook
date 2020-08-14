@@ -16,7 +16,7 @@ c.learn(SarnFacts.seenPersonally);
 
 He is being guarded by an orcish jailer.
 
-![Illustration of Sarn, my brother, working with an anvil. An orcish jailer is in the background.](sarn.jpg)
+![Illustration of Sarn, my brother, working with an anvil. An orcish jailer is in the background.](sarn.png)
 
 // TODO: there is also a dead body on the floor. Can be necromance'd.
 

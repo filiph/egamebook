@@ -92,7 +92,7 @@ final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: A device similar to Conet is here.\n\n![Illustration of Big O, a necromancer with a dog\'s head.](bigo.jpg)\n\nTODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n\n\nTODO: fight with Osiris. Assuming a win (otherwise, death).\n',
+      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: A device similar to Conet is here.\n\n![Illustration of Big O, a necromancer with a dog\'s head.](bigo.png)\n\nTODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n\n\nTODO: fight with Osiris. Assuming a win (otherwise, death).\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -110,7 +110,7 @@ final Approach endOfRoamFromBigOObservatory = Approach(
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I have prevailed.\n\nTODO: an end, in which Aren (the player) shows the Dog\'s head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn\'s mind, and he is no longer insane. He explains his past mistakes, and apologizes.\n\n![Illustration Big O\'s head in my arms. Before me, a group of people.](doghead.jpg)\n\nThe end.\n',
+      'I have prevailed.\n\nTODO: an end, in which Aren (the player) shows the Dog\'s head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn\'s mind, and he is no longer insane. He explains his past mistakes, and apologizes.\n\n![Illustration Big O\'s head in my arms. Before me, a group of people.](doghead.png)\n\nThe end.\n',
       isRaw: true);
 });
 final Approach bigOAntechamberFromCrowdsource =
@@ -368,7 +368,7 @@ final Room dargTentAfterDargArrived = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.jpg)\n',
+          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -396,7 +396,7 @@ final Room dargTentAfterDargArrived = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Darg is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.jpg)\n',
+          'Darg is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
           isRaw: true);
     },
     positionX: 33,
@@ -577,7 +577,7 @@ class CrowdsourceListen extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I hear a heated debate. There\'s the leader of the orcs, called Darg. There is another orc, and a high-ranking goblin.\n\nThe others are trying to persuade Darg to open the antechamber\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.jpg)\n\nTODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.\n',
+        'I hear a heated debate. There\'s the leader of the orcs, called Darg. There is another orc, and a high-ranking goblin.\n\nThe others are trying to persuade Darg to open the antechamber\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\nTODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.\n',
         isRaw: true);
     return '${a.name} successfully performs CrowdsourceListen';
   }
@@ -1288,7 +1288,7 @@ final Room smithy = Room('smithy', (ActionContext c) {
   c.learn(SarnFacts.seenPersonally);
 
   s.add(
-      '\nHe is being guarded by an orcish jailer.\n\n![Illustration of Sarn, my brother, working with an anvil. An orcish jailer is in the background.](sarn.jpg)\n',
+      '\nHe is being guarded by an orcish jailer.\n\n![Illustration of Sarn, my brother, working with an anvil. An orcish jailer is in the background.](sarn.png)\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1875,7 +1875,7 @@ final Room battlefield = Room(
       final weSubstitution =
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc, the other a goblin.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge serrated sword and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.jpg)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two attack.\n\n',
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc, the other a goblin.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge serrated sword and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two attack.\n\n',
           isRaw: true);
       c.learn(OrcsFacts.inPyramid);
       c.learn(SixtyFiversFacts.shieldSeen);
@@ -1921,7 +1921,7 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A woman is here. She seems deep in though, walking up and down the room, over debris.\n\n![Illustration of an old woman with a staff.](oracle.jpg)\n\nA ridiculously red apple sits on the table.\n\n',
+      'A woman is here. She seems deep in though, walking up and down the room, over debris.\n\n![Illustration of an old woman with a staff.](oracle.png)\n\nA ridiculously red apple sits on the table.\n\n',
       isRaw: true);
   c.describeWorthiness(
       who: oracle,
@@ -3493,7 +3493,7 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The sacred shrine of the Deathless.\n\n![Illustration of a pedestal with "Ovum Draconis" written on it. On the pedestal, there is a frag grenade.](dragonegg.jpg)\n\nTODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It\'s a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It\'s a frag grenade.)\n\n',
+      'The sacred shrine of the Deathless.\n\n![Illustration of a pedestal with "Ovum Draconis" written on it. On the pedestal, there is a frag grenade.](dragonegg.png)\n\nTODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It\'s a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It\'s a frag grenade.)\n\n',
       isRaw: true);
   c.giveNewItemToPlayer(dragonEgg);
   c.markHappened(evReceivedDragonEgg);
@@ -3719,7 +3719,7 @@ final Room pondWithLizardman = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          '${weSubstitutionCapitalized} follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.\n\nIn front of the pond, a lizardman.\n\n![Illustration of a lizardman with a spear.](lizardman.jpg)\n',
+          '${weSubstitutionCapitalized} follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.\n\nIn front of the pond, a lizardman.\n\n![Illustration of a lizardman with a spear.](lizardman.png)\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3746,7 +3746,7 @@ final Room pondWithLizardman = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'A lizardman stands in front of the pond.\n\n![Illustration of a lizardman with a spear.](lizardman.jpg)\n',
+          'A lizardman stands in front of the pond.\n\n![Illustration of a lizardman with a spear.](lizardman.png)\n',
           isRaw: true);
     },
     positionX: 14,
@@ -7613,7 +7613,7 @@ final Room keepDining = Room('keep_dining', (ActionContext c) {
   c.learn(LadyHopeFacts.ladyHopeName);
 
   s.add(
-      '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.jpg)\n\nSomeone is talking through her. Impressive. She is clearly undead, and talking undead is something I\'ve never even considered before. It is obviously necromancy of some higher level. TODO: the necromancer taunts me.\n\n',
+      '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.png)\n\nSomeone is talking through her. Impressive. She is clearly undead, and talking undead is something I\'ve never even considered before. It is obviously necromancy of some higher level. TODO: the necromancer taunts me.\n\n',
       isRaw: true);
   if (c.hasItem(familyPortraitId)) {
     s.add('Lady Hope seems taken aback by the portrait I have with me.',
@@ -7685,7 +7685,7 @@ class NorthSkullExamine extends RoamingAction {
         ? '''As I circle the "North Skull", the compass always points directly at it.'''
         : '''''';
     s.add(
-        'This is human skull made into a device. \n\n![Illustration of some kind of device inset in a human skull.](northskull.jpg)\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n${ifBlock_465f63bbc}\n',
+        'This is human skull made into a device. \n\n![Illustration of some kind of device inset in a human skull.](northskull.png)\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n${ifBlock_465f63bbc}\n',
         isRaw: true);
     return '${a.name} successfully performs NorthSkullExamine';
   }
@@ -7835,7 +7835,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As ${weSubstitution} approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n![Illustration of two knights: a woman with a sword and a man with a halberd](guards.jpg)\n\nThe man has been crying, judging from his eyes.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. \n\n',
+      'As ${weSubstitution} approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n![Illustration of two knights: a woman with a sword and a man with a halberd](guards.png)\n\nThe man has been crying, judging from his eyes.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. \n\n',
       isRaw: true);
   c.learn(LadyHopeFacts.ladyInKeep);
 }, (ActionContext c) {
@@ -9367,7 +9367,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.jpg)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
       isRaw: true);
   c.learn(kbTrader);
   c.learn(kbGoblinCampSmoke);
@@ -11527,7 +11527,7 @@ final Room bleedsMainDuringCaravan = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They\'re clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.\n\nThere is some commotion around the trader\'s shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don\'t. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.\n\n![Illustration of a man with a hawk\'s head, and a sicle for a weapon.](hawkman.jpg)\n\n\n',
+          'The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They\'re clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.\n\nThere is some commotion around the trader\'s shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don\'t. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.\n\n![Illustration of a man with a hawk\'s head, and a sicle for a weapon.](hawkman.png)\n\n\n',
           isRaw: true);
       c.increaseSanityFromPeople();
     },
@@ -11597,7 +11597,7 @@ final Room bleedsMainAfterQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.jpg)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -11647,7 +11647,7 @@ final Room bleedsMainAfterQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.jpg)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -12643,7 +12643,7 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '![Illustration of a ferocious goblin is stepping out of a bush, holding a sword](goblin.jpg)\n',
+        '![Illustration of a ferocious goblin is stepping out of a bush, holding a sword](goblin.png)\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),

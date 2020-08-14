@@ -11,7 +11,7 @@ MAP_NAME: Oracle's
 FIRST_DESCRIPTION:
 A woman is here. She seems deep in though, walking up and down the room, over debris.
 
-![Illustration of an old woman with a staff.](oracle.jpg)
+![Illustration of an old woman with a staff.](oracle.png)
 
 A ridiculously red apple sits on the table.
 

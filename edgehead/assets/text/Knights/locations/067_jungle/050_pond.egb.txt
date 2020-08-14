@@ -22,13 +22,13 @@ FIRST_DESCRIPTION:
 
 In front of the pond, a lizardman.
 
-![Illustration of a lizardman with a spear.](lizardman.jpg)
+![Illustration of a lizardman with a spear.](lizardman.png)
 
 
 VARIANT_UPDATE_DESCRIPTION:
 A lizardman stands in front of the pond.
 
-![Illustration of a lizardman with a spear.](lizardman.jpg)
+![Illustration of a lizardman with a spear.](lizardman.png)
 
 
 // ---
