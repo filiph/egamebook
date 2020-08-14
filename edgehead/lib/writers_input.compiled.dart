@@ -9266,70 +9266,6 @@ final Approach bleedsMainFromMeadowFight =
 final Approach bleedsMainFromPyramidEntrance =
     Approach('pyramid_entrance', 'bleeds_main', '', null);
 
-class BleedsMainObserveSmoke extends RoamingAction {
-  @override
-  final String name = 'bleeds_main_observe_smoke';
-
-  static final BleedsMainObserveSmoke singleton = BleedsMainObserveSmoke();
-
-  @override
-  List<String> get commandPathTemplate => ['Smoke', 'observe'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('bleeds_main') != true) {
-      return false;
-    }
-    if (!(!c.hasHappened(evGoblinCampCleared))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire.\n\nSomeone is not afraid to be found.\n',
-        isRaw: true);
-    return '${a.name} successfully performs BleedsMainObserveSmoke';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    return '${a.name} fails to perform BleedsMainObserveSmoke';
-  }
-
-  @override
-  ReasonedSuccessChance<void> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  Resource get rerollResource => null;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will I be successful?';
-  }
-
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
 class BleedsMainObserveVillage extends RoamingAction {
   @override
   final String name = 'bleeds_main_observe_village';
@@ -11787,8 +11723,11 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
 }, null, generateBleedsGoblinSkirmishPatrol, null,
     positionX: 15,
     positionY: 97,
-    mapName: 'Smoke',
-    hint: 'I noticed a smoke to the west.');
+    mapName: 'Ancient rubble',
+    firstMapName: 'Smoke',
+    hint: 'It\'s the place I met the goblin patrol.',
+    firstHint:
+        'The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.');
 final Approach goblinSkirmishSneakFromBleedsMain = Approach(
     'bleeds_main',
     'goblin_skirmish_sneak',
@@ -13688,7 +13627,6 @@ final allActions = <RoamingAction>[
   TalkToMiguelAboutLady.singleton,
   TalkToMiguelGreetings.singleton,
   TalkToKatAfterOrcOffensive.singleton,
-  BleedsMainObserveSmoke.singleton,
   BleedsMainObserveVillage.singleton,
   BleedsTraderGoblinSmoke.singleton,
   BleedsTraderGoblins.singleton,

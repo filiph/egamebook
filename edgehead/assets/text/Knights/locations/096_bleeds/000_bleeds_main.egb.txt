@@ -73,19 +73,6 @@ Every door is shut except for two. One is the entrance into the trader's shop. T
 c.learn(JisadFacts.blindPerson);
 [[ENDCODE]]
 
-// ---
-ACTION: $bleeds_main_observe_smoke
-COMMAND: Smoke >> observe
-FOR_LOCATION: $bleeds_main
-
-PREREQUISITES:
-!c.hasHappened(evGoblinCampCleared)
-
-COMPLETE_SUCCESS_DESCRIPTION:
-The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire.
-
-Someone is not afraid to be found.
-
 NOTES:
 
 if c.hasHappened(evSavedSarn), then Sarn is here
