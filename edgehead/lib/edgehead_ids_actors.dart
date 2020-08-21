@@ -1,5 +1,9 @@
 part of edgehead.ids;
 
+const int campLeaderGoblinId = 6008;
+
+const int campNakedGoblinId = 6009;
+
 /// Darg, the leader of the Crowd.
 const int dargId = 6005;
 

@@ -1,0 +1,17 @@
+// ---
+ACTION: $compass_use
+COMMAND: Inventory >> compass >> use
+
+PREREQUISITES:
+c.hasItem(compassId)
+&&
+!c.playerRoom.isSynthetic
+&&
+c.playerRoom.isOnMap
+
+REPEATABLE: $TRUE
+
+COMPLETE_SUCCESS_DESCRIPTION:
+[[CODE]]
+describeCompass(c);
+[[ENDCODE]]

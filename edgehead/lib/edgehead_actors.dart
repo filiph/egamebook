@@ -10,6 +10,42 @@ import 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 
+final Actor campLeaderGoblin = Actor.initialized(
+  campLeaderGoblinId,
+  StatefulRandom(~campLeaderGoblinId).next,
+  'goblin',
+  adjective: 'scar-faced',
+  pronoun: Pronoun.HE,
+  currentRoomName: 'goblin_skirmish_main',
+  currentWeapon: Item.weapon(
+    crudeHatchetId,
+    WeaponType.axe,
+    name: 'hatchet',
+    adjective: 'crude',
+    firstOwnerId: campLeaderGoblinId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
+final Actor campNakedGoblin = Actor.initialized(
+  campNakedGoblinId,
+  StatefulRandom(~campNakedGoblinId).next,
+  'goblin',
+  adjective: 'half-naked',
+  pronoun: Pronoun.HE,
+  currentRoomName: 'goblin_skirmish_main',
+  currentWeapon: Item.weapon(
+    smokingBranchId,
+    WeaponType.club,
+    name: 'branch',
+    adjective: 'smoking',
+    firstOwnerId: campNakedGoblinId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 /// The orc leader.
 final Actor edgeheadDarg = Actor.initialized(
   dargId,
@@ -142,7 +178,6 @@ final Actor sixtyFiverGoblin = Actor.initialized(
     adjective: 'bone',
     firstOwnerId: sixtyFiverGoblinId,
   ),
-  dexterity: 100,
   team: defaultEnemyTeam,
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );

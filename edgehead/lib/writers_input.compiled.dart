@@ -9367,7 +9367,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
       isRaw: true);
   c.learn(kbTrader);
   c.learn(kbGoblinCampSmoke);
@@ -11597,7 +11597,7 @@ final Room bleedsMainAfterQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -11647,7 +11647,7 @@ final Room bleedsMainAfterQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -11752,7 +11752,7 @@ class GoblinCampAttack extends RoamingAction {
   static final GoblinCampAttack singleton = GoblinCampAttack();
 
   @override
-  List<String> get commandPathTemplate => ['Camp', 'Attack'];
+  List<String> get commandPathTemplate => ['Goblins', 'Attack'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -11769,11 +11769,6 @@ class GoblinCampAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final weSubstitutionCapitalized =
-        getWeOrI(a, sim, originalWorld, capitalized: true);
-    s.add(
-        '${weSubstitutionCapitalized} come out of the hiding and charge the goblins.\n\n',
-        isRaw: true);
     c.movePlayer('goblin_skirmish_main');
 
     return '${a.name} successfully performs GoblinCampAttack';
@@ -11838,7 +11833,7 @@ class ListenContinue extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The higher ranked goblin takes something out of a leather bag and shoves it into the other\'s face.\n\n"The only reason we are here, shithead, is the graytower. Look at the device."\n\nThe lower ranked goblin\'s face wrinkles, almost showing his teeth but not quite.\n\n"The kh\'ompakh is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."\n\n"Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.\n',
+        'The higher ranked goblin takes something out of a leather bag and shoves it into the other\'s face.\n\n"The only reason we are here, shithead, is the graytower. Look at the device."\n\nThe lower ranked goblin\'s face wrinkles, almost showing his teeth but not quite.\n\n"The come-pass is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."\n\n"Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.\n',
         isRaw: true);
     return '${a.name} successfully performs ListenContinue';
   }
@@ -11963,7 +11958,7 @@ class ListenToThemArguing extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw no guards!" \n\n"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go there."\n',
+        '"Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw no guards!" \n\n"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go the big building. Let\'s raid instead!"\n',
         isRaw: true);
     return '${a.name} successfully performs ListenToThemArguing';
   }
@@ -12006,7 +12001,7 @@ class ObserveGoblinCamp extends RoamingAction {
   static final ObserveGoblinCamp singleton = ObserveGoblinCamp();
 
   @override
-  List<String> get commandPathTemplate => ['Camp', 'Observe'];
+  List<String> get commandPathTemplate => ['Goblins', 'Observe'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -12023,10 +12018,11 @@ class ObserveGoblinCamp extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
     final weSubstitutionCapitalized =
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '${weSubstitutionCapitalized} find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n',
+        '${weSubstitutionCapitalized} find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n\nThis will not be an easy fight if ${weSubstitution} choose to attack. But ${weSubstitution} do have the element of surprise.\n',
         isRaw: true);
     return '${a.name} successfully performs ObserveGoblinCamp';
   }
@@ -12089,6 +12085,135 @@ final Approach goblinSkirmishMainFromBleedsMain =
   return c.hasHappened(evGoblinCampCleared);
 });
 
+class BarbecuedSquirrelExamine extends RoamingAction {
+  @override
+  final String name = 'barbecued_squirrel_examine';
+
+  static final BarbecuedSquirrelExamine singleton = BarbecuedSquirrelExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Barbecued Squirrel', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
+      return false;
+    }
+    if (!(!c.getRoomRoaming().monstersAlive)) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'It\'s a bulky squirrel, western gray from the looks of it, thoroughly barbecued and impaled with a thin wooden stick. No one has touched it yet.\n',
+        isRaw: true);
+    return '${a.name} successfully performs BarbecuedSquirrelExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform BarbecuedSquirrelExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class BarbecuedSquirrelTake extends RoamingAction {
+  @override
+  final String name = 'barbecued_squirrel_take';
+
+  static final BarbecuedSquirrelTake singleton = BarbecuedSquirrelTake();
+
+  @override
+  List<String> get commandPathTemplate => ['Barbecued Squirrel', 'Take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
+      return false;
+    }
+    if (!(!c.getRoomRoaming().monstersAlive &&
+        w.actionHasBeenPerformed('barbecued_squirrel_examine'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I put it in my bag. It smells great.\n\n', isRaw: true);
+    c.giveNewItemToPlayer(barbecuedSquirrel);
+
+    return '${a.name} successfully performs BarbecuedSquirrelTake';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform BarbecuedSquirrelTake';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class CompassExamine extends RoamingAction {
   @override
   final String name = 'compass_examine';
@@ -12103,7 +12228,7 @@ class CompassExamine extends RoamingAction {
     if (c.inRoomParent('goblin_skirmish_main') != true) {
       return false;
     }
-    if (!(!w.actionHasBeenPerformed('compass_take'))) {
+    if (!(!c.getRoomRoaming().monstersAlive)) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12167,7 +12292,8 @@ class CompassTake extends RoamingAction {
     if (c.inRoomParent('goblin_skirmish_main') != true) {
       return false;
     }
-    if (!(w.actionHasBeenPerformed('compass_examine'))) {
+    if (!(!c.getRoomRoaming().monstersAlive &&
+        w.actionHasBeenPerformed('compass_examine'))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12217,89 +12343,76 @@ class CompassTake extends RoamingAction {
   bool get isAggressive => false;
 }
 
-class CompassUse extends RoamingAction {
-  @override
-  final String name = 'compass_use';
-
-  static final CompassUse singleton = CompassUse();
-
-  @override
-  List<String> get commandPathTemplate => ['inventory', 'compass', 'use'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(c.hasItem(compassId) &&
-        !c.playerRoom.isSynthetic &&
-        c.playerRoom.isOnMap)) {
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    describeCompass(c);
-
-    return '${a.name} successfully performs CompassUse';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    return '${a.name} fails to perform CompassUse';
-  }
-
-  @override
-  ReasonedSuccessChance<void> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  Resource get rerollResource => null;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will I be successful?';
-  }
-
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
-final Room goblinSkirmishMain = Room('goblin_skirmish_main', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'TODO: an actual battle with the goblins.\n\nThere\'s a curious device on the ground. Some kind of a compass.\n\n',
-      isRaw: true);
-  c.markHappened(evGoblinCampCleared);
-
-  s.add('\nThere\'s a squirrel on a stick. I take it.\n\n', isRaw: true);
-  c.giveNewItemToPlayer(barbecuedSquirrel);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblin camp is deserted.\n', isRaw: true);
-}, null, null, positionX: 11, positionY: 97, mapName: 'The Goblin Camp');
+final Room goblinSkirmishMain = Room(
+    'goblin_skirmish_main',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
+      Ruleset(
+          Rule(219805437, 1, false, (ApplicabilityContext c) {
+            final WorldState w = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            return w.actionHasBeenPerformed("observe_goblin_camp");
+          }, (ActionContext c) {
+            final WorldState originalWorld = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            final WorldStateBuilder w = c.outputWorld;
+            final Storyline s = c.outputStoryline;
+            s.add(
+                ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. I run past the lying goblin and easily kill him as he\'s waking up.\n',
+                isRaw: true);
+          }),
+          Rule(21199514, 0, false, (ApplicabilityContext c) {
+            final WorldState w = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            return true;
+          }, (ActionContext c) {
+            final WorldState originalWorld = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            final WorldStateBuilder w = c.outputWorld;
+            final Storyline s = c.outputStoryline;
+            s.add(
+                ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. The two I heard arguing sit next to a fire pit. There is another one, sleeping on the ground, close to where I start my attack. I run past him and easily kill him as he\'s waking up.\n',
+                isRaw: true);
+          })).apply(c);
+      s.add(
+          '\nThe goblins near the fire pit stand up. One of them, I realize, is almost naked and doesn\'t have a weapon near him. He grabs a branch from the fire.\n\nThe other one, the one I decide looks like the leader of the group, readies a crude hatchet. An ugly scar slants through his face.\n\n"Amak, you f—" he starts saying, but then I am already on him.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateGoblinCampFight,
+    null,
+    positionX: 11,
+    positionY: 97,
+    mapName: 'The Goblin Camp',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The fight is done and I finally have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there\'s a barbecued squirrel on a stick next to the fire.) \n\nThis must be a shared place of rest for the goblins who travel through here. But on what journey?\n\nThere\'s a bag on the ground, and peeking out of it, a curious device.\n\n',
+          isRaw: true);
+      c.markHappened(evGoblinCampCleared);
+    },
+    whereDescription: 'near the campfire');
 final Approach startFromPreStartBook =
     Approach('pre_start_book', 'start', r'$IMPLICIT', null);
 final startInkInk = InkAst([
@@ -13084,6 +13197,68 @@ final Room meadowFight = Room(
     whereDescription: 'among the trees',
     groundMaterial: '{earth|dirt}');
 
+class CompassUse extends RoamingAction {
+  @override
+  final String name = 'compass_use';
+
+  static final CompassUse singleton = CompassUse();
+
+  @override
+  List<String> get commandPathTemplate => ['Inventory', 'compass', 'use'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(c.hasItem(compassId) &&
+        !c.playerRoom.isSynthetic &&
+        c.playerRoom.isOnMap)) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    describeCompass(c);
+
+    return '${a.name} successfully performs CompassUse';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform CompassUse';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class PerformNecromancyElsewhere extends RoamingAction {
   @override
   final String name = 'perform_necromancy_elsewhere';
@@ -13651,11 +13826,13 @@ final allActions = <RoamingAction>[
   ListenMore.singleton,
   ListenToThemArguing.singleton,
   ObserveGoblinCamp.singleton,
+  BarbecuedSquirrelExamine.singleton,
+  BarbecuedSquirrelTake.singleton,
   CompassExamine.singleton,
   CompassTake.singleton,
-  CompassUse.singleton,
   StartInk.singleton,
   FirstPyramidApproach.singleton,
+  CompassUse.singleton,
   PerformNecromancyElsewhere.singleton,
   ReadLetterFromFather.singleton,
   GuardpostAboveChurchTakeShield.singleton

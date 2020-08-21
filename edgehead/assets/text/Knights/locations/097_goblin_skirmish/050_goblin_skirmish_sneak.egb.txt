@@ -24,19 +24,26 @@ MAP_NAME: The Camp
 FIRST_DESCRIPTION:
 Suddenly, I hear voices ahead. Two goblins are arguing about something.
 
-// TODO: make it clear that this is going to be hard
-
 DESCRIPTION:
 The goblins are still here.
 
+
 // ---
-ACTION: $goblin_camp_attack
-COMMAND: Camp >> Attack
+ACTION: $observe_goblin_camp
+COMMAND: Goblins >> Observe
 FOR_LOCATION: $goblin_skirmish_sneak
 
 COMPLETE_SUCCESS_DESCRIPTION:
-[We] come out of the hiding and charge the goblins.
+[We] find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don't see, but looking at the size of the camp ground, it's not likely.
 
+This will not be an easy fight if [we] choose to attack. But [we] do have the element of surprise.
+
+// ---
+ACTION: $goblin_camp_attack
+COMMAND: Goblins >> Attack
+FOR_LOCATION: $goblin_skirmish_sneak
+
+COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
 c.movePlayer('goblin_skirmish_main');
 [[ENDCODE]]
@@ -55,15 +62,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 
 "Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.
 
-"Another reason why not to go there."
-
-// ---
-ACTION: $observe_goblin_camp
-COMMAND: Camp >> Observe
-FOR_LOCATION: $goblin_skirmish_sneak
-
-COMPLETE_SUCCESS_DESCRIPTION:
-[We] find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don't see, but looking at the size of the camp ground, it's not likely.
+"Another reason why not to go the big building. Let's raid instead!"
 
 // --
 ACTION: $listen_continue
@@ -80,7 +79,7 @@ The higher ranked goblin takes something out of a leather bag and shoves it into
 
 The lower ranked goblin's face wrinkles, almost showing his teeth but not quite.
 
-"The kh'ompakh is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."
+"The come-pass is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."
 
 "Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.
 

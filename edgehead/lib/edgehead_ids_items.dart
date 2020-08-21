@@ -10,6 +10,8 @@ const int barbecuedSquirrelId = 770017;
 
 const int compassId = 77007;
 
+const int crudeHatchetId = 77024;
+
 const int dragonEggId = 77008;
 
 const int familyPortraitId = 77011;
@@ -37,6 +39,8 @@ const int sixtyFiverGoblinHatchetId = 77023;
 const int sixtyFiverShieldId = 77010;
 
 const int sixtyFiverSwordId = 77013;
+
+const int smokingBranchId = 77025;
 
 const int staleBreadId = 770019;
 

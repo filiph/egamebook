@@ -120,7 +120,7 @@ void describeCompass(ActionContext c) {
     }
   }
 
-  s.add('The compass points ${getDirection(dx, dy)}.', isRaw: true);
+  s.add('The compass currently points ${getDirection(dx, dy)}.', isRaw: true);
 
   if (room.name == 'keep_bedroom' && !c.knows(kbKeepServantsLocation)) {
     s.add('After a short while, I realize the compass is pointing to a hidden '
@@ -176,6 +176,23 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
   w.actors.add(goblin);
   return FightSituation.initialized(w.randomInt(), party, [goblin],
       "{muddy |wet |}ground", roomRoamingSituation, {});
+}
+
+/// The goblin camp fight near the Bleeds.
+FightSituation generateGoblinCampFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+  w.actors.addAll([campNakedGoblin, campLeaderGoblin]);
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [campNakedGoblin, campLeaderGoblin],
+    "ash-covered ground",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
 }
 
 /// God's lair fight.

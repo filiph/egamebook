@@ -9,25 +9,72 @@ ROOM: $goblin_skirmish_main
 POS: 11, 97
 MAP_NAME: The Goblin Camp
 
-FIRST_DESCRIPTION:
-TODO: an actual battle with the goblins.
+WHERE: near the campfire
 
-There's a curious device on the ground. Some kind of a compass.
+FIRST_DESCRIPTION:
+[[RULESET]]
+[[RULE]]
+  w.actionHasBeenPerformed("observe_goblin_camp")
+[[THEN]]
+  [We] leap from hiding and charge the goblins. I run past the lying goblin and easily kill him as he's waking up.
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+  [We] leap from hiding and charge the goblins. The two I heard arguing sit next to a fire pit. There is another one, sleeping on the ground, close to where I start my attack. I run past him and easily kill him as he's waking up.
+[[ENDRULE]]
+[[ENDRULESET]]
+
+The goblins near the fire pit stand up. One of them, I realize, is almost naked and doesn't have a weapon near him. He grabs a branch from the fire.
+
+The other one, the one I decide looks like the leader of the group, readies a crude hatchet. An ugly scar slants through his face.
+
+"Amak, you f—" he starts saying, but then I am already on him.
+
+FIGHT_SITUATION:
+generateGoblinCampFight
+
+DESCRIPTION: $NONE
+
+AFTER_MONSTERS_CLEARED:
+The fight is done, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there's a barbecued squirrel on a stick next to the fire.) 
+
+This must be a shared place of rest for the goblins who travel through here. But on what journey?
+
+There's a bag on the ground, and peeking out of it, a curious device.
 
 [[CODE]]
 c.markHappened(evGoblinCampCleared);
 [[ENDCODE]]
 
-// TODO: make this into an action once we implement the attack
-There's a squirrel on a stick. I take it.
+// ---
+ACTION: $barbecued_squirrel_examine
+COMMAND: Barbecued Squirrel >> Examine
+FOR_LOCATION: $goblin_skirmish_main
+
+PREREQUISITES:
+!c.getRoomRoaming().monstersAlive
+
+COMPLETE_SUCCESS_DESCRIPTION:
+It's a bulky squirrel, western gray from the looks of it, thoroughly barbecued and impaled with a thin wooden stick. No one has touched it yet.
+
+
+// ---
+ACTION: $barbecued_squirrel_take
+COMMAND: Barbecued Squirrel >> Take
+FOR_LOCATION: $goblin_skirmish_main
+
+PREREQUISITES:
+!c.getRoomRoaming().monstersAlive
+&&
+w.actionHasBeenPerformed('barbecued_squirrel_examine')
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I put it in my bag. It smells great.
 
 [[CODE]]
 c.giveNewItemToPlayer(barbecuedSquirrel);
 [[ENDCODE]]
-
-
-DESCRIPTION:
-The goblin camp is deserted.
 
 
 // ---
@@ -36,7 +83,7 @@ COMMAND: Device >> Examine
 FOR_LOCATION: $goblin_skirmish_main
 
 PREREQUISITES:
-!w.actionHasBeenPerformed('compass_take')
+!c.getRoomRoaming().monstersAlive
 
 COMPLETE_SUCCESS_DESCRIPTION:
 A curious, crude device. Round as a pebble, slightly translucent, with a dark spot that moves as I rotate the device. The dark spot always points to one direction. It's like a compass. It currently points slightly upwards and toward the Pyramid.
@@ -48,6 +95,8 @@ COMMAND: Compass >> Take
 FOR_LOCATION: $goblin_skirmish_main
 
 PREREQUISITES:
+!c.getRoomRoaming().monstersAlive
+&&
 w.actionHasBeenPerformed('compass_examine')
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -57,21 +106,3 @@ I take the compass.
 c.giveNewItemToPlayer(compass);
 [[ENDCODE]]
 
-
-// ---
-ACTION: $compass_use
-COMMAND: inventory >> compass >> use
-
-PREREQUISITES:
-c.hasItem(compassId)
-&&
-!c.playerRoom.isSynthetic
-&&
-c.playerRoom.isOnMap
-
-REPEATABLE: $TRUE
-
-COMPLETE_SUCCESS_DESCRIPTION:
-[[CODE]]
-describeCompass(c);
-[[ENDCODE]]
