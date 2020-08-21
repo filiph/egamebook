@@ -135,35 +135,24 @@ void describeCompass(ActionContext c) {
 FightSituation generateBattlefieldFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
+  w.actors.addAll([sixtyFiverOrc, sixtyFiverGoblin]);
+
   final weak = _orcsLackCockroaches(c);
   if (weak) {
     c.outputStoryline.add('They seem famished.', isRaw: true);
+    w.updateActorById(sixtyFiverOrcId, (b) => b.dexterity = 50);
+    w.updateActorById(sixtyFiverGoblinId, (b) => b.dexterity = 70);
   }
   final stripped = _orcsLackWeapons(c);
   if (stripped) {
     c.outputStoryline.add('Their weapons look battered.', isRaw: true);
+    // Currently, this has no gameplay effect.
   }
-  final battlefieldGoblinId = w.randomInt();
-  final battlefieldGoblin = Actor.initialized(
-      battlefieldGoblinId, w.randomInt, "goblin",
-      adjective: 'angry',
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
-          name: 'hatchet',
-          adjective: 'bone',
-          firstOwnerId: battlefieldGoblinId),
-      constitution: 1,
-      dexterity: weak ? 50 : 100,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-
-  w.actors.addAll([sixtyFiverOrc, battlefieldGoblin]);
 
   return FightSituation.initialized(
     w.randomInt(),
     party,
-    [sixtyFiverOrc, battlefieldGoblin],
+    [sixtyFiverOrc, sixtyFiverGoblin],
     "{battlefield|concrete} floor",
     roomRoamingSituation,
     {},

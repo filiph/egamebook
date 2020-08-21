@@ -22,6 +22,9 @@ const int miguelId = 102;
 /// [edgeheadPlayer]'s [Actor.id].
 const int playerId = 1;
 
+/// The goblin next to the orc.
+const int sixtyFiverGoblinId = 6007;
+
 /// The orc with the 65 shield.
 const int sixtyFiverOrcId = 6006;
 

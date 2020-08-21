@@ -128,6 +128,25 @@ final Actor firstGoblin = Actor.initialized(
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
+final Actor sixtyFiverGoblin = Actor.initialized(
+  sixtyFiverGoblinId,
+  StatefulRandom(~sixtyFiverGoblinId).next,
+  "goblin",
+  adjective: 'angry',
+  pronoun: Pronoun.HE,
+  currentRoomName: 'battlefield',
+  currentWeapon: Item.weapon(
+    sixtyFiverGoblinHatchetId,
+    WeaponType.axe,
+    name: 'hatchet',
+    adjective: 'bone',
+    firstOwnerId: sixtyFiverGoblinId,
+  ),
+  dexterity: 100,
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 /// The orc sixty-fiver.
 final Actor sixtyFiverOrc = Actor.initialized(
   sixtyFiverOrcId,
