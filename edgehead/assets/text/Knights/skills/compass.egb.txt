@@ -8,6 +8,8 @@ c.hasItem(compassId)
 !c.playerRoom.isSynthetic
 &&
 c.playerRoom.isOnMap
+&&
+!c.getRoomRoaming().monstersAlive
 
 REPEATABLE: $TRUE
 

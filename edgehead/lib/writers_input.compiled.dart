@@ -12408,7 +12408,7 @@ final Room goblinSkirmishMain = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The fight is done and I finally have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there\'s a barbecued squirrel on a stick next to the fire.) \n\nThis must be a shared place of rest for the goblins who travel through here. But on what journey?\n\nThere\'s a bag on the ground, and peeking out of it, a curious device.\n\n',
+          'The fight is done, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there\'s a barbecued squirrel on a stick next to the fire.) \n\nThis must be a shared place of rest for the goblins who travel through here. But on what journey?\n\nThere\'s a bag on the ground, and peeking out of it, a curious device.\n\n',
           isRaw: true);
       c.markHappened(evGoblinCampCleared);
     },
@@ -13210,7 +13210,8 @@ class CompassUse extends RoamingAction {
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (!(c.hasItem(compassId) &&
         !c.playerRoom.isSynthetic &&
-        c.playerRoom.isOnMap)) {
+        c.playerRoom.isOnMap &&
+        !c.getRoomRoaming().monstersAlive)) {
       return false;
     }
     return true;
