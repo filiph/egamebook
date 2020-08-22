@@ -7587,7 +7587,7 @@ final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'This is where the aristocracy lived, the Lord\'s quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.\n',
+      'Redwood parquetry, the wooden flooring of the rich, creaks underfoot.\n\nThis is where the aristocracy lived: the Lord\'s quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -7600,49 +7600,66 @@ final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
     isIdle: true, positionX: 15, positionY: 86, mapName: 'Lord\'s quarters');
 final Approach keepDiningFromKeepBedroom =
     Approach('keep_bedroom', 'keep_dining', '', null);
-final Room keepDining = Room('keep_dining', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final ifBlock_1d766ac55 = c.knows(LadyHopeFacts.ladyHopeName)
-      ? '''Lady Hope faces me and prepares for battle.'''
-      : '''An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.''';
-  s.add('${ifBlock_1d766ac55}\n\n', isRaw: true);
-  c.learn(LadyHopeFacts.ladyHopeName);
+final Room keepDining = Room(
+    'keep_dining',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final ifBlock_1d766ac55 = c.knows(LadyHopeFacts.ladyHopeName)
+          ? '''Lady Hope faces me and prepares for battle.'''
+          : '''An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.''';
+      s.add('${ifBlock_1d766ac55} I wonder if she saw my brother.\n\n',
+          isRaw: true);
+      c.learn(LadyHopeFacts.ladyHopeName);
 
-  s.add(
-      '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.png)\n\nSomeone is talking through her. Impressive. She is clearly undead, and talking undead is something I\'ve never even considered before. It is obviously necromancy of some higher level. TODO: the necromancer taunts me.\n\n',
-      isRaw: true);
-  if (c.hasItem(familyPortraitId)) {
-    s.add('Lady Hope seems taken aback by the portrait I have with me.',
-        isRaw: true);
+      s.add(
+          '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.png)\n\nAs I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer.\n\nI risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\nBut then, Lady Hope\'s undead lips start moving. She _speaks._\n\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n\n"You made it rather far, I admit." The body starts walking towards me. "But now you die."\n\n',
+          isRaw: true);
+      if (c.hasItem(familyPortraitId)) {
+        s.add(
+            'As she approaches, Lady Hope seems taken aback by the portrait I have with me. This gives me initiative. ',
+            isRaw: true);
 
-    w.updateActorById(
-        ladyHopeId,
-        (b) => b
-          ..initiative = 0
-          ..dexterity = b.dexterity ~/ 2);
-  }
-
-  s.add('\nTODO: fight\n\n', isRaw: true);
-  w.updateActorById(ladyHopeId, (b) => b..inventory.remove(katana));
-  c.giveNewItemToPlayer(katana);
-
-  s.add(
-      '\nI take the katana.\n\n\nLady Hope is dead, but for a while, her head is still talking. Lady Hope\'s head: "I see you, young friend. I see your ambition. I see your talents. I see your brutality, which I like most of all. Too many young people limit themselves. Their effect on the world. You don\'t. But I warn you: you\'re not to cross me. You\'re not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die." And then, as if to illustrate the point, Lady Hope\'s face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.\n\n',
-      isRaw: true);
-  c.learn(DogheadFacts.somethingCalledDoghead);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null,
-    isIdle: true, positionX: 9, positionY: 86, mapName: 'Dining Room');
+        w.updateActorById(
+            ladyHopeId,
+            (b) => b
+              ..initiative = 0
+              ..dexterity = b.dexterity ~/ 2);
+      }
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateLadyHopeFight,
+    null,
+    isIdle: true,
+    positionX: 9,
+    positionY: 86,
+    mapName: 'Dining Room',
+    firstMapName: 'Dining Room',
+    hint:
+        'The place where the Lord of the Keep dined with his family. A place with a good overview of the Pyramid\'s surroundings.',
+    firstHint:
+        'I can see a female figure silhouetted against a tall window. She is not moving but I can feel she\'s alive, or at the very least undead. She waits.',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Lady Hope is defeated, but her head is still talking. \n\n"I see you, young friend," the head says. "I see your ambition. I see your talents. I see your brutality, which I like most of all."\n\nA barren approximation of a laugh leaves the throat.\n\n"Too many young people limit themselves," the head continues. "They limit their effect on the world. You don\'t. But I warn you: you\'re not to cross me. You\'re not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die."\n\nAnd then, as if to illustrate the point, Lady Hope\'s face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.\n\n',
+          isRaw: true);
+      c.learn(DogheadFacts.somethingCalledDoghead);
+    });
 final Approach keepServantsFromKeepBedroom =
     Approach('keep_bedroom', 'keep_servants', '', null,
         isApplicable: (ApplicabilityContext c) {

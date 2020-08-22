@@ -79,6 +79,7 @@ final Actor edgeheadLadyHope = Actor.initialized(
   "Lady Hope",
   nameIsProperNoun: true,
   isSurvivor: true,
+  isUndead: true,
   pronoun: Pronoun.SHE,
   constitution: 2,
   dexterity: 130,

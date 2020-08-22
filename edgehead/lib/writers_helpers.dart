@@ -135,7 +135,6 @@ void describeCompass(ActionContext c) {
 FightSituation generateBattlefieldFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  w.actors.addAll([sixtyFiverOrc, sixtyFiverGoblin]);
 
   final weak = _orcsLackCockroaches(c);
   if (weak) {
@@ -182,7 +181,6 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
 FightSituation generateGoblinCampFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  w.actors.addAll([campNakedGoblin, campLeaderGoblin]);
 
   return FightSituation.initialized(
     w.randomInt(),
@@ -240,6 +238,25 @@ FightSituation generateGodsLairFight(ActionContext c,
     "{|concrete} floor",
     roomRoamingSituation,
     {},
+    items: const [],
+  );
+}
+
+/// The fight in the Keep with Lady Hope.
+FightSituation generateLadyHopeFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [edgeheadLadyHope],
+    "wooden floor",
+    roomRoamingSituation,
+    {
+      // TODO: fight events when Lady Hope sees the portrait
+      // TODO: taunts from Big O
+    },
     items: const [],
   );
 }

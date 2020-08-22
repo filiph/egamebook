@@ -7,9 +7,13 @@ FLAGS: $IDLE
 
 POS: 9, 86
 MAP_NAME: Dining Room
+HINT: The place where the Lord of the Keep dined with his family. A place with a good overview of the Pyramid's surroundings.
+
+FIRST_MAP_NAME: Dining Room
+FIRST_HINT: I can see a female figure silhouetted against a tall window. She is not moving but I can feel she's alive, or at the very least undead. She waits.
 
 FIRST_DESCRIPTION:
-[[IF c.knows(LadyHopeFacts.ladyHopeName)]]Lady Hope faces me and prepares for battle.[[ELSE]]An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.[[ENDIF]]
+[[IF c.knows(LadyHopeFacts.ladyHopeName)]]Lady Hope faces me and prepares for battle.[[ELSE]]An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.[[ENDIF]] I wonder if she saw my brother.
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);
@@ -17,11 +21,19 @@ c.learn(LadyHopeFacts.ladyHopeName);
 
 ![Illustration of Lady Hope, an undead woman with a katana.](hope.png)
 
-Someone is talking through her. Impressive. She is clearly undead, and talking undead is something I've never even considered before. It is obviously necromancy of some higher level. TODO: the necromancer taunts me.
+As I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer.
+
+I risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.
+
+But then, Lady Hope's undead lips start moving. She _speaks._
+
+"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I've never even considered before. This is obviously necromancy of some higher level.
+
+"You made it rather far, I admit." The body starts walking towards me. "But now you die."
 
 [[CODE]]
 if (c.hasItem(familyPortraitId)) {
-    s.add('Lady Hope seems taken aback by the portrait I have with me.', isRaw: true);
+    s.add('As she approaches, Lady Hope seems taken aback by the portrait I have with me. This gives me initiative. ', isRaw: true);
 
     w.updateActorById(
         ladyHopeId,
@@ -31,35 +43,22 @@ if (c.hasItem(familyPortraitId)) {
 }
 [[ENDCODE]]
 
-TODO: fight
-// TODO: fight events when Lady Hope sees the portrait
-// TODO: taunts from Big O
+FIGHT_SITUATION:
+generateLadyHopeFight
 
-[[CODE]]
-// This can be removed once we implement the fight. 
-w.updateActorById(ladyHopeId, (b)=> b..inventory.remove(katana));
-c.giveNewItemToPlayer(katana);
-[[ENDCODE]]
+AFTER_MONSTERS_CLEARED:
+Lady Hope is defeated, but her head is still talking. 
 
-I take the katana.
+"I see you, young friend," the head says. "I see your ambition. I see your talents. I see your brutality, which I like most of all."
 
-// TODO: post-fight description
+A barren approximation of a laugh leaves the throat.
 
-Lady Hope is dead, but for a while, her head is still talking. Lady Hope's head: "I see you, young friend. I see your ambition. I see your talents. I see your brutality, which I like most of all. Too many young people limit themselves. Their effect on the world. You don't. But I warn you: you're not to cross me. You're not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die." And then, as if to illustrate the point, Lady Hope's face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.
+"Too many young people limit themselves," the head continues. "They limit their effect on the world. You don't. But I warn you: you're not to cross me. You're not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die."
+
+And then, as if to illustrate the point, Lady Hope's face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.
 
 [[CODE]]
 c.learn(DogheadFacts.somethingCalledDoghead);
 [[ENDCODE]]
 
-
 DESCRIPTION: $NONE
-
-
-// TODO: action: look outside - see how the goblins might have climbed into the pyramid this way
-
-NOTES:
-
-// Vignette:
-// looking at Lady Hope
-
-Aren: "I wonder if she saw my brother."

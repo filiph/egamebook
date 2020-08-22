@@ -16,7 +16,9 @@ POS: 15, 86
 MAP_NAME: Lord's quarters
 
 FIRST_DESCRIPTION:
-This is where the aristocracy lived, the Lord's quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.
+Redwood parquetry, the wooden flooring of the rich, creaks underfoot.
+
+This is where the aristocracy lived: the Lord's quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.
 
 DESCRIPTION: $NONE
 
