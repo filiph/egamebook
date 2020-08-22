@@ -9742,16 +9742,6 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
         'The shop of Joseph and his son, Leroy. Sells basic items for the inhabitants of The Bleeds, and the Farmers of the Pyramid.',
     firstHint:
         'A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.');
-final Approach endOfRoamFromBleedsMain =
-    Approach('bleeds_main', '__END_OF_ROAM__', 'Go >> back home (ENDS GAME)',
-        (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('You realize this adventuring life is not for you.\n', isRaw: true);
-});
 final bleedsBlindGuideBigOInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -13742,7 +13732,6 @@ final allApproaches = <Approach>[
   bleedsMainFromMeadowFight,
   bleedsMainFromPyramidEntrance,
   bleedsTraderHutFromBleedsMain,
-  endOfRoamFromBleedsMain,
   goblinSkirmishPatrolFromBleedsMain,
   goblinSkirmishSneakFromBleedsMain,
   goblinSkirmishSneakFromGoblinSkirmishPatrol,

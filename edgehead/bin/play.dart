@@ -105,17 +105,25 @@ Future<void> main(List<String> args) async {
 }
 
 class CliRunner extends Presenter<EdgeheadGame> {
+  static final Logger _log = Logger("play_run");
+
   final Random _random;
 
   final bool automated;
+
+  /// A counter of choices. When [automated] is `true` and when
+  /// this counter reaches [maxAutomatedChoicesTaken], we bail out
+  /// of the game. This is because we don't want automated tests
+  /// to go on forever.
+  int _automatedChoicesTaken = 0;
+
+  final int maxAutomatedChoicesTaken;
 
   final File _logFile;
 
   final Pattern actionPattern;
 
   StreamSubscription _loggerSubscription;
-
-  static final Logger _log = Logger("play_run");
 
   /// Silent mode can be overridden when [actionPattern] is encountered.
   bool _silent;
@@ -143,9 +151,15 @@ class CliRunner extends Presenter<EdgeheadGame> {
   /// (Two walkthroughs with the same seed will have exactly the same result,
   /// because edgehead itself has predictable randomness, and the injected
   /// [random] makes sure we predictably choose the same options.)
-  CliRunner(this.automated, bool silent, File logFile,
-      {Level logLevel = Level.FINE, this.actionPattern, Random random})
-      : _logFile = logFile,
+  CliRunner(
+    this.automated,
+    bool silent,
+    File logFile, {
+    Level logLevel = Level.FINE,
+    this.actionPattern,
+    Random random,
+    this.maxAutomatedChoicesTaken = 0xFFFFFF,
+  })  : _logFile = logFile,
         _random = random ?? Random() {
     _silent = silent;
 
@@ -176,6 +190,15 @@ class CliRunner extends Presenter<EdgeheadGame> {
       return;
     }
 
+    if (automated && _automatedChoicesTaken >= maxAutomatedChoicesTaken) {
+      _log.info('We have reached the limit of automated choices: '
+          '$_automatedChoicesTaken');
+      add(LoseGame(
+          (b) => b.markdownText = 'Automated run reached limit of choices: '
+              '$_automatedChoicesTaken'));
+      return;
+    }
+
     int option;
 
     // Exercise ChoiceTree parsing of ChoiceBlock, to catch bugs.
@@ -185,6 +208,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
     if (automated && !book.actionPatternWasHit) {
       option = _random.nextInt(element.choices.length);
+      _automatedChoicesTaken += 1;
     } else {
       assert(
           !element.choices.any((ch) => ch.isImplicit),

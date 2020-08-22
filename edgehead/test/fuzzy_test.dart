@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'dart:math';
+
 import 'package:edgehead/edgehead_lib.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
@@ -12,7 +12,8 @@ import '../bin/play.dart';
 
 void main() {
   test("edgehead runs to completion", () async {
-    final runner = CliRunner(true, true, null);
+    final runner =
+        CliRunner(true, true, null, maxAutomatedChoicesTaken: _maxChoices);
     await runner.initialize(EdgeheadGame());
     runner.startBook();
     await runner.bookEnd.first;
@@ -23,7 +24,8 @@ void main() {
     final seed = Random().nextInt(0xffffff);
 
     Future<String> runAndGetFinalWorld(int seed) async {
-      final runner = CliRunner(true, true, null, random: Random(seed));
+      final runner = CliRunner(true, true, null,
+          random: Random(seed), maxAutomatedChoicesTaken: _maxChoices);
       await runner.initialize(EdgeheadGame(
         randomSeed: seed,
         randomizeAfterPlayerChoice: false,
@@ -65,6 +67,10 @@ void main() {
   });
 }
 
+/// The max number of choices the automated runner should take before
+/// bailing out.
+const _maxChoices = 50;
+
 String createLogFilePath(Directory tempDir, int i, String description) =>
     path.absolute(path.join(
         tempDir.path, "${description}_${i.toString().padLeft(3, '0')}.log"));
@@ -82,7 +88,8 @@ Future<void> testWithStopWords(
     print(" - log: $logPath");
     // Make sure the file exists even when there are no errors.
     logFile.writeAsStringSync("");
-    final runner = CliRunner(true, true, logFile, logLevel: logLevel);
+    final runner = CliRunner(true, true, logFile,
+        logLevel: logLevel, maxAutomatedChoicesTaken: _maxChoices);
     await runner.initialize(EdgeheadGame(
       saveGameSerialized: savegame == null ? null : defaultSavegames[savegame],
       randomizeAfterPlayerChoice: false,

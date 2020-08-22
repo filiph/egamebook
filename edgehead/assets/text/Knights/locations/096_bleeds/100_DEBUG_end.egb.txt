@@ -1,3 +1,0 @@
-APPROACH: $__END_OF_ROAM__ FROM $bleeds_main
-COMMAND: Go >> back home (ENDS GAME)
-DESCRIPTION: You realize this adventuring life is not for you.
