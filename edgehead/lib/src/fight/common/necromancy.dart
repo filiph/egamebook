@@ -182,7 +182,8 @@ void reportRaiseDead(Actor a, Storyline s, Actor corpse) {
       .length;
   if (functioningEyesBeforeDeath > 0) {
     final eyeOrEyes = functioningEyesBeforeDeath > 1 ? "eyes" : "eye";
-    corpse.report(s, "<subject> open<s> <subject's> $eyeOrEyes");
+    corpse.report(
+        s, "<subjectNounWithAdjective> open<s> <subject's> $eyeOrEyes");
     reportedSomething = true;
   }
 
