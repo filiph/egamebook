@@ -22,7 +22,7 @@ POS: 13, 98
 MAP_NAME: The Camp
 
 FIRST_DESCRIPTION:
-Suddenly, I hear voices ahead. Two goblins are arguing about something.
+Suddenly, I hear voices ahead. Two goblins are arguing about something. [We] find a hiding spot behind a tree stump and lay low.
 
 DESCRIPTION:
 The goblins are still here.
@@ -30,13 +30,13 @@ The goblins are still here.
 
 // ---
 ACTION: $observe_goblin_camp
-COMMAND: Goblins >> Observe
+COMMAND: Goblins >> Peek
 FOR_LOCATION: $goblin_skirmish_sneak
 
 COMPLETE_SUCCESS_DESCRIPTION:
-[We] find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping.  There may be more that I don't see, but looking at the size of the camp ground, it's not likely.
+I gingerly look over the tree stump and see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don't see, but looking at the size of the camp ground, it's not likely.
 
-This will not be an easy fight if [we] choose to attack. But [we] do have the element of surprise.
+This will not be an easy fight if I choose to attack. But [we] do have the element of surprise.
 
 // ---
 ACTION: $goblin_camp_attack
@@ -60,7 +60,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 
 "Amak was there. He saw no guards!" 
 
-"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.
+"Amak is a fool, and so are you," the higher rank says. "The guards can be in the graytower." He means the Pyramid.
 
 "Another reason why not to go the big building. Let's raid instead!"
 
@@ -73,15 +73,11 @@ PREREQUISITES:
 w.actionHasBeenPerformed("listen_to_them_arguing")
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The higher ranked goblin takes something out of a leather bag and shoves it into the other's face.
+"The only reason we are here, shithead, is the graytower." This is the lower voice of the higher rank. "Look at the device."
 
-"The only reason we are here, shithead, is the graytower. Look at the device."
+The lower rank starts to growl but apparently thinks better of it. "The come-pass is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."
 
-The lower ranked goblin's face wrinkles, almost showing his teeth but not quite.
-
-"The come-pass is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."
-
-"Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.
+"Oh, you know what the maker wants, do you?"
 
 // ---
 ACTION: $listen_more
@@ -92,4 +88,4 @@ PREREQUISITES:
 w.actionHasBeenPerformed("listen_continue")
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The two goblins don't speak anymore. They each look into the fire.
+The two goblins don't speak anymore.

@@ -11833,7 +11833,7 @@ class ListenContinue extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The higher ranked goblin takes something out of a leather bag and shoves it into the other\'s face.\n\n"The only reason we are here, shithead, is the graytower. Look at the device."\n\nThe lower ranked goblin\'s face wrinkles, almost showing his teeth but not quite.\n\n"The come-pass is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."\n\n"Oh, you know what the maker wants, do you?" The higher ranked goblin, who I decide is a captain, places the device back in the bag.\n',
+        '"The only reason we are here, shithead, is the graytower." This is the lower voice of the higher rank. "Look at the device."\n\nThe lower rank starts to growl but apparently thinks better of it. "The come-pass is just a stupid piece of metal. Its maker wants us here, _around_ the graytower. Not _in_ it."\n\n"Oh, you know what the maker wants, do you?"\n',
         isRaw: true);
     return '${a.name} successfully performs ListenContinue';
   }
@@ -11896,9 +11896,7 @@ class ListenMore extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'The two goblins don\'t speak anymore. They each look into the fire.\n',
-        isRaw: true);
+    s.add('The two goblins don\'t speak anymore.\n', isRaw: true);
     return '${a.name} successfully performs ListenMore';
   }
 
@@ -11958,7 +11956,7 @@ class ListenToThemArguing extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw no guards!" \n\n"Amak is a fool, and so are you. The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go the big building. Let\'s raid instead!"\n',
+        '"Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."\n\n"How do you know they are weak?" This other goblin\'s voice is lower. This tells me he is ranked above the first one. "They can have a platoon of guards."\n\n"Amak was there. He saw no guards!" \n\n"Amak is a fool, and so are you," the higher rank says. "The guards can be in the graytower." He means the Pyramid.\n\n"Another reason why not to go the big building. Let\'s raid instead!"\n',
         isRaw: true);
     return '${a.name} successfully performs ListenToThemArguing';
   }
@@ -12001,7 +11999,7 @@ class ObserveGoblinCamp extends RoamingAction {
   static final ObserveGoblinCamp singleton = ObserveGoblinCamp();
 
   @override
-  List<String> get commandPathTemplate => ['Goblins', 'Observe'];
+  List<String> get commandPathTemplate => ['Goblins', 'Peek'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -12019,10 +12017,8 @@ class ObserveGoblinCamp extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
-    final weSubstitutionCapitalized =
-        getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '${weSubstitutionCapitalized} find a hiding spot behind a tree stump and gingerly look over it. I see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n\nThis will not be an easy fight if ${weSubstitution} choose to attack. But ${weSubstitution} do have the element of surprise.\n',
+        'I gingerly look over the tree stump and see a camp ground with a fire pit and a small shelter made of some animal\'s hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don\'t see, but looking at the size of the camp ground, it\'s not likely.\n\nThis will not be an easy fight if I choose to attack. But ${weSubstitution} do have the element of surprise.\n',
         isRaw: true);
     return '${a.name} successfully performs ObserveGoblinCamp';
   }
@@ -12065,8 +12061,10 @@ final Room goblinSkirmishSneak =
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'Suddenly, I hear voices ahead. Two goblins are arguing about something.\n',
+      'Suddenly, I hear voices ahead. Two goblins are arguing about something. ${weSubstitutionCapitalized} find a hiding spot behind a tree stump and lay low.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
