@@ -73,12 +73,14 @@ COMMAND: gate >> destroy
 FOR_LOCATION: $keep_gate
 PREREQUISITES:
 c.player.inventory.hasWeapon(WeaponType.axe)
+&&
+!c.hasHappened(evKeepUnlockedGate)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I chop down of gate.
-// This can happen even _after_ the player unlocked the gate.
-
 [[CODE]]
+final axe = c.player.inventory.findBestWeapon(type: WeaponType.axe);
+a.report(s, "<subject> chop<s> down the gate with <objectNounWithAdjective>", object: axe);
+
 w.recordCustom(evKeepDestroyedGate);
 [[ENDCODE]]
 

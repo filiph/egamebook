@@ -7172,7 +7172,8 @@ class DestroyGateWithAxe extends RoamingAction {
     if (c.inRoomParent('keep_gate') != true) {
       return false;
     }
-    if (!(c.player.inventory.hasWeapon(WeaponType.axe))) {
+    if (!(c.player.inventory.hasWeapon(WeaponType.axe) &&
+        !c.hasHappened(evKeepUnlockedGate))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -7185,7 +7186,11 @@ class DestroyGateWithAxe extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I chop down of gate.\n\n', isRaw: true);
+    final axe = c.player.inventory.findBestWeapon(type: WeaponType.axe);
+    a.report(
+        s, "<subject> chop<s> down the gate with <objectNounWithAdjective>",
+        object: axe);
+
     w.recordCustom(evKeepDestroyedGate);
 
     return '${a.name} successfully performs DestroyGateWithAxe';
