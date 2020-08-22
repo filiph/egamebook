@@ -4,6 +4,7 @@ targets:
     sources:
       - assets/**
       - lib/**
+      - $package$
     builders:
       egamebook_builder|writers_builder:
         generate_for: ['lib/writers_input.dart']
