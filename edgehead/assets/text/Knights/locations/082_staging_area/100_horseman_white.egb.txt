@@ -20,7 +20,7 @@ INK:
 
 -
 
-"Why would Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."
+"Why would this Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."
 
 // TODO: another option here
 

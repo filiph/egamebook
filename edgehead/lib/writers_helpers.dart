@@ -163,18 +163,37 @@ FightSituation generateBattlefieldFight(ActionContext c,
 FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
-  var goblinId = w.randomInt();
-  var goblin = Actor.initialized(goblinId, w.randomInt, "goblin",
-      adjective: "snarky",
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.spear,
-          adjective: "gray", firstOwnerId: goblinId),
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  w.actors.add(goblin);
-  return FightSituation.initialized(w.randomInt(), party, [goblin],
-      "{muddy |wet |}ground", roomRoamingSituation, {});
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [albinoGoblin],
+    "{muddy |wet |}ground",
+    roomRoamingSituation,
+    {},
+  );
+}
+
+/// The fight with the lizardman in the pond.
+FightSituation generateLizardmanFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [lizardman],
+    "grass",
+    roomRoamingSituation,
+    {},
+    items: [
+      Item.weapon(
+        w.randomInt(),
+        WeaponType.club,
+        name: 'leg',
+        adjective: 'half-eaten',
+      ),
+    ],
+  );
 }
 
 /// The goblin camp fight near the Bleeds.

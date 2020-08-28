@@ -1,0 +1,28 @@
+APPROACH: $pond_lizard_rock FROM $pond
+PREREQUISITES:
+c.playerHasVisited("pond_lizard_rock")
+
+// ---
+ROOM: $pond_lizard_rock
+
+POS: 13, 72
+MAP_NAME: The Lizardman's Rock
+
+FIRST_DESCRIPTION:
+[We] circle the pond and climb on a concrete platform that serves as the lizardman's new base. I notice a half-eaten human leg lying on the ground here.
+
+The lizardman watches me approach and readies his shield. He motions with his trident at my weapon.
+
+"Fffood should not fight," he says. I remember my struggles with eating a local delicacy — the squirming sannakji octopus of Oak Land — and I must agree with the lizardman. Food should not fight. Then again, I don't consider myself food.
+
+DESCRIPTION: $NONE
+
+FIGHT_SITUATION:
+generateLizardmanFight
+
+AFTER_MONSTERS_CLEARED:
+The monster is dead. I look around for treasure but don't see anything except for a few bones. One can be perfectly happy with a life spent eating, it seems. No treasure or purpose was needed for the lizardman.
+
+[[CODE]]
+c.markHappened(evKilledLizardman);
+[[ENDCODE]]

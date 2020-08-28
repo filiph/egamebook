@@ -16,6 +16,8 @@ const int dragonEggId = 77008;
 
 const int familyPortraitId = 77011;
 
+const int graySpearId = 77027;
+
 const int jisadAppleId = 770016;
 
 const int katanaId = 77006;
@@ -23,6 +25,8 @@ const int katanaId = 77006;
 const int lairOfGodStarId = 77003;
 
 const int letterFromFatherId = 77004;
+
+const int lizardmanShieldId = 77028;
 
 const int northSkullId = 770015;
 
@@ -47,3 +51,5 @@ const int staleBreadId = 770019;
 const int startBranchId = 770021;
 
 const int tamarasDaggerId = 77002;
+
+const int tridentId = 77026;

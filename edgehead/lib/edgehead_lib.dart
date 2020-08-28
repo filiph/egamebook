@@ -277,8 +277,10 @@ class EdgeheadGame extends Book {
           sixtyFiverOrc,
           sixtyFiverGoblin,
           firstGoblin,
+          albinoGoblin,
           campLeaderGoblin,
           campNakedGoblin,
+          lizardman,
         ])
         ..director = edgeheadDirector.toBuilder()
         ..situations =

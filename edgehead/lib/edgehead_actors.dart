@@ -10,6 +10,23 @@ import 'package:edgehead/fractal_stories/storyline/storyline_pronoun.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 
+final Actor albinoGoblin = Actor.initialized(
+  albinoGoblinId,
+  StatefulRandom(~albinoGoblinId).next,
+  'goblin',
+  adjective: 'albino',
+  pronoun: Pronoun.HE,
+  currentRoomName: 'goblin_skirmish_main',
+  currentWeapon: Item.weapon(
+    graySpearId,
+    WeaponType.spear,
+    adjective: "gray",
+    firstOwnerId: albinoGoblinId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 final Actor campLeaderGoblin = Actor.initialized(
   campLeaderGoblinId,
   StatefulRandom(~campLeaderGoblinId).next,
@@ -161,6 +178,32 @@ final Actor firstGoblin = Actor.initialized(
   // For the first 2 rounds, the goblin is invincible. We don't want
   // Tamara to kill him before the player has any chance to do something.
   isInvincible: true,
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
+final Actor lizardman = Actor.initialized(
+  lizardmanId,
+  StatefulRandom(~lizardmanId).next,
+  'lizardman',
+  pronoun: Pronoun.HE,
+  currentRoomName: 'pond_lizard_rock',
+  dexterity: 130,
+  hitpoints: 2,
+  currentWeapon: Item.weapon(
+    tridentId,
+    WeaponType.spear,
+    name: 'trident',
+    adjective: 'flat',
+    firstOwnerId: lizardmanId,
+  ),
+  currentShield: Item.weapon(
+    lizardmanShieldId,
+    WeaponType.shield,
+    name: 'shield',
+    adjective: 'round',
+    firstOwnerId: lizardmanId,
+  ),
   team: defaultEnemyTeam,
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );

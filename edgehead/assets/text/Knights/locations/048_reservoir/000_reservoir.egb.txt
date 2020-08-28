@@ -10,9 +10,15 @@ MAP_NAME: Reservoir
 FLAGS: $IDLE
 
 DESCRIPTION:
-A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality.
+A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. There's an iron dam here.
 
-There's an iron dam here. 
+// TODO: observe iron dam ("emergency hatch")
+
+Everything is wet here, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.
+
+Something big just moved in the water.
+
+// TODO: action: observe the water
 
 
 // ---
@@ -22,8 +28,11 @@ VARIANT_OF: $reservoir
 RULE: c.hasHappened(evOpenedDam)
 
 DESCRIPTION:
-A huge empty room, with the floor covered with sludge and slimy carcasses.
+A huge empty room, with the floor covered with sludge and slimy carcasses. The are orc and goblin corpses there, too.
 
+Muddy footprints lead away from the reservoir.
+
+// TODO: action: examine footprints - leads player to pond, to make things easier
 // TODO: write the action that describes the dam before we open it
 
 // ---

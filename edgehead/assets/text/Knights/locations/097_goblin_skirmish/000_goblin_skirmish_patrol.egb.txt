@@ -18,7 +18,7 @@ MAP_NAME: Ancient rubble
 HINT: It's the place I met the goblin patrol.
 
 FIRST_DESCRIPTION:
-When [we] come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.
+When [we] come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear. The goblin is completely white — even his eyebrows are unpigmented.
 
 "You lost, peasant?"
 

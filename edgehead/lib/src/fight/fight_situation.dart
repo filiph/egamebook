@@ -338,7 +338,9 @@ abstract class FightSituation extends Object
             false,
             'Entities have duplicate id ($entity): '
             '$entity vs ${map[id]}. Previous one was in ${locations[id]}, '
-            'this one is in $location');
+            'this one is in $location. Possible copy-paste error when '
+            'making a new actor or new item and leaving the same '
+            'id.');
       }
       ids.add(id);
       map[id] = entity;

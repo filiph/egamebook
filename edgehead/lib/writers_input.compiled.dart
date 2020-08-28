@@ -1702,7 +1702,7 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality.\n\nThere\'s an iron dam here.\n',
+      'A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. There\'s an iron dam here.\n\n\nEverything is wet here, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.\n\nSomething big just moved in the water.\n',
       isRaw: true);
 }, null, null,
     isIdle: true, positionX: 25, positionY: 48, mapName: 'Reservoir');
@@ -1714,7 +1714,7 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A huge empty room, with the floor covered with sludge and slimy carcasses.\n',
+      'A huge empty room, with the floor covered with sludge and slimy carcasses. The are orc and goblin corpses there, too.\n\nMuddy footprints lead away from the reservoir.\n',
       isRaw: true);
 }, null, null,
     parent: 'reservoir',
@@ -3507,6 +3507,8 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
 }, null, null, positionX: 15, positionY: 67, mapName: 'Sacred Place');
 final Approach pondFromJungleEntrance =
     Approach('jungle_entrance', 'pond', '', null);
+final Approach pondFromPondLizardRock =
+    Approach('pond_lizard_rock', 'pond', '', null);
 final pondHelicopterExamineInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -3590,8 +3592,7 @@ class AttackLizardNearPond extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: fight. Assuming victory.\n\n', isRaw: true);
-    c.markHappened(evKilledLizardman);
+    c.movePlayer('pond_lizard_rock');
 
     return '${a.name} successfully performs AttackLizardNearPond';
   }
@@ -3719,7 +3720,7 @@ final Room pondWithLizardman = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          '${weSubstitutionCapitalized} follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.\n\nIn front of the pond, a lizardman.\n\n![Illustration of a lizardman with a spear.](lizardman.png)\n',
+          '${weSubstitutionCapitalized} follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.\n\nOn one side of the pond, in plain sight but outside my immediate reach, a lizardman.\n\n![Illustration of a lizardman with a spear.](lizardman.png)\n\nHe watches me, motionless, holding a flat trident in front of him.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3746,12 +3747,58 @@ final Room pondWithLizardman = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'A lizardman stands in front of the pond.\n\n![Illustration of a lizardman with a spear.](lizardman.png)\n',
+          'On one side of the pond, in plain sight but outside my immediate reach, a lizardman.\n\n![Illustration of a lizardman with a spear.](lizardman.png)\n\nHe watches me, motionless, holding a flat trident in front of him.\n',
           isRaw: true);
     },
     positionX: 14,
     positionY: 74,
     mapName: 'Pond');
+final Approach pondLizardRockFromPond =
+    Approach('pond', 'pond_lizard_rock', '', null,
+        isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return c.playerHasVisited("pond_lizard_rock");
+});
+final Room pondLizardRock = Room(
+    'pond_lizard_rock',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
+      s.add(
+          '${weSubstitutionCapitalized} circle the pond and climb on a concrete platform that serves as the lizardman\'s new base. I notice a half-eaten human leg lying on the ground here.\n\nThe lizardman watches me approach and readies his shield. He motions with his trident at my weapon.\n\n"Fffood should not fight," he says. I remember my struggles with eating a local delicacy — the squirming sannakji octopus of Oak Land — and I must agree with the lizardman. Food should not fight. Then again, I don\'t consider myself food.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateLizardmanFight,
+    null,
+    positionX: 13,
+    positionY: 72,
+    mapName: 'The Lizardman\'s Rock',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'The monster is dead. I look around for treasure but don\'t see anything except for a few bones. One can be perfectly happy with a life spent eating, it seems. No treasure or purpose was needed for the lizardman.\n\n',
+          isRaw: true);
+      c.markHappened(evKilledLizardman);
+    });
 final argoAskDeathlessInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -5170,7 +5217,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Why would Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."\n',
+        '"Why would this Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -11730,7 +11777,7 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'When ${weSubstitution} come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear.\n\n"You lost, peasant?"\n',
+      'When ${weSubstitution} come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear. The goblin is completely white — even his eyebrows are unpigmented.\n\n"You lost, peasant?"\n',
       isRaw: true);
 }, null, generateBleedsGoblinSkirmishPatrol, null,
     positionX: 15,
@@ -13615,6 +13662,7 @@ final allRooms = <Room>[
   dragonEggRoom,
   pond,
   pondWithLizardman,
+  pondLizardRock,
   deathlessVillageOrcOffensive,
   deathlessVillageQuake2,
   deathlessVillageQuake3,
@@ -13699,6 +13747,8 @@ final allApproaches = <Approach>[
   deathlessVillageFromJungleEntrance,
   dragonEggRoomFromDeathlessVillage,
   pondFromJungleEntrance,
+  pondFromPondLizardRock,
+  pondLizardRockFromPond,
   knightsHqMainFromBattlefield,
   knightsHqMainFromElevator12,
   knightsHqMainFromOracleMain,

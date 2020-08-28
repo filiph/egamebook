@@ -1,4 +1,5 @@
 APPROACH: $pond FROM $jungle_entrance
+APPROACH: $pond FROM $pond_lizard_rock
 
 // ---
 ROOM: $pond
@@ -7,7 +8,7 @@ POS: 14, 74
 MAP_NAME: Pond
 
 FIRST_DESCRIPTION:
-[We] follow a narrow path through the foliage, smelling  the crispness of pine needles and  the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
+[We] follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
 
 DESCRIPTION: $NONE
 
@@ -18,17 +19,21 @@ VARIANT_OF: $pond
 RULE: c.hasHappened(evOpenedDam)
 
 FIRST_DESCRIPTION:
-[We] follow a narrow path through the foliage, smelling  the crispness of pine needles and  the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
+[We] follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
 
-In front of the pond, a lizardman.
+On one side of the pond, in plain sight but outside my immediate reach, a lizardman.
 
 ![Illustration of a lizardman with a spear.](lizardman.png)
+
+He watches me, motionless, holding a flat trident in front of him.
 
 
 VARIANT_UPDATE_DESCRIPTION:
-A lizardman stands in front of the pond.
+On one side of the pond, in plain sight but outside my immediate reach, a lizardman.
 
 ![Illustration of a lizardman with a spear.](lizardman.png)
+
+He watches me, motionless, holding a flat trident in front of him.
 
 
 // ---
@@ -62,10 +67,8 @@ PREREQUISITES:
 c.hasHappened(evOpenedDam) && !c.hasHappened(evKilledLizardman)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: fight. Assuming victory.
-
 [[CODE]]
-c.markHappened(evKilledLizardman);
+c.movePlayer('pond_lizard_rock');
 [[ENDCODE]]
 
 

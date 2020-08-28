@@ -801,8 +801,12 @@ class ShadowGraph {
           assign(properNounId, entity);
         }
 
-        assert(current.values.any((e) => e.id == entity.id),
-            "The entity $entity didn't get any values in $current.");
+        assert(
+            current.values.any((e) => e.id == entity.id),
+            "The entity $entity didn't get any values in $current. "
+            "This can mean that you have two entities with the exact "
+            "same adjective and name (${entity.adjective} ${entity.name}). "
+            "A possible copy-paste error.");
       }
 
       if (i >= 0) {

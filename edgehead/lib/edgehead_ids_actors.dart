@@ -1,5 +1,7 @@
 part of edgehead.ids;
 
+const int albinoGoblinId = 6011;
+
 const int campLeaderGoblinId = 6008;
 
 const int campNakedGoblinId = 6009;
@@ -19,6 +21,8 @@ const int katId = 103;
 const int ladyHopeId = 6004;
 
 const int leroyId = 101;
+
+const int lizardmanId = 6010;
 
 /// Miguel, the antsy knight at the entrance.
 const int miguelId = 102;

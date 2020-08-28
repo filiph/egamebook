@@ -76,3 +76,5 @@ The sound is different, hollow.
 The planks spring a little bit under my feet.
 
 // TODO: I can look through the door and see Lady Hope. Show the picture.
+
+Lady Hope's father is Marquis Hirayama.
