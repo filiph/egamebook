@@ -103,7 +103,7 @@ final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null, positionX: 26, positionY: 8, mapName: 'Observatory');
 final Approach endOfRoamFromBigOObservatory = Approach(
-    'big_o_observatory', '__END_OF_ROAM__', r'$IMPLICIT', (ActionContext c) {
+    'big_o_observatory', '__END_OF_ROAM__', 'Descend', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -278,7 +278,7 @@ class DargTentAttack extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('darg_tent_after_darg_arrived') != true) {
+    if (c.inRoomParent('darg_tent') != true) {
       return false;
     }
     if (!(c.hasHappened(evDargLeftCrowdsource) &&
@@ -295,19 +295,35 @@ class DargTentAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: a fight with Darg and his one guard. Assume victory.\n\n',
-        isRaw: true);
-    w.updateActorById(
-        dargId,
-        (b) => b
-          ..inventory.remove(akxe)
-          ..hitpoints = 0);
-    c.giveNewItemToPlayer(akxe);
-    c.markHappened(evKilledDarg);
 
-    s.add(
-        '\nTODO: After I defeat him, Darg\'s head starts to talk. There is no question that this is a necromancer talking through the newly deceased Darg. I am (once again?) impressed that a necromancer can be so precise at their craft. The necromancer discourages me from going to the very top of the Pyramid. "Last chance to turn around."\n\nI take Darg\'s akxe.\n',
-        isRaw: true);
+    final situation = w.currentSituation as RoomRoamingSituation;
+    Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
+
+    WorldState built = w.build();
+    var friends = built.actors
+        .where((other) =>
+            other.isAnimatedAndActive &&
+            other.team.isFriendWith(a.team) &&
+            other.currentRoomName == room.name)
+        .toList(growable: false);
+
+    var fightSituation = generateDargTentFight(c, situation, friends);
+    assert(() {
+      WorldState rebuilt = w.build();
+      return fightSituation.enemyTeamIds
+          .every((id) => rebuilt.actors.any((a) => a.id == id));
+    }(),
+        "FightGenerator in $room didn't add its monsters to the world's "
+        "actors. Add a line like `w.actors.addAll(monsters)` to the "
+        "generator. At least one of these actors is missing: "
+        "${fightSituation.enemyTeamIds}");
+
+    for (final enemyId in fightSituation.enemyTeamIds) {
+      w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
+    }
+
+    w.pushSituation(fightSituation);
+
     return '${a.name} successfully performs DargTentAttack';
   }
 
@@ -342,23 +358,47 @@ class DargTentAttack extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room dargTent = Room('darg_tent', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null, positionX: 33, positionY: 24, mapName: 'Darg\'s tent');
+final Room dargTent = Room(
+    'darg_tent',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    positionX: 33,
+    positionY: 24,
+    mapName: 'Darg\'s tent',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          isRaw: true);
+      c.markHappened(evKilledDarg);
+
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "darg_head_talk_ink_ink",
+      ));
+    });
 final Room dargTentAfterDargArrived = Room(
     'darg_tent_after_darg_arrived',
     (ActionContext c) {
@@ -368,7 +408,7 @@ final Room dargTentAfterDargArrived = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
+          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg, the leader of the orcs, is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -382,12 +422,11 @@ final Room dargTentAfterDargArrived = Room(
     null,
     null,
     parent: 'darg_tent',
-    prerequisite: Prerequisite(910482930, 2, true, (ApplicabilityContext c) {
+    prerequisite: Prerequisite(910482930, 1, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
-      return c.hasHappened(evDargLeftCrowdsource) &&
-          !c.hasHappened(evKilledDarg);
+      return c.hasHappened(evDargLeftCrowdsource);
     }),
     variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -396,12 +435,28 @@ final Room dargTentAfterDargArrived = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Darg is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
+          'Darg, the leader of the orcs, is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
           isRaw: true);
     },
     positionX: 33,
     positionY: 24,
-    mapName: 'Darg\'s tent');
+    mapName: 'Darg\'s tent',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          isRaw: true);
+      c.markHappened(evKilledDarg);
+
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "darg_head_talk_ink_ink",
+      ));
+    });
 final Room dargTentAfterDargKilled = Room(
     'darg_tent_after_darg_killed',
     (ActionContext c) {
@@ -425,11 +480,12 @@ final Room dargTentAfterDargKilled = Room(
     null,
     null,
     parent: 'darg_tent',
-    prerequisite: Prerequisite(831974385, 1, true, (ApplicabilityContext c) {
+    prerequisite: Prerequisite(831974385, 2, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
       final Simulation sim = c.simulation;
       final Actor a = c.actor;
-      return c.hasHappened(evKilledDarg);
+      return c.hasHappened(evKilledDarg) &&
+          !c.hasHappened(evDargLeftCrowdsource);
     }),
     variantUpdateDescribe: (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -441,7 +497,207 @@ final Room dargTentAfterDargKilled = Room(
     },
     positionX: 33,
     positionY: 24,
-    mapName: 'Darg\'s tent');
+    mapName: 'Darg\'s tent',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          isRaw: true);
+      c.markHappened(evKilledDarg);
+
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "darg_head_talk_ink_ink",
+      ));
+    });
+final dargHeadTalkInkInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I am almost about to retreat back to the shadows when I hear a soft, gurgling sound. Darg\'s head opens its dead eyes, and an ugly, unnatural grin appears on the face.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    Ruleset(
+        Rule(407569879, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.playerHasVisited('keep_dining');
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('I am reminded of my fight with Lady Hope.\n', isRaw: true);
+        }),
+        Rule(567781735, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.\nI risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\nBut then, Darg\'s undead lips start moving. He _speaks._\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n',
+              isRaw: true);
+        })).apply(c);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"You should know I hold no grudge against you. I respect your skill."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I respect yours." """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "That is irrelevant." """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "Shut up." """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"I try to keep my head clear of emotions, and for the past few decades, I have succeeded. He who wants to amount to anything in life must rid himself of all distractions."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I agree." """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "I don't care." """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "What are you trying to amount to?" """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Nothing less than immortality. Not of myself, mind you. Immortality of civilization, of culture." Darg\'s dead gaze slowly slides towards the floor but the mouth keeps talking. "What happened to the ancients cannot happen to us. I will make sure of it."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The muscles on Darg\'s head finally loosen and his tongue touches the ground.\n',
+        isRaw: true);
+  }),
+]);
+
+class DargHeadTalkInk extends RoamingAction {
+  @override
+  final String name = 'darg_head_talk_ink';
+
+  static final DargHeadTalkInk singleton = DargHeadTalkInk();
+
+  @override
+  List<String> get commandPathTemplate => ['N/A'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('start_bogus_location') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "darg_head_talk_ink_ink",
+    ));
+    return '${a.name} successfully performs DargHeadTalkInk';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform DargHeadTalkInk';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Approach topOfClimbFromBarracks =
     Approach('barracks', 'top_of_climb', '', null);
 final Approach topOfClimbFromBigOAntechamber =
@@ -500,20 +756,35 @@ class CrowdsourceAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'TODO: a big fight, probably lost cause unless player is really powerful. Debug assumes victory here (because the alternative is always death).\n\n',
-        isRaw: true);
-    w.updateActorById(
-        dargId,
-        (b) => b
-          ..inventory.remove(akxe)
-          ..hitpoints = 0);
-    c.giveNewItemToPlayer(akxe);
-    c.markHappened(evKilledDarg);
 
-    s.add(
-        '\nTODO: After I defeat him, Darg\'s head starts to talk. There is no question that this is a necromancer talking through the newly deceased Darg. I am (once again?) impressed that a necromancer can be so precise at their craft. The necromancer discourages me from going to the very top of the Pyramid. "Last chance to turn around."\n\nI take Darg\'s akxe.\n',
-        isRaw: true);
+    final situation = w.currentSituation as RoomRoamingSituation;
+    Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
+
+    WorldState built = w.build();
+    var friends = built.actors
+        .where((other) =>
+            other.isAnimatedAndActive &&
+            other.team.isFriendWith(a.team) &&
+            other.currentRoomName == room.name)
+        .toList(growable: false);
+
+    var fightSituation = generateCrowdsourceFight(c, situation, friends);
+    assert(() {
+      WorldState rebuilt = w.build();
+      return fightSituation.enemyTeamIds
+          .every((id) => rebuilt.actors.any((a) => a.id == id));
+    }(),
+        "FightGenerator in $room didn't add its monsters to the world's "
+        "actors. Add a line like `w.actors.addAll(monsters)` to the "
+        "generator. At least one of these actors is missing: "
+        "${fightSituation.enemyTeamIds}");
+
+    for (final enemyId in fightSituation.enemyTeamIds) {
+      w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
+    }
+
+    w.pushSituation(fightSituation);
+
     return '${a.name} successfully performs CrowdsourceAttack';
   }
 
@@ -577,7 +848,7 @@ class CrowdsourceListen extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I hear a heated debate. There\'s the leader of the orcs, called Darg. There is another orc, and a high-ranking goblin.\n\nThe others are trying to persuade Darg to open the antechamber\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\nTODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.\n',
+        'TODO: The shaman is trying to persuade Darg to open the antechamber.\n\nTODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.\n',
         isRaw: true);
     return '${a.name} successfully performs CrowdsourceListen';
   }
@@ -613,25 +884,49 @@ class CrowdsourceListen extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room crowdsource = Room('crowdsource', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      'A temple. Some orcs are talking. ${weSubstitutionCapitalized} stay hidden.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null, positionX: 27, positionY: 29, mapName: 'Crowd\'s Temple');
+final Room crowdsource = Room(
+    'crowdsource',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
+      s.add(
+          'A temple. Two orcs are talking. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is addressing the other orc as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
+    positionX: 27,
+    positionY: 29,
+    mapName: 'Crowd\'s Temple',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs\' complex.\n\n',
+          isRaw: true);
+      c.markHappened(evKilledDarg);
+
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "darg_head_talk_ink_ink",
+      ));
+    });
 final Room crowdsourceAfterOrcsLeft = Room(
     'crowdsource_after_orcs_left',
     (ActionContext c) {
@@ -643,7 +938,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'A temple. Some orcs are talking. ${weSubstitutionCapitalized} stay hidden.\n',
+          'A temple. Two orcs are talking. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is addressing the other orc as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -674,7 +969,33 @@ final Room crowdsourceAfterOrcsLeft = Room(
     },
     positionX: 27,
     positionY: 29,
-    mapName: 'Crowd\'s Temple');
+    mapName: 'Crowd\'s Temple',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs\' complex.\n\n',
+          isRaw: true);
+      c.markHappened(evKilledDarg);
+
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "darg_head_talk_ink_ink",
+      ));
+    });
+final Room crowdsourceVestry = Room('crowdsource_vestry', null,
+    (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null,
+    positionX: 28, positionY: 30, mapName: 'Crowd\'s Temple\'s Vestry');
 final Approach barracksFromCrowdsource =
     Approach('crowdsource', 'barracks', '', null);
 final Approach barracksFromDargTent =
@@ -711,7 +1032,7 @@ class BarracksTakeBarbecuedBat extends RoamingAction {
   static final BarracksTakeBarbecuedBat singleton = BarracksTakeBarbecuedBat();
 
   @override
-  List<String> get commandPathTemplate => ['Barbecued bat'];
+  List<String> get commandPathTemplate => ['Barbecued bat', 'Take'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -7668,7 +7989,7 @@ final Room keepDining = Room(
       c.learn(LadyHopeFacts.ladyHopeName);
 
       s.add(
-          '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.png)\n\nAs I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer.\n\nI risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\nBut then, Lady Hope\'s undead lips start moving. She _speaks._\n\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n\n"You made it rather far, I admit." The body starts walking towards me. "But now you die."\n\n',
+          '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.png)\n\n\nAs I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.\n\nI risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\nBut then, Lady Hope\'s undead lips start moving. She _speaks._\n\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n\n"You made it rather far, I admit." The body starts walking towards me. "But now you die."\n\n',
           isRaw: true);
       if (c.hasItem(familyPortraitId)) {
         s.add(
@@ -13637,6 +13958,7 @@ final allRooms = <Room>[
   topOfClimb,
   crowdsource,
   crowdsourceAfterOrcsLeft,
+  crowdsourceVestry,
   barracks,
   conet,
   conetAfterClearing,
@@ -13794,6 +14116,7 @@ final allActions = <RoamingAction>[
   ExamineAntechamberLock.singleton,
   OpenAntechamberLock.singleton,
   DargTentAttack.singleton,
+  DargHeadTalkInk.singleton,
   CrowdsourceAttack.singleton,
   CrowdsourceListen.singleton,
   BarracksTakeBarbecuedBat.singleton,
@@ -13898,6 +14221,7 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'darg_head_talk_ink_ink': dargHeadTalkInkInk,
   'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,

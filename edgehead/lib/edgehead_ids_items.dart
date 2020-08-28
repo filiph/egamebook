@@ -38,6 +38,8 @@ const int rustySwordId = 770022;
 
 const int sarnHammerId = 770014;
 
+const int shamanDaggerId = 77029;
+
 const int sixtyFiverGoblinHatchetId = 77023;
 
 const int sixtyFiverShieldId = 77010;

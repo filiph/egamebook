@@ -70,6 +70,8 @@ final Actor edgeheadDarg = Actor.initialized(
   "Darg",
   nameIsProperNoun: true,
   pronoun: Pronoun.HE,
+  dexterity: 140,
+  hitpoints: 2,
   currentRoomName: 'crowdsource',
   currentWeapon: akxe,
   team: defaultEnemyTeam,
@@ -203,6 +205,28 @@ final Actor lizardman = Actor.initialized(
     name: 'shield',
     adjective: 'round',
     firstOwnerId: lizardmanId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
+/// The orc shaman.
+final Actor shaman = Actor.initialized(
+  shamanId,
+  StatefulRandom(~shamanId).next,
+  "shaman",
+  adjective: "orc",
+  pronoun: Pronoun.SHE,
+  dexterity: 160,
+  hitpoints: 2,
+  currentRoomName: 'crowdsource',
+  currentWeapon: Item.weapon(
+    shamanDaggerId,
+    WeaponType.dagger,
+    name: 'dagger',
+    adjective: 'ceremonial',
+    thrustingDamage: 2,
+    firstOwnerId: shamanId,
   ),
   team: defaultEnemyTeam,
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,

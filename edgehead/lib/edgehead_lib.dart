@@ -274,6 +274,7 @@ class EdgeheadGame extends Book {
           edgeheadMiguel,
           edgeheadLadyHope,
           edgeheadDarg,
+          shaman,
           sixtyFiverOrc,
           sixtyFiverGoblin,
           firstGoblin,

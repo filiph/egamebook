@@ -20,7 +20,7 @@ DESCRIPTION: $NONE
 
 // ---
 ACTION: $barracks_take_barbecued_bat
-COMMAND: Barbecued bat
+COMMAND: Barbecued bat >> Take
 FOR_LOCATION: $barracks
 
 INK:

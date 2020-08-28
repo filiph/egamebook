@@ -173,26 +173,59 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
   );
 }
 
-/// The fight with the lizardman in the pond.
-FightSituation generateLizardmanFight(ActionContext c,
+/// Fight with Darg and the shaman in the temple.
+FightSituation generateCrowdsourceFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
   final w = c.outputWorld;
+
+  final weak = _orcsLackCockroaches(c);
+  if (weak) {
+    c.outputStoryline.add('They seem famished.', isRaw: true);
+    w.updateActorById(sixtyFiverOrcId, (b) => b.dexterity = 50);
+    w.updateActorById(sixtyFiverGoblinId, (b) => b.dexterity = 70);
+  }
+  final stripped = _orcsLackWeapons(c);
+  if (stripped) {
+    c.outputStoryline.add('Their weapons look battered.', isRaw: true);
+    // Currently, this has no gameplay effect.
+  }
 
   return FightSituation.initialized(
     w.randomInt(),
     party,
-    [lizardman],
-    "grass",
+    [shaman, edgeheadDarg],
+    "{temple |}floor",
     roomRoamingSituation,
     {},
-    items: [
-      Item.weapon(
-        w.randomInt(),
-        WeaponType.club,
-        name: 'leg',
-        adjective: 'half-eaten',
-      ),
-    ],
+    items: const [],
+  );
+}
+
+/// Fight with Darg near his tent.
+FightSituation generateDargTentFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  final weak = _orcsLackCockroaches(c);
+  if (weak) {
+    c.outputStoryline.add('He seems famished.', isRaw: true);
+    w.updateActorById(sixtyFiverOrcId, (b) => b.dexterity = 50);
+    w.updateActorById(sixtyFiverGoblinId, (b) => b.dexterity = 70);
+  }
+  final stripped = _orcsLackWeapons(c);
+  if (stripped) {
+    c.outputStoryline.add('His weapon looks battered.', isRaw: true);
+    // Currently, this has no gameplay effect.
+  }
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [edgeheadDarg],
+    "flat roof",
+    roomRoamingSituation,
+    {},
+    items: const [],
   );
 }
 
@@ -277,6 +310,29 @@ FightSituation generateLadyHopeFight(ActionContext c,
       // TODO: taunts from Big O
     },
     items: const [],
+  );
+}
+
+/// The fight with the lizardman in the pond.
+FightSituation generateLizardmanFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [lizardman],
+    "grass",
+    roomRoamingSituation,
+    {},
+    items: [
+      Item.weapon(
+        w.randomInt(),
+        WeaponType.club,
+        name: 'leg',
+        adjective: 'half-eaten',
+      ),
+    ],
   );
 }
 

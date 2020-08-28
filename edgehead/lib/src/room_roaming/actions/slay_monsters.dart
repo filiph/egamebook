@@ -53,7 +53,7 @@ class SlayMonstersAction extends Action<Nothing> {
     WorldState originalWorld = context.world;
     WorldStateBuilder w = context.outputWorld;
     final situation = w.currentSituation as RoomRoamingSituation;
-    Room room = sim.getRoomByName(situation.currentRoomName);
+    Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
 
     WorldState built = w.build();
     var friends = built.actors

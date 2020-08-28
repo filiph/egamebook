@@ -1,0 +1,51 @@
+// ---
+ACTION: $darg_head_talk_ink
+FOR_LOCATION: $start_bogus_location
+COMMAND: N/A
+
+INK:
+// TODO: make a variant for when we di this near Darg's tent (i.e. no "shadows")
+I am almost about to retreat back to the shadows when I hear a soft, gurgling sound. Darg's head opens its dead eyes, and an ugly, unnatural grin appears on the face.
+
+[[RULESET]]
+[[RULE]]
+c.playerHasVisited('keep_dining')
+[[THEN]]
+I am reminded of my fight with Lady Hope.
+[[ENDRULE]]
+[[RULE]]
+// Haven't seen this yet.
+$DEFAULT
+[[THEN]]
+// TODO: This must be one paragraph until the following bug is fixed:
+// https://trello.com/c/UrXXOYJJ/1223-bug-cannot-have-a-blank-line-in-a-ruleset-when-in-ink
+I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.
+I risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.
+But then, Darg's undead lips start moving. He _speaks._
+"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I've never even considered before. This is obviously necromancy of some higher level.
+[[ENDRULE]]
+[[ENDRULESET]]
+
+"You should know I hold no grudge against you. I respect your skill."
+
+* "I respect yours."
+
+* "That is irrelevant."
+
+* "Shut up."
+
+-
+
+"I try to keep my head clear of emotions, and for the past few decades, I have succeeded. He who wants to amount to anything in life must rid himself of all distractions."
+
+* "I agree."
+
+* "I don't care."
+
+* "What are you trying to amount to?"
+
+-
+
+"Nothing less than immortality. Not of myself, mind you. Immortality of civilization, of culture." Darg's dead gaze slowly slides towards the floor but the mouth keeps talking. "What happened to the ancients cannot happen to us. I will make sure of it."
+
+The muscles on Darg's head finally loosen and his tongue touches the ground.

@@ -30,6 +30,8 @@ const int miguelId = 102;
 /// [edgeheadPlayer]'s [Actor.id].
 const int playerId = 1;
 
+const int shamanId = 6012;
+
 /// The goblin next to the orc.
 const int sixtyFiverGoblinId = 6007;
 

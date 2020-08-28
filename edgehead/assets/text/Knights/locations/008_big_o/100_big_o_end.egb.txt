@@ -1,6 +1,6 @@
 // This will be executed automatically after Osiris is overcome.
 APPROACH: $__END_OF_ROAM__ FROM $big_o_observatory
-COMMAND: $IMPLICIT
+COMMAND: Descend
 DESCRIPTION: 
 I have prevailed.
 

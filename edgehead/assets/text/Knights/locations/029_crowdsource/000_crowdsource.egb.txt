@@ -8,10 +8,30 @@ POS: 27, 29
 MAP_NAME: Crowd's Temple
 
 FIRST_DESCRIPTION:
-A temple. Some orcs are talking. [We] stay hidden.
+A temple. Two orcs are talking. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is addressing the other orc as Darg.
+
+Darg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.
+
+![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)
+
+[We] stay hidden.
 
 DESCRIPTION: $NONE
 
+AFTER_MONSTERS_CLEARED:
+I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs' complex.
+
+[[CODE]]
+c.markHappened(evKilledDarg);
+[[ENDCODE]]
+
+[[CODE]]
+// Use the ink defined in darg_tent/darg_head_talk.
+w.pushSituation(InkSituation.initialized(
+    w.randomInt(),
+    "darg_head_talk_ink_ink",
+));
+[[ENDCODE]]
 
 // ---
 ROOM: $crowdsource_after_orcs_left
@@ -38,11 +58,7 @@ PREREQUISITES:
 COMMAND: Orcs >> Listen
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I hear a heated debate. There's the leader of the orcs, called Darg. There is another orc, and a high-ranking goblin.
-
-The others are trying to persuade Darg to open the antechamber
-
-![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)
+TODO: The shaman is trying to persuade Darg to open the antechamber.
 
 TODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.
 
@@ -60,22 +76,51 @@ w.actionHasBeenPerformed('crowdsource_listen')
 COMMAND: Orcs >> Attack
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: a big fight, probably lost cause unless player is really powerful. Debug assumes victory here (because the alternative is always death).
-
 [[CODE]]
-w.updateActorById(dargId, (b) => b
-  ..inventory.remove(akxe)
-  ..hitpoints = 0
-);
-c.giveNewItemToPlayer(akxe);
-c.markHappened(evKilledDarg);
+// This is copy-pasted from SlayMonstersAction. Ideally, we could have an "optional fight" bit on rooms that would make this automatically.
+// Same code is in darg_tent.egb.txt.
+
+final situation = w.currentSituation as RoomRoamingSituation;
+Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
+
+WorldState built = w.build();
+var friends = built.actors
+    .where((other) =>
+        other.isAnimatedAndActive &&
+        other.team.isFriendWith(a.team) &&
+        other.currentRoomName == room.name)
+    .toList(growable: false);
+
+var fightSituation = generateCrowdsourceFight(c, situation, friends);
+assert(() {
+  WorldState rebuilt = w.build();
+  return fightSituation.enemyTeamIds
+      .every((id) => rebuilt.actors.any((a) => a.id == id));
+}(),
+    "FightGenerator in $room didn't add its monsters to the world's "
+    "actors. Add a line like `w.actors.addAll(monsters)` to the "
+    "generator. At least one of these actors is missing: "
+    "${fightSituation.enemyTeamIds}");
+
+// Move enemy combatants to the room (fightGenerator cannot know which
+// room it will be, so their currentRoomName is `null`).
+for (final enemyId in fightSituation.enemyTeamIds) {
+  w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
+}
+
+// _assignRecoveringUntil(
+//    originalWorld.time, w, fightSituation.getActors(sim, w.build()));
+
+w.pushSituation(fightSituation);
 [[ENDCODE]]
 
-TODO: After I defeat him, Darg's head starts to talk. There is no question that this is a necromancer talking through the newly deceased Darg. I am (once again?) impressed that a necromancer can be so precise at their craft. The necromancer discourages me from going to the very top of the Pyramid. "Last chance to turn around."
 
-I take Darg's akxe.
-
-
+// ---
+// THIS ROOM IS INACCESSIBLE. IT IS ONLY A WAY TO HIDE THE SHAMAN.
+ROOM: $crowdsource_vestry
+POS: 28, 30
+MAP_NAME: Crowd's Temple's Vestry
+DESCRIPTION: $NONE
 
 
 NOTES:

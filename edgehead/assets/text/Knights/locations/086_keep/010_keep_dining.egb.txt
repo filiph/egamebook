@@ -21,7 +21,9 @@ c.learn(LadyHopeFacts.ladyHopeName);
 
 ![Illustration of Lady Hope, an undead woman with a katana.](hope.png)
 
-As I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer.
+// TODO: make a variant for players who kill Darg first, Lady Hope second.
+
+As I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.
 
 I risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.
 
