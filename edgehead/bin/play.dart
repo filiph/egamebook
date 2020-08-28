@@ -119,6 +119,14 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   final int maxAutomatedChoicesTaken;
 
+  /// The maximum amount of time the runner will keep going in automated
+  /// mode.
+  final Duration maxTimeAutomated;
+
+  /// Marks the time when [this] was constructed. The value is used
+  /// to determine whether [maxTimeAutomated] has been reached.
+  final DateTime _timeStarted;
+
   final File _logFile;
 
   final Pattern actionPattern;
@@ -159,8 +167,10 @@ class CliRunner extends Presenter<EdgeheadGame> {
     this.actionPattern,
     Random random,
     this.maxAutomatedChoicesTaken = 0xFFFFFF,
+    this.maxTimeAutomated = const Duration(days: 365),
   })  : _logFile = logFile,
-        _random = random ?? Random() {
+        _random = random ?? Random(),
+        _timeStarted = DateTime.now() {
     _silent = silent;
 
     if (_logFile != null) {
@@ -196,6 +206,16 @@ class CliRunner extends Presenter<EdgeheadGame> {
       add(LoseGame(
           (b) => b.markdownText = 'Automated run reached limit of choices: '
               '$_automatedChoicesTaken'));
+      return;
+    }
+
+    if (automated &&
+        DateTime.now().difference(_timeStarted) > maxTimeAutomated) {
+      _log.info('We have reached the time limit of automated running: '
+          '$maxTimeAutomated');
+      add(LoseGame(
+          (b) => b.markdownText = 'Automated run reached maxTimeAutomated: '
+              '$maxTimeAutomated'));
       return;
     }
 

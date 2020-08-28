@@ -88,8 +88,13 @@ Future<void> testWithStopWords(
     print(" - log: $logPath");
     // Make sure the file exists even when there are no errors.
     logFile.writeAsStringSync("");
-    final runner = CliRunner(true, true, logFile,
-        logLevel: logLevel, maxAutomatedChoicesTaken: _maxChoices);
+    final runner = CliRunner(
+      true,
+      true,
+      logFile,
+      logLevel: logLevel,
+      maxTimeAutomated: const Duration(minutes: 5),
+    );
     await runner.initialize(EdgeheadGame(
       saveGameSerialized: savegame == null ? null : defaultSavegames[savegame],
       randomizeAfterPlayerChoice: false,
