@@ -53,8 +53,12 @@ class TakeApproachAction extends Action<RoomPath> {
       path.approach.description(context);
     }
 
-    (w.currentSituation as RoomRoamingSituation)
-        .moveActor(context, path.approach.to);
+    // The current situation might not be room roaming situation because
+    // `path.approach.description` might have added another situation on top
+    // of the stack.
+    final roomRoamingSituation = w.getSituationByName<RoomRoamingSituation>(
+        RoomRoamingSituation.className);
+    roomRoamingSituation.moveActor(context, path.approach.to);
 
     return "${a.name} went through approach to ${path.approach.to}";
   }

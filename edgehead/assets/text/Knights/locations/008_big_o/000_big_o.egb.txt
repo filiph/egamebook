@@ -1,14 +1,22 @@
 APPROACH: $big_o_observatory FROM $big_o_antechamber
+DESCRIPTION:
+[[CODE]]
+// Use the ink
+w.pushSituation(InkSituation.initialized(
+    w.randomInt(),
+    "final_fight_ink_ink",
+));
+[[ENDCODE]]
 PREREQUISITES:
 w.actionHasBeenPerformed('open_antechamber_lock')
 
+
 // ---
-ROOM: $big_o_observatory
+ACTION: $final_fight_ink
+FOR_LOCATION: $start_bogus_location
+COMMAND: N/A
 
-POS: 26, 8
-MAP_NAME: Observatory
-
-FIRST_DESCRIPTION:
+INK:
 A tiny floor overlooking the Bay and the ruins of San Francisco.
 
 TODO: A device similar to Conet is here.
@@ -17,12 +25,42 @@ TODO: A device similar to Conet is here.
 
 TODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He's a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it's in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.
 
+* Test A
+* Test B
+
+-
+
+// TODO: Big O reveals his name ("Osiris"), player has choice to call him that (renames BigO's entity) or ignore that, or even degrade him ("I will call you fucker instead.")
+
 // TODO: big O notices asthma / wooden foot
 
-TODO: fight with Osiris. Assuming a win (otherwise, death).
+The fight begins.
+
+
+// ---
+ROOM: $big_o_observatory
+
+POS: 26, 8
+
+MAP_NAME: Observatory
+HINT: At the very top of the Pyramid, a room for the Lich King.
+
+FIRST_MAP_NAME: The very top
+FIRST_HINT: The staircase is all marble and concrete, an exquisite combination of ancient minimalism and current excess. It leads up to a sun lit space.
 
 DESCRIPTION: $NONE
 
+FIGHT_SITUATION:
+generateBigOFight
+
+AFTER_MONSTERS_CLEARED:
+[[CODE]]
+// Use the ink in big_o_end.egb.txt.
+w.pushSituation(InkSituation.initialized(
+    w.randomInt(),
+    "big_o_end_ink_ink",
+));
+[[ENDCODE]]
 
 
 NOTES:
@@ -57,7 +95,3 @@ Someone: I believe in Doghead.
 Writing on the wall: DOGHEAD
 
 A small altar to Doghead.
-
-## Actual last act
-
-TODO

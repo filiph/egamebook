@@ -2,6 +2,9 @@ part of edgehead.ids;
 
 const int albinoGoblinId = 6011;
 
+/// Big O, or Osiris.
+const int bigOId = 6666;
+
 const int campLeaderGoblinId = 6008;
 
 const int campNakedGoblinId = 6009;

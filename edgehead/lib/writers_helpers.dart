@@ -201,6 +201,22 @@ FightSituation generateCrowdsourceFight(ActionContext c,
   );
 }
 
+/// Fight with Big O (Osiris) at the end.
+FightSituation generateBigOFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [bigO],
+    "marble floor",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 /// Fight with Darg near his tent.
 FightSituation generateDargTentFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {

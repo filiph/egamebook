@@ -27,6 +27,27 @@ final Actor albinoGoblin = Actor.initialized(
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
+/// Osiris, a.k.a. Big O.
+final Actor bigO = Actor.initialized(
+  bigOId,
+  StatefulRandom(~bigOId).next,
+  "Big O",
+  nameIsProperNoun: true,
+  pronoun: Pronoun.HE,
+  dexterity: 160,
+  hitpoints: 2,
+  currentRoomName: 'big_o_observatory',
+  currentWeapon: Item.weapon(
+    bigOScytheId,
+    WeaponType.axe,
+    name: "scythe",
+    adjective: "white",
+    firstOwnerId: bigOId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 final Actor campLeaderGoblin = Actor.initialized(
   campLeaderGoblinId,
   StatefulRandom(~campLeaderGoblinId).next,

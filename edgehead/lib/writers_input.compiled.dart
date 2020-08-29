@@ -78,41 +78,299 @@ final Room testRandomEncounter = Room('test_random_encounter',
 }, null, generateRandomEncounter, null,
     positionX: 0, positionY: 0, mapName: 'N/A');
 final Approach bigOObservatoryFromBigOAntechamber =
-    Approach('big_o_antechamber', 'big_o_observatory', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('big_o_antechamber', 'big_o_observatory', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  w.pushSituation(InkSituation.initialized(
+    w.randomInt(),
+    "final_fight_ink_ink",
+  ));
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   return w.actionHasBeenPerformed('open_antechamber_lock');
 });
-final Room bigOObservatory = Room('big_o_observatory', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'A tiny floor overlooking the Bay and the ruins of San Francisco.\n\nTODO: A device similar to Conet is here.\n\n![Illustration of Big O, a necromancer with a dog\'s head.](bigo.png)\n\nTODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n\n\nTODO: fight with Osiris. Assuming a win (otherwise, death).\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null, positionX: 26, positionY: 8, mapName: 'Observatory');
-final Approach endOfRoamFromBigOObservatory = Approach(
-    'big_o_observatory', '__END_OF_ROAM__', 'Descend', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'I have prevailed.\n\nTODO: an end, in which Aren (the player) shows the Dog\'s head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn\'s mind, and he is no longer insane. He explains his past mistakes, and apologizes.\n\n![Illustration Big O\'s head in my arms. Before me, a group of people.](doghead.png)\n\nThe end.\n',
-      isRaw: true);
-});
+final finalFightInkInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('A tiny floor overlooking the Bay and the ruins of San Francisco.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('TODO: A device similar to Conet is here.\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '![Illustration of Big O, a necromancer with a dog\'s head.](bigo.png)\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" Test A """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" Test B """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The fight begins.\n', isRaw: true);
+  }),
+]);
+
+class FinalFightInk extends RoamingAction {
+  @override
+  final String name = 'final_fight_ink';
+
+  static final FinalFightInk singleton = FinalFightInk();
+
+  @override
+  List<String> get commandPathTemplate => ['N/A'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('start_bogus_location') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "final_fight_ink_ink",
+    ));
+    return '${a.name} successfully performs FinalFightInk';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform FinalFightInk';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room bigOObservatory = Room(
+    'big_o_observatory',
+    null,
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateBigOFight,
+    null,
+    positionX: 26,
+    positionY: 8,
+    mapName: 'Observatory',
+    firstMapName: 'The very top',
+    hint: 'At the very top of the Pyramid, a room for the Lich King.',
+    firstHint:
+        'The staircase is all marble and concrete, an exquisite combination of ancient minimalism and current excess. It leads up to a sun lit space.',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "big_o_end_ink_ink",
+      ));
+    });
+final bigOEndInkInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I have prevailed.\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'TODO: an end, in which Aren (the player) shows the Dog\'s head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn\'s mind, and he is no longer insane. He explains his past mistakes, and apologizes.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '![Illustration Big O\'s head in my arms. Before me, a group of people.](doghead.png)\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" A option """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" B option """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The end.\n', isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.movePlayer('__END_OF_ROAM__');
+  }),
+]);
+
+class BigOEndInk extends RoamingAction {
+  @override
+  final String name = 'big_o_end_ink';
+
+  static final BigOEndInk singleton = BigOEndInk();
+
+  @override
+  List<String> get commandPathTemplate => ['N/A'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('start_bogus_location') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "big_o_end_ink_ink",
+    ));
+    return '${a.name} successfully performs BigOEndInk';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform BigOEndInk';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Approach bigOAntechamberFromCrowdsource =
     Approach('crowdsource', 'big_o_antechamber', '', null);
 final Approach bigOAntechamberFromTopOfClimb =
@@ -14027,7 +14285,6 @@ final allRooms = <Room>[
 final allApproaches = <Approach>[
   endOfRoamFromTestRandomEncounter,
   bigOObservatoryFromBigOAntechamber,
-  endOfRoamFromBigOObservatory,
   bigOAntechamberFromCrowdsource,
   bigOAntechamberFromTopOfClimb,
   dargTentFromBarracks,
@@ -14113,6 +14370,8 @@ final allApproaches = <Approach>[
   meadowFightFromStart
 ];
 final allActions = <RoamingAction>[
+  FinalFightInk.singleton,
+  BigOEndInk.singleton,
   ExamineAntechamberLock.singleton,
   OpenAntechamberLock.singleton,
   DargTentAttack.singleton,
@@ -14221,6 +14480,8 @@ final allActions = <RoamingAction>[
   GuardpostAboveChurchTakeShield.singleton
 ];
 final allInks = <String, InkAst>{
+  'final_fight_ink_ink': finalFightInkInk,
+  'big_o_end_ink_ink': bigOEndInkInk,
   'darg_head_talk_ink_ink': dargHeadTalkInkInk,
   'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,
