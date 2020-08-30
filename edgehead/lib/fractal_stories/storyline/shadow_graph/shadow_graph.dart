@@ -891,7 +891,7 @@ class ShadowGraph {
   }
 
   /// Use the data in [identifiers] to remove qualifications levels
-  /// that would be confusing.
+  /// that would be confusing. Disambiguate.
   ///
   /// Most of the work has already been done -- we know which identifiers
   /// (such as "he" or "the goblin") can potentially refer to which

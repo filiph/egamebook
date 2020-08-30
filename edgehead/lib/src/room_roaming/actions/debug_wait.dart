@@ -83,7 +83,6 @@ class WaitWhileRoamingAction extends Action<Nothing> {
 
     if (!a.isPlayer) return false;
 
-    var applicable = true;
-    return applicable;
+    return true;
   }
 }

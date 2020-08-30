@@ -14,8 +14,7 @@ class PutToRest extends OtherActorActionBase {
   static const String className = "PutToRest";
 
   @override
-  List<String> get commandPathTemplate =>
-      ["<objectNounWithAdjective>", "put to rest"];
+  List<String> get commandPathTemplate => ["<object>", "put to rest"];
 
   @override
   String get helpMessage => "I can put the undead to rest, "
