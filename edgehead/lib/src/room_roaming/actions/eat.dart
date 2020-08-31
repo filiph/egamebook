@@ -64,7 +64,7 @@ class Eat extends Action<Item> {
 
     if (item.edibility == Edibility.disgusting) {
       item.report(s, '<subject> <is> disgusting');
-      a.report(s, '<subject> force<s> <subjectSelf> to eat <object>',
+      a.report(s, '<subject> force<s> <subjectPronounSelf> to eat <object>',
           object: item);
       a.report(s, '<subject> get<s> sick', negative: true);
       a.report(s, '<subject> retch<es> violently', negative: true);
