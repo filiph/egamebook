@@ -13,7 +13,7 @@ import '../bin/play.dart';
 void main() {
   test("edgehead runs to completion", () async {
     final runner =
-        CliRunner(true, true, null, maxAutomatedChoicesTaken: _maxChoices);
+        CliRunner(true, true, null, maxTimeAutomated: maxTimeAutomated);
     await runner.initialize(EdgeheadGame());
     runner.startBook();
     await runner.bookEnd.first;
@@ -25,7 +25,7 @@ void main() {
 
     Future<String> runAndGetFinalWorld(int seed) async {
       final runner = CliRunner(true, true, null,
-          random: Random(seed), maxAutomatedChoicesTaken: _maxChoices);
+          random: Random(seed), maxAutomatedChoicesTaken: 10);
       await runner.initialize(EdgeheadGame(
         randomSeed: seed,
         randomizeAfterPlayerChoice: false,
@@ -67,9 +67,8 @@ void main() {
   });
 }
 
-/// The max number of choices the automated runner should take before
-/// bailing out.
-const _maxChoices = 50;
+/// The maximum time to run a fuzzy test.
+const Duration maxTimeAutomated = Duration(seconds: 30);
 
 String createLogFilePath(Directory tempDir, int i, String description) =>
     path.absolute(path.join(
@@ -93,7 +92,7 @@ Future<void> testWithStopWords(
       true,
       logFile,
       logLevel: logLevel,
-      maxTimeAutomated: const Duration(minutes: 5),
+      maxTimeAutomated: maxTimeAutomated,
     );
     await runner.initialize(EdgeheadGame(
       saveGameSerialized: savegame == null ? null : defaultSavegames[savegame],
