@@ -27,7 +27,8 @@ WeaponAssaultResult _addMajorThrustingWound(
     Actor target, BodyPart designated, Item weapon) {
   assert(designated.hitpoints >= 0);
 
-  if (designated.hitpoints == 1 && !target.isInvincible) {
+  if (designated.hitpoints == 1 &&
+      (!target.isInvincible || !designated.isVital)) {
     return _disableByThrust(target, designated, weapon);
   }
 

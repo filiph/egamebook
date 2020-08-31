@@ -286,6 +286,10 @@ abstract class Actor extends Object
   ///
   /// Contrast with [isSurvivor], which only means that the actor won't get
   /// unlucky hits against himself.
+  ///
+  /// This is a bit of a misnomer, since it's okay to _injure_ an actor
+  /// with [isInvincible] set to true. It's just not allowed to kill him.
+  /// An alternative name could be `isKillable`.
   bool get isInvincible;
 
   bool get isOnGround => pose == Pose.onGround;
