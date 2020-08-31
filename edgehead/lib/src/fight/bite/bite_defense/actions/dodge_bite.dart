@@ -11,6 +11,7 @@ import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 
 ReasonedSuccessChance computeDodgeBite(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
@@ -102,7 +103,21 @@ class DodgeBite extends OtherActorAction {
     assert(enemy.anatomy.isHumanoid,
         "Not prepared for non-humanoids. They should fall to ground.");
 
-    if (enemy.pose > Pose.offBalance) {
+    if (a.isOnGround) {
+      // If the actor is on the ground, the enemy must have landed
+      // on the ground as well.
+      final groundMaterial = getGroundMaterial(w);
+      enemy.report(
+          s,
+          "<subject> {land<s>|crash<es>|hit<s> the $groundMaterial} "
+          "next to <object>",
+          object: a,
+          negative: true,
+          actionThread: thread);
+      w.updateActorById(enemy.id, (b) => b.pose = Pose.onGround);
+    } else if (enemy.pose > Pose.offBalance) {
+      // If the actor _isn't_ on the ground, then the attacker
+      // at least staggers.
       enemy.report(
           s,
           "<subject> {stagger<s>|stumble<s>|lurch<es>|sway<s>} "
@@ -112,6 +127,7 @@ class DodgeBite extends OtherActorAction {
           actionThread: thread);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.offBalance);
     }
+
     w.popSituationsUntil("FightSituation", context);
 
     if (a.isOnGround) {
