@@ -31,6 +31,13 @@ Map<T, List<S>> _groupBy<S, T>(Iterable<S> values, T key(S element)) {
 /// Recursively creates a tree from given [choices]. The node given
 /// by this function will be [order] deep, with [prefix].
 ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
+  assert(prefix.trim() != 'go',
+      "All 'map' actions must be under 'Go' command, case sensitive.");
+  assert(prefix.trim() != 'inventory',
+      "All 'item' actions must be under 'Inventory' command, case sensitive.");
+  assert(prefix.trim() != 'skills',
+      "All 'skills' actions must be under 'Skills' command, case sensitive.");
+
   final list = choices.toList(growable: false);
 
   // A list of choices that are at the current order and shouldn't be made

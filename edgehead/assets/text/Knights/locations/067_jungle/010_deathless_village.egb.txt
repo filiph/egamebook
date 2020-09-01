@@ -27,7 +27,7 @@ c.increaseSanityFromPeople();
 
 // ---
 ACTION: $give_lair_of_god_star_to_deathless
-COMMAND: inventory >> Artifact Star >> give to the Deathless
+COMMAND: Inventory >> Artifact Star >> give to the Deathless
 FOR_LOCATION: $deathless_village
 
 PREREQUISITES:

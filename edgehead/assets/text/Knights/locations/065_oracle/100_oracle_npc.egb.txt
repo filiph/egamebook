@@ -62,7 +62,7 @@ c.learn(KeepGateFacts.keepGateUnlock);
 
 // ---
 ACTION: $oracle_give_north_skull
-COMMAND: inventory >> North Skull >> Give to Oracle
+COMMAND: Inventory >> North Skull >> Give to Oracle
 FOR_LOCATION: $oracle_main
 PREREQUISITES:
 // Oracle must live.

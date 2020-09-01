@@ -3026,7 +3026,7 @@ class OracleGiveNorthSkull extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['inventory', 'North Skull', 'Give to Oracle'];
+      ['Inventory', 'North Skull', 'Give to Oracle'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -3950,7 +3950,7 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['inventory', 'Artifact Star', 'give to the Deathless'];
+      ['Inventory', 'Artifact Star', 'give to the Deathless'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -11927,7 +11927,7 @@ class SarnReadLetter extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['inventory', 'father\'s letter', 'read to Sarn'];
+      ['Inventory', 'letter from my father', 'read to Sarn'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {

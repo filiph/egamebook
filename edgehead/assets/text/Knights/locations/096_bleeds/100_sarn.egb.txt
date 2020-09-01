@@ -42,7 +42,7 @@ c.giveNewItemToPlayer(sarnHammer);
 
 // ---
 ACTION: $sarn_read_letter
-COMMAND: inventory >> father's letter >> read to Sarn
+COMMAND: Inventory >> letter from my father >> read to Sarn
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
