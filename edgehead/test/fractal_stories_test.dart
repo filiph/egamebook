@@ -174,7 +174,7 @@ void main() {
 
       group("RoomRoamingSituation.moveActor", () {
         final aren = Actor.initialized(42, testRandomIdGetter, "Aren",
-            currentRoomName: _outsideName);
+            currentRoomName: _outsideName, isPlayer: true);
         final initialSituation =
             RoomRoamingSituation.initialized(1, outside, false);
         final world = WorldState((b) => b
