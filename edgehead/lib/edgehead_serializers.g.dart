@@ -39,6 +39,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(RoomRoamingSituation.serializer)
       ..add(RuleHistory.serializer)
       ..add(RuleRecord.serializer)
+      ..add(SlayHistory.serializer)
+      ..add(SlayRecord.serializer)
       ..add(Team.serializer)
       ..add(VisitHistory.serializer)
       ..add(VisitRecord.serializer)
@@ -89,6 +91,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltListMultimap,
               const [const FullType(String), const FullType(CustomEvent)]),
           () => new ListMultimapBuilder<String, CustomEvent>())
+      ..addBuilderFactory(
+          const FullType(BuiltListMultimap,
+              const [const FullType(String), const FullType(SlayRecord)]),
+          () => new ListMultimapBuilder<String, SlayRecord>())
       ..addBuilderFactory(
           const FullType(BuiltListMultimap,
               const [const FullType(String), const FullType(VisitRecord)]),

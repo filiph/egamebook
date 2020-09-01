@@ -25,8 +25,10 @@ class TakeImplicitApproachAction extends TakeApproachAction {
       return false;
     }
 
-    if ((w.currentSituation as RoomRoamingSituation).monstersAlive) {
-      // Don't allow exit taking when monsters in this room are still alive.
+    if ((w.currentSituation as RoomRoamingSituation).monstersAlive &&
+        !path.origin.fightIsOptional) {
+      // Don't allow exit taking when monsters in this room are still alive
+      // and the fight isn't optional.
       return false;
     }
 

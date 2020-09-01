@@ -1,7 +1,4 @@
-APPROACH: $goblin_skirmish_main FROM $bleeds_main
-PREREQUISITES:
-c.hasHappened(evGoblinCampCleared)
-
+APPROACH: $goblin_skirmish_main FROM $goblin_skirmish_patrol
 
 // ---
 ROOM: $goblin_skirmish_main
@@ -12,6 +9,34 @@ MAP_NAME: The Goblin Camp
 WHERE: near the campfire
 
 FIRST_DESCRIPTION:
+Suddenly, I hear voices ahead. Two goblins are arguing about something. [We] find a hiding spot behind a tree stump and lay low.
+
+
+FLAGS: $FIGHT_IS_OPTIONAL
+
+FIGHT_SITUATION:
+generateGoblinCampFight
+
+DESCRIPTION: $NONE
+
+AFTER_MONSTERS_CLEARED:
+The fight is done, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there's a barbecued squirrel on a stick next to the fire.) 
+
+This must be a shared place of rest for the goblins who travel through here. But on what journey?
+
+There's a bag on the ground, and peeking out of it, a curious device.
+
+[[CODE]]
+c.markHappened(evGoblinCampCleared);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $goblin_camp_attack
+COMMAND: Goblins >> Attack
+FOR_LOCATION: $goblin_skirmish_main
+
+COMPLETE_SUCCESS_DESCRIPTION:
 [[RULESET]]
 [[RULE]]
   w.actionHasBeenPerformed("observe_goblin_camp")
@@ -31,21 +56,10 @@ The other one, the one I decide looks like the leader of the group, readies a cr
 
 "Amak, you f—" he starts saying, but then I am already on him.
 
-FIGHT_SITUATION:
-generateGoblinCampFight
-
-DESCRIPTION: $NONE
-
-AFTER_MONSTERS_CLEARED:
-The fight is done, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there's a barbecued squirrel on a stick next to the fire.) 
-
-This must be a shared place of rest for the goblins who travel through here. But on what journey?
-
-There's a bag on the ground, and peeking out of it, a curious device.
-
 [[CODE]]
-c.markHappened(evGoblinCampCleared);
+c.startOptionalFight();
 [[ENDCODE]]
+
 
 // ---
 ACTION: $barbecued_squirrel_examine

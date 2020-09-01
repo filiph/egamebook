@@ -35,6 +35,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       serializers.serialize(object.situations,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Situation)])),
+      'slayHistory',
+      serializers.serialize(object.slayHistory,
+          specifiedType: const FullType(SlayHistory)),
       'statefulRandomState',
       serializers.serialize(object.statefulRandomState,
           specifiedType: const FullType(int)),
@@ -105,6 +108,10 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
                       BuiltList, const [const FullType(Situation)]))
               as BuiltList<Object>);
           break;
+        case 'slayHistory':
+          result.slayHistory.replace(serializers.deserialize(value,
+              specifiedType: const FullType(SlayHistory)) as SlayHistory);
+          break;
         case 'statefulRandomState':
           result.statefulRandomState = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
@@ -140,6 +147,8 @@ class _$WorldState extends WorldState {
   @override
   final BuiltList<Situation> situations;
   @override
+  final SlayHistory slayHistory;
+  @override
   final int statefulRandomState;
   @override
   final DateTime time;
@@ -157,6 +166,7 @@ class _$WorldState extends WorldState {
       this.global,
       this.ruleHistory,
       this.situations,
+      this.slayHistory,
       this.statefulRandomState,
       this.time,
       this.visitHistory})
@@ -175,6 +185,9 @@ class _$WorldState extends WorldState {
     }
     if (situations == null) {
       throw new BuiltValueNullFieldError('WorldState', 'situations');
+    }
+    if (slayHistory == null) {
+      throw new BuiltValueNullFieldError('WorldState', 'slayHistory');
     }
     if (statefulRandomState == null) {
       throw new BuiltValueNullFieldError('WorldState', 'statefulRandomState');
@@ -205,6 +218,7 @@ class _$WorldState extends WorldState {
         global == other.global &&
         ruleHistory == other.ruleHistory &&
         situations == other.situations &&
+        slayHistory == other.slayHistory &&
         statefulRandomState == other.statefulRandomState &&
         time == other.time &&
         visitHistory == other.visitHistory;
@@ -220,13 +234,15 @@ class _$WorldState extends WorldState {
                         $jc(
                             $jc(
                                 $jc(
-                                    $jc($jc(0, actionHistory.hashCode),
-                                        actors.hashCode),
-                                    customHistory.hashCode),
-                                director.hashCode),
-                            global.hashCode),
-                        ruleHistory.hashCode),
-                    situations.hashCode),
+                                    $jc(
+                                        $jc($jc(0, actionHistory.hashCode),
+                                            actors.hashCode),
+                                        customHistory.hashCode),
+                                    director.hashCode),
+                                global.hashCode),
+                            ruleHistory.hashCode),
+                        situations.hashCode),
+                    slayHistory.hashCode),
                 statefulRandomState.hashCode),
             time.hashCode),
         visitHistory.hashCode));
@@ -321,6 +337,18 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
+  SlayHistoryBuilder get slayHistory {
+    _$this;
+    return super.slayHistory ??= new SlayHistoryBuilder();
+  }
+
+  @override
+  set slayHistory(SlayHistoryBuilder slayHistory) {
+    _$this;
+    super.slayHistory = slayHistory;
+  }
+
+  @override
   int get statefulRandomState {
     _$this;
     return super.statefulRandomState;
@@ -367,6 +395,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
       super.global = _$v.global;
       super.ruleHistory = _$v.ruleHistory?.toBuilder();
       super.situations = _$v.situations?.toBuilder();
+      super.slayHistory = _$v.slayHistory?.toBuilder();
       super.statefulRandomState = _$v.statefulRandomState;
       super.time = _$v.time;
       super.visitHistory = _$v.visitHistory?.toBuilder();
@@ -401,6 +430,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
               global: global,
               ruleHistory: ruleHistory.build(),
               situations: situations.build(),
+              slayHistory: slayHistory.build(),
               statefulRandomState: statefulRandomState,
               time: time,
               visitHistory: visitHistory.build());
@@ -420,6 +450,8 @@ class _$WorldStateBuilder extends WorldStateBuilder {
         ruleHistory.build();
         _$failedField = 'situations';
         situations.build();
+        _$failedField = 'slayHistory';
+        slayHistory.build();
 
         _$failedField = 'visitHistory';
         visitHistory.build();

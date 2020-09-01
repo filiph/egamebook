@@ -553,34 +553,7 @@ class DargTentAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-
-    final situation = w.currentSituation as RoomRoamingSituation;
-    Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
-
-    WorldState built = w.build();
-    var friends = built.actors
-        .where((other) =>
-            other.isAnimatedAndActive &&
-            other.team.isFriendWith(a.team) &&
-            other.currentRoomName == room.name)
-        .toList(growable: false);
-
-    var fightSituation = generateDargTentFight(c, situation, friends);
-    assert(() {
-      WorldState rebuilt = w.build();
-      return fightSituation.enemyTeamIds
-          .every((id) => rebuilt.actors.any((a) => a.id == id));
-    }(),
-        "FightGenerator in $room didn't add its monsters to the world's "
-        "actors. Add a line like `w.actors.addAll(monsters)` to the "
-        "generator. At least one of these actors is missing: "
-        "${fightSituation.enemyTeamIds}");
-
-    for (final enemyId in fightSituation.enemyTeamIds) {
-      w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
-    }
-
-    w.pushSituation(fightSituation);
+    c.startOptionalFight();
 
     return '${a.name} successfully performs DargTentAttack';
   }
@@ -636,8 +609,9 @@ final Room dargTent = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
+    generateDargTentFight,
     null,
-    null,
+    fightIsOptional: true,
     positionX: 33,
     positionY: 24,
     mapName: 'Darg\'s tent',
@@ -677,7 +651,7 @@ final Room dargTentAfterDargArrived = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
-    null,
+    generateDargTentFight,
     null,
     parent: 'darg_tent',
     prerequisite: Prerequisite(910482930, 1, true, (ApplicabilityContext c) {
@@ -696,6 +670,7 @@ final Room dargTentAfterDargArrived = Room(
           'Darg, the leader of the orcs, is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
           isRaw: true);
     },
+    fightIsOptional: true,
     positionX: 33,
     positionY: 24,
     mapName: 'Darg\'s tent',
@@ -735,7 +710,7 @@ final Room dargTentAfterDargKilled = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
-    null,
+    generateDargTentFight,
     null,
     parent: 'darg_tent',
     prerequisite: Prerequisite(831974385, 2, true, (ApplicabilityContext c) {
@@ -753,6 +728,7 @@ final Room dargTentAfterDargKilled = Room(
       final Storyline s = c.outputStoryline;
       s.add('Darg won\'t be needing this tent anymore.\n', isRaw: true);
     },
+    fightIsOptional: true,
     positionX: 33,
     positionY: 24,
     mapName: 'Darg\'s tent',
@@ -1014,34 +990,7 @@ class CrowdsourceAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-
-    final situation = w.currentSituation as RoomRoamingSituation;
-    Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
-
-    WorldState built = w.build();
-    var friends = built.actors
-        .where((other) =>
-            other.isAnimatedAndActive &&
-            other.team.isFriendWith(a.team) &&
-            other.currentRoomName == room.name)
-        .toList(growable: false);
-
-    var fightSituation = generateCrowdsourceFight(c, situation, friends);
-    assert(() {
-      WorldState rebuilt = w.build();
-      return fightSituation.enemyTeamIds
-          .every((id) => rebuilt.actors.any((a) => a.id == id));
-    }(),
-        "FightGenerator in $room didn't add its monsters to the world's "
-        "actors. Add a line like `w.actors.addAll(monsters)` to the "
-        "generator. At least one of these actors is missing: "
-        "${fightSituation.enemyTeamIds}");
-
-    for (final enemyId in fightSituation.enemyTeamIds) {
-      w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
-    }
-
-    w.pushSituation(fightSituation);
+    c.startOptionalFight();
 
     return '${a.name} successfully performs CrowdsourceAttack';
   }
@@ -1164,8 +1113,9 @@ final Room crowdsource = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
+    generateCrowdsourceFight,
     null,
-    null,
+    fightIsOptional: true,
     positionX: 27,
     positionY: 29,
     mapName: 'Crowd\'s Temple',
@@ -1207,7 +1157,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
-    null,
+    generateCrowdsourceFight,
     null,
     parent: 'crowdsource',
     prerequisite: Prerequisite(586291809, 2, true, (ApplicabilityContext c) {
@@ -1225,6 +1175,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final Storyline s = c.outputStoryline;
       s.add('The orcs are gone.\n', isRaw: true);
     },
+    fightIsOptional: true,
     positionX: 27,
     positionY: 29,
     mapName: 'Crowd\'s Temple',
@@ -9899,10 +9850,8 @@ final Room pyramidEntranceAfterQuake2 = Room(
         'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
 final Approach bleedsMainFromBleedsTraderHut =
     Approach('bleeds_trader_hut', 'bleeds_main', '', null);
-final Approach bleedsMainFromGoblinSkirmishMain =
-    Approach('goblin_skirmish_main', 'bleeds_main', '', null);
-final Approach bleedsMainFromGoblinSkirmishSneak =
-    Approach('goblin_skirmish_sneak', 'bleeds_main', '', null);
+final Approach bleedsMainFromGoblinSkirmishPatrol =
+    Approach('goblin_skirmish_patrol', 'bleeds_main', '', null);
 final Approach bleedsMainFromMeadowFight =
     Approach('meadow_fight', 'bleeds_main', '', null,
         isApplicable: (ApplicabilityContext c) {
@@ -12329,24 +12278,15 @@ final Room bleedsMainAfterQuake2 = Room(
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach goblinSkirmishPatrolFromBleedsMain =
-    Approach('bleeds_main', 'goblin_skirmish_patrol', '', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      'There is no path in the direction of the smoke. ${weSubstitutionCapitalized} go through the brush and step over logs and ancient rubble.\n',
-      isRaw: true);
-}, isApplicable: (ApplicabilityContext c) {
+    Approach('bleeds_main', 'goblin_skirmish_patrol', '', null,
+        isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
-  return c.knows(kbGoblinCampSmoke) &&
-      !c.playerHasVisited("goblin_skirmish_patrol");
+  return c.knows(kbGoblinCampSmoke);
 });
+final Approach goblinSkirmishPatrolFromGoblinSkirmishMain =
+    Approach('goblin_skirmish_main', 'goblin_skirmish_patrol', '', null);
 final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
     (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -12355,10 +12295,19 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+  final weSubstitutionCapitalized =
+      getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'When ${weSubstitution} come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear. The goblin is completely white — even his eyebrows are unpigmented.\n\n"You lost, peasant?"\n',
+      'There is no path in the direction of the smoke. ${weSubstitutionCapitalized} go through the brush and step over logs and ancient rubble.\n\nWhen ${weSubstitution} come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear. The goblin is completely white — even his eyebrows are unpigmented.\n\n"You lost, peasant?"\n',
       isRaw: true);
-}, null, generateBleedsGoblinSkirmishPatrol, null,
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, generateBleedsGoblinSkirmishPatrol, null,
     positionX: 15,
     positionY: 97,
     mapName: 'Ancient rubble',
@@ -12366,82 +12315,6 @@ final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
     hint: 'It\'s the place I met the goblin patrol.',
     firstHint:
         'The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.');
-final Approach goblinSkirmishSneakFromBleedsMain = Approach(
-    'bleeds_main',
-    'goblin_skirmish_sneak',
-    'Go >> Near the Goblin Outpost',
-    null, isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return c.playerHasVisited("goblin_skirmish_sneak") &&
-      !c.hasHappened(evGoblinCampCleared);
-});
-final Approach goblinSkirmishSneakFromGoblinSkirmishPatrol = Approach(
-    'goblin_skirmish_patrol',
-    'goblin_skirmish_sneak',
-    'Smoke >> Come closer',
-    null);
-
-class GoblinCampAttack extends RoamingAction {
-  @override
-  final String name = 'goblin_camp_attack';
-
-  static final GoblinCampAttack singleton = GoblinCampAttack();
-
-  @override
-  List<String> get commandPathTemplate => ['Goblins', 'Attack'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    c.movePlayer('goblin_skirmish_main');
-
-    return '${a.name} successfully performs GoblinCampAttack';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    return '${a.name} fails to perform GoblinCampAttack';
-  }
-
-  @override
-  ReasonedSuccessChance<void> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  Resource get rerollResource => null;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will I be successful?';
-  }
-
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
 
 class ListenContinue extends RoamingAction {
   @override
@@ -12454,10 +12327,11 @@ class ListenContinue extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
       return false;
     }
-    if (!(w.actionHasBeenPerformed("listen_to_them_arguing"))) {
+    if (!(!c.hasHappened(evGoblinCampCleared) &&
+        w.actionHasBeenPerformed("listen_to_them_arguing"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12518,10 +12392,11 @@ class ListenMore extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
       return false;
     }
-    if (!(w.actionHasBeenPerformed("listen_continue"))) {
+    if (!(!c.hasHappened(evGoblinCampCleared) &&
+        w.actionHasBeenPerformed("listen_continue"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12580,7 +12455,10 @@ class ListenToThemArguing extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12641,7 +12519,10 @@ class ObserveGoblinCamp extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('goblin_skirmish_sneak') != true) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evGoblinCampCleared))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12692,34 +12573,8 @@ class ObserveGoblinCamp extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room goblinSkirmishSneak =
-    Room('goblin_skirmish_sneak', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      'Suddenly, I hear voices ahead. Two goblins are arguing about something. ${weSubstitutionCapitalized} find a hiding spot behind a tree stump and lay low.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('The goblins are still here.\n', isRaw: true);
-}, null, null, positionX: 13, positionY: 98, mapName: 'The Camp');
-final Approach goblinSkirmishMainFromBleedsMain =
-    Approach('bleeds_main', 'goblin_skirmish_main', '', null,
-        isApplicable: (ApplicabilityContext c) {
-  final WorldState w = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  return c.hasHappened(evGoblinCampCleared);
-});
+final Approach goblinSkirmishMainFromGoblinSkirmishPatrol =
+    Approach('goblin_skirmish_patrol', 'goblin_skirmish_main', '', null);
 
 class BarbecuedSquirrelExamine extends RoamingAction {
   @override
@@ -12979,6 +12834,102 @@ class CompassTake extends RoamingAction {
   bool get isAggressive => false;
 }
 
+class GoblinCampAttack extends RoamingAction {
+  @override
+  final String name = 'goblin_camp_attack';
+
+  static final GoblinCampAttack singleton = GoblinCampAttack();
+
+  @override
+  List<String> get commandPathTemplate => ['Goblins', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('goblin_skirmish_main') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    Ruleset(
+        Rule(219805437, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return w.actionHasBeenPerformed("observe_goblin_camp");
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. I run past the lying goblin and easily kill him as he\'s waking up.\n',
+              isRaw: true);
+        }),
+        Rule(21199514, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. The two I heard arguing sit next to a fire pit. There is another one, sleeping on the ground, close to where I start my attack. I run past him and easily kill him as he\'s waking up.\n',
+              isRaw: true);
+        })).apply(c);
+    s.add(
+        '\nThe goblins near the fire pit stand up. One of them, I realize, is almost naked and doesn\'t have a weapon near him. He grabs a branch from the fire.\n\nThe other one, the one I decide looks like the leader of the group, readies a crude hatchet. An ugly scar slants through his face.\n\n"Amak, you f—" he starts saying, but then I am already on him.\n\n',
+        isRaw: true);
+    c.startOptionalFight();
+
+    return '${a.name} successfully performs GoblinCampAttack';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform GoblinCampAttack';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Room goblinSkirmishMain = Room(
     'goblin_skirmish_main',
     (ActionContext c) {
@@ -12989,39 +12940,8 @@ final Room goblinSkirmishMain = Room(
       final Storyline s = c.outputStoryline;
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
-      Ruleset(
-          Rule(219805437, 1, false, (ApplicabilityContext c) {
-            final WorldState w = c.world;
-            final Simulation sim = c.simulation;
-            final Actor a = c.actor;
-            return w.actionHasBeenPerformed("observe_goblin_camp");
-          }, (ActionContext c) {
-            final WorldState originalWorld = c.world;
-            final Simulation sim = c.simulation;
-            final Actor a = c.actor;
-            final WorldStateBuilder w = c.outputWorld;
-            final Storyline s = c.outputStoryline;
-            s.add(
-                ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. I run past the lying goblin and easily kill him as he\'s waking up.\n',
-                isRaw: true);
-          }),
-          Rule(21199514, 0, false, (ApplicabilityContext c) {
-            final WorldState w = c.world;
-            final Simulation sim = c.simulation;
-            final Actor a = c.actor;
-            return true;
-          }, (ActionContext c) {
-            final WorldState originalWorld = c.world;
-            final Simulation sim = c.simulation;
-            final Actor a = c.actor;
-            final WorldStateBuilder w = c.outputWorld;
-            final Storyline s = c.outputStoryline;
-            s.add(
-                ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. The two I heard arguing sit next to a fire pit. There is another one, sleeping on the ground, close to where I start my attack. I run past him and easily kill him as he\'s waking up.\n',
-                isRaw: true);
-          })).apply(c);
       s.add(
-          '\nThe goblins near the fire pit stand up. One of them, I realize, is almost naked and doesn\'t have a weapon near him. He grabs a branch from the fire.\n\nThe other one, the one I decide looks like the leader of the group, readies a crude hatchet. An ugly scar slants through his face.\n\n"Amak, you f—" he starts saying, but then I am already on him.\n',
+          'Suddenly, I hear voices ahead. Two goblins are arguing about something. ${weSubstitutionCapitalized} find a hiding spot behind a tree stump and lay low.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -13034,6 +12954,7 @@ final Room goblinSkirmishMain = Room(
     },
     generateGoblinCampFight,
     null,
+    fightIsOptional: true,
     positionX: 11,
     positionY: 97,
     mapName: 'The Goblin Camp',
@@ -14277,7 +14198,6 @@ final allRooms = <Room>[
   bleedsMainAfterQuake1,
   bleedsMainAfterQuake2,
   goblinSkirmishPatrol,
-  goblinSkirmishSneak,
   goblinSkirmishMain,
   start,
   meadowFight
@@ -14356,15 +14276,13 @@ final allApproaches = <Approach>[
   pyramidEntranceFromFarmersVillage,
   pyramidEntranceFromStagingArea,
   bleedsMainFromBleedsTraderHut,
-  bleedsMainFromGoblinSkirmishMain,
-  bleedsMainFromGoblinSkirmishSneak,
+  bleedsMainFromGoblinSkirmishPatrol,
   bleedsMainFromMeadowFight,
   bleedsMainFromPyramidEntrance,
   bleedsTraderHutFromBleedsMain,
   goblinSkirmishPatrolFromBleedsMain,
-  goblinSkirmishSneakFromBleedsMain,
-  goblinSkirmishSneakFromGoblinSkirmishPatrol,
-  goblinSkirmishMainFromBleedsMain,
+  goblinSkirmishPatrolFromGoblinSkirmishMain,
+  goblinSkirmishMainFromGoblinSkirmishPatrol,
   startFromPreStartBook,
   meadowFightFromBleedsMain,
   meadowFightFromStart
@@ -14463,7 +14381,6 @@ final allActions = <RoamingAction>[
   SarnReadLetter.singleton,
   SarnSlap.singleton,
   SarnTakeHisHammer.singleton,
-  GoblinCampAttack.singleton,
   ListenContinue.singleton,
   ListenMore.singleton,
   ListenToThemArguing.singleton,
@@ -14472,6 +14389,7 @@ final allActions = <RoamingAction>[
   BarbecuedSquirrelTake.singleton,
   CompassExamine.singleton,
   CompassTake.singleton,
+  GoblinCampAttack.singleton,
   StartInk.singleton,
   FirstPyramidApproach.singleton,
   CompassUse.singleton,

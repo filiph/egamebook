@@ -7,8 +7,7 @@ PREREQUISITES:
 c.playerHasVisited('bleeds_main')
 
 APPROACH: $bleeds_main FROM $bleeds_trader_hut
-APPROACH: $bleeds_main FROM $goblin_skirmish_sneak
-APPROACH: $bleeds_main FROM $goblin_skirmish_main
+APPROACH: $bleeds_main FROM $goblin_skirmish_patrol
 APPROACH: $bleeds_main FROM $pyramid_entrance
 
 // ---

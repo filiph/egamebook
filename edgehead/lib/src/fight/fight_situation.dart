@@ -19,8 +19,8 @@ import 'package:edgehead/src/fight/actions/confuse.dart';
 import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/debug_kill_enemies.dart';
 import 'package:edgehead/src/fight/actions/disarm_kick.dart';
-import 'package:edgehead/src/fight/actions/equip_weapon.dart';
 import 'package:edgehead/src/fight/actions/drop_current_weapon.dart';
+import 'package:edgehead/src/fight/actions/equip_weapon.dart';
 import 'package:edgehead/src/fight/actions/kick_item_out_of_reach.dart';
 import 'package:edgehead/src/fight/actions/punch_on_ground.dart';
 import 'package:edgehead/src/fight/actions/raise_dead.dart';
@@ -272,13 +272,17 @@ abstract class FightSituation extends Object
       world.replaceSituationById(
           situation.id, situation.rebuild((b) => b..monstersAlive = false));
 
+      // We should also record this slaying so that the next time the player
+      // visits, the monsters don't reappear.
+      final room = sim.getRoomByName(situation.currentRoomName);
+      world.recordSlaying(context.actor, room);
+
       for (final id in playerTeamIds) {
         if (world.getActorById(id).isAnimatedAndActive) {
           world.updateActorById(id, (b) => b..pose = b.poseMax);
         }
       }
 
-      final room = sim.getRoomByName(situation.currentRoomName);
       if (room.afterMonstersCleared != null) {
         room.afterMonstersCleared(context);
       }

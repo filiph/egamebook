@@ -77,7 +77,7 @@ class WaitWhileRoamingAction extends Action<Nothing> {
     if (room.isSynthetic || !room.isOnMap) return false;
 
     if (situation.monstersAlive) {
-      // Don't allow healing when monsters in this room are still alive.
+      // Don't allow waiting when monsters in this room are still alive.
       return false;
     }
 

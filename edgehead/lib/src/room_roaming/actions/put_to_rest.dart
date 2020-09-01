@@ -87,8 +87,9 @@ class PutToRest extends OtherActorActionBase {
 
     if (room.isSynthetic) return false;
 
-    if (situation.monstersAlive) {
-      // Don't allow putting to rest when monsters in this room are still alive.
+    if (situation.monstersAlive && !room.fightIsOptional) {
+      // Don't allow putting to rest when monsters in this room are still alive
+      // and the fight isn't optional.
       return false;
     }
 

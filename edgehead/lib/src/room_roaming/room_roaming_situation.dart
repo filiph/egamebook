@@ -56,7 +56,7 @@ abstract class RoomRoamingSituation extends Object
         Eat.singleton,
         PutToRest.singleton,
         PutInsectToRest.singleton,
-        SlayMonstersAction.singleton,
+        AutoSlayMonstersAction.singleton,
         TakeApproachAction.singleton,
         TakeImplicitApproachAction.singleton,
         HireNpcAction.singleton,
@@ -121,10 +121,24 @@ abstract class RoomRoamingSituation extends Object
     final parentRoom = sim.getRoomParent(specifiedRoom);
     final room = sim.getVariantIfApplicable(specifiedRoom, context);
 
-    // Find if monsters were slain by seeing if there was a [TakeApproach]
-    // action record leading to this room.
-    bool visited = originalWorld.visitHistory.query(a, room).hasHappened;
-    bool monstersAlive = !visited && room.fightGenerator != null;
+    // Find if monsters were slain by seeing if there was slaying
+    // performed by the actor in the room.
+    assert(
+        a.isPlayer,
+        "Currently, we assume slaying only by the player. "
+        "Otherwise, we'd have to figure out if _any_ actor slayed "
+        "in the room.");
+    bool monstersAlive = room.fightGenerator != null &&
+        !originalWorld.slayHistory.query(a, room).hasHappened;
+    if (room.fightGenerator != null && !monstersAlive) {
+      // Monsters are _still_ alive (in other words, this room has the ability
+      // to have monsters (fightGenerator) and they haven't been slain.
+      assert(
+          originalWorld.slayHistory.query(a, room).count == 1,
+          "Currently, we assume only one slaying per room, ever. "
+          "If this assumption doesn't hold, we need to somehow track "
+          "'monster re-population events' and check them here.");
+    }
 
     var nextRoomSituation =
         RoomRoamingSituation.initialized(w.randomInt(), room, monstersAlive);

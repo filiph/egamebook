@@ -15,6 +15,7 @@ import 'package:edgehead/fractal_stories/director/director.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/history/rule_history.dart';
+import 'package:edgehead/fractal_stories/history/slay_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
@@ -73,6 +74,7 @@ part 'edgehead_serializers.g.dart';
   Situation,
   Team,
   VisitHistory,
+  SlayHistory,
   DamageCapability,
   WeaponType,
   WorldState,

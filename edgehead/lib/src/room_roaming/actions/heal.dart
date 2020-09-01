@@ -99,8 +99,9 @@ class HealAction extends Action<Actor> {
 
     if (room.isSynthetic) return false;
 
-    if (situation.monstersAlive) {
-      // Don't allow healing when monsters in this room are still alive.
+    if (situation.monstersAlive && !room.fightIsOptional) {
+      // Don't allow healing when monsters in this room are still alive
+      // and the fight isn't optional.
       return false;
     }
 

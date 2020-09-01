@@ -146,6 +146,17 @@ class Room {
   /// TakeImplicitApproach.
   final bool isSynthetic;
 
+  /// When this is `true`, fight doesn't start automatically when the player
+  /// enters the room. Instead, the writer has the option to call
+  /// [SlayMonstersAction.pushFightSituation] manually in some action.
+  ///
+  /// This allows having rooms in which the player stays hidden.
+  ///
+  /// By default, this is `false`, which means that the fight will start
+  /// implicitly as soon as player enters the room
+  /// (right after `FIRST_DESCRIPTION`).
+  final bool fightIsOptional;
+
   /// Called just after the first batch of monsters (defined
   /// in [fightGenerator]) have been killed. This is often the first time
   /// the player character has the peace to explore the room some more.
@@ -182,6 +193,7 @@ class Room {
     this.firstMapName,
     this.hint,
     this.firstHint,
+    this.fightIsOptional = false,
   })  : assert(name != null),
         assert(
             describe != null || firstDescribe != null,

@@ -1,9 +1,9 @@
 APPROACH: $goblin_skirmish_patrol FROM $bleeds_main
-DESCRIPTION: There is no path in the direction of the smoke. [We] go through the brush and step over logs and ancient rubble.
 PREREQUISITES:
 c.knows(kbGoblinCampSmoke)
-&&
-!c.playerHasVisited("goblin_skirmish_patrol")
+
+APPROACH: $goblin_skirmish_patrol FROM $goblin_skirmish_main
+
 
 // ---
 ROOM: $goblin_skirmish_patrol
@@ -18,9 +18,13 @@ MAP_NAME: Ancient rubble
 HINT: It's the place I met the goblin patrol.
 
 FIRST_DESCRIPTION:
+There is no path in the direction of the smoke. [We] go through the brush and step over logs and ancient rubble.
+
 When [we] come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear. The goblin is completely white — even his eyebrows are unpigmented.
 
 "You lost, peasant?"
+
+DESCRIPTION: $NONE
 
 FIGHT_SITUATION:
 generateBleedsGoblinSkirmishPatrol

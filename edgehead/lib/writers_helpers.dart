@@ -18,6 +18,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
@@ -159,6 +160,22 @@ FightSituation generateBattlefieldFight(ActionContext c,
   );
 }
 
+/// Fight with Big O (Osiris) at the end.
+FightSituation generateBigOFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [bigO],
+    "marble floor",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 /// The fight west of The Bleeds.
 FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
@@ -195,22 +212,6 @@ FightSituation generateCrowdsourceFight(ActionContext c,
     party,
     [shaman, edgeheadDarg],
     "{temple |}floor",
-    roomRoamingSituation,
-    {},
-    items: const [],
-  );
-}
-
-/// Fight with Big O (Osiris) at the end.
-FightSituation generateBigOFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
-  final w = c.outputWorld;
-
-  return FightSituation.initialized(
-    w.randomInt(),
-    party,
-    [bigO],
-    "marble floor",
     roomRoamingSituation,
     {},
     items: const [],
@@ -778,6 +779,17 @@ extension ActionContextHelpers on ActionContext {
       outputWorld.recordCustom(_describedWorthinessEvent,
           data: item.id, actor: who);
     }
+  }
+
+  /// Starts a fight, assuming the current room's fight is optional
+  /// and the monsters are still alive.
+  void startOptionalFight() {
+    assert((world.currentSituation as RoomRoamingSituation).monstersAlive);
+    assert(simulation
+        .getRoomParent(simulation.getRoomByName(
+            (world.currentSituation as RoomRoamingSituation).currentRoomName))
+        .fightIsOptional);
+    AutoSlayMonstersAction.pushFightSituation(this);
   }
 }
 

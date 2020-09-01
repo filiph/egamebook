@@ -79,7 +79,7 @@
 		"constants": {
 			"patterns": [{
 				"name": "constant.language.egb",
-				"match": "(\\s|^)\\$(TRUE|IMPLICIT|NONE|DEFAULT|IDLE|__END_OF_ROAM__)(\\s|$)"
+				"match": "(\\s|^)\\$(TRUE|IMPLICIT|NONE|DEFAULT|IDLE|FIGHT_IS_OPTIONAL|__END_OF_ROAM__)(\\s|$)"
 			}]
 		},
 		"variable_names": {

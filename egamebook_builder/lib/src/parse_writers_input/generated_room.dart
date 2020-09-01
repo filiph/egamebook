@@ -100,6 +100,9 @@ class GeneratedRoom extends GeneratedGameObject {
           case r'$IDLE':
             namedArguments["isIdle"] = literalTrue;
             break;
+          case r'$FIGHT_IS_OPTIONAL':
+            namedArguments["fightIsOptional"] = literalTrue;
+            break;
           default:
             throw ArgumentError(
                 'Unknown flag "$flag" in $writersName ($path).');

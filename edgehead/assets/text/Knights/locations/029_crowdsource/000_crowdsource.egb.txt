@@ -18,6 +18,11 @@ Darg is larger and considerably more muscular than the shaman. He is the leader 
 
 DESCRIPTION: $NONE
 
+FLAGS: $FIGHT_IS_OPTIONAL
+
+FIGHT_SITUATION:
+generateCrowdsourceFight
+
 AFTER_MONSTERS_CLEARED:
 I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs' complex.
 
@@ -77,41 +82,7 @@ COMMAND: Orcs >> Attack
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
-// This is copy-pasted from SlayMonstersAction. Ideally, we could have an "optional fight" bit on rooms that would make this automatically.
-// Same code is in darg_tent.egb.txt.
-
-final situation = w.currentSituation as RoomRoamingSituation;
-Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
-
-WorldState built = w.build();
-var friends = built.actors
-    .where((other) =>
-        other.isAnimatedAndActive &&
-        other.team.isFriendWith(a.team) &&
-        other.currentRoomName == room.name)
-    .toList(growable: false);
-
-var fightSituation = generateCrowdsourceFight(c, situation, friends);
-assert(() {
-  WorldState rebuilt = w.build();
-  return fightSituation.enemyTeamIds
-      .every((id) => rebuilt.actors.any((a) => a.id == id));
-}(),
-    "FightGenerator in $room didn't add its monsters to the world's "
-    "actors. Add a line like `w.actors.addAll(monsters)` to the "
-    "generator. At least one of these actors is missing: "
-    "${fightSituation.enemyTeamIds}");
-
-// Move enemy combatants to the room (fightGenerator cannot know which
-// room it will be, so their currentRoomName is `null`).
-for (final enemyId in fightSituation.enemyTeamIds) {
-  w.updateActorById(enemyId, (b) => b.currentRoomName = room.name);
-}
-
-// _assignRecoveringUntil(
-//    originalWorld.time, w, fightSituation.getActors(sim, w.build()));
-
-w.pushSituation(fightSituation);
+c.startOptionalFight();
 [[ENDCODE]]
 
 

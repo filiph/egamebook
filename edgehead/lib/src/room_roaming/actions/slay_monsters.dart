@@ -6,8 +6,8 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class SlayMonstersAction extends Action<Nothing> {
-  static final SlayMonstersAction singleton = SlayMonstersAction();
+class AutoSlayMonstersAction extends Action<Nothing> {
+  static final AutoSlayMonstersAction singleton = AutoSlayMonstersAction();
 
   static const String className = "SlayMonstersAction";
 
@@ -48,12 +48,46 @@ class SlayMonstersAction extends Action<Nothing> {
 
   @override
   String applySuccess(ActionContext context, void _) {
+    pushFightSituation(context);
+
+    return "${context.actor.name} initiated combat with monsters "
+        "in ${context.world.currentSituation}";
+  }
+
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
+      "WARNING should not be user-visible";
+
+  @override
+  ReasonedSuccessChance getSuccessChance(
+          Actor a, Simulation sim, WorldState w, void _) =>
+      ReasonedSuccessChance.sureSuccess;
+
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    final situation = w.currentSituation as RoomRoamingSituation;
+    Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
+    return !room.fightIsOptional && situation.monstersAlive;
+  }
+
+  /// Pushes the current room's fight situation (constructed by
+  /// [Room.fightGenerator] on the [WorldState.situations] stack.
+  ///
+  /// This function must be called when [WorldState.currentSituation]
+  /// is a [RoomRoamingSituation], and when it has monsters alive
+  /// (it has a non-null [Room.fightGenerator] and the monsters haven't been
+  /// slain).
+  static void pushFightSituation(ActionContext context) {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldState originalWorld = context.world;
     WorldStateBuilder w = context.outputWorld;
+    assert(w.currentSituation is RoomRoamingSituation);
     final situation = w.currentSituation as RoomRoamingSituation;
     Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
+    assert(room.fightGenerator != null);
+    assert(situation.monstersAlive);
 
     WorldState built = w.build();
     var friends = built.actors
@@ -84,23 +118,7 @@ class SlayMonstersAction extends Action<Nothing> {
         originalWorld.time, w, fightSituation.getActors(sim, w.build()));
 
     w.pushSituation(fightSituation);
-
-    return "${a.name} initiated combat with monsters in $room";
   }
-
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) =>
-      "WARNING should not be user-visible";
-
-  @override
-  ReasonedSuccessChance getSuccessChance(
-          Actor a, Simulation sim, WorldState w, void _) =>
-      ReasonedSuccessChance.sureSuccess;
-
-  @override
-  bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
-          WorldState w, void _) =>
-      (w.currentSituation as RoomRoamingSituation).monstersAlive;
 
   /// Assign recoveringUntil according to initiative.
   static void _assignRecoveringUntil(

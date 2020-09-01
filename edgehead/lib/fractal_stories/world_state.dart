@@ -9,6 +9,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
 import 'package:edgehead/fractal_stories/history/custom_event_history.dart';
 import 'package:edgehead/fractal_stories/history/rule_history.dart';
+import 'package:edgehead/fractal_stories/history/slay_history.dart';
 import 'package:edgehead/fractal_stories/history/visit_history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
@@ -69,6 +70,12 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   ///
   /// This is a push-down automaton.
   BuiltList<Situation> get situations;
+
+  /// A record of times when actors (generally, the player) slayed monsters
+  /// in a room.
+  ///
+  /// Important to find out if a room is free of monsters or not.
+  SlayHistory get slayHistory;
 
   /// The state of statefulRandom. This is changed every time
   /// [WorldStateBuilder.randomInt] or [WorldStateBuilder.randomDouble]
@@ -242,6 +249,8 @@ abstract class WorldStateBuilder
 
   VisitHistoryBuilder visitHistory;
 
+  SlayHistoryBuilder slayHistory;
+
   factory WorldStateBuilder() = _$WorldStateBuilder;
 
   WorldStateBuilder._();
@@ -356,6 +365,17 @@ abstract class WorldStateBuilder
     final record = RuleRecord(ruleId: rule.hash, time: time);
     ruleHistory.records[rule.hash] = record;
     ruleHistory.latestRule = record.toBuilder();
+  }
+
+  void recordSlaying(Actor actor, Room room) {
+    final key = SlayHistory.getKey(room);
+    slayHistory.records.add(
+        key,
+        SlayRecord(
+            time: time,
+            actorId: actor.id,
+            roomName: room.name,
+            parentRoomName: room.parent));
   }
 
   void recordVisit(Actor actor, Room room) {

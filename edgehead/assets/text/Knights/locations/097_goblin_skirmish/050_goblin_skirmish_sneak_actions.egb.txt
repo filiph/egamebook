@@ -1,57 +1,24 @@
-APPROACH: $goblin_skirmish_sneak FROM $goblin_skirmish_patrol
-COMMAND: Smoke >> Come closer
-
-APPROACH: $goblin_skirmish_sneak FROM $bleeds_main
-COMMAND: Go >> Near the Goblin Outpost
-PREREQUISITES:
-c.playerHasVisited("goblin_skirmish_sneak")
-&&
-!c.hasHappened(evGoblinCampCleared)
-
-// Goal: Tell player what they should expect if they attack.
-// Optional: 
-//   - learn about kh'ompakh (compass device)
-//   - learn about goblin rank through voice
-//   - learn that the patrol goblin was Amak
-// State: 
-//   - one_of_the_goblins_higher_ranked - If player doesn't listen to their chat, they don't know it. We need to describe it at the start of attack.
-
-ROOM: $goblin_skirmish_sneak
-
-POS: 13, 98
-MAP_NAME: The Camp
-
-FIRST_DESCRIPTION:
-Suddenly, I hear voices ahead. Two goblins are arguing about something. [We] find a hiding spot behind a tree stump and lay low.
-
-DESCRIPTION:
-The goblins are still here.
-
-
 // ---
 ACTION: $observe_goblin_camp
 COMMAND: Goblins >> Peek
-FOR_LOCATION: $goblin_skirmish_sneak
+FOR_LOCATION: $goblin_skirmish_main
+
+PREREQUISITES:
+!c.hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 I gingerly look over the tree stump and see a camp ground with a fire pit and a small shelter made of some animal's hide. There are three goblins, not two. The third goblin is sleeping. There may be more that I don't see, but looking at the size of the camp ground, it's not likely.
 
 This will not be an easy fight if I choose to attack. But [we] do have the element of surprise.
 
-// ---
-ACTION: $goblin_camp_attack
-COMMAND: Goblins >> Attack
-FOR_LOCATION: $goblin_skirmish_sneak
-
-COMPLETE_SUCCESS_DESCRIPTION:
-[[CODE]]
-c.movePlayer('goblin_skirmish_main');
-[[ENDCODE]]
 
 // ---
 ACTION: $listen_to_them_arguing
 COMMAND: Goblins >> Listen
-FOR_LOCATION: $goblin_skirmish_sneak
+FOR_LOCATION: $goblin_skirmish_main
+
+PREREQUISITES:
+!c.hasHappened(evGoblinCampCleared)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 "Why not go now?" a goblin says in a screeching voice. "They are weak. It will be an easy take."
@@ -67,9 +34,11 @@ COMPLETE_SUCCESS_DESCRIPTION:
 // --
 ACTION: $listen_continue
 COMMAND: Goblins >> Continue listening
-FOR_LOCATION: $goblin_skirmish_sneak
+FOR_LOCATION: $goblin_skirmish_main
 
 PREREQUISITES:
+!c.hasHappened(evGoblinCampCleared)
+&&
 w.actionHasBeenPerformed("listen_to_them_arguing")
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -79,12 +48,15 @@ The lower rank starts to growl but apparently thinks better of it. "The come-pas
 
 "Oh, you know what the maker wants, do you?"
 
+
 // ---
 ACTION: $listen_more
 COMMAND: Goblins >> Continue listening
-FOR_LOCATION: $goblin_skirmish_sneak
+FOR_LOCATION: $goblin_skirmish_main
 
 PREREQUISITES:
+!c.hasHappened(evGoblinCampCleared)
+&&
 w.actionHasBeenPerformed("listen_continue")
 
 COMPLETE_SUCCESS_DESCRIPTION:
