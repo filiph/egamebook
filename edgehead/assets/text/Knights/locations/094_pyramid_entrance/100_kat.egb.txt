@@ -59,6 +59,10 @@ c.inRoomWith(katId)
 w.actionHasBeenPerformed("talk_to_kat_greetings")
 &&
 w.actionHasBeenPerformed("talk_to_miguel_greetings")
+&&
+!c.inRoomWith(miguelId)
+&&
+c.hasHappened(evQuake2)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 She shakes her head. "Left his post. Went inside."

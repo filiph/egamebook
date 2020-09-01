@@ -8915,7 +8915,9 @@ class TalkToKatAboutMiguelMissing extends RoamingAction {
     }
     if (!(c.inRoomWith(katId) &&
         w.actionHasBeenPerformed("talk_to_kat_greetings") &&
-        w.actionHasBeenPerformed("talk_to_miguel_greetings"))) {
+        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
+        !c.inRoomWith(miguelId) &&
+        c.hasHappened(evQuake2))) {
       return false;
     }
     return w.actionNeverUsed(name);
