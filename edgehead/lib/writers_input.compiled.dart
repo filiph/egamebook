@@ -10617,15 +10617,17 @@ final bleedsBlindGuideDelvingInk = InkAst([
               'You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it\'s best to find friends, allies. There are powerful weapons to be had, in the Pyramid, like the Dragon Egg or a katana."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          c.learn(DragonEggFacts.anAncientWeapon);
-          c.learn(DelvingFacts.knowledge);
+          s.add('He scratches just under one of his unseeing eyes.\n',
+              isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -10635,6 +10637,15 @@ final bleedsBlindGuideDelvingInk = InkAst([
           s.add(
               '"And remember, you can always just turn around and run from here."\n',
               isRaw: true);
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(DragonEggFacts.anAncientWeapon);
+          c.learn(DelvingFacts.knowledge);
         }),
       ],
     ),

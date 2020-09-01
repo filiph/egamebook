@@ -306,12 +306,14 @@ INK:
 
   <> You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it's best to find friends, allies. There are powerful weapons to be had, in the Pyramid, like the Dragon Egg or a katana."
 
+  He scratches just under one of his unseeing eyes.
+
+  "And remember, you can always just turn around and run from here."
+
   [[CODE]]
   c.learn(DragonEggFacts.anAncientWeapon);
   c.learn(DelvingFacts.knowledge);
   [[ENDCODE]]
-
-  "And remember, you can always just turn around and run from here."
 
 -
 
