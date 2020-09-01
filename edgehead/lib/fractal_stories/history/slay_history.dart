@@ -24,18 +24,18 @@ abstract class SlayHistory implements Built<SlayHistory, SlayHistoryBuilder> {
   /// The records are grouped for faster access.
   BuiltListMultimap<String, SlayRecord> get records;
 
-  /// Returns the record for the particular [actor] and the [room].
+  /// Returns the record for the particular [room].
   ///
   /// By default, this only asks for record of the particular variant of the
   /// room. If you don't care what state the room was in when the actor
   /// visited it, set [includeVariants] to `true`.
-  SerialQueryResult<SlayRecord> query(Actor actor, Room room,
+  ///
+  /// This doesn't care which actor finished the fight ([SlayRecord.actorId]).
+  SerialQueryResult<SlayRecord> query(Room room,
       {bool includeVariants = false}) {
-    assert(actor != null);
     assert(room != null);
     final key = getKey(room);
     return SerialQueryResult(records[key].where((rec) {
-      if (rec.actorId != actor.id) return false;
       if (rec.roomName == room.name) return true;
       if (includeVariants) {
         if (rec.parentRoomName != null) {
@@ -71,6 +71,8 @@ abstract class SlayRecord
 
   SlayRecord._();
 
+  /// The [Actor.id] of the actor who finished the deed (last kill).
+  /// Not necessarily the player.
   int get actorId;
 
   @nullable

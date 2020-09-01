@@ -367,6 +367,10 @@ abstract class WorldStateBuilder
     ruleHistory.latestRule = record.toBuilder();
   }
 
+  /// Essentially, marks the [room] as "cleared of monsters".
+  ///
+  /// [actor] is the person who finished the deed (the last kill). It does
+  /// _not_ need to be the player.
   void recordSlaying(Actor actor, Room room) {
     final key = SlayHistory.getKey(room);
     slayHistory.records.add(

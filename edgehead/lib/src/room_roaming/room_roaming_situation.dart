@@ -129,12 +129,12 @@ abstract class RoomRoamingSituation extends Object
         "Otherwise, we'd have to figure out if _any_ actor slayed "
         "in the room.");
     bool monstersAlive = room.fightGenerator != null &&
-        !originalWorld.slayHistory.query(a, room).hasHappened;
+        !originalWorld.slayHistory.query(room).hasHappened;
     if (room.fightGenerator != null && !monstersAlive) {
       // Monsters are _still_ alive (in other words, this room has the ability
       // to have monsters (fightGenerator) and they haven't been slain.
       assert(
-          originalWorld.slayHistory.query(a, room).count == 1,
+          originalWorld.slayHistory.query(room).count == 1,
           "Currently, we assume only one slaying per room, ever. "
           "If this assumption doesn't hold, we need to somehow track "
           "'monster re-population events' and check them here.");
