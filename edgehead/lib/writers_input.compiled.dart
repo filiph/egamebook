@@ -1832,6 +1832,7 @@ final Room smithy = Room(
     },
     generateJailerFight,
     null,
+    fightIsOptional: true,
     positionX: 24,
     positionY: 40,
     mapName: 'Smithy',
@@ -1882,6 +1883,7 @@ final Room smithyAfterSarnSaved = Room(
       final Storyline s = c.outputStoryline;
       s.add('The smithy is empty and silent now.\n', isRaw: true);
     },
+    fightIsOptional: true,
     positionX: 24,
     positionY: 40,
     mapName: 'Smithy',

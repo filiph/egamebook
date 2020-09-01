@@ -18,9 +18,9 @@ He is being guarded by an orc jailer.
 
 ![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)
 
-// TODO: there is also a dead body on the floor. Can be necromance'd.
-
 DESCRIPTION: $NONE
+
+FLAGS: $FIGHT_IS_OPTIONAL
 
 FIGHT_SITUATION:
 generateJailerFight
