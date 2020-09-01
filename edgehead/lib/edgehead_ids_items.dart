@@ -20,6 +20,8 @@ const int familyPortraitId = 77011;
 
 const int graySpearId = 77027;
 
+const int jailerMaceId = 77031;
+
 const int jisadAppleId = 770016;
 
 const int katanaId = 77006;

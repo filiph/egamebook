@@ -1767,10 +1767,9 @@ class SaveSarn extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: fight. Assuming victory.\n\nTODO: I try to talk to Sarn, but he doesn\'t respond. He\'s trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.\n\nTODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.\n\n',
+        'I drop down next to Sarn. He looks surprised but there is no recognition in his eyes.\n\nThe orc jailer takes an iron mace and advances towards me.\n\n"Step back, inventor," he says to Sarn. "Let me deal with this worm."\n\nSarn retreats to a corner of the room and looks at the floor, waiting.\n\n',
         isRaw: true);
-    c.markHappened(evSavedSarn);
-    c.movePlayer('bleeds_main');
+    c.startOptionalFight();
 
     return '${a.name} successfully performs SaveSarn';
   }
@@ -1806,28 +1805,48 @@ class SaveSarn extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room smithy = Room('smithy', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'My brother, Sarn, working for the orcs, forging weapons. He seems not fully aware of his surroundings.\n\n',
-      isRaw: true);
-  c.learn(SarnFacts.seenPersonally);
+final Room smithy = Room(
+    'smithy',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'My brother, Sarn, working for the orcs, forging weapons. He seems not fully aware of his surroundings.\n\n',
+          isRaw: true);
+      c.learn(SarnFacts.seenPersonally);
 
-  s.add(
-      '\nHe is being guarded by an orcish jailer.\n\n![Illustration of Sarn, my brother, working with an anvil. An orcish jailer is in the background.](sarn.png)\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null, positionX: 24, positionY: 40, mapName: 'Smithy');
+      s.add(
+          '\nHe is being guarded by an orc jailer.\n\n![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateJailerFight,
+    null,
+    positionX: 24,
+    positionY: 40,
+    mapName: 'Smithy',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'TODO: I try to talk to Sarn, but he doesn\'t respond. He\'s trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.\n\nTODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.\n\n',
+          isRaw: true);
+      c.markHappened(evSavedSarn);
+      c.movePlayer('bleeds_main');
+    });
 final Room smithyAfterSarnSaved = Room(
     'smithy_after_sarn_saved',
     (ActionContext c) {
@@ -1846,7 +1865,7 @@ final Room smithyAfterSarnSaved = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
-    null,
+    generateJailerFight,
     null,
     parent: 'smithy',
     prerequisite: Prerequisite(476050921, 1, true, (ApplicabilityContext c) {
@@ -1865,7 +1884,19 @@ final Room smithyAfterSarnSaved = Room(
     },
     positionX: 24,
     positionY: 40,
-    mapName: 'Smithy');
+    mapName: 'Smithy',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'TODO: I try to talk to Sarn, but he doesn\'t respond. He\'s trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.\n\nTODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.\n\n',
+          isRaw: true);
+      c.markHappened(evSavedSarn);
+      c.movePlayer('bleeds_main');
+    });
 final Approach elevator28FromElevator12 =
     Approach('elevator_12', 'elevator_28', '', (ActionContext c) {
   final WorldState originalWorld = c.world;

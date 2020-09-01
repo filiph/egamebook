@@ -205,6 +205,24 @@ final Actor firstGoblin = Actor.initialized(
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
+final Actor jailer = Actor.initialized(
+  jailerId,
+  StatefulRandom(~jailerId).next,
+  'jailer',
+  adjective: 'orc',
+  pronoun: Pronoun.HE,
+  currentRoomName: 'smithy',
+  currentWeapon: Item.weapon(
+    jailerMaceId,
+    WeaponType.club,
+    name: "mace",
+    adjective: "iron",
+    firstOwnerId: jailerId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 final Actor lizardman = Actor.initialized(
   lizardmanId,
   StatefulRandom(~lizardmanId).next,

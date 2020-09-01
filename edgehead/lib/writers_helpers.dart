@@ -262,6 +262,29 @@ FightSituation generateGoblinCampFight(ActionContext c,
   );
 }
 
+/// The fight in the smithy with the orc jailer.
+FightSituation generateJailerFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+  final weak = _orcsLackCockroaches(c);
+  if (weak) {
+    c.outputStoryline.add('He seems famished.', isRaw: true);
+    w.updateActorById(jailerId, (b) => b.dexterity = b.dexterity ~/ 2);
+  }
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [jailer],
+    "{|concrete} floor",
+    roomRoamingSituation,
+    {},
+    items: const [
+      // TODO: some kind of a weapon?
+    ],
+  );
+}
+
 /// God's lair fight.
 FightSituation generateGodsLairFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
