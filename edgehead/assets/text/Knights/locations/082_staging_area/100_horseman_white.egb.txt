@@ -55,7 +55,7 @@ c.learn(KnightsFacts.knightsAreLeaving);
 
 * "Can you just look in your book?"
 
-Horseman White's face reddens, but he swallows a retort and flips through the pages. <>
+The officer's face reddens, but he swallows a retort and flips through the pages. <>
 
 * "You don't remember your subordinates?"
 

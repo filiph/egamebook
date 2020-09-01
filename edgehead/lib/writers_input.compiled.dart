@@ -5877,7 +5877,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'Horseman White\'s face reddens, but he swallows a retort and flips through the pages.\n',
+              'The officer\'s face reddens, but he swallows a retort and flips through the pages.\n',
               isRaw: true);
         }),
       ],
