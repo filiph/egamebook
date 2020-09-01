@@ -11,8 +11,7 @@ import 'package:meta/meta.dart';
 part 'slay_history.g.dart';
 
 /// A record of all the times any actor slayed monsters in any room.
-abstract class SlayHistory
-    implements Built<SlayHistory, SlayHistoryBuilder> {
+abstract class SlayHistory implements Built<SlayHistory, SlayHistoryBuilder> {
   static Serializer<SlayHistory> get serializer => _$slayHistorySerializer;
 
   factory SlayHistory([void updates(SlayHistoryBuilder b)]) = _$SlayHistory;
