@@ -280,8 +280,6 @@ FightSituation generateGodsLairFight(ActionContext c,
     // Currently, this has no gameplay effect.
   }
 
-  w.actors.addAll([orcBerserker, orcCaptain]);
-
   return FightSituation.initialized(
     w.randomInt(),
     party,
