@@ -24,6 +24,11 @@ class WeaponType extends EnumClass {
   /// who am I to stop them?
   static const WeaponType harmless = _$harmless;
 
+  /// Clothing is not only [harmless] as a weapon, it shouldn't be even
+  /// allowed to be equipped. (Because that's confusing: equipping a jacket
+  /// seems like putting it on, not wielding it.)
+  static const WeaponType clothing = _$clothing;
+
   /// An animal claw.
   static const WeaponType claw = _$claw;
 
@@ -98,6 +103,7 @@ class WeaponType extends EnumClass {
   /// of you.
   int get defaultLength {
     if (this == invalid) return 0;
+    if (this == clothing) return 0;
     if (bodyPartWeapons.contains(this)) return 0;
     if (this == harmless) return 0;
     if (this == rock) return 0;
@@ -151,6 +157,7 @@ class WeaponType extends EnumClass {
       case rock:
         return true;
       case harmless:
+      case clothing:
       case shield:
       case teeth:
       case claw:

@@ -12,6 +12,8 @@ const int bigOScytheId = 77030;
 
 const int compassId = 77007;
 
+const int conetKoboldWrenchId = 77034;
+
 const int crudeHatchetId = 77024;
 
 const int dragonEggId = 77008;
@@ -19,6 +21,10 @@ const int dragonEggId = 77008;
 const int familyPortraitId = 77011;
 
 const int graySpearId = 77027;
+
+const int hawkmanJacketId = 77036;
+
+const int hawkmanSickleId = 77035;
 
 const int jailerMaceId = 77031;
 
@@ -37,8 +43,6 @@ const int northSkullId = 77015;
 const int oracleAppleId = 77018;
 
 const int orcBerserkerBattleAxeId = 77033;
-
-const int conetKoboldWrenchId = 77034;
 
 const int orcCaptainKnifeId = 77032;
 

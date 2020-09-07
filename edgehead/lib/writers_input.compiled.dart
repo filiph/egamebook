@@ -932,12 +932,198 @@ class DargHeadTalkInk extends RoamingAction {
   bool get isAggressive => false;
 }
 
+final Approach outlookFromTopOfClimb =
+    Approach('top_of_climb', 'outlook', '', null);
+final outlookAttackInk = InkAst([
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" Option A """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" Option B """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.startOptionalFight();
+  }),
+]);
+
+class OutlookAttack extends RoamingAction {
+  @override
+  final String name = 'outlook_attack';
+
+  static final OutlookAttack singleton = OutlookAttack();
+
+  @override
+  List<String> get commandPathTemplate => ['Hawkman', 'Attack'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('outlook') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "outlook_attack_ink",
+    ));
+    return '${a.name} successfully performs OutlookAttack';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform OutlookAttack';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class StripDeadHawkman extends RoamingAction {
+  @override
+  final String name = 'strip_dead_hawkman';
+
+  static final StripDeadHawkman singleton = StripDeadHawkman();
+
+  @override
+  List<String> get commandPathTemplate => ['Hawkman\'s suit', 'Take'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(!(c.world.currentSituation as RoomRoamingSituation).monstersAlive &&
+        !c.playerRoom.isSynthetic &&
+        c.playerRoom.isOnMap &&
+        c.inRoomWith(hawkmanId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I strip the hawkman of his suit and put it on.\n\n', isRaw: true);
+    c.giveNewItemToPlayer(hawkmanJacket);
+
+    return '${a.name} successfully performs StripDeadHawkman';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform StripDeadHawkman';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room outlook = Room(
+    'outlook',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'A hawkman is looking into the distance, looking bored. He sees me immediately, but doesn\'t seem to care.\n\n![Illustration of a man with a hawk\'s head, dressed in an ancient suit, and a sicle for a weapon.](hawkman.png)\n\nHe is wearing an ancient suit, miraculously preserved.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateHawkmanFight,
+    null,
+    fightIsOptional: true,
+    positionX: 18,
+    positionY: 24,
+    mapName: 'Outlook',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The fight is over.\n\n', isRaw: true);
+      c.markHappened(evKilledHawkman);
+    });
 final Approach topOfClimbFromBarracks =
     Approach('barracks', 'top_of_climb', '', null);
 final Approach topOfClimbFromBigOAntechamber =
     Approach('big_o_antechamber', 'top_of_climb', '', null);
 final Approach topOfClimbFromKeepServants =
     Approach('keep_servants', 'top_of_climb', '', null);
+final Approach topOfClimbFromOutlook =
+    Approach('outlook', 'top_of_climb', '', null);
 final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -955,7 +1141,7 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, null, positionX: 19, positionY: 26, mapName: 'Top of the climb');
+}, null, null, positionX: 19, positionY: 28, mapName: 'Top of the climb');
 final Approach crowdsourceFromBarracks =
     Approach('barracks', 'crowdsource', '', null);
 final Approach crowdsourceFromBigOAntechamber =
@@ -2628,7 +2814,8 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
         dragonEggId,
         lairOfGodStarId,
         northSkullId,
-        sixtyFiverShieldId
+        sixtyFiverShieldId,
+        hawkmanJacketId
       ],
       especially: [compassId, northSkullId],
       how: "{approvingly|with respect}");
@@ -2646,7 +2833,8 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
         dragonEggId,
         lairOfGodStarId,
         northSkullId,
-        sixtyFiverShieldId
+        sixtyFiverShieldId,
+        hawkmanJacketId
       ],
       especially: [compassId, northSkullId],
       how: "{approvingly|with respect}");
@@ -3979,7 +4167,8 @@ final Room oracleAfterOrcOffensive = Room(
             dragonEggId,
             lairOfGodStarId,
             northSkullId,
-            sixtyFiverShieldId
+            sixtyFiverShieldId,
+            hawkmanJacketId
           ],
           especially: [compassId, northSkullId],
           how: "{approvingly|with respect}");
@@ -4157,8 +4346,8 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
 
   c.describeWorthiness(
       who: cultists,
-      what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-      especially: [lairOfGodStarId],
+      what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+      especially: [lairOfGodStarId, hawkmanJacketId],
       how: "{approvingly|with respect}");
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -4168,8 +4357,8 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   c.describeWorthiness(
       who: cultists,
-      what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-      especially: [lairOfGodStarId],
+      what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+      especially: [lairOfGodStarId, hawkmanJacketId],
       how: "{approvingly|with respect}");
 
   c.increaseSanityFromPeople();
@@ -4943,8 +5132,15 @@ final Room deathlessVillageOrcOffensive = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.\n\nThe tribe is in a state of disarray. They weild the few weapons that they have, and seem to be preparing for a siege.\n',
+          'On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.\n\nThe tribe is in a state of disarray. They weild the few weapons that they have, and seem to be preparing for a siege.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -4954,8 +5150,8 @@ final Room deathlessVillageOrcOffensive = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: cultists,
-          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-          especially: [lairOfGodStarId],
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -4980,8 +5176,8 @@ final Room deathlessVillageOrcOffensive = Room(
           isRaw: true);
       c.describeWorthiness(
           who: cultists,
-          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-          especially: [lairOfGodStarId],
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -4998,8 +5194,15 @@ final Room deathlessVillageQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.\n\nThey are freaked out by the most recent quake.\n',
+          'On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.\n\nThey are freaked out by the most recent quake.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -5009,8 +5212,8 @@ final Room deathlessVillageQuake2 = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: cultists,
-          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-          especially: [lairOfGodStarId],
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -5034,8 +5237,8 @@ final Room deathlessVillageQuake2 = Room(
           isRaw: true);
       c.describeWorthiness(
           who: cultists,
-          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-          especially: [lairOfGodStarId],
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -5052,8 +5255,15 @@ final Room deathlessVillageQuake3 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.\n\nThe village is seriously damaged.\n',
+          'On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.\n\nThe village is seriously damaged.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: cultists,
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -5063,8 +5273,8 @@ final Room deathlessVillageQuake3 = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: cultists,
-          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-          especially: [lairOfGodStarId],
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -5088,8 +5298,8 @@ final Room deathlessVillageQuake3 = Room(
           isRaw: true);
       c.describeWorthiness(
           who: cultists,
-          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId],
-          especially: [lairOfGodStarId],
+          what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -6701,8 +6911,24 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n',
+      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n\n',
       isRaw: true);
+  c.describeWorthiness(
+      who: farmers,
+      what: [
+        akxeId,
+        bannerId,
+        dragonEggId,
+        katanaId,
+        lairOfGodStarId,
+        sixtyFiverShieldId,
+        sixtyFiverSwordId,
+        hawkmanJacketId
+      ],
+      especially: [katanaId, bannerId],
+      how: "{approvingly|with respect}");
+
+  c.increaseSanityFromPeople();
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -6718,7 +6944,8 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
         katanaId,
         lairOfGodStarId,
         sixtyFiverShieldId,
-        sixtyFiverSwordId
+        sixtyFiverSwordId,
+        hawkmanJacketId
       ],
       especially: [katanaId, bannerId],
       how: "{approvingly|with respect}");
@@ -7608,8 +7835,24 @@ final Room farmersVillageQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n',
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: farmers,
+          what: [
+            akxeId,
+            bannerId,
+            dragonEggId,
+            katanaId,
+            lairOfGodStarId,
+            sixtyFiverShieldId,
+            sixtyFiverSwordId,
+            hawkmanJacketId
+          ],
+          especially: [katanaId, bannerId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -7626,7 +7869,8 @@ final Room farmersVillageQuake1 = Room(
             katanaId,
             lairOfGodStarId,
             sixtyFiverShieldId,
-            sixtyFiverSwordId
+            sixtyFiverSwordId,
+            hawkmanJacketId
           ],
           especially: [katanaId, bannerId],
           how: "{approvingly|with respect}");
@@ -7660,7 +7904,8 @@ final Room farmersVillageQuake1 = Room(
             katanaId,
             lairOfGodStarId,
             sixtyFiverShieldId,
-            sixtyFiverSwordId
+            sixtyFiverSwordId,
+            hawkmanJacketId
           ],
           especially: [katanaId, bannerId],
           how: "{approvingly|with respect}");
@@ -7764,8 +8009,24 @@ final Room farmersVillageQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nThe farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\nAmong all this, an old woman is whittling a little dog-headed figure from wood. She looks familiar.\n',
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nThe farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\nAmong all this, an old woman is whittling a little dog-headed figure from wood. She looks familiar.\n\n',
           isRaw: true);
+      c.describeWorthiness(
+          who: farmers,
+          what: [
+            akxeId,
+            bannerId,
+            dragonEggId,
+            katanaId,
+            lairOfGodStarId,
+            sixtyFiverShieldId,
+            sixtyFiverSwordId,
+            hawkmanJacketId
+          ],
+          especially: [katanaId, bannerId],
+          how: "{approvingly|with respect}");
+
+      c.increaseSanityFromPeople();
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -7782,7 +8043,8 @@ final Room farmersVillageQuake2 = Room(
             katanaId,
             lairOfGodStarId,
             sixtyFiverShieldId,
-            sixtyFiverSwordId
+            sixtyFiverSwordId,
+            hawkmanJacketId
           ],
           especially: [katanaId, bannerId],
           how: "{approvingly|with respect}");
@@ -7816,7 +8078,8 @@ final Room farmersVillageQuake2 = Room(
             katanaId,
             lairOfGodStarId,
             sixtyFiverShieldId,
-            sixtyFiverSwordId
+            sixtyFiverSwordId,
+            hawkmanJacketId
           ],
           especially: [katanaId, bannerId],
           how: "{approvingly|with respect}");
@@ -8612,7 +8875,13 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   c.describeWorthiness(
       who: w.getActorById(miguelId),
-      what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+      what: [
+        bannerId,
+        dragonEggId,
+        katanaId,
+        sixtyFiverShieldId,
+        hawkmanJacketId
+      ],
       especially: [sixtyFiverShieldId, bannerId],
       how: "{approvingly|with respect}");
 }, null, null,
@@ -9787,7 +10056,13 @@ final Room pyramidEntranceDuringCaravan = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: w.getActorById(miguelId),
-          what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+          what: [
+            bannerId,
+            dragonEggId,
+            katanaId,
+            sixtyFiverShieldId,
+            hawkmanJacketId
+          ],
           especially: [sixtyFiverShieldId, bannerId],
           how: "{approvingly|with respect}");
     },
@@ -9933,7 +10208,13 @@ final Room pyramidEntranceAfterOrcOffensive = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: w.getActorById(miguelId),
-          what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+          what: [
+            bannerId,
+            dragonEggId,
+            katanaId,
+            sixtyFiverShieldId,
+            hawkmanJacketId
+          ],
           especially: [sixtyFiverShieldId, bannerId],
           how: "{approvingly|with respect}");
     },
@@ -9984,7 +10265,13 @@ final Room pyramidEntranceAfterQuake2 = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: w.getActorById(miguelId),
-          what: [bannerId, dragonEggId, katanaId, sixtyFiverShieldId],
+          what: [
+            bannerId,
+            dragonEggId,
+            katanaId,
+            sixtyFiverShieldId,
+            hawkmanJacketId
+          ],
           especially: [sixtyFiverShieldId, bannerId],
           how: "{approvingly|with respect}");
     },
@@ -12294,7 +12581,7 @@ final Room bleedsMainDuringCaravan = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They\'re clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.\n\nThere is some commotion around the trader\'s shop, not surprisingly. People are moving goods through the back. A tall figure is watching over all this. At first it seems like the person has a cape, but the truth is they don\'t. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.\n\n![Illustration of a man with a hawk\'s head, and a sicle for a weapon.](hawkman.png)\n\n\n',
+          'The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They\'re clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.\n\nThere is some commotion around the trader\'s shop, not surprisingly. People are moving goods through the back. \n\n',
           isRaw: true);
       c.increaseSanityFromPeople();
     },
@@ -12339,11 +12626,11 @@ final Room bleedsMainAfterCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      final ifBlock_405410045 = c.playerHasVisited("bleeds_main_during_caravan")
-          ? '''The caravan has left. The hawkman named Gadelon stays.'''
-          : '''A tall figure is standing near the trader's shop. At first it seems like the person has a cape, but the truth is they don't. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.''';
+      final ifBlock_370faf1ba = c.playerHasVisited("bleeds_main_during_caravan")
+          ? '''The caravan has left.'''
+          : '''''';
       s.add(
-          'The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. ${ifBlock_405410045}\n\n',
+          'The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. ${ifBlock_370faf1ba}\n\n',
           isRaw: true);
       c.increaseSanityFromPeople();
     },
@@ -14314,6 +14601,7 @@ final allRooms = <Room>[
   dargTent,
   dargTentAfterDargArrived,
   dargTentAfterDargKilled,
+  outlook,
   topOfClimb,
   crowdsource,
   crowdsourceAfterOrcsLeft,
@@ -14388,9 +14676,11 @@ final allApproaches = <Approach>[
   bigOAntechamberFromCrowdsource,
   bigOAntechamberFromTopOfClimb,
   dargTentFromBarracks,
+  outlookFromTopOfClimb,
   topOfClimbFromBarracks,
   topOfClimbFromBigOAntechamber,
   topOfClimbFromKeepServants,
+  topOfClimbFromOutlook,
   crowdsourceFromBarracks,
   crowdsourceFromBigOAntechamber,
   barracksFromCrowdsource,
@@ -14474,6 +14764,8 @@ final allActions = <RoamingAction>[
   OpenAntechamberLock.singleton,
   DargTentAttack.singleton,
   DargHeadTalkInk.singleton,
+  OutlookAttack.singleton,
+  StripDeadHawkman.singleton,
   CrowdsourceAttack.singleton,
   CrowdsourceListen.singleton,
   BarracksTakeBarbecuedBat.singleton,
@@ -14582,6 +14874,7 @@ final allInks = <String, InkAst>{
   'final_fight_ink_ink': finalFightInkInk,
   'big_o_end_ink_ink': bigOEndInkInk,
   'darg_head_talk_ink_ink': dargHeadTalkInkInk,
+  'outlook_attack_ink': outlookAttackInk,
   'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,
   'conet_kobold_examine_ink': conetKoboldExamineInk,

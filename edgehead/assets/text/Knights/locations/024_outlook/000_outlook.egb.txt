@@ -1,0 +1,84 @@
+APPROACH: $outlook FROM $top_of_climb
+
+// ---
+ROOM: $outlook
+
+POS: 18, 24
+MAP_NAME: Outlook
+
+FIRST_DESCRIPTION:
+A hawkman is looking into the distance, looking bored. He sees me immediately, but doesn't seem to care.
+
+![Illustration of a man with a hawk's head, dressed in an ancient suit, and a sicle for a weapon.](hawkman.png)
+
+He is wearing an ancient suit, miraculously preserved.
+
+
+DESCRIPTION: $NONE
+
+FLAGS: $FIGHT_IS_OPTIONAL
+
+FIGHT_SITUATION:
+generateHawkmanFight
+
+AFTER_MONSTERS_CLEARED:
+The fight is over.
+
+[[CODE]]
+c.markHappened(evKilledHawkman);
+[[ENDCODE]]
+
+
+// ---
+ACTION: $outlook_attack
+FOR_LOCATION: $outlook
+
+COMMAND: Hawkman >> Attack
+
+INK:
+// TODO: add conversation: theme is "zaprodat se korporaci"
+
+* Option A
+
+* Option B
+
+-
+
+[[CODE]]
+c.startOptionalFight();
+[[ENDCODE]]
+
+
+// ---
+ACTION: $strip_dead_hawkman
+
+COMMAND: Hawkman's suit >> Take
+
+PREREQUISITES:
+!(c.world.currentSituation as RoomRoamingSituation).monstersAlive
+&&
+!c.playerRoom.isSynthetic
+&&
+c.playerRoom.isOnMap
+&&
+c.inRoomWith(hawkmanId)
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I strip the hawkman of his suit and put it on.
+// TODO: add some feeling
+
+[[CODE]]
+c.giveNewItemToPlayer(hawkmanJacket);
+[[ENDCODE]]
+
+
+NOTES:
+
+Hawkman stands on top of the elevator shaft, looking out (using his hawk eyes). Talking to him will reveal the coming of the giants.
+
+The reward of killing him:
+
+* Some tantalizing info about what's happening: Big O is going to create a new civilization, on the shoulders of giants. "I can already see them." Said before the fight.
+* The sickle is a cleaving weapon.
+* Wearing the jacket will get worthiness.
+

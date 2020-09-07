@@ -15,12 +15,12 @@ c.learn(DeathlessFacts.sawDeathless);
 [[ENDCODE]]
 
 [[CODE]]
-c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId], especially: [lairOfGodStarId], how: "{approvingly|with respect}");
+c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId], especially: [lairOfGodStarId, hawkmanJacketId], how: "{approvingly|with respect}");
 [[ENDCODE]]
 
 DESCRIPTION:
 [[CODE]]
-c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId], especially: [lairOfGodStarId], how: "{approvingly|with respect}");
+c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId], especially: [lairOfGodStarId, hawkmanJacketId], how: "{approvingly|with respect}");
 
 c.increaseSanityFromPeople();
 [[ENDCODE]]

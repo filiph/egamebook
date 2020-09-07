@@ -11,7 +11,7 @@ throw StateError("Player should have been to the Bleeds already.");
 [[ENDCODE]]
 
 VARIANT_UPDATE_DESCRIPTION:
-The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. [[IF c.playerHasVisited("bleeds_main_during_caravan")]]The caravan has left. The hawkman named Gadelon stays.[[ELSE]]A tall figure is standing near the trader's shop. At first it seems like the person has a cape, but the truth is they don't. They are a taheen, and I know them. Gadelon, the hawk man. They traded in the Falling Rock.[[ENDIF]]
+The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. [[IF c.playerHasVisited("bleeds_main_during_caravan")]]The caravan has left.[[ENDIF]]
 
 [[CODE]]
 c.increaseSanityFromPeople();

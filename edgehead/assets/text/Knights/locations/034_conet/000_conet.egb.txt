@@ -6,6 +6,8 @@ ROOM: $conet
 POS: 17, 34
 MAP_NAME: Conet
 
+// TODO: First map name should say "quiter area"
+
 FIRST_DESCRIPTION:
 A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.
 

@@ -63,6 +63,15 @@ final Item familyPortrait = Item(
   firstOwnerId: ladyHopeId,
 );
 
+final Item hawkmanJacket = Item(
+  hawkmanJacketId,
+  name: 'suit',
+  adjective: 'ancient',
+  firstOwnerId: hawkmanId,
+  // Don't allow hitting someone with a suit.
+  damageCapability: DamageCapability(WeaponType.clothing).toBuilder(),
+);
+
 final Item jisadApple = Item(
   jisadAppleId,
   name: 'apple',

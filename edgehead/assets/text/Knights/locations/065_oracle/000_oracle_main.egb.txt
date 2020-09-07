@@ -16,12 +16,12 @@ A woman is here. She seems deep in though, walking up and down the room, over de
 A ridiculously red apple sits on the table.
 
 [[CODE]]
-c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId, hawkmanJacketId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
 [[ENDCODE]]
 
 DESCRIPTION:
 [[CODE]]
-c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId, hawkmanJacketId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
 [[ENDCODE]]
 
 // TODO: the raven can say a random word

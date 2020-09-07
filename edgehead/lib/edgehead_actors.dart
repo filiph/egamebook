@@ -225,6 +225,26 @@ final Actor firstGoblin = Actor.initialized(
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
+final Actor hawkman = Actor.initialized(
+  hawkmanId,
+  StatefulRandom(~hawkmanId).next,
+  "hawkman",
+  adjective: 'tall',
+  pronoun: Pronoun.HE,
+  constitution: 2,
+  dexterity: 150,
+  currentRoomName: 'outlook',
+  currentWeapon: Item.weapon(
+    hawkmanSickleId,
+    WeaponType.axe,
+    name: 'sickle',
+    adjective: 'large',
+    firstOwnerId: hawkmanId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 final Actor jailer = Actor.initialized(
   jailerId,
   StatefulRandom(~jailerId).next,

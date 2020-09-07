@@ -10,11 +10,18 @@ On a ledge overlooking the jungle, a village of cultists. They call themselves t
 
 The village is seriously damaged.
 
+[[CODE]]
+c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId], especially: [lairOfGodStarId, hawkmanJacketId], how: "{approvingly|with respect}");
+
+c.increaseSanityFromPeople();
+[[ENDCODE]]
+
+
 VARIANT_UPDATE_DESCRIPTION:
 The village has been seriously damaged by the latest quake.
 
 [[CODE]]
-c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId], especially: [lairOfGodStarId], how: "{approvingly|with respect}");
+c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId], especially: [lairOfGodStarId, hawkmanJacketId], how: "{approvingly|with respect}");
 
 c.increaseSanityFromPeople();
 [[ENDCODE]]

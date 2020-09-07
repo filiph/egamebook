@@ -314,6 +314,22 @@ FightSituation generateGodsLairFight(ActionContext c,
   );
 }
 
+/// Fight with Big O (Osiris) at the end.
+FightSituation generateHawkmanFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [hawkman],
+    "flat roof",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 /// The fight in the smithy with the orc jailer.
 FightSituation generateJailerFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
@@ -797,6 +813,7 @@ extension ActionContextHelpers on ActionContext {
         "{entranced|captivated|mesmerized|delighted} by",
         especiallyItems,
         null,
+        subject: who,
         maxPerSentence: 5,
       );
     }

@@ -286,6 +286,7 @@ class EdgeheadGame extends Book {
           conetKobold,
           orcCaptain,
           orcBerserker,
+          hawkman,
           bigO,
         ])
         ..director = edgeheadDirector.toBuilder()

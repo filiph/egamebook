@@ -8,6 +8,7 @@ part of fractal_stories.items.weapon_type;
 
 const WeaponType _$invalid = const WeaponType._('invalid');
 const WeaponType _$harmless = const WeaponType._('harmless');
+const WeaponType _$clothing = const WeaponType._('clothing');
 const WeaponType _$claw = const WeaponType._('claw');
 const WeaponType _$teeth = const WeaponType._('teeth');
 const WeaponType _$fist = const WeaponType._('fist');
@@ -25,6 +26,8 @@ WeaponType _$valueOf(String name) {
       return _$invalid;
     case 'harmless':
       return _$harmless;
+    case 'clothing':
+      return _$clothing;
     case 'claw':
       return _$claw;
     case 'teeth':
@@ -54,6 +57,7 @@ final BuiltSet<WeaponType> _$values =
     new BuiltSet<WeaponType>(const <WeaponType>[
   _$invalid,
   _$harmless,
+  _$clothing,
   _$claw,
   _$teeth,
   _$fist,

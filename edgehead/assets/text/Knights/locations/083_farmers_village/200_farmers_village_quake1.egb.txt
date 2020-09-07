@@ -10,12 +10,18 @@ The corridors here look more like streets. Painted walls on either side, with wo
 
 An old woman is whittling a little dog-headed figure from wood. She looks familiar.
 
+[[CODE]]
+c.describeWorthiness(who: farmers, what: [akxeId, bannerId, dragonEggId, katanaId, lairOfGodStarId, sixtyFiverShieldId, sixtyFiverSwordId, hawkmanJacketId], especially: [katanaId, bannerId], how: "{approvingly|with respect}");
+
+c.increaseSanityFromPeople();
+[[ENDCODE]]
+
 
 VARIANT_UPDATE_DESCRIPTION:
 The farmers look a bit more stressed. No more polite nods. Someone's repairing a damaged door, others are cleaning debris. Yet others seem to ignore all that, instead focusing on packing.
 
 [[CODE]]
-c.describeWorthiness(who: farmers, what: [akxeId, bannerId, dragonEggId, katanaId, lairOfGodStarId, sixtyFiverShieldId, sixtyFiverSwordId], especially: [katanaId, bannerId], how: "{approvingly|with respect}");
+c.describeWorthiness(who: farmers, what: [akxeId, bannerId, dragonEggId, katanaId, lairOfGodStarId, sixtyFiverShieldId, sixtyFiverSwordId, hawkmanJacketId], especially: [katanaId, bannerId], how: "{approvingly|with respect}");
 
 c.increaseSanityFromPeople();
 [[ENDCODE]]

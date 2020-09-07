@@ -20,6 +20,8 @@ const int directorId = -1;
 /// The goblin at the start of Knights.
 const int firstGoblinId = 6003;
 
+const int hawkmanId = 6017;
+
 const int jailerId = 6013;
 
 /// Kat, the knight at the entrance.
