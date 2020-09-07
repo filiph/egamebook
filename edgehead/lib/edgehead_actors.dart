@@ -249,6 +249,46 @@ final Actor lizardman = Actor.initialized(
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
+final Actor orcBerserker = Actor.initialized(
+  orcBerserkerId,
+  StatefulRandom(~orcBerserkerId).next,
+  "berserker",
+  adjective: 'orc',
+  pronoun: Pronoun.HE,
+  constitution: 2,
+  dexterity: 120,
+  currentRoomName: 'gods_lair',
+  currentWeapon: Item.weapon(
+    orcBerserkerBattleAxeId,
+    WeaponType.axe,
+    name: 'battle axe',
+    adjective: 'berserker',
+    firstOwnerId: orcBerserkerId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
+final Actor orcCaptain = Actor.initialized(
+  orcCaptainId,
+  StatefulRandom(~orcCaptainId).next,
+  'captain',
+  adjective: 'orc',
+  pronoun: Pronoun.HE,
+  constitution: 2,
+  dexterity: 110,
+  currentRoomName: 'gods_lair',
+  currentWeapon: Item.weapon(
+    orcCaptainKnifeId,
+    WeaponType.dagger,
+    name: 'knife',
+    adjective: 'bone-decorated',
+    firstOwnerId: orcCaptainId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 /// The orc shaman.
 final Actor shaman = Actor.initialized(
   shamanId,

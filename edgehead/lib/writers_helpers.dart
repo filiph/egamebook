@@ -226,8 +226,7 @@ FightSituation generateDargTentFight(ActionContext c,
   final weak = _orcsLackCockroaches(c);
   if (weak) {
     c.outputStoryline.add('He seems famished.', isRaw: true);
-    w.updateActorById(sixtyFiverOrcId, (b) => b.dexterity = 50);
-    w.updateActorById(sixtyFiverGoblinId, (b) => b.dexterity = 70);
+    w.updateActorById(dargId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
   }
   final stripped = _orcsLackWeapons(c);
   if (stripped) {
@@ -262,6 +261,38 @@ FightSituation generateGoblinCampFight(ActionContext c,
   );
 }
 
+/// God's lair fight.
+FightSituation generateGodsLairFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  final weak = _orcsLackCockroaches(c);
+  if (weak) {
+    c.outputStoryline.add('They seem famished.', isRaw: true);
+    w.updateActorById(
+        orcBerserkerId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
+    w.updateActorById(
+        orcCaptainId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
+  }
+  final stripped = _orcsLackWeapons(c);
+  if (stripped) {
+    c.outputStoryline.add('Their weapons look battered.', isRaw: true);
+    // Currently, this has no gameplay effect.
+  }
+
+  w.actors.addAll([orcBerserker, orcCaptain]);
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [orcBerserker, orcCaptain],
+    "{concrete |}floor",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 /// The fight in the smithy with the orc jailer.
 FightSituation generateJailerFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
@@ -269,7 +300,7 @@ FightSituation generateJailerFight(ActionContext c,
   final weak = _orcsLackCockroaches(c);
   if (weak) {
     c.outputStoryline.add('He seems famished.', isRaw: true);
-    w.updateActorById(jailerId, (b) => b.dexterity = b.dexterity ~/ 2);
+    w.updateActorById(jailerId, (b) => b.dexterity = b.dexterity ~/ 1.5);
   }
 
   return FightSituation.initialized(
@@ -282,55 +313,6 @@ FightSituation generateJailerFight(ActionContext c,
     items: const [
       // TODO: some kind of a weapon?
     ],
-  );
-}
-
-/// God's lair fight.
-FightSituation generateGodsLairFight(ActionContext c,
-    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
-  final w = c.outputWorld;
-  final weak = _orcsLackCockroaches(c);
-  if (weak) {
-    c.outputStoryline.add('They seem famished.', isRaw: true);
-  }
-  final stripped = _orcsLackWeapons(c);
-  if (stripped) {
-    c.outputStoryline.add('Their weapons look battered.', isRaw: true);
-  }
-  final orcBerserkerId = w.randomInt();
-  final orcBerserker = Actor.initialized(
-      orcBerserkerId, w.randomInt, "berserker",
-      adjective: 'orc',
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.axe,
-          name: 'battle axe',
-          adjective: 'berserker',
-          firstOwnerId: orcBerserkerId),
-      constitution: weak ? 2 : 3,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-  final orcCaptainId = w.randomInt();
-  final orcCaptain = Actor.initialized(orcCaptainId, w.randomInt, 'captain',
-      adjective: 'orc',
-      nameIsProperNoun: false,
-      pronoun: Pronoun.HE,
-      currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
-          adjective: 'labelled', firstOwnerId: orcCaptainId),
-      constitution: weak ? 1 : 2,
-      team: defaultEnemyTeam,
-      foldFunctionHandle: carelessMonsterFoldFunctionHandle);
-
-  w.actors.addAll([orcBerserker, orcCaptain]);
-
-  return FightSituation.initialized(
-    w.randomInt(),
-    party,
-    [orcBerserker, orcCaptain],
-    "{|concrete} floor",
-    roomRoamingSituation,
-    {},
-    items: const [],
   );
 }
 

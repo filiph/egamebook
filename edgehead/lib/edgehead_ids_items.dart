@@ -4,9 +4,9 @@ const int akxeId = 77012;
 
 const int bannerId = 77009;
 
-const int barbecuedBatId = 770020;
+const int barbecuedBatId = 77020;
 
-const int barbecuedSquirrelId = 770017;
+const int barbecuedSquirrelId = 77017;
 
 const int bigOScytheId = 77030;
 
@@ -22,7 +22,7 @@ const int graySpearId = 77027;
 
 const int jailerMaceId = 77031;
 
-const int jisadAppleId = 770016;
+const int jisadAppleId = 77016;
 
 const int katanaId = 77006;
 
@@ -32,15 +32,19 @@ const int letterFromFatherId = 77004;
 
 const int lizardmanShieldId = 77028;
 
-const int northSkullId = 770015;
+const int northSkullId = 77015;
 
-const int oracleAppleId = 770018;
+const int oracleAppleId = 77018;
+
+const int orcBerserkerBattleAxeId = 77033;
+
+const int orcCaptainKnifeId = 77032;
 
 const int rockFromMeadowId = 77005;
 
-const int rustySwordId = 770022;
+const int rustySwordId = 77022;
 
-const int sarnHammerId = 770014;
+const int sarnHammerId = 77014;
 
 const int shamanDaggerId = 77029;
 
@@ -52,9 +56,9 @@ const int sixtyFiverSwordId = 77013;
 
 const int smokingBranchId = 77025;
 
-const int staleBreadId = 770019;
+const int staleBreadId = 77019;
 
-const int startBranchId = 770021;
+const int startBranchId = 77021;
 
 const int tamarasDaggerId = 77002;
 

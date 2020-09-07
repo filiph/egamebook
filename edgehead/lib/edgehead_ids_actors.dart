@@ -32,6 +32,12 @@ const int lizardmanId = 6010;
 /// Miguel, the antsy knight at the entrance.
 const int miguelId = 102;
 
+/// The lower-ranked on in the Lair of God.
+const int orcBerserkerId = 6014;
+
+/// The higher-ranked orc in the Lair of God.
+const int orcCaptainId = 6015;
+
 /// [edgeheadPlayer]'s [Actor.id].
 const int playerId = 1;
 

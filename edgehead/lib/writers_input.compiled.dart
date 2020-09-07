@@ -1563,7 +1563,7 @@ class KarlListenToGuards extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The two are laughing.\n\n"He ate him whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The fucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
+        'The two are laughing.\n\n"He ate him whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The sucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
         isRaw: true);
     return '${a.name} successfully performs KarlListenToGuards';
   }
@@ -1605,11 +1605,14 @@ final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  final ifBlock_373b22f49 = !c.hasHappened(evKarlGuardsKilled)
-      ? '''Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.'''
+  final ifBlock_2092aa1ea = !c.hasHappened(evKarlGuardsKilled)
+      ? '''two orcs below, guarding some kind of a large gate. A berserker and a captain.'''
+      : '''a room below, with a large gate.''';
+  final ifBlock_5de2362e6 = !c.hasHappened(evKarlKilled)
+      ? '''A guttural breathing sounds come from beyond the gate.'''
       : '''''';
   s.add(
-      'Musty, dark place. Through cracks, I can see rooms under me.\n\n${ifBlock_373b22f49}\n',
+      'Musty, dark place. Through cracks, I can see rooms under me.\n\nGoing to the end of the shaft, I can see ${ifBlock_2092aa1ea}\n\n${ifBlock_5de2362e6}\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1652,7 +1655,7 @@ class KarlUseNecromancy extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, terrible roar and thrashing comes from beyond the gate.\n\n',
+        'I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, a terrible roar and thrashing comes from beyond the gate.\n\n',
         isRaw: true);
     c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
     c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
@@ -1918,7 +1921,7 @@ final Approach elevator28FromJunction =
     Approach('junction', 'elevator_28', '', null);
 final Approach elevator28FromMaintenanceShaft =
     Approach('maintenance_shaft', 'elevator_28', '', null);
-final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
+final Room elevator28 = Room('elevator_28', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -1931,6 +1934,13 @@ final Room elevator28 = Room('elevator_28', null, (ActionContext c) {
       'Orc noises from all around, but thankfully no orc in sight. ${ifBlock_753ddd0b}\n\n',
       isRaw: true);
   c.learn(OrcsFacts.inPyramid);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
 }, null, null,
     positionX: 32,
     positionY: 42,
@@ -2077,7 +2087,7 @@ final Room godsLair = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Two orcs, a berserker and a captain, watch me approach in amazement.\n\n"You!" the captain bellows. "Stand still so I can chop off your head."\n',
+          'Two orcs, a berserker and a captain, watch me approach in amazement.\n\n"You!" the berserker bellows, readying his battle axe. "Stand still so I can chop off your head."\n\nThe captain readies a large, bone-decorated knife, and confidently starts towards me.\n',
           isRaw: true);
     },
     (ActionContext c) {

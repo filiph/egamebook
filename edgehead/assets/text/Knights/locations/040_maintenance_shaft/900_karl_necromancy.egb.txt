@@ -25,7 +25,7 @@ return ReasonedSuccessChance.sureSuccess;
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, terrible roar and thrashing comes from beyond the gate.
+I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, a terrible roar and thrashing comes from beyond the gate.
 
 [[CODE]]
 // Keep in sync with FightSituation's RaiseDead.applySuccess.

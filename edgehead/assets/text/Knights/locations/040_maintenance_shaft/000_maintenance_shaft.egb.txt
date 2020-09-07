@@ -9,7 +9,9 @@ MAP_NAME: Maintenance Shaft above 28th Floor
 FIRST_DESCRIPTION:
 Musty, dark place. Through cracks, I can see rooms under me.
 
-[[IF !c.hasHappened(evKarlGuardsKilled)]]Going to the end of the shaft, I can see two orcs below, guarding some kind of a large gate. A berserker and a captain.[[ENDIF]]
+Going to the end of the shaft, I can see [[IF !c.hasHappened(evKarlGuardsKilled)]]two orcs below, guarding some kind of a large gate. A berserker and a captain.[[ELSE]]a room below, with a large gate.[[ENDIF]]
+
+[[IF !c.hasHappened(evKarlKilled)]]A guttural breathing sounds come from beyond the gate.[[ENDIF]]
 
 // TODO: if Karl still here and alive, hear a guttural breating "just beyond the gate"
 
@@ -32,7 +34,7 @@ The two are laughing.
 
 "We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."
 
-"Get a horse carcass up here and we'll do it. The fucker is sleeping like a baby, and I think it's because of the size of the food."
+"Get a horse carcass up here and we'll do it. The sucker is sleeping like a baby, and I think it's because of the size of the food."
 
 The berserker nods. "Even better, it looks like we don't need to worry about chopping the carcasses from now on."
 

@@ -17,7 +17,10 @@ FIRST_HINT: An antechamber to a much bigger room, with a guard post and a huge, 
 FIRST_DESCRIPTION: 
 Two orcs, a berserker and a captain, watch me approach in amazement.
 
-"You!" the captain bellows. "Stand still so I can chop off your head."
+"You!" the berserker bellows, readying his battle axe. "Stand still so I can chop off your head."
+
+The captain readies a large, bone-decorated knife, and confidently starts towards me.
+
 
 DESCRIPTION: $NONE
 
@@ -44,6 +47,9 @@ FIRST_DESCRIPTION:
 The gate is open. On it, there is a small star decoration.
 
 Beyond the gate, a giant's carcass lies. Its belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.
+
+// TODO: let the player take their weapons
+// TODO: optional - one of the orc still lives, easy fight
 
 
 VARIANT_UPDATE_DESCRIPTION:
