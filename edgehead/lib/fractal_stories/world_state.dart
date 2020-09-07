@@ -283,6 +283,23 @@ abstract class WorldStateBuilder
   S getSituationByName<S extends Situation>(String situationName) =>
       build().getSituationByName<S>(situationName);
 
+  void insertSituationAbove(
+      Situation newSituation, Situation existingSituation) {
+    int index;
+    for (var i = situations.length - 1; i >= 0; i -= 1) {
+      if (situations[i].id == existingSituation.id) {
+        index = i;
+        break;
+      }
+    }
+    if (index == null) {
+      throw StateError('Cannot find $existingSituation while trying '
+          'to insert $newSituation above it.');
+    }
+
+    situations.insert(index + 1, newSituation);
+  }
+
   void popSituation(ActionContext context) {
     var removal = situations.build().last;
     removal.onPop(context);

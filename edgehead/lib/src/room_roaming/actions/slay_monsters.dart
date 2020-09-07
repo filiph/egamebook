@@ -74,7 +74,7 @@ class AutoSlayMonstersAction extends Action<Nothing> {
   /// Pushes the current room's fight situation (constructed by
   /// [Room.fightGenerator] on the [WorldState.situations] stack.
   ///
-  /// This function must be called when [WorldState.currentSituation]
+  /// This function must be called when one of the [WorldState.situations]
   /// is a [RoomRoamingSituation], and when it has monsters alive
   /// (it has a non-null [Room.fightGenerator] and the monsters haven't been
   /// slain).
@@ -83,8 +83,8 @@ class AutoSlayMonstersAction extends Action<Nothing> {
     Simulation sim = context.simulation;
     WorldState originalWorld = context.world;
     WorldStateBuilder w = context.outputWorld;
-    assert(w.currentSituation is RoomRoamingSituation);
-    final situation = w.currentSituation as RoomRoamingSituation;
+    final situation = w.getSituationByName<RoomRoamingSituation>(
+        RoomRoamingSituation.className);
     Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
     assert(room.fightGenerator != null);
     assert(situation.monstersAlive);
@@ -117,7 +117,7 @@ class AutoSlayMonstersAction extends Action<Nothing> {
     _assignRecoveringUntil(
         originalWorld.time, w, fightSituation.getActors(sim, w.build()));
 
-    w.pushSituation(fightSituation);
+    w.insertSituationAbove(fightSituation, situation);
   }
 
   /// Assign recoveringUntil according to initiative.

@@ -810,10 +810,15 @@ extension ActionContextHelpers on ActionContext {
   /// Starts a fight, assuming the current room's fight is optional
   /// and the monsters are still alive.
   void startOptionalFight() {
-    assert((world.currentSituation as RoomRoamingSituation).monstersAlive);
+    assert(outputWorld
+        .getSituationByName<RoomRoamingSituation>(
+            RoomRoamingSituation.className)
+        .monstersAlive);
     assert(simulation
-        .getRoomParent(simulation.getRoomByName(
-            (world.currentSituation as RoomRoamingSituation).currentRoomName))
+        .getRoomParent(simulation.getRoomByName(outputWorld
+            .getSituationByName<RoomRoamingSituation>(
+                RoomRoamingSituation.className)
+            .currentRoomName))
         .fightIsOptional);
     AutoSlayMonstersAction.pushFightSituation(this);
   }
