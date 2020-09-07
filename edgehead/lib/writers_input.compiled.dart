@@ -1327,16 +1327,6 @@ final conetExamineInk = InkAst([
         'TODO: Explain that this device is obviously what makes the quakes. There are massive stones being lifted. There are cracks in the walls and the floor, radiating from the center of the device.\n',
         isRaw: true);
   }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add('The kobolds are complaining about being worked to death this day.\n',
-        isRaw: true);
-  }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -1344,6 +1334,48 @@ final conetExamineInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     c.learn(ConetFacts.sawConet);
+  }),
+]);
+final conetKoboldExamineInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The kobold is talking to himself as he\'s turning the wheel.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"How I wish I could be down there and fight," he says. "What I\'d give to be able to crack some skulls."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'He swings his free hand as if holding a weapon. "You talkin\' to me?" he says to an imaginary foe. "You talkin\' to me? Who the hell do you think you\'re talking to?"\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Another swing of hand, and a grin.\n', isRaw: true);
   }),
 ]);
 
@@ -1354,14 +1386,11 @@ class ConetAttack extends RoamingAction {
   static final ConetAttack singleton = ConetAttack();
 
   @override
-  List<String> get commandPathTemplate => ['Kobolds', 'Attack'];
+  List<String> get commandPathTemplate => ['Kobold', 'Attack'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (c.inRoomParent('conet') != true) {
-      return false;
-    }
-    if (!(w.actionHasBeenPerformed('conet_examine'))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -1374,10 +1403,12 @@ class ConetAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        'TODO: actual fight. Assuming victory.\n\nTODO: one of the kobolds is actually undead. He talks to me during the fight and after I kill him. It is obvious that the talking is done remotely, by some necromancer with amazing skill. The necromancer is discouraging me from getting involved.\n\n',
+        '${weSubstitutionCapitalized} step out of hiding. The kobold stops turning the wheel, briefly surprised. But then he jumps to the side and picks a big black wrench from a brown bag on the floor.\n\n"Oh, this is going to be good," he says. "A human child."\n\n',
         isRaw: true);
-    c.markHappened(evConetDestroyed);
+    c.startOptionalFight();
 
     return '${a.name} successfully performs ConetAttack';
   }
@@ -1420,7 +1451,7 @@ class ConetExamine extends RoamingAction {
   static final ConetExamine singleton = ConetExamine();
 
   @override
-  List<String> get commandPathTemplate => ['Kobolds', 'Examine'];
+  List<String> get commandPathTemplate => ['Device', 'Examine'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -1475,25 +1506,108 @@ class ConetExamine extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final Room conet = Room('conet', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      'Some kobolds operating a large device. They are turning a huge wheel, drawing some kind of spring, and lifting huge rocks into position.\n\nA primitive writing on the entrance says "Conet".\n\n${weSubstitutionCapitalized} stay hidden.\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null, positionX: 17, positionY: 34, mapName: 'Conet');
+class ConetKoboldExamine extends RoamingAction {
+  @override
+  final String name = 'conet_kobold_examine';
+
+  static final ConetKoboldExamine singleton = ConetKoboldExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Kobold', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('conet') != true) {
+      return false;
+    }
+    if (!(!w.actionHasBeenPerformed('conet_attack'))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "conet_kobold_examine_ink",
+    ));
+    return '${a.name} successfully performs ConetKoboldExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform ConetKoboldExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+final Room conet = Room(
+    'conet',
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
+      s.add(
+          'A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.\n\nA primitive writing on the entrance says "Conet".\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateConetFight,
+    null,
+    fightIsOptional: true,
+    positionX: 17,
+    positionY: 34,
+    mapName: 'Conet',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The fight is over.\n\n', isRaw: true);
+      c.markHappened(evConetDestroyed);
+    });
 final Room conetAfterClearing = Room(
     'conet_after_clearing',
     (ActionContext c) {
@@ -1512,7 +1626,7 @@ final Room conetAfterClearing = Room(
       final Storyline s = c.outputStoryline;
       s.add('', isRaw: true);
     },
-    null,
+    generateConetFight,
     null,
     parent: 'conet',
     prerequisite: Prerequisite(357396258, 1, true, (ApplicabilityContext c) {
@@ -1529,9 +1643,19 @@ final Room conetAfterClearing = Room(
       final Storyline s = c.outputStoryline;
       s.add('Now, the room is silent.\n', isRaw: true);
     },
+    fightIsOptional: true,
     positionX: 17,
     positionY: 34,
-    mapName: 'Conet');
+    mapName: 'Conet',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The fight is over.\n\n', isRaw: true);
+      c.markHappened(evConetDestroyed);
+    });
 final Approach maintenanceShaftFromElevator28 =
     Approach('elevator_28', 'maintenance_shaft', '', null);
 
@@ -14355,6 +14479,7 @@ final allActions = <RoamingAction>[
   BarracksTakeBarbecuedBat.singleton,
   ConetAttack.singleton,
   ConetExamine.singleton,
+  ConetKoboldExamine.singleton,
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
   SaveSarn.singleton,
@@ -14459,6 +14584,7 @@ final allInks = <String, InkAst>{
   'darg_head_talk_ink_ink': dargHeadTalkInkInk,
   'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,
+  'conet_kobold_examine_ink': conetKoboldExamineInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
   'talk_to_oracle_dragon_egg_ink': talkToOracleDragonEggInk,

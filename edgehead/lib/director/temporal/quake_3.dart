@@ -31,7 +31,8 @@ void _quake3Apply(ActionContext c) {
   s.add('Suddenly, a quake.', isRaw: true);
 
   if (c.hasHappened(evConetDestroyed)) {
-    // TODO: check if we've said this in quake2, in which case skip this.
+    // TODO: check if we've said this in quake2 (evConetDestroyed came before
+    //       evQuake2), in which case skip this.
     s.add(
         "I thought I've destroyed the source of the quakes, "
         "but apparently not.",

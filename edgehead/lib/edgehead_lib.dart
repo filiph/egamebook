@@ -283,6 +283,7 @@ class EdgeheadGame extends Book {
           campLeaderGoblin,
           campNakedGoblin,
           lizardman,
+          conetKobold,
           orcCaptain,
           orcBerserker,
           bigO,

@@ -7,7 +7,7 @@ POS: 17, 34
 MAP_NAME: Conet
 
 FIRST_DESCRIPTION:
-Some kobolds operating a large device. They are turning a huge wheel, drawing some kind of spring, and lifting huge rocks into position.
+A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.
 
 A primitive writing on the entrance says "Conet".
 
@@ -15,6 +15,18 @@ A primitive writing on the entrance says "Conet".
 
 
 DESCRIPTION: $NONE
+
+FLAGS: $FIGHT_IS_OPTIONAL
+
+FIGHT_SITUATION:
+generateConetFight
+
+AFTER_MONSTERS_CLEARED:
+The fight is over.
+
+[[CODE]]
+c.markHappened(evConetDestroyed);
+[[ENDCODE]]
 
 
 // ---
@@ -34,12 +46,10 @@ Now, the room is silent.
 ACTION: $conet_examine
 FOR_LOCATION: $conet
 
-COMMAND: Kobolds >> Examine
+COMMAND: Device >> Examine
 
 INK:
 TODO: Explain that this device is obviously what makes the quakes. There are massive stones being lifted. There are cracks in the walls and the floor, radiating from the center of the device.
-
-The kobolds are complaining about being worked to death this day.
 
 [[CODE]]
 c.learn(ConetFacts.sawConet);
@@ -50,19 +60,35 @@ c.learn(ConetFacts.sawConet);
 ACTION: $conet_attack
 FOR_LOCATION: $conet
 
-PREREQUISITES:
-w.actionHasBeenPerformed('conet_examine')
-
-COMMAND: Kobolds >> Attack
+COMMAND: Kobold >> Attack
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: actual fight. Assuming victory.
+[We] step out of hiding. The kobold stops turning the wheel, briefly surprised. But then he jumps to the side and picks a big black wrench from a brown bag on the floor.
 
-TODO: one of the kobolds is actually undead. He talks to me during the fight and after I kill him. It is obvious that the talking is done remotely, by some necromancer with amazing skill. The necromancer is discouraging me from getting involved.
+"Oh, this is going to be good," he says. "A human child."
 
 [[CODE]]
-c.markHappened(evConetDestroyed);
+c.startOptionalFight();
 [[ENDCODE]]
+
+
+// ---
+ACTION: $conet_kobold_examine
+FOR_LOCATION: $conet
+
+PREREQUISITES:
+!w.actionHasBeenPerformed('conet_attack')
+
+COMMAND: Kobold >> Examine
+
+INK:
+The kobold is talking to himself as he's turning the wheel.
+
+"How I wish I could be down there and fight," he says. "What I'd give to be able to crack some skulls."
+
+He swings his free hand as if holding a weapon. "You talkin' to me?" he says to an imaginary foe. "You talkin' to me? Who the hell do you think you're talking to?"
+
+Another swing of hand, and a grin.
 
 
 
@@ -70,4 +96,6 @@ NOTES:
 - Name inspired by https://en.wikipedia.org/wiki/The_Conet_Project.
 - Attracting "evil" / giants from far away.
 - This is on the 32nd floor (binary symbolism).
+- rejected: one of the kobolds is actually undead. He talks to me during the fight and after I kill him. It is obvious that the talking is done remotely, by some necromancer with amazing skill. The necromancer is discouraging me from getting involved.
+
 

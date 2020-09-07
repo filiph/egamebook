@@ -190,6 +190,29 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
   );
 }
 
+/// Fight in Conet.
+FightSituation generateConetFight(ActionContext c,
+    RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
+  final w = c.outputWorld;
+
+  final weak = _orcsLackCockroaches(c);
+  if (weak) {
+    c.outputStoryline.add('He seem famished.', isRaw: true);
+    w.updateActorById(
+        conetKoboldId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
+  }
+
+  return FightSituation.initialized(
+    w.randomInt(),
+    party,
+    [conetKobold],
+    "{cracked |}floor",
+    roomRoamingSituation,
+    {},
+    items: const [],
+  );
+}
+
 /// Fight with Darg and the shaman in the temple.
 FightSituation generateCrowdsourceFight(ActionContext c,
     RoomRoamingSituation roomRoamingSituation, List<Actor> party) {
@@ -574,7 +597,7 @@ bool _orcsLackCockroaches(ApplicabilityContext c) {
   final event = c.world.customHistory.query(name: evOpenedDam).latest;
   if (event == null) return false;
 
-  if (c.world.time.difference(event.time) > const Duration(minutes: 60)) {
+  if (c.world.time.difference(event.time) >= const Duration(minutes: 30)) {
     // It's been more than enough time for the lack of food to affect
     // performance.
     return true;

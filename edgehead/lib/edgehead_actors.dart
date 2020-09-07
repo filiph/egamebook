@@ -84,6 +84,26 @@ final Actor campNakedGoblin = Actor.initialized(
   foldFunctionHandle: carelessMonsterFoldFunctionHandle,
 );
 
+final Actor conetKobold = Actor.initialized(
+  conetKoboldId,
+  StatefulRandom(~conetKoboldId).next,
+  "kobold",
+  adjective: 'worker',
+  pronoun: Pronoun.HE,
+  constitution: 1,
+  dexterity: 90,
+  currentRoomName: 'conet',
+  currentWeapon: Item.weapon(
+    conetKoboldWrenchId,
+    WeaponType.club,
+    name: 'wrench',
+    adjective: 'black',
+    firstOwnerId: conetKoboldId,
+  ),
+  team: defaultEnemyTeam,
+  foldFunctionHandle: carelessMonsterFoldFunctionHandle,
+);
+
 /// The orc leader.
 final Actor edgeheadDarg = Actor.initialized(
   dargId,

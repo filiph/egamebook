@@ -38,6 +38,8 @@ const int oracleAppleId = 77018;
 
 const int orcBerserkerBattleAxeId = 77033;
 
+const int conetKoboldWrenchId = 77034;
+
 const int orcCaptainKnifeId = 77032;
 
 const int rockFromMeadowId = 77005;
