@@ -8,3 +8,4 @@ build/
 *.scssc
 .cli_access_credentials.private
 edgehead.log
+benchmark/full.exe

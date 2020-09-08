@@ -292,3 +292,19 @@ tool to extract them and put them in a database:
 
 This will generate CSV and SQLite files in `tool/ai/`. You can open and
 inspect them.
+
+### Benchmarking
+
+We have a rough, end-to-end benchmark. Run the following command and wait
+for several minutes:
+
+```sh
+dart benchmark/full.dart
+```
+
+Alternatively, you can run the benchmark in AOT mode (closer to how it's going
+to perform on a mobile platform):
+
+```sh
+dart2native benchmark/full.dart && ./benchmark/full.exe
+```
