@@ -87,7 +87,7 @@ class ActorPlanner {
     }
     var average = ActorScoreChange.average(uplifts);
 
-    log.finest("- uplifts average = $average");
+    log.finest(() => "- uplifts average = $average");
     return average;
   }
 
@@ -104,7 +104,7 @@ class ActorPlanner {
     if (_firstActionScores.isEmpty) {
       log.warning("There are no actions available for "
           "actorId=$actorId.");
-      log.fine("Actions not available for $actorId and $_initial.");
+      log.fine(() => "Actions not available for $actorId and $_initial.");
     }
     return PlannerRecommendation(_firstActionScores);
   }
@@ -115,7 +115,8 @@ class ActorPlanner {
     var currentActor = _initial.world.getActorById(actorId);
     var initialScore = currentActor.scoreWorld(_initial.world);
 
-    log.fine("Planning for ${currentActor.name}, initialScore=$initialScore");
+    log.fine(
+        () => "Planning for ${currentActor.name}, initialScore=$initialScore");
 
     final context =
         ApplicabilityContext(currentActor, simulation, _initial.world);
@@ -242,7 +243,7 @@ class ActorPlanner {
             .firstWhere((a) => a.id == actorId, orElse: () => null);
 
         if (mainActor == null) {
-          log.finest("- this actor ($actorId) has been removed");
+          log.finest(() => "- this actor ($actorId) has been removed");
           continue;
         }
 
@@ -275,15 +276,16 @@ class ActorPlanner {
         throw StateError("World has several duplicates of mainActor: "
             "${current.world}");
       } else if (mainActorDuplicates == 0) {
-        log.info("mainActor $actorId dies and is removed in world - "
+        log.info(() => "mainActor $actorId dies and is removed in world - "
             "will use defaultScoreWhenDead");
       } else {
         mainActor = current.world.actors.singleWhere((a) => a.id == actorId);
       }
       bool currentActorIsMain = currentActor == mainActor;
 
-      log.finest("- actor: ${currentActor.name} (isMain==$currentActorIsMain)");
-      log.finest("- mainActor: ${mainActor?.name}");
+      log.finest(
+          () => "- actor: ${currentActor.name} (isMain==$currentActorIsMain)");
+      log.finest(() => "- mainActor: ${mainActor?.name}");
 
       var score =
           mainActor?.scoreWorld(current.world) ?? Actor.defaultScoreWhenDead;
@@ -300,7 +302,7 @@ class ActorPlanner {
 
       yield stats;
 
-      log.finest("- generating all actions for ${currentActor.name}");
+      log.finest(() => "- generating all actions for ${currentActor.name}");
       var originalCount = open.length;
 
       final context =
@@ -340,7 +342,8 @@ class ActorPlanner {
         }
       }
 
-      log.finest("- added ${open.length - originalCount} new PlanConsequences");
+      log.finest(
+          () => "- added ${open.length - originalCount} new PlanConsequences");
 
       closed.add(current.world);
     }
