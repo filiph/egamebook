@@ -365,7 +365,7 @@ class EdgeheadGame extends Book {
     planner.plan(
       // Don't plan ahead for the player, we are showing
       // all possibilities anyway. And the director only has one action.
-      maxOrder: actor.isPlayer || actor.isDirector ? 0 : 5,
+      maxOrder: actor.isPlayer || actor.isDirector ? 0 : 4,
       maxConsequences: 10000,
     );
     var recs = planner.getRecommendations();
