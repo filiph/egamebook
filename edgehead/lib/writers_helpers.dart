@@ -637,7 +637,7 @@ bool _orcsLackWeapons(ApplicabilityContext c) {
 
 extension ActionContextHelpers on ActionContext {
   void movePlayer(String locationName) {
-    getRoomRoaming().moveActor(this, locationName);
+    getRoomRoaming().moveActor(player, this, locationName);
   }
 
   /// Learns a fact in a chain of facts.

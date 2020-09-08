@@ -189,7 +189,7 @@ void main() {
           final actionContext = ActionContext(null, aren, simulation, world,
               world.toBuilder(), Storyline(), sureSuccess);
 
-          initialSituation.moveActor(actionContext, _forgeName);
+          initialSituation.moveActor(aren, actionContext, _forgeName);
           final result = actionContext.outputWorld.build();
 
           expect(result.getActorById(aren.id).currentRoomName, _forgeName);
@@ -203,7 +203,7 @@ void main() {
           expect(world.visitHistory.getLatestOnly(aren)?.roomName,
               isNot(_forgeAfterFireName));
 
-          initialSituation.moveActor(actionContext, _forgeName);
+          initialSituation.moveActor(aren, actionContext, _forgeName);
           final result = actionContext.outputWorld.build();
 
           expect(result.visitHistory.getLatestOnly(aren).roomName,
@@ -215,7 +215,7 @@ void main() {
               world.toBuilder(), Storyline(), sureSuccess);
           forgeIsAfterFire = true;
 
-          initialSituation.moveActor(actionContext, _forgeName);
+          initialSituation.moveActor(aren, actionContext, _forgeName);
           final result = actionContext.outputWorld.build();
 
           expect(result.getActorById(aren.id).currentRoomName, _forgeName);

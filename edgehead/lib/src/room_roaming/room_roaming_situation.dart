@@ -107,14 +107,14 @@ abstract class RoomRoamingSituation extends Object
     return ActorTurn(actor, world.time);
   }
 
-  /// Moves [a] with their party to [destination].
+  /// Moves [actor] with their party to [destination].
   ///
   /// This will also print out the description of the room (or the short version
   /// as appropriate).
-  void moveActor(ActionContext context, String destinationRoomName) {
+  void moveActor(
+      Actor actor, ActionContext context, String destinationRoomName) {
     final WorldState originalWorld = context.world;
     final Simulation sim = context.simulation;
-    final Actor a = context.actor;
     final WorldStateBuilder w = context.outputWorld;
     final Storyline s = context.outputStoryline;
     final specifiedRoom = sim.getRoomByName(destinationRoomName);
@@ -124,10 +124,10 @@ abstract class RoomRoamingSituation extends Object
     // Find if monsters were slain by seeing if there was slaying
     // performed by the actor in the room.
     assert(
-        a.isPlayer,
+        actor.isPlayer,
         "Currently, we assume slaying only by the player. "
         "Otherwise, we'd have to figure out if _any_ actor slayed "
-        "in the room.");
+        "in the room. Actor given: $actor");
     bool monstersAlive = room.fightGenerator != null &&
         !originalWorld.slayHistory.query(room).hasHappened;
     if (room.fightGenerator != null && !monstersAlive) {
@@ -146,14 +146,14 @@ abstract class RoomRoamingSituation extends Object
     w.replaceSituationById(id, nextRoomSituation);
 
     final hasVisitedThisVariant =
-        originalWorld.visitHistory.query(a, room).hasHappened;
+        originalWorld.visitHistory.query(actor, room).hasHappened;
     final hasVisitedAnyVariant = originalWorld.visitHistory
-        .query(a, room, includeVariants: true)
+        .query(actor, room, includeVariants: true)
         .hasHappened;
 
     // Move the actor and also all the other actors in the party.
-    for (final actor in getPartyOf(a, sim, w.build())) {
-      w.updateActorById(actor.id, (b) => b..currentRoomName = parentRoom.name);
+    for (final member in getPartyOf(actor, sim, w.build())) {
+      w.updateActorById(member.id, (b) => b..currentRoomName = parentRoom.name);
       // Do not record the visit just yet. It could mess with the reporting
       // below. We record the visit at the end of this method.
     }
@@ -163,7 +163,7 @@ abstract class RoomRoamingSituation extends Object
     // to already be where they're going.
     final afterMoveContext = ActionContext(
         context.currentAction,
-        w.getActorById(a.id),
+        w.getActorById(actor.id),
         context.simulation,
         w.build(),
         w,
@@ -213,7 +213,7 @@ abstract class RoomRoamingSituation extends Object
     if (!monstersAlive) {
       final localNpcs = _getNpcs(w.build())
           .where((npc) => npc.currentRoomName == parentRoom.name)
-          .where((npc) => npc.npc.followingActorId != a.id)
+          .where((npc) => npc.npc.followingActorId != actor.id)
           .toList();
       // First, let the overrides take place.
       Set<Actor> overridden = {};
@@ -240,10 +240,10 @@ abstract class RoomRoamingSituation extends Object
     }
 
     // Record the visit of the actor and also all the other actors in the party.
-    for (final actor in getPartyOf(a, sim, w.build())) {
+    for (final member in getPartyOf(actor, sim, w.build())) {
       // The actors have already been moved at the start of method.
       // Here we just record their visit.
-      w.recordVisit(actor, room);
+      w.recordVisit(member, room);
     }
   }
 
@@ -307,11 +307,11 @@ abstract class RoomRoamingSituation extends Object
     return true;
   }
 
-  Iterable<Actor> _getNpcs(WorldState world) =>
-      world.actors.where((a) => a.isAnimatedAndActive && !a.isPlayer);
-
   Iterable<Actor> _getCorpses(WorldState world) =>
       world.actors.where((a) => a.isActive && !a.isAnimated);
+
+  Iterable<Actor> _getNpcs(WorldState world) =>
+      world.actors.where((a) => a.isAnimatedAndActive && !a.isPlayer);
 
   Actor _getPlayer(WorldState world) =>
       world.actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive,

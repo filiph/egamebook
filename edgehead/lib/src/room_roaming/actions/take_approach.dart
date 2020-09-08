@@ -58,7 +58,7 @@ class TakeApproachAction extends Action<RoomPath> {
     // of the stack.
     final roomRoamingSituation = w.getSituationByName<RoomRoamingSituation>(
         RoomRoamingSituation.className);
-    roomRoamingSituation.moveActor(context, path.approach.to);
+    roomRoamingSituation.moveActor(a, context, path.approach.to);
 
     return "${a.name} went through approach to ${path.approach.to}";
   }
