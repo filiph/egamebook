@@ -6898,8 +6898,6 @@ final Room stagingAreaQuake2 = Room(
         'This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.',
     firstHint:
         'The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.');
-final Approach farmersVillageFromFloatingPoint =
-    Approach('floating_point', 'farmers_village', '', null);
 final Approach farmersVillageFromSlopes =
     Approach('slopes', 'farmers_village', '', null);
 final Approach farmersVillageFromStagingArea =
@@ -8832,24 +8830,6 @@ final Room keepServants = Room('keep_servants', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     isIdle: true, positionX: 19, positionY: 89, mapName: 'Servants\' quarters');
-final Approach floatingPointFromFarmersVillage =
-    Approach('farmers_village', 'floating_point', '', null);
-final Room floatingPoint = Room('floating_point', (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('A thin place. Objects floating in mid air.\n', isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, null, null,
-    isIdle: true, positionX: 32, positionY: 90, mapName: 'Floating Point');
 final Approach pyramidEntranceFromBleedsMain =
     Approach('bleeds_main', 'pyramid_entrance', '', null);
 final Approach pyramidEntranceFromFarmersVillage =
@@ -14654,7 +14634,6 @@ final allRooms = <Room>[
   keepBedroom,
   keepDining,
   keepServants,
-  floatingPoint,
   pyramidEntrance,
   pyramidEntranceDuringCaravan,
   pyramidEntranceAfterOrcOffensive,
@@ -14730,7 +14709,6 @@ final allApproaches = <Approach>[
   stagingAreaFromKeepGate,
   stagingAreaFromKnightsHqMain,
   stagingAreaFromPyramidEntrance,
-  farmersVillageFromFloatingPoint,
   farmersVillageFromSlopes,
   farmersVillageFromStagingArea,
   keepGateFromKeepBedroom,
@@ -14741,7 +14719,6 @@ final allApproaches = <Approach>[
   keepDiningFromKeepBedroom,
   keepServantsFromKeepBedroom,
   keepServantsFromTopOfClimb,
-  floatingPointFromFarmersVillage,
   pyramidEntranceFromBleedsMain,
   pyramidEntranceFromFarmersVillage,
   pyramidEntranceFromStagingArea,

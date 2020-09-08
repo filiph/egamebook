@@ -1,3 +1,5 @@
+NOTES:
+
 APPROACH: $floating_point FROM $farmers_village
 
 // ---
