@@ -313,5 +313,6 @@ dart2native benchmark/full.dart && ./benchmark/full.exe
 
 | Commit  | Mean (s) | MoE (s) | N |
 | ------- | -------: | ------: | ---: |
+| f8617f53 Remove async from planner | 21.89 | 6.22 | 6 |
 | e11fe3f0 Avoid string interpolation ... | 14.91 | 0.17 | 21 |
 | bab88227 Decrease maxOrder of AI | 4.87 | 0.04 | 62 |
