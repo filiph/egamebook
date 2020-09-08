@@ -34,6 +34,11 @@ class FullRunBenchmark extends _BenchmarkBase {
     runner.close();
   }
 
+  @override
+  FutureOr<void> warmup() {
+    // No warmup. We are testing AOT, so there's no JIT compiler to warm up.
+  }
+
   // The benchmark code.
   @override
   void setup() {}
@@ -65,13 +70,15 @@ class _BenchmarkBase {
     await run();
   }
 
+  static const minimalDuration = Duration(minutes: 5);
+
   // Runs a short version of the benchmark. By default invokes [run] once.
   Future<Statistic> measure() async {
     setup();
     // Warmup for at least 100ms. Discard result.
     await warmup();
     // Run the benchmark for at least 120s.
-    final result = await measureFor(exercise, 120000);
+    final result = await measureFor(exercise, minimalDuration.inMilliseconds);
     teardown();
     return result;
   }

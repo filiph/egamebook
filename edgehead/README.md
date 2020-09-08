@@ -308,3 +308,10 @@ to perform on a mobile platform):
 ```sh
 dart2native benchmark/full.dart && ./benchmark/full.exe
 ```
+
+#### Results
+
+| Commit  | Mean (s) | MoE (s) | N |
+| ------- | -------: | ------: | ---: |
+| e11fe3f0 Avoid string interpolation ... | 14.91 | 0.17 | 21 |
+| bab88227 Decrease maxOrder of AI | 4.87 | 0.04 | 62 |
