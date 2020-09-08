@@ -1,6 +1,5 @@
 library stranded.planner;
 
-import 'dart:async';
 import 'dart:collection';
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -26,8 +25,6 @@ class ActorPlanner {
   /// by the planner can be significantly less than the actual probability,
   /// because the planner assumes choices are picked randomly.
   static const num minimumCumulativeProbability = 0.0001;
-
-  static DateTime _latestWait = DateTime.now();
 
   static final Logger log = Logger('ActorPlanner');
 
@@ -112,11 +109,7 @@ class ActorPlanner {
     return PlannerRecommendation(_firstActionScores);
   }
 
-  Future<void> plan({
-    @required int maxOrder,
-    @required int maxConsequences,
-    Future<void> waitFunction(),
-  }) async {
+  void plan({@required int maxOrder, @required int maxConsequences}) {
     _firstActionScores.clear();
 
     var currentActor = _initial.world.getActorById(actorId);
@@ -137,8 +130,8 @@ class ActorPlanner {
       log.finer(() => "Evaluating action '${performance.commandPath}' "
           "for ${currentActor.name}");
 
-      var consequenceStats = await _getConsequenceStats(_initial, initialScore,
-              performance, maxOrder, maxConsequences, waitFunction)
+      var consequenceStats = _getConsequenceStats(
+              _initial, initialScore, performance, maxOrder, maxConsequences)
           .toList();
 
       if (consequenceStats.isEmpty) {
@@ -171,13 +164,12 @@ class ActorPlanner {
   /// [firstPerformance] is the action which we evaluate. All following
   /// actions are consequences -- actions taken by the different actors
   /// after the main actor ([actorId]) chooses this path.
-  Stream<ConsequenceStats> _getConsequenceStats(
+  Iterable<ConsequenceStats> _getConsequenceStats(
       PlanConsequence initial,
       ActorScore initialScore,
       Performance<dynamic> firstPerformance,
       int maxOrder,
-      int maxConsequences,
-      Future<void> waitFunction()) async* {
+      int maxConsequences) sync* {
     // Actor object changes during planning, so we need to look up via id.
     var mainActor = initial.world.getActorById(actorId);
     var startTurn = ActorTurn(mainActor, initial.world.time);
@@ -221,12 +213,6 @@ class ActorPlanner {
     while (open.isNotEmpty) {
       consequences += 1;
 
-      if (waitFunction != null &&
-          DateTime.now().difference(_latestWait) >
-              const Duration(milliseconds: 5)) {
-        await waitFunction();
-        _latestWait = DateTime.now();
-      }
       var current = open.removeFirst();
 
       log.finest("----");

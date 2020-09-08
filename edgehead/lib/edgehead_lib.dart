@@ -362,7 +362,7 @@ class EdgeheadGame extends Book {
 
     var actor = actorTurn.actor;
     var planner = ActorPlanner(actor, simulation, world);
-    await planner.plan(
+    planner.plan(
       // Don't plan ahead for the player, we are showing
       // all possibilities anyway. And the director only has one action.
       maxOrder: actor.isPlayer || actor.isDirector ? 0 : 5,
