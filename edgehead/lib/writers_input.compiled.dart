@@ -13427,13 +13427,13 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Here I am in the ancient ruins of San Francisco. After a month long journey, I have finally reached my destination. My brother is here, somewhere.\n',
+        'I am finally here, in the ancient ruins of San Francisco. I have reached my destination at last. My brother is here, somewhere in this dense forest, among fragments of a long lost civilization.\n',
         isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
+          r""" I am a young woman >> ... with black hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13448,7 +13448,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
+          r""" I am a young woman >> ... with black hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13463,7 +13463,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+          r""" I am a young woman >> ... with black hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13478,7 +13478,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
+          r""" I am a young woman >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13493,7 +13493,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
+          r""" I am a young woman >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13508,7 +13508,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+          r""" I am a young woman >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13523,7 +13523,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
+          r""" I am a young woman >> with long blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13538,7 +13538,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
+          r""" I am a young woman >> with long blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13553,7 +13553,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+          r""" I am a young woman >> with long blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13568,7 +13568,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
+          r""" I am a young man >> ... with black hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13583,7 +13583,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
+          r""" I am a young man >> ... with black hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13598,7 +13598,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+          r""" I am a young man >> ... with black hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13613,7 +13613,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
+          r""" I am a young man >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13628,7 +13628,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
+          r""" I am a young man >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13643,7 +13643,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+          r""" I am a young man >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13658,7 +13658,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.)) """
+          r""" I am a young man >> with short blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13673,7 +13673,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.)) """
+          r""" I am a young man >> with short blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13688,7 +13688,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.)) """
+          r""" I am a young man >> with short blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13728,7 +13728,7 @@ final startInkInk = InkAst([
         ? '''his'''
         : '''her''';
     s.add(
-        'I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on ${ifBlock_a78affd5} own.\n',
+        'I am here with Tamara, the deserter. She is the hired sword for my expedition. It is unwise for a young necromancer to be traveling on ${ifBlock_a78affd5} own.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -13739,7 +13739,7 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Tamara has just finished telling me, for the hundredth time, what a stupid idea it is for me to come here. I tell her there\'s nothing to be worried about. I tell her the tales about goblins and orcs in the woods of San Francisco are exaggerated.\n',
+        'Tamara has just finished telling me, for the hundredth time, what a stupid idea it was to come here. I tell her there\'s nothing to worry about. The tales about goblins and orcs in the forests of San Francisco are exaggerated.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -13749,8 +13749,7 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Which, of course, is immediately refuted by what happens next.\n',
-        isRaw: true);
+    s.add('Then of course, a moment later, I\'m proven wrong.\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -13771,13 +13770,13 @@ final startInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us. I look around to see if there\'s more but no. He is alone. What gives the predator such confidence?\n',
+        'A goblin, bloodlust in his eyes, emerges from his hiding place to stand a few paces in front of us. I look around to see if there are more, but no. He is alone.\n',
         isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
       command:
-          r""" Run ((This is a goblin: a killing machine. No one would fault me for leaving a fight I may hardly win.)) """
+          r""" Run ((This is a goblin: a killing machine. No one would fault me for fleeing a fight I will hardly win.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13790,7 +13789,7 @@ final startInkInk = InkAst([
               ? '''My wooden stump doesn't help.'''
               : '''''';
           s.add(
-              'Tamara seems pleased with this course of action at first. But the agile goblin is faster in the overgrowth. ${ifBlock_549bd7b58} A few heartbeats later, he\'s almost upon us.\n',
+              'Tamara seems pleased with this course of action at first. But the agile goblin runs faster through the overgrowth. ${ifBlock_549bd7b58} A few heartbeats later, he\'s almost on us.\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -13834,7 +13833,7 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'The goblin growls like a wolf, standing above Tamara. She\'s had time to draw her dented sword but not much else. The goblin\n',
+              'The goblin growls like a wolf, standing above Tamara. She\'s had time to draw her battered sword but not much else. The goblin\n',
               isRaw: true);
         }),
       ],
@@ -13852,7 +13851,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her dented sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, ${youngSirSubstitution}."\n',
+              '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her battered sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, ${youngSirSubstitution}."\n',
               isRaw: true);
         }),
         InkParagraphNode((ActionContext c) {
@@ -13872,14 +13871,14 @@ final startInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'The goblin is out of the brush and ready to fight. He\'s gnashing his teeth and growls like a wolf. He\n',
+              'The goblin is out of the brush and ready to fight. He gnashes his teeth and snarls. He\n',
               isRaw: true);
         }),
       ],
     ),
     InkChoiceNode(
       command:
-          r""" Wait ((It could be a trap. Or the goblin could decide we are more than he can chew. In either case, caution might save our necks.)) """
+          r""" Wait ((It could be a trap. Or the goblin could decide we are more than he can chew. Either way, a little caution might save our necks.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13890,7 +13889,7 @@ final startInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              'Tamara nods. She points her dented sword at the goblin but doesn\'t move. "Take my dagger, ${youngSirSubstitution}," she tells me and moves her hip a little, to indicate where it\'s strapped.\n',
+              'Tamara nods. She points her battered sword at the goblin but doesn\'t move. "Take my dagger, ${youngSirSubstitution}," she says and holds the dagger out toward me, handle-first.\n',
               isRaw: true);
         }),
         InkForkNode([
@@ -13913,7 +13912,17 @@ final startInkInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    'I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it, the goblin attacks. As he runs towards us, he\n',
+                    'I take the dagger and point it at the goblin. It\'s surprisingly heavy but well-balanced.\n',
+                    isRaw: true);
+              }),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('The goblin attacks. As he runs towards us, he\n',
                     isRaw: true);
               }),
             ],
@@ -13939,7 +13948,7 @@ final startInkInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    'I pick up a moldy rock that lies right next to my {left|right} foot. It\'s hard and heavy in my palm. As soon as I straighten up, the goblin attacks. As he runs towards us, he\n',
+                    'I pick up a mossy rock that sits right next to my {left|right} foot. It\'s hard and heavy in my palm. As soon as I straighten with the rock in my hand, the goblin attacks. As he runs towards us, he\n',
                     isRaw: true);
               }),
             ],
@@ -13954,8 +13963,7 @@ final startInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('taps his thigh with the blunt side of a rusty sword, grinning.\n',
-        isRaw: true);
+    s.add('aims his rusty sword, grinning.\n', isRaw: true);
   }),
 ]);
 

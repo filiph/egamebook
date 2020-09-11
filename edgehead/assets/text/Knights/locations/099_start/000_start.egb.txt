@@ -23,112 +23,112 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-Here I am in the ancient ruins of San Francisco. After a month long journey, I have finally reached my destination. My brother is here, somewhere.
+I am finally here, in the ancient ruins of San Francisco. I have reached my destination at last. My brother is here, somewhere in this dense forest, among fragments of a long lost civilization.
 
 
-* I am a young woman >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
+* I am a young woman >> ... with black hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 0, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
+* I am a young woman >> ... with black hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 0, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
+* I am a young woman >> ... with black hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 0, 2);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
+* I am a young woman >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
+* I am a young woman >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
+* I am a young woman >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 2);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
+* I am a young woman >> with long blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
+* I am a young woman >> with long blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
+* I am a young woman >> with long blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 2);
 [[ENDCODE]]
 
-* I am a young man >> with curly black hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
+* I am a young man >> ... with black hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 0, 0);
 [[ENDCODE]]
 
-* I am a young man >> with curly black hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
+* I am a young man >> ... with black hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 0, 1);
 [[ENDCODE]]
 
-* I am a young man >> with curly black hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
+* I am a young man >> ... with black hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 0, 2);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
+* I am a young man >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 0);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
+* I am a young man >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 1);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
+* I am a young man >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 2);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> and a large debt. ((Debts don't go away. They grow in size and importance. And they bring rage and animosity where there was once a handshake.))
+* I am a young man >> with short blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 0);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> and a wooden stump instead of the left foot. ((The foot will make me less nimble and more conspicuous.))
+* I am a young man >> with short blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 1);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> and asthma. ((The illness is a constant nightmare, giving fits of cough and taking stamina.))
+* I am a young man >> with short blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 2);
@@ -140,19 +140,19 @@ c.recordCharacterChoice(1, 2, 2);
 I am also a necromancer. I can raise the dead, although not very well yet.
 
 // The IF ELSE statement in the following paragraph must build the outputWorld (instead of just using c.playerIsMale) because the custom event for 'player_is_male' was set earlier this action (it's not yet in originalWorld).
-I am here with Tamara, the deserter. She is the sword of my little expedition. It is unwise for a young necromancer to be traveling on [[IF c.outputWorld.build().customHistory.query(name: 'player_is_male').hasHappened]]his[[ELSE]]her[[ENDIF]] own.
+I am here with Tamara, the deserter. She is the hired sword for my expedition. It is unwise for a young necromancer to be traveling on [[IF c.outputWorld.build().customHistory.query(name: 'player_is_male').hasHappened]]his[[ELSE]]her[[ENDIF]] own.
 
-Tamara has just finished telling me, for the hundredth time, what a stupid idea it is for me to come here. I tell her there's nothing to be worried about. I tell her the tales about goblins and orcs in the woods of San Francisco are exaggerated.
+Tamara has just finished telling me, for the hundredth time, what a stupid idea it was to come here. I tell her there's nothing to worry about. The tales about goblins and orcs in the forests of San Francisco are exaggerated.
 
-Which, of course, is immediately refuted by what happens next.
+Then of course, a moment later, I'm proven wrong.
 
 ![Illustration of a ferocious goblin is stepping out of a bush, holding a sword](goblin.png)
 
-A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us. I look around to see if there's more but no. He is alone. What gives the predator such confidence?
+A goblin, bloodlust in his eyes, emerges from his hiding place to stand a few paces in front of us. I look around to see if there are more, but no. He is alone.
 
-* Run ((This is a goblin: a killing machine. No one would fault me for leaving a fight I may hardly win.))
+* Run ((This is a goblin: a killing machine. No one would fault me for fleeing a fight I will hardly win.))
 
-    Tamara seems pleased with this course of action at first. But the agile goblin is faster in the overgrowth. [[IF c.playerHasWoodenFoot]]My wooden stump doesn't help.[[ENDIF]] A few heartbeats later, he's almost upon us.
+    Tamara seems pleased with this course of action at first. But the agile goblin runs faster through the overgrowth. [[IF c.playerHasWoodenFoot]]My wooden stump doesn't help.[[ENDIF]] A few heartbeats later, he's almost on us.
 
     He slashes Tamara's leg and she goes down. There is no more running now. [[IF c.playerHasAsthma]]I wheeze and cough. The damn asthma.[[ENDIF]] But I am able to pick up a solid branch from the ground and I have the initiative now.
 
@@ -171,22 +171,22 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
     w.updateActorById(playerId, (b) => b.inventory.equip(startBranch, a.anatomy));
     [[ENDCODE]]
 
-    The goblin growls like a wolf, standing above Tamara. She's had time to draw her dented sword but not much else. The goblin <>
+    The goblin growls like a wolf, standing above Tamara. She's had time to draw her battered sword but not much else. The goblin <>
 
 * Attack ((There is no way around this. The goblin is clearly set on fighting us. May as well seize initiative before more of them show up.))
 
-    "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her dented sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
+    "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her battered sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
 
     [[CODE]]
     w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
     w.updateActorById(firstGoblinId, (b) => b.initiative = 0);
     [[ENDCODE]]
 
-    The goblin is out of the brush and ready to fight. He's gnashing his teeth and growls like a wolf. He <>
+    The goblin is out of the brush and ready to fight. He gnashes his teeth and snarls. He <>
 
-* Wait ((It could be a trap. Or the goblin could decide we are more than he can chew. In either case, caution might save our necks.))
+* Wait ((It could be a trap. Or the goblin could decide we are more than he can chew. Either way, a little caution might save our necks.))
 
-    Tamara nods. She points her dented sword at the goblin but doesn't move. "Take my dagger, [young sir]," she tells me and moves her hip a little, to indicate where it's strapped.
+    Tamara nods. She points her battered sword at the goblin but doesn't move. "Take my dagger, [young sir]," she says and holds the dagger out toward me, handle-first.
 
     * * Take the dagger.
 
@@ -194,7 +194,9 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
         w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
         [[ENDCODE]]
 
-        I take the dagger and point it in the direction of the goblin. The hilt is thick, and the weapon feels heavy but balanced. Before I know it, the goblin attacks. As he runs towards us, he <>
+        I take the dagger and point it at the goblin. It's surprisingly heavy but well-balanced. 
+        
+        The goblin attacks. As he runs towards us, he <>
 
     * * Take a rock from the ground instead.
 
@@ -203,8 +205,8 @@ A goblin, death-hunger in his eyes, steps out of hiding, directly in front of us
         w.updateActorById(playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
         [[ENDCODE]]
 
-        I pick up a moldy rock that lies right next to my {left|right} foot. It's hard and heavy in my palm. As soon as I straighten up, the goblin attacks. As he runs towards us, he <>
+        I pick up a mossy rock that sits right next to my {left|right} foot. It's hard and heavy in my palm. As soon as I straighten with the rock in my hand, the goblin attacks. As he runs towards us, he <>
 
 -
 
-<> taps his thigh with the blunt side of a rusty sword, grinning.
+<> aims his rusty sword, grinning.

@@ -123,7 +123,7 @@ final Item rockFromMeadow = Item.weapon(
   rockFromMeadowId,
   WeaponType.rock,
   name: "rock",
-  adjective: "moldy",
+  adjective: "mossy",
 );
 
 final Item sarnHammer = Item.weapon(

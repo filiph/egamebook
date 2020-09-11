@@ -206,7 +206,7 @@ final Actor edgeheadTamara = Actor.initialized(
   currentRoomName: Simulation.preStartBookName,
   followingActorId: playerId,
   currentWeapon: Item.weapon(2342341, WeaponType.sword,
-      adjective: "dented", firstOwnerId: tamaraId),
+      adjective: "battered", firstOwnerId: tamaraId),
 );
 
 final Actor firstGoblin = Actor.initialized(
