@@ -398,6 +398,7 @@ class ShadowGraph {
         if (entity.firstOwnerId == null) {
           set.removeAll([
             IdentifierLevel.ownerNoun,
+            IdentifierLevel.ownerAdjectiveNoun,
           ]);
         }
       });
@@ -577,7 +578,8 @@ class ShadowGraph {
   /// [Entity.firstOwnerId] set, and removes all irrelevant [IdentifierLevel]s.
   ///
   /// Entities with `<*wner>` before them cannot be just [IdentifierLevel.noun],
-  /// for example. They are forced to be [IdentifierLevel.ownerNoun].
+  /// for example. They are forced to be [IdentifierLevel.ownerNoun]
+  /// or [IdentifierLevel.ownerAdjectiveNoun].
   ///
   /// This assures that the author can say
   /// `"<subject> hits <objectOwner's> <object>"` without specifying
@@ -591,6 +593,7 @@ class ShadowGraph {
           report.subject.firstOwnerId != null) {
         reports[i]._reportIdentifiers._subjectRange.retainAll([
           IdentifierLevel.ownerNoun,
+          IdentifierLevel.ownerAdjectiveNoun,
         ]);
       }
 
@@ -599,6 +602,7 @@ class ShadowGraph {
           report.object.firstOwnerId != null) {
         reports[i]._reportIdentifiers._objectRange.retainAll([
           IdentifierLevel.ownerNoun,
+          IdentifierLevel.ownerAdjectiveNoun,
         ]);
       }
 
@@ -607,6 +611,7 @@ class ShadowGraph {
           report.object2.firstOwnerId != null) {
         reports[i]._reportIdentifiers._object2Range.retainAll([
           IdentifierLevel.ownerNoun,
+          IdentifierLevel.ownerAdjectiveNoun,
         ]);
       }
     }
@@ -653,10 +658,17 @@ class ShadowGraph {
     }
 
     if (entity.adjective != null &&
-        others.any((e) =>
-            '${e.adjective} ${e.name}' ==
-            '${entity.adjective} ${entity.name}')) {
+        others.any(
+            (e) => e.name == entity.name && e.adjective == entity.adjective)) {
       yield IdentifierLevel.adjectiveNoun;
+    }
+
+    if (entity.firstOwnerId != null &&
+        others.any((e) =>
+            e.name == entity.name &&
+            e.adjective == entity.adjective &&
+            e.firstOwnerId == entity.firstOwnerId)) {
+      yield IdentifierLevel.ownerAdjectiveNoun;
     }
 
     if (entity.nameIsProperNoun && others.any((e) => e.name == entity.name)) {
@@ -785,6 +797,14 @@ class ShadowGraph {
           final ownerNounId =
               Identifier.ownerNoun('${owner.name}\'s ${entity.name}');
           assign(ownerNounId, entity);
+
+          // Same as above, but for a combination of owner, adjective and name.
+          // For example, "Tamara's red shield".
+          if (entity.adjective != null) {
+            final ownerAdjectiveNounId = Identifier.ownerAdjectiveNoun(
+                '${owner.name}\'s ${entity.adjective} ${entity.name}');
+            assign(ownerAdjectiveNounId, entity);
+          }
         }
 
         // TODO: theOtherNoun - by definition, this one will have 2 entities

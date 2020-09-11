@@ -7,6 +7,7 @@ part of storyline.shadow_graph;
 /// there are two male actors, so "he" is too vague).
 const List<IdentifierLevel> orderedQualificationLevels = [
   IdentifierLevel.properNoun,
+  IdentifierLevel.ownerAdjectiveNoun,
   IdentifierLevel.adjectiveNoun,
   IdentifierLevel.ownerNoun,
   IdentifierLevel.noun,
@@ -45,6 +46,10 @@ class Identifier {
       : level = IdentifierLevel.omitted,
         pronoun = null,
         string = null;
+
+  const Identifier.ownerAdjectiveNoun(this.string)
+      : level = IdentifierLevel.ownerAdjectiveNoun,
+        pronoun = null;
 
   const Identifier.ownerNoun(this.string)
       : level = IdentifierLevel.ownerNoun,
@@ -95,6 +100,10 @@ enum IdentifierLevel {
   /// Same as [noun], but forces the addition of an owner. For example,
   /// a "shield" becomes "Tamara's shield".
   ownerNoun,
+
+  /// Same as [adjectiveNoun], but forces the addition of an owner. For example,
+  /// a "red shield" becomes "Tamara's red shield".
+  ownerAdjectiveNoun,
 
   /// Something like "the brown jacket" or "the long sword"
   adjectiveNoun,
@@ -259,14 +268,17 @@ class ReportIdentifiers {
   String toString() => "$runtimeType<subject=$_subjectRange, "
       "object=$_objectRange, object2=$_object2Range>";
 
-  /// Sometimes, [IdentifierLevel.ownerNoun] is the only available identifier
+  /// Sometimes, [IdentifierLevel.ownerNoun] and
+  /// [IdentifierLevel.ownerAdjectiveNoun] are the only available identifiers
   /// for the entity. In that case, we force the inclusion of an owner
   /// in things.
   bool _ownerIsForcedByRange(Entity entity, Set<IdentifierLevel> range) {
     if (entity == null) return false;
     if (entity.firstOwnerId == null) return false;
     // If only [IdentifierLevel.ownerNoun] is available, then owner is forced.
-    return range.every((level) => level == IdentifierLevel.ownerNoun);
+    return range.every((level) =>
+        level == IdentifierLevel.ownerNoun ||
+        level == IdentifierLevel.ownerAdjectiveNoun);
   }
 
   static IdentifierLevel _ensureSingle(

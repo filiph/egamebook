@@ -1049,6 +1049,10 @@ class Storyline {
             },
           );
           break;
+        // IdentifierLevel.ownerAdjectiveNoun renders the same as
+        // IdentifierLevel.adjectiveNoun. That level only forces owners
+        // to appear before the adjective & noun.
+        case IdentifierLevel.ownerAdjectiveNoun:
         case IdentifierLevel.adjectiveNoun:
           result = _replaceFirstThenAll(
             result,
@@ -1314,7 +1318,8 @@ class Storyline {
     return result;
   }
 
-  /// When something is [IdentifierLevel.ownerNoun], we should add
+  /// When something is [IdentifierLevel.ownerNoun]
+  /// or [IdentifierLevel.ownerAdjectiveNoun], we should add
   /// the `"<*wner>` stopword before it (unless it's already there).
   String _addOwnerStopwords(String string, ShadowReport report) {
     String result = string;
@@ -1324,8 +1329,9 @@ class Storyline {
       final entity = report.getEntityByType(complement);
       if (entity == null) return;
 
-      if (report.qualifications.getByType(complement) !=
-          IdentifierLevel.ownerNoun) return;
+      final level = report.qualifications.getByType(complement);
+      if (level != IdentifierLevel.ownerNoun &&
+          level != IdentifierLevel.ownerAdjectiveNoun) return;
 
       result = result.replaceAll(complement.generic,
           "${ownerComplement.genericPossessive} ${complement.generic}");
