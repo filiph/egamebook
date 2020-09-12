@@ -125,4 +125,54 @@ The woman looks at him with a mix of puzzlement and exasperation, then she turns
     expect(result, contains('Fork'));
     expect(result, contains('Choice'));
   });
+
+  test("supports rulesets", () {
+    var text = r"""
+      I come to a door.
+      
+      * Open it.
+      
+      I try to open, but how?
+      
+      * * Try the knob.
+      
+      The knob turns and the door opens.
+      
+      [[RULESET]]
+      [[RULE]]
+      c.playerHasVisited('keep_dining')
+      [[THEN]]
+      I am reminded of my fight with Lady Hope.
+      [[ENDRULE]]
+      [[RULE]]
+      $DEFAULT
+      [[THEN]]
+      I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.
+      
+      I risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.
+      
+      But then, Darg's undead lips start moving. He _speaks._
+      
+      "Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I've never even considered before. This is obviously necromancy of some higher level.
+      [[ENDRULE]]
+      [[ENDRULESET]]
+      
+      * * Kick it down.
+      
+      The door explodes into the room.
+      
+      * Listen.
+      
+      It's quiet.
+      
+      -
+      
+      Well that was easy.
+    """;
+
+    var result = parseInk('test', text);
+    expect(result, contains('Paragraph'));
+    expect(result, contains('Fork'));
+    expect(result, contains('Choice'));
+  });
 }

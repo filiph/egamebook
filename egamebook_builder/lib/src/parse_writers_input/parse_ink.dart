@@ -1,5 +1,6 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:egamebook_builder/src/parse_writers_input/describer.dart';
+import 'package:egamebook_builder/src/parse_writers_input/parse_code_blocks.dart';
 
 final _dartEmitter = DartEmitter();
 
@@ -84,8 +85,28 @@ String parseInk(String name, String text) {
     currentParagraphLines.clear();
   }
 
+  /// The depth of [RULESET]. Zero means we are not in a ruleset.
+  /// One means we are in one ruleset. Two means we are in a ruleset
+  /// that is itself wrapped in another ruleset.
+  var rulesetLevel = 0;
+
   final lines = text.split('\n');
   for (final line in lines) {
+    // First, make sure we deal with rulesets, so that it's okay to
+    // have a ruleset with a blank line in it.
+    if (rulesetOpenTag.hasMatch(line)) {
+      rulesetLevel += 1;
+    }
+
+    if (rulesetLevel > 0) {
+      if (rulesetCloseTag.hasMatch(line)) {
+        rulesetLevel -= 1;
+      }
+
+      addToParagraph(line);
+      continue;
+    }
+
     if (line.trim().isEmpty) {
       addParagraphBreak();
       continue;
@@ -152,6 +173,8 @@ String parseInk(String name, String text) {
     // Normal paragraph.
     addToParagraph(line);
   }
+
+  assert(rulesetLevel == 0, "Unbalanced [RULESET] tags: $rulesetLevel.");
 
   finalizeParagraph();
 
