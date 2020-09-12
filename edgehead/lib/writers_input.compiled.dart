@@ -780,7 +780,7 @@ final dargHeadTalkInkInk = InkAst([
           final Storyline s = c.outputStoryline;
           s.add('I am reminded of my fight with Lady Hope.\n', isRaw: true);
         }),
-        Rule(567781735, 0, false, (ApplicabilityContext c) {
+        Rule(99175816, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -792,7 +792,7 @@ final dargHeadTalkInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.\nI risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\nBut then, Darg\'s undead lips start moving. He _speaks._\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n',
+              'I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.\n\nI risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\nBut then, Darg\'s undead lips start moving. He _speaks._\n\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n',
               isRaw: true);
         })).apply(c);
   }),
@@ -9556,7 +9556,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     Ruleset(
-        Rule(336492451, 2, false, (ApplicabilityContext c) {
+        Rule(1015144832, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -9568,7 +9568,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is in there, you would not want to get in. You would want to get out."\nThe woman looks at him with a mix of puzzlement and exasperation, then she turns to me.\n"This place is no longer safe. Orcs, goblins. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
+              'Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is in there, you would not want to get in. You would want to get out."\n\nThe woman looks at him with a mix of puzzlement and exasperation, then she turns to me.\n\n"This place is no longer safe. Orcs, goblins. Unless you have business with one of the farmers, you shouldn\'t go in."\n',
               isRaw: true);
         }),
         Rule(389695249, 0, false, (ApplicabilityContext c) {

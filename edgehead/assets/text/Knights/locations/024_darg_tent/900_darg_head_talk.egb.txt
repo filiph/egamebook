@@ -17,11 +17,12 @@ I am reminded of my fight with Lady Hope.
 // Haven't seen this yet.
 $DEFAULT
 [[THEN]]
-// TODO: This must be one paragraph until the following bug is fixed:
-// https://trello.com/c/UrXXOYJJ/1223-bug-cannot-have-a-blank-line-in-a-ruleset-when-in-ink
 I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.
+
 I risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.
+
 But then, Darg's undead lips start moving. He _speaks._
+
 "Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I've never even considered before. This is obviously necromancy of some higher level.
 [[ENDRULE]]
 [[ENDRULESET]]

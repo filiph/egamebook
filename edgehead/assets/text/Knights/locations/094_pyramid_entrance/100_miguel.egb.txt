@@ -76,10 +76,10 @@ c.inRoomParent('pyramid_entrance')
 &&
 c.inRoomWith(katId)
 [[THEN]]
-// TODO: This must be one paragraph until the following bug is fixed:
-// https://trello.com/c/UrXXOYJJ/1223-bug-cannot-have-a-blank-line-in-a-ruleset-when-in-ink
 Miguel looks over his shoulder at the Pyramid, then back at me. "Even if he is in there, you would not want to get in. You would want to get out."
+
 The woman looks at him with a mix of puzzlement and exasperation, then she turns to me.
+
 "This place is no longer safe. Orcs, goblins. Unless you have business with one of the farmers, you shouldn't go in."
 [[ENDRULE]]
 [[RULE]]
