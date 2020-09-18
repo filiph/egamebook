@@ -174,6 +174,11 @@ class TakeApproachAction extends Action<RoomPath> {
   /// directly, or through a set of already-explored other rooms.
   ///
   /// This lets the player "fast travel" throughout the map.
+  ///
+  /// Only returns approaches that are applicable (they respect
+  /// [Approach.isApplicable] of every approach in the path). In other words,
+  /// if the walk finds an approach that is currently inapplicable
+  /// (i.e. a blocked corridor), it will not continue that way.
   static Iterable<RoomPath> _walkApproaches(
       ApplicabilityContext context, Room startingRoom) sync* {
     // The unclosed paths that we yet have to explore.
@@ -255,7 +260,7 @@ class TakeApproachAction extends Action<RoomPath> {
       }
     }
     if (count == 0) {
-      _log.severe('No approach coming from $startingRoom');
+      _log.info(() => 'No approach coming from $startingRoom');
     }
   }
 }
