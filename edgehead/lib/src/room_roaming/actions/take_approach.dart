@@ -209,6 +209,12 @@ class TakeApproachAction extends Action<RoomPath> {
           "You can have only one implicit approach: $approaches");
 
       for (final approach in approaches) {
+        if (approach.isApplicable != null && !approach.isApplicable(context)) {
+          // Do not follow paths that are not applicable given current
+          // context. In other words, respect [Approach.isApplicable].
+          continue;
+        }
+
         final destination = context.simulation.getRoomByName(approach.to);
         final destinationParent = context.simulation.getRoomParent(destination);
 

@@ -184,7 +184,9 @@ class Simulation {
     }
   }
 
-  /// Lists all applicable approaches from [room] in current [world].
+  /// Lists all available approaches from [room] in current [world].
+  /// This does _not_ weed out approaches that are not applicable given
+  /// the current [context].
   ///
   /// Algorithm
   ///
