@@ -11,6 +11,7 @@ I am in a maze of twisty little passages, all alike. All crawling with cockroach
 
 DESCRIPTION: $NONE
 
+// TODO: examine - learn this is a farm
 
 // ---
 ROOM: $cockroach_farm_after_open_dam

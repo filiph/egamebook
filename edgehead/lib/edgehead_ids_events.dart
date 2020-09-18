@@ -47,3 +47,5 @@ const evQuake3 = "evQuake3";
 const evReceivedDragonEgg = "evReceivedDragonEgg";
 
 const evSavedSarn = "evSavedSarn";
+
+const evTookSarnToBleeds = "evTookSarnToBleeds";

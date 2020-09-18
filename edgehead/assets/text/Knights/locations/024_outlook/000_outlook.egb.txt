@@ -55,7 +55,7 @@ ACTION: $strip_dead_hawkman
 COMMAND: Hawkman's suit >> Take
 
 PREREQUISITES:
-!(c.world.currentSituation as RoomRoamingSituation).monstersAlive
+!c.getRoomRoaming().monstersAlive
 &&
 !c.playerRoom.isSynthetic
 &&

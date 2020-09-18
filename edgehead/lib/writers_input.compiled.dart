@@ -1028,7 +1028,7 @@ class StripDeadHawkman extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(!(c.world.currentSituation as RoomRoamingSituation).monstersAlive &&
+    if (!(!c.getRoomRoaming().monstersAlive &&
         !c.playerRoom.isSynthetic &&
         c.playerRoom.isOnMap &&
         c.inRoomWith(hawkmanId))) {
@@ -1501,7 +1501,13 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null, positionX: 34, positionY: 31, mapName: 'Barracks');
-final Approach conetFromSmithy = Approach('smithy', 'conet', '', null);
+final Approach conetFromSmithy = Approach('smithy', 'conet', '', null,
+    isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return !c.hasHappened(evSavedSarn) || c.hasHappened(evTookSarnToBleeds);
+});
 final conetExamineInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -2155,11 +2161,11 @@ final Room smithy = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add(
-          'TODO: I try to talk to Sarn, but he doesn\'t respond. He\'s trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.\n\nTODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.\n\n',
-          isRaw: true);
       c.markHappened(evSavedSarn);
-      c.movePlayer('bleeds_main');
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "sarn_rescue_ink_ink",
+      ));
     });
 final Room smithyAfterSarnSaved = Room(
     'smithy_after_sarn_saved',
@@ -2206,12 +2212,490 @@ final Room smithyAfterSarnSaved = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add(
-          'TODO: I try to talk to Sarn, but he doesn\'t respond. He\'s trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.\n\nTODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He\'ll be safe at Jisad\'s.\n\n\nAs I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn\'t.\n\nI sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.\n\n',
-          isRaw: true);
       c.markHappened(evSavedSarn);
-      c.movePlayer('bleeds_main');
+      w.pushSituation(InkSituation.initialized(
+        w.randomInt(),
+        "sarn_rescue_ink_ink",
+      ));
     });
+final sarnRescueInkInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The fight is over. I wheel around and turn to my brother. He looks at the dead jailer, then at me. Does he even recognize me?\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “I came for you.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('“For me,” Sarn says.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" “It’s me, Aren.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('“Aren,” he says.\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I wait a little, but there’s nothing more.\n', isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “What did they do to you?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('No response.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command:
+          r""" “I guess karma finally caught up with you, brother.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('And yet, I feel none of the satisfaction I expected.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Sarn just stands there, as if waiting for orders. From whom, though? The jailer is dead.\n',
+        isRaw: true);
+  }),
+]);
+final takeSarnToBleedsInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I usher Sarn out of the smithy and through the places I know, downwards. Sarn is obedient but slow to react. I can’t risk combat with my brother in tow.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('If anyone is to kill him, it is going to be me.\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'After a tedious journey down the Pyramid, we arrive at the Bleeds.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.movePlayer('bleeds_main');
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    Ruleset(
+        Rule(509056194, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.knows(JisadFacts.name);
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I look for a place to rest, and see Jisad’s porch.\n\n“Brother, you say?” Jisad says after I ask for help. “Take chairs from the kitchen and bring them. You can sit beside me.”\n',
+              isRaw: true);
+        }),
+        Rule(3746569, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I look for a place to rest. The only dwelling that could be even remotely described as inviting is a little house with a porch and a man sitting outside.\n\nI approach him and realize that the man is blind.\n\n“I’m Jisad,” the man tells me. “Welcome to San Francisco.”\n\n',
+              isRaw: true);
+          c.learn(JisadFacts.name);
+
+          s.add(
+              '\nI ask if I can rest with my brother on his porch.\n\n“Brother, you say?” Jisad asks. “Take chairs from the kitchen and bring them. You can sit beside me.”\n',
+              isRaw: true);
+        })).apply(c);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'In a moment, Sarn, Jisad and I sit on the porch, facing the center of the Bleeds. Briny wind ruffles our hair and chills our hands.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “Are you okay now, Sarn?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“Yes,” he says. But it’s a mechanical answer. He’s getting worse.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" “Snap out of it, brother.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('No response, of course.\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'During our descent from the top of the Pyramid, Sarn reacted less and less, with shorter sentences. I realize that the scumbag is dying. Something in my brother is dying.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('“The fight is not over.”\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I turn around in surprise. This is Jisad talking.\n', isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “What do you mean?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“There are things larger than ourselves,” Jisad says, straightening on his seat. “Larger than life. We can take what we want for ourselves, we can solve our own little problems.”\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Jisad touches just below his missing eyes.\n', isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“But that doesn’t mean the fight is over. The fight is not over.”\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" “What fight?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“You came here to accomplish something,” Jisad says. “Everyone does. And you succeeded.”\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('He turns to me, as if trying to make eye contact.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('“Congratulations.”\n', isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" “I achieved nothing.” """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '“Your brother,” Jisad says, and stops there. There’s a pause.\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" “Thank you.” """.trim(),
+            consequence: [],
+          ),
+        ]),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '“The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal.”\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.markHappened(evTookSarnToBleeds);
+  }),
+]);
+
+class SarnRescueInk extends RoamingAction {
+  @override
+  final String name = 'sarn_rescue_ink';
+
+  static final SarnRescueInk singleton = SarnRescueInk();
+
+  @override
+  List<String> get commandPathTemplate => ['N/A'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('start_bogus_location') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "sarn_rescue_ink_ink",
+    ));
+    return '${a.name} successfully performs SarnRescueInk';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform SarnRescueInk';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class TakeSarnToBleeds extends RoamingAction {
+  @override
+  final String name = 'take_sarn_to_bleeds';
+
+  static final TakeSarnToBleeds singleton = TakeSarnToBleeds();
+
+  @override
+  List<String> get commandPathTemplate => ['Take Sarn to safety'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('smithy') != true) {
+      return false;
+    }
+    if (!(!c.getRoomRoaming().monstersAlive)) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "take_sarn_to_bleeds_ink",
+    ));
+    return '${a.name} successfully performs TakeSarnToBleeds';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform TakeSarnToBleeds';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 final Approach elevator28FromElevator12 =
     Approach('elevator_12', 'elevator_28', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -2497,7 +2981,13 @@ final Approach junctionFromElevator28 =
     Approach('elevator_28', 'junction', '', null);
 final Approach junctionFromReservoir =
     Approach('reservoir', 'junction', '', null);
-final Approach junctionFromSmithy = Approach('smithy', 'junction', '', null);
+final Approach junctionFromSmithy = Approach('smithy', 'junction', '', null,
+    isApplicable: (ApplicabilityContext c) {
+  final WorldState w = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  return !c.hasHappened(evSavedSarn) || c.hasHappened(evTookSarnToBleeds);
+});
 final Room junction = Room('junction', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2785,7 +3275,7 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          '${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner - an important source of pride for the Knights\n\nI take the banner.\n\n',
+          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner - an important source of pride for the Knights\n\nI take the banner.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(banner);
 
@@ -2848,7 +3338,7 @@ final talkToOracleDeathlessInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"They are a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
+        'TODO "They are a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -2896,7 +3386,7 @@ final talkToOracleDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"There\'s a prophesy. A man with a dog\'s head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."\n',
+        'TODO "There\'s a prophesy. A man with a dog\'s head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -3235,7 +3725,7 @@ class AskOracleAboutKeep extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"I worked there as a kid."\n\n', isRaw: true);
+    s.add('"I worked there as a kid."\n\nTODO\n\n', isRaw: true);
     c.learn(KeepGateFacts.oracleWorkedInKeep);
 
     return '${a.name} successfully performs AskOracleAboutKeep';
@@ -3302,7 +3792,8 @@ class AskOracleAboutKeepGate extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Oracle describes a convoluted series of steps to open the gate.\n\n',
+    s.add(
+        'Oracle describes a convoluted series of steps to open the gate.\n\nTODO\n\n',
         isRaw: true);
     c.learn(KeepGateFacts.keepGateUnlock);
 
@@ -3370,7 +3861,7 @@ class OracleGiveNorthSkull extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Oracle is very thankful.\n\n', isRaw: true);
+    s.add('Oracle is very thankful.\n\nTODO\n\n', isRaw: true);
     c.removeItemFromPlayer(northSkullId);
 
     return '${a.name} successfully performs OracleGiveNorthSkull';
@@ -10323,10 +10814,16 @@ class BleedsMainObserveVillage extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_473d070da = c.knows(JisadFacts.name)
+        ? '''Jisad sits there.'''
+        : '''A blind man sits there, wearing a coat.''';
     final ifBlock_646ab8e51 =
         !c.hasHappened(evQuake1) ? '''Something bad is happening.''' : '''''';
+    final ifBlock_2464a34ed = c.knows(JisadFacts.name)
+        ? '''Jisad sits outside on a stool.'''
+        : '''A blind man sits outside on a stool, wearing a coat.''';
     Ruleset(
-        Rule(635652871, 2, false, (ApplicabilityContext c) {
+        Rule(934960039, 2, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -10339,10 +10836,10 @@ class BleedsMainObserveVillage extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.\n\nThe talking and commotion is especially vivid near the local trader\'s building. On the other end of the liveliness spectrum, there\'s a small dwelling with a porch here that most people ignore. A blind man sits there, wearing a coat.\n',
+              'With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.\n\nThe talking and commotion is especially vivid near the local trader\'s building. On the other end of the liveliness spectrum, there\'s a small dwelling with a porch here that most people ignore. ${ifBlock_473d070da}\n',
               isRaw: true);
         }),
-        Rule(35451700, 0, false, (ApplicabilityContext c) {
+        Rule(502605258, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -10354,7 +10851,7 @@ class BleedsMainObserveVillage extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. ${ifBlock_646ab8e51}\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.\n',
+              'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. ${ifBlock_646ab8e51}\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. ${ifBlock_2464a34ed}\n',
               isRaw: true);
         })).apply(c);
     c.learn(JisadFacts.blindPerson);
@@ -11937,7 +12434,7 @@ class BleedsBlindGuideGreet extends RoamingAction {
     if (c.inRoomParent('bleeds_main') != true) {
       return false;
     }
-    if (!(c.knows(JisadFacts.blindPerson))) {
+    if (!(c.knows(JisadFacts.blindPerson) && !c.knows(JisadFacts.name))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12257,14 +12754,74 @@ class BleedsBlindGuideWhatsWrong extends RoamingAction {
   bool get isAggressive => false;
 }
 
-final sarnSlapInk = InkAst([
+final sarnTalkInBleedsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Sarn is unresponsive.\n', isRaw: true);
+    s.add(
+        'Sarn doesn\'t answer. He rocks back and forth and doesn\'t even look up.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Do you hear me?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Sarn nods, almost imperceptibly. But the rocking continues, and\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What happened to you?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Sarn continues rocking, and\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('he keeps staring into distance.\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_2bc5a45df = c.playerHasWoodenFoot
+        ? '''My left foot starts to itch. The foot that isn't there anymore.'''
+        : '''''';
+    final ifBlock_473256f7d = c.playerHasAsthma
+        ? '''I feel my lungs constrict. I fight off the urge to cough, and remember the cold, cold nights after my brother left.'''
+        : '''''';
+    final ifBlock_79379cb7c = c.playerHasDebt
+        ? '''My right hand makes a fist as I remember the months after my brother left, and the crippling debt that is still with us today.'''
+        : '''''';
+    s.add(
+        'Did I travel all this way, did I go through all this, for nothing? ${ifBlock_2bc5a45df}${ifBlock_473256f7d}${ifBlock_79379cb7c}\n',
+        isRaw: true);
   }),
 ]);
 
@@ -12396,72 +12953,6 @@ class SarnReadLetter extends RoamingAction {
   bool get isAggressive => false;
 }
 
-class SarnSlap extends RoamingAction {
-  @override
-  final String name = 'sarn_slap';
-
-  static final SarnSlap singleton = SarnSlap();
-
-  @override
-  List<String> get commandPathTemplate =>
-      ['Sarn', 'Talk', '"What happened up there?"'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('bleeds_main') != true) {
-      return false;
-    }
-    if (!(c.hasHappened(evSavedSarn))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    w.pushSituation(InkSituation.initialized(
-      w.randomInt(),
-      "sarn_slap_ink",
-    ));
-    return '${a.name} successfully performs SarnSlap';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    return '${a.name} fails to perform SarnSlap';
-  }
-
-  @override
-  ReasonedSuccessChance<void> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  Resource get rerollResource => null;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will I be successful?';
-  }
-
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-}
-
 class SarnTakeHisHammer extends RoamingAction {
   @override
   final String name = 'sarn_take_his_hammer';
@@ -12503,6 +12994,72 @@ class SarnTakeHisHammer extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     return '${a.name} fails to perform SarnTakeHisHammer';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class SarnTalkInBleeds extends RoamingAction {
+  @override
+  final String name = 'sarn_talk_in_bleeds';
+
+  static final SarnTalkInBleeds singleton = SarnTalkInBleeds();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Sarn', 'Talk', '"What happened up there?"'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('bleeds_main') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evSavedSarn))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "sarn_talk_in_bleeds_ink",
+    ));
+    return '${a.name} successfully performs SarnTalkInBleeds';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform SarnTalkInBleeds';
   }
 
   @override
@@ -12734,34 +13291,47 @@ final Approach goblinSkirmishPatrolFromBleedsMain =
 });
 final Approach goblinSkirmishPatrolFromGoblinSkirmishMain =
     Approach('goblin_skirmish_main', 'goblin_skirmish_patrol', '', null);
-final Room goblinSkirmishPatrol = Room('goblin_skirmish_patrol',
+final Room goblinSkirmishPatrol = Room(
+    'goblin_skirmish_patrol',
     (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
-  final weSubstitutionCapitalized =
-      getWeOrI(a, sim, originalWorld, capitalized: true);
-  s.add(
-      'There is no path in the direction of the smoke. ${weSubstitutionCapitalized} go through the brush and step over logs and ancient rubble.\n\nWhen ${weSubstitution} come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear. The goblin is completely white — even his eyebrows are unpigmented.\n\n"You lost, peasant?"\n',
-      isRaw: true);
-}, (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add('', isRaw: true);
-}, generateBleedsGoblinSkirmishPatrol, null,
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      final weSubstitution =
+          getWeOrI(a, sim, originalWorld, capitalized: false);
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
+      s.add(
+          'There is no path in the direction of the smoke. ${weSubstitutionCapitalized} go through the brush and step over logs and ancient rubble.\n\nWhen ${weSubstitution} come out of a particularly nasty shrub, I hear a short, guttural sound. I look up and see a lone goblin with a gray spear. The goblin is completely white — even his eyebrows are unpigmented.\n\n"You lost, peasant?"\n\nHe doesn\'t wait for an answer and readies a spear. The spear is painted white: as white as the albino\'s skin.\n\nThe goblin is starting to advance towards me.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    generateBleedsGoblinSkirmishPatrol,
+    null,
     positionX: 15,
     positionY: 97,
-    mapName: 'Ancient rubble',
+    mapName: 'Wilderness near the Bleeds',
     firstMapName: 'Smoke',
-    hint: 'It\'s the place I met the goblin patrol.',
+    hint: 'It\'s the place where I met the goblin patrol.',
     firstHint:
-        'The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.');
+        'The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.',
+    afterMonstersCleared: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('The fight is over.\n', isRaw: true);
+    });
 
 class ListenContinue extends RoamingAction {
   @override
@@ -13478,7 +14048,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
+          r""" I am a young woman >> ... with brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13493,7 +14063,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
+          r""" I am a young woman >> ... with brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13508,7 +14078,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
+          r""" I am a young woman >> ... with brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13523,7 +14093,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
+          r""" I am a young woman >> ... with blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13538,7 +14108,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
+          r""" I am a young woman >> ... with blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13553,7 +14123,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young woman >> with long blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
+          r""" I am a young woman >> ... with blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13613,7 +14183,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
+          r""" I am a young man >> ... with brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13628,7 +14198,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
+          r""" I am a young man >> ... with brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13643,7 +14213,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
+          r""" I am a young man >> ... with brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13658,7 +14228,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
+          r""" I am a young man >> ... with blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13673,7 +14243,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
+          r""" I am a young man >> ... with blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -13688,7 +14258,7 @@ final startInkInk = InkAst([
     ),
     InkChoiceNode(
       command:
-          r""" I am a young man >> with short blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
+          r""" I am a young man >> ... with blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.)) """
               .trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
@@ -14284,7 +14854,7 @@ class PerformNecromancyElsewhere extends RoamingAction {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (!(!(c.world.currentSituation as RoomRoamingSituation).monstersAlive &&
+    if (!(!c.getRoomRoaming().monstersAlive &&
         !c.playerRoom.isSynthetic &&
         c.playerRoom.isOnMap &&
         !storyNecromanyHasPrecedence(c))) {
@@ -14760,6 +15330,8 @@ final allActions = <RoamingAction>[
   KarlListenToGuards.singleton,
   KarlUseNecromancy.singleton,
   SaveSarn.singleton,
+  SarnRescueInk.singleton,
+  TakeSarnToBleeds.singleton,
   KarlExamineStar.singleton,
   KarlTakeStar.singleton,
   ReservoirOpenDam.singleton,
@@ -14837,8 +15409,8 @@ final allActions = <RoamingAction>[
   BleedsBlindGuideWhatsWrong.singleton,
   SarnExamineHisHammer.singleton,
   SarnReadLetter.singleton,
-  SarnSlap.singleton,
   SarnTakeHisHammer.singleton,
+  SarnTalkInBleeds.singleton,
   ListenContinue.singleton,
   ListenMore.singleton,
   ListenToThemArguing.singleton,
@@ -14863,6 +15435,8 @@ final allInks = <String, InkAst>{
   'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,
   'conet_kobold_examine_ink': conetKoboldExamineInk,
+  'sarn_rescue_ink_ink': sarnRescueInkInk,
+  'take_sarn_to_bleeds_ink': takeSarnToBleedsInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
   'talk_to_oracle_dragon_egg_ink': talkToOracleDragonEggInk,
@@ -14914,6 +15488,6 @@ final allInks = <String, InkAst>{
   'bleeds_blind_guide_orcs_ink': bleedsBlindGuideOrcsInk,
   'bleeds_blind_guide_quake_1_ink': bleedsBlindGuideQuake1Ink,
   'bleeds_blind_guide_whats_wrong_ink': bleedsBlindGuideWhatsWrongInk,
-  'sarn_slap_ink': sarnSlapInk,
+  'sarn_talk_in_bleeds_ink': sarnTalkInBleedsInk,
   'start_ink_ink': startInkInk
 };

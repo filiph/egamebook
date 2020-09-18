@@ -1,5 +1,5 @@
 // ---
-ACTION: $sarn_slap
+ACTION: $sarn_talk_in_bleeds
 COMMAND: Sarn >> Talk >> "What happened up there?"
 FOR_LOCATION: $bleeds_main
 
@@ -7,7 +7,21 @@ PREREQUISITES:
 c.hasHappened(evSavedSarn)
 
 INK:
-Sarn is unresponsive.
+Sarn doesn't answer. He rocks back and forth and doesn't even look up.
+
+* "Do you hear me?"
+
+Sarn nods, almost imperceptibly. But the rocking continues, and <>
+
+* "What happened to you?"
+
+Sarn continues rocking, and <>
+
+-
+
+<> he keeps staring into distance.
+
+Did I travel all this way, did I go through all this, for nothing? [[IF c.playerHasWoodenFoot]]My left foot starts to itch. The foot that isn't there anymore.[[ENDIF]][[IF c.playerHasAsthma]]I feel my lungs constrict. I fight off the urge to cough, and remember the cold, cold nights after my brother left.[[ENDIF]][[IF c.playerHasDebt]]My right hand makes a fist as I remember the months after my brother left, and the crippling debt that is still with us today.[[ENDIF]]
 
 
 // ---
@@ -52,3 +66,8 @@ c.hasItem(letterFromFatherId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 Sarn listens intently. There seems to be a little bit of recognition in his face. By the time I finish reading, he looks happier, though still out of it.
+
+
+NOTES:
+
+There could be a Sarn >> Kill option if we wanted to be a lot darker. That would end the game? If not, then we'd have to tread carefully, especially around the ending. If we do end the game with killing Sarn, then the "Win" screen must reflect that it's just one of the choices.

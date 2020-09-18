@@ -58,7 +58,7 @@ c.hasHappened(evCaravanArrived) && !c.hasHappened(evCaravanDeparted)
 [[THEN]]
 With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.
 
-The talking and commotion is especially vivid near the local trader's building. On the other end of the liveliness spectrum, there's a small dwelling with a porch here that most people ignore. A blind man sits there, wearing a coat.
+The talking and commotion is especially vivid near the local trader's building. On the other end of the liveliness spectrum, there's a small dwelling with a porch here that most people ignore. [[IF c.knows(JisadFacts.name)]]Jisad sits there.[[ELSE]]A blind man sits there, wearing a coat.[[ENDIF]]
 [[ENDRULE]]
 
 [[RULE]]
@@ -66,7 +66,7 @@ The talking and commotion is especially vivid near the local trader's building. 
 [[THEN]]
 At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. [[IF !c.hasHappened(evQuake1)]]Something bad is happening.[[ENDIF]]
 
-Every door is shut except for two. One is the entrance into the trader's shop. The second open door belongs to a small dwelling with a porch. A blind man sits outside on a stool, wearing a coat.
+Every door is shut except for two. One is the entrance into the trader's shop. The second open door belongs to a small dwelling with a porch. [[IF c.knows(JisadFacts.name)]]Jisad sits outside on a stool.[[ELSE]]A blind man sits outside on a stool, wearing a coat.[[ENDIF]]
 [[ENDRULE]]
 [[ENDRULESET]]
 

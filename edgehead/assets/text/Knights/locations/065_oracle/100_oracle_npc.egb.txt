@@ -33,6 +33,8 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 COMPLETE_SUCCESS_DESCRIPTION:
 "I worked there as a kid."
 
+TODO
+
 [[CODE]]
 c.learn(KeepGateFacts.oracleWorkedInKeep);
 [[ENDCODE]]
@@ -55,6 +57,8 @@ c.knows(KeepGateFacts.oracleWorkedInKeep)
 COMPLETE_SUCCESS_DESCRIPTION:
 Oracle describes a convoluted series of steps to open the gate.
 
+TODO
+
 [[CODE]]
 c.learn(KeepGateFacts.keepGateUnlock);
 [[ENDCODE]]
@@ -75,6 +79,8 @@ c.hasItem(northSkullId)
 COMPLETE_SUCCESS_DESCRIPTION:
 Oracle is very thankful.
 
+TODO
+
 [[CODE]]
 c.removeItemFromPlayer(northSkullId);
 [[ENDCODE]]
@@ -94,7 +100,7 @@ c.knows(DogheadFacts.somethingCalledDoghead)
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
 
 INK:
-"There's a prophesy. A man with a dog's head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."
+TODO "There's a prophesy. A man with a dog's head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
@@ -211,7 +217,7 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 c.knows(DeathlessFacts.somethingCalledDeathless)
 
 INK:
-"They are a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
+TODO "They are a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);

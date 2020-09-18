@@ -20,7 +20,7 @@ final Actor albinoGoblin = Actor.initialized(
   currentWeapon: Item.weapon(
     graySpearId,
     WeaponType.spear,
-    adjective: "gray",
+    adjective: "white",
     firstOwnerId: albinoGoblinId,
   ),
   team: defaultEnemyTeam,

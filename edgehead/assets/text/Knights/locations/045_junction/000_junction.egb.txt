@@ -1,8 +1,15 @@
 APPROACH: $junction FROM $barracks
 APPROACH: $junction FROM $elevator_28
 APPROACH: $junction FROM $reservoir
-APPROACH: $junction FROM $smithy
 APPROACH: $junction FROM $cockroach_farm
+
+APPROACH: $junction FROM $smithy
+PREREQUISITES:
+// Between the two events, there is no way from the $smithy.
+!c.hasHappened(evSavedSarn)
+||
+c.hasHappened(evTookSarnToBleeds)
+
 
 // ---
 ROOM: $junction

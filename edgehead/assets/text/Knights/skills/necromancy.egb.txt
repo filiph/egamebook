@@ -5,7 +5,7 @@ COMMAND: Skills >> necromancy
 HINT: Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.
 
 PREREQUISITES:
-!(c.world.currentSituation as RoomRoamingSituation).monstersAlive
+!c.getRoomRoaming().monstersAlive
 &&
 !c.playerRoom.isSynthetic
 &&

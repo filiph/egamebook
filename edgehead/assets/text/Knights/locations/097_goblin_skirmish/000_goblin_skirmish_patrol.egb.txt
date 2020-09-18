@@ -14,8 +14,8 @@ FIRST_MAP_NAME: Smoke
 FIRST_HINT: The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.
 
 // This is not needed as of this writing, as we never re-visit. But we might change that in the future.
-MAP_NAME: Ancient rubble
-HINT: It's the place I met the goblin patrol.
+MAP_NAME: Wilderness near the Bleeds
+HINT: It's the place where I met the goblin patrol.
 
 FIRST_DESCRIPTION:
 There is no path in the direction of the smoke. [We] go through the brush and step over logs and ancient rubble.
@@ -24,7 +24,15 @@ When [we] come out of a particularly nasty shrub, I hear a short, guttural sound
 
 "You lost, peasant?"
 
+He doesn't wait for an answer and readies a spear. The spear is painted white: as white as the albino's skin.
+
+The goblin is starting to advance towards me.
+
+
 DESCRIPTION: $NONE
 
 FIGHT_SITUATION:
 generateBleedsGoblinSkirmishPatrol
+
+AFTER_MONSTERS_CLEARED:
+The fight is over. 

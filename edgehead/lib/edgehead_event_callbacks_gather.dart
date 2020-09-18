@@ -34,3 +34,12 @@ final start_tamara_bellows = EventCallback((c, sim, w, s) {
   tamara.report(s, '"I hate this place."', wholeSentence: true);
   s.addParagraph();
 });
+
+final jailer_fight_sarn_looking = EventCallback((c, sim, world, storyline) {
+  storyline.addParagraph();
+  storyline.add(
+      "I look over at Sarn. He stopped working, "
+      "but he’s not joining the fight. He just looks on.",
+      isRaw: true);
+  storyline.addParagraph();
+});

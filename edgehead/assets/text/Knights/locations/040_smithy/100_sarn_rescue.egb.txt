@@ -1,0 +1,125 @@
+ACTION: $sarn_rescue_ink
+FOR_LOCATION: $start_bogus_location
+COMMAND: N/A
+
+INK:
+The fight is over. I wheel around and turn to my brother. He looks at the dead jailer, then at me. Does he even recognize me?
+
+* “I came for you.”
+
+  “For me,” Sarn says. <>
+
+* “It’s me, Aren.”
+
+  “Aren,” he says. <>
+
+-
+
+<> I wait a little, but there’s nothing more.
+
+* “What did they do to you?”
+
+  No response. <>
+
+* “I guess karma finally caught up with you, brother.”
+
+  And yet, I feel none of the satisfaction I expected. <>
+
+-
+
+<> Sarn just stands there, as if waiting for orders. From whom, though? The jailer is dead.
+
+
+// —--
+ACTION: $take_sarn_to_bleeds
+COMMAND: Take Sarn to safety
+FOR_LOCATION: $smithy
+PREREQUISITES:
+!c.getRoomRoaming().monstersAlive
+
+INK:
+I usher Sarn out of the smithy and through the places I know, downwards. Sarn is obedient but slow to react. I can’t risk combat with my brother in tow.
+
+If anyone is to kill him, it is going to be me.
+
+After a tedious journey down the Pyramid, we arrive at the Bleeds.
+
+[[CODE]]
+c.movePlayer('bleeds_main');
+[[ENDCODE]]
+
+[[RULESET]]
+[[RULE]]
+c.knows(JisadFacts.name)
+[[THEN]]
+I look for a place to rest, and see Jisad’s porch.
+
+“Brother, you say?” Jisad says after I ask for help. “Take chairs from the kitchen and bring them. You can sit beside me.”
+[[ENDRULE]]
+[[RULE]]
+// Don’t know Jisad.
+$DEFAULT
+[[THEN]]
+I look for a place to rest. The only dwelling that could be even remotely described as inviting is a little house with a porch and a man sitting outside.
+
+I approach him and realize that the man is blind.
+
+“I’m Jisad,” the man tells me. “Welcome to San Francisco.”
+
+[[CODE]]
+c.learn(JisadFacts.name);
+[[ENDCODE]]
+
+I ask if I can rest with my brother on his porch.
+
+“Brother, you say?” Jisad asks. “Take chairs from the kitchen and bring them. You can sit beside me.”
+[[ENDRULE]]
+[[ENDRULESET]]
+
+In a moment, Sarn, Jisad and I sit on the porch, facing the center of the Bleeds. Briny wind ruffles our hair and chills our hands.
+
+* “Are you okay now, Sarn?”
+
+  “Yes,” he says. But it’s a mechanical answer. He’s getting worse. <>
+
+* “Snap out of it, brother.”
+
+  No response, of course. <>
+
+-
+
+<> During our descent from the top of the Pyramid, Sarn reacted less and less, with shorter sentences. I realize that the scumbag is dying. Something in my brother is dying.
+
+“The fight is not over.”
+
+I turn around in surprise. This is Jisad talking.
+
+* “What do you mean?”
+
+  “There are things larger than ourselves,” Jisad says, straightening on his seat. “Larger than life. We can take what we want for ourselves, we can solve our own little problems.”
+
+  Jisad touches just below his missing eyes.
+
+  “But that doesn’t mean the fight is over. The fight is not over.”
+
+* “What fight?”
+
+  “You came here to accomplish something,” Jisad says. “Everyone does. And you succeeded.”
+
+  He turns to me, as if trying to make eye contact.
+
+  “Congratulations.”
+
+  * * “I achieved nothing.”
+
+    “Your brother,” Jisad says, and stops there. There’s a pause.
+
+  * * “Thank you.”
+
+-
+
+“The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal.”
+
+[[CODE]]
+c.markHappened(evTookSarnToBleeds);
+[[ENDCODE]]

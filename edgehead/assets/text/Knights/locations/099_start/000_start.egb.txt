@@ -44,37 +44,37 @@ c.recordCharacterChoice(0, 0, 1);
 c.recordCharacterChoice(0, 0, 2);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young woman >> ... with brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
+* I am a young woman >> ... with brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
+* I am a young woman >> ... with brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 2);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young woman >> ... with blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 0);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
+* I am a young woman >> ... with blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 1);
 [[ENDCODE]]
 
-* I am a young woman >> with long blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
+* I am a young woman >> ... with blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 2);
@@ -98,37 +98,37 @@ c.recordCharacterChoice(1, 0, 1);
 c.recordCharacterChoice(1, 0, 2);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young man >> ... with brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 0);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
+* I am a young man >> ... with brown hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 1);
 [[ENDCODE]]
 
-* I am a young man >> with wavy brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
+* I am a young man >> ... with brown hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 2);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young man >> ... with blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 0);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
+* I am a young man >> ... with blond hair >> ... and a wooden stump where my left foot used to be. ((The stump will make me less nimble and more conspicuous.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 1);
 [[ENDCODE]]
 
-* I am a young man >> with short blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
+* I am a young man >> ... with blond hair >> ... and asthma. ((The illness is a constant nightmare, causing coughing fits and reducing stamina.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 2);

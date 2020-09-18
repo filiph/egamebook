@@ -26,19 +26,14 @@ FIGHT_SITUATION:
 generateJailerFight
 
 AFTER_MONSTERS_CLEARED:
-TODO: I try to talk to Sarn, but he doesn't respond. He's trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.
-
-TODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He'll be safe at Jisad's.
-
-// TODO: what if we haven't met Jisad yet? - quickly introduce and set kbBlindGuide
-
-As I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn't.
-
-I sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.
 
 [[CODE]]
 c.markHappened(evSavedSarn);
-c.movePlayer('bleeds_main');
+// Use the ink defined in sarn_rescue.egb.txt.
+w.pushSituation(InkSituation.initialized(
+    w.randomInt(),
+    "sarn_rescue_ink_ink",
+));
 [[ENDCODE]]
 
 
@@ -73,3 +68,26 @@ Sarn retreats to a corner of the room and looks at the floor, waiting.
 [[CODE]]
 c.startOptionalFight();
 [[ENDCODE]]
+
+
+NOTES:
+
+Old AFTER_MONSTERS_CLEARED:
+
+TODO: I try to talk to Sarn, but he doesn't respond. He's trying to keep forging the weapons. "I must do this, the jailer told me to do this." Finally, I snap Sarn out of it, at least to stop forging and follow me.
+
+IF I know jisad: go straight to him, otherwise, we must meet him
+
+"Where are we going?"
+
+* "Safety."
+* "Hell."
+
+TODO: I take Sarn (and his hammer) through the Pyramid and outside, where he starts sobbing. I try to be mad at Sarn but instead I just take Sarn to Jisad and leave him there. He'll be safe at Jisad's.
+
+// TODO: what if we haven't met Jisad yet? - quickly introduce and set kbBlindGuide
+
+As I leave the hut, I nod to both men, and Jisad, though blind, seems to notice the nod while Sarn doesn't.
+
+I sigh and turn my back to them, and walk out to The Bleeds. This has not happened the way I imagined it.
+

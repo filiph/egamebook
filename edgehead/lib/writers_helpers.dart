@@ -346,7 +346,9 @@ FightSituation generateJailerFight(ActionContext c,
     [jailer],
     "{|concrete} floor",
     roomRoamingSituation,
-    {},
+    {
+      4: jailer_fight_sarn_looking,
+    },
     items: const [
       // TODO: some kind of a weapon?
     ],
@@ -845,6 +847,13 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   /// Returns `true` while player is roaming through Knights and is in an idle
   /// room (i.e. can do things like chatting or reading).
   bool get isInIdleRoom {
+    if (world.currentSituation is! RoomRoamingSituation) return false;
+    final situation = world.currentSituation as RoomRoamingSituation;
+    if (situation.monstersAlive) return false;
+    return simulation.getRoomByName(situation.currentRoomName).isIdle;
+  }
+
+  bool get monstersAlive {
     if (world.currentSituation is! RoomRoamingSituation) return false;
     final situation = world.currentSituation as RoomRoamingSituation;
     if (situation.monstersAlive) return false;

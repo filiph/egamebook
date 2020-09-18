@@ -38,7 +38,7 @@ generateBattlefieldFight
 DESCRIPTION: $NONE
 
 AFTER_MONSTERS_CLEARED:
-[We] stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
+The fight is over. [We] stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
 
 A glorious battle this was, I'm sure. It became a scab.
 
