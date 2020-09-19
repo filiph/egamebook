@@ -5184,7 +5184,314 @@ final argoAskDeathlessInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"There\'s only one thing the Deathless regret. The Lair of God was taken by the orcs long before I was born. They now use it as some kind of a prison, or a sty. Disgusting. But the temple had an artifact in it, a star made in the age of the ancients, and we think it\'s still there. That star means a lot to our people. Our Founder had it a hundred years ago, and it inspired her to bring the community to this place, to start the worship of the ancients, and to build the Lair of God."\n',
+        'Argo bows. She wears a perfume, and her motion sends its floral scent towards me. "I am delighted. Most people think of us as a cult, and few take the time to ask us directly."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She opens her arms and invites me to take a look at the village. "Do we look like cultists to you?"\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Looks can be deceiving." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Argo laughs, smiles, and waves her hand dismissively. "True. And same goes for words. Words can be deceiving, too." She pauses, looking at the concrete floor.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Cult," she recites after a moment. "A relatively small group of people having religious beliefs or practices regarded by others as strange or sinister."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She nods a little, then shrugs. "Cult isn\'t a real thing. It\'s just a word.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "No." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Argo puts her arms back down. "Thank you," she says, visibly relieved. "I am glad.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Yes." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Argo lets her arms fall back down. "That is unfortunate.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Do you know what we worship?"\n', isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "The ancients?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Argo shakes her head, smiling again. "Incorrect," she says. "We worship the Eight Gods. Just like everyone else." She looks to the ceiling. "Well, almost everyone else. As for the ancients, we do not worship them. We know they weren\'t gods. Only people. But they were people who could erect places like the Pyramid."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She stomps on the floor. "This. They were able to build it. The ancients must have been a lot closer to the Eight Gods than we are."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "This building?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Argo shakes her head, smiling again. "Incorrect," she says. "We worship the Eight Gods. Just like everyone else." She looks to the ceiling. "Well, almost everyone else. As for the Pyramid, we do not worship it. We do admire the people that built it. The ancients. Just imagine: those people were could erect a hundred places like this building."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She stomps on the floor. "This. They were able to build it. The ancients must have been a lot closer to the Eight Gods than we are."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "The Eight Gods?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Argo smiles again. "That is correct. The Eight Gods and the Sixteen Truths. Just like everyone else." She looks to the ceiling. "Well, almost everyone else."\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "You worship nothing else?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"Well, we do admire the ancients," she says. "We know they weren\'t gods. Only people. But they were people who could erect places like the Pyramid."\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "Why do you live secluded, then?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"Well, this place was built by the ancients," she says. "And we do admire them. We know they weren\'t gods. Only people. But they were people who could erect places like the Pyramid."\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+        ]),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She stomps on the floor. "This. They were able to build it. The ancients must have been a lot closer to the Eight Gods than we are."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "And that's why you live here?" """.trim(),
+      consequence: [],
+    ),
+    InkChoiceNode(
+      command: r""" "Or maybe they were just better builders." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Unlikely," Argo says. "The did a lot more than just build. Don\'t forget who put the goddess Iss in the sky. The ancients."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Argo bows again, this time towards the center of the Pyramid. "We are Deathless. We want to learn from the ancients. We want to ensure their memory never dies. We want to ensure their legacy outlives our own. We are Deathless."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "What legacy?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"The Pyramid, for example," she says. "We also collect artifacts, small and large. The Deathless have existed for generations, and so our collection is considerable."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What memory?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"The ancients didn\'t leave a lot of paper behind," she says. "The books they left are of a different kind. Smaller, unopenable. Black glossy objects that refuse to give out even a hint of information. We know they contain it. We just cannot access it. At least not yet."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Argo raises eyebrows. "Have you met Oracle? She does have quite a few of the ancient books that are on paper. We even lend her some of our own books. She can read in them better than anyone here in the village."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She sighs. "There\'s only one thing the Deathless regret. The Lair of God, our original place of worship, was taken by the orcs long before I was born. They now use it as some kind of a prison, or a sty. Disgusting."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Argo pretends to spit on the floor. With her size and age, her pretend anger looks almost adorable. "But the temple had an artifact in it, a star made in the age of the ancients, and we think it\'s still there."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She straightens, assuming a queenly posture. "That star means a lot to our people. Our Founder had it a hundred years ago, and it inspired her to bring the community to this place, to start the Deathless movement, and to build the Lair of God."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
