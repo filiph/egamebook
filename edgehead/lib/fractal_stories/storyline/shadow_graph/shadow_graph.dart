@@ -948,7 +948,7 @@ class ShadowGraph {
         // the next iteration will have the goblin from the start.
         // Here, all we can do is to give the goblin all the identifiers.
         if (relevantIdentifiers.isEmpty) {
-          log.warning("relevantIdentifiers for $entity are empty in $report: "
+          log.info("relevantIdentifiers for $entity are empty in $report: "
               "$current");
           relevantIdentifiers.addAll([
             // All identifiers, except for omitted. Omitted doesn't make sense
