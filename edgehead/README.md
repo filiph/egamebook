@@ -317,3 +317,4 @@ dart2native benchmark/full.dart && ./benchmark/full.exe
 | e11fe3f0 Avoid string interpolation ... | 14.91 | 0.17 | 21 |
 | bab88227 Decrease maxOrder of AI | 4.87 | 0.04 | 62 |
 | exploration: `while (await _update())` | 5.70 | 0.17 | 53 |
+| latest Fix bug which led to ... | 4.71 | 0.04 | 64 |

@@ -104,20 +104,21 @@ class ShadowGraph {
   /// reports.
   List<ShadowReport> reports;
 
-  bool _entitiesHadToBeAdded;
-
   factory ShadowGraph.from(Storyline storyline) {
     /// These are the reports we get from the storyline itself.
     List<Report> reports = storyline.rawReports;
     ShadowGraph graph;
 
     // Try at most ten times to construct the ShadowGraph.
+    //
+    // The loop goes at least twice, so that we can guarantee that no new
+    // entities had to be added at some point during the first pass.
     for (var i = 0; i < _maxIterations; i++) {
       final mentionedEntities = _getAllMentionedEntities(reports);
       graph = ShadowGraph._(storyline, reports, mentionedEntities);
 
-      if (!graph.entitiesHadToBeAdded) {
-        // No new entities were added by the ShadowGraph. We're done here.
+      if (reports != null && _checkEquivalent(graph.reports, reports)) {
+        // No modification to entities in the ShadowGraph. We're done here.
         break;
       }
 
@@ -179,15 +180,6 @@ class ShadowGraph {
 
     _retainTheLowestPossibleIdentifiers();
     _retainTheHighestPossibleConjunction();
-
-    final endMentionedEntities = _getAllMentionedEntities(this.reports);
-    final startIds = _mentionedEntities.map((e) => e.id).toSet();
-    final endIds = endMentionedEntities.map((e) => e.id).toSet();
-    if (startIds.containsAll(endIds)) {
-      _entitiesHadToBeAdded = false;
-    } else {
-      _entitiesHadToBeAdded = true;
-    }
   }
 
   Set<Entity> get allMentionedEntities => _mentionedEntities;
@@ -195,8 +187,6 @@ class ShadowGraph {
   UnmodifiableListView<SentenceConjunction> get conjunctions =>
       UnmodifiableListView(
           reports.map((report) => report._conjunctions.single));
-
-  bool get entitiesHadToBeAdded => _entitiesHadToBeAdded;
 
   UnmodifiableListView<SentenceJoinType> get joiners =>
       UnmodifiableListView(reports.map((report) => report._joiners.single));
@@ -924,6 +914,11 @@ class ShadowGraph {
       final current = identifiers[i];
       reports[i]._reportIdentifiers.forEachEntityIn(report,
           (complement, entity, set) {
+        assert(
+            set.isNotEmpty,
+            "set of identifiers is already empty for $complement ($entity)"
+            " in $report");
+
         // Take the identifiers that refer to the entity.
         // For example, in a particular sentence, "he" and "Aren" can
         // both be relevant identifiers for the actor named Aren.
@@ -973,7 +968,7 @@ class ShadowGraph {
         assert(
             set.isNotEmpty,
             "range of identifiers for $entity ($complement) is empty "
-            "in $report: current");
+            "in $report. Report relevantIdentifiers: $relevantIdentifiers");
       });
     }
   }
@@ -1010,6 +1005,18 @@ class ShadowGraph {
         assert(set.length == 1);
       });
     }
+  }
+
+  /// Checks whether [a] and [b] reports have the same entities.
+  static bool _checkEquivalent(List<ShadowReport> a, List<Report> b) {
+    assert(a.length == b.length,
+        "We don't expect to have different sizes of lists here.");
+    for (var i = 0; i < min(a.length, b.length); i++) {
+      if (!a[i].isEntityEquivalentTo(b[i])) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// Gets all mentioned entities in [storylineReports].
@@ -1157,6 +1164,26 @@ class ShadowReport implements Report {
   @override
   Entity getEntityByType(ComplementType type) {
     return _reportIdentifiers.getEntityByType(wrapped, type);
+  }
+
+  /// Returns `true` if this and [other] are equivalent in terms of
+  /// entities. This can be used to check whether the [ShadowReport]
+  /// has added any new entities (for example, through a new [owner]
+  /// entity that needed to be added because [subject] was
+  /// too vague. (E.g. "The sword hits the sword." --> "Tamara's sword
+  /// hits the goblin's sword." Tamara and goblin are new entities added
+  /// to the report in the process of NLG.)
+  bool isEntityEquivalentTo(Report other) {
+    assert(
+        string == other.string,
+        "We don't expect to be checking entity-equivalency of "
+        "two completely different reports.");
+    return subject == other.subject &&
+        object == other.object &&
+        object2 == other.object2 &&
+        owner == other.owner &&
+        objectOwner == other.objectOwner &&
+        object2Owner == other.object2Owner;
   }
 
   @override

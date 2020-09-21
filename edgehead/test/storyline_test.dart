@@ -801,6 +801,48 @@ void main() {
           anyOf(IdentifierLevel.pronoun, IdentifierLevel.adjectiveOne));
       expect(graph.qualifications.last.object2, IdentifierLevel.adjectiveOne);
     });
+
+    test("doesn't add confusing pronoun", () {
+      // The regression looked like this:
+      //
+      //     I pick his sword up and wield it, replacing the spear to my belt.
+      //     The undead strikes down at the orc. The orc tries to roll out of
+      //     the way but can't. His sword cuts his neck and he stops moving.
+      //                        ^^^^^^^^^^^^^^^^^^^^^^^
+
+      final aren =
+          Entity(name: 'I', nameIsProperNoun: true, pronoun: Pronoun.I);
+      final orc = Entity(name: 'orc', adjective: 'huge', pronoun: Pronoun.HE);
+      final undead =
+          Entity(name: 'undead', adjective: 'goblin', pronoun: Pronoun.HE);
+      final orcSword =
+          Entity(name: 'sword', adjective: 'serrated', firstOwnerId: orc.id);
+      final undeadSword =
+          Entity(name: 'sword', adjective: 'goblin', firstOwnerId: undead.id);
+
+      final storyline = Storyline();
+      aren.report(storyline, '<subject> pick<s> <object> up', object: orcSword);
+      aren.report(storyline, '<subject> wield<s> <object>', object: orcSword);
+      undead.report(storyline, '<subject> strike<s> down at <object>',
+          object: orc);
+      orc.report(storyline, '<subject> tr<ies> to roll out of the way');
+      orc.report(storyline, "<subject> can't", but: true);
+      storyline.add("<subject> cut<s> <object's> neck",
+          subject: undeadSword, object: orc);
+
+      // Make sure Storyline has [Storyline.reports].
+      final result = storyline.realizeAsString();
+
+      final graph = ShadowGraph.from(storyline);
+      expect(
+        result,
+        isNot(
+          contains(RegExp('His sword cuts his neck', caseSensitive: false)),
+        ),
+      );
+      // We expect something else than "his sword".
+      expect(graph.qualifications.last.owner, isNot(IdentifierLevel.pronoun));
+    });
   });
 
   group('pronouns, nouns, adjectives', () {
