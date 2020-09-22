@@ -380,7 +380,8 @@ final Actor sixtyFiverOrc = Actor.initialized(
   currentWeapon: Item.weapon(
     sixtyFiverSwordId,
     WeaponType.sword,
-    adjective: 'serrated',
+    name: 'machete',
+    adjective: 'large',
     firstOwnerId: sixtyFiverOrcId,
   ),
   currentShield: sixtyFiverShield,

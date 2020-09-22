@@ -2138,7 +2138,7 @@ final Room smithy = Room(
       c.learn(SarnFacts.seenPersonally);
 
       s.add(
-          '\nHe is being guarded by an orc jailer.\n\n![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)\n',
+          '\nHe is being guarded by an orc jailer. He\'s working on a battle axe at the anvil, using some piece of ancient metal equipment as a handle.\n\n![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -2352,7 +2352,7 @@ final takeSarnToBleedsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     Ruleset(
-        Rule(509056194, 1, false, (ApplicabilityContext c) {
+        Rule(851124582, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -2364,10 +2364,10 @@ final takeSarnToBleedsInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I look for a place to rest, and see Jisad’s porch.\n\n“Brother, you say?” Jisad says after I ask for help. “Take chairs from the kitchen and bring them. You can sit beside me.”\n',
+              'I look for a place to rest, and see Jisad’s porch. The blind man is sitting on his stool, listening to the sounds of the village.\n\n“Of course!” Jisad says after I ask for help. “Brother, you say? Take chairs from the kitchen and bring them. You can sit beside me.”\n',
               isRaw: true);
         }),
-        Rule(3746569, 0, false, (ApplicabilityContext c) {
+        Rule(198292883, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -2384,7 +2384,7 @@ final takeSarnToBleedsInk = InkAst([
           c.learn(JisadFacts.name);
 
           s.add(
-              '\nI ask if I can rest with my brother on his porch.\n\n“Brother, you say?” Jisad asks. “Take chairs from the kitchen and bring them. You can sit beside me.”\n',
+              '\nI ask if I can rest with my brother on his porch.\n\n“Of course!” Jisad says. “Brother, you say? Take chairs from the kitchen and bring them. You can sit beside me.”\n',
               isRaw: true);
         })).apply(c);
   }),
@@ -3248,7 +3248,7 @@ final Room battlefield = Room(
       final weSubstitution =
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc, the other a goblin.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge serrated sword and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc is saying with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two attack.\n\n',
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge machete and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc says with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two attack.\n\n',
           isRaw: true);
       c.learn(OrcsFacts.inPyramid);
       c.learn(SixtyFiversFacts.shieldSeen);

@@ -52,9 +52,9 @@ c.movePlayer('bleeds_main');
 [[RULE]]
 c.knows(JisadFacts.name)
 [[THEN]]
-I look for a place to rest, and see Jisad’s porch.
+I look for a place to rest, and see Jisad’s porch. The blind man is sitting on his stool, listening to the sounds of the village.
 
-“Brother, you say?” Jisad says after I ask for help. “Take chairs from the kitchen and bring them. You can sit beside me.”
+“Of course!” Jisad says after I ask for help. “Brother, you say? Take chairs from the kitchen and bring them. You can sit beside me.”
 [[ENDRULE]]
 [[RULE]]
 // Don’t know Jisad.
@@ -72,7 +72,7 @@ c.learn(JisadFacts.name);
 
 I ask if I can rest with my brother on his porch.
 
-“Brother, you say?” Jisad asks. “Take chairs from the kitchen and bring them. You can sit beside me.”
+“Of course!” Jisad says. “Brother, you say? Take chairs from the kitchen and bring them. You can sit beside me.”
 [[ENDRULE]]
 [[ENDRULESET]]
 

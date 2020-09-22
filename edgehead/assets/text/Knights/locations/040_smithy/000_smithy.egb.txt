@@ -14,7 +14,7 @@ My brother, Sarn, working for the orcs, forging weapons. He seems not fully awar
 c.learn(SarnFacts.seenPersonally);
 [[ENDCODE]]
 
-He is being guarded by an orc jailer.
+He is being guarded by an orc jailer. He's working on a battle axe at the anvil, using some piece of ancient metal equipment as a handle.
 
 ![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)
 
@@ -26,7 +26,6 @@ FIGHT_SITUATION:
 generateJailerFight
 
 AFTER_MONSTERS_CLEARED:
-
 [[CODE]]
 c.markHappened(evSavedSarn);
 // Use the ink defined in sarn_rescue.egb.txt.
