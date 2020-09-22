@@ -13,7 +13,7 @@ Anatomy buildHumanoid(int id, RandomIdGetter randomIdGetter,
   assert(constitution >= 1, "Cannot have creature with constitution below 1");
 
   final rightLeg = BodyPart(randomIdGetter(), "right leg",
-      randomDesignation: "{right leg|right thigh}",
+      randomDesignation: "{right shin|right thigh}",
       designation: BodyPartDesignation.rightLeg,
       function: BodyPartFunction.mobile,
       swingSurfaceLeft: 7,
@@ -23,7 +23,7 @@ Anatomy buildHumanoid(int id, RandomIdGetter randomIdGetter,
       firstOwnerId: id);
 
   final leftLeg = BodyPart(randomIdGetter(), "left leg",
-      randomDesignation: "{left leg|left thigh}",
+      randomDesignation: "{left shin|left thigh}",
       designation: BodyPartDesignation.leftLeg,
       function: BodyPartFunction.mobile,
       swingSurfaceRight: 7,
@@ -43,7 +43,7 @@ Anatomy buildHumanoid(int id, RandomIdGetter randomIdGetter,
       firstOwnerId: id);
 
   final primaryArm = BodyPart(randomIdGetter(), "right arm",
-      randomDesignation: "{right arm|right shoulder}",
+      randomDesignation: "{right biceps|right shoulder}",
       designation: BodyPartDesignation.primaryArm,
       isSeverable: true,
       swingSurfaceLeft: 7,
@@ -63,7 +63,7 @@ Anatomy buildHumanoid(int id, RandomIdGetter randomIdGetter,
       firstOwnerId: id);
 
   final secondaryArm = BodyPart(randomIdGetter(), "left arm",
-      randomDesignation: "{left arm|left shoulder}",
+      randomDesignation: "{left biceps|left shoulder}",
       designation: BodyPartDesignation.secondaryArm,
       isSeverable: true,
       swingSurfaceRight: 7,
@@ -108,7 +108,7 @@ Anatomy buildHumanoid(int id, RandomIdGetter randomIdGetter,
       firstOwnerId: id);
 
   final neck = BodyPart(randomIdGetter(), "neck",
-      randomDesignation: "{throat|neck}",
+      randomDesignation: "{throat|jugular}",
       designation: BodyPartDesignation.neck,
       isVital: true,
       isSeverable: true,
