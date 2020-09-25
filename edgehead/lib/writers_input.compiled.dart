@@ -411,11 +411,11 @@ class ExamineAntechamberLock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_113686834 = c.hasItem(theNull)
+    final ifBlock_13a1b5365 = c.hasItem(theNullId)
         ? '''After a few moments, I realize the shape of the lock reminds me of something I have. The circular badge of the orc leader. It will fit.'''
         : '''''';
     s.add(
-        'The mechanism is complex and delicate. Not quite ancient but definitely a work of someone skillful.\n\nIn contrast to the intricate texture of the bulk of the mechanism, the center of the lock is simple. An elegant circle, about the size of my palm. This must be the equivalent of a key slit.\n\n${ifBlock_113686834}\n',
+        'The mechanism is complex and delicate. Not quite ancient but definitely a work of someone skillful.\n\nIn contrast to the intricate texture of the bulk of the mechanism, the center of the lock is simple. An elegant circle, about the size of my palm. This must be the equivalent of a key slit.\n\n${ifBlock_13a1b5365}\n',
         isRaw: true);
     return '${a.name} successfully performs ExamineAntechamberLock';
   }
@@ -467,7 +467,7 @@ class OpenAntechamberLock extends RoamingAction {
       return false;
     }
     if (!(w.actionHasBeenPerformed('examine_antechamber_lock') &&
-        c.hasItem(theNull))) {
+        c.hasItem(theNullId))) {
       return false;
     }
     return w.actionNeverUsed(name);

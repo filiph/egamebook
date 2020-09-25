@@ -25,7 +25,7 @@ The mechanism is complex and delicate. Not quite ancient but definitely a work o
 
 In contrast to the intricate texture of the bulk of the mechanism, the center of the lock is simple. An elegant circle, about the size of my palm. This must be the equivalent of a key slit.
 
-[[IF c.hasItem(theNull)]]After a few moments, I realize the shape of the lock reminds me of something I have. The circular badge of the orc leader. It will fit.[[ENDIF]]
+[[IF c.hasItem(theNullId)]]After a few moments, I realize the shape of the lock reminds me of something I have. The circular badge of the orc leader. It will fit.[[ENDIF]]
 
 
 // ---
@@ -36,7 +36,7 @@ FOR_LOCATION: $big_o_antechamber
 PREREQUISITES:
 w.actionHasBeenPerformed('examine_antechamber_lock')
 &&
-c.hasItem(theNull)
+c.hasItem(theNullId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 I climb up the ladder and place the metal circle in the center of the mechanism. It fits perfectly. Something in the trapdoor clicks, and it slowly opens, as if held by an invisible hand.
