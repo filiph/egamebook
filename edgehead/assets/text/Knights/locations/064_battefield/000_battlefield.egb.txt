@@ -44,14 +44,6 @@ A glorious battle this was, I'm sure. It became a scab.
 
 Whatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.
 
-TODO: explain the banner - an important source of pride for the Knights
-
-I take the banner.
-
-[[CODE]]
-c.giveNewItemToPlayer(banner);
-[[ENDCODE]]
-
 Searching through the orc's posession, I find a stale bread.
 
 [[CODE]]

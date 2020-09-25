@@ -84,3 +84,8 @@ enum SixtyFiversFacts {
   shieldSeen,
   significance,
 }
+
+enum TheNullFacts {
+  somethingRoundCalledNull,
+  orcLeaderHasIt,
+}

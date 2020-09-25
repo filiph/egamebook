@@ -13,12 +13,6 @@ final Item akxe = Item.weapon(
   isCleaving: true,
 );
 
-final Item banner = Item(
-  bannerId,
-  name: 'banner',
-  adjective: 'red',
-);
-
 final Item barbecuedBat = Item(
   barbecuedBatId,
   name: 'barbecued',
@@ -46,7 +40,7 @@ final Item barbecuedSquirrel = Item(
 final Item compass = Item(
   compassId,
   name: 'compass',
-  adjective: 'iron',
+  adjective: 'rock-like',
 );
 
 final Item dragonEgg = Item.weapon(
@@ -167,4 +161,10 @@ final Item tamarasDagger = Item.weapon(
   name: "dagger",
   adjective: "long",
   firstOwnerId: tamaraId,
+);
+
+final Item theNull = Item(
+  theNullId,
+  name: 'badge',
+  adjective: 'iron',
 );

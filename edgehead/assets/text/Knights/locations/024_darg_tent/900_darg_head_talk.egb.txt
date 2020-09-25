@@ -50,3 +50,17 @@ But then, Darg's undead lips start moving. He _speaks._
 "Nothing less than immortality. Not of myself, mind you. Immortality of civilization, of culture." Darg's dead gaze slowly slides towards the floor but the mouth keeps talking. "What happened to the ancients cannot happen to us. I will make sure of it."
 
 The muscles on Darg's head finally loosen and his tongue touches the ground.
+
+I knee down to inspect the dead body. Surely, the necromancer behind the talking must have used some kind of a device to make the corpse talk. He or she could have implanted it into the windpipe a long ago.
+
+But I find no such thing. Despite my instincts, I must assume that the necromancer is able to do all of this remotely, without the help of any device. I shudder. No human can possibly endure such concentration. Such pain.
+
+On Darg's chest, I find a circular iron badge. It has nothing embossed in it but that simplicity somehow makes it even more impressive. I take it.
+
+[[CODE]]
+c.giveNewItemToPlayer(theNull);
+if (c.knows(TheNullFacts.somethingRoundCalledNull)) {
+    s.add("This must be the Null I have heard about.", isRaw: true);
+    c.learn(TheNullFacts.orcLeaderHasIt);
+}
+[[ENDCODE]]

@@ -21,13 +21,21 @@ final Map<Type, List<String>> _chainEnums = {
   OrcsFacts: OrcsFacts.values.map((e) => e.toString()).toList(),
   SarnFacts: SarnFacts.values.map((e) => e.toString()).toList(),
   SixtyFiversFacts: SixtyFiversFacts.values.map((e) => e.toString()).toList(),
+  TheNullFacts: TheNullFacts.values.map((e) => e.toString()).toList(),
 };
 
 /// This class allows checking if the player has learned about something.
 /// It implements the "chained facts" idea from Inkle Studios, where some
-/// knowledge can be represented as a list of facts. If the player knows
-/// something in the chain of fact, they automatically know every fact
-/// that precedes the chain.
+/// knowledge can be represented as a list of facts. If the player learns
+/// fact B in a chain of facts {A, B, C}, they automatically learn every fact
+/// that precedes fact B in that chain as well. Therefore, they now know
+/// both A and B.
+///
+/// As an example, in a chain {"there's someone called Alice", "Alice is blond",
+/// "Alice grew up in poverty"}, when the player sees Alice for the first
+/// time and they introduce each other, they will learn the first two facts
+/// at once. To know that Alice is blond automatically implies the knowledge
+/// of someone named Alice.
 ///
 /// This is explained here:
 /// https://heavens-vault-game.tumblr.com/post/160306503785/what-dyknow

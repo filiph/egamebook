@@ -121,6 +121,17 @@ final finalFightInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
+        'TODO: if Sarn wasn\'t rescued: "I hear a distant scream and for a second I think I recognize my brother\'s voice. But, there\'s no time for that now."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
         '![Illustration of Big O, a necromancer with a dog\'s head.](bigo.png)\n',
         isRaw: true);
   }),
@@ -400,11 +411,11 @@ class ExamineAntechamberLock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_6892af2b6 = c.hasItem(akxeId)
-        ? '''After a few moments, I realize the shape of the lock reminds me of something ancient. I look at the akxe and its hilt. It will fit.'''
+    final ifBlock_113686834 = c.hasItem(theNull)
+        ? '''After a few moments, I realize the shape of the lock reminds me of something I have. The circular badge of the orc leader. It will fit.'''
         : '''''';
     s.add(
-        'It is a long slit with an irregular shape. If it\'s meant to be opened by a key, the key must be massive, and weirdly shaped.\n\n\n${ifBlock_6892af2b6}\n',
+        'The mechanism is complex and delicate. Not quite ancient but definitely a work of someone skillful.\n\nIn contrast to the intricate texture of the bulk of the mechanism, the center of the lock is simple. An elegant circle, about the size of my palm. This must be the equivalent of a key slit.\n\n${ifBlock_113686834}\n',
         isRaw: true);
     return '${a.name} successfully performs ExamineAntechamberLock';
   }
@@ -447,7 +458,8 @@ class OpenAntechamberLock extends RoamingAction {
   static final OpenAntechamberLock singleton = OpenAntechamberLock();
 
   @override
-  List<String> get commandPathTemplate => ['lock mechanism', 'open with akxe'];
+  List<String> get commandPathTemplate =>
+      ['lock mechanism', 'open with the badge'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -455,7 +467,7 @@ class OpenAntechamberLock extends RoamingAction {
       return false;
     }
     if (!(w.actionHasBeenPerformed('examine_antechamber_lock') &&
-        c.hasItem(akxeId))) {
+        c.hasItem(theNull))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -469,7 +481,7 @@ class OpenAntechamberLock extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I insert the hilt of Darg\'s akxe to the lock mechanism. It fits perfectly. Something in the trapdoor clicks, and it slowly opens.\n',
+        'I climb up the ladder and place the metal circle in the center of the mechanism. It fits perfectly. Something in the trapdoor clicks, and it slowly opens, as if held by an invisible hand.\n\nThe ladder leads upwards, through a dark shaft and into a sun-lit space far above.\n',
         isRaw: true);
     return '${a.name} successfully performs OpenAntechamberLock';
   }
@@ -867,6 +879,51 @@ final dargHeadTalkInkInk = InkAst([
     s.add(
         'The muscles on Darg\'s head finally loosen and his tongue touches the ground.\n',
         isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I knee down to inspect the dead body. Surely, the necromancer behind the talking must have used some kind of a device to make the corpse talk. He or she could have implanted it into the windpipe a long ago.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'But I find no such thing. Despite my instincts, I must assume that the necromancer is able to do all of this remotely, without the help of any device. I shudder. No human can possibly endure such concentration. Such pain.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'On Darg\'s chest, I find a circular iron badge. It has nothing embossed in it but that simplicity somehow makes it even more impressive. I take it.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.giveNewItemToPlayer(theNull);
+    if (c.knows(TheNullFacts.somethingRoundCalledNull)) {
+      s.add("This must be the Null I have heard about.", isRaw: true);
+      c.learn(TheNullFacts.orcLeaderHasIt);
+    }
   }),
 ]);
 
@@ -3275,12 +3332,7 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nTODO: explain the banner - an important source of pride for the Knights\n\nI take the banner.\n\n',
-          isRaw: true);
-      c.giveNewItemToPlayer(banner);
-
-      s.add(
-          '\nSearching through the orc\'s posession, I find a stale bread.\n\n',
+          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nSearching through the orc\'s posession, I find a stale bread.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(staleBread);
     },
@@ -7713,7 +7765,6 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
       who: farmers,
       what: [
         akxeId,
-        bannerId,
         dragonEggId,
         katanaId,
         lairOfGodStarId,
@@ -7721,7 +7772,7 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
         sixtyFiverSwordId,
         hawkmanJacketId
       ],
-      especially: [katanaId, bannerId],
+      especially: [katanaId],
       how: "{approvingly|with respect}");
 
   c.increaseSanityFromPeople();
@@ -7735,7 +7786,6 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
       who: farmers,
       what: [
         akxeId,
-        bannerId,
         dragonEggId,
         katanaId,
         lairOfGodStarId,
@@ -7743,7 +7793,7 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
         sixtyFiverSwordId,
         hawkmanJacketId
       ],
-      especially: [katanaId, bannerId],
+      especially: [katanaId],
       how: "{approvingly|with respect}");
 
   c.increaseSanityFromPeople();
@@ -8637,7 +8687,6 @@ final Room farmersVillageQuake1 = Room(
           who: farmers,
           what: [
             akxeId,
-            bannerId,
             dragonEggId,
             katanaId,
             lairOfGodStarId,
@@ -8645,7 +8694,7 @@ final Room farmersVillageQuake1 = Room(
             sixtyFiverSwordId,
             hawkmanJacketId
           ],
-          especially: [katanaId, bannerId],
+          especially: [katanaId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -8660,7 +8709,6 @@ final Room farmersVillageQuake1 = Room(
           who: farmers,
           what: [
             akxeId,
-            bannerId,
             dragonEggId,
             katanaId,
             lairOfGodStarId,
@@ -8668,7 +8716,7 @@ final Room farmersVillageQuake1 = Room(
             sixtyFiverSwordId,
             hawkmanJacketId
           ],
-          especially: [katanaId, bannerId],
+          especially: [katanaId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -8695,7 +8743,6 @@ final Room farmersVillageQuake1 = Room(
           who: farmers,
           what: [
             akxeId,
-            bannerId,
             dragonEggId,
             katanaId,
             lairOfGodStarId,
@@ -8703,7 +8750,7 @@ final Room farmersVillageQuake1 = Room(
             sixtyFiverSwordId,
             hawkmanJacketId
           ],
-          especially: [katanaId, bannerId],
+          especially: [katanaId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -8811,7 +8858,6 @@ final Room farmersVillageQuake2 = Room(
           who: farmers,
           what: [
             akxeId,
-            bannerId,
             dragonEggId,
             katanaId,
             lairOfGodStarId,
@@ -8819,7 +8865,7 @@ final Room farmersVillageQuake2 = Room(
             sixtyFiverSwordId,
             hawkmanJacketId
           ],
-          especially: [katanaId, bannerId],
+          especially: [katanaId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -8834,7 +8880,6 @@ final Room farmersVillageQuake2 = Room(
           who: farmers,
           what: [
             akxeId,
-            bannerId,
             dragonEggId,
             katanaId,
             lairOfGodStarId,
@@ -8842,7 +8887,7 @@ final Room farmersVillageQuake2 = Room(
             sixtyFiverSwordId,
             hawkmanJacketId
           ],
-          especially: [katanaId, bannerId],
+          especially: [katanaId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -8869,7 +8914,6 @@ final Room farmersVillageQuake2 = Room(
           who: farmers,
           what: [
             akxeId,
-            bannerId,
             dragonEggId,
             katanaId,
             lairOfGodStarId,
@@ -8877,7 +8921,7 @@ final Room farmersVillageQuake2 = Room(
             sixtyFiverSwordId,
             hawkmanJacketId
           ],
-          especially: [katanaId, bannerId],
+          especially: [katanaId],
           how: "{approvingly|with respect}");
 
       c.increaseSanityFromPeople();
@@ -9653,14 +9697,8 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   c.describeWorthiness(
       who: w.getActorById(miguelId),
-      what: [
-        bannerId,
-        dragonEggId,
-        katanaId,
-        sixtyFiverShieldId,
-        hawkmanJacketId
-      ],
-      especially: [sixtyFiverShieldId, bannerId],
+      what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+      especially: [sixtyFiverShieldId],
       how: "{approvingly|with respect}");
 }, null, null,
     isIdle: true,
@@ -10834,14 +10872,8 @@ final Room pyramidEntranceDuringCaravan = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: w.getActorById(miguelId),
-          what: [
-            bannerId,
-            dragonEggId,
-            katanaId,
-            sixtyFiverShieldId,
-            hawkmanJacketId
-          ],
-          especially: [sixtyFiverShieldId, bannerId],
+          what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [sixtyFiverShieldId],
           how: "{approvingly|with respect}");
     },
     null,
@@ -10986,14 +11018,8 @@ final Room pyramidEntranceAfterOrcOffensive = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: w.getActorById(miguelId),
-          what: [
-            bannerId,
-            dragonEggId,
-            katanaId,
-            sixtyFiverShieldId,
-            hawkmanJacketId
-          ],
-          especially: [sixtyFiverShieldId, bannerId],
+          what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [sixtyFiverShieldId],
           how: "{approvingly|with respect}");
     },
     null,
@@ -11043,14 +11069,8 @@ final Room pyramidEntranceAfterQuake2 = Room(
       final Storyline s = c.outputStoryline;
       c.describeWorthiness(
           who: w.getActorById(miguelId),
-          what: [
-            bannerId,
-            dragonEggId,
-            katanaId,
-            sixtyFiverShieldId,
-            hawkmanJacketId
-          ],
-          especially: [sixtyFiverShieldId, bannerId],
+          what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+          especially: [sixtyFiverShieldId],
           how: "{approvingly|with respect}");
     },
     null,

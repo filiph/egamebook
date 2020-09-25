@@ -2,8 +2,6 @@ part of edgehead.ids;
 
 const int akxeId = 77012;
 
-const int bannerId = 77009;
-
 const int barbecuedBatId = 77020;
 
 const int barbecuedSquirrelId = 77017;
@@ -67,5 +65,7 @@ const int staleBreadId = 77019;
 const int startBranchId = 77021;
 
 const int tamarasDaggerId = 77002;
+
+const int theNullId = 77037;
 
 const int tridentId = 77026;
