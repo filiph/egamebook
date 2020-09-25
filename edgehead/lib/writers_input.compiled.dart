@@ -1775,7 +1775,42 @@ final conetExamineInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: Explain that this device is obviously what makes the quakes. There are massive stones being lifted. There are cracks in the walls and the floor, radiating from the center of the device.\n',
+        'The device occupies most of the room. It is made of massive redwood beams and concrete blocks, but also delicate machinery. The air smells of oiled wood and kobold sweat.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_5b399eb1d = c.hasHappened(evConetDestroyed)
+        ? '''This spring was being drawn by the kobold's turning of the wheel.'''
+        : '''This spring is being drawn, very slowly, by the kobold's turning of the wheel.''';
+    s.add(
+        'A large pillar of wood, concrete and metal stands in the center. A large spring rolls around this pillar and vibrates with strange, anxious energy. ${ifBlock_5b399eb1d}\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Only after focusing on this centerpiece do I realize that there is a subtle symmetry in the room. Rings of cracks on the floor radiate from the pillar outward, getting feinter as they recede from the core.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('This is the source of the earthquakes. I am sure of it.\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -1826,7 +1861,7 @@ final conetKoboldExamineInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Another swing of hand, and a grin.\n', isRaw: true);
+    s.add('Another swing of a hand, and a grin.\n', isRaw: true);
   }),
 ]);
 
@@ -2033,7 +2068,7 @@ final Room conet = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.\n\nA primitive writing on the entrance says "Conet".\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          'A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.\n\nA primitive writing on the entrance says "Conet".\n\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {

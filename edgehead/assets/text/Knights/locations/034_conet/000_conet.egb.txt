@@ -18,6 +18,8 @@ A kobold is operating a large device. He is turning a huge wheel, drawing some k
 
 A primitive writing on the entrance says "Conet".
 
+// TODO: "There is a writing on the entrance: PICTURE"
+
 [We] stay hidden.
 
 
@@ -56,7 +58,13 @@ FOR_LOCATION: $conet
 COMMAND: Device >> Examine
 
 INK:
-TODO: Explain that this device is obviously what makes the quakes. There are massive stones being lifted. There are cracks in the walls and the floor, radiating from the center of the device.
+The device occupies most of the room. It is made of massive redwood beams and concrete blocks, but also delicate machinery. The air smells of oiled wood and kobold sweat.
+
+A large pillar of wood, concrete and metal stands in the center. A large spring rolls around this pillar and vibrates with strange, anxious energy. [[IF c.hasHappened(evConetDestroyed)]]This spring was being drawn by the kobold's turning of the wheel.[[ELSE]]This spring is being drawn, very slowly, by the kobold's turning of the wheel.[[ENDIF]]
+
+Only after focusing on this centerpiece do I realize that there is a subtle symmetry in the room. Rings of cracks on the floor radiate from the pillar outward, getting feinter as they recede from the core.
+
+This is the source of the earthquakes. I am sure of it.
 
 [[CODE]]
 c.learn(ConetFacts.sawConet);
@@ -95,7 +103,7 @@ The kobold is talking to himself as he's turning the wheel.
 
 He swings his free hand as if holding a weapon. "You talkin' to me?" he says to an imaginary foe. "You talkin' to me? Who the hell do you think you're talking to?"
 
-Another swing of hand, and a grin.
+Another swing of a hand, and a grin.
 
 
 
