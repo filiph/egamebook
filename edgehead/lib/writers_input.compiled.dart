@@ -991,15 +991,153 @@ class DargHeadTalkInk extends RoamingAction {
 
 final Approach outlookFromTopOfClimb =
     Approach('top_of_climb', 'outlook', '', null);
+final hawkmanExamineInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I have seen hawkmen before. They are vicious creatures. Intelligent predators with fragile bodies but superhuman agility.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Hawkmen are often mercenaries. They are effective, ruthless, and expensive. Though most people think that at least part of their real motivation is in the thrill of the battle and the kill.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'This particular hawkman seems to be one of the more successful ones. The suit and the sharp sickle are proof.\n',
+        isRaw: true);
+  }),
+]);
 final outlookAttackInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('The hawkman gives me a condescending look.\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '“So you finally decide to crawl out of your hole and face me, little human?” He swings his sickle in front of him and nods. “I am ready.”\n',
+        isRaw: true);
+  }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" Option A """.trim(),
+      command: r""" “I came to talk.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“There is nothing to talk about,” the hawkman says. “You trespass on my master’s tower, you die.” He\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" “Ready to die?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“Cute,” he says. “But you chose a bad place for your comedy. This is my master’s property, and you are trespassing.” The hawkman\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'starts towards me. The high wind ruffles the feathers at the back of his head as he walks.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" Attack """.trim(),
       consequence: [],
     ),
     InkChoiceNode(
-      command: r""" Option B """.trim(),
-      consequence: [],
+      command: r""" “Who is your master?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The hawkman lets out a short chuckle. “That’s good. You came all this way and you don’t know? The big dog at the top, of course,” he says, nodding towards the point of the Pyramid.\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" “Why are you in his service?” """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '“Coins, human,” the hawkman says. “Also, this view isn’t half bad, don’t you think? I can see the giants over the water." He chuckles again. "They are coming, you know.”\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" “What are you watching from here?” """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '“Master’s realm, of course. This all will become a new, powerful civilization. Built on the shoulders of giants.” He chuckles again. “I can already see them, you know. The giants. They are coming here.”\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+        ]),
+      ],
     ),
   ]),
   InkParagraphNode((ActionContext c) {
@@ -1012,6 +1150,68 @@ final outlookAttackInk = InkAst([
   }),
 ]);
 
+class HawkmanExamine extends RoamingAction {
+  @override
+  final String name = 'hawkman_examine';
+
+  static final HawkmanExamine singleton = HawkmanExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Hawkman', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('outlook') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "hawkman_examine_ink",
+    ));
+    return '${a.name} successfully performs HawkmanExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform HawkmanExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
 class OutlookAttack extends RoamingAction {
   @override
   final String name = 'outlook_attack';
@@ -1019,7 +1219,7 @@ class OutlookAttack extends RoamingAction {
   static final OutlookAttack singleton = OutlookAttack();
 
   @override
-  List<String> get commandPathTemplate => ['Hawkman', 'Attack'];
+  List<String> get commandPathTemplate => ['Hawkman', 'Approach'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -1101,7 +1301,9 @@ class StripDeadHawkman extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I strip the hawkman of his suit and put it on.\n\n', isRaw: true);
+    s.add(
+        'I strip the hawkman of his suit and put it on. It fits well, and feels like no fabric I have touched before.\n\n',
+        isRaw: true);
     c.giveNewItemToPlayer(hawkmanJacket);
 
     return '${a.name} successfully performs StripDeadHawkman';
@@ -15646,6 +15848,7 @@ final allActions = <RoamingAction>[
   OpenAntechamberLock.singleton,
   DargTentAttack.singleton,
   DargHeadTalkInk.singleton,
+  HawkmanExamine.singleton,
   OutlookAttack.singleton,
   StripDeadHawkman.singleton,
   CrowdsourceAttack.singleton,
@@ -15758,6 +15961,7 @@ final allInks = <String, InkAst>{
   'final_fight_ink_ink': finalFightInkInk,
   'big_o_end_ink_ink': bigOEndInkInk,
   'darg_head_talk_ink_ink': dargHeadTalkInkInk,
+  'hawkman_examine_ink': hawkmanExamineInk,
   'outlook_attack_ink': outlookAttackInk,
   'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,

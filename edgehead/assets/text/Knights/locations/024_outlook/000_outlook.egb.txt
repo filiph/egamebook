@@ -30,17 +30,55 @@ c.markHappened(evKilledHawkman);
 
 
 // ---
+ACTION: $hawkman_examine
+FOR_LOCATION: $outlook
+
+COMMAND: Hawkman >> Examine
+
+INK:
+I have seen hawkmen before. They are vicious creatures. Intelligent predators with fragile bodies but superhuman agility.
+
+Hawkmen are often mercenaries. They are effective, ruthless, and expensive. Though most people think that at least part of their real motivation is in the thrill of the battle and the kill.
+
+This particular hawkman seems to be one of the more successful ones. The suit and the sharp sickle are proof.
+
+
+// ---
 ACTION: $outlook_attack
 FOR_LOCATION: $outlook
 
-COMMAND: Hawkman >> Attack
+COMMAND: Hawkman >> Approach
 
 INK:
-// TODO: add conversation: theme is "zaprodat se korporaci"
+The hawkman gives me a condescending look.
 
-* Option A
+“So you finally decide to crawl out of your hole and face me, little human?” He swings his sickle in front of him and nods. “I am ready.”
 
-* Option B
+* “I came to talk.”
+
+  “There is nothing to talk about,” the hawkman says. “You trespass on my master’s tower, you die.” He <>
+
+* “Ready to die?”
+
+  “Cute,” he says. “But you chose a bad place for your comedy. This is my master’s property, and you are trespassing.” The hawkman <>
+
+-
+
+<> starts towards me. The high wind ruffles the feathers at the back of his head as he walks. 
+
+* Attack
+
+* “Who is your master?”
+
+  The hawkman lets out a short chuckle. “That’s good. You came all this way and you don’t know? The big dog at the top, of course,” he says, nodding towards the point of the Pyramid.
+
+  * * “Why are you in his service?”
+
+  “Coins, human,” the hawkman says. “Also, this view isn’t half bad, don’t you think? I can see the giants over the water." He chuckles again. "They are coming, you know.”
+
+  * * “What are you watching from here?”
+
+  “Master’s realm, of course. This all will become a new, powerful civilization. Built on the shoulders of giants.” He chuckles again. “I can already see them, you know. The giants. They are coming here.”
 
 -
 
@@ -64,8 +102,7 @@ c.playerRoom.isOnMap
 c.inRoomWith(hawkmanId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I strip the hawkman of his suit and put it on.
-// TODO: add some feeling
+I strip the hawkman of his suit and put it on. It fits well, and feels like no fabric I have touched before.
 
 [[CODE]]
 c.giveNewItemToPlayer(hawkmanJacket);
@@ -74,11 +111,7 @@ c.giveNewItemToPlayer(hawkmanJacket);
 
 NOTES:
 
-Hawkman stands on top of the elevator shaft, looking out (using his hawk eyes). Talking to him will reveal the coming of the giants.
+Possibilities: 
 
-The reward of killing him:
-
-* Some tantalizing info about what's happening: Big O is going to create a new civilization, on the shoulders of giants. "I can already see them." Said before the fight.
-* The sickle is a cleaving weapon.
-* Wearing the jacket will get worthiness.
-
+* theme of this encounter is "sell out to a corporation" - but that would make the discussion too long
+* let the player decide why they hate hawkmen (killed mother, racism, traditional enemy)

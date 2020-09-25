@@ -239,6 +239,7 @@ final Actor hawkman = Actor.initialized(
     WeaponType.axe,
     name: 'sickle',
     adjective: 'large',
+    isCleaving: true,
     firstOwnerId: hawkmanId,
   ),
   team: defaultEnemyTeam,
