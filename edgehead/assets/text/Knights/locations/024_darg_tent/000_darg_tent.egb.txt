@@ -17,7 +17,7 @@ FIGHT_SITUATION:
 generateDargTentFight
 
 AFTER_MONSTERS_CLEARED:
-I look around and there are no more orcs. They probably didn't consider it necessary to post guards around this remote place.
+The fight is over. I look around and there are no more orcs. They probably didn't consider it necessary to post guards around this remote place.
 
 [[CODE]]
 c.markHappened(evKilledDarg);
@@ -41,14 +41,20 @@ RULE:
 c.hasHappened(evDargLeftCrowdsource)
 
 FIRST_DESCRIPTION:
-Tent outside, at the top of the elevator structure. Overlooking the bay. Darg, the leader of the orcs, is here.
+Tent outside, at the top of the elevator structure. Overlooking the bay. Darg, the leader of the orcs I first saw in the orcs' temple, is here.
+
+// No need to talk about Darg's weapon or appearance. If we see him here, that means we saw him in Crowdsource before.
 
 ![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)
+
+[We] stay hidden.
 
 VARIANT_UPDATE_DESCRIPTION:
-Darg, the leader of the orcs, is here.
+Darg, the leader of the orcs I first saw in the orcs' temple, is here.
 
 ![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)
+
+[We] stay hidden.
 
 
 // ---
@@ -78,6 +84,10 @@ c.hasHappened(evDargLeftCrowdsource)
 COMMAND: Darg >> Attack
 
 COMPLETE_SUCCESS_DESCRIPTION:
+[We] approach Darg's tent. Darg spots me and looks surprised at first, then amused.
+
+"A human child, here?" Darg says, readying his battle axe. "Must have found a crawlspace to get here." He grins. "Never mind, [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]]. I'll dance on your bones."
+
 [[CODE]]
 c.startOptionalFight();
 [[ENDCODE]]

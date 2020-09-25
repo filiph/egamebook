@@ -565,6 +565,12 @@ class DargTentAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    final ifBlock_20579df5 = c.playerIsMale ? '''boy''' : '''girl''';
+    s.add(
+        '${weSubstitutionCapitalized} approach Darg\'s tent. Darg spots me and looks surprised at first, then amused.\n\n"A human child, here?" Darg says, readying his battle axe. "Must have found a crawlspace to get here." He grins. "Never mind, ${ifBlock_20579df5}. I\'ll dance on your bones."\n\n',
+        isRaw: true);
     c.startOptionalFight();
 
     return '${a.name} successfully performs DargTentAttack';
@@ -634,7 +640,7 @@ final Room dargTent = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          'The fight is over. I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -651,8 +657,10 @@ final Room dargTentAfterDargArrived = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg, the leader of the orcs, is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
+          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg, the leader of the orcs I first saw in the orcs\' temple, is here.\n\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -678,8 +686,10 @@ final Room dargTentAfterDargArrived = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      final weSubstitutionCapitalized =
+          getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'Darg, the leader of the orcs, is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n',
+          'Darg, the leader of the orcs I first saw in the orcs\' temple, is here.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     fightIsOptional: true,
@@ -693,7 +703,7 @@ final Room dargTentAfterDargArrived = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          'The fight is over. I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -751,7 +761,7 @@ final Room dargTentAfterDargKilled = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          'The fight is over. I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -1405,6 +1415,247 @@ final Approach crowdsourceFromBarracks =
     Approach('barracks', 'crowdsource', '', null);
 final Approach crowdsourceFromBigOAntechamber =
     Approach('big_o_antechamber', 'crowdsource', '', null);
+final crowdsourceListenInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Only you have the power," the shaman is saying to Darg. "Use it! Talk to him!"\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Darg takes a step back from her and shakes his head. "The Maker will call me. Before that, my hands are tied. A mouse does not ask to visit the cat."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The shaman sighs and takes a step toward Darg. Her hushed voice reverberates through the large space. "The Maker gave you the Null. Why else would he give it to you other than for you to use it?"\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" Listen some more """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Darg lowers his voice, too. "You don\'t know him the way I do. He\'s no orc. No human. I have never seen his face but there\'s something in his voice." Darg pauses and lowers his voice even further. "He\'s terrifying."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('The shaman growls. "You\'re afraid," she says.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Darg\'s huge hand moves quickly and squeezes the back of the shaman\'s neck. His angry snarl fills the temple.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"I have a weakness for you, shaman," he says. "But say something like that one more time and I break you and dance on your bones." He glances around. "My guard is close, he could have heard."\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" Listen some more """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'After a brief moment of silence, the shaman starts talking again. Her voice is softer now. "If we can\'t ask the Maker for permission, so be it. We can attack now, and ask him for forgiveness later."\n',
+                    isRaw: true);
+              }),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('Darg shakes his head, but the shaman continues.\n',
+                    isRaw: true);
+              }),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"It will be an easy win and you know it. The crowd is ready. We can take the whole tower today. There will be no resistance."\n',
+                    isRaw: true);
+              }),
+              InkForkNode([
+                InkChoiceNode(
+                  command: r""" Listen some more """.trim(),
+                  consequence: [
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add(
+                          '"You don\'t know that," Darg says and watches the shaman, once again, take a step towards him.\n',
+                          isRaw: true);
+                    }),
+                    InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add(
+                          '"Of course I do, Darg," the shaman says. "Didn\'t you hear the hawk? He saw a company of knights leaving the tower and traveling south. They\'ve abandoned this place."\n',
+                          isRaw: true);
+                    }),
+                    InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add(
+                          '"It might have been only a part of them," Darg says. "Others might be still inside."\n',
+                          isRaw: true);
+                    }),
+                    InkForkNode([
+                      InkChoiceNode(
+                        command: r""" Listen some more """.trim(),
+                        consequence: [
+                          InkParagraphNode((ActionContext c) {
+                            final WorldState originalWorld = c.world;
+                            final Simulation sim = c.simulation;
+                            final Actor a = c.actor;
+                            final WorldStateBuilder w = c.outputWorld;
+                            final Storyline s = c.outputStoryline;
+                            s.add(
+                                '"So what," the shaman grins and places her hand on Darg\'s crotch. "We\'ll kill them."\n',
+                                isRaw: true);
+                          }),
+                          InkParagraphNode(
+                              (c) => c.outputStoryline.addParagraph()),
+                          InkParagraphNode((ActionContext c) {
+                            final WorldState originalWorld = c.world;
+                            final Simulation sim = c.simulation;
+                            final Actor a = c.actor;
+                            final WorldStateBuilder w = c.outputWorld;
+                            final Storyline s = c.outputStoryline;
+                            s.add(
+                                'Darg freezes, then slowly pulls away her hand. "We\'ll wait for the Maker\'s decision," he says. "The Maker\'s plan is larger than the tower itself. Attacking now seems obvious, but it can be a bad mistake."\n',
+                                isRaw: true);
+                          }),
+                          InkParagraphNode(
+                              (c) => c.outputStoryline.addParagraph()),
+                          InkParagraphNode((ActionContext c) {
+                            final WorldState originalWorld = c.world;
+                            final Simulation sim = c.simulation;
+                            final Actor a = c.actor;
+                            final WorldStateBuilder w = c.outputWorld;
+                            final Storyline s = c.outputStoryline;
+                            s.add(
+                                'The shaman draws away from Darg but says nothing. I can hear her breathe.\n',
+                                isRaw: true);
+                          }),
+                          InkParagraphNode(
+                              (c) => c.outputStoryline.addParagraph()),
+                          InkParagraphNode((ActionContext c) {
+                            final WorldState originalWorld = c.world;
+                            final Simulation sim = c.simulation;
+                            final Actor a = c.actor;
+                            final WorldStateBuilder w = c.outputWorld;
+                            final Storyline s = c.outputStoryline;
+                            s.add(
+                                '"Knowing to avoid bad mistakes like this is why I have the Null," Darg says. "I know the crowd is only a small part of this machine, and I don\'t see where it fits." He gestures to encompass the room. "Now prepare for the daily."\n',
+                                isRaw: true);
+                          }),
+                          InkParagraphNode(
+                              (c) => c.outputStoryline.addParagraph()),
+                          InkParagraphNode((ActionContext c) {
+                            final WorldState originalWorld = c.world;
+                            final Simulation sim = c.simulation;
+                            final Actor a = c.actor;
+                            final WorldStateBuilder w = c.outputWorld;
+                            final Storyline s = c.outputStoryline;
+                            s.add(
+                                'The shaman frowns but moves away from Darg and starts preparing the temple for some kind of a ritual. Darg watches her work.\n',
+                                isRaw: true);
+                          }),
+                        ],
+                      ),
+                      InkChoiceNode(
+                        command: r""" Stop """.trim(),
+                        consequence: [],
+                      ),
+                    ]),
+                  ],
+                ),
+                InkChoiceNode(
+                  command: r""" Stop """.trim(),
+                  consequence: [],
+                ),
+              ]),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" Stop """.trim(),
+            consequence: [],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" Stop """.trim(),
+      consequence: [],
+    ),
+  ]),
+]);
 
 class CrowdsourceAttack extends RoamingAction {
   @override
@@ -1435,6 +1686,11 @@ class CrowdsourceAttack extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    s.add(
+        '${weSubstitutionCapitalized} step from behind the columns and approach the two orcs.\n\n"Humans?" the shaman says. "Here?"\n\n"Looks like a child," Darg says, readying his battle axe. "Must have found a crawlspace to get here."\n\nThe shaman takes a ceremonial dagger from a nearby nook and stands next to Darg. "Let\'s kill together, Darg. Like in Oak Land so many moons ago."\n\nDarg grins.\n\n',
+        isRaw: true);
     c.startOptionalFight();
 
     return '${a.name} successfully performs CrowdsourceAttack';
@@ -1499,9 +1755,10 @@ class CrowdsourceListen extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'TODO: The shaman is trying to persuade Darg to open the antechamber.\n\nTODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.\n',
-        isRaw: true);
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "crowdsource_listen_ink",
+    ));
     return '${a.name} successfully performs CrowdsourceListen';
   }
 
@@ -1547,7 +1804,7 @@ final Room crowdsource = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'A temple. Two orcs are talking. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is addressing the other orc as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          'This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of columns provide good opportunities to hide.\n\nI can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -1571,7 +1828,7 @@ final Room crowdsource = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs\' complex.\n\n',
+          'The fight is over. I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs\' complex.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -1591,7 +1848,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'A temple. Two orcs are talking. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is addressing the other orc as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          'This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of columns provide good opportunities to hide.\n\nI can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -1631,7 +1888,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs\' complex.\n\n',
+          'The fight is over. I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs\' complex.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -3569,7 +3826,7 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nSearching through the orc\'s posession, I find a stale bread.\n\n',
+          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nSearching through the orc\'s posession, I find a loaf of stale bread.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(staleBread);
     },
@@ -15998,6 +16255,7 @@ final allInks = <String, InkAst>{
   'darg_head_talk_ink_ink': dargHeadTalkInkInk,
   'hawkman_examine_ink': hawkmanExamineInk,
   'outlook_attack_ink': outlookAttackInk,
+  'crowdsource_listen_ink': crowdsourceListenInk,
   'barracks_take_barbecued_bat_ink': barracksTakeBarbecuedBatInk,
   'conet_examine_ink': conetExamineInk,
   'conet_kobold_examine_ink': conetKoboldExamineInk,

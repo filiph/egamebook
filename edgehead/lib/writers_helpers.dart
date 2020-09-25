@@ -236,7 +236,9 @@ FightSituation generateCrowdsourceFight(ActionContext c,
     [shaman, edgeheadDarg],
     "{temple |}floor",
     roomRoamingSituation,
-    {},
+    {
+      // TODO: guard joins the fight
+    },
     items: const [],
   );
 }

@@ -8,7 +8,9 @@ POS: 27, 29
 MAP_NAME: Crowd's Temple
 
 FIRST_DESCRIPTION:
-A temple. Two orcs are talking. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is addressing the other orc as Darg.
+This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of columns provide good opportunities to hide.
+
+I can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.
 
 Darg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.
 
@@ -24,7 +26,7 @@ FIGHT_SITUATION:
 generateCrowdsourceFight
 
 AFTER_MONSTERS_CLEARED:
-I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs' complex.
+The fight is over. I look around and there are no more orcs. The corridors are silent. I am fortunate that the temple is so secluded from the rest of the orcs' complex.
 
 [[CODE]]
 c.markHappened(evKilledDarg);
@@ -62,10 +64,59 @@ PREREQUISITES:
 
 COMMAND: Orcs >> Listen
 
-COMPLETE_SUCCESS_DESCRIPTION:
-TODO: The shaman is trying to persuade Darg to open the antechamber.
+INK:
+// The shaman is trying to persuade Darg to open the antechamber. She hates the waiting.
+"Only you have the power," the shaman is saying to Darg. "Use it! Talk to him!"
 
-TODO: It is obvious that attacking now would be inadvisable unless the player is well prepared.
+Darg takes a step back from her and shakes his head. "The Maker will call me. Before that, my hands are tied. A mouse does not ask to visit the cat."
+
+The shaman sighs and takes a step toward Darg. Her hushed voice reverberates through the large space. "The Maker gave you the Null. Why else would he give it to you other than for you to use it?"
+
+* Listen some more
+
+    Darg lowers his voice, too. "You don't know him the way I do. He's no orc. No human. I have never seen his face but there's something in his voice." Darg pauses and lowers his voice even further. "He's terrifying."
+
+    The shaman growls. "You're afraid," she says.
+
+    Darg's huge hand moves quickly and squeezes the back of the shaman's neck. His angry snarl fills the temple.
+
+    "I have a weakness for you, shaman," he says. "But say something like that one more time and I break you and dance on your bones." He glances around. "My guard is close, he could have heard."
+
+    * * Listen some more
+
+        After a brief moment of silence, the shaman starts talking again. Her voice is softer now. "If we can't ask the Maker for permission, so be it. We can attack now, and ask him for forgiveness later."
+
+        Darg shakes his head, but the shaman continues.
+
+        "It will be an easy win and you know it. The crowd is ready. We can take the whole tower today. There will be no resistance."
+
+        * * * Listen some more
+
+            "You don't know that," Darg says and watches the shaman, once again, take a step towards him.
+
+            "Of course I do, Darg," the shaman says. "Didn't you hear the hawk? He saw a company of knights leaving the tower and traveling south. They've abandoned this place."
+
+            "It might have been only a part of them," Darg says. "Others might be still inside."
+
+            * * * * Listen some more
+
+                "So what," the shaman grins and places her hand on Darg's crotch. "We'll kill them."
+
+                Darg freezes, then slowly pulls away her hand. "We'll wait for the Maker's decision," he says. "The Maker's plan is larger than the tower itself. Attacking now seems obvious, but it can be a bad mistake."
+
+                The shaman draws away from Darg but says nothing. I can hear her breathe.
+
+                "Knowing to avoid bad mistakes like this is why I have the Null," Darg says. "I know the crowd is only a small part of this machine, and I don't see where it fits." He gestures to encompass the room. "Now prepare for the daily."
+
+                The shaman frowns but moves away from Darg and starts preparing the temple for some kind of a ritual. Darg watches her work.
+
+            * * * * Stop
+
+        * * * Stop
+
+    * * Stop
+
+* Stop
 
 
 // ---
@@ -81,6 +132,16 @@ w.actionHasBeenPerformed('crowdsource_listen')
 COMMAND: Orcs >> Attack
 
 COMPLETE_SUCCESS_DESCRIPTION:
+[We] step from behind the columns and approach the two orcs.
+
+"Humans?" the shaman says. "Here?"
+
+"Looks like a child," Darg says, readying his battle axe. "Must have found a crawlspace to get here."
+
+The shaman takes a ceremonial dagger from a nearby nook and stands next to Darg. "Let's kill together, Darg. Like in Oak Land so many moons ago."
+
+Darg grins.
+
 [[CODE]]
 c.startOptionalFight();
 [[ENDCODE]]
@@ -95,7 +156,7 @@ DESCRIPTION: $NONE
 
 
 NOTES:
-- This is where you finally confront the Akxe orc (named captain - Darg).
+- This is where you finally confront the Akxe orc (named Darg).
 - Darg's head talks after you kill him. Big O is taunting you.
-- Darg's Akxe is the key to the antechamber.
+- Darg's badge is the key to the antechamber.
 - You might see him before, but shouldn't be able to kill him.

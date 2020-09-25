@@ -88,6 +88,8 @@ class InkChoose extends Action<InkChoicePointer> {
       // We have finished. Pop the [InkSituation].
       context.outputWorld.popSituation(context);
     } else {
+      // The INK continues. Rebuild this situation with the new
+      // [InkSituation.currentPath].
       context.outputWorld.replaceSituationById<InkSituation>(inkSituation.id,
           inkSituation.rebuild((b) => b.currentPath.replace(end)));
     }

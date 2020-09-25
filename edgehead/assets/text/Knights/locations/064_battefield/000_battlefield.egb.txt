@@ -44,7 +44,7 @@ A glorious battle this was, I'm sure. It became a scab.
 
 Whatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.
 
-Searching through the orc's posession, I find a stale bread.
+Searching through the orc's posession, I find a loaf of stale bread.
 
 [[CODE]]
 c.giveNewItemToPlayer(staleBread);
