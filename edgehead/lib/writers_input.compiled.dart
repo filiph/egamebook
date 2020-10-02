@@ -1689,7 +1689,7 @@ class CrowdsourceAttack extends RoamingAction {
     final weSubstitutionCapitalized =
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '${weSubstitutionCapitalized} step from behind the columns and approach the two orcs.\n\n"Humans?" the shaman says. "Here?"\n\n"Looks like a child," Darg says, readying his battle axe. "Must have found a crawlspace to get here."\n\nThe shaman takes a ceremonial dagger from a nearby nook and stands next to Darg. "Let\'s kill together, Darg. Like in Oak Land so many moons ago."\n\nDarg grins.\n\n',
+        '${weSubstitutionCapitalized} step from behind the columns and approach the two orcs.\n\n"Humans?" the shaman says. "Here?"\n\n"Looks like a child," Darg says, readying his battle axe. "Must have found a crawlspace to get here."\n\nThe shaman readies the ceremonial dagger from her side and takes position next to Darg. "Let\'s kill together, Darg. Like in Oak Land so many moons ago."\n\nDarg grins.\n\n',
         isRaw: true);
     c.startOptionalFight();
 
@@ -3570,15 +3570,59 @@ final Approach reservoirFromJunction =
     Approach('junction', 'reservoir', '', null);
 final Approach reservoirFromTrainingGrounds =
     Approach('training_grounds', 'reservoir', '', null);
+final reservoirFollowFootprintsInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    s.add(
+        '${weSubstitutionCapitalized} use the same ledge as the creature and follow the muddy footprints. After leaving the reservoir area, the footprints beeline to a tight crawlspace out of sight. The creature must be as unwelcome among the orcs as any human.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The footprints continue downward. There is no wandering - the creature must know these parts well.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'After a long while, the creature\'s trail leads us all the way to the enormous hole in the Pyramid and the foliage that fills the space.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.movePlayer('jungle_entrance');
+  }),
+]);
 
-class ReservoirOpenDam extends RoamingAction {
+class ReservoirDamExamine extends RoamingAction {
   @override
-  final String name = 'reservoir_open_dam';
+  final String name = 'reservoir_dam_examine';
 
-  static final ReservoirOpenDam singleton = ReservoirOpenDam();
+  static final ReservoirDamExamine singleton = ReservoirDamExamine();
 
   @override
-  List<String> get commandPathTemplate => ['Dam', 'Open'];
+  List<String> get commandPathTemplate => ['Dam', 'Examine'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -3596,11 +3640,9 @@ class ReservoirOpenDam extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I open the dam and the reservoir quickly empties. Water rushes past me, into corridors of the Pyramid.\n\n',
+        'The low waves of the reservoir go up and down the face of the dam, producing an occassional splash where the dam meets with the solid, reinforced walls. The doors of the dam are almost all rust now, though they were probably white in the ancient times. At least that\'s what I gather from the small islands of white on the otherwise dark red surface.\n\nThe dam is topped with a little bridge. There\'s an iron wheel here which is connected to the dam beneath with a massive rod.\n',
         isRaw: true);
-    c.markHappened(evOpenedDam);
-
-    return '${a.name} successfully performs ReservoirOpenDam';
+    return '${a.name} successfully performs ReservoirDamExamine';
   }
 
   @override
@@ -3610,7 +3652,402 @@ class ReservoirOpenDam extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    return '${a.name} fails to perform ReservoirOpenDam';
+    return '${a.name} fails to perform ReservoirDamExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+class ReservoirDamWheelLeft extends RoamingAction {
+  @override
+  final String name = 'reservoir_dam_wheel_left';
+
+  static final ReservoirDamWheelLeft singleton = ReservoirDamWheelLeft();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Wheel', 'Turn', 'Counter-clockwise'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('reservoir') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("reservoir_dam_examine") &&
+        !c.hasHappened(evOpenedDam))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I lean on the wheel and push hard to the left. To my surprise, the wheel does move. Before I know it, the wheel turns easily, and sound of rushing water fills the room.\n\nIn only a few moments, the reservoir empties. As it does, I think I can see a creature on the opposite side of the room. It jumps from the quickly subsiding water surface onto a ledge, and quickly disappears in shadows. It leaves muddy footprints behind.\n',
+        isRaw: true);
+    c.markHappened(evOpenedDam);
+    return '${a.name} successfully performs ReservoirDamWheelLeft';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    s.add(
+        '${weSubstitutionCapitalized} lean on the wheel and push as hard as possible to the left, but it does not budge.\n',
+        isRaw: true);
+    w.pushSituation(
+        ReservoirDamWheelLeftRescueSituation.initialized(w.randomInt()));
+    return '${a.name} fails to perform ReservoirDamWheelLeft';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return const ReasonedSuccessChance<void>(0.4);
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+abstract class ReservoirDamWheelLeftRescueSituation extends Object
+    with
+        SituationBaseBehavior
+    implements
+        Built<ReservoirDamWheelLeftRescueSituation,
+            ReservoirDamWheelLeftRescueSituationBuilder> {
+  factory ReservoirDamWheelLeftRescueSituation(
+      [void Function(ReservoirDamWheelLeftRescueSituationBuilder)
+          updates]) = _$ReservoirDamWheelLeftRescueSituation;
+
+  factory ReservoirDamWheelLeftRescueSituation.initialized(int id) {
+    return ReservoirDamWheelLeftRescueSituation((b) {
+      b.id = id;
+      b.turn = 0;
+    });
+  }
+
+  ReservoirDamWheelLeftRescueSituation._();
+
+  static Serializer<ReservoirDamWheelLeftRescueSituation> get serializer =>
+      _$reservoirDamWheelLeftRescueSituationSerializer;
+  @override
+  List<RoamingAction> get actions {
+    return [
+      SimpleAction(
+          'reservoir_dam_wheel_left_rescue',
+          'Try harder',
+          (ActionContext c, self) {
+            final WorldState originalWorld = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            final WorldStateBuilder w = c.outputWorld;
+            final Storyline s = c.outputStoryline;
+            s.add(
+                'After laboring over the wheel for some time, I get it to move. At first, it moves by only an inch and stops again. But something gives way then, and suddenly the wheel turns easily. Sound of rushing water fills the room.\n\nIn only a few moments, the reservoir empties. As it does, I think I can see a creature on the opposite side of the room. It jumps from the quickly subsiding water surface onto a ledge, and quickly disappears in shadows. It leaves muddy footprints behind.',
+                isRaw: true);
+            w.popSituation(c);
+            w.updateActorById(a.id, (b) => b..stamina -= 1);
+            c.markHappened(evOpenedDam);
+            return 'ReservoirDamWheelLeftRescueSituation resolved with rescue/continuation (Try harder)';
+          },
+          'I still have some stamina left in me.',
+          isApplicableClosure: (ApplicabilityContext c, Actor a, Simulation sim,
+              WorldState w, self) {
+            return a.stamina > 0;
+          }),
+      SimpleAction(
+          'reservoir_dam_wheel_left_continuation_of_failure', 'Give up',
+          (ActionContext c, self) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('I shrug and let off the wheel.', isRaw: true);
+        w.popSituation(c);
+        return 'ReservoirDamWheelLeftRescueSituation resolved with rescue/continuation (Give up)';
+      }, null)
+    ];
+  }
+
+  @override
+  int get id;
+  @override
+  int get turn;
+  @override
+  String get name {
+    return 'reservoir_dam_wheel_left';
+  }
+
+  @override
+  Situation elapseTurn() => rebuild((b) {
+        return b..turn += 1;
+      });
+  @override
+  ActorTurn getNextTurn(Simulation sim, WorldState w) {
+    if (turn != 0) return ActorTurn.never;
+    var player = w.actors.singleWhere((a) => a.isPlayer);
+    return ActorTurn(player, w.time);
+  }
+
+  @override
+  Iterable<Actor> getActors(Simulation sim, WorldState w) {
+    return [
+      w.actors.singleWhere((Actor a) {
+        return a.isPlayer;
+      })
+    ];
+  }
+}
+
+class ReservoirDamWheelRight extends RoamingAction {
+  @override
+  final String name = 'reservoir_dam_wheel_right';
+
+  static final ReservoirDamWheelRight singleton = ReservoirDamWheelRight();
+
+  @override
+  List<String> get commandPathTemplate => ['Wheel', 'Turn', 'Clockwise'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('reservoir') != true) {
+      return false;
+    }
+    if (!(w.actionHasBeenPerformed("reservoir_dam_examine") &&
+        !c.hasHappened(evOpenedDam) &&
+        !w.actionHasBeenPerformedSuccessfully("reservoir_dam_wheel_right"))) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I lean on the wheel and push hard to the right. To my surprise, the wheel does move a bit but then immediately stops. A feint thud escapes from below.\n',
+        isRaw: true);
+    return '${a.name} successfully performs ReservoirDamWheelRight';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    s.add(
+        '${weSubstitutionCapitalized} lean on the wheel and push as hard as possible to the right, but it does not budge.\n',
+        isRaw: true);
+    w.pushSituation(
+        ReservoirDamWheelRightRescueSituation.initialized(w.randomInt()));
+    return '${a.name} fails to perform ReservoirDamWheelRight';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return const ReasonedSuccessChance<void>(0.4);
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+}
+
+abstract class ReservoirDamWheelRightRescueSituation extends Object
+    with
+        SituationBaseBehavior
+    implements
+        Built<ReservoirDamWheelRightRescueSituation,
+            ReservoirDamWheelRightRescueSituationBuilder> {
+  factory ReservoirDamWheelRightRescueSituation(
+      [void Function(ReservoirDamWheelRightRescueSituationBuilder)
+          updates]) = _$ReservoirDamWheelRightRescueSituation;
+
+  factory ReservoirDamWheelRightRescueSituation.initialized(int id) {
+    return ReservoirDamWheelRightRescueSituation((b) {
+      b.id = id;
+      b.turn = 0;
+    });
+  }
+
+  ReservoirDamWheelRightRescueSituation._();
+
+  static Serializer<ReservoirDamWheelRightRescueSituation> get serializer =>
+      _$reservoirDamWheelRightRescueSituationSerializer;
+  @override
+  List<RoamingAction> get actions {
+    return [
+      SimpleAction(
+          'reservoir_dam_wheel_right_rescue',
+          'Try harder',
+          (ActionContext c, self) {
+            final WorldState originalWorld = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            final WorldStateBuilder w = c.outputWorld;
+            final Storyline s = c.outputStoryline;
+            s.add(
+                'After laboring over the wheel for some time, I get it to move, but only a bit. It moves maybe a an inch and then stops. A feint thud escapes from below.',
+                isRaw: true);
+            w.popSituation(c);
+            w.updateActorById(a.id, (b) => b..stamina -= 1);
+
+            return 'ReservoirDamWheelRightRescueSituation resolved with rescue/continuation (Try harder)';
+          },
+          'I still have some stamina left in me.',
+          isApplicableClosure: (ApplicabilityContext c, Actor a, Simulation sim,
+              WorldState w, self) {
+            return a.stamina > 0;
+          }),
+      SimpleAction(
+          'reservoir_dam_wheel_right_continuation_of_failure', 'Give up',
+          (ActionContext c, self) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add('I shrug and let off the wheel.', isRaw: true);
+        w.popSituation(c);
+        return 'ReservoirDamWheelRightRescueSituation resolved with rescue/continuation (Give up)';
+      }, null)
+    ];
+  }
+
+  @override
+  int get id;
+  @override
+  int get turn;
+  @override
+  String get name {
+    return 'reservoir_dam_wheel_right';
+  }
+
+  @override
+  Situation elapseTurn() => rebuild((b) {
+        return b..turn += 1;
+      });
+  @override
+  ActorTurn getNextTurn(Simulation sim, WorldState w) {
+    if (turn != 0) return ActorTurn.never;
+    var player = w.actors.singleWhere((a) => a.isPlayer);
+    return ActorTurn(player, w.time);
+  }
+
+  @override
+  Iterable<Actor> getActors(Simulation sim, WorldState w) {
+    return [
+      w.actors.singleWhere((Actor a) {
+        return a.isPlayer;
+      })
+    ];
+  }
+}
+
+class ReservoirFollowFootprints extends RoamingAction {
+  @override
+  final String name = 'reservoir_follow_footprints';
+
+  static final ReservoirFollowFootprints singleton =
+      ReservoirFollowFootprints();
+
+  @override
+  List<String> get commandPathTemplate => ['Footprints', 'Follow'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('reservoir') != true) {
+      return false;
+    }
+    if (!(c.hasHappened(evOpenedDam))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "reservoir_follow_footprints_ink",
+    ));
+    return '${a.name} successfully performs ReservoirFollowFootprints';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform ReservoirFollowFootprints';
   }
 
   @override
@@ -3641,7 +4078,7 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. There\'s an iron dam here.\n\n\nEverything is wet here, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.\n\nSomething big just moved in the water.\n',
+      'A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. There\'s an iron dam here, preventing the water from spilling into the corridors of the Pyramid.\n\nEverything is wet here, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.\n\nSomething big just moved in the water.\n',
       isRaw: true);
 }, null, null,
     isIdle: true, positionX: 25, positionY: 48, mapName: 'Reservoir');
@@ -5552,7 +5989,7 @@ final Room jungleEntranceMuddyFootprints = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Corridors full of vegetation. Path through that, like a path in a forest, but indoors. Muddy footprints.\n',
+          'Corridors full of vegetation. Path through that, like a path in a forest, but indoors. Muddy footprints lead into the jungle.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -5578,7 +6015,7 @@ final Room jungleEntranceMuddyFootprints = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('Muddy footprints.\n', isRaw: true);
+      s.add('Muddy footprints lead into the jungle.\n', isRaw: true);
     },
     positionX: 21,
     positionY: 72,
@@ -16447,7 +16884,10 @@ final allActions = <RoamingAction>[
   TakeSarnToBleeds.singleton,
   KarlExamineStar.singleton,
   KarlTakeStar.singleton,
-  ReservoirOpenDam.singleton,
+  ReservoirDamExamine.singleton,
+  ReservoirDamWheelLeft.singleton,
+  ReservoirDamWheelRight.singleton,
+  ReservoirFollowFootprints.singleton,
   AskOracleAboutKeep.singleton,
   AskOracleAboutKeepGate.singleton,
   OracleGiveNorthSkull.singleton,
@@ -16552,6 +16992,7 @@ final allInks = <String, InkAst>{
   'conet_kobold_examine_ink': conetKoboldExamineInk,
   'sarn_rescue_ink_ink': sarnRescueInkInk,
   'take_sarn_to_bleeds_ink': takeSarnToBleedsInk,
+  'reservoir_follow_footprints_ink': reservoirFollowFootprintsInk,
   'ask_oracle_about_keep_ink': askOracleAboutKeepInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,

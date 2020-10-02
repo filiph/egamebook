@@ -6,9 +6,117 @@ part of 'writers_input.compiled.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<ReservoirDamWheelLeftRescueSituation>
+    _$reservoirDamWheelLeftRescueSituationSerializer =
+    new _$ReservoirDamWheelLeftRescueSituationSerializer();
+Serializer<ReservoirDamWheelRightRescueSituation>
+    _$reservoirDamWheelRightRescueSituationSerializer =
+    new _$ReservoirDamWheelRightRescueSituationSerializer();
 Serializer<GuardpostAboveChurchTakeShieldRescueSituation>
     _$guardpostAboveChurchTakeShieldRescueSituationSerializer =
     new _$GuardpostAboveChurchTakeShieldRescueSituationSerializer();
+
+class _$ReservoirDamWheelLeftRescueSituationSerializer
+    implements StructuredSerializer<ReservoirDamWheelLeftRescueSituation> {
+  @override
+  final Iterable<Type> types = const [
+    ReservoirDamWheelLeftRescueSituation,
+    _$ReservoirDamWheelLeftRescueSituation
+  ];
+  @override
+  final String wireName = 'ReservoirDamWheelLeftRescueSituation';
+
+  @override
+  Iterable<Object> serialize(
+      Serializers serializers, ReservoirDamWheelLeftRescueSituation object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  ReservoirDamWheelLeftRescueSituation deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new ReservoirDamWheelLeftRescueSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'turn':
+          result.turn = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$ReservoirDamWheelRightRescueSituationSerializer
+    implements StructuredSerializer<ReservoirDamWheelRightRescueSituation> {
+  @override
+  final Iterable<Type> types = const [
+    ReservoirDamWheelRightRescueSituation,
+    _$ReservoirDamWheelRightRescueSituation
+  ];
+  @override
+  final String wireName = 'ReservoirDamWheelRightRescueSituation';
+
+  @override
+  Iterable<Object> serialize(
+      Serializers serializers, ReservoirDamWheelRightRescueSituation object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'turn',
+      serializers.serialize(object.turn, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  ReservoirDamWheelRightRescueSituation deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new ReservoirDamWheelRightRescueSituationBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'turn':
+          result.turn = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
 
 class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
     implements
@@ -59,6 +167,213 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
     }
 
     return result.build();
+  }
+}
+
+class _$ReservoirDamWheelLeftRescueSituation
+    extends ReservoirDamWheelLeftRescueSituation {
+  @override
+  final int id;
+  @override
+  final int turn;
+
+  factory _$ReservoirDamWheelLeftRescueSituation(
+          [void Function(ReservoirDamWheelLeftRescueSituationBuilder)
+              updates]) =>
+      (new ReservoirDamWheelLeftRescueSituationBuilder()..update(updates))
+          .build();
+
+  _$ReservoirDamWheelLeftRescueSituation._({this.id, this.turn}) : super._() {
+    if (id == null) {
+      throw new BuiltValueNullFieldError(
+          'ReservoirDamWheelLeftRescueSituation', 'id');
+    }
+    if (turn == null) {
+      throw new BuiltValueNullFieldError(
+          'ReservoirDamWheelLeftRescueSituation', 'turn');
+    }
+  }
+
+  @override
+  ReservoirDamWheelLeftRescueSituation rebuild(
+          void Function(ReservoirDamWheelLeftRescueSituationBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ReservoirDamWheelLeftRescueSituationBuilder toBuilder() =>
+      new ReservoirDamWheelLeftRescueSituationBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is ReservoirDamWheelLeftRescueSituation &&
+        id == other.id &&
+        turn == other.turn;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), turn.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('ReservoirDamWheelLeftRescueSituation')
+          ..add('id', id)
+          ..add('turn', turn))
+        .toString();
+  }
+}
+
+class ReservoirDamWheelLeftRescueSituationBuilder
+    implements
+        Builder<ReservoirDamWheelLeftRescueSituation,
+            ReservoirDamWheelLeftRescueSituationBuilder> {
+  _$ReservoirDamWheelLeftRescueSituation _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
+
+  ReservoirDamWheelLeftRescueSituationBuilder();
+
+  ReservoirDamWheelLeftRescueSituationBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _turn = _$v.turn;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(ReservoirDamWheelLeftRescueSituation other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$ReservoirDamWheelLeftRescueSituation;
+  }
+
+  @override
+  void update(
+      void Function(ReservoirDamWheelLeftRescueSituationBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$ReservoirDamWheelLeftRescueSituation build() {
+    final _$result =
+        _$v ?? new _$ReservoirDamWheelLeftRescueSituation._(id: id, turn: turn);
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$ReservoirDamWheelRightRescueSituation
+    extends ReservoirDamWheelRightRescueSituation {
+  @override
+  final int id;
+  @override
+  final int turn;
+
+  factory _$ReservoirDamWheelRightRescueSituation(
+          [void Function(ReservoirDamWheelRightRescueSituationBuilder)
+              updates]) =>
+      (new ReservoirDamWheelRightRescueSituationBuilder()..update(updates))
+          .build();
+
+  _$ReservoirDamWheelRightRescueSituation._({this.id, this.turn}) : super._() {
+    if (id == null) {
+      throw new BuiltValueNullFieldError(
+          'ReservoirDamWheelRightRescueSituation', 'id');
+    }
+    if (turn == null) {
+      throw new BuiltValueNullFieldError(
+          'ReservoirDamWheelRightRescueSituation', 'turn');
+    }
+  }
+
+  @override
+  ReservoirDamWheelRightRescueSituation rebuild(
+          void Function(ReservoirDamWheelRightRescueSituationBuilder)
+              updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  ReservoirDamWheelRightRescueSituationBuilder toBuilder() =>
+      new ReservoirDamWheelRightRescueSituationBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is ReservoirDamWheelRightRescueSituation &&
+        id == other.id &&
+        turn == other.turn;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), turn.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('ReservoirDamWheelRightRescueSituation')
+          ..add('id', id)
+          ..add('turn', turn))
+        .toString();
+  }
+}
+
+class ReservoirDamWheelRightRescueSituationBuilder
+    implements
+        Builder<ReservoirDamWheelRightRescueSituation,
+            ReservoirDamWheelRightRescueSituationBuilder> {
+  _$ReservoirDamWheelRightRescueSituation _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  int _turn;
+  int get turn => _$this._turn;
+  set turn(int turn) => _$this._turn = turn;
+
+  ReservoirDamWheelRightRescueSituationBuilder();
+
+  ReservoirDamWheelRightRescueSituationBuilder get _$this {
+    if (_$v != null) {
+      _id = _$v.id;
+      _turn = _$v.turn;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(ReservoirDamWheelRightRescueSituation other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$ReservoirDamWheelRightRescueSituation;
+  }
+
+  @override
+  void update(
+      void Function(ReservoirDamWheelRightRescueSituationBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$ReservoirDamWheelRightRescueSituation build() {
+    final _$result = _$v ??
+        new _$ReservoirDamWheelRightRescueSituation._(id: id, turn: turn);
+    replace(_$result);
+    return _$result;
   }
 }
 

@@ -71,6 +71,8 @@ part 'edgehead_serializers.g.dart';
   Predetermination,
   Pronoun,
   RoomRoamingSituation,
+  ReservoirDamWheelLeftRescueSituation,
+  ReservoirDamWheelRightRescueSituation,
   Situation,
   Team,
   VisitHistory,
