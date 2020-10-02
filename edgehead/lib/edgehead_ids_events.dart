@@ -32,6 +32,8 @@ const evKilledDarg = "evKilledDarg";
 
 const evKilledHawkman = "evKilledHawkman";
 
+const evKilledHope = "evKilledHope";
+
 const evKilledLizardman = "evKilledLizardman";
 
 const evOpenedDam = "evOpenedDam";

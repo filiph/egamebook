@@ -106,6 +106,8 @@ w.actionHasBeenPerformed("talk_to_kat_greetings")
 c.knows(LadyHopeFacts.ladyInKeep)
 &&
 !c.knows(LadyHopeFacts.ladyHopeName)
+&&
+!c.hasHappened(evKilledHope)
 
 INK:
 "That's Lady Hope. Our local ghost."

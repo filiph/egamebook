@@ -789,11 +789,11 @@ final dargHeadTalkInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     Ruleset(
-        Rule(407569879, 1, false, (ApplicabilityContext c) {
+        Rule(654961362, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
-          return c.playerHasVisited('keep_dining');
+          return c.hasHappened(evKilledHope);
         }, (ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -3539,7 +3539,7 @@ final Approach junctionFromSmithy = Approach('smithy', 'junction', '', null,
   final Actor a = c.actor;
   return !c.hasHappened(evSavedSarn) || c.hasHappened(evTookSarnToBleeds);
 });
-final Room junction = Room('junction', null, (ActionContext c) {
+final Room junction = Room('junction', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3548,9 +3548,24 @@ final Room junction = Room('junction', null, (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'A place of increased orc foot traffic. ${weSubstitutionCapitalized} stay hidden.\n',
+      'This place is traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. ${weSubstitutionCapitalized} have no trouble staying unseen.\n',
       isRaw: true);
-}, null, null, positionX: 27, positionY: 45, mapName: 'Junction on 26th Floor');
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null,
+    positionX: 27,
+    positionY: 45,
+    mapName: 'Hub on 26th floor',
+    firstMapName: 'Increased foot traffic',
+    hint:
+        'An area of increased foot traffic in the heart of the orcs’ outpost.',
+    firstHint:
+        'In this direction, footsteps and orc voices are more frequent. But the area is also dark and full of debris. It won’t be hard to hide.');
 final Approach reservoirFromJunction =
     Approach('junction', 'reservoir', '', null);
 final Approach reservoirFromTrainingGrounds =
@@ -3661,7 +3676,7 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I am in a maze of twisty little passages, all alike. All crawling with cockroaches.\n',
+      'I am in a maze of twisty little passages, all alike. All crawling with cockroaches.\n\nThe place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. I quickly realize this is a sort of a farm. The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -3670,7 +3685,14 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, null, positionX: 29, positionY: 52, mapName: 'Cockroach Farm');
+}, null, null,
+    positionX: 29,
+    positionY: 52,
+    mapName: 'Cockroach Farm',
+    firstMapName: 'Smell of rot',
+    hint: 'The main source of food for the orcs.',
+    firstHint:
+        'The closer I am to this area, the more I can smell rotten food and flesh. No voices, though, and no footsteps.');
 final Room cockroachFarmAfterOpenDam = Room(
     'cockroach_farm_after_open_dam',
     (ActionContext c) {
@@ -3680,7 +3702,7 @@ final Room cockroachFarmAfterOpenDam = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I am in a maze of twisty little passages, all alike. A few wet cockroaches are crawling around, but most of the place is empty.\n',
+          'I am in a maze of twisty little passages, all alike. A few wet cockroaches are crawling around, but most of the place is empty.\n\nI quickly realize this was a sort of a farm. The orcs were letting the cockroaches multiply, feeding them with whatever they’d eat. There are shovels and chests here, prepared for harvest. But most of the cockroaches have been swept away by water.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3712,7 +3734,11 @@ final Room cockroachFarmAfterOpenDam = Room(
     },
     positionX: 29,
     positionY: 52,
-    mapName: 'Cockroach Farm');
+    mapName: 'Cockroach Farm',
+    firstMapName: 'Smell of rot',
+    hint: 'The main source of food for the orcs.',
+    firstHint:
+        'The closer I am to this area, the more I can smell rotten food and flesh. No voices, though, and no footsteps.');
 final Approach trainingGroundsFromBattlefield =
     Approach('battlefield', 'training_grounds', '', null);
 final Approach trainingGroundsFromReservoir =
@@ -3876,6 +3902,142 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
       how: "{approvingly|with respect}");
 }, null, null,
     isIdle: true, positionX: 39, positionY: 65, mapName: 'Oracle\'s');
+final askOracleAboutKeepInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '“Ah, the Keep!” Oracle says. “I worked there as a kid. I sometimes miss those days.”\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Corax raises his head from a bowl of seed. “You told me it was horrible! You told me the nobility treated you as garbage.”\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '“That they did,” she says. “There was a lot of screaming, and quite a few beatings as well. I don’t miss _that_. I do miss being younger, though. And having access to all those books seemed magical at the time.”\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “What was the Keep for?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“It was the seat of power,” Oracle says. “Back in those days, San Francisco wasn’t as lawless as it is today. There were no orcs, no goblins, nothing.”\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“Paradise,” the bird says, and its claws make a little sound on the books.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“Well,” Oracle says, “not quite. Anyway, the lords have been living in the Keep with their families for generations. By having their home in the Pyramid itself, they were close to the farmers: the ones who sent the most coin to their coffers. And of course, living in the highest tower in the world brings a measure of pride and stature.”\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Corax nods and straightens, showing his black breast.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“But of course, such pride cannot last forever. Now, they’re all dead. Even the one that still keeps watch over the place is dead.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" “What’s in the Keep now?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('“Death,” says Corax.\n', isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final ifBlock_2dd81eaee = c.hasHappened(evKilledHope)
+              ? '''”News travel fast in the Pyramid,” Oracle smiles. “We know you were able to kill '''
+              : '''”The nobility that ruled from the Keep are all dead, that’s true,” Oracle says. “But that doesn’t make the Keep safe. One of the dead is still walking: ''';
+          s.add('${ifBlock_2dd81eaee}\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Lady Hope.”\n', isRaw: true);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.learn(KeepGateFacts.oracleWorkedInKeep);
+    c.learn(LadyHopeFacts.ladyHopeName);
+  }),
+]);
 final talkToOracleDeathlessInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -4126,9 +4288,63 @@ final talkToOracleGreetingsInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"Greetings to you, too, ${youngSirSubstitution}. I am Oracle. Bring me good information, and I will repay you with good information."\n',
+        '“Ah, greetings to you, too, ${youngSirSubstitution}. I am Oracle.” She takes me by the shoulder and looks me in the eye. “You are new here, you must be excited to learn about this place!”\n',
         isRaw: true);
   }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “Not really.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She keeps looking into my eyes for an uncomfortably long while. She smells of coffee. “Okay,” she says, still smiling.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Something moves behind me. “Okay!” I wheel around and see a big dark bird perched on top of some books. “Okay!” it says again.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" “Yes.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“You came to the right person, then.” She steps back, leaving a feint scent of coffee behind. “Welcome!”\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Something moves behind me. “Welcome!” I wheel around and see a big dark bird perched on top of some books. “Welcome!” it says again.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -4137,7 +4353,77 @@ final talkToOracleGreetingsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: she has a raven who can talk and sometimes interrupts conversation\n',
+        '“That’s Corax, my companion here.” Oracle nods toward the bird and the bird nods toward me.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “It can talk?” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '“Well,” Oracle says, “all ravens can talk if you teach them. It’s a trait they’ve had since the time of the ancients. But Corax doesn’t just repeat what he hears.”\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('“No I don’t,” Corax says.\n', isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Oracle smiles nervously.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" “Well met, Corax.” """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final youngSirSubstitution = c.playerSalutation;
+          s.add(
+              '“Well met indeed, ${youngSirSubstitution},” Corax says with a nod.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Oracle smiles with satisfaction.\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '“Well, you must be bored by all this talk. You’re in San Francisco! Young people don’t come to San Francisco to talk. They come here to slay.”\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -4271,9 +4557,10 @@ class AskOracleAboutKeep extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"I worked there as a kid."\n\nTODO\n\n', isRaw: true);
-    c.learn(KeepGateFacts.oracleWorkedInKeep);
-
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "ask_oracle_about_keep_ink",
+    ));
     return '${a.name} successfully performs AskOracleAboutKeep';
   }
 
@@ -9761,7 +10048,7 @@ class ExamineFamilyPortrait extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The portrait depicts an aristocratic family. Handsome people.\n\nA young, striking lady stands in the front. Kind of bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription say "For our beloved Lady Hope".\n\n',
+        'The portrait depicts an aristocratic family. Handsome people.\n\nA young, striking lady stands in the front. Kind of bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription says "For our beloved Lady Hope".\n\n',
         isRaw: true);
     c.learn(LadyHopeFacts.ladyHopeName);
 
@@ -10559,7 +10846,8 @@ class TalkToKatAboutLady extends RoamingAction {
     if (!(c.inRoomWith(katId) &&
         w.actionHasBeenPerformed("talk_to_kat_greetings") &&
         c.knows(LadyHopeFacts.ladyInKeep) &&
-        !c.knows(LadyHopeFacts.ladyHopeName))) {
+        !c.knows(LadyHopeFacts.ladyHopeName) &&
+        !c.hasHappened(evKilledHope))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -11234,7 +11522,8 @@ class TalkToMiguelAboutLady extends RoamingAction {
     if (!(c.inRoomWith(miguelId) &&
         w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
         c.knows(LadyHopeFacts.ladyInKeep) &&
-        !c.knows(LadyHopeFacts.ladyHopeName))) {
+        !c.knows(LadyHopeFacts.ladyHopeName) &&
+        !c.hasHappened(evKilledHope))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -16261,6 +16550,7 @@ final allInks = <String, InkAst>{
   'conet_kobold_examine_ink': conetKoboldExamineInk,
   'sarn_rescue_ink_ink': sarnRescueInkInk,
   'take_sarn_to_bleeds_ink': takeSarnToBleedsInk,
+  'ask_oracle_about_keep_ink': askOracleAboutKeepInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
   'talk_to_oracle_dragon_egg_ink': talkToOracleDragonEggInk,

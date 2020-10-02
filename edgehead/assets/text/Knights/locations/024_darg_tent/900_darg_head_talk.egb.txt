@@ -9,7 +9,7 @@ I am almost about to retreat back to the shadows when I hear a soft, gurgling so
 
 [[RULESET]]
 [[RULE]]
-c.playerHasVisited('keep_dining')
+c.hasHappened(evKilledHope)
 [[THEN]]
 I am reminded of my fight with Lady Hope.
 [[ENDRULE]]

@@ -42,7 +42,7 @@ w.actionHasBeenPerformed('search_bedroom')
 COMPLETE_SUCCESS_DESCRIPTION:
 The portrait depicts an aristocratic family. Handsome people.
 
-A young, striking lady stands in the front. Kind of bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription say "For our beloved Lady Hope".
+A young, striking lady stands in the front. Kind of bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription says "For our beloved Lady Hope".
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);

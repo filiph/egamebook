@@ -11,9 +11,42 @@ PREREQUISITES:
 !c.hasHappened(evOrcOffensive)
 
 INK:
-"Greetings to you, too, [young sir]. I am Oracle. Bring me good information, and I will repay you with good information."
+“Ah, greetings to you, too, [young sir]. I am Oracle.” She takes me by the shoulder and looks me in the eye. “You are new here, you must be excited to learn about this place!”
 
-TODO: she has a raven who can talk and sometimes interrupts conversation
+* “Not really.”
+
+  She keeps looking into my eyes for an uncomfortably long while. She smells of coffee. “Okay,” she says, still smiling.
+
+  Something moves behind me. “Okay!” I wheel around and see a big dark bird perched on top of some books. “Okay!” it says again.
+
+* “Yes.”
+
+  “You came to the right person, then.” She steps back, leaving a feint scent of coffee behind. “Welcome!”
+
+
+  Something moves behind me. “Welcome!” I wheel around and see a big dark bird perched on top of some books. “Welcome!” it says again.
+
+-
+
+“That’s Corax, my companion here.” Oracle nods toward the bird and the bird nods toward me.
+
+* “It can talk?”
+
+  “Well,” Oracle says, “all ravens can talk if you teach them. It’s a trait they’ve had since the time of the ancients. But Corax doesn’t just repeat what he hears.” 
+
+  “No I don’t,” Corax says.
+
+  Oracle smiles nervously. <>
+
+* “Well met, Corax.”
+
+  “Well met indeed, [young sir],” Corax says with a nod.
+
+  Oracle smiles with satisfaction. <>
+
+-
+
+<> “Well, you must be bored by all this talk. You’re in San Francisco! Young people don’t come to San Francisco to talk. They come here to slay.”
 
 [[CODE]]
 c.learn(OracleFacts.personally);
@@ -30,13 +63,38 @@ PREREQUISITES:
 &&
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
 
-COMPLETE_SUCCESS_DESCRIPTION:
-"I worked there as a kid."
+INK:
+“Ah, the Keep!” Oracle says. “I worked there as a kid. I sometimes miss those days.”
 
-TODO
+Corax raises his head from a bowl of seed. “You told me it was horrible! You told me the nobility treated you as garbage.”
+
+“That they did,” she says. “There was a lot of screaming, and quite a few beatings as well. I don’t miss _that_. I do miss being younger, though. And having access to all those books seemed magical at the time.”
+
+* “What was the Keep for?”
+
+  “It was the seat of power,” Oracle says. “Back in those days, San Francisco wasn’t as lawless as it is today. There were no orcs, no goblins, nothing.”
+
+“Paradise,” the bird says, and its claws make a little sound on the books.
+
+“Well,” Oracle says, “not quite. Anyway, the lords have been living in the Keep with their families for generations. By having their home in the Pyramid itself, they were close to the farmers: the ones who sent the most coin to their coffers. And of course, living in the highest tower in the world brings a measure of pride and stature.”
+
+Corax nods and straightens, showing his black breast.
+
+“But of course, such pride cannot last forever. Now, they’re all dead. Even the one that still keeps watch over the place is dead. <>
+
+* “What’s in the Keep now?”
+
+  “Death,” says Corax.
+
+  [[IF c.hasHappened(evKilledHope)]]”News travel fast in the Pyramid,” Oracle smiles. “We know you were able to kill [[ELSE]]”The nobility that ruled from the Keep are all dead, that’s true,” Oracle says. “But that doesn’t make the Keep safe. One of the dead is still walking: [[ENDIF]] <>
+
+-
+
+<> Lady Hope.”
 
 [[CODE]]
 c.learn(KeepGateFacts.oracleWorkedInKeep);
+c.learn(LadyHopeFacts.ladyHopeName);
 [[ENDCODE]]
 
 

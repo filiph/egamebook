@@ -138,6 +138,8 @@ w.actionHasBeenPerformed("talk_to_miguel_greetings")
 c.knows(LadyHopeFacts.ladyInKeep)
 &&
 !c.knows(LadyHopeFacts.ladyHopeName)
+&&
+!c.hasHappened(evKilledHope)
 
 INK:
 "Lady Hope."
