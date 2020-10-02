@@ -15818,8 +15818,10 @@ final Room meadowFight = Room(
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
       final ifBlock_781966055 =
           c.isHurt(tamaraId) ? '''She slowly stands up, and shrugs.''' : '''''';
+      w.updateActorById(firstGoblinId, (b) => b.initiative = 10);
+
       s.add(
-          'My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.\n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.\n\n\n',
+          '\nMy hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.\n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.\n\n\n',
           isRaw: true);
       Ruleset(
           Rule(175509328, 2, false, (ApplicabilityContext c) {

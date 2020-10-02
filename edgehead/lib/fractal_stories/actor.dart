@@ -222,7 +222,7 @@ abstract class Actor extends Object
   ///
   /// The player should have the highest initiative (so that he starts).
   ///
-  /// This doesn't change during gameplay.
+  /// This generally doesn't change during gameplay.
   int get initiative;
 
   /// The current state of the actor's inventory. Deals with everything
