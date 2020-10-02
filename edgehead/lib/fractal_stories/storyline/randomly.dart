@@ -173,7 +173,11 @@ class Randomly {
   /// Randomly runs one of the provided functions.
   static void run(void script1(), void script2(),
       [void script3(), void script4()]) {
-    int count = script4 != null ? 4 : script3 != null ? 3 : 2;
+    int count = script4 != null
+        ? 4
+        : script3 != null
+            ? 3
+            : 2;
     int index = _random.nextInt(count);
     switch (index) {
       case 0:
