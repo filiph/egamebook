@@ -86,7 +86,9 @@ class InkChoose extends Action<InkChoicePointer> {
 
     if (end == null) {
       // We have finished. Pop the [InkSituation].
-      context.outputWorld.popSituation(context);
+      if (context.outputWorld.currentSituation?.id == inkSituation.id) {
+        context.outputWorld.popSituation(context);
+      }
     } else {
       // The INK continues. Rebuild this situation with the new
       // [InkSituation.currentPath].

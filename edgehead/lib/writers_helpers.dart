@@ -862,6 +862,10 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return simulation.getRoomByName(situation.currentRoomName).isIdle;
   }
 
+  bool get playerIsAlone {
+    return getPartyOf(actor, simulation, world).length == 1;
+  }
+
   bool get playerIsMale {
     final query =
         world.customHistory.query(name: ActionContextHelpers._playerIsMale);

@@ -101,7 +101,13 @@ final finalFightInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('A tiny floor overlooking the Bay and the ruins of San Francisco.\n',
+    final weSubstitutionCapitalized =
+        getWeOrI(a, sim, originalWorld, capitalized: true);
+    final ifBlock_458168aa1 = !c.hasHappened(evSavedSarn)
+        ? '''I hear a distant scream from way bellow and for a second I think I recognize my brother's voice. But, there's no time for that now.'''
+        : '''''';
+    s.add(
+        '${weSubstitutionCapitalized} ascend the ladder through the dark. ${ifBlock_458168aa1} I emerge in the middle of a sun-lit space far above the forest of San Francisco. I can see the shape of the overgrown Bay Bridge to the southeast. The iconic Black Gate guards the Bay far to the northwest, immersed in fog.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -111,7 +117,18 @@ final finalFightInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: A device similar to Conet is here.\n', isRaw: true);
+    s.add(
+        'My eyes are now accustomed to the light. The space is open, with only a few pieces of furniture here and there. An exquisite chair, two workshop tables, a satin divan, a heavy white chest. All the windowpanes I can see are unbroken and pristine, though they vary slightly in color and texture. The air smells of the ocean. Whatever Big O is, he is rich. Richer than most kings.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('"You are a fool."\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -121,7 +138,7 @@ final finalFightInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: if Sarn wasn\'t rescued: "I hear a distant scream and for a second I think I recognize my brother\'s voice. But, there\'s no time for that now."\n',
+        'The voice comes from above. I look up and see that there is a second floor to this space, connected to the first one with a narrow staircase without a rail.\nA figure stands at the edge of a concrete plate, looking down. At first I only see the outline of a tall man. It\'s only after a few heartbeats that I realize there is something wrong with the head. It\'s not a human head.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -142,20 +159,8 @@ final finalFightInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'TODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He\'s a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it\'s in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.\n',
-        isRaw: true);
+    s.add('It\'s a dog\'s head.\n', isRaw: true);
   }),
-  InkForkNode([
-    InkChoiceNode(
-      command: r""" Test A """.trim(),
-      consequence: [],
-    ),
-    InkChoiceNode(
-      command: r""" Test B """.trim(),
-      consequence: [],
-    ),
-  ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -163,8 +168,415 @@ final finalFightInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('The fight begins.\n', isRaw: true);
+    s.add(
+        '"Surprised?" The creature laughs. "I\'m glad. After such a long time, one doubts that the people below still haven\'t seen through the deceit."\n',
+        isRaw: true);
   }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "You are Big O." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Osiris," he nods. "Big O. Whatever the vermin down there call me these days."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'He starts casually walking down the stairs, talking the whole way. "I\'m the big bad at the top. But as you can see, I\'m also the big hero." He chuckles: a sharp, unpleasant sound. "The Doghead.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "You are Doghead." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"That, too," he says. "I prefer Osiris myself. Big O these days, among the people at the bottom."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'He starts casually walking down the stairs, talking the whole way. "I\'m the big bad at the top. And I\'m also Doghead, the big hero." He chuckles: a sharp, unpleasant sound. "You see,\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I invented the folk tale two hundred years ago. You\'d be surprised how easy it is to get something like that going. People find a few \'ancient\' artifacts and their imagination does the rest."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'He takes a moment to relish in my confusion. I force my face to harden again. He chuckles again.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"It\'s good insurance. If things ever go south, if I get desperate, I can just show my face, and ..." He spreads his arms and shows an ugly smile. "Everyone loves me."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Not if they know." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Big O\'s smile disappears. "But they won\'t. Today, you either join me or die. And if you\'re clever, you\'ll do the former.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Not if I kill you." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final ifBlock_33dade49d = c.playerIsAlone
+              ? '''You're'''
+              : '''You and your pathetic entourage are''';
+          s.add(
+              'Big O\'s smile disappears. "But you won\'t. ${ifBlock_33dade49d} not strong enough. I figure you\'re too clever to try anything like that.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I think you know what will happen, sooner or later."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'He reaches the bottom of the stairs. "You. Are. A. Necromancer. You\'re not one of them. No, you\'re not, whatever you think now. They might like you now, but you know what happens soon."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'He hits the floor with the handle of his scythe for emphasis. The marble cracks in a delicate web of lines. "They will call you a \'neck\'. They will hate and laugh at you behind your back. At best, they will ignore your talent. They will act as if your talent doesn’t exist. What a stupidity! You and I have the power to fight death itself."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_1aaeebfe6 = c.playerIsAlone ? '''me''' : '''us''';
+    s.add(
+        'Big O starts to circle around ${ifBlock_1aaeebfe6}, still well out of reach. "And instead of support, necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Here, the necromancers are at the top."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Not just necromancers. Also orcs and goblins." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"And giants, soon," he smiles. "You have to understand: they are tools. The orcs and goblins down there might be a bit crude and violent for your tender heart. But they are effective."\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "Effective for what?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('"Effective for building a new civilization.\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command:
+                r""" "They are literally killing and enslaving innocent people." """
+                    .trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'Big O mocks a sad expression with his dog eyes. "Oh no, are you going to cry, you absolute snowflake? A few people here met an undeserved fate. Isn\'t that something that happens _every single day?_ Normally, people suffer for idiotic reasons, such as greed and senseless war. In contrast, the folks down there are suffering for a good cause, even if they don\'t know it.\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What are you trying to do here?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Preservation.\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The hard truth is that the ancients, in all their wisdom, allowed themselves to be wiped out. All that wisdom, all that power — wiped out."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_1aaeebfe6 = c.playerIsAlone ? '''me''' : '''us''';
+    s.add(
+        'Big O still walks in a wide circle around ${ifBlock_1aaeebfe6}. There\'s a spark in his eyes now.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"That can\'t happen again. I will not allow it." He places his off hand at his chest. "Humanity cannot lose knowledge if it\'s in the mind of an immortal. Civilization will not end if it\'s strong enough to withstand anything."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "You call this civilization?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"To disrupt the status quo, you have to move fast and break things. At the other end of all this, we will have a much better version of society. A strong, efficient, everlasting. The tools — the orcs and goblins and giants — will help us get there. It\'s the only way."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "How does attacking innocents help?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"You\'re not looking far enough into the future, child. This place is just the beginning. It\'s the epicenter. My vision goes way beyond this valley." He points to the north, east and south. "We can build this empire again. But this time, we make it everlasting. Isn\'t it worth a few lives down below?"\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "You are crazy and you will die." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('The fight begins.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Why do you need me?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"I don\'t, child," he says. "I don\'t _need_ anyone. But someone of your talents might be useful. My quakes have worked: the giants are coming. This place will soon be a lot busier than it is now."\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "You are crazy and you will die." """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add('The fight begins.\n', isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "What do you offer?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"The knowledge that your life has some meaning. Power. Status. Immortality. Literally _everything_ that the human mind has ever wanted." Osiris smiles. "That\'s what I offer."\n',
+                    isRaw: true);
+              }),
+              InkForkNode([
+                InkChoiceNode(
+                  command: r""" "You are crazy and you will die." """.trim(),
+                  consequence: [
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add('The fight begins.\n', isRaw: true);
+                    }),
+                  ],
+                ),
+                InkChoiceNode(
+                  command:
+                      r""" "You are wise >> ... and you will die." """.trim(),
+                  consequence: [
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add('The fight begins.\n', isRaw: true);
+                    }),
+                  ],
+                ),
+                InkChoiceNode(
+                  command:
+                      r""" "You are wise >> ... and you will live forever." """
+                          .trim(),
+                  consequence: [
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add('TODO: player joins the cause\n', isRaw: true);
+                    }),
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      w.popSituationsUntil(RoomRoamingSituation.className, c);
+                      w.popSituation(c);
+                    }),
+                  ],
+                ),
+              ]),
+            ],
+          ),
+        ]),
+      ],
+    ),
+  ]),
 ]);
 
 class FinalFightInk extends RoamingAction {
@@ -243,7 +655,7 @@ final Room bigOObservatory = Room(
     generateBigOFight,
     null,
     positionX: 26,
-    positionY: 8,
+    positionY: 12,
     mapName: 'Observatory',
     firstMapName: 'The very top',
     hint: 'At the very top of the Pyramid, a room for the Lich King.',
@@ -533,7 +945,7 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, null, positionX: 26, positionY: 12, mapName: 'Antechamber');
+}, null, null, positionX: 26, positionY: 20, mapName: 'Antechamber');
 final Approach dargTentFromBarracks =
     Approach('barracks', 'darg_tent', '', null);
 

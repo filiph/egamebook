@@ -140,8 +140,7 @@ c.movePlayer('jungle_entrance');
 
 
 NOTES:
-- A monster from here leaves muddy footprints.
-- The lizardman: he can be find either here or in the jungle.
+- TODO: also allow following the water?
 
 // Vignette
 

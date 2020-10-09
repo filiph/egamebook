@@ -17,32 +17,134 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-A tiny floor overlooking the Bay and the ruins of San Francisco.
+[We] ascend the ladder through the dark. [[IF !c.hasHappened(evSavedSarn)]]I hear a distant scream from way bellow and for a second I think I recognize my brother's voice. But, there's no time for that now.[[ENDIF]] I emerge in the middle of a sun-lit space far above the forest of San Francisco. I can see the shape of the overgrown Bay Bridge to the southeast. The iconic Black Gate guards the Bay far to the northwest, immersed in fog.
 
-TODO: A device similar to Conet is here.
+My eyes are now accustomed to the light. The space is open, with only a few pieces of furniture here and there. An exquisite chair, two workshop tables, a satin divan, a heavy white chest. All the windowpanes I can see are unbroken and pristine, though they vary slightly in color and texture. The air smells of the ocean. Whatever Big O is, he is rich. Richer than most kings.
 
-TODO: if Sarn wasn't rescued: "I hear a distant scream and for a second I think I recognize my brother's voice. But, there's no time for that now."
+"You are a fool."
+
+The voice comes from above. I look up and see that there is a second floor to this space, connected to the first one with a narrow staircase without a rail.
+A figure stands at the edge of a concrete plate, looking down. At first I only see the outline of a tall man. It's only after a few heartbeats that I realize there is something wrong with the head. It's not a human head.
 
 ![Illustration of Big O, a necromancer with a dog's head.](bigo.png)
 
-TODO: during a pre-fight dialogue sequence, we find out Big O is actually a human with a dog head. He's a necromancer who has lived hundreds of years, and he seeded the "Doghead will save us" myth generations ago, as an escape hatch. His ultimate goal was to prevent another apocalypse by instituting strict order, amassing power, and knowledge. Humanity cannot lose knowledge if it's in the mind of an immortal. The quakes were a way to attract mountain giants. The Orcs and goblins were brought on the myth of Doghead, and the promise of power over the other races.
+It's a dog's head.
 
-* Test A
-* Test B
+"Surprised?" The creature laughs. "I'm glad. After such a long time, one doubts that the people below still haven't seen through the deceit."
+
+* "You are Big O."
+
+  "Osiris," he nods. "Big O. Whatever the vermin down there call me these days."
+
+// TODO: Player has choice to call him Big O. (renames BigO's entity) or ignore that, or even degrade him ("I will call you fucker instead.")
+
+  He starts casually walking down the stairs, talking the whole way. "I'm the big bad at the top. But as you can see, I'm also the big hero." He chuckles: a sharp, unpleasant sound. "The Doghead. <>
+
+* "You are Doghead."
+
+  "That, too," he says. "I prefer Osiris myself. Big O these days, among the people at the bottom."
+
+  He starts casually walking down the stairs, talking the whole way. "I'm the big bad at the top. And I'm also Doghead, the big hero." He chuckles: a sharp, unpleasant sound. "You see, <>
 
 -
 
-// TODO: Big O reveals his name ("Osiris"), player has choice to call him that (renames BigO's entity) or ignore that, or even degrade him ("I will call you fucker instead.")
+<> I invented the folk tale two hundred years ago. You'd be surprised how easy it is to get something like that going. People find a few 'ancient' artifacts and their imagination does the rest."
 
 // TODO: big O notices asthma / wooden foot
 
-The fight begins.
+He takes a moment to relish in my confusion. I force my face to harden again. He chuckles again.
 
+"It's good insurance. If things ever go south, if I get desperate, I can just show my face, and ..." He spreads his arms and shows an ugly smile. "Everyone loves me."
+
+* "Not if they know."
+
+  Big O's smile disappears. "But they won't. Today, you either join me or die. And if you're clever, you'll do the former. <>
+
+* "Not if I kill you."
+
+  Big O's smile disappears. "But you won't. [[IF c.playerIsAlone]]You're[[ELSE]]You and your pathetic entourage are[[ENDIF]] not strong enough. I figure you're too clever to try anything like that. <>
+
+-
+
+<> I think you know what will happen, sooner or later."
+
+He reaches the bottom of the stairs. "You. Are. A. Necromancer. You're not one of them. No, you're not, whatever you think now. They might like you now, but you know what happens soon."
+
+He hits the floor with the handle of his scythe for emphasis. The marble cracks in a delicate web of lines. "They will call you a 'neck'. They will hate and laugh at you behind your back. At best, they will ignore your talent. They will act as if your talent doesn’t exist. What a stupidity! You and I have the power to fight death itself."
+
+Big O starts to circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]], still well out of reach. "And instead of support, necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Here, the necromancers are at the top."
+
+* "Not just necromancers. Also orcs and goblins."
+
+  "And giants, soon," he smiles. "You have to understand: they are tools. The orcs and goblins down there might be a bit crude and violent for your tender heart. But they are effective."
+
+  * * "Effective for what?"
+
+    "Effective for building a new civilization. <>
+
+  * * "They are literally killing and enslaving innocent people."
+
+    Big O mocks a sad expression with his dog eyes. "Oh no, are you going to cry, you absolute snowflake? A few people here met an undeserved fate. Isn't that something that happens _every single day?_ Normally, people suffer for idiotic reasons, such as greed and senseless war. In contrast, the folks down there are suffering for a good cause, even if they don't know it. <>
+
+* "What are you trying to do here?"
+
+"Preservation. <>
+
+-
+
+<> The hard truth is that the ancients, in all their wisdom, allowed themselves to be wiped out. All that wisdom, all that power — wiped out."
+
+Big O still walks in a wide circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]]. There's a spark in his eyes now.
+
+"That can't happen again. I will not allow it." He places his off hand at his chest. "Humanity cannot lose knowledge if it's in the mind of an immortal. Civilization will not end if it's strong enough to withstand anything."
+
+* "You call this civilization?"
+
+  "To disrupt the status quo, you have to move fast and break things. At the other end of all this, we will have a much better version of society. A strong, efficient, everlasting. The tools — the orcs and goblins and giants — will help us get there. It's the only way."
+
+* "How does attacking innocents help?"
+
+  "You're not looking far enough into the future, child. This place is just the beginning. It's the epicenter. My vision goes way beyond this valley." He points to the north, east and south. "We can build this empire again. But this time, we make it everlasting. Isn't it worth a few lives down below?"
+
+-
+
+* "You are crazy and you will die."
+
+    The fight begins.
+
+* "Why do you need me?"
+
+  "I don't, child," he says. "I don't _need_ anyone. But someone of your talents might be useful. My quakes have worked: the giants are coming. This place will soon be a lot busier than it is now."
+
+  * * "You are crazy and you will die."
+
+    The fight begins.
+
+  * * "What do you offer?"
+
+    "The knowledge that your life has some meaning. Power. Status. Immortality. Literally _everything_ that the human mind has ever wanted." Osiris smiles. "That's what I offer."
+    
+    * * * "You are crazy and you will die."
+
+        The fight begins.
+
+    * * * "You are wise >> ... and you will die."
+
+        The fight begins.
+
+    * * * "You are wise >> ... and you will live forever."
+
+        TODO: player joins the cause
+
+        [[CODE]]
+        w.popSituationsUntil(RoomRoamingSituation.className, c);
+        w.popSituation(c);
+        [[ENDCODE]]
 
 // ---
 ROOM: $big_o_observatory
 
-POS: 26, 8
+POS: 26, 12
 
 MAP_NAME: Observatory
 HINT: At the very top of the Pyramid, a room for the Lich King.

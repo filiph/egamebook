@@ -5,7 +5,7 @@ APPROACH: $big_o_antechamber FROM $top_of_climb
 ROOM: $big_o_antechamber
 MAP_NAME: Antechamber
 
-POS: 26, 12
+POS: 26, 20
 
 FIRST_DESCRIPTION:
 A dark room without windows. A stone staircase leads up to a trap door in the ceiling.
