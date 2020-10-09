@@ -559,6 +559,17 @@ final finalFightInkInk = InkAst([
                       final Storyline s = c.outputStoryline;
                       s.add('TODO: player joins the cause\n', isRaw: true);
                     }),
+                    InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add(
+                          'TODO: Yet all this time I wonder if I made the right choice.\n',
+                          isRaw: true);
+                    }),
                     InkParagraphNode((ActionContext c) {
                       final WorldState originalWorld = c.world;
                       final Simulation sim = c.simulation;
@@ -681,7 +692,9 @@ final bigOEndInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I have prevailed.\n', isRaw: true);
+    s.add(
+        'I look at the dead necromancer. The tyrant is no more, and his sick experiment will no doubt crumble without his leadership.\n',
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -691,7 +704,52 @@ final bigOEndInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: an end, in which Aren (the player) shows the Dog\'s head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn\'s mind, and he is no longer insane. He explains his past mistakes, and apologizes.\n',
+        'It has started raining outside. The large raindrops drum on the windowpanes, and the air becomes sweeter.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'An hour later, I\'m descending through the Pyramid. No one tries to stop me. Even the orcs move out of the way. They all look, mesmerized by what I hold in my hands.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People don\'t complain. They know that what they are about to witness transcends this brief moment of discomfort. Somehow, they all know what the thing in my hands means.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_1d0ea1020 = c.hasHappened(evSavedSarn)
+        ? '''Sarn comes to the fore. He looks much better now. Still scared, but less fuzzy than before. For the first time in years, I smile at him. He starts quietly weeping.'''
+        : '''I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.''';
+    s.add('${ifBlock_1d0ea1020}\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The crowd is formed. Two dozen men and women are soaking in the downpour, watching me in silence. I raise my posession for everyone to see.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -707,12 +765,34 @@ final bigOEndInkInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" A option """.trim(),
-      consequence: [],
+      command: r""" "I am the Doghead." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I am the one these people have been waiting for. The man with a dog\'s head. The savior of this damned place.\n',
+              isRaw: true);
+        }),
+      ],
     ),
     InkChoiceNode(
-      command: r""" B option """.trim(),
-      consequence: [],
+      command: r""" "The Doghead is dead." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I killed him. I removed the false myth and the tyrant behind it.\n',
+              isRaw: true);
+        }),
+      ],
     ),
   ]),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -722,7 +802,7 @@ final bigOEndInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('The end.\n', isRaw: true);
+    s.add('The fight is over.\n', isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;

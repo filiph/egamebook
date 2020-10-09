@@ -136,6 +136,8 @@ Big O still walks in a wide circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[EN
 
         TODO: player joins the cause
 
+        TODO: Yet all this time I wonder if I made the right choice.
+
         [[CODE]]
         w.popSituationsUntil(RoomRoamingSituation.className, c);
         w.popSituation(c);

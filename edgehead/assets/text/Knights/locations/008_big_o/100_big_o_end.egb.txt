@@ -4,22 +4,31 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-I have prevailed.
+I look at the dead necromancer. The tyrant is no more, and his sick experiment will no doubt crumble without his leadership.
 
-// TODO: Use INK here and let the player explore the observatory, descend to the people, show the head, and make some stately decision (keep the Knights, or start a new kingdom, or...) as well as some personal decision (call on father, start from scratch, or ...).
+It has started raining outside. The large raindrops drum on the windowpanes, and the air becomes sweeter.
 
-TODO: an end, in which Aren (the player) shows the Dog's head to the people. Most of the Orcs and goblins flee. Aren is revered. A darkness is lifted from Sarn's mind, and he is no longer insane. He explains his past mistakes, and apologizes.
+An hour later, I'm descending through the Pyramid. No one tries to stop me. Even the orcs move out of the way. They all look, mesmerized by what I hold in my hands.
+
+Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People don't complain. They know that what they are about to witness transcends this brief moment of discomfort. Somehow, they all know what the thing in my hands means.
+
+[[IF c.hasHappened(evSavedSarn)]]Sarn comes to the fore. He looks much better now. Still scared, but less fuzzy than before. For the first time in years, I smile at him. He starts quietly weeping.[[ELSE]]I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.[[ENDIF]]
+
+The crowd is formed. Two dozen men and women are soaking in the downpour, watching me in silence. I raise my posession for everyone to see.
 
 ![Illustration Big O's head in my arms. Before me, a group of people.](doghead.png)
 
-// * But what was Conet for? What were these quakes for? ... In the distance, large figures are approaching. -- this is cool, but it could be seen as a cheap trick - an obvious cliffhanger. Instead, focus on making the ending deliver, emotionally.
+* "I am the Doghead."
 
-* A option
-* B option
+  I am the one these people have been waiting for. The man with a dog's head. The savior of this damned place.
+
+* "The Doghead is dead."
+
+  I killed him. I removed the false myth and the tyrant behind it.
 
 -
 
-The end.
+The fight is over.
 
 [[CODE]]
 c.movePlayer('__END_OF_ROAM__');
