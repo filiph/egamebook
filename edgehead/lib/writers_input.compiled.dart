@@ -639,6 +639,8 @@ class FinalFightInk extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room bigOObservatory = Room(
@@ -792,6 +794,8 @@ class BigOEndInk extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Approach bigOAntechamberFromCrowdsource =
@@ -861,6 +865,8 @@ class ExamineAntechamberLock extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class OpenAntechamberLock extends RoamingAction {
@@ -927,6 +933,8 @@ class OpenAntechamberLock extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
@@ -1017,6 +1025,8 @@ class DargTentAttack extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => true;
 }
 
 final Room dargTent = Room(
@@ -1409,6 +1419,8 @@ class DargHeadTalkInk extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Approach outlookFromTopOfClimb =
@@ -1632,6 +1644,8 @@ class HawkmanExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class OutlookAttack extends RoamingAction {
@@ -1694,6 +1708,8 @@ class OutlookAttack extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => true;
 }
 
 class StripDeadHawkman extends RoamingAction {
@@ -1760,6 +1776,8 @@ class StripDeadHawkman extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room outlook = Room(
@@ -2137,6 +2155,8 @@ class CrowdsourceAttack extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => true;
 }
 
 class CrowdsourceListen extends RoamingAction {
@@ -2203,6 +2223,8 @@ class CrowdsourceListen extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room crowdsource = Room(
@@ -2408,6 +2430,8 @@ class BarracksTakeBarbecuedBat extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room barracks = Room('barracks', (ActionContext c) {
@@ -2597,6 +2621,8 @@ class ConetAttack extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => true;
 }
 
 class ConetExamine extends RoamingAction {
@@ -2659,6 +2685,8 @@ class ConetExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ConetKoboldExamine extends RoamingAction {
@@ -2724,6 +2752,8 @@ class ConetKoboldExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room conet = Room(
@@ -2876,6 +2906,8 @@ class KarlListenToGuards extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room maintenanceShaft = Room('maintenance_shaft', (ActionContext c) {
@@ -3019,6 +3051,8 @@ class KarlUseNecromancy extends RoamingAction {
       'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Approach smithyFromConet = Approach('conet', 'smithy', '', null);
@@ -3085,6 +3119,8 @@ class SaveSarn extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => true;
 }
 
 final Room smithy = Room(
@@ -3592,6 +3628,8 @@ class SarnRescueInk extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TakeSarnToBleeds extends RoamingAction {
@@ -3657,6 +3695,8 @@ class TakeSarnToBleeds extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Approach elevator28FromElevator12 =
@@ -3769,6 +3809,8 @@ class KarlExamineStar extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class KarlTakeStar extends RoamingAction {
@@ -3833,6 +3875,8 @@ class KarlTakeStar extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room godsLair = Room(
@@ -4086,6 +4130,8 @@ class ReservoirDamExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ReservoirDamWheelLeft extends RoamingAction {
@@ -4160,6 +4206,8 @@ class ReservoirDamWheelLeft extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 abstract class ReservoirDamWheelLeftRescueSituation extends Object
@@ -4324,6 +4372,8 @@ class ReservoirDamWheelRight extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 abstract class ReservoirDamWheelRightRescueSituation extends Object
@@ -4481,6 +4531,8 @@ class ReservoirFollowFootprints extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room reservoir = Room('reservoir', null, (ActionContext c) {
@@ -5442,6 +5494,8 @@ class AskOracleAboutKeep extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class AskOracleAboutKeepGate extends RoamingAction {
@@ -5511,6 +5565,8 @@ class AskOracleAboutKeepGate extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class OracleGiveNorthSkull extends RoamingAction {
@@ -5578,6 +5634,8 @@ class OracleGiveNorthSkull extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleDeathless extends RoamingAction {
@@ -5646,6 +5704,8 @@ class TalkToOracleDeathless extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleDoghead extends RoamingAction {
@@ -5714,6 +5774,8 @@ class TalkToOracleDoghead extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleDragonEgg extends RoamingAction {
@@ -5783,6 +5845,8 @@ class TalkToOracleDragonEgg extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleEarthquakes extends RoamingAction {
@@ -5851,6 +5915,8 @@ class TalkToOracleEarthquakes extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleGreetings extends RoamingAction {
@@ -5916,6 +5982,8 @@ class TalkToOracleGreetings extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleOrcs extends RoamingAction {
@@ -5984,6 +6052,8 @@ class TalkToOracleOrcs extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleQuake1 extends RoamingAction {
@@ -6053,6 +6123,8 @@ class TalkToOracleQuake1 extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToOracleSixtyFiver extends RoamingAction {
@@ -6122,6 +6194,8 @@ class TalkToOracleSixtyFiver extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final oracleAppleExamineInk = InkAst([
@@ -6247,6 +6321,8 @@ class OracleAppleExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class OracleAppleTake extends RoamingAction {
@@ -6312,6 +6388,8 @@ class OracleAppleTake extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room oracleAfterOrcOffensive = Room(
@@ -6504,6 +6582,8 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
@@ -6685,6 +6765,8 @@ class AttackLizardNearPond extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class PondHelicopterExamine extends RoamingAction {
@@ -6747,6 +6829,8 @@ class PondHelicopterExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room pond = Room('pond', (ActionContext c) {
@@ -7403,6 +7487,8 @@ class ArgoAskDeathless extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ArgoAskDragonEgg extends RoamingAction {
@@ -7471,6 +7557,8 @@ class ArgoAskDragonEgg extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ArgoAskQuake1 extends RoamingAction {
@@ -7539,6 +7627,8 @@ class ArgoAskQuake1 extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ArgoGreet extends RoamingAction {
@@ -7601,6 +7691,8 @@ class ArgoGreet extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room deathlessVillageOrcOffensive = Room(
@@ -7920,6 +8012,8 @@ class TalkToMiguelAboutDeserting extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToMiguelAfterCaravanDeparted extends RoamingAction {
@@ -7989,6 +8083,8 @@ class TalkToMiguelAfterCaravanDeparted extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room knightsHqCaravanDeparture = Room(
@@ -8351,6 +8447,8 @@ class TalkToGreenWomanAboutSlopesDeath extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room slopesQuake2 = Room(
@@ -8943,6 +9041,8 @@ class TalkToHorsemanWhiteAboutDevling extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToHorsemanWhiteAboutOracle extends RoamingAction {
@@ -9012,6 +9112,8 @@ class TalkToHorsemanWhiteAboutOracle extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToHorsemanWhiteDoghead extends RoamingAction {
@@ -9080,6 +9182,8 @@ class TalkToHorsemanWhiteDoghead extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToHorsemanWhiteGreetings extends RoamingAction {
@@ -9143,6 +9247,8 @@ class TalkToHorsemanWhiteGreetings extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToHorsemanWhiteQuake1 extends RoamingAction {
@@ -9212,6 +9318,8 @@ class TalkToHorsemanWhiteQuake1 extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToHorsemanWhiteRetreat extends RoamingAction {
@@ -9280,6 +9388,8 @@ class TalkToHorsemanWhiteRetreat extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room stagingAreaQuake1 = Room(
@@ -9902,6 +10012,8 @@ class TalkToAdaAboutDelving extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToAdaAboutDragonEgg extends RoamingAction {
@@ -9969,6 +10081,8 @@ class TalkToAdaAboutDragonEgg extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToAdaAboutOracle extends RoamingAction {
@@ -10037,6 +10151,8 @@ class TalkToAdaAboutOracle extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToAdaBigO extends RoamingAction {
@@ -10104,6 +10220,8 @@ class TalkToAdaBigO extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToAdaDogheadFigure extends RoamingAction {
@@ -10170,6 +10288,8 @@ class TalkToAdaDogheadFigure extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToAdaGreetings extends RoamingAction {
@@ -10232,6 +10352,8 @@ class TalkToAdaGreetings extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToAdaQuake1 extends RoamingAction {
@@ -10300,6 +10422,8 @@ class TalkToAdaQuake1 extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room farmersVillageQuake1 = Room(
@@ -10471,6 +10595,8 @@ class TalkToAdaAfterQuake2 extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room farmersVillageQuake2 = Room(
@@ -10633,6 +10759,8 @@ class AttemptOpenGate extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class DestroyGateWithAxe extends RoamingAction {
@@ -10702,6 +10830,8 @@ class DestroyGateWithAxe extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ExamineGate extends RoamingAction {
@@ -10763,6 +10893,8 @@ class ExamineGate extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class OpenGateUnlock extends RoamingAction {
@@ -10828,6 +10960,8 @@ class OpenGateUnlock extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room keepGate = Room('keep_gate', (ActionContext c) {
@@ -10933,6 +11067,8 @@ class ExamineFamilyPortrait extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class SearchBedroom extends RoamingAction {
@@ -10994,6 +11130,8 @@ class SearchBedroom extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TakeFamilyPortrait extends RoamingAction {
@@ -11060,6 +11198,8 @@ class TakeFamilyPortrait extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
@@ -11218,6 +11358,8 @@ class NorthSkullExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class NorthSkullTake extends RoamingAction {
@@ -11282,6 +11424,8 @@ class NorthSkullTake extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room keepServants = Room('keep_servants', (ActionContext c) {
@@ -11605,6 +11749,8 @@ class TalkToKatAboutBrother extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToKatAboutDevling extends RoamingAction {
@@ -11675,6 +11821,8 @@ class TalkToKatAboutDevling extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToKatAboutLady extends RoamingAction {
@@ -11745,6 +11893,8 @@ class TalkToKatAboutLady extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToKatAboutMiguelMissing extends RoamingAction {
@@ -11813,6 +11963,8 @@ class TalkToKatAboutMiguelMissing extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToKatGreetings extends RoamingAction {
@@ -11876,6 +12028,8 @@ class TalkToKatGreetings extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final talkToMiguelAboutBrotherInk = InkAst([
@@ -12215,6 +12369,8 @@ class TalkToMiguelAboutBrother extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToMiguelAboutDevling extends RoamingAction {
@@ -12282,6 +12438,8 @@ class TalkToMiguelAboutDevling extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToMiguelAboutDragonEgg extends RoamingAction {
@@ -12351,6 +12509,8 @@ class TalkToMiguelAboutDragonEgg extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToMiguelAboutLady extends RoamingAction {
@@ -12421,6 +12581,8 @@ class TalkToMiguelAboutLady extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class TalkToMiguelGreetings extends RoamingAction {
@@ -12483,6 +12645,8 @@ class TalkToMiguelGreetings extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room pyramidEntranceDuringCaravan = Room(
@@ -12630,6 +12794,8 @@ class TalkToKatAfterOrcOffensive extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room pyramidEntranceAfterOrcOffensive = Room(
@@ -12847,6 +13013,8 @@ class BleedsMainObserveVillage extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
@@ -12964,6 +13132,8 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsTraderGoblins extends RoamingAction {
@@ -13037,6 +13207,8 @@ class BleedsTraderGoblins extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsTraderGreet extends RoamingAction {
@@ -13103,6 +13275,8 @@ class BleedsTraderGreet extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsTraderTellAboutClearedCamp extends RoamingAction {
@@ -13168,6 +13342,8 @@ class BleedsTraderTellAboutClearedCamp extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
@@ -14110,6 +14286,8 @@ class BleedsBlindGuideBigO extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideBrother extends RoamingAction {
@@ -14177,6 +14355,8 @@ class BleedsBlindGuideBrother extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideDelving extends RoamingAction {
@@ -14243,6 +14423,8 @@ class BleedsBlindGuideDelving extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideDragonEgg extends RoamingAction {
@@ -14311,6 +14493,8 @@ class BleedsBlindGuideDragonEgg extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideGoblins extends RoamingAction {
@@ -14377,6 +14561,8 @@ class BleedsBlindGuideGoblins extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideGreet extends RoamingAction {
@@ -14442,6 +14628,8 @@ class BleedsBlindGuideGreet extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideOracle extends RoamingAction {
@@ -14509,6 +14697,8 @@ class BleedsBlindGuideOracle extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideOrcs extends RoamingAction {
@@ -14576,6 +14766,8 @@ class BleedsBlindGuideOrcs extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideQuake1 extends RoamingAction {
@@ -14644,6 +14836,8 @@ class BleedsBlindGuideQuake1 extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BleedsBlindGuideWhatsWrong extends RoamingAction {
@@ -14711,6 +14905,8 @@ class BleedsBlindGuideWhatsWrong extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final sarnTalkInBleedsInk = InkAst([
@@ -14845,6 +15041,8 @@ class SarnExamineHisHammer extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class SarnReadLetter extends RoamingAction {
@@ -14910,6 +15108,8 @@ class SarnReadLetter extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class SarnTakeHisHammer extends RoamingAction {
@@ -14974,6 +15174,8 @@ class SarnTakeHisHammer extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class SarnTalkInBleeds extends RoamingAction {
@@ -15040,6 +15242,8 @@ class SarnTalkInBleeds extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room bleedsMainDuringCaravan = Room(
@@ -15355,6 +15559,8 @@ class ListenContinue extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ListenMore extends RoamingAction {
@@ -15418,6 +15624,8 @@ class ListenMore extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ListenToThemArguing extends RoamingAction {
@@ -15482,6 +15690,8 @@ class ListenToThemArguing extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ObserveGoblinCamp extends RoamingAction {
@@ -15547,6 +15757,8 @@ class ObserveGoblinCamp extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Approach goblinSkirmishMainFromGoblinSkirmishPatrol =
@@ -15614,6 +15826,8 @@ class BarbecuedSquirrelExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class BarbecuedSquirrelTake extends RoamingAction {
@@ -15679,6 +15893,8 @@ class BarbecuedSquirrelTake extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class CompassExamine extends RoamingAction {
@@ -15743,6 +15959,8 @@ class CompassExamine extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class CompassTake extends RoamingAction {
@@ -15808,6 +16026,8 @@ class CompassTake extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class GoblinCampAttack extends RoamingAction {
@@ -15904,6 +16124,8 @@ class GoblinCampAttack extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => true;
 }
 
 final Room goblinSkirmishMain = Room(
@@ -16556,6 +16778,8 @@ class StartInk extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room start = Room('start', (ActionContext c) {
@@ -16635,6 +16859,8 @@ class FirstPyramidApproach extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 final Room meadowFight = Room(
@@ -16801,6 +17027,8 @@ class CompassUse extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class PerformNecromancyElsewhere extends RoamingAction {
@@ -16883,6 +17111,8 @@ class PerformNecromancyElsewhere extends RoamingAction {
       'Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.';
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class ReadLetterFromFather extends RoamingAction {
@@ -16947,6 +17177,8 @@ class ReadLetterFromFather extends RoamingAction {
   String get helpMessage => null;
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 class GuardpostAboveChurchTakeShield extends RoamingAction {
@@ -17018,6 +17250,8 @@ class GuardpostAboveChurchTakeShield extends RoamingAction {
       'The goblin is asleep, but not soundly — the floor here is cold and uncomfortable, and the wall isn’t much of a headrest. Taking the shield from the goblin\'s lap will likely wake him up.';
   @override
   bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
 }
 
 abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object

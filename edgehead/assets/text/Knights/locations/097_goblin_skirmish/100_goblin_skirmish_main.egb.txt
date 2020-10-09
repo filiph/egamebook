@@ -36,6 +36,8 @@ ACTION: $goblin_camp_attack
 COMMAND: Goblins >> Attack
 FOR_LOCATION: $goblin_skirmish_main
 
+IS_IMMEDIATE: $TRUE
+
 COMPLETE_SUCCESS_DESCRIPTION:
 [[RULESET]]
 [[RULE]]

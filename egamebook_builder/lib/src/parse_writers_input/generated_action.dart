@@ -146,6 +146,17 @@ class GeneratedAction extends GeneratedGameObject {
       ..type = classType
       ..assignment = classType.newInstance([]).code));
 
+    bool isImmediate = _map['IS_IMMEDIATE'] == '\$TRUE';
+    if (!isImmediate) {
+      assert(
+          !_map.containsKey('IS_IMMEDIATE'),
+          "We only allow one value for "
+          "IS_IMMEDIATE, and that is \$TRUE. Instead, "
+          "${_map['IS_IMMEDIATE']} was provided in $name.");
+    }
+    classBuilder.methods
+        .add(_createGetter('isImmediate', boolType, isImmediate));
+
     //  TODO add FAILURE_BEGINNING_DESCRIPTION in applyFailure
     //   https://trello.com/c/S1XPDQ7/1-parser-for-writer-s-output#comment-58682ee019b9e7b833655fb7
     yield classBuilder.build();

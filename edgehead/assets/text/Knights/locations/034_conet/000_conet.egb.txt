@@ -77,6 +77,8 @@ FOR_LOCATION: $conet
 
 COMMAND: Kobold >> Attack
 
+IS_IMMEDIATE: $TRUE
+
 COMPLETE_SUCCESS_DESCRIPTION:
 [We] step out of hiding. The kobold stops turning the wheel, briefly surprised. But then he jumps to the side and picks a big black wrench from a brown bag on the floor.
 

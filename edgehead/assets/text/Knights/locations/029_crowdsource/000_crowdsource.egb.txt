@@ -131,6 +131,8 @@ w.actionHasBeenPerformed('crowdsource_listen')
 
 COMMAND: Orcs >> Attack
 
+IS_IMMEDIATE: $TRUE
+
 COMPLETE_SUCCESS_DESCRIPTION:
 [We] step from behind the columns and approach the two orcs.
 

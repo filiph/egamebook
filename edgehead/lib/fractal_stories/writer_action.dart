@@ -34,6 +34,24 @@ abstract class RoamingAction extends Action<Nothing> {
 
   @override
   final bool isImplicit = false;
+
+  /// Some roaming actions can be immediate. This means that they will not
+  /// affect the performer's [Actor.recoveringUntil].
+  ///
+  /// This is useful for things like initiating an attack, where we don't want
+  /// the player to go last just because she is "recovering" from performing
+  /// the "initiate attack" action.
+  bool get isImmediate;
+
+  /// [RoamingAction] overrides this method to accommodate [isImmediate].
+  @override
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing object) {
+    if (isImmediate) {
+      return Duration.zero;
+    }
+
+    return super.getRecoveryDuration(context, object);
+  }
 }
 
 /// This is a simple actions that, once taken, always succeed.
@@ -65,6 +83,9 @@ class SimpleAction extends RoamingAction {
 
   @override
   bool get isAggressive => false;
+
+  @override
+  bool get isImmediate => false;
 
   @override
   bool get rerollable => false;

@@ -55,6 +55,8 @@ COMMAND: Jailer >> Attack
 
 FOR_LOCATION: $smithy
 
+IS_IMMEDIATE: $TRUE
+
 COMPLETE_SUCCESS_DESCRIPTION:
 I drop down next to Sarn. He looks surprised but there is no recognition in his eyes.
 

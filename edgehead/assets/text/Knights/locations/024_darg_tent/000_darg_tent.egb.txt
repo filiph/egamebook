@@ -83,6 +83,8 @@ c.hasHappened(evDargLeftCrowdsource)
 
 COMMAND: Darg >> Attack
 
+IS_IMMEDIATE: $TRUE
+
 COMPLETE_SUCCESS_DESCRIPTION:
 [We] approach Darg's tent. Darg spots me and looks surprised at first, then amused.
 

@@ -49,6 +49,8 @@ FOR_LOCATION: $outlook
 
 COMMAND: Hawkman >> Approach
 
+IS_IMMEDIATE: $TRUE
+
 INK:
 The hawkman gives me a condescending look.
 

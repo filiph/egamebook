@@ -513,12 +513,21 @@ class Performance<T> {
     // Move world time to when the turn happens.
     output.time = turn.time;
 
+    // Mark actor busy after performing their action.
     if (action.isProactive) {
-      // Mark actor busy after performing their action.
-      final recoveringUntil =
-          turn.time.add(action.getRecoveryDuration(context, object));
-      output.updateActorById(
-          turn.actor.id, (b) => b.recoveringUntil = recoveringUntil);
+      final recovery = action.getRecoveryDuration(context, object);
+      // First, check whether the action took any time. Some actions, such
+      // as initiating an attack, are pro-active, but don't take any time.
+      // In order to preserve fighting order, we should not change
+      // the attacker's `recoveringUntil`. Thus, we check if recovery
+      // is in fact more than zero.
+      if (recovery > Duration.zero) {
+        // The action was proactive and did take some time. Update the actor's
+        // [Actor.recoveringUntil].
+        final recoveringUntil = turn.time.add(recovery);
+        output.updateActorById(
+            turn.actor.id, (b) => b.recoveringUntil = recoveringUntil);
+      }
     }
 
     // Perform any [Situation.onAfterAction]s.
