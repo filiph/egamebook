@@ -4,7 +4,8 @@ APPROACH: $maintenance_shaft FROM $elevator_28
 ROOM: $maintenance_shaft
 
 POS: 34, 40
-MAP_NAME: Maintenance Shaft above 28th Floor
+MAP_NAME: Maintenance Shaft
+HINT: A narrow crawlspace above the 28th floor.
 
 FIRST_DESCRIPTION:
 Musty, dark place. Through cracks, I can see rooms under me.

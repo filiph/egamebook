@@ -7,11 +7,11 @@ FLAGS: $IDLE
 
 POS: 35, 42
 
+FIRST_MAP_NAME: Guard Room
+FIRST_HINT: An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.
+
 MAP_NAME: God's Lair
 HINT: A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.
-
-FIRST_MAP_NAME: A guard room
-FIRST_HINT: An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.
 
 
 FIRST_DESCRIPTION: 

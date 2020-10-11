@@ -10,7 +10,8 @@ FLAGS: $IDLE
 
 POS: 37, 70
 
-MAP_NAME: Knights Headquarters
+MAP_NAME: Command Post
+HINT: This is the original center of operations of the Knights of San Francisco. 
 
 FIRST_DESCRIPTION:
 I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.

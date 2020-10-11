@@ -4,7 +4,12 @@ APPROACH: $outlook FROM $top_of_climb
 ROOM: $outlook
 
 POS: 18, 24
+
+FIRST_MAP_NAME: On Top of the Western Shaft
+FIRST_HINT: Something is on top of the shaft. The access to outside is well used, though it's unguarded.
+
 MAP_NAME: Outlook
+HINT: A place for a sentry with excellent eyes.
 
 FIRST_DESCRIPTION:
 A hawkman is looking into the distance, looking bored. He sees me immediately, but doesn't seem to care.

@@ -5,7 +5,12 @@ APPROACH: $reservoir FROM $training_grounds
 ROOM: $reservoir
 
 POS: 25, 48
+
+FIRST_MAP_NAME: Damp Place
+FIRST_HINT: Corridors around this place smell of stale water. A faint splashing can be heard.
+
 MAP_NAME: Reservoir
+HINT: A large, filthy pool in the middle of the building.
 
 FLAGS: $IDLE
 

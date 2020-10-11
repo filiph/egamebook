@@ -11,11 +11,10 @@ ROOM: $goblin_skirmish_patrol
 POS: 15, 97
 
 FIRST_MAP_NAME: Smoke
-FIRST_HINT: The smoke is black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.
+FIRST_HINT: The smoke is as black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.
 
-// This is not needed as of this writing, as we never re-visit. But we might change that in the future.
 MAP_NAME: Wilderness near the Bleeds
-HINT: It's the place where I met the goblin patrol.
+HINT: It's the place where I met the albino goblin.
 
 FIRST_DESCRIPTION:
 There is no path in the direction of the smoke. [We] go through the brush and step over logs and ancient rubble.

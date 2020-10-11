@@ -7,7 +7,10 @@ APPROACH: $top_of_climb FROM $keep_servants
 ROOM: $top_of_climb
 
 POS: 19, 28
-MAP_NAME: Top of the climb
+
+// Using the same text even before the player has visited this place.
+MAP_NAME: Top of a Shaft
+HINT: A dark pit extends hundreds of feet toward the bottom of the Pyramid.
 
 FIRST_DESCRIPTION:
 A huge, dark pit. The bottom is unseen, in complete darkness.

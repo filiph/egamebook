@@ -9,9 +9,12 @@ c.hasHappened(evTookSarnToBleeds)
 ROOM: $conet
 
 POS: 17, 34
-MAP_NAME: Conet
 
-// TODO: First map name should say "quiter area"
+FIRST_MAP_NAME: Some Mechanism
+FIRST_HINT: Somethings is making a quiet chafing sounds similar. Reminds me of millstones.
+
+MAP_NAME: Conet
+HINT: A room filled with a large device.
 
 FIRST_DESCRIPTION:
 A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.

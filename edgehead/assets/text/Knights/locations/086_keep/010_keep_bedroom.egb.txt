@@ -13,7 +13,9 @@ ROOM: $keep_bedroom
 FLAGS: $IDLE
 
 POS: 15, 86
-MAP_NAME: Lord's quarters
+
+MAP_NAME: Lord's Quarters
+HINT: Though derelict, these are still the nicest parts of the Keep.
 
 FIRST_DESCRIPTION:
 Redwood parquetry, the wooden flooring of the rich, creaks underfoot.

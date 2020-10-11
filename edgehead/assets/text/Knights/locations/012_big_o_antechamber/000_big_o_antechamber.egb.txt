@@ -3,7 +3,12 @@ APPROACH: $big_o_antechamber FROM $top_of_climb
 
 // ---
 ROOM: $big_o_antechamber
+
+FIRST_MAP_NAME: A Clean Chamber
+FIRST_HINT: Far apart from most of the commotion, this part of the Pyramid clearly sees much less regular use. The corridors are empty and clean, and they all converge on this one silent room.
+
 MAP_NAME: Antechamber
+HINT: The room with the trap door in the ceiling and the curious lock mechanism.
 
 POS: 26, 20
 

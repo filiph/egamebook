@@ -6,7 +6,9 @@ c.playerHasVisited("pond_lizard_rock")
 ROOM: $pond_lizard_rock
 
 POS: 13, 72
-MAP_NAME: The Lizardman's Rock
+
+MAP_NAME: Lizardman's Rock
+HINT: A concrete platform near the pond that serves as the lizardman's new base.
 
 FIRST_DESCRIPTION:
 [We] circle the pond and climb on a concrete platform that serves as the lizardman's new base. I notice a half-eaten human leg lying on the ground here.

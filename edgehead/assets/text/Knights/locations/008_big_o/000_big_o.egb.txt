@@ -148,11 +148,11 @@ ROOM: $big_o_observatory
 
 POS: 26, 12
 
+FIRST_MAP_NAME: The Very Top
+FIRST_HINT: The staircase is all marble and concrete, an exquisite combination of ancient minimalism and current excess. It leads up to a sun lit space.
+
 MAP_NAME: Observatory
 HINT: At the very top of the Pyramid, a room for the Lich King.
-
-FIRST_MAP_NAME: The very top
-FIRST_HINT: The staircase is all marble and concrete, an exquisite combination of ancient minimalism and current excess. It leads up to a sun lit space.
 
 DESCRIPTION: $NONE
 

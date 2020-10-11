@@ -4,10 +4,13 @@ APPROACH: $cockroach_farm FROM $junction
 ROOM: $cockroach_farm
 
 POS: 29, 52
+
+FIRST_MAP_NAME: Smell of Rot
+FIRST_HINT: The closer I am to this area, the more I can smell rotten food and flesh. No voices, though, and no footsteps.
+
 MAP_NAME: Cockroach Farm
 HINT: The main source of food for the orcs.
-FIRST_MAP_NAME: Smell of rot
-FIRST_HINT: The closer I am to this area, the more I can smell rotten food and flesh. No voices, though, and no footsteps.
+
 
 FIRST_DESCRIPTION:
 I am in a maze of twisty little passages, all alike. All crawling with cockroaches.

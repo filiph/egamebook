@@ -10,7 +10,9 @@ ROOM: $keep_servants
 FLAGS: $IDLE
 
 POS: 19, 89
-MAP_NAME: Servants' quarters
+
+MAP_NAME: Servants' Quarters
+HINT: The cramped rooms where the servants of the Keep's owner once lived and worked.
 
 FIRST_DESCRIPTION:
 Clear signs of goblin activity. But deserted. A curious skull-shaped device in the middle of the room.

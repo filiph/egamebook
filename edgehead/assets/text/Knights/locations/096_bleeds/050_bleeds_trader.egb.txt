@@ -9,7 +9,7 @@ FLAGS: $IDLE
 
 POS: 36, 97
 
-FIRST_MAP_NAME: A building that says "Trader"
+FIRST_MAP_NAME: Trader's Shop
 FIRST_HINT: A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.
 
 MAP_NAME: Trader's Shop

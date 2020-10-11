@@ -4,7 +4,12 @@ APPROACH: $goblin_skirmish_main FROM $goblin_skirmish_patrol
 ROOM: $goblin_skirmish_main
 
 POS: 11, 97
-MAP_NAME: The Goblin Camp
+
+FIRST_MAP_NAME: Closer to the Smoke Stack
+FIRST_HINT: Not too far to the source of the smoke now.
+
+MAP_NAME: Goblin Camp
+HINT: A shared place of rest for the goblins who travel through here.
 
 WHERE: near the campfire
 

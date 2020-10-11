@@ -6,7 +6,9 @@ APPROACH: $jungle_entrance FROM $pond
 ROOM: $jungle_entrance
 
 POS: 21, 72
+
 MAP_NAME: Jungle
+HINT: This is where the interior of the Pyramid opens into a large crater, covered in vegetation.
 
 FIRST_DESCRIPTION:
 Corridors full of vegetation. Path through that, like a path in a forest, but indoors.

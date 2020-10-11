@@ -6,7 +6,9 @@ ROOM: $slopes
 FLAGS: $IDLE
 
 POS: 42, 78
+
 MAP_NAME: Slopes
+HINT: The farmland on the outer wall of the Pyramid.
 
 FIRST_DESCRIPTION:
 The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.

@@ -5,10 +5,15 @@ APPROACH: $training_grounds FROM $battlefield
 ROOM: $training_grounds
 
 POS: 21, 54
+
+FIRST_MAP_NAME: Grunts of Strain
+FIRST_HINT: Loud grunts and clashes of steel. Orc laughter.
+
 MAP_NAME: Training Grounds
+HINT: A small army of orcs, goblins and kobolds, all training for war.
 
 FIRST_DESCRIPTION:
-An army of orcs, goblins and kobolds, all training for war.
+A small army of orcs, goblins and kobolds, all training for war.
 
 DESCRIPTION: $NONE
 

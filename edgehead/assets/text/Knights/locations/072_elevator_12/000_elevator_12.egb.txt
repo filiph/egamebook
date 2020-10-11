@@ -10,10 +10,14 @@ ROOM: $elevator_12
 FLAGS: $IDLE
 
 POS: 32, 72
-MAP_NAME: Elevator Shaft Entrance on 12th Floor
 
-DESCRIPTION: 
-A rare access to the ancient elevator shaft.
+MAP_NAME: Elevator Shaft Entrance on the 12th Floor
+HINT: A rare access to the ancient elevator shaft.
+
+FIRST_DESCRIPTION: 
+Darkness shrouds most of the vertical shaft above, except for a single bright slit many floors above. Down here, only a narrow passage connects the elevator shaft with the corridors surrounding it.
+
+DESCRIPTION: $NONE
 
 
 NOTES:

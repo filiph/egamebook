@@ -15,10 +15,12 @@ c.hasHappened(evTookSarnToBleeds)
 ROOM: $junction
 
 POS: 27, 45
-MAP_NAME: Hub on 26th floor
-HINT: An area of increased foot traffic in the heart of the orcs’ outpost.
-FIRST_MAP_NAME: Increased foot traffic
+
+FIRST_MAP_NAME: Increased Foot Traffic
 FIRST_HINT: In this direction, footsteps and orc voices are more frequent. But the area is also dark and full of debris. It won’t be hard to hide.
+
+MAP_NAME: Traffic Hub on 26th Floor
+HINT: An area of increased foot traffic in the heart of the orcs’ outpost.
 
 FIRST_DESCRIPTION:
 This place is traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. [We] have no trouble staying unseen.

@@ -5,9 +5,15 @@ APPROACH: $smithy FROM $conet
 ROOM: $smithy
 
 POS: 24, 40
+
+FIRST_MAP_NAME: Sounds of an Anvil
+FIRST_HINT: A regular metallic beat and a smell of coal dust and hot steel.
+
 MAP_NAME: Smithy
+HINT: The involuntary workplace of my brother Sarn under the orc rule.
 
 FIRST_DESCRIPTION:
+// TODO: describe crawling through a high ventilation shaft
 My brother, Sarn, working for the orcs, forging weapons. He seems not fully aware of his surroundings.
 
 [[CODE]]

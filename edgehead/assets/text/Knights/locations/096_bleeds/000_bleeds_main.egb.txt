@@ -17,7 +17,7 @@ FLAGS: $IDLE
 
 POS: 37, 98
 
-FIRST_MAP_NAME: Some buildings
+FIRST_MAP_NAME: Some Buildings
 FIRST_HINT: There seems to be a village or at least a homestead next to the Pyramid.
 
 MAP_NAME: The Bleeds

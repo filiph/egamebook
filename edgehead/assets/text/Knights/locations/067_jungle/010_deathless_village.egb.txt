@@ -5,7 +5,12 @@ APPROACH: $deathless_village FROM $dragon_egg_room
 ROOM: $deathless_village
 
 POS: 18, 68
+
+FIRST_MAP_NAME: Village in the Jungle
+FIRST_HINT: I can see some buildings through the canopy of leaves. The buildings are placed on a ledge overlooking the crater.
+
 MAP_NAME: Village of the Deathless
+HINT: A village of cultists positioned on a ledge overlooking the jungle.
 
 FIRST_DESCRIPTION:
 On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.

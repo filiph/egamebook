@@ -5,7 +5,9 @@ APPROACH: $pond FROM $pond_lizard_rock
 ROOM: $pond
 
 POS: 14, 74
+
 MAP_NAME: Pond
+HINT: A small body of water at the bottom of the crater.
 
 FIRST_DESCRIPTION:
 [We] follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.

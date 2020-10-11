@@ -7,7 +7,12 @@ APPROACH: $barracks FROM $darg_tent
 ROOM: $barracks
 
 POS: 34, 31
+
+FIRST_MAP_NAME: Large Quiet Area
+FIRST_HINT: Sounds of orcs snoring.
+
 MAP_NAME: Barracks
+HINT: A large room taking up two floors with bunk beds and a dining area.
 
 FIRST_DESCRIPTION:
 A large room taking up two floors. Bunk beds, and a dining area. [We] stay hidden.

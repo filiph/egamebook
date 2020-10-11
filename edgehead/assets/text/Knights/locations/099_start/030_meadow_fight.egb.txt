@@ -8,7 +8,7 @@ ROOM: $meadow_fight
 
 POS: 49, 99
 
-MAP_NAME: Forest clearing
+MAP_NAME: Forest Clearing
 HINT: The clearing in the forest of San Francisco where Tamara and I were ambushed.
 
 DESCRIPTION: $NONE

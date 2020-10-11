@@ -4,7 +4,13 @@ APPROACH: $darg_tent FROM $barracks
 ROOM: $darg_tent
 
 POS: 33, 24
-MAP_NAME: Darg's tent
+
+FIRST_MAP_NAME: On Top of the Eastern Shaft
+FIRST_HINT: There is access to the outside of the Pyramid here. The walls close to the ancient door are painted red and decorated with human teeth and other signs of orc power.
+
+MAP_NAME: Orc Leader's Tent
+HINT: A tent placed on top of the Eastern shaft, overlooking the bay.
+
 
 FIRST_DESCRIPTION:
 Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.
