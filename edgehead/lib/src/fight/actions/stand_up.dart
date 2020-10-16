@@ -34,7 +34,8 @@ class StandUp extends Action<Nothing> {
   final Resource rerollResource = Resource.stamina;
 
   @override
-  List<String> get commandPathTemplate => const ["self", "stand up"];
+  List<String> get commandPathTemplate =>
+      const ["self", "get up from the ground"];
 
   @override
   String get name => className;
