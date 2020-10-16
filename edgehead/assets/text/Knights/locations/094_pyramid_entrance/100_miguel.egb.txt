@@ -142,8 +142,16 @@ c.knows(LadyHopeFacts.ladyInKeep)
 !c.hasHappened(evKilledHope)
 
 INK:
-"Lady Hope."
+"Lady Hope. Our local undead. Just stands there with that katana at the ready."
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);
 [[ENDCODE]]
+
+* "Is she dangerous?"
+
+  "Well, she sure _looks_ dangerous, doesn't she. But that place she's standing in is the dining room of the old Keep. Nobody goes near that place."
+
+* "What katana?"
+
+  He smiles. "Didn't you notice? She wields the sword like she's always ready to slash someone in half. Beautiful weapon."

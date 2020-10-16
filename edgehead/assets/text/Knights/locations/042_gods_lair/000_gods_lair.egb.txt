@@ -28,7 +28,7 @@ FIGHT_SITUATION:
 generateGodsLairFight
 
 AFTER_MONSTERS_CLEARED:
-A grumbling from behind the gate. On the gate, a little star decoration.
+The fight is over. A grumbling from behind the gate. On the gate, a little star decoration.
 
 [[CODE]]
 c.markHappened(evKarlGuardsKilled);

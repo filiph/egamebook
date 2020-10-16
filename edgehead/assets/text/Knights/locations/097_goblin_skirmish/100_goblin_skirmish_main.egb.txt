@@ -25,7 +25,7 @@ generateGoblinCampFight
 DESCRIPTION: $NONE
 
 AFTER_MONSTERS_CLEARED:
-The fight is done, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there's a barbecued squirrel on a stick next to the fire.) 
+The fight is over, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there's a barbecued squirrel on a stick next to the fire.) 
 
 This must be a shared place of rest for the goblins who travel through here. But on what journey?
 

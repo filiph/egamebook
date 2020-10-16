@@ -12,6 +12,7 @@ final _quake2 = Rule(
     2,
     true,
     (ApplicabilityContext c) =>
+        !c.hasHappened(evQuake2) &&
         !c.hasHappened(evConetDestroyed) &&
         !c.inRoomParent('conet') &&
         _quake2BaseRequirements(c),
@@ -22,6 +23,7 @@ final _quake2FromAbove = Rule(
     2,
     true,
     (ApplicabilityContext c) =>
+        !c.hasHappened(evQuake2) &&
         c.hasHappened(evConetDestroyed) &&
         !c.inRoomParent('big_o_observatory') &&
         _quake2BaseRequirements(c),

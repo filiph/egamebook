@@ -173,7 +173,15 @@ c.knows(DragonEggFacts.deathlessHaveIt)
 INK:
 The child named Argo tries to conceal her pride. She says: "We do have the holy artifact you speak of. The Dragon Egg. We know many want it, for unholy reasons, so we keep it hidden."
 
+* "Good."
+
+  Argo nods.
+
+* "It's a weapon, though. Don't you want to use it?"
+
+  "Not unless it's absolutely necessary. And not unless we find a warrior worthy of such a terrible power."
+
 
 NOTES:
 
-Argo - because "cargo cult"
+Argo - because "(c)argo cult"

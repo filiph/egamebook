@@ -23,6 +23,6 @@ MAP_NAME: Traffic Hub on 26th Floor
 HINT: An area of increased foot traffic in the heart of the orcs’ outpost.
 
 FIRST_DESCRIPTION:
-This place is traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. [We] have no trouble staying unseen.
+This place is a traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. [We] have no trouble staying unseen.
 
 DESCRIPTION: $NONE

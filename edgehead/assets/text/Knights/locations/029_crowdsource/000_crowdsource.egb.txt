@@ -1,5 +1,6 @@
 APPROACH: $crowdsource FROM $big_o_antechamber
 APPROACH: $crowdsource FROM $barracks
+APPROACH: $crowdsource FROM $conet
 
 // ---
 ROOM: $crowdsource
@@ -73,7 +74,7 @@ INK:
 // The shaman is trying to persuade Darg to open the antechamber. She hates the waiting.
 "Only you have the power," the shaman is saying to Darg. "Use it! Talk to him!"
 
-Darg takes a step back from her and shakes his head. "The Maker will call me. Before that, my hands are tied. A mouse does not ask to visit the cat."
+Darg takes a step back from her and shakes his head. He looks upward. "The Maker will call me. Before that, my hands are tied. A mouse does not ask to visit the cat."
 
 The shaman sighs and takes a step toward Darg. Her hushed voice reverberates through the large space. "The Maker gave you the Null. Why else would he give it to you other than for you to use it?"
 

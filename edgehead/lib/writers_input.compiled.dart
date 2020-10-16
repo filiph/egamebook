@@ -1954,6 +1954,8 @@ final Approach crowdsourceFromBarracks =
     Approach('barracks', 'crowdsource', '', null);
 final Approach crowdsourceFromBigOAntechamber =
     Approach('big_o_antechamber', 'crowdsource', '', null);
+final Approach crowdsourceFromConet =
+    Approach('conet', 'crowdsource', '', null);
 final crowdsourceListenInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -1973,7 +1975,7 @@ final crowdsourceListenInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Darg takes a step back from her and shakes his head. "The Maker will call me. Before that, my hands are tied. A mouse does not ask to visit the cat."\n',
+        'Darg takes a step back from her and shakes his head. He looks upward. "The Maker will call me. Before that, my hands are tied. A mouse does not ask to visit the cat."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -2576,6 +2578,8 @@ final Room barracks = Room('barracks', (ActionContext c) {
     firstMapName: 'Large Quiet Area',
     hint: 'A large room taking up two floors with bunk beds and a dining area.',
     firstHint: 'Sounds of orcs snoring.');
+final Approach conetFromCrowdsource =
+    Approach('crowdsource', 'conet', '', null);
 final Approach conetFromSmithy = Approach('smithy', 'conet', '', null,
     isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
@@ -3003,7 +3007,7 @@ class KarlListenToGuards extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The two are laughing.\n\n"He ate him whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The sucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n',
+        'The two are laughing.\n\n"He ate him whole, didn\'t he?" the orc captain says. "I\'ve never seen Karl do that."\n\n"We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."\n\n"Get a horse carcass up here and we\'ll do it. The sucker is sleeping like a baby, and I think it\'s because of the size of the food."\n\nThe berserker nods. "Even better, it looks like we don\'t need to worry about chopping the carcasses from now on."\n\n"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn\'t he."\n\nIf I understand correctly, there\'s a corpse of a hawkman lying in some nearby creature\'s belly. That creature must be gigantic, whatever it is.\n',
         isRaw: true);
     return '${a.name} successfully performs KarlListenToGuards';
   }
@@ -4059,7 +4063,7 @@ final Room godsLair = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
+          'The fight is over. A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
           isRaw: true);
       c.markHappened(evKarlGuardsKilled);
     });
@@ -4118,7 +4122,7 @@ final Room godsLairAfterNecromancy = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
+          'The fight is over. A grumbling from behind the gate. On the gate, a little star decoration.\n\n',
           isRaw: true);
       c.markHappened(evKarlGuardsKilled);
     });
@@ -4146,7 +4150,7 @@ final Room junction = Room('junction', (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'This place is traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. ${weSubstitutionCapitalized} have no trouble staying unseen.\n',
+      'This place is a traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. ${weSubstitutionCapitalized} have no trouble staying unseen.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -4189,7 +4193,7 @@ final reservoirFollowFootprintsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The footprints continue downward. There is no wandering - the creature must know these parts well.\n',
+        'The footprints continue downward. There is no wandering — the creature must know these parts well.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -4872,7 +4876,7 @@ final Approach battlefieldFromKnightsHqMain =
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      '${weSubstitutionCapitalized} climb up the stairs to the sixteenth floor.\n',
+      '${weSubstitutionCapitalized} climb up the stairs from the Command Post to the sixteenth floor.\n',
       isRaw: true);
 });
 final Approach battlefieldFromTrainingGrounds =
@@ -5402,7 +5406,7 @@ final talkToOracleGreetingsInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '“You came to the right person, then.” She steps back, leaving a feint scent of coffee behind. “Welcome!”\n',
+              '“You came to the right person, then.” She steps back, leaving a feint scent of coffee behind. “Welcome.”\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -5702,7 +5706,7 @@ class AskOracleAboutKeepGate extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Oracle describes a convoluted series of steps to open the gate.\n\nTODO\n\n',
+        'Oracle describes a convoluted series of steps to open the gate. I ask her to repeat some of the steps several times to make sure I remember.\n\n',
         isRaw: true);
     c.learn(KeepGateFacts.keepGateUnlock);
 
@@ -6798,6 +6802,12 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
       especially: [lairOfGodStarId, hawkmanJacketId],
       how: "{approvingly|with respect}");
 
+  if (c.hasItem(lairOfGodStarId)) {
+    s.add(
+        """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+        isRaw: true);
+  }
+
   c.increaseSanityFromPeople();
 }, null, null,
     positionX: 18,
@@ -7485,6 +7495,37 @@ final argoAskDragonEggInk = InkAst([
         'The child named Argo tries to conceal her pride. She says: "We do have the holy artifact you speak of. The Dragon Egg. We know many want it, for unholy reasons, so we keep it hidden."\n',
         isRaw: true);
   }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Good." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Argo nods.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command:
+          r""" "It's a weapon, though. Don't you want to use it?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Not unless it\'s absolutely necessary. And not unless we find a warrior worthy of such a terrible power."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
 ]);
 final argoAskQuake1Ink = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -7930,6 +7971,12 @@ final Room deathlessVillageOrcOffensive = Room(
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
+
       c.increaseSanityFromPeople();
     },
     null,
@@ -7996,6 +8043,12 @@ final Room deathlessVillageQuake2 = Room(
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
+
       c.increaseSanityFromPeople();
     },
     null,
@@ -8060,6 +8113,12 @@ final Room deathlessVillageQuake3 = Room(
           what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
+
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
 
       c.increaseSanityFromPeople();
     },
@@ -12504,7 +12563,9 @@ final talkToMiguelAboutLadyInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('"Lady Hope."\n', isRaw: true);
+    s.add(
+        '"Lady Hope. Our local undead. Just stands there with that katana at the ready."\n',
+        isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -12514,6 +12575,38 @@ final talkToMiguelAboutLadyInk = InkAst([
     final Storyline s = c.outputStoryline;
     c.learn(LadyHopeFacts.ladyHopeName);
   }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Is she dangerous?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Well, she sure _looks_ dangerous, doesn\'t she. But that place she\'s standing in is the dining room of the old Keep. Nobody goes near that place."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What katana?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'He smiles. "Didn\'t you notice? She wields the sword like she\'s always ready to slash someone in half. Beautiful weapon."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
 ]);
 final talkToMiguelGreetingsInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -15230,6 +15323,27 @@ final sarnTalkInBleedsInk = InkAst([
         'Did I travel all this way, did I go through all this, for nothing? ${ifBlock_2bc5a45df}${ifBlock_473256f7d}${ifBlock_79379cb7c}\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I have to finish this. My brother left to seek his adventure, leaving my father and I in poverty and misery. I don\'t owe him nothing. But the people living here, under the tyranny of whatever it is at the top, deserve my help.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I will show my brother what it is to be a decent human being.\n',
+        isRaw: true);
+  }),
 ]);
 
 class SarnExamineHisHammer extends RoamingAction {
@@ -16418,7 +16532,7 @@ final Room goblinSkirmishMain = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The fight is done, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there\'s a barbecued squirrel on a stick next to the fire.) \n\nThis must be a shared place of rest for the goblins who travel through here. But on what journey?\n\nThere\'s a bag on the ground, and peeking out of it, a curious device.\n\n',
+          'The fight is over, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there\'s a barbecued squirrel on a stick next to the fire.) \n\nThis must be a shared place of rest for the goblins who travel through here. But on what journey?\n\nThere\'s a bag on the ground, and peeking out of it, a curious device.\n\n',
           isRaw: true);
       c.markHappened(evGoblinCampCleared);
     },
@@ -17690,10 +17804,12 @@ final allApproaches = <Approach>[
   topOfClimbFromOutlook,
   crowdsourceFromBarracks,
   crowdsourceFromBigOAntechamber,
+  crowdsourceFromConet,
   barracksFromCrowdsource,
   barracksFromDargTent,
   barracksFromJunction,
   barracksFromTopOfClimb,
+  conetFromCrowdsource,
   conetFromSmithy,
   maintenanceShaftFromElevator28,
   smithyFromConet,

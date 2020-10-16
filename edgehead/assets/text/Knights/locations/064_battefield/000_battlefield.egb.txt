@@ -1,5 +1,5 @@
 APPROACH: $battlefield FROM $knights_hq_main
-DESCRIPTION: [We] climb up the stairs to the sixteenth floor.
+DESCRIPTION: [We] climb up the stairs from the Command Post to the sixteenth floor.
 
 APPROACH: $battlefield FROM $training_grounds
 

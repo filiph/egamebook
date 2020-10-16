@@ -1,3 +1,4 @@
+APPROACH: $conet FROM $crowdsource
 APPROACH: $conet FROM $smithy
 PREREQUISITES:
 // Between the two events, there is no way from the $smithy.

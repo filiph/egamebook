@@ -21,7 +21,7 @@ INK:
 
 * “Yes.”
 
-  “You came to the right person, then.” She steps back, leaving a feint scent of coffee behind. “Welcome!”
+  “You came to the right person, then.” She steps back, leaving a feint scent of coffee behind. “Welcome.”
 
 
   Something moves behind me. “Welcome!” I wheel around and see a big dark bird perched on top of some books. “Welcome!” it says again.
@@ -110,12 +110,10 @@ PREREQUISITES:
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
 &&
 c.knows(KeepGateFacts.oracleWorkedInKeep)
-// TODO: add "kbOracleWorkedInKeep"
 
 COMPLETE_SUCCESS_DESCRIPTION:
-Oracle describes a convoluted series of steps to open the gate.
-
-TODO
+Oracle describes a convoluted series of steps to open the gate. I ask her to repeat some of the steps several times to make sure I remember.
+// TODO: add a detail, something like "find the 8th decorative column from the right"
 
 [[CODE]]
 c.learn(KeepGateFacts.keepGateUnlock);

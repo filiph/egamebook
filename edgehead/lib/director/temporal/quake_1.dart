@@ -4,7 +4,8 @@ part of edgehead_director;
 ///
 ///   * just a forewarning
 final _quake1 = Rule(_id++, 2, true, (ApplicabilityContext c) {
-  return !c.hasHappened(evConetDestroyed) &&
+  return !c.hasHappened(evQuake1) &&
+      !c.hasHappened(evConetDestroyed) &&
       !c.inRoomParent('conet') &&
       !c.inPopulatedRoom &&
       c.playerHasVisited('bleeds_main') &&
@@ -13,7 +14,8 @@ final _quake1 = Rule(_id++, 2, true, (ApplicabilityContext c) {
 }, _quake1Apply);
 
 final _quake1FromAbove = Rule(_id++, 2, true, (ApplicabilityContext c) {
-  return c.hasHappened(evConetDestroyed) &&
+  return !c.hasHappened(evQuake1) &&
+      c.hasHappened(evConetDestroyed) &&
       !c.inRoomParent('big_o_observatory') &&
       !c.inPopulatedRoom &&
       c.playerHasVisited('bleeds_main') &&
