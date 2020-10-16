@@ -67,7 +67,14 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
         object: enemy,
         positive: true);
     enemy.report(s, "<subject's> eyes go wide with terror", negative: true);
-    w.updateActorById(enemy.id, (b) => b..isConfused = true);
+    w.updateActorById(
+        enemy.id,
+        (b) => b
+          ..isConfused = true
+          // Make the confused actor act immediately.
+          // We need to go a long time into the past so that if one of the NPCs
+          // (like Leroy) hasn't acted yet, they still go _after_ this actor.
+          ..recoveringUntil = w.time.subtract(const Duration(hours: 10)));
     return "${a.name} confuses ${enemy.name}";
   }
 
