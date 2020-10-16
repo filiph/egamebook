@@ -128,6 +128,18 @@ final finalFightInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_1d986f16d = c.hasHappened(evConetDestroyed)
+        ? '''A device similar to the one in Conet is installed in one corner of the room.'''
+        : '''''';
+    s.add('${ifBlock_1d986f16d}\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
     s.add('"You are a fool."\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -668,7 +680,7 @@ final Room bigOObservatory = Room(
     generateBigOFight,
     null,
     positionX: 26,
-    positionY: 12,
+    positionY: 16,
     mapName: 'Observatory',
     firstMapName: 'The Very Top',
     hint: 'At the very top of the Pyramid, a room for the Lich King.',

@@ -148,7 +148,7 @@ Big O still walks in a wide circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[EN
 // ---
 ROOM: $big_o_observatory
 
-POS: 26, 12
+POS: 26, 16
 
 FIRST_MAP_NAME: The Very Top
 FIRST_HINT: The staircase is all marble and concrete, an exquisite combination of ancient minimalism and current excess. It leads up to a sun lit space.

@@ -32,8 +32,8 @@ final _quake2FromAbove = Rule(
 void _quake2Apply(ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.addParagraph();
-  s.add('Suddenly, a quake. Outside the pyramid, a chilling human scream.',
-      isRaw: true);
+
+  s.add('Out of nowhere, the quake starts again.', isRaw: true);
 
   if (c.hasHappened(evConetDestroyed)) {
     s.add(
@@ -41,6 +41,16 @@ void _quake2Apply(ActionContext c) {
         "but apparently not.",
         isRaw: true);
   }
+
+  s.add(
+      'The same loud roar, the same '
+      'bizarre images. Giants on the march. '
+      'As I try to keep my footing, I hear a chilling human scream. It comes '
+      'from outside the Pyramid, and it ends abruptly with a thud. '
+      'Someone fell a long, long way to the ground. '
+      'By the time I realize this, the quake is finished. '
+      'Everything is still again.',
+      isRaw: true);
 
   if (c.world.getActorById(leroyId).isAnimatedAndActive) {
     // Move Leroy to Knights HQ.

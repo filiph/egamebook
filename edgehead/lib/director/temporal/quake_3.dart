@@ -30,16 +30,31 @@ final _quake3FromAbove = Rule(
 void _quake3Apply(ActionContext c) {
   final s = c.outputStoryline;
   s.addParagraph();
-  s.add('Suddenly, a quake.', isRaw: true);
 
-  if (c.hasHappened(evConetDestroyed)) {
-    // TODO: check if we've said this in quake2 (evConetDestroyed came before
-    //       evQuake2), in which case skip this.
+  s.add('Suddenly, a third quake violently shakes with everything around me. ',
+      isRaw: true);
+  if (c.hasHappened(evConetDestroyed) &&
+      // Check that we haven't said this in quake2 already.
+      c.world.customHistory
+          .query(name: evConetDestroyed)
+          .latest
+          .time
+          .isAfter(c.world.customHistory.query(name: evQuake2).latest.time)) {
     s.add(
         "I thought I've destroyed the source of the quakes, "
         "but apparently not.",
         isRaw: true);
   }
+  s.add(
+      'I cover my ears but the roar persists. '
+      'The see the faces of the giants now, hungry for war.',
+      isRaw: true);
+  s.addParagraph();
+  s.add(
+      'After a few heartbeats, the quake fades out. '
+      'I realize I have been holding my breath the whole time, '
+      'and I breathe out.',
+      isRaw: true);
 
   final miguel = c.world.getActorById(miguelId);
   if (miguel.npc.followingActorId != c.player.id) {
