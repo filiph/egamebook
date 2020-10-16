@@ -21,6 +21,8 @@ INK:
 
 My eyes are now accustomed to the light. The space is open, with only a few pieces of furniture here and there. An exquisite chair, two workshop tables, a satin divan, a heavy white chest. All the windowpanes I can see are unbroken and pristine, though they vary slightly in color and texture. The air smells of the ocean. Whatever Big O is, he is rich. Richer than most kings.
 
+[[IF c.hasHappened(evConetDestroyed)]]A device similar to the one in Conet is installed in one corner of the room.[[ENDIF]]
+
 "You are a fool."
 
 The voice comes from above. I look up and see that there is a second floor to this space, connected to the first one with a narrow staircase without a rail.
