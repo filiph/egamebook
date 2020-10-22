@@ -66,7 +66,8 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
         "into <object's> mind",
         object: enemy,
         positive: true);
-    enemy.report(s, "<subject's> eyes go wide with terror", negative: true);
+    enemy.report(s, "<subject's> eyes go wide with terror",
+        negative: true, endSentence: true);
     w.updateActorById(
         enemy.id,
         (b) => b
@@ -85,7 +86,7 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return const ReasonedSuccessChance<Object>(0.8);
+    return const ReasonedSuccessChance<Object>(0.45);
   }
 
   @override
