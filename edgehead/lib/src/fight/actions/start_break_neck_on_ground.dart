@@ -45,7 +45,7 @@ void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
       "We assume a humanoid physique for this, "
       "especially hands. We need hands to break a neck.");
 
-  if (a.currentWeapon == null) {
+  if (a.currentWeapon != null) {
     a.report(s, '<subject> drop<s> <object>', object: a.currentWeapon);
     dropCurrentWeapon(w, a.id, forced: false);
   }
