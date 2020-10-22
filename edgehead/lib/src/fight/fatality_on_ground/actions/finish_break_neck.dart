@@ -81,5 +81,5 @@ class FinishBreakNeck extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      a.isBarehanded;
+      a.currentWeapon == null && a.anatomy.isHumanoid;
 }
