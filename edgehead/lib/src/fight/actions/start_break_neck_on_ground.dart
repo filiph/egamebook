@@ -40,7 +40,12 @@ EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
 
 void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation mainSituation) {
-  if (!a.isBarehanded) {
+  assert(
+      a.anatomy.isHumanoid,
+      "We assume a humanoid physique for this, "
+      "especially hands. We need hands to break a neck.");
+
+  if (a.currentWeapon == null) {
     a.report(s, '<subject> drop<s> <object>', object: a.currentWeapon);
     dropCurrentWeapon(w, a.id, forced: false);
   }
