@@ -10,6 +10,9 @@ FLAGS: $IDLE
 
 POS: 37, 70
 
+FIRST_MAP_NAME: Command Post
+FIRST_HINT: This is the original center of operations of the Knights of San Francisco. 
+
 MAP_NAME: Command Post
 HINT: This is the original center of operations of the Knights of San Francisco. 
 

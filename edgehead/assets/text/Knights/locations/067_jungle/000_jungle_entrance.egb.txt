@@ -7,6 +7,9 @@ ROOM: $jungle_entrance
 
 POS: 21, 72
 
+FIRST_MAP_NAME: Jungle
+FIRST_HINT: This is where the interior of the Pyramid opens into a large crater, covered in vegetation.
+
 MAP_NAME: Jungle
 HINT: This is where the interior of the Pyramid opens into a large crater, covered in vegetation.
 

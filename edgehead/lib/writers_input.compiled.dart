@@ -6666,7 +6666,10 @@ final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
     positionX: 21,
     positionY: 72,
     mapName: 'Jungle',
+    firstMapName: 'Jungle',
     hint:
+        'This is where the interior of the Pyramid opens into a large crater, covered in vegetation.',
+    firstHint:
         'This is where the interior of the Pyramid opens into a large crater, covered in vegetation.');
 final Room jungleEntranceMuddyFootprints = Room(
     'jungle_entrance_muddy_footprints',
@@ -6708,7 +6711,10 @@ final Room jungleEntranceMuddyFootprints = Room(
     positionX: 21,
     positionY: 72,
     mapName: 'Jungle',
+    firstMapName: 'Jungle',
     hint:
+        'This is where the interior of the Pyramid opens into a large crater, covered in vegetation.',
+    firstHint:
         'This is where the interior of the Pyramid opens into a large crater, covered in vegetation.');
 final Approach deathlessVillageFromDragonEggRoom =
     Approach('dragon_egg_room', 'deathless_village', '', null);
@@ -8195,7 +8201,10 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
     positionX: 37,
     positionY: 70,
     mapName: 'Command Post',
+    firstMapName: 'Command Post',
     hint:
+        'This is the original center of operations of the Knights of San Francisco.',
+    firstHint:
         'This is the original center of operations of the Knights of San Francisco.');
 final talkToMiguelAboutDesertingInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -8420,7 +8429,10 @@ final Room knightsHqCaravanDeparture = Room(
     positionX: 37,
     positionY: 70,
     mapName: 'Command Post',
+    firstMapName: 'Command Post',
     hint:
+        'This is the original center of operations of the Knights of San Francisco.',
+    firstHint:
         'This is the original center of operations of the Knights of San Francisco.');
 final Room knightsHqOrcOffensive = Room(
     'knights_hq_orc_offensive',
@@ -8464,7 +8476,10 @@ final Room knightsHqOrcOffensive = Room(
     positionX: 37,
     positionY: 70,
     mapName: 'Command Post',
+    firstMapName: 'Command Post',
     hint:
+        'This is the original center of operations of the Knights of San Francisco.',
+    firstHint:
         'This is the original center of operations of the Knights of San Francisco.');
 final Room knightsHqQuake2 = Room(
     'knights_hq_quake2',
@@ -8509,7 +8524,10 @@ final Room knightsHqQuake2 = Room(
     positionX: 37,
     positionY: 70,
     mapName: 'Command Post',
+    firstMapName: 'Command Post',
     hint:
+        'This is the original center of operations of the Knights of San Francisco.',
+    firstHint:
         'This is the original center of operations of the Knights of San Francisco.');
 final Room knightsHqQuake3 = Room(
     'knights_hq_quake3',
@@ -8552,7 +8570,10 @@ final Room knightsHqQuake3 = Room(
     positionX: 37,
     positionY: 70,
     mapName: 'Command Post',
+    firstMapName: 'Command Post',
     hint:
+        'This is the original center of operations of the Knights of San Francisco.',
+    firstHint:
         'This is the original center of operations of the Knights of San Francisco.');
 final Approach elevator12FromElevator28 =
     Approach('elevator_28', 'elevator_12', '', (ActionContext c) {
