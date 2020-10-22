@@ -387,24 +387,33 @@ abstract class Actor extends Object
   /// a monster), then we return `10.0` to make monsters target the player
   /// more.
   double hateTowards(Actor other, WorldState w) {
-    if (isConfused && team.isFriendWith(other.team)) {
-      return 1000.0;
+    if (isConfused) {
+      // The actor is confused. They must attack friends.
+      if (team.isFriendWith(other.team)) {
+        return 1000;
+      } else if (!team.isEnemyWith(other.team)) {
+        // Neutral team.
+        return 1;
+      } else {
+        // Enemy team.
+        return 0;
+      }
     }
 
     if (_hasBeenAttackedBy(other, w, 10)) {
-      return 2.0;
+      return 2;
     }
 
     if (team.isEnemyWith(other.team)) {
       if (other.isPlayer) {
         // Extra hatred for player by monsters, to make combat more interesting.
-        return 10.0;
+        return 10;
       } else {
-        return 1.0;
+        return 1;
       }
     }
 
-    return 0.0;
+    return 0;
   }
 
   /// Scores the state of the [world] in the eyes of [this] Actor.
