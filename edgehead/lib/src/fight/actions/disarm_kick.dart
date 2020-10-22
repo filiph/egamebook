@@ -76,7 +76,7 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
       s.add("<owner's> <subject> fl<ies> away",
           subject: enemy.currentWeapon, owner: enemy);
     });
-    dropCurrentWeapon(w, enemy.id);
+    dropCurrentWeapon(w, enemy.id, forced: true);
     return "${a.name} kicks ${enemy.name}'s weapon off";
   }
 

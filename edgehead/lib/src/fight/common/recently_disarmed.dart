@@ -4,7 +4,7 @@ import 'package:edgehead/src/fight/common/recently.dart';
 
 const String disarmedCustomEventName = "was_disarmed";
 
-/// This will return `true` if the actor [a] was recently pushed to the ground.
+/// This will return `true` if the actor [a] was recently disarmed.
 /// That's useful to know so that they can't immediately get the weapon.
 bool recentlyDisarmed(Actor a, WorldState world) {
   final latestDisarmament = world.customHistory

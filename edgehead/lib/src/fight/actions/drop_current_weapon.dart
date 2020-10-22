@@ -54,7 +54,7 @@ class DropCurrentWeapon extends Action<Item> {
 
     a.report(s, "<subject> drop<s> <object>", object: item);
 
-    dropCurrentWeapon(context.outputWorld, a.id);
+    dropCurrentWeapon(context.outputWorld, a.id, forced: false);
 
     return "${a.name} drops ${item.name}";
   }

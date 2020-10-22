@@ -91,7 +91,7 @@ class WrestleWeaponOnGround extends EnemyTargetAction with CombatCommandPath {
     enemy.report(s, "<subject> drop<s> <object>",
         object: enemy.currentWeapon, negative: true);
 
-    final weapon = disarmActor(w, enemy);
+    final weapon = disarmActor(w, enemy, forced: true);
 
     a.report(
         s, "<subject> {take<s>|seize<s>|snatch<es>|take<s> hold of} <object>",

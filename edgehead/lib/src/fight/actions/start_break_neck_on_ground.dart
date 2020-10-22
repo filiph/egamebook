@@ -7,6 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/combat_command_path.dart';
 import 'package:edgehead/src/fight/common/conflict_chance.dart';
+import 'package:edgehead/src/fight/common/drop_weapon.dart';
 import 'package:edgehead/src/fight/common/start_defensible_action.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/fatality_on_ground.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/wrestle_defense/wrestle_defense_situation.dart';
@@ -27,10 +28,7 @@ EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
       commandPathTail: "break neck",
       helpMessage: startBreakNeckOnGroundHelpMessage,
       isApplicable: (a, sim, w, enemy) =>
-          a.isBarehanded &&
-          !a.anatomy.isBlind &&
-          enemy.isOnGround &&
-          enemy.holdsNoWeapon,
+          !a.anatomy.isBlind && enemy.isOnGround && enemy.holdsNoWeapon,
       applyStart: startBreakNeckOnGroundReportStart,
       mainSituationBuilder: createFatalityOnGroundSituation,
       defenseSituationBuilder: createOnGroundWrestleDefenseSituation,
@@ -42,6 +40,11 @@ EnemyTargetAction startBreakNeckOnGroundBuilder() => StartDefensibleAction(
 
 void startBreakNeckOnGroundReportStart(Actor a, Simulation sim,
     WorldStateBuilder w, Storyline s, Actor enemy, Situation mainSituation) {
+  if (!a.isBarehanded) {
+    a.report(s, '<subject> drop<s> <object>', object: a.currentWeapon);
+    dropCurrentWeapon(w, a.id, forced: false);
+  }
+
   if (a.isOnGround) {
     a.report(s, '<subject> crawl<s> over {to|towards} <object>', object: enemy);
   } else {

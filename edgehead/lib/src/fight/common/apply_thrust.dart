@@ -61,7 +61,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
           negative: true, actionThread: thread);
     }
     if (result.willDropCurrentWeapon) {
-      final weapon = dropCurrentWeapon(w, result.victim.id);
+      final weapon = dropCurrentWeapon(w, result.victim.id, forced: true);
       if (result.didSeverBodyPart) {
         weapon.report(s, '<subject> land<s> on the $groundMaterial');
       } else {

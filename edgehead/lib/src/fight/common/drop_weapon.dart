@@ -3,15 +3,18 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_disarmed.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:meta/meta.dart';
 
 /// Removes the current weapon from [actor] _without_ placing it on the floor.
 /// (Use [dropCurrentWeapon] for that.)
 ///
 /// Returns the weapon being removed.
 ///
-/// The actor will go barehanded. A [disarmedCustomEventName] event will
-/// be recorded.
-Item disarmActor(WorldStateBuilder w, Actor actor) {
+/// The actor will go barehanded.
+///
+/// If [forced] is `true`, a [disarmedCustomEventName] event will be recorded.
+/// Otherwise, this is considered a voluntary disarmament.
+Item disarmActor(WorldStateBuilder w, Actor actor, {@required bool forced}) {
   final weapon = actor.currentWeapon;
   w.updateActorById(
       actor.id,
@@ -32,8 +35,12 @@ Item disarmActor(WorldStateBuilder w, Actor actor) {
 /// If this method is called when there is no [FightSituation]
 /// in the current [WorldState.situations] stack, it will throw.
 ///
+/// If [forced] is `true`, a [disarmedCustomEventName] event will be recorded.
+/// Otherwise, this is considered a voluntary dropping.
+///
 /// Calls [disarmActor] under the hood.
-Item dropCurrentWeapon(WorldStateBuilder w, int actorId) {
+Item dropCurrentWeapon(WorldStateBuilder w, int actorId,
+    {@required bool forced}) {
   final situation =
       w.getSituationByName<FightSituation>(FightSituation.className);
   final actor = w.getActorById(actorId);
@@ -43,7 +50,7 @@ Item dropCurrentWeapon(WorldStateBuilder w, int actorId) {
       situation.id,
       situation
           .rebuild((FightSituationBuilder b) => b..droppedItems.add(weapon)));
-  final disarmedWeapon = disarmActor(w, actor);
+  final disarmedWeapon = disarmActor(w, actor, forced: forced);
   assert(disarmedWeapon == weapon);
   return weapon;
 }
