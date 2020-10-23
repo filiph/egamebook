@@ -18,7 +18,6 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
 
