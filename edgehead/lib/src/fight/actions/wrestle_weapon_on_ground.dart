@@ -31,7 +31,8 @@ class WrestleWeaponOnGround extends EnemyTargetAction with CombatCommandPath {
 
   @override
   final String helpMessage = "When enemies are on the ground, I can try to "
-      "wrestle their weapon from them.";
+      "wrestle their weapon from them. "
+      "This is harder if I already have a weapon in hand.";
 
   @override
   CombatCommandType get combatCommandType => CombatCommandType.gear;
@@ -112,7 +113,7 @@ class WrestleWeaponOnGround extends EnemyTargetAction with CombatCommandPath {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return getCombatMoveChance(a, enemy, 0.4, [
+    return getCombatMoveChance(a, enemy, a.holdsSomeWeapon ? 0.2 : 0.4, [
       const Modifier(50, CombatReason.dexterity),
       const Bonus(90, CombatReason.targetHasAllEyesDisabled),
     ]);
@@ -122,7 +123,6 @@ class WrestleWeaponOnGround extends EnemyTargetAction with CombatCommandPath {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, Actor enemy) =>
       a.anatomy.anyWeaponAppendageAvailable &&
-      a.holdsNoWeapon &&
       // Don't allow switching weapons ad infinitum.
       !recentlyDisarmed(a, world) &&
       !a.anatomy.isBlind &&
