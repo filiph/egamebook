@@ -73,7 +73,7 @@ abstract class OffBalanceOpportunitySituation extends Object
             a.isAnimatedAndActive &&
             a.id != culpritId &&
             a.currentRoomName == actor.currentRoomName &&
-            a.hates(actor, world))
+            a.hates(actor, world, sim))
         .toList();
 
     if (enemies.isEmpty) return ActorTurn.never;
@@ -93,6 +93,6 @@ abstract class OffBalanceOpportunitySituation extends Object
   @override
   Iterable<Actor> getActors(Simulation sim, WorldState w) {
     var actor = w.getActorById(actorId);
-    return w.actors.where((a) => a == actor || a.hates(actor, w));
+    return w.actors.where((a) => a == actor || a.hates(actor, w, sim));
   }
 }

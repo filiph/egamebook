@@ -280,7 +280,7 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
       if (other == context.actor || !other.isAnimatedAndActive) return false;
       // Currently, we are only generating enemy-target actions for actors
       // towards which the actor feels hate.
-      return context.actor.hates(other, context.world);
+      return context.actor.hates(other, context.world, context.simulation);
     });
   }
 

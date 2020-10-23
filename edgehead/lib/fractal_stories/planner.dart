@@ -113,7 +113,7 @@ class ActorPlanner {
     _firstActionScores.clear();
 
     var currentActor = _initial.world.getActorById(actorId);
-    var initialScore = currentActor.scoreWorld(_initial.world);
+    var initialScore = currentActor.scoreWorld(_initial.world, simulation);
 
     log.fine(
         () => "Planning for ${currentActor.name}, initialScore=$initialScore");
@@ -187,7 +187,7 @@ class ActorPlanner {
       return;
     }
 
-    ActorScore initialScore = mainActor.scoreWorld(initial.world);
+    ActorScore initialScore = mainActor.scoreWorld(initial.world, simulation);
 
     log.finer(() => "- current: initialScore=$initialScore, "
         "cumProb=${initial.cumulativeProbability} "
@@ -247,7 +247,7 @@ class ActorPlanner {
           continue;
         }
 
-        var score = mainActor.scoreWorld(current.world);
+        var score = mainActor.scoreWorld(current.world, simulation);
 
         var stats = ConsequenceStats(
             score, current.cumulativeProbability, current.order);
@@ -287,8 +287,8 @@ class ActorPlanner {
           () => "- actor: ${currentActor.name} (isMain==$currentActorIsMain)");
       log.finest(() => "- mainActor: ${mainActor?.name}");
 
-      var score =
-          mainActor?.scoreWorld(current.world) ?? Actor.defaultScoreWhenDead;
+      var score = mainActor?.scoreWorld(current.world, simulation) ??
+          Actor.defaultScoreWhenDead;
       var stats =
           ConsequenceStats(score, current.cumulativeProbability, current.order);
 

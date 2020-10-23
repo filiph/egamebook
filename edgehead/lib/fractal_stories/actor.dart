@@ -18,6 +18,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
 
@@ -375,8 +376,8 @@ abstract class Actor extends Object
   /// team mate, they will attack back.
   ///
   /// This method is a simple threshold over [hateTowards].
-  bool hates(Actor other, WorldState w) {
-    return hateTowards(other, w) > 0.0;
+  bool hates(Actor other, WorldState w, Simulation sim) {
+    return hateTowards(other, w, sim) > 0.0;
   }
 
   /// Returns the intensity of hate towards the actor. Very high when
@@ -386,7 +387,7 @@ abstract class Actor extends Object
   /// When [other] is the player _and_ an enemy (which means [this] is
   /// a monster), then we return `10.0` to make monsters target the player
   /// more.
-  double hateTowards(Actor other, WorldState w) {
+  double hateTowards(Actor other, WorldState w, Simulation sim) {
     if (isConfused) {
       // The actor is confused. They must attack friends.
       if (team.isFriendWith(other.team)) {
@@ -395,8 +396,20 @@ abstract class Actor extends Object
         // Neutral team.
         return 1;
       } else {
-        // Enemy team.
-        return 0;
+        // By default, the actor does not attack the enemy team while
+        // confused. But first, we need to check he has enough friends
+        // and neutrals to attack.
+        final friends = w.currentSituation?.getActors(sim, w)?.where(
+                (actor) => actor.id != id && !team.isEnemyWith(actor.team)) ??
+            const [];
+        if (friends.isNotEmpty) {
+          // We still have some friends to attack. Ignore enemies.
+          return 0;
+        } else {
+          // Looks like the only ones to attack at this point are enemies.
+          // Confusion or no, we have to attack _someone_.
+          return 1;
+        }
       }
     }
 
@@ -428,7 +441,7 @@ abstract class Actor extends Object
   /// dimensions. Later, actor combines these functions into a single
   /// dimension using [foldFunctionHandle] (which is used to get
   /// a globally provided [FoldFunction] in [Simulation.foldFunctions]).
-  ActorScore scoreWorld(WorldState world) {
+  ActorScore scoreWorld(WorldState world, Simulation sim) {
     var actor = world.getActorById(id);
     num selfPreservation = 2 * actor.hitpoints;
     selfPreservation += actor.pose.differenceFrom(Pose.onGround);
@@ -464,7 +477,7 @@ abstract class Actor extends Object
       final hitpointScore = a.hitpoints;
       final stanceScore = a.pose.differenceFrom(Pose.onGround);
       final enemyScore = aliveScore + hitpointScore + stanceScore;
-      final weightedScore = enemyScore * hateTowards(a, world);
+      final weightedScore = enemyScore * hateTowards(a, world, sim);
       return sum + weightedScore;
     });
 
