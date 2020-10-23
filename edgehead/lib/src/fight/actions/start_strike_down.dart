@@ -1,5 +1,6 @@
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
+import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
@@ -28,7 +29,9 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
   assert(a.isPlayer);
   // Major bonus when the actor just rolled out of the way.
   final didRecentlyRoll = recentlyRolledOutOfWay(w, enemy);
-  final base = didRecentlyRoll ? 0.8 : 0.4;
+  final hasShortBlade = (a.currentWeapon?.damageCapability?.length ?? 0) ==
+      WeaponType.dagger.defaultLength;
+  final base = (didRecentlyRoll ? 0.8 : 0.4) - (hasShortBlade ? 0.1 : 0);
 
   return getCombatMoveChance(a, enemy, base, [
     const Modifier(50, CombatReason.dexterity),

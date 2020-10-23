@@ -25,9 +25,9 @@ EnemyTargetAction startThrustDownBuilder() => StartDefensibleAction(
           enemy.isOnGround &&
           !a.isOnGround &&
           !a.anatomy.isBlind &&
-          // For weapons that are as long as a sword or longer.
+          // For weapons that are as long as a dagger or longer.
           (a.currentWeapon?.damageCapability?.length ?? 0) >=
-              WeaponType.sword.defaultLength &&
+              WeaponType.dagger.defaultLength &&
           (a.currentWeapon?.damageCapability?.isThrusting ?? false),
       mainSituationBuilder: (a, sim, w, enemy) =>
           createStrikeThrustDownSituation(w.randomInt(), a, enemy),
