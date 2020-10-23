@@ -33,7 +33,7 @@ class ThrowGrenade extends Action<Nothing> {
   final Resource rerollResource = null;
 
   @override
-  List<String> get commandPathTemplate => ["inventory", "dragon egg", "throw"];
+  List<String> get commandPathTemplate => ["Inventory", "dragon egg", "throw"];
 
   @override
   String get name => className;

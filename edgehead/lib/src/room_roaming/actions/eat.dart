@@ -16,7 +16,7 @@ class Eat extends Action<Item> {
 
   @override
   List<String> get commandPathTemplate =>
-      ['inventory', '<objectNounWithAdjective>', 'eat'];
+      ['Inventory', '<objectNounWithAdjective>', 'eat'];
 
   @override
   String get helpMessage => null;

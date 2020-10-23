@@ -12,7 +12,7 @@ class RaiseDead extends Action<Nothing> {
   static const String className = "RaiseDead";
 
   @override
-  List<String> get commandPathTemplate => ["Skills", "necromancy"];
+  List<String> get commandPathTemplate => ["Skills", "Necromancy"];
 
   @override
   String get helpMessage => "Raising the dead will make them fight for me. "

@@ -1,5 +1,5 @@
 ACTION: $perform_necromancy_elsewhere
-COMMAND: Skills >> necromancy
+COMMAND: Skills >> Necromancy
 
 // Keep this in sync with RaiseDead.helpMessage.
 HINT: Raising the dead will make them fight for me. I do not know in advance which corpse will rise. I cannot do this if I am already followed by an undead. My powers are not strong enough to hold two unliving minds.

@@ -17441,7 +17441,7 @@ class PerformNecromancyElsewhere extends RoamingAction {
       PerformNecromancyElsewhere();
 
   @override
-  List<String> get commandPathTemplate => ['Skills', 'necromancy'];
+  List<String> get commandPathTemplate => ['Skills', 'Necromancy'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
