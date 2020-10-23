@@ -53,7 +53,14 @@ class PutInsectToRest extends Action<String> {
     w.recordCustom(CustomEvent.actorPuttingInsectToRest,
         data: insectName, actor: a);
 
-    final insect = Entity(name: insectName, adjective: 'undead');
+    final insect = Entity(
+      name: insectName,
+      adjective: 'undead',
+      // We need to say that this entity is common, because we could have
+      // two of these reports in the same storyline, and there could be
+      // a clash of names. isCommon says that clashes are okay.
+      isCommon: true,
+    );
 
     a.report(s, "<subject> put<s> a hand on <object>", object: insect);
     insect.report(s, "<subject> collapse<s> to the ground");

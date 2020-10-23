@@ -439,6 +439,7 @@ class Storyline {
           pronoun: (article == articles.last && i % maxPerSentence == 1)
               ? article.pronoun
               : Pronoun.THEY,
+          isCommon: true,
         );
         add(buf.toString(),
             subject: subject ?? articlesEntity,

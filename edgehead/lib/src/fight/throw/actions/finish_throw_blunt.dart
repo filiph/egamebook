@@ -54,8 +54,8 @@ class FinishThrowBlunt extends OtherActorAction {
     final projectile = a.currentWeapon;
     assert(projectile.damageCapability.isBlunt);
 
-    final bodyPart = _createBodyPartEntity(
-        enemy, "{shoulder|{left|right} arm|{left|right} thigh|chest|stomach}");
+    final bodyPart =
+        enemy.anatomy.pickRandomBodyPartFromFront(w.randomInt, false);
     projectile.report(
         s,
         "<subject> {hit<s>|strike<s>} "
@@ -92,12 +92,4 @@ class FinishThrowBlunt extends OtherActorAction {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
       a.currentWeapon.damageCapability.isBlunt;
-
-  Entity _createBodyPartEntity(Actor a, String name) {
-    return Entity(
-        name: Randomly.parseAndPick(name),
-        team: a.team,
-        firstOwnerId: a.id,
-        isCommon: true);
-  }
 }

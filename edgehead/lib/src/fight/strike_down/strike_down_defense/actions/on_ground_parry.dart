@@ -77,7 +77,7 @@ class OnGroundParry extends OtherActorAction {
       // We have to use an entity for "this" here, so that the enemy
       // can be an object in the sentence. If enemy was a subject,
       // we would get reports such as "This leaves she extended."
-      final thisEntity = Entity(name: 'this');
+      final thisEntity = Entity(name: 'this', isCommon: true);
       thisEntity.report(s, "this leaves <object> extended",
           object: enemy, negative: true);
       w.updateActorById(enemy.id, (b) => b.pose = Pose.extended);

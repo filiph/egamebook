@@ -54,8 +54,8 @@ class FinishThrowHarmless extends OtherActorAction {
     assert(projectile.damageCapability.isHarmless);
     final groundMaterial = getGroundMaterial(w);
 
-    final bodyPart = _createBodyPartEntity(
-        enemy, "{shoulder|{left|right} arm|{left|right} thigh|chest|stomach}");
+    final bodyPart =
+        enemy.anatomy.pickRandomBodyPartFromFront(w.randomInt, false);
     projectile.report(
         s,
         "<subject> {hit<s>|land<s> on} "
@@ -82,12 +82,4 @@ class FinishThrowHarmless extends OtherActorAction {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
       a.currentWeapon.damageCapability.isHarmless;
-
-  Entity _createBodyPartEntity(Actor a, String name) {
-    return Entity(
-        name: Randomly.parseAndPick(name),
-        team: a.team,
-        firstOwnerId: a.id,
-        isCommon: true);
-  }
 }
