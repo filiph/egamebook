@@ -114,6 +114,8 @@ enum IdentifierLevel {
 
 /// A set of options for each entity in a given report.
 class ReportIdentifiers {
+  static final _log = Logger('ReportIdentifiers');
+
   final Set<IdentifierLevel> _subjectRange = IdentifierLevel.values.toSet();
 
   final Set<IdentifierLevel> _objectRange = IdentifierLevel.values.toSet()
@@ -268,6 +270,36 @@ class ReportIdentifiers {
   String toString() => "$runtimeType<subject=$_subjectRange, "
       "object=$_objectRange, object2=$_object2Range>";
 
+  IdentifierLevel _ensureSingle(Set<IdentifierLevel> set, String debugLabel) {
+    assert(set.length <= 1, "Too many options for $debugLabel: $set");
+    assert(set.isNotEmpty, "No options for $debugLabel: $set");
+    if (set.length == 1) {
+      return set.single;
+    }
+
+    _log.severe('_ensureSingle failed. "$debugLabel" had this set of '
+        'IdentifierLevels: $set for $this');
+
+    // The following two things shouldn't ever happen (in debug, we throw above,
+    // because by the time this method is called, NLG should have picked
+    // a single identifier level). But for robustness in prod, we need to
+    // fall back to some sane defaults.
+    if (set.isEmpty) {
+      // Noun is the safest choice. (There could be no adjective, but noun
+      // is always present.)
+      return IdentifierLevel.noun;
+    }
+
+    // The set is not empty nor is it of length 1. Too many options.
+    // We pick the least qualified.
+    int j = 0;
+    while (set.length > 1) {
+      set.remove(orderedQualificationLevels[j]);
+      j += 1;
+    }
+    return set.single;
+  }
+
   /// Sometimes, [IdentifierLevel.ownerNoun] and
   /// [IdentifierLevel.ownerAdjectiveNoun] are the only available identifiers
   /// for the entity. In that case, we force the inclusion of an owner
@@ -279,22 +311,5 @@ class ReportIdentifiers {
     return range.every((level) =>
         level == IdentifierLevel.ownerNoun ||
         level == IdentifierLevel.ownerAdjectiveNoun);
-  }
-
-  static IdentifierLevel _ensureSingle(
-      Set<IdentifierLevel> set, String debugLabel) {
-    assert(set.length <= 1, "Too many options for $debugLabel: $set");
-    assert(set.isNotEmpty, "No options for $debugLabel: $set");
-    if (set.length == 1) {
-      return set.single;
-    }
-    // This shouldn't ever happen (in debug, we throw above). But for
-    // robustness, we pick the least qualified.
-    int j = 0;
-    while (set.length > 1) {
-      set.remove(orderedQualificationLevels[j]);
-      j += 1;
-    }
-    return set.single;
   }
 }

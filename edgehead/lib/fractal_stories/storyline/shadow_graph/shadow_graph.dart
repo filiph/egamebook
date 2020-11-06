@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:built_value/built_value.dart' show $jf, $jc;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
+import 'package:logging/logging.dart';
 
 part 'src/identifier.dart';
 part 'src/report_pair.dart';
