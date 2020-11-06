@@ -92,12 +92,23 @@ class TakeApproachAction extends Action<RoomPath> {
       return const {};
     }
 
-    final wasVisited = _alreadyVisited(context, path.destination);
+    // Paths lead to parents only. Find out if we're _actually_ going
+    // to a variant of the room.
+    final destinationVariant =
+        context.simulation.getVariantIfApplicable(path.destination, context);
+
+    // Has the player visited this room at all?
+    final hasVisited = _alreadyVisited(context, destinationVariant);
+    // Has the player visited this particular variant of the room?
+    final hasVisitedVariant =
+        _alreadyVisited(context, destinationVariant, includeVariants: false);
     // Either provide the first or the following hint, or an empty string
     // if both are missing.
     final hint =
-        (wasVisited ? path.destination.hint : path.destination.firstHint) ?? '';
+        (hasVisited ? path.destination.hint : path.destination.firstHint) ?? '';
     return {
+      'hasVisited': hasVisited ? 'true' : 'false',
+      'hasVisitedVariant': hasVisitedVariant ? 'true' : 'false',
       'hint': hint,
     };
   }
@@ -164,9 +175,10 @@ class TakeApproachAction extends Action<RoomPath> {
     return true;
   }
 
-  bool _alreadyVisited(ApplicabilityContext context, Room destination) {
+  bool _alreadyVisited(ApplicabilityContext context, Room destination,
+      {bool includeVariants = true}) {
     return context.world.visitHistory
-        .query(context.actor, destination, includeVariants: true)
+        .query(context.actor, destination, includeVariants: includeVariants)
         .hasHappened;
   }
 
