@@ -102,10 +102,15 @@ class TakeApproachAction extends Action<RoomPath> {
     // Has the player visited this particular variant of the room?
     final hasVisitedVariant =
         _alreadyVisited(context, destinationVariant, includeVariants: false);
+
     // Either provide the first or the following hint, or an empty string
     // if both are missing.
-    final hint =
-        (hasVisited ? path.destination.hint : path.destination.firstHint) ?? '';
+    String hint = path.destination.hint;
+    if (!hasVisited && path.destination.firstHint != null) {
+      hint = path.destination.firstHint;
+    }
+    hint ??= '';
+
     return {
       'hasVisited': hasVisited ? 'true' : 'false',
       'hasVisitedVariant': hasVisitedVariant ? 'true' : 'false',
