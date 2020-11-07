@@ -6,16 +6,16 @@ ROOM: $keep_gate
 
 FLAGS: $IDLE
 
-POS: 20, 86
+POS: 20, 81
 
 FIRST_MAP_NAME: The Keep
-FIRST_HINT: This part of the Pyramid seems to have been carved into an artistocratic residence. The strict simplicity of the ancient building gives way to nortonian redwood panels, doors and floors.
+FIRST_HINT: This part of the Pyramid seems to have been carved into an artistocratic residence. This is the floor where I saw the lady.
 
 MAP_NAME: The Keep's Gate
 HINT: The entrance to the abandoned aristocratic mansion.
 
 FIRST_DESCRIPTION:
-The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. 
+The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood.
 
 This is a lord's house, except it doesn't stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.
 
@@ -28,8 +28,8 @@ COMMAND: gate >> examine
 FOR_LOCATION: $keep_gate
 
 COMPLETE_SUCCESS_DESCRIPTION:
-// TODO: could be destroyed
-TODO: describe gate - a fine piece of carpentry. Obviously expensive to build.
+// TODO: by the time we examine, the gate could have been destroyed
+The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.
 
 // Include some hints that Ada might know about it.
 

@@ -3,7 +3,7 @@ APPROACH: $darg_tent FROM $barracks
 // ---
 ROOM: $darg_tent
 
-POS: 33, 24
+POS: 33, 23
 
 FIRST_MAP_NAME: On Top of the Eastern Shaft
 FIRST_HINT: There is access to the outside of the Pyramid here. The walls close to the ancient door are painted red and decorated with human teeth and other signs of orc power.

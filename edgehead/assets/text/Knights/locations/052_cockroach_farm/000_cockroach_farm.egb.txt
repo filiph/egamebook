@@ -3,7 +3,7 @@ APPROACH: $cockroach_farm FROM $junction
 // ---
 ROOM: $cockroach_farm
 
-POS: 29, 52
+POS: 30, 48
 
 FIRST_MAP_NAME: Smell of Rot
 FIRST_HINT: The closer I am to this area, the more I can smell rotten food and flesh. No voices, though, and no footsteps.

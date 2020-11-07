@@ -4,7 +4,7 @@ APPROACH: $pond FROM $pond_lizard_rock
 // ---
 ROOM: $pond
 
-POS: 14, 74
+POS: 14, 70
 
 MAP_NAME: Pond
 HINT: A small body of water at the bottom of the crater.

@@ -9,7 +9,7 @@ ROOM: $keep_servants
 
 FLAGS: $IDLE
 
-POS: 19, 89
+POS: 19, 84
 
 MAP_NAME: Servants' Quarters
 HINT: The cramped rooms where the servants of the Keep's owner once lived and worked.

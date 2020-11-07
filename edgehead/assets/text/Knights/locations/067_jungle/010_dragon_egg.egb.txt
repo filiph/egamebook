@@ -5,7 +5,7 @@ c.hasHappened(evDeathlessRespectGained)
 // ---
 ROOM: $dragon_egg_room
 
-POS: 15, 67
+POS: 22, 58
 
 FIRST_MAP_NAME: Sacred Place
 FIRST_HINT: A well-hidden place of worship near the village of the Deathless.

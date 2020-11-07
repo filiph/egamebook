@@ -7,7 +7,7 @@ ROOM: $bleeds_trader_hut
 
 FLAGS: $IDLE
 
-POS: 36, 97
+POS: 41, 96
 
 FIRST_MAP_NAME: Trader's Shop
 FIRST_HINT: A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.

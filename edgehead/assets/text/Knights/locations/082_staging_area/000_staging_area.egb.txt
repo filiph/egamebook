@@ -30,7 +30,7 @@ ROOM: $staging_area
 
 FLAGS: $IDLE
 
-POS: 23, 82
+POS: 26, 76
 
 FIRST_MAP_NAME: Up the stairs
 FIRST_HINT: The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.

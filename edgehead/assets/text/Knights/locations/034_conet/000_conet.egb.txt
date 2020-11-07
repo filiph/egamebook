@@ -9,7 +9,7 @@ c.hasHappened(evTookSarnToBleeds)
 // ---
 ROOM: $conet
 
-POS: 17, 34
+POS: 19, 38
 
 FIRST_MAP_NAME: Some Mechanism
 FIRST_HINT: Somethings is making a quiet chafing sounds similar. Reminds me of millstones.

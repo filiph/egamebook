@@ -6,7 +6,7 @@ APPROACH: $barracks FROM $darg_tent
 // ---
 ROOM: $barracks
 
-POS: 34, 31
+POS: 30, 33
 
 FIRST_MAP_NAME: Large Quiet Area
 FIRST_HINT: Sounds of orcs snoring.

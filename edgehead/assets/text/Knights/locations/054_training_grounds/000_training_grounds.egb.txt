@@ -4,7 +4,7 @@ APPROACH: $training_grounds FROM $battlefield
 // ---
 ROOM: $training_grounds
 
-POS: 21, 54
+POS: 23, 51
 
 FIRST_MAP_NAME: Grunts of Strain
 FIRST_HINT: Loud grunts and clashes of steel. Orc laughter.

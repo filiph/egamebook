@@ -5,7 +5,7 @@ ROOM: $keep_dining
 
 FLAGS: $IDLE
 
-POS: 9, 86
+POS: 9, 81
 
 MAP_NAME: Dining Room
 HINT: The place where the Lord of the Keep dined with his family. A place with a good view of the redwoods outside.

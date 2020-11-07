@@ -1047,7 +1047,7 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     positionX: 26,
-    positionY: 20,
+    positionY: 22,
     mapName: 'Antechamber',
     firstMapName: 'A Clean Chamber',
     hint:
@@ -1153,7 +1153,7 @@ final Room dargTent = Room(
     null,
     fightIsOptional: true,
     positionX: 33,
-    positionY: 24,
+    positionY: 23,
     mapName: 'Orc Leader\'s Tent',
     firstMapName: 'On Top of the Eastern Shaft',
     hint: 'A tent placed on top of the Eastern shaft, overlooking the bay.',
@@ -1220,7 +1220,7 @@ final Room dargTentAfterDargArrived = Room(
     },
     fightIsOptional: true,
     positionX: 33,
-    positionY: 24,
+    positionY: 23,
     mapName: 'Orc Leader\'s Tent',
     firstMapName: 'On Top of the Eastern Shaft',
     hint: 'A tent placed on top of the Eastern shaft, overlooking the bay.',
@@ -1282,7 +1282,7 @@ final Room dargTentAfterDargKilled = Room(
     },
     fightIsOptional: true,
     positionX: 33,
-    positionY: 24,
+    positionY: 23,
     mapName: 'Orc Leader\'s Tent',
     firstMapName: 'On Top of the Eastern Shaft',
     hint: 'A tent placed on top of the Eastern shaft, overlooking the bay.',
@@ -1915,8 +1915,8 @@ final Room outlook = Room(
     generateHawkmanFight,
     null,
     fightIsOptional: true,
-    positionX: 18,
-    positionY: 24,
+    positionX: 20,
+    positionY: 25,
     mapName: 'Outlook',
     firstMapName: 'On Top of the Western Shaft',
     hint: 'A place for a sentry with excellent eyes.',
@@ -1935,6 +1935,8 @@ final Approach topOfClimbFromBarracks =
     Approach('barracks', 'top_of_climb', '', null);
 final Approach topOfClimbFromBigOAntechamber =
     Approach('big_o_antechamber', 'top_of_climb', '', null);
+final Approach topOfClimbFromConet =
+    Approach('conet', 'top_of_climb', '', null);
 final Approach topOfClimbFromKeepServants =
     Approach('keep_servants', 'top_of_climb', '', null);
 final Approach topOfClimbFromOutlook =
@@ -1957,8 +1959,8 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    positionX: 19,
-    positionY: 28,
+    positionX: 20,
+    positionY: 30,
     mapName: 'Top of a Shaft',
     hint:
         'A dark pit extends hundreds of feet toward the bottom of the Pyramid.');
@@ -2584,8 +2586,8 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    positionX: 34,
-    positionY: 31,
+    positionX: 30,
+    positionY: 33,
     mapName: 'Barracks',
     firstMapName: 'Large Quiet Area',
     hint: 'A large room taking up two floors with bunk beds and a dining area.',
@@ -2920,8 +2922,8 @@ final Room conet = Room(
     generateConetFight,
     null,
     fightIsOptional: true,
-    positionX: 17,
-    positionY: 34,
+    positionX: 19,
+    positionY: 38,
     mapName: 'Conet',
     firstMapName: 'Some Mechanism',
     hint: 'A room filled with a large device.',
@@ -2972,8 +2974,8 @@ final Room conetAfterClearing = Room(
       s.add('Now, the room is silent.\n', isRaw: true);
     },
     fightIsOptional: true,
-    positionX: 17,
-    positionY: 34,
+    positionX: 19,
+    positionY: 38,
     mapName: 'Conet',
     firstMapName: 'Some Mechanism',
     hint: 'A room filled with a large device.',
@@ -4704,8 +4706,8 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
       isRaw: true);
 }, null, null,
     isIdle: true,
-    positionX: 25,
-    positionY: 48,
+    positionX: 20,
+    positionY: 46,
     mapName: 'Reservoir',
     firstMapName: 'Damp Place',
     hint: 'A large, filthy pool in the middle of the building.',
@@ -4730,8 +4732,8 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
       return c.hasHappened(evOpenedDam);
     }),
     isIdle: true,
-    positionX: 25,
-    positionY: 48,
+    positionX: 20,
+    positionY: 46,
     mapName: 'Reservoir',
     firstMapName: 'Damp Place',
     hint: 'A large, filthy pool in the middle of the building.',
@@ -4756,8 +4758,8 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    positionX: 29,
-    positionY: 52,
+    positionX: 30,
+    positionY: 48,
     mapName: 'Cockroach Farm',
     firstMapName: 'Smell of Rot',
     hint: 'The main source of food for the orcs.',
@@ -4802,8 +4804,8 @@ final Room cockroachFarmAfterOpenDam = Room(
           'The whole area is wet. There are puddles of water everywhere, and a few cockroaches scurrying between them.\n',
           isRaw: true);
     },
-    positionX: 29,
-    positionY: 52,
+    positionX: 30,
+    positionY: 48,
     mapName: 'Cockroach Farm',
     firstMapName: 'Smell of Rot',
     hint: 'The main source of food for the orcs.',
@@ -4829,8 +4831,8 @@ final Room trainingGrounds = Room('training_grounds', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    positionX: 21,
-    positionY: 54,
+    positionX: 23,
+    positionY: 51,
     mapName: 'Training Grounds',
     firstMapName: 'Grunts of Strain',
     hint: 'A small army of orcs, goblins and kobolds, all training for war.',
@@ -4872,8 +4874,8 @@ final Room trainingGroundsAfterDamOpened = Room(
       final Storyline s = c.outputStoryline;
       s.add('The training grounds are dripping wet.\n', isRaw: true);
     },
-    positionX: 21,
-    positionY: 54,
+    positionX: 23,
+    positionY: 51,
     mapName: 'Training Grounds',
     firstMapName: 'Grunts of Strain',
     hint: 'A small army of orcs, goblins and kobolds, all training for war.',
@@ -4920,7 +4922,7 @@ final Room battlefield = Room(
     generateBattlefieldFight,
     null,
     positionX: 28,
-    positionY: 64,
+    positionY: 54,
     mapName: 'Battlefield Floor',
     firstMapName: 'Battlefield Floor',
     hint: 'A floor devoid of walls.',
@@ -4986,7 +4988,7 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
 }, null, null,
     isIdle: true,
     positionX: 39,
-    positionY: 65,
+    positionY: 58,
     mapName: 'Oracle\'s Study',
     firstMapName: 'Someone\'s Study',
     hint: 'A place full of books and the smell of coffee.',
@@ -6634,7 +6636,7 @@ final Room oracleAfterOrcOffensive = Room(
     },
     isIdle: true,
     positionX: 39,
-    positionY: 65,
+    positionY: 58,
     mapName: 'Oracle\'s Study',
     firstMapName: 'Someone\'s Study',
     hint: 'A place full of books and the smell of coffee.',
@@ -6663,8 +6665,8 @@ final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    positionX: 21,
-    positionY: 72,
+    positionX: 20,
+    positionY: 68,
     mapName: 'Jungle',
     firstMapName: 'Jungle',
     hint:
@@ -6708,8 +6710,8 @@ final Room jungleEntranceMuddyFootprints = Room(
       final Storyline s = c.outputStoryline;
       s.add('Muddy footprints lead into the jungle.\n', isRaw: true);
     },
-    positionX: 21,
-    positionY: 72,
+    positionX: 20,
+    positionY: 68,
     mapName: 'Jungle',
     firstMapName: 'Jungle',
     hint:
@@ -6828,8 +6830,8 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
 
   c.increaseSanityFromPeople();
 }, null, null,
-    positionX: 18,
-    positionY: 68,
+    positionX: 21,
+    positionY: 64,
     mapName: 'Village of the Deathless',
     firstMapName: 'Village in the Jungle',
     hint: 'A village of cultists positioned on a ledge overlooking the jungle.',
@@ -6862,8 +6864,8 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 }, null, null,
-    positionX: 15,
-    positionY: 67,
+    positionX: 22,
+    positionY: 58,
     mapName: 'Sacred Place',
     firstMapName: 'Sacred Place',
     hint: 'The place with the Dragon Egg.',
@@ -7078,7 +7080,7 @@ final Room pond = Room('pond', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     positionX: 14,
-    positionY: 74,
+    positionY: 70,
     mapName: 'Pond',
     hint: 'A small body of water at the bottom of the crater.');
 final Room pondWithLizardman = Room(
@@ -7123,7 +7125,7 @@ final Room pondWithLizardman = Room(
           isRaw: true);
     },
     positionX: 14,
-    positionY: 74,
+    positionY: 70,
     mapName: 'Pond',
     hint: 'A small body of water at the bottom of the crater.');
 final Approach pondLizardRockFromPond =
@@ -8023,8 +8025,8 @@ final Room deathlessVillageOrcOffensive = Room(
 
       c.increaseSanityFromPeople();
     },
-    positionX: 18,
-    positionY: 68,
+    positionX: 21,
+    positionY: 64,
     mapName: 'Village of the Deathless',
     firstMapName: 'Village in the Jungle',
     hint: 'A village of cultists positioned on a ledge overlooking the jungle.',
@@ -8094,8 +8096,8 @@ final Room deathlessVillageQuake2 = Room(
 
       c.increaseSanityFromPeople();
     },
-    positionX: 18,
-    positionY: 68,
+    positionX: 21,
+    positionY: 64,
     mapName: 'Village of the Deathless',
     firstMapName: 'Village in the Jungle',
     hint: 'A village of cultists positioned on a ledge overlooking the jungle.',
@@ -8165,8 +8167,8 @@ final Room deathlessVillageQuake3 = Room(
 
       c.increaseSanityFromPeople();
     },
-    positionX: 18,
-    positionY: 68,
+    positionX: 21,
+    positionY: 64,
     mapName: 'Village of the Deathless',
     firstMapName: 'Village in the Jungle',
     hint: 'A village of cultists positioned on a ledge overlooking the jungle.',
@@ -8199,7 +8201,7 @@ final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
 }, null, null,
     isIdle: true,
     positionX: 37,
-    positionY: 70,
+    positionY: 65,
     mapName: 'Command Post',
     firstMapName: 'Command Post',
     hint:
@@ -8427,7 +8429,7 @@ final Room knightsHqCaravanDeparture = Room(
     },
     isIdle: true,
     positionX: 37,
-    positionY: 70,
+    positionY: 65,
     mapName: 'Command Post',
     firstMapName: 'Command Post',
     hint:
@@ -8474,7 +8476,7 @@ final Room knightsHqOrcOffensive = Room(
     },
     isIdle: true,
     positionX: 37,
-    positionY: 70,
+    positionY: 65,
     mapName: 'Command Post',
     firstMapName: 'Command Post',
     hint:
@@ -8522,7 +8524,7 @@ final Room knightsHqQuake2 = Room(
     },
     isIdle: true,
     positionX: 37,
-    positionY: 70,
+    positionY: 65,
     mapName: 'Command Post',
     firstMapName: 'Command Post',
     hint:
@@ -8568,7 +8570,7 @@ final Room knightsHqQuake3 = Room(
     },
     isIdle: true,
     positionX: 37,
-    positionY: 70,
+    positionY: 65,
     mapName: 'Command Post',
     firstMapName: 'Command Post',
     hint:
@@ -8609,7 +8611,7 @@ final Room elevator12 = Room('elevator_12', (ActionContext c) {
 }, null, null,
     isIdle: true,
     positionX: 32,
-    positionY: 72,
+    positionY: 67,
     mapName: 'Elevator Shaft Entrance on the 12th Floor',
     hint: 'A rare access to the ancient elevator shaft.');
 final Approach slopesFromFarmersVillage =
@@ -8633,8 +8635,8 @@ final Room slopes = Room('slopes', (ActionContext c) {
   s.add('', isRaw: true);
 }, null, null,
     isIdle: true,
-    positionX: 42,
-    positionY: 78,
+    positionX: 44,
+    positionY: 74,
     mapName: 'Slopes',
     hint: 'The farmland on the outer wall of the Pyramid.');
 final Room slopesQuake1 = Room(
@@ -8677,8 +8679,8 @@ final Room slopesQuake1 = Room(
           isRaw: true);
     },
     isIdle: true,
-    positionX: 42,
-    positionY: 78,
+    positionX: 44,
+    positionY: 74,
     mapName: 'Slopes',
     hint: 'The farmland on the outer wall of the Pyramid.');
 final talkToGreenWomanAboutSlopesDeathInk = InkAst([
@@ -8825,8 +8827,8 @@ final Room slopesQuake2 = Room(
           isRaw: true);
     },
     isIdle: true,
-    positionX: 42,
-    positionY: 78,
+    positionX: 44,
+    positionY: 74,
     mapName: 'Slopes',
     hint: 'The farmland on the outer wall of the Pyramid.');
 final Approach stagingAreaFromFarmersVillage =
@@ -8899,8 +8901,8 @@ final Room stagingArea = Room('staging_area', (ActionContext c) {
   c.increaseSanityFromPeople();
 }, null, null,
     isIdle: true,
-    positionX: 23,
-    positionY: 82,
+    positionX: 26,
+    positionY: 76,
     mapName: 'The Staging Area',
     firstMapName: 'Up the stairs',
     hint:
@@ -9767,8 +9769,8 @@ final Room stagingAreaQuake1 = Room(
           isRaw: true);
     },
     isIdle: true,
-    positionX: 23,
-    positionY: 82,
+    positionX: 26,
+    positionY: 76,
     mapName: 'The Staging Area',
     firstMapName: 'Up the stairs',
     hint:
@@ -9815,8 +9817,8 @@ final Room stagingAreaQuake2 = Room(
           isRaw: true);
     },
     isIdle: true,
-    positionX: 23,
-    positionY: 82,
+    positionX: 26,
+    positionY: 76,
     mapName: 'The Staging Area',
     firstMapName: 'Up the stairs',
     hint:
@@ -9874,8 +9876,8 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   c.increaseSanityFromPeople();
 }, null, null,
     isIdle: true,
-    positionX: 35,
-    positionY: 83,
+    positionX: 38,
+    positionY: 78,
     mapName: 'Farmers\' Village',
     firstMapName: 'Settled Area',
     hint:
@@ -10845,8 +10847,8 @@ final Room farmersVillageQuake1 = Room(
       c.increaseSanityFromPeople();
     },
     isIdle: true,
-    positionX: 35,
-    positionY: 83,
+    positionX: 38,
+    positionY: 78,
     mapName: 'Farmers\' Village',
     firstMapName: 'Settled Area',
     hint:
@@ -11018,8 +11020,8 @@ final Room farmersVillageQuake2 = Room(
       c.increaseSanityFromPeople();
     },
     isIdle: true,
-    positionX: 35,
-    positionY: 83,
+    positionX: 38,
+    positionY: 78,
     mapName: 'Farmers\' Village',
     firstMapName: 'Settled Area',
     hint:
@@ -11194,7 +11196,7 @@ class ExamineGate extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: describe gate - a fine piece of carpentry. Obviously expensive to build.\n\n\nA big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".\n',
+        'The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.\n\n\nA big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".\n',
         isRaw: true);
     return '${a.name} successfully performs ExamineGate';
   }
@@ -11306,7 +11308,7 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood. \n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
+      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood.\n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -11318,12 +11320,12 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
 }, null, null,
     isIdle: true,
     positionX: 20,
-    positionY: 86,
+    positionY: 81,
     mapName: 'The Keep\'s Gate',
     firstMapName: 'The Keep',
     hint: 'The entrance to the abandoned aristocratic mansion.',
     firstHint:
-        'This part of the Pyramid seems to have been carved into an artistocratic residence. The strict simplicity of the ancient building gives way to nortonian redwood panels, doors and floors.');
+        'This part of the Pyramid seems to have been carved into an artistocratic residence. This is the floor where I saw the lady.');
 final Approach keepBedroomFromKeepDining =
     Approach('keep_dining', 'keep_bedroom', '', null);
 final Approach keepBedroomFromKeepGate =
@@ -11556,7 +11558,7 @@ final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
 }, null, null,
     isIdle: true,
     positionX: 15,
-    positionY: 86,
+    positionY: 82,
     mapName: 'Lord\'s Quarters',
     hint: 'Though derelict, these are still the nicest parts of the Keep.');
 final Approach keepDiningFromKeepBedroom =
@@ -11603,7 +11605,7 @@ final Room keepDining = Room(
     null,
     isIdle: true,
     positionX: 9,
-    positionY: 86,
+    positionY: 81,
     mapName: 'Dining Room',
     firstMapName: 'Dining Room',
     hint:
@@ -11786,14 +11788,12 @@ final Room keepServants = Room('keep_servants', (ActionContext c) {
 }, null, null,
     isIdle: true,
     positionX: 19,
-    positionY: 89,
+    positionY: 84,
     mapName: 'Servants\' Quarters',
     hint:
         'The cramped rooms where the servants of the Keep\'s owner once lived and worked.');
 final Approach pyramidEntranceFromBleedsMain =
     Approach('bleeds_main', 'pyramid_entrance', '', null);
-final Approach pyramidEntranceFromFarmersVillage =
-    Approach('farmers_village', 'pyramid_entrance', '', null);
 final Approach pyramidEntranceFromStagingArea =
     Approach('staging_area', 'pyramid_entrance', '', null);
 final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
@@ -13755,8 +13755,8 @@ final Room bleedsTraderHut = Room('bleeds_trader_hut', (ActionContext c) {
   }
 }, null, null,
     isIdle: true,
-    positionX: 36,
-    positionY: 97,
+    positionX: 41,
+    positionY: 96,
     mapName: 'Trader\'s Shop',
     firstMapName: 'Trader\'s Shop',
     hint:
@@ -17833,6 +17833,7 @@ final allApproaches = <Approach>[
   outlookFromTopOfClimb,
   topOfClimbFromBarracks,
   topOfClimbFromBigOAntechamber,
+  topOfClimbFromConet,
   topOfClimbFromKeepServants,
   topOfClimbFromOutlook,
   crowdsourceFromBarracks,
@@ -17897,7 +17898,6 @@ final allApproaches = <Approach>[
   keepServantsFromKeepBedroom,
   keepServantsFromTopOfClimb,
   pyramidEntranceFromBleedsMain,
-  pyramidEntranceFromFarmersVillage,
   pyramidEntranceFromStagingArea,
   bleedsMainFromBleedsTraderHut,
   bleedsMainFromGoblinSkirmishPatrol,

@@ -1,13 +1,12 @@
 APPROACH: $farmers_village FROM $staging_area
 APPROACH: $farmers_village FROM $slopes
-// APPROACH: $farmers_village FROM $floating_point
 
 // ---
 ROOM: $farmers_village
 
 FLAGS: $IDLE
 
-POS: 35, 83
+POS: 38, 78
 
 FIRST_MAP_NAME: Settled Area
 FIRST_HINT: From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.

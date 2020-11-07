@@ -12,7 +12,7 @@ ROOM: $keep_bedroom
 
 FLAGS: $IDLE
 
-POS: 15, 86
+POS: 15, 82
 
 MAP_NAME: Lord's Quarters
 HINT: Though derelict, these are still the nicest parts of the Keep.

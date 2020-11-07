@@ -51,7 +51,7 @@ void main() {
 
     test("edgehead runs to completion 10 times from bleedsFight", () async {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
-      await testWithStopWords(stopWords, tempDir, Level.WARNING, 10,
+      await testWithStopWords(stopWords, tempDir, Level.INFO, 10,
           savegame: "bleedsFight");
     }, timeout: const Timeout.factor(10), tags: ["long-running"]);
 
@@ -62,7 +62,7 @@ void main() {
 
     test("edgehead runs to completion 10 times from beginning", () async {
       final stopWords = ["[SEVERE]", "[SHOUT]"];
-      await testWithStopWords(stopWords, tempDir, Level.WARNING, 10);
+      await testWithStopWords(stopWords, tempDir, Level.INFO, 10);
     }, timeout: const Timeout.factor(10), tags: ["long-running"]);
   });
 }

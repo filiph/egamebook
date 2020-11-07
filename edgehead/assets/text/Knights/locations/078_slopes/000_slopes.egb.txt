@@ -5,7 +5,7 @@ ROOM: $slopes
 
 FLAGS: $IDLE
 
-POS: 42, 78
+POS: 44, 74
 
 MAP_NAME: Slopes
 HINT: The farmland on the outer wall of the Pyramid.

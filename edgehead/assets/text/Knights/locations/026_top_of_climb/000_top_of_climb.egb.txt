@@ -2,11 +2,12 @@ APPROACH: $top_of_climb FROM $big_o_antechamber
 APPROACH: $top_of_climb FROM $outlook
 APPROACH: $top_of_climb FROM $barracks
 APPROACH: $top_of_climb FROM $keep_servants
+APPROACH: $top_of_climb FROM $conet
 
 // ---
 ROOM: $top_of_climb
 
-POS: 19, 28
+POS: 20, 30
 
 // Using the same text even before the player has visited this place.
 MAP_NAME: Top of a Shaft

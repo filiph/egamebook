@@ -1,6 +1,5 @@
 APPROACH: $pyramid_entrance FROM $bleeds_main
 APPROACH: $pyramid_entrance FROM $staging_area
-APPROACH: $pyramid_entrance FROM $farmers_village
 
 // ---
 ROOM: $pyramid_entrance

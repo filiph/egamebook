@@ -3,7 +3,7 @@ APPROACH: $outlook FROM $top_of_climb
 // ---
 ROOM: $outlook
 
-POS: 18, 24
+POS: 20, 25
 
 FIRST_MAP_NAME: On Top of the Western Shaft
 FIRST_HINT: Something is on top of the shaft. The access to outside is well used, though it's unguarded.

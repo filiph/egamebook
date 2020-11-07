@@ -9,7 +9,7 @@ ROOM: $elevator_12
 
 FLAGS: $IDLE
 
-POS: 32, 72
+POS: 32, 67
 
 MAP_NAME: Elevator Shaft Entrance on the 12th Floor
 HINT: A rare access to the ancient elevator shaft.

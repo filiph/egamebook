@@ -6,7 +6,7 @@ APPROACH: $battlefield FROM $training_grounds
 // ---
 ROOM: $battlefield
 
-POS: 28, 64
+POS: 28, 54
 
 FIRST_MAP_NAME: Battlefield Floor
 FIRST_HINT: The frontier between the humans at the bottom and the orcs at the top. Currently held and guarded by the orcs.
