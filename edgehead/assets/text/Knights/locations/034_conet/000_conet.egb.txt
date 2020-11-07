@@ -12,7 +12,7 @@ ROOM: $conet
 POS: 19, 38
 
 FIRST_MAP_NAME: Some Mechanism
-FIRST_HINT: Somethings is making a quiet chafing sounds similar. Reminds me of millstones.
+FIRST_HINT: Somethings is making a quiet chafing sounds. Reminds me of millstones.
 
 MAP_NAME: Conet
 HINT: A room filled with a large device.
