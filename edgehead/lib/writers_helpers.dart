@@ -722,7 +722,9 @@ extension ActionContextHelpers on ActionContext {
     giveSanityToPlayer(2);
     outputWorld.recordCustom(customEventName, actor: player);
 
-    outputStoryline.add('Being around people lifts a weight from my mind.',
+    outputStoryline.add(
+        'Being around people lifts a weight from my mind, '
+        'and my sanity increases.',
         isRaw: true);
   }
 
