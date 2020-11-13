@@ -156,7 +156,7 @@ class EdgeheadGame extends Book {
   }
 
   Future<void> update() async {
-    return runZoned(_update, onError: (Object e, StackTrace s) {
+    return runZonedGuarded(_update, (Object e, StackTrace s) {
       // Catch errors and send to presenter.
       elementsSink.add(ErrorElement((b) => b
         ..message = e.toString()
