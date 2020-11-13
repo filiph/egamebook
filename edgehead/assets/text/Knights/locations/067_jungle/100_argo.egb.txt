@@ -28,6 +28,10 @@ INK:
 
   She smiles. "Well met, sir."
 
+-
+
+[[IF c.hasItem(lairOfGodStarId)]]She points at the Artifact Star. "Did you bring us the holy item?"[[ENDIF]]
+
 
 // ---
 ACTION: $argo_ask_deathless

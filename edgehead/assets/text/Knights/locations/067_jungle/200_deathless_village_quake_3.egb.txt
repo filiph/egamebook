@@ -13,6 +13,10 @@ The village is seriously damaged.
 [[CODE]]
 c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId], especially: [lairOfGodStarId, hawkmanJacketId], how: "{approvingly|with respect}");
 
+if (c.hasItem(lairOfGodStarId)) {
+    s.add("""One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """, isRaw: true);
+}
+
 c.increaseSanityFromPeople();
 [[ENDCODE]]
 
@@ -22,6 +26,10 @@ The village has been seriously damaged by the latest quake.
 
 [[CODE]]
 c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId], especially: [lairOfGodStarId, hawkmanJacketId], how: "{approvingly|with respect}");
+
+if (c.hasItem(lairOfGodStarId)) {
+    s.add("""One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """, isRaw: true);
+}
 
 c.increaseSanityFromPeople();
 [[ENDCODE]]

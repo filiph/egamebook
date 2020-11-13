@@ -21,6 +21,7 @@ A woman is here. She seems deep in though, walking up and down the room, over de
 A ridiculously red apple sits on the table.
 
 [[CODE]]
+// TODO: "the woman" instead of "Oracle"
 c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId, hawkmanJacketId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
 [[ENDCODE]]
 

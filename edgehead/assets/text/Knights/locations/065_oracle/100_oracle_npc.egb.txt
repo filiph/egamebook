@@ -46,7 +46,7 @@ INK:
 
 -
 
-<> “Well, you must be bored by all this talk. You’re in San Francisco! Young people don’t come to San Francisco to talk. They come here to slay.”
+<> “Well, you must be bored by all this introductory talk. You’re in San Francisco! Young people don’t come to San Francisco to talk. They come here to slay.”
 
 [[CODE]]
 c.learn(OracleFacts.personally);
@@ -187,6 +187,7 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 
 INK:
 // TODO: rewrite this draft to readable prose
+// TODO: use other prose if Aren already cleared the Lair of God
 "There are still things I'd like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."
 
 [[CODE]]

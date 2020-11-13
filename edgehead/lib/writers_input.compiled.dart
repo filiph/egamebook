@@ -3937,6 +3937,9 @@ class KarlExamineStar extends RoamingAction {
         isRaw: true);
     c.learn(ArtifactStarFacts.artifactStarSeen);
 
+    s.add(
+        '\nThis artifact must be ancient, and of great value to those who revere the old gods.\n',
+        isRaw: true);
     return '${a.name} successfully performs KarlExamineStar';
   }
 
@@ -5515,7 +5518,7 @@ final talkToOracleGreetingsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '“Well, you must be bored by all this talk. You’re in San Francisco! Young people don’t come to San Francisco to talk. They come here to slay.”\n',
+        '“Well, you must be bored by all this introductory talk. You’re in San Francisco! Young people don’t come to San Francisco to talk. They come here to slay.”\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -6804,6 +6807,12 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
       what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
       especially: [lairOfGodStarId, hawkmanJacketId],
       how: "{approvingly|with respect}");
+
+  if (c.hasItem(lairOfGodStarId)) {
+    s.add(
+        """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+        isRaw: true);
+  }
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7680,6 +7689,18 @@ final argoGreetInk = InkAst([
       ],
     ),
   ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_121bab35a = c.hasItem(lairOfGodStarId)
+        ? '''She points at the Artifact Star. "Did you bring us the holy item?"'''
+        : '''''';
+    s.add('${ifBlock_121bab35a}\n', isRaw: true);
+  }),
 ]);
 
 class ArgoAskDeathless extends RoamingAction {
@@ -7971,6 +7992,12 @@ final Room deathlessVillageOrcOffensive = Room(
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
+
       c.increaseSanityFromPeople();
     },
     (ActionContext c) {
@@ -8017,6 +8044,12 @@ final Room deathlessVillageOrcOffensive = Room(
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
+
       c.increaseSanityFromPeople();
     },
     positionX: 21,
@@ -8042,6 +8075,12 @@ final Room deathlessVillageQuake2 = Room(
           what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
+
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
 
       c.increaseSanityFromPeople();
     },
@@ -8088,6 +8127,12 @@ final Room deathlessVillageQuake2 = Room(
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
 
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
+
       c.increaseSanityFromPeople();
     },
     positionX: 21,
@@ -8113,6 +8158,12 @@ final Room deathlessVillageQuake3 = Room(
           what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
+
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
 
       c.increaseSanityFromPeople();
     },
@@ -8158,6 +8209,12 @@ final Room deathlessVillageQuake3 = Room(
           what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId],
           especially: [lairOfGodStarId, hawkmanJacketId],
           how: "{approvingly|with respect}");
+
+      if (c.hasItem(lairOfGodStarId)) {
+        s.add(
+            """One of the villagers points to the Artifact Star. "Did you bring us that holy item, oh noble one?" """,
+            isRaw: true);
+      }
 
       c.increaseSanityFromPeople();
     },

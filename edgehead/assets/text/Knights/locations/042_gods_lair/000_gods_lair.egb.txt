@@ -77,6 +77,8 @@ TODO: image of a "Lamb of God" christmas star, but the writing is so mangled tha
 c.learn(ArtifactStarFacts.artifactStarSeen);
 [[ENDCODE]]
 
+This artifact must be ancient, and of great value to those who revere the old gods.
+
 
 // ---
 ACTION: $karl_take_star
@@ -100,3 +102,6 @@ c.giveNewItemToPlayer(lairOfGodStar);
 NOTES:
 
 * The sound here is the same guttural growl that the player hears when exploring.
+* Allow opening the gate: 
+  * If no necromancy was NOT performed, then the giant is sleeping. We can kill it, or go somewhere else. (Later, an event will set Karl loose, and he will decimate the orcs, then fall down from the pyramid.)
+  * If necromancy was performed, we can examine the dead giant and the dead taheen.

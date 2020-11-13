@@ -16,6 +16,7 @@ HINT: A dark pit extends hundreds of feet toward the bottom of the Pyramid.
 FIRST_DESCRIPTION:
 A huge, dark pit. The bottom is unseen, in complete darkness.
 
+// TODO: only use this when coming from the bottom
 Orc language is heard from behind the walls.
 
 [[CODE]]
