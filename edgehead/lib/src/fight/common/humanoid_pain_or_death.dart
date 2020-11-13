@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -134,7 +135,10 @@ void killHumanoid(ActionContext context, int actorId) {
   }
   switch (_random.nextInt(3)) {
     case 0:
-      actor.report(s, "<subject> collapse<s>, dead",
+      final again = (actor.isUndead && actor.npc.followingActorId == playerId)
+          ? ' (again)'
+          : '';
+      actor.report(s, "<subject> collapse<s>, dead$again",
           negative: true, endSentence: true);
       break;
     case 1:
