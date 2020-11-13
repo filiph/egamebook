@@ -178,7 +178,7 @@ c.learn(OracleFacts.someoneCalledOracle);
 c.learn(KnightsFacts.knightsAreLeaving);
 [[ENDCODE]]
 
-"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I've heard of the Dragon Egg, an ancient weapon of that sort."
+"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I've heard of the Dragon Egg, an ancient device of war of that sort."
 
 [[CODE]]
 c.learn(DragonEggFacts.anAncientWeapon);
@@ -197,4 +197,4 @@ w.actionHasBeenPerformed("talk_to_ada_greetings")
 c.knows(DragonEggFacts.anAncientWeapon)
 
 INK:
-"Oh, you should not ask an old woman about such things. I know it's a weapon. I know it's powerful. People have claimed it's somewhere in the Pyramid. But where? And what it is, exactly? I don't know."
+"Oh, you should not ask an old woman about such things. I know it's a device of war. I know it's powerful. People have claimed it's somewhere in the Pyramid. But where? And what it is, exactly? I don't know."

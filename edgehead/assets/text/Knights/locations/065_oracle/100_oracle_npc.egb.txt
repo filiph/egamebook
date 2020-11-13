@@ -322,7 +322,7 @@ c.learn(DragonEggFacts.deathlessHaveIt);
 
 * "How can I get it?"
 
-  "Ha! You can't, [young sir]. The Deathless have been using it as a holy symbol for generations. They won't just give it away."
+  "Ha! You can't, [young sir]. The Deathless have been using it as a holy symbol for generations. They won't just give it away to a random stranger."
 
 
 // ---

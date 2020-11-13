@@ -306,7 +306,7 @@ INK:
 
   - -
 
-  <> You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it's best to find friends, allies. There are powerful weapons to be had, in the Pyramid, like the Dragon Egg or a katana."
+  <> You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it's best to find friends, allies. There are powerful devices of war to be had, in the Pyramid, like the Dragon Egg or a katana."
 
   He scratches just under one of his unseeing eyes.
 
@@ -332,7 +332,7 @@ w.actionHasBeenPerformed("bleeds_blind_guide_greet")
 c.knows(DragonEggFacts.anAncientWeapon)
 
 INK:
-"It's supposed to be a powerful weapon. Not sure where it is, but I don't think anyone has it, or we'd know about it, I'm sure. Maybe it's lost somewhere. I kind of hope it is."
+"It's supposed to be a powerful device of war. Not sure where it is, but I don't think anyone has it, or we'd know about it, I'm sure. Maybe it's lost somewhere. I kind of hope it is."
 
 // Optional: explore why he doesn't want it to be found.
 

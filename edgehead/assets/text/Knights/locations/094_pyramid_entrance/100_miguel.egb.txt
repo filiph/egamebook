@@ -122,7 +122,7 @@ w.actionHasBeenPerformed("talk_to_miguel_greetings")
 c.knows(DragonEggFacts.anAncientWeapon)
 
 INK:
-"It's an ancient weapon, somewhere in the Pyramid." He shrugs. "If I knew more, I'd go find it, [young sir]."
+"It's an ancient device of war, somewhere in the Pyramid." He shrugs. "If I knew more, I'd go find it, [young sir]."
 
 
 // ---

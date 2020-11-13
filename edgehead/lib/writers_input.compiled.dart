@@ -5289,7 +5289,7 @@ final talkToOracleDragonEggInk = InkAst([
           final Storyline s = c.outputStoryline;
           final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"Ha! You can\'t, ${youngSirSubstitution}. The Deathless have been using it as a holy symbol for generations. They won\'t just give it away."\n',
+              '"Ha! You can\'t, ${youngSirSubstitution}. The Deathless have been using it as a holy symbol for generations. They won\'t just give it away to a random stranger."\n',
               isRaw: true);
         }),
       ],
@@ -9942,7 +9942,7 @@ final talkToAdaAboutDelvingInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I\'ve heard of the Dragon Egg, an ancient weapon of that sort."\n',
+        '"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I\'ve heard of the Dragon Egg, an ancient device of war of that sort."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -9963,7 +9963,7 @@ final talkToAdaAboutDragonEggInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Oh, you should not ask an old woman about such things. I know it\'s a weapon. I know it\'s powerful. People have claimed it\'s somewhere in the Pyramid. But where? And what it is, exactly? I don\'t know."\n',
+        '"Oh, you should not ask an old woman about such things. I know it\'s a device of war. I know it\'s powerful. People have claimed it\'s somewhere in the Pyramid. But where? And what it is, exactly? I don\'t know."\n',
         isRaw: true);
   }),
 ]);
@@ -12568,7 +12568,7 @@ final talkToMiguelAboutDragonEggInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"It\'s an ancient weapon, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it, ${youngSirSubstitution}."\n',
+        '"It\'s an ancient device of war, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it, ${youngSirSubstitution}."\n',
         isRaw: true);
   }),
 ]);
@@ -14008,7 +14008,7 @@ final bleedsBlindGuideDelvingInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it\'s best to find friends, allies. There are powerful weapons to be had, in the Pyramid, like the Dragon Egg or a katana."\n',
+              'You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it\'s best to find friends, allies. There are powerful devices of war to be had, in the Pyramid, like the Dragon Egg or a katana."\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -14053,7 +14053,7 @@ final bleedsBlindGuideDragonEggInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"It\'s supposed to be a powerful weapon. Not sure where it is, but I don\'t think anyone has it, or we\'d know about it, I\'m sure. Maybe it\'s lost somewhere. I kind of hope it is."\n',
+        '"It\'s supposed to be a powerful device of war. Not sure where it is, but I don\'t think anyone has it, or we\'d know about it, I\'m sure. Maybe it\'s lost somewhere. I kind of hope it is."\n',
         isRaw: true);
   }),
 ]);
