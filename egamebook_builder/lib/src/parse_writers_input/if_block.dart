@@ -7,7 +7,7 @@ class IfBlock {
   static final RegExp _ifBlockStart = RegExp(r"\[\[IF (.+)\]\]");
 
   static final RegExp _ifBlock =
-      RegExp(r"\[\[IF (.+?)\]\](.+?)(\[\[ELSE\]\](.+))?\[\[ENDIF\]\]");
+      RegExp(r"\[\[IF (.+?)\]\](.+?)(\[\[ELSE\]\](.+?))?\[\[ENDIF\]\]");
 
   final String fullString;
 
