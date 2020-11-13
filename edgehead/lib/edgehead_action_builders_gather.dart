@@ -32,6 +32,8 @@ import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
 import 'package:edgehead/src/fight/off_balance_opportunity/actions/off_balance_opportunity_thrust.dart';
 import 'package:edgehead/src/fight/punch/actions/finish_punch.dart';
 import 'package:edgehead/src/fight/punch/punch_defense/actions/dodge_punch.dart';
+import 'package:edgehead/src/fight/punch_on_ground/actions/finish_punch.dart';
+import 'package:edgehead/src/fight/punch_on_ground/punch_defense/actions/dodge_punch_on_ground.dart';
 import 'package:edgehead/src/fight/slash/actions/finish_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/dodge_slash.dart';

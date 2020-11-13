@@ -143,6 +143,10 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/jump_over_thrust_on_ground.dart:
   'JumpOverThrustOnGround.singleton': JumpOverThrustOnGround.singleton,
+  // From lib/src/fight/punch_on_ground/actions/finish_punch.dart:
+  'FinishPunchOnGround.singleton': FinishPunchOnGround.singleton,
+  // From lib/src/fight/punch_on_ground/punch_defense/actions/dodge_punch_on_ground.dart:
+  'DodgePunchOnGround.singleton': DodgePunchOnGround.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

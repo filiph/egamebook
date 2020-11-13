@@ -5,16 +5,16 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
-import 'package:edgehead/src/fight/actions/start_punch.dart';
+import 'package:edgehead/src/fight/actions/start_punch_on_ground.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
-import 'package:edgehead/src/fight/punch/punch_situation.dart';
+import 'package:edgehead/src/fight/punch_on_ground/punch_situation.dart';
 
-class DodgePunch extends OtherActorAction {
-  static final DodgePunch singleton = DodgePunch();
+class DodgePunchOnGround extends OtherActorAction {
+  static final DodgePunchOnGround singleton = DodgePunchOnGround();
 
-  static const String className = "DodgePunch";
+  static const String className = "DodgePunchOnGround";
 
   @override
   final String helpMessage = "Dodging means moving my body out of harm's "
@@ -47,8 +47,8 @@ class DodgePunch extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, punchSituationName);
-    a.report(s, "<subject> tr<ies> to {dodge|sidestep|move out of the way}",
+    final thread = getThreadId(sim, w, punchOnGroundSituationName);
+    a.report(s, "<subject> tr<ies> to {dodge|move out of the way}",
         actionThread: thread);
     Randomly.run(
         () => a.report(s, "<subject> {can't|fail<s>|<does>n't succeed}",
@@ -65,12 +65,12 @@ class DodgePunch extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final thread = getThreadId(sim, w, punchSituationName);
-    a.report(s, "<subject> {dodge<s>|sidestep<s>} <object's> {punch|blow|jab}",
+    final thread = getThreadId(sim, w, punchOnGroundSituationName);
+    a.report(s, "<subject> {dodge<s>|avoid<s>} <object's> {punch|blow|jab}",
         object: enemy, positive: true, actionThread: thread);
 
     // Summary
-    a.report(s, "<subject> {dodge<s>|sidestep<s>} <objectOwner's> <object>",
+    a.report(s, "<subject> {dodge<s>|avoid<s>} <objectOwner's> <object>",
         objectOwner: enemy,
         object: MoveEntity.getFromAttackerSituation(context.world),
         positive: true,
@@ -92,7 +92,7 @@ class DodgePunch extends OtherActorAction {
       Actor a, Simulation sim, WorldState w, Actor enemy) {
     final situation = w.currentSituation as DefenseSituation;
     return situation.predeterminedChance
-        .or(computeStartPunch(enemy, sim, w, a).inverted());
+        .or(computeStartPunchOnGround(enemy, sim, w, a).inverted());
   }
 
   @override

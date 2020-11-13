@@ -8,6 +8,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/fall.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
+import 'package:edgehead/src/fight/punch/punch_situation.dart';
 
 class FinishPunch extends OtherActorAction {
   static final FinishPunch singleton = FinishPunch();
@@ -55,7 +56,7 @@ class FinishPunch extends OtherActorAction {
     assert(!enemy.isOnGround, "Can't punch people on the ground.");
     final updatedPose =
         enemy.pose >= Pose.standing ? Pose.offBalance : Pose.onGround;
-    final thread = getThreadId(sim, w, "PunchSituation");
+    final thread = getThreadId(sim, w, punchSituationName);
     final groundMaterial = getGroundMaterial(w);
     w.updateActorById(enemy.id, (b) => b..pose = updatedPose);
     w.recordCustom(lostStanceCustomEvent, actor: enemy);
