@@ -11783,7 +11783,7 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'As ${weSubstitution} approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n![Illustration of two knights: a woman with a sword and a man with a halberd](guards.png)\n\nThe man has been crying, judging from his eyes.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. \n\n',
+      'As ${weSubstitution} approach, I can\'t stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.\n\nTwo knights, a woman and a man, are on guard.\n\n![Illustration of two knights: a woman with a sword and a man with a halberd](guards.png)\n\nThe man has been crying, judging from his eyes.\n\nFour stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. She is armed with a katana, from the looks of it.\n\n',
       isRaw: true);
   c.learn(LadyHopeFacts.ladyInKeep);
 }, (ActionContext c) {
@@ -12540,8 +12540,12 @@ final talkToMiguelAboutDevlingInk = InkAst([
             .actionHasBeenPerformed("talk_to_kat_about_devling")
         ? '''What Kat said. I'd just add that'''
         : '''You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that''';
+    final ifBlock_c48d1a8b = !w
+            .actionHasBeenPerformed("talk_to_miguel_about_dragon_egg")
+        ? '''I've heard locals talk of a device of war called the Dragon Egg.'''
+        : ''' the Dragon Egg is worth pursuing for someone like you.''';
     s.add(
-        '"${ifBlock_e7f3070f} I\'ve heard locals talk of a device of war called the Dragon Egg. If I were you, no offense, I\'d try to find any advantage possible against the Orcs and the other creatures of the upside."\n',
+        '"${ifBlock_e7f3070f} ${ifBlock_c48d1a8b} If I were you, no offense, I\'d try to find any advantage possible against the orcs and the other creatures of the upside."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -12576,7 +12580,7 @@ final talkToMiguelAboutLadyInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Lady Hope. Our local undead. Just stands there with that katana at the ready."\n',
+        '"Lady Hope. Our local undead. Just stands there with that sweet katana at the ready."\n',
         isRaw: true);
   }),
   InkParagraphNode((ActionContext c) {
@@ -12604,7 +12608,7 @@ final talkToMiguelAboutLadyInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" "What katana?" """.trim(),
+      command: r""" "Sweet katana?" """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -13596,7 +13600,7 @@ class BleedsTraderGreet extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here?"\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"Death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
+        'The trader shrugs.\n\n"It\'s terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we\'re out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.\n\n_"Why travel gear?"_\n\n"People are leaving. Even _he_ wants to leave."\n\nThis is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader\'s son.\n\n"Well why wouldn\'t I leave, father? We all should. What awaits us here? It\'s just... it\'s just..."\n\nThe trader shakes his head and interjects: "What awaits us anywhere else?"\n\n"... death or slavery." Leroy deems his point made, ignoring his father\'s interjection. He goes back to his work.\n\n',
         isRaw: true);
     c.learn(kbLeroy);
 

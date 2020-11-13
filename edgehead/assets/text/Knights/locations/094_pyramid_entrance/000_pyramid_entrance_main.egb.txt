@@ -25,7 +25,7 @@ Two knights, a woman and a man, are on guard.
 
 The man has been crying, judging from his eyes.
 
-Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. 
+Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. She is armed with a katana, from the looks of it.
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyInKeep);

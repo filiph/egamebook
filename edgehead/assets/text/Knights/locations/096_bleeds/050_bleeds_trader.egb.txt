@@ -55,11 +55,11 @@ _"Why travel gear?"_
 
 This is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader's son.
 
-"Well why wouldn't I leave, father? We all should. What awaits us here?"
+"Well why wouldn't I leave, father? We all should. What awaits us here? It's just... it's just..."
 
 The trader shakes his head and interjects: "What awaits us anywhere else?"
 
-"Death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
+"... death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
 
 [[CODE]]
 c.learn(kbLeroy);

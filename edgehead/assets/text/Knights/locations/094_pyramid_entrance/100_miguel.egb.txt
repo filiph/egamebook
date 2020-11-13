@@ -101,7 +101,7 @@ c.inRoomWith(miguelId)
 w.actionHasBeenPerformed("talk_to_miguel_greetings")
 
 INK:
-"[[IF w.actionHasBeenPerformed("talk_to_kat_about_devling")]]What Kat said. I'd just add that[[ELSE]]You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that[[ENDIF]] I've heard locals talk of a device of war called the Dragon Egg. If I were you, no offense, I'd try to find any advantage possible against the Orcs and the other creatures of the upside."
+"[[IF w.actionHasBeenPerformed("talk_to_kat_about_devling")]]What Kat said. I'd just add that[[ELSE]]You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that[[ENDIF]] [[IF !w.actionHasBeenPerformed("talk_to_miguel_about_dragon_egg")]]I've heard locals talk of a device of war called the Dragon Egg.[[ELSE]] the Dragon Egg is worth pursuing for someone like you.[[ENDIF]] If I were you, no offense, I'd try to find any advantage possible against the orcs and the other creatures of the upside."
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
@@ -142,7 +142,7 @@ c.knows(LadyHopeFacts.ladyInKeep)
 !c.hasHappened(evKilledHope)
 
 INK:
-"Lady Hope. Our local undead. Just stands there with that katana at the ready."
+"Lady Hope. Our local undead. Just stands there with that sweet katana at the ready."
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);
@@ -152,6 +152,6 @@ c.learn(LadyHopeFacts.ladyHopeName);
 
   "Well, she sure _looks_ dangerous, doesn't she. But that place she's standing in is the dining room of the old Keep. Nobody goes near that place."
 
-* "What katana?"
+* "Sweet katana?"
 
   He smiles. "Didn't you notice? She wields the sword like she's always ready to slash someone in half. Beautiful weapon."
