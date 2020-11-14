@@ -119,6 +119,10 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'WithstandClash.singleton': WithstandClash.singleton,
   // From lib/src/fight/clash/actions/finish_clash.dart:
   'FinishClash.singleton': FinishClash.singleton,
+  // From lib/src/fight/punch_on_ground/punch_defense/actions/dodge_punch_on_ground.dart:
+  'DodgePunchOnGround.singleton': DodgePunchOnGround.singleton,
+  // From lib/src/fight/punch_on_ground/actions/finish_punch.dart:
+  'FinishPunchOnGround.singleton': FinishPunchOnGround.singleton,
   // From lib/src/fight/fatality_on_ground/actions/finish_crack_skull.dart:
   'FinishCrackSkull.singleton': FinishCrackSkull.singleton,
   // From lib/src/fight/fatality_on_ground/actions/finish_break_neck.dart:
@@ -143,10 +147,6 @@ final _$actionSerializer = InstanceSerializer<Action>({
   'DodgeThrustOnGround.singleton': DodgeThrustOnGround.singleton,
   // From lib/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/jump_over_thrust_on_ground.dart:
   'JumpOverThrustOnGround.singleton': JumpOverThrustOnGround.singleton,
-  // From lib/src/fight/punch_on_ground/actions/finish_punch.dart:
-  'FinishPunchOnGround.singleton': FinishPunchOnGround.singleton,
-  // From lib/src/fight/punch_on_ground/punch_defense/actions/dodge_punch_on_ground.dart:
-  'DodgePunchOnGround.singleton': DodgePunchOnGround.singleton,
 }, additionalTypes: [
   OtherActorAction,
   EnemyTargetAction,

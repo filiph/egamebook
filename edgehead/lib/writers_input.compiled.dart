@@ -582,6 +582,7 @@ final finalFightInkInk = InkAst([
                           'TODO: Yet all this time I wonder if I made the right choice.\n',
                           isRaw: true);
                     }),
+                    InkParagraphNode((c) => c.outputStoryline.addParagraph()),
                     InkParagraphNode((ActionContext c) {
                       final WorldState originalWorld = c.world;
                       final Simulation sim = c.simulation;
@@ -816,6 +817,7 @@ final bigOEndInkInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add('The fight is over.\n', isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -1457,6 +1459,7 @@ final dargHeadTalkInkInk = InkAst([
         'On Darg\'s chest, I find a circular iron badge. It has nothing embossed in it but that simplicity somehow makes it even more impressive. I take it.\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -1686,6 +1689,7 @@ final outlookAttackInk = InkAst([
       ],
     ),
   ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -2493,6 +2497,7 @@ final barracksTakeBarbecuedBatInk = InkAst([
         'The bat has been broiled well. Maybe too well. But there\'s enough meat on it.\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -2647,6 +2652,7 @@ final conetExamineInk = InkAst([
     s.add('This is the source of the earthquakes. I am sure of it.\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -3494,6 +3500,7 @@ final takeSarnToBleedsInk = InkAst([
         'After a tedious journey down the Pyramid, we arrive at the Bleeds.\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -3716,6 +3723,7 @@ final takeSarnToBleedsInk = InkAst([
         '“The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal.”\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -4224,6 +4232,7 @@ final reservoirFollowFootprintsInk = InkAst([
         'After a long while, the creature\'s trail leads us all the way to the enormous hole in the Pyramid and the foliage that fills the space.\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5123,6 +5132,7 @@ final askOracleAboutKeepInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add('Lady Hope.”\n', isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5144,6 +5154,7 @@ final talkToOracleDeathlessInk = InkAst([
         'TODO "They are a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5162,6 +5173,7 @@ final talkToOracleDeathlessInk = InkAst([
         '"They used to inhabit a lot more of the Pyramid. These days, they live in a village in the part known as the Jungle. It\'s the big hole in the building on the west side, overgrown with vegetation."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5192,6 +5204,7 @@ final talkToOracleDogheadInk = InkAst([
         'TODO "There\'s a prophesy. A man with a dog\'s head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5222,6 +5235,7 @@ final talkToOracleDogheadInk = InkAst([
         '"Now, with the Orcs and Big O and goblins, the popularity of the tale of the Doghead is only getting stronger."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5259,6 +5273,7 @@ final talkToOracleDragonEggInk = InkAst([
       ],
     ),
   ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5364,6 +5379,7 @@ final talkToOracleEarthquakesInk = InkAst([
         '"I think that Big O is behind the quakes. I think they\'re not earthquakes, really. I think that they\'re coming from the top of the Pyramid, not the ground."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5521,6 +5537,7 @@ final talkToOracleGreetingsInk = InkAst([
         '“Well, you must be bored by all this introductory talk. You’re in San Francisco! Young people don’t come to San Francisco to talk. They come here to slay.”\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5541,6 +5558,7 @@ final talkToOracleOrcsInk = InkAst([
         '"There are still things I\'d like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5561,6 +5579,7 @@ final talkToOracleQuake1Ink = InkAst([
     final Storyline s = c.outputStoryline;
     s.add('"Ah yes, these happen quite often."\n', isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -5613,6 +5632,7 @@ final talkToOracleSixtyFiverInk = InkAst([
         '"I think the orcs love it. It gives them a way to say: Look! The ancients had evil in them. The culture you so revere is a failed, evil empire. Something like that."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -7497,6 +7517,7 @@ final argoAskDeathlessInk = InkAst([
         'She straightens, assuming a queenly posture. "That star means a lot to our people. Our Founder had it a hundred years ago, and it inspired her to bring the community to this place, to start the Deathless movement, and to build the Lair of God."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -7603,6 +7624,7 @@ final argoAskQuake1Ink = InkAst([
         'Some of the older members remember quieter times. Of course, we are only people. We are afraid when bigger things happen to us. But we can trust the wisdom of the ancients."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -8279,6 +8301,7 @@ final talkToMiguelAfterCaravanDepartedInk = InkAst([
         '"The Knights of San Francisco are no more. Look, if you are in the business of hurting the orcs, take me with you."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -8956,6 +8979,7 @@ final talkToHorsemanWhiteAboutOracleInk = InkAst([
         '"An old woman with books. She insists on living on the fifteenth floor. I told her several times she\'s practically asking to be killed by a rogue orc skirmisher, living that close to them." He waves his hand. "Bah."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -9015,6 +9039,7 @@ final talkToHorsemanWhiteDogheadInk = InkAst([
         'Doghead is a local myth. A creature with a dog\'s head and a human\'s body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone\'s problems. It\'s magical thinking. Bullshit from centuries ago. Go ask Oracle."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -9092,6 +9117,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
               '"I wouldn\'t be a very good Knight if I fled from my company, would I. But if you ask me... Wait." The knight shouts some commands at the servants, makes a short note in his book, and continues. "If you ask me, the withdrawal from here cannot come fast enough. I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -9248,6 +9274,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
       ],
     ),
   ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -9307,6 +9334,7 @@ final talkToHorsemanWhiteQuake1Ink = InkAst([
         '"I don\'t think so, kid. Where I come from, there are earthquakes. I remember a few. A few, you hear? Maybe ten, in my whole life. Not an earthquake a day, sometimes more, like here."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -9338,6 +9366,7 @@ final talkToHorsemanWhiteRetreatInk = InkAst([
         'He pounds his chest. "We are not meant to be slaughtered like pigs."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -9982,6 +10011,7 @@ final talkToAdaAboutDelvingInk = InkAst([
         'seek help from others. The Deathless have been friendly to us farmers. Oracle is a beautiful person. The Knights are leaving, but they are good people, at heart."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -10002,6 +10032,7 @@ final talkToAdaAboutDelvingInk = InkAst([
         '"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I\'ve heard of the Dragon Egg, an ancient device of war of that sort."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -10035,6 +10066,7 @@ final talkToAdaAboutOracleInk = InkAst([
         '"She\'s the wisest person I know. Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor." Ada chuckles. "As high as possible without being quartered by the orcs. She likes the view."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -10108,6 +10140,7 @@ final talkToAdaBigOInk = InkAst([
         'what dark magic he\'s doing up there. I try not to think about it, to be honest."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -10170,6 +10203,7 @@ final talkToAdaDogheadFigureInk = InkAst([
         'All I know is that this has been said for generations. My mother taught me about Doghead"\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -10202,6 +10236,7 @@ final talkToAdaDogheadFigureInk = InkAst([
               '"The Knights are leaving. Big O at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -10268,6 +10303,7 @@ final talkToAdaQuake1Ink = InkAst([
         '"Don\'t you worry, ${youngSirSubstitution}, this is quite normal here. These past months there is seldom a single day when we don\'t have a quake."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -10308,6 +10344,7 @@ final talkToAdaQuake1Ink = InkAst([
               '"I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. ${ifBlock_23e6b75e}"\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -11875,6 +11912,7 @@ final talkToKatAboutDevlingInk = InkAst([
         '"Don\'t underestimate it. There\'s a reason the Knights are leaving, and it\'s not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -11894,6 +11932,7 @@ final talkToKatAboutDevlingInk = InkAst([
         '"You would do well to ask the locals. There\'s so much I don\'t know about this place."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -11983,6 +12022,7 @@ final talkToKatAboutLadyInk = InkAst([
         'an undead aristocrat. In life, she was a powerful young lady in these parts. A daughter of a lord. Today, she\'s just standing there, watching night and day, with that katana of hers."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -12605,6 +12645,7 @@ final talkToMiguelAboutDevlingInk = InkAst([
         '"${ifBlock_e7f3070f} ${ifBlock_c48d1a8b} If I were you, no offense, I\'d try to find any advantage possible against the orcs and the other creatures of the upside."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -12640,6 +12681,7 @@ final talkToMiguelAboutLadyInk = InkAst([
         '"Lady Hope. Our local undead. Just stands there with that sweet katana at the ready."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -13131,6 +13173,7 @@ final talkToKatAfterOrcOffensiveInk = InkAst([
         '"It\'s the orcs. They attacked. They took over the Oracle\'s observatory, threatened to bring the fight to the farmers. Miguel was right. I cannot leave it be. If you want my help, I\'ll follow you."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -13816,6 +13859,7 @@ final bleedsBlindGuideBigOInk = InkAst([
         'Jisad points to the top of the Pyramid, or at least where he thinks it is. He\'s not too far off, considering his blindness. "The wizard." He puts his hand down and spits. "Or at least that\'s what everyone assumes."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -13865,6 +13909,7 @@ final bleedsBlindGuideBigOInk = InkAst([
         'know is that there\'s someone up there, above the Orcs. People say there are strange lights coming out of those top floors, during some nights."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -13911,6 +13956,7 @@ final bleedsBlindGuideBrotherInk = InkAst([
                     '"Well, then, ask the Knights. Most of them are still here, though the lot is leaving as we speak." Jisad shrugs.\n',
                     isRaw: true);
               }),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
               InkParagraphNode((ActionContext c) {
                 final WorldState originalWorld = c.world;
                 final Simulation sim = c.simulation;
@@ -13954,6 +14000,7 @@ final bleedsBlindGuideBrotherInk = InkAst([
           s.add('ask Oracle. She\'s the most knowledgeable of us all."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -13977,6 +14024,7 @@ final bleedsBlindGuideBrotherInk = InkAst([
               '"Finding anyone in this mess is tough. If you make it that far, you should ask Oracle. She\'s the one who makes it her job to _know_ things."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -14091,6 +14139,7 @@ final bleedsBlindGuideDelvingInk = InkAst([
               '"And remember, you can always just turn around and run from here."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -14233,6 +14282,7 @@ final bleedsBlindGuideGreetInk = InkAst([
         '"Hello there. Nice to meet you! I am Jisad, the blind guide." He smiles.\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -14375,6 +14425,7 @@ final bleedsBlindGuideGreetInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add('I take the apple.\n', isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -14466,6 +14517,7 @@ final bleedsBlindGuideOracleInk = InkAst([
         'on the East side of the Pyramid. She has a room just below the battlefield floor. Quite dangerous, this close to the Orcs. But the height gives her an advantage. A better view of the surroundings."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -14507,6 +14559,7 @@ final bleedsBlindGuideOrcsInk = InkAst([
         '"I have been here for a long time, ${youngSirSubstitution}. But I don\'t know why they came or what they are doing."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -14529,6 +14582,7 @@ final bleedsBlindGuideQuake1Ink = InkAst([
         '"Yes, ${youngSirSubstitution}. We have these quite often, at least one a day. They don\'t seem to be too serious, thank the Eight Gods."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -14579,6 +14633,7 @@ final bleedsBlindGuideWhatsWrongInk = InkAst([
         '"Oh!" Jisad slaps his knee. "Everything! I was born and raised in these ancient ruins. It was always a little bit crazy here but never like this. The Knights are leaving. The orcs at the upper floors are getting bolder every day. There are bands of goblins closing in on this place."\n',
         isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -17005,6 +17060,7 @@ final startInkInk = InkAst([
               'He slashes Tamara\'s leg and she goes down. There is no more running now. ${ifBlock_72e7100f8} But I am able to pick up a solid branch from the ground and I have the initiative now.\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
@@ -17053,6 +17109,7 @@ final startInkInk = InkAst([
               '"I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her battered sword at the goblin. With her off hand, she hands me her dagger. "You\'ll need it, ${youngSirSubstitution}."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
           final Simulation sim = c.simulation;
