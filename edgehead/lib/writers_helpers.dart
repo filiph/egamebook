@@ -578,6 +578,45 @@ bool storyNecromanyHasPrecedence(ApplicabilityContext c) {
   return false;
 }
 
+/// This is called when the player reaches the Bleeds for the first time.
+/// It is here to remind the player about the items and that they can interact
+/// with them.
+void takeInventory(ActionContext c) {
+  final s = c.outputStoryline;
+  final player = c.player;
+
+  s.add("I take inventory of my items.", isRaw: true);
+
+  if (player.inventory.items.isEmpty) {
+    s.add(
+        "I have reached the Pyramid with absolutely nothing in my possession.",
+        isRaw: true);
+    return;
+  }
+
+  final hasFathersLetter = c.hasItem(letterFromFatherId);
+
+  if (hasFathersLetter) {
+    s.add("I have my father's letter in a pocket.", isRaw: true);
+  }
+
+  final otherItems = player.inventory.items.toSet()
+    ..removeWhere((item) => item.id == letterFromFatherId);
+
+  if (otherItems.isEmpty) {
+    assert(
+        hasFathersLetter,
+        "We did check that items are non-empty, "
+        "and so if otherItems are empty, that means that the only item "
+        "in the player's possession is the father's letter.");
+    s.add("And that is all.", isRaw: true);
+    return;
+  }
+
+  s.addEnumeration("And I <also> carry ", otherItems, null, maxPerSentence: 10);
+  s.add("I must hope it is enough.", isRaw: true);
+}
+
 Actor _makeGoblin(WorldStateBuilder w,
     {int id,
     bool spear = false,

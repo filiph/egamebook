@@ -39,6 +39,10 @@ c.learn(kbTrader);
 c.learn(kbGoblinCampSmoke);
 [[ENDCODE]]
 
+[[CODE]]
+takeInventory(c);
+[[ENDCODE]]
+
 DESCRIPTION:
 
 [[CODE]]

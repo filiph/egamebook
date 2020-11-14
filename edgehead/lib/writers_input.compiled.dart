@@ -13446,6 +13446,8 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
       isRaw: true);
   c.learn(kbTrader);
   c.learn(kbGoblinCampSmoke);
+
+  takeInventory(c);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -15794,6 +15796,8 @@ final Room bleedsMainAfterQuake1 = Room(
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
+
+      takeInventory(c);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -15844,6 +15848,8 @@ final Room bleedsMainAfterQuake2 = Room(
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
+
+      takeInventory(c);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
