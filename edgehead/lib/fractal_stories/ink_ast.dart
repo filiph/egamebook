@@ -73,7 +73,7 @@ class InkChoiceNode extends InkSequenceNode {
     if (helpMessageStart == -1) return null;
     final helpMessageEnd = command.indexOf('))');
     assert(helpMessageStart < helpMessageEnd,
-        'Command start a helpMessage region but never closes it: $command');
+        'Command starts a helpMessage region but never closes it: $command');
     return command.substring(helpMessageStart + '(('.length, helpMessageEnd);
   }
 }

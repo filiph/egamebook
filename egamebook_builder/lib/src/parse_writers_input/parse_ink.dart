@@ -62,9 +62,10 @@ String parseInk(String name, String text) {
       final paragraph = _ParagraphText(fullParagraph.trim());
       final isCodeParagraph = fullParagraph.contains('[[CODE]]');
 
-      if (previousWasParagraph &&
-          !previousParagraphHadGlue &&
-          !isCodeParagraph) {
+      // Create a new paragraph unless the previous paragraph ended
+      // with glue.
+      // This applies even for code paragraphs that follow a normal paragraph.
+      if (!previousParagraphHadGlue && previousWasParagraph) {
         assert(
             !paragraph.hasStartingGlue,
             "Previous paragraph didn't have glue "
