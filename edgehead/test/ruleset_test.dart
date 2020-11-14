@@ -59,7 +59,7 @@ void main() {
       Rule(ruleId, 1, false, (c) => c.actor.isPlayer, (_) {}),
     );
     final world = WorldStateBuilder()
-      ..actors = SetBuilder<Actor>(<Actor>[aren])
+      ..actors = ListBuilder<Actor>(<Actor>[aren])
       ..situations = ListBuilder<Situation>(<Situation>[])
       ..statefulRandomState = 1337
       ..time = DateTime.utc(1000);
@@ -77,7 +77,7 @@ void main() {
       Rule(43, 0, false, (_) => true, (_) => state = 2),
     );
     final world = WorldStateBuilder()
-      ..actors = SetBuilder<Actor>(<Actor>[aren])
+      ..actors = ListBuilder<Actor>(<Actor>[aren])
       ..situations = ListBuilder<Situation>(<Situation>[])
       ..statefulRandomState = 1337
       ..time = DateTime.utc(1000);

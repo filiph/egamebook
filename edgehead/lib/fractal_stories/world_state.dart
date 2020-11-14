@@ -35,7 +35,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   ActionHistory get actionHistory;
 
   /// All the actors currently in the game.
-  BuiltSet<Actor> get actors;
+  BuiltList<Actor> get actors;
 
   /// The situation on the top of the stack.
   Situation get currentSituation {
@@ -233,7 +233,7 @@ abstract class WorldStateBuilder
 
   RuleHistoryBuilder ruleHistory;
 
-  SetBuilder<Actor> actors;
+  ListBuilder<Actor> actors;
 
   ActorBuilder director;
 

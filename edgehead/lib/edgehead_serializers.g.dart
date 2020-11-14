@@ -49,6 +49,12 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(WeaponType.serializer)
       ..add(WorldState.serializer)
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Actor)]),
+          () => new ListBuilder<Actor>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Situation)]),
+          () => new ListBuilder<Situation>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(BodyPart)]),
           () => new ListBuilder<BodyPart>())
       ..addBuilderFactory(
@@ -116,12 +122,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltMap,
               const [const FullType(int), const FullType(RuleRecord)]),
           () => new MapBuilder<int, RuleRecord>())
-      ..addBuilderFactory(
-          const FullType(BuiltSet, const [const FullType(Actor)]),
-          () => new SetBuilder<Actor>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Situation)]),
-          () => new ListBuilder<Situation>())
       ..addBuilderFactory(const FullType(BuiltSet, const [const FullType(int)]),
           () => new SetBuilder<int>()))
     .build();

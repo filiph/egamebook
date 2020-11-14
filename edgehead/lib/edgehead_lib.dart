@@ -266,7 +266,7 @@ class EdgeheadGame extends Book {
     } else {
       // Creating a new game from start.
       world = WorldState((b) => b
-        ..actors = SetBuilder<Actor>(<Actor>[
+        ..actors = ListBuilder<Actor>(<Actor>[
           edgeheadPlayer,
           edgeheadTamara,
           edgeheadLeroy,

@@ -24,7 +24,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       'actors',
       serializers.serialize(object.actors,
           specifiedType:
-              const FullType(BuiltSet, const [const FullType(Actor)])),
+              const FullType(BuiltList, const [const FullType(Actor)])),
       'customHistory',
       serializers.serialize(object.customHistory,
           specifiedType: const FullType(CustomEventHistory)),
@@ -81,8 +81,8 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
         case 'actors':
           result.actors.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltSet, const [const FullType(Actor)]))
-              as BuiltSet<Object>);
+                      const FullType(BuiltList, const [const FullType(Actor)]))
+              as BuiltList<Object>);
           break;
         case 'customHistory':
           result.customHistory.replace(serializers.deserialize(value,
@@ -135,7 +135,7 @@ class _$WorldState extends WorldState {
   @override
   final ActionHistory actionHistory;
   @override
-  final BuiltSet<Actor> actors;
+  final BuiltList<Actor> actors;
   @override
   final CustomEventHistory customHistory;
   @override
@@ -265,13 +265,13 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
-  SetBuilder<Actor> get actors {
+  ListBuilder<Actor> get actors {
     _$this;
-    return super.actors ??= new SetBuilder<Actor>();
+    return super.actors ??= new ListBuilder<Actor>();
   }
 
   @override
-  set actors(SetBuilder<Actor> actors) {
+  set actors(ListBuilder<Actor> actors) {
     _$this;
     super.actors = actors;
   }

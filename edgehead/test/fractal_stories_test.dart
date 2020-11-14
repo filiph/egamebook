@@ -53,7 +53,7 @@ void main() {
       final sim = Simulation(const [], const [], const {},
           const Ruleset.empty(), const {}, const {});
       final world = WorldState((b) => b
-        ..actors = SetBuilder<Actor>(<Actor>[])
+        ..actors = ListBuilder<Actor>(<Actor>[])
         ..situations = ListBuilder<Situation>(<Situation>[])
         ..statefulRandomState = 1337
         ..time = DateTime.utc(1000)).toBuilder();
@@ -178,7 +178,7 @@ void main() {
         final initialSituation =
             RoomRoamingSituation.initialized(1, outside, false);
         final world = WorldState((b) => b
-          ..actors = SetBuilder<Actor>(<Actor>[aren])
+          ..actors = ListBuilder<Actor>(<Actor>[aren])
           ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
           ..statefulRandomState = 1337
           ..time = DateTime.utc(1000));

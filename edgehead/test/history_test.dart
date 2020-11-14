@@ -22,7 +22,7 @@ void main() {
       final initialSituation =
           RoomRoamingSituation.initialized(1, outside, false);
       final WorldState world = WorldState((b) => b
-        ..actors = SetBuilder<Actor>(<Actor>[aren])
+        ..actors = ListBuilder<Actor>(<Actor>[aren])
         ..situations = ListBuilder<Situation>(<Situation>[initialSituation])
         ..statefulRandomState = 1337
         ..time = DateTime.utc(1000));

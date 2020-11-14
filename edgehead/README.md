@@ -309,12 +309,21 @@ to perform on a mobile platform):
 dart2native benchmark/full.dart && ./benchmark/full.exe
 ```
 
+Finally, if you want to hear a beep at the end, you can do:
+
+``sh
+dart2native benchmark/full.dart && ./benchmark/full.exe; tput bel
+``
+
 #### Results
 
-| Commit  | Mean (s) | MoE (s) | N |
-| ------- | -------: | ------: | ---: |
-| f8617f53 Remove async from planner | 21.89 | 6.22 | 6 |
-| e11fe3f0 Avoid string interpolation ... | 14.91 | 0.17 | 21 |
-| bab88227 Decrease maxOrder of AI | 4.87 | 0.04 | 62 |
-| exploration: `while (await _update())` | 5.70 | 0.17 | 53 |
-| latest Fix bug which led to ... | 4.71 | 0.04 | 64 |
+| Commit  | Mean (s) | MoE (s) | N | Notes |
+| ------- | -------: | ------: | ---: | :--- |
+| f8617f53 Remove async from planner | 21.89 | 6.22 | 6 | |
+| e11fe3f0 Avoid string interpolation ... | 14.91 | 0.17 | 21 | |
+| bab88227 Decrease maxOrder of AI | 4.87 | 0.04 | 62 | |
+| exploration: `while (await _update())` | 5.70 | 0.17 | 53 | |
+| e60dfc88 Fix bug which led to ... | 4.71 | 0.04 | 64 | |
+| 78cc8107 Actually fix ... | 9.73 | 0.26 | 31 | Increase of options. |
+| 66f07c71 Run build | 8.29 | 0.05 | 37 | |
+| latest Use BuiltList for actors | 5.05 | 0.02 | 60 | |
