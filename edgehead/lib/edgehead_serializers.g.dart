@@ -116,6 +116,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
               BuiltMap, const [const FullType(int), const FullType(DateTime)]),
           () => new MapBuilder<int, DateTime>())
       ..addBuilderFactory(
+          const FullType(
+              BuiltMap, const [const FullType(int), const FullType(DateTime)]),
+          () => new MapBuilder<int, DateTime>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ActionRecord)]),
           () => new ListBuilder<ActionRecord>())
       ..addBuilderFactory(

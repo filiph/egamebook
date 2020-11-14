@@ -326,4 +326,5 @@ dart2native benchmark/full.dart && ./benchmark/full.exe; tput bel
 | e60dfc88 Fix bug which led to ... | 4.71 | 0.04 | 64 | |
 | 78cc8107 Actually fix ... | 9.73 | 0.26 | 31 | Increase of options. |
 | 66f07c71 Run build | 8.29 | 0.05 | 37 | |
-| latest Use BuiltList for actors | 5.05 | 0.02 | 60 | |
+| 97e17d04 Use BuiltList | 5.05 | 0.02 | 60 | |
+| latest: Speed up hateTowards | 3.64 | 0.02 | 83 | |

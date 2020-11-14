@@ -21,6 +21,10 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
   Iterable<Object> serialize(Serializers serializers, ActionHistory object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
+      'latestAggression',
+      serializers.serialize(object.latestAggression,
+          specifiedType: const FullType(
+              BuiltMap, const [const FullType(int), const FullType(DateTime)])),
       'latestByActorId',
       serializers.serialize(object.latestByActorId,
           specifiedType: const FullType(
@@ -50,6 +54,11 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'latestAggression':
+          result.latestAggression.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltMap,
+                  const [const FullType(int), const FullType(DateTime)])));
+          break;
         case 'latestByActorId':
           result.latestByActorId.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap,
@@ -182,6 +191,8 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
 
 class _$ActionHistory extends ActionHistory {
   @override
+  final BuiltMap<int, DateTime> latestAggression;
+  @override
   final BuiltMap<int, DateTime> latestByActorId;
   @override
   final BuiltMap<int, DateTime> latestProactiveByActorId;
@@ -192,8 +203,14 @@ class _$ActionHistory extends ActionHistory {
       (new ActionHistoryBuilder()..update(updates)).build();
 
   _$ActionHistory._(
-      {this.latestByActorId, this.latestProactiveByActorId, this.records})
+      {this.latestAggression,
+      this.latestByActorId,
+      this.latestProactiveByActorId,
+      this.records})
       : super._() {
+    if (latestAggression == null) {
+      throw new BuiltValueNullFieldError('ActionHistory', 'latestAggression');
+    }
     if (latestByActorId == null) {
       throw new BuiltValueNullFieldError('ActionHistory', 'latestByActorId');
     }
@@ -217,6 +234,7 @@ class _$ActionHistory extends ActionHistory {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ActionHistory &&
+        latestAggression == other.latestAggression &&
         latestByActorId == other.latestByActorId &&
         latestProactiveByActorId == other.latestProactiveByActorId &&
         records == other.records;
@@ -225,7 +243,7 @@ class _$ActionHistory extends ActionHistory {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, latestByActorId.hashCode),
+        $jc($jc($jc(0, latestAggression.hashCode), latestByActorId.hashCode),
             latestProactiveByActorId.hashCode),
         records.hashCode));
   }
@@ -233,6 +251,7 @@ class _$ActionHistory extends ActionHistory {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ActionHistory')
+          ..add('latestAggression', latestAggression)
           ..add('latestByActorId', latestByActorId)
           ..add('latestProactiveByActorId', latestProactiveByActorId)
           ..add('records', records))
@@ -243,6 +262,12 @@ class _$ActionHistory extends ActionHistory {
 class ActionHistoryBuilder
     implements Builder<ActionHistory, ActionHistoryBuilder> {
   _$ActionHistory _$v;
+
+  MapBuilder<int, DateTime> _latestAggression;
+  MapBuilder<int, DateTime> get latestAggression =>
+      _$this._latestAggression ??= new MapBuilder<int, DateTime>();
+  set latestAggression(MapBuilder<int, DateTime> latestAggression) =>
+      _$this._latestAggression = latestAggression;
 
   MapBuilder<int, DateTime> _latestByActorId;
   MapBuilder<int, DateTime> get latestByActorId =>
@@ -266,6 +291,7 @@ class ActionHistoryBuilder
 
   ActionHistoryBuilder get _$this {
     if (_$v != null) {
+      _latestAggression = _$v.latestAggression?.toBuilder();
       _latestByActorId = _$v.latestByActorId?.toBuilder();
       _latestProactiveByActorId = _$v.latestProactiveByActorId?.toBuilder();
       _records = _$v.records?.toBuilder();
@@ -293,12 +319,15 @@ class ActionHistoryBuilder
     try {
       _$result = _$v ??
           new _$ActionHistory._(
+              latestAggression: latestAggression.build(),
               latestByActorId: latestByActorId.build(),
               latestProactiveByActorId: latestProactiveByActorId.build(),
               records: records.build());
     } catch (_) {
       String _$failedField;
       try {
+        _$failedField = 'latestAggression';
+        latestAggression.build();
         _$failedField = 'latestByActorId';
         latestByActorId.build();
         _$failedField = 'latestProactiveByActorId';

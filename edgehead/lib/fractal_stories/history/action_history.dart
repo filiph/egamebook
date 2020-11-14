@@ -5,6 +5,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/history/history.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
 part 'action_history.g.dart';
@@ -18,6 +19,20 @@ abstract class ActionHistory
       _$ActionHistory;
 
   ActionHistory._();
+
+  /// A record of the latest aggressive action by one actor to another.
+  ///
+  /// The key of the map is a hash from [Actor.hashTwoActorIds]: the first
+  /// [Actor.id] is the protagonist, the second is the sufferer.
+  ///
+  /// The value is the latest time the protagonist was aggressive towards
+  /// the sufferer.
+  ///
+  /// This map is set from [WorldStateBuilder.recordAction].
+  ///
+  /// This is a performance optimization, because we're checking this a lot
+  /// in [Actor.hates].
+  BuiltMap<int, DateTime> get latestAggression;
 
   /// A record of the latest actions made by each actor.
   ///

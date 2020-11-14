@@ -159,6 +159,34 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 
+  /// This is a special case of [timeSinceLastActionRecord], for aggressive
+  /// actions by [protagonist] that were done to [sufferer].
+  ///
+  /// This is called many times by things like [Actor.hates]. When resolved
+  /// using the usual [ActionHistory.query], the search takes about 30% of all
+  /// CPU cycles in a combat situation. This is a performance optimization
+  /// that uses [ActionHistory.latestAggression] map, which keeps track
+  /// of the last time an aggression from any actor to any other actor
+  /// happened.
+  ///
+  /// This can return `null` if there never was any aggressive action
+  /// performed by [protagonist] on [sufferer]. Otherwise, returns
+  /// number of seconds since the last time this happened. In other words,
+  /// the return is the same as with [timeSinceLastActionRecord].
+  int timeSinceLastAggressiveAction(
+      {@required Actor protagonist, @required Actor sufferer}) {
+    assert(protagonist != null);
+    assert(sufferer != null);
+
+    final hash = Actor.hashTwoActorIds(protagonist.id, sufferer.id);
+    final latest = actionHistory.latestAggression[hash];
+    if (latest == null) {
+      // ignore: avoid_returning_null
+      return null;
+    }
+    return time.difference(latest).inSeconds;
+  }
+
   /// Returns number of seconds since an [ActionRecord] that conforms to
   /// the specified named parameters was performed.
   ///
@@ -169,6 +197,9 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
       Actor sufferer,
       bool wasSuccess,
       bool wasAggressive}) {
+    assert(!(protagonist != null && sufferer != null && wasAggressive),
+        "Use timeSinceLastAggressiveAction for a major speedup.");
+
     final latest = actionHistory
         .query(
             actionName: actionName,
@@ -364,6 +395,14 @@ abstract class WorldStateBuilder
     actionHistory.latestByActorId[record.protagonist] = record.time;
     if (record.wasProactive) {
       actionHistory.latestProactiveByActorId[record.protagonist] = record.time;
+    }
+    // Record aggressive action to [ActionHistory.latestAggression] for faster
+    // access.
+    if (record.wasAggressive && record.protagonist != null) {
+      for (final sufferer in record.sufferers) {
+        final hash = Actor.hashTwoActorIds(record.protagonist, sufferer);
+        actionHistory.latestAggression[hash] = record.time;
+      }
     }
   }
 

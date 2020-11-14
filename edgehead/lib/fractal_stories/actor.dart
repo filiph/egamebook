@@ -544,8 +544,8 @@ abstract class Actor extends Object
   /// Returns true if this actor was attacked by [actor] in the past
   /// [maxTime] seconds.
   bool _hasBeenAttackedBy(Actor other, WorldState w, int maxTime) {
-    int recency = w.timeSinceLastActionRecord(
-        protagonist: other, sufferer: this, wasAggressive: true);
+    int recency =
+        w.timeSinceLastAggressiveAction(protagonist: other, sufferer: this);
     if (recency == null) return false;
 
     int deathRecency =
@@ -566,5 +566,11 @@ abstract class Actor extends Object
     }
 
     return recency <= maxTime;
+  }
+
+  static int hashTwoActorIds(int a, int b) {
+    if (a == null) throw StateError('Hash cannot be computed');
+    if (b == null) throw StateError('Hash cannot be computed');
+    return $jf($jc($jc(0, a), b));
   }
 }
