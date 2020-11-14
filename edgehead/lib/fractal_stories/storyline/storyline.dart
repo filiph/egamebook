@@ -374,6 +374,10 @@ class Storyline {
       String conjunction = "and"}) {
     assert(start != null);
     assert(articles != null);
+    assert(
+        end == null || end.isNotEmpty,
+        "If you don't want an end to the enumeration sentence, provide null "
+        "(and not an empty string).");
     if (articles.isEmpty) {
       throw ArgumentError.value(articles);
     }
@@ -388,8 +392,8 @@ class Storyline {
     int sentenceCount = 0;
     for (final article in articles) {
       if (i > 0) {
-        if (i == 1 && article == articles.last) {
-          buf.write(" ");
+        if (article == articles.last) {
+          buf.write(i == 1 ? " " : ", ");
           buf.write(conjunction);
         } else if (i == maxPerSentence - 1) {
           buf.write(", $conjunction");
