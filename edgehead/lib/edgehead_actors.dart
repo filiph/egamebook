@@ -112,7 +112,7 @@ final Actor edgeheadDarg = Actor.initialized(
   "Darg",
   nameIsProperNoun: true,
   pronoun: Pronoun.HE,
-  dexterity: 140,
+  dexterity: 170,
   hitpoints: 2,
   currentRoomName: 'crowdsource',
   currentWeapon: akxe,
@@ -298,7 +298,7 @@ final Actor orcBerserker = Actor.initialized(
   adjective: 'orc',
   pronoun: Pronoun.HE,
   constitution: 2,
-  dexterity: 120,
+  dexterity: 140,
   currentRoomName: 'gods_lair',
   currentWeapon: Item.weapon(
     orcBerserkerBattleAxeId,
@@ -379,6 +379,7 @@ final Actor sixtyFiverOrc = Actor.initialized(
   adjective: "huge",
   pronoun: Pronoun.HE,
   currentRoomName: 'battlefield',
+  dexterity: 150,
   currentWeapon: Item.weapon(
     sixtyFiverSwordId,
     WeaponType.sword,
