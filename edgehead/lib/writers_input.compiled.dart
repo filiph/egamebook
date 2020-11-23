@@ -14649,20 +14649,7 @@ final bleedsBlindGuideWhatsWrongInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "Why?" """.trim(),
-      consequence: [
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add('"Because magic\n', isRaw: true);
-        }),
-      ],
-    ),
-    InkChoiceNode(
-      command: r""" "You blame magic for this?" """.trim(),
+      command: r""" "Why is all this happening?" """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -14671,33 +14658,38 @@ final bleedsBlindGuideWhatsWrongInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'The otherwise calm face of the blind man twists with rage. "Of course I do. Magic\n',
+              '"Because magic is power, and power corrupts. This place is _infused_ with magic. And the world has noticed."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The man turns his unseeing face almost precisely at me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Why are you staying here?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The blind man sighs. "Where would I go?" he says. "What would I do? No. However bad this place gets, I\'ll stay. The Pyramid gave me everything I have — good or bad. I will see this love-hate relationship to the bitter end."\n',
               isRaw: true);
         }),
       ],
     ),
   ]),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'is power, and power corrupts. This place is _infused_ with magic. And the world has noticed."\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        'The man turns his unseeing face almost precisely at me. "Go away. Leave this place. Forgo the magic and keep your life."\n',
-        isRaw: true);
-  }),
 ]);
 
 class BleedsBlindGuideBigO extends RoamingAction {

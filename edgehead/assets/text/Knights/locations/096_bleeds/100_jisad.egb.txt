@@ -136,20 +136,15 @@ c.learn(OrcsFacts.inPyramid);
 // Maybe goblins.
 [[ENDCODE]]
 
-* "Why?"
+* "Why is all this happening?"
 
-  "Because magic <>
+  "Because magic is power, and power corrupts. This place is _infused_ with magic. And the world has noticed."
 
-* "You blame magic for this?"
+  The man turns his unseeing face almost precisely at me. "Go away. Leave this place. Forgo the magic and keep your life."
 
-  The otherwise calm face of the blind man twists with rage. "Of course I do. Magic <>
-  
--
+* "Why are you staying here?"
 
-<> is power, and power corrupts. This place is _infused_ with magic. And the world has noticed."
-
-The man turns his unseeing face almost precisely at me. "Go away. Leave this place. Forgo the magic and keep your life."
-
+  The blind man sighs. "Where would I go?" he says. "What would I do? No. However bad this place gets, I'll stay. The Pyramid gave me everything I have — good or bad. I will see this love-hate relationship to the bitter end."
 
 // ---
 ACTION: $bleeds_blind_guide_goblins
