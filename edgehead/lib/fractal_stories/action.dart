@@ -288,21 +288,6 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
   String toString() => "EnemyTargetAction<$commandPathTemplate>";
 }
 
-/// This [Action] requires an [item] from the ground.
-abstract class ItemAction extends Action<Item> {
-  @override
-  final bool isImplicit = false;
-
-  @override
-  Iterable<Item> generateObjects(ApplicabilityContext context) {
-    final situation = context.world.currentSituation as FightSituation;
-    return situation.droppedItems;
-  }
-
-  @override
-  String toString() => "ItemAction<$commandPathTemplate>";
-}
-
 /// This is a class you can use as a type argument for [Action].
 ///
 /// An `Action<Nothing>` is an action that does not need an object to be
@@ -314,6 +299,54 @@ class Nothing {
   /// to ever instantiate. This is what we want, because [Nothing] is
   /// the type expression of, literally, nothing.
   Nothing._();
+}
+
+/// This [Action] requires an [item] from the ground.
+abstract class OnGroundItemAction extends Action<Item> {
+  @override
+  final bool isImplicit = false;
+
+  /// See [getCommandPath].
+  @override
+  @nonVirtual
+  List<String> get commandPathTemplate =>
+      throw StateError('This action overrides getCommandPath');
+
+  String get verb;
+
+  @override
+  Iterable<Item> generateObjects(ApplicabilityContext context) {
+    final situation = context.world.currentSituation as FightSituation;
+    return situation.droppedItems;
+  }
+
+  /// Because some items might not have an adjective, we need to have extra
+  /// logic in getCommandPath, and therefore cannot use the vanilla
+  /// [commandPathTemplate] (which is a simple getter).
+  @override
+  List<String> getCommandPath(ApplicabilityContext context, Item object) {
+    final commandPathTemplate = [
+      object.adjective != null ? "<objectNounWithAdjective>" : "<objectNoun>",
+      verb,
+    ];
+
+    // This is a computation in [super.getCommandPath()] but here we know
+    // the template contains `<object.*>`
+    const templateContainsObject = true;
+
+    // Realize the template, optionally with "<object>".
+    return (Storyline(
+            referredEntities:
+                context.world.actors.where((actor) => !actor.isDirector))
+          ..add(commandPathTemplate.join(' >> '),
+              object: templateContainsObject ? object : null))
+        .realizeAsString()
+        // Then split again into a list.
+        .split(' >> ');
+  }
+
+  @override
+  String toString() => "ItemAction<$commandPathTemplate>";
 }
 
 /// This [Action] requires a another [Actor], a target. The target

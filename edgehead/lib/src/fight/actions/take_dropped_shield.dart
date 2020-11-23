@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class TakeDroppedShield extends ItemAction {
+class TakeDroppedShield extends OnGroundItemAction {
   static const String className = "TakeDroppedShield";
 
   static final TakeDroppedShield singleton = TakeDroppedShield();
@@ -16,8 +16,7 @@ class TakeDroppedShield extends ItemAction {
   final bool isProactive = true;
 
   @override
-  List<String> get commandPathTemplate =>
-      const ["<objectNounWithAdjective>", "pick up"];
+  final String verb = "pick up";
 
   @override
   String get helpMessage => "A shield makes a huge difference in battle.";

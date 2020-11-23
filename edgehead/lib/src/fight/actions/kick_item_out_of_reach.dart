@@ -9,7 +9,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class KickItemOutOfReach extends ItemAction {
+class KickItemOutOfReach extends OnGroundItemAction {
   static const String className = "KickItemOutOfReach";
 
   static final KickItemOutOfReach singleton = KickItemOutOfReach();
@@ -18,8 +18,7 @@ class KickItemOutOfReach extends ItemAction {
   final bool isProactive = true;
 
   @override
-  List<String> get commandPathTemplate =>
-      const ["<objectNounWithAdjective>", "kick out of reach"];
+  final String verb = "kick out of reach";
 
   @override
   String get helpMessage => "Denies anyone to pick up the weapon. "

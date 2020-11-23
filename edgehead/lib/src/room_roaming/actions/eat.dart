@@ -7,16 +7,16 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/edibility.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/equip_weapon.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class Eat extends Action<Item> {
+class Eat extends InventoryItemAction {
   static const className = 'Eat';
 
   static final Eat singleton = Eat();
 
   @override
-  List<String> get commandPathTemplate =>
-      ['Inventory', '<objectNounWithAdjective>', 'eat'];
+  final String verb = "eat";
 
   @override
   String get helpMessage => null;

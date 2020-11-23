@@ -6,6 +6,7 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:meta/meta.dart';
 
 /// This [Action] requires an [item] from the performer's inventory.
 ///
@@ -106,6 +107,7 @@ class EquipWeapon extends InventoryItemAction {
 abstract class InventoryItemAction extends Action<Item> {
   /// See [getCommandPath].
   @override
+  @nonVirtual
   List<String> get commandPathTemplate =>
       throw StateError('This action overrides getCommandPath');
 
@@ -119,7 +121,7 @@ abstract class InventoryItemAction extends Action<Item> {
     final commandPathTemplate = [
       "Inventory",
       object.adjective != null ? "<objectNounWithAdjective>" : "<objectNoun>",
-      "equip",
+      verb,
     ];
 
     // This is a computation in [super.getCommandPath()] but here we know
