@@ -95,8 +95,8 @@ class WeaponType extends EnumClass {
   /// The length of the weapon.
   ///
   /// When you have a weapon that is longer than your opponents, that should
-  /// make your attacks a little easier. You can keep the opponent at distance.
-  /// On the other hand, a long weapon is harder to be brought to bear
+  /// make your attacks a little easier. You can keep the opponent at a
+  /// distance. On the other hand, a long weapon is harder to be brought to bear
   /// in close combat.
   ///
   /// Note that even [shield] has a "length". This just means it's in front

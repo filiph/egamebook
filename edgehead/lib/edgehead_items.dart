@@ -81,6 +81,8 @@ final Item katana = Item.weapon(
   name: "katana",
   adjective: "ancient",
   firstOwnerId: ladyHopeId,
+  // Katana is a long sword, longer than normal.
+  length: 3,
   isCleaving: true,
 );
 

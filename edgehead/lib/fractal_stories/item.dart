@@ -90,6 +90,7 @@ abstract class Item extends Object
       int slashingDamage,
       int thrustingDamage,
       int tearingDamage,
+      int length,
       bool isCleaving = false,
       int firstOwnerId}) {
     assert(
@@ -101,6 +102,7 @@ abstract class Item extends Object
         slashingDamage: slashingDamage,
         thrustingDamage: thrustingDamage,
         tearingDamage: tearingDamage,
+        length: length,
         isCleaving: isCleaving);
     return Item(id,
         name: name ?? type.name,
@@ -185,6 +187,7 @@ abstract class Item extends Object
     score += damageCapability.thrustingDamage;
     score += damageCapability.bluntDamage;
     score += damageCapability.tearingDamage;
+    score += damageCapability.isCleaving ? 1 : 0;
     return score;
   }
 
