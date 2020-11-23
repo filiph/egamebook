@@ -104,6 +104,14 @@ class StartDefensibleAction extends StartDefensibleActionBase {
   @override
   final CombatCommandType combatCommandType;
 
+  /// Creates a defensible action with the provided callbacks.
+  ///
+  /// The [successChanceGetter] callback is only applied to the player.
+  /// The NPC/enemy's success is given by the defense. In other words,
+  /// the _start_ of a slash is a given, what's contested is if the target
+  /// is able to avoid the slash. The special case for the player is there
+  /// because we want the player-initiated action to create a "roll of dice"
+  /// of some kind.
   StartDefensibleAction({
     @required this.name,
     @required this.combatCommandType,

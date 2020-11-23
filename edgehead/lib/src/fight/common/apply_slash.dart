@@ -29,14 +29,14 @@ void applySlash(WeaponAssaultResult result, ActionContext context, Actor enemy,
   bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
   if (!killed) {
     if (result.didSeverBodyPart) {
-      a.report(s, "<subject> {cleave<s>|sever<s>} <objectOwner's> <object>",
-          objectOwner: result.victim,
-          object: result.severedPart,
-          positive: true,
-          actionThread: thread);
+      a.report(s, "<subject> {cleave<s>|slash<es>} through",
+          positive: true, actionThread: thread);
       if (!enemy.isOnGround) {
         result.severedPart
             .report(s, '<subject> fall<s> to the ground', actionThread: thread);
+      } else {
+        result.severedPart.report(s, '<subject> roll<s> a short distance away',
+            actionThread: thread);
       }
       _placeBodyPartOnGround(w, result.severedPart);
     } else {

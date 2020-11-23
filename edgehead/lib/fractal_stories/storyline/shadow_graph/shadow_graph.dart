@@ -968,8 +968,9 @@ class ShadowGraph {
 
         assert(
             set.isNotEmpty,
-            "range of identifiers for $entity ($complement) is empty "
-            "in $report. Report relevantIdentifiers: $relevantIdentifiers");
+            "range of identifiers for $entity (${entity.id}, $complement) "
+            "is empty in $report. "
+            "Report relevantIdentifiers: $relevantIdentifiers");
       });
     }
   }

@@ -76,9 +76,8 @@ abstract class Item extends Object
       ..bodyPart = part.toBuilder()
       ..damageCapability = DamageCapability(weaponType).toBuilder()
       ..edibility = Edibility.disgusting.toBuilder()
-      ..name = name
+      ..name = 'severed $name'
       ..nameIsProperNoun = false
-      ..adjective = 'severed'
       ..firstOwnerId = part.firstOwnerId);
   }
 
