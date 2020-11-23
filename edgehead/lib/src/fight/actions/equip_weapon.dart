@@ -10,7 +10,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 /// This [Action] requires an [item] from the performer's inventory.
 ///
 /// It will skip weapons that are held by the actor.
-class EquipWeapon extends Action<Item> {
+class EquipWeapon extends InventoryItemAction {
   static const String className = "EquipWeapon";
 
   static final Action<Item> singleton = EquipWeapon();
@@ -32,8 +32,7 @@ class EquipWeapon extends Action<Item> {
   final bool rerollable = false;
 
   @override
-  List<String> get commandPathTemplate =>
-      ["Inventory", "<objectNounWithAdjective>", "equip"];
+  final String verb = "equip";
 
   @override
   String get name => className;
@@ -102,4 +101,39 @@ class EquipWeapon extends Action<Item> {
 
   @override
   String toString() => "EquipWeapon<$commandPathTemplate>";
+}
+
+abstract class InventoryItemAction extends Action<Item> {
+  /// See [getCommandPath].
+  @override
+  List<String> get commandPathTemplate =>
+      throw StateError('This action overrides getCommandPath');
+
+  String get verb;
+
+  /// Because some items might be proper nouns (like "the Artifact Star")
+  /// we need to have extra logic in getCommandPath, and therefore cannot
+  /// use the vanilla [commandPathTemplate] (which is a simple getter).
+  @override
+  List<String> getCommandPath(ApplicabilityContext context, Item object) {
+    final commandPathTemplate = [
+      "Inventory",
+      object.adjective != null ? "<objectNounWithAdjective>" : "<objectNoun>",
+      "equip",
+    ];
+
+    // This is a computation in [super.getCommandPath()] but here we know
+    // the template contains `<object.*>`
+    const templateContainsObject = true;
+
+    // Realize the template, optionally with "<object>".
+    return (Storyline(
+            referredEntities:
+                context.world.actors.where((actor) => !actor.isDirector))
+          ..add(commandPathTemplate.join(' >> '),
+              object: templateContainsObject ? object : null))
+        .realizeAsString()
+        // Then split again into a list.
+        .split(' >> ');
+  }
 }

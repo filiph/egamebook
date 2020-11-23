@@ -5,11 +5,12 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/src/fight/actions/equip_weapon.dart';
 import 'package:edgehead/src/fight/common/drop_weapon.dart';
 
 /// This is meant mostly for harmless weapons, when going barehanded
 /// is an improvement.
-class DropCurrentWeapon extends Action<Item> {
+class DropCurrentWeapon extends InventoryItemAction {
   static final DropCurrentWeapon singleton = DropCurrentWeapon();
 
   static const String className = "DropCurrentWeapon";
@@ -33,8 +34,7 @@ class DropCurrentWeapon extends Action<Item> {
   final Resource rerollResource = null;
 
   @override
-  List<String> get commandPathTemplate =>
-      ["Inventory", "<objectNounWithAdjective>", "drop"];
+  final String verb = "drop";
 
   @override
   String get name => className;
