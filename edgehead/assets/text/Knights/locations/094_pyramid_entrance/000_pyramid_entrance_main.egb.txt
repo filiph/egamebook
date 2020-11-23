@@ -34,7 +34,10 @@ c.learn(LadyHopeFacts.ladyInKeep);
 
 DESCRIPTION:
 [[CODE]]
-c.describeWorthiness(who: w.getActorById(miguelId), what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId], especially: [sixtyFiverShieldId], how: "{approvingly|with respect}");
+if (c.inRoomWith(miguelId) &&
+    w.actionHasBeenPerformed("talk_to_miguel_greetings")) {
+  c.describeWorthiness(who: w.getActorById(miguelId), what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId], especially: [sixtyFiverShieldId], how: "{approvingly|with respect}");
+}
 [[ENDCODE]]
 
 

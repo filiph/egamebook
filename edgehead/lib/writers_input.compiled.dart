@@ -11878,11 +11878,14 @@ final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  c.describeWorthiness(
-      who: w.getActorById(miguelId),
-      what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
-      especially: [sixtyFiverShieldId],
-      how: "{approvingly|with respect}");
+  if (c.inRoomWith(miguelId) &&
+      w.actionHasBeenPerformed("talk_to_miguel_greetings")) {
+    c.describeWorthiness(
+        who: w.getActorById(miguelId),
+        what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+        especially: [sixtyFiverShieldId],
+        how: "{approvingly|with respect}");
+  }
 }, null, null,
     isIdle: true,
     positionX: 26,
@@ -13118,11 +13121,14 @@ final Room pyramidEntranceDuringCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      c.describeWorthiness(
-          who: w.getActorById(miguelId),
-          what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
-          especially: [sixtyFiverShieldId],
-          how: "{approvingly|with respect}");
+      if (c.inRoomWith(miguelId) &&
+          w.actionHasBeenPerformed("talk_to_miguel_greetings")) {
+        c.describeWorthiness(
+            who: w.getActorById(miguelId),
+            what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+            especially: [sixtyFiverShieldId],
+            how: "{approvingly|with respect}");
+      }
     },
     null,
     null,
@@ -13267,11 +13273,14 @@ final Room pyramidEntranceAfterOrcOffensive = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      c.describeWorthiness(
-          who: w.getActorById(miguelId),
-          what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
-          especially: [sixtyFiverShieldId],
-          how: "{approvingly|with respect}");
+      if (c.inRoomWith(miguelId) &&
+          w.actionHasBeenPerformed("talk_to_miguel_greetings")) {
+        c.describeWorthiness(
+            who: w.getActorById(miguelId),
+            what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+            especially: [sixtyFiverShieldId],
+            how: "{approvingly|with respect}");
+      }
     },
     null,
     null,
@@ -13318,11 +13327,14 @@ final Room pyramidEntranceAfterQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      c.describeWorthiness(
-          who: w.getActorById(miguelId),
-          what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
-          especially: [sixtyFiverShieldId],
-          how: "{approvingly|with respect}");
+      if (c.inRoomWith(miguelId) &&
+          w.actionHasBeenPerformed("talk_to_miguel_greetings")) {
+        c.describeWorthiness(
+            who: w.getActorById(miguelId),
+            what: [dragonEggId, katanaId, sixtyFiverShieldId, hawkmanJacketId],
+            especially: [sixtyFiverShieldId],
+            how: "{approvingly|with respect}");
+      }
     },
     null,
     null,
