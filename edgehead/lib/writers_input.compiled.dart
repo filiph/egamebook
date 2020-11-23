@@ -4718,7 +4718,7 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
       isRaw: true);
 }, null, null,
     isIdle: true,
-    positionX: 20,
+    positionX: 21,
     positionY: 46,
     mapName: 'Reservoir',
     firstMapName: 'Damp Place',
@@ -4744,7 +4744,7 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
       return c.hasHappened(evOpenedDam);
     }),
     isIdle: true,
-    positionX: 20,
+    positionX: 21,
     positionY: 46,
     mapName: 'Reservoir',
     firstMapName: 'Damp Place',
@@ -4963,40 +4963,44 @@ final Room oracleMain = Room('oracle_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A woman is here. She seems deep in though, walking up and down the room, over debris.\n\n![Illustration of an old woman with a staff.](oracle.png)\n\nA ridiculously red apple sits on the table.\n\n',
+      'A woman is here. She seems deep in thought, walking up and down the room, over debris.\n\n![Illustration of an old woman with a staff.](oracle.png)\n\nA ridiculously red apple sits on the table.\n\n',
       isRaw: true);
-  c.describeWorthiness(
-      who: oracle,
-      what: [
-        akxeId,
-        compassId,
-        dragonEggId,
-        lairOfGodStarId,
-        northSkullId,
-        sixtyFiverShieldId,
-        hawkmanJacketId
-      ],
-      especially: [compassId, northSkullId],
-      how: "{approvingly|with respect}");
+  if (w.actionHasBeenPerformed("talk_to_oracle_greetings")) {
+    c.describeWorthiness(
+        who: oracle,
+        what: [
+          akxeId,
+          compassId,
+          dragonEggId,
+          lairOfGodStarId,
+          northSkullId,
+          sixtyFiverShieldId,
+          hawkmanJacketId
+        ],
+        especially: [compassId, northSkullId],
+        how: "{approvingly|with respect}");
+  }
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  c.describeWorthiness(
-      who: oracle,
-      what: [
-        akxeId,
-        compassId,
-        dragonEggId,
-        lairOfGodStarId,
-        northSkullId,
-        sixtyFiverShieldId,
-        hawkmanJacketId
-      ],
-      especially: [compassId, northSkullId],
-      how: "{approvingly|with respect}");
+  if (w.actionHasBeenPerformed("talk_to_oracle_greetings")) {
+    c.describeWorthiness(
+        who: oracle,
+        what: [
+          akxeId,
+          compassId,
+          dragonEggId,
+          lairOfGodStarId,
+          northSkullId,
+          sixtyFiverShieldId,
+          hawkmanJacketId
+        ],
+        especially: [compassId, northSkullId],
+        how: "{approvingly|with respect}");
+  }
 }, null, null,
     isIdle: true,
     positionX: 39,
@@ -6624,19 +6628,7 @@ final Room oracleAfterOrcOffensive = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      c.describeWorthiness(
-          who: oracle,
-          what: [
-            akxeId,
-            compassId,
-            dragonEggId,
-            lairOfGodStarId,
-            northSkullId,
-            sixtyFiverShieldId,
-            hawkmanJacketId
-          ],
-          especially: [compassId, northSkullId],
-          how: "{approvingly|with respect}");
+      s.add('', isRaw: true);
     },
     null,
     null,

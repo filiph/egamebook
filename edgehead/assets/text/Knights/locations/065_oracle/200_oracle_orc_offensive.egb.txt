@@ -8,6 +8,8 @@ RULE: c.hasHappened(evOrcOffensive)
 FIRST_DESCRIPTION:
 The place was recently ruined. Blood is everywhere. An old woman lies dead, and next to her, a dead bird.
 
+DESCRIPTION: $NONE
+
 VARIANT_UPDATE_DESCRIPTION:
 The place is ruined. Blood is everywhere. Oracle is dead, and so is the bird.
 

@@ -14,20 +14,23 @@ MAP_NAME: Oracle's Study
 HINT: A place full of books and the smell of coffee.
 
 FIRST_DESCRIPTION:
-A woman is here. She seems deep in though, walking up and down the room, over debris.
+A woman is here. She seems deep in thought, walking up and down the room, over debris.
 
 ![Illustration of an old woman with a staff.](oracle.png)
 
 A ridiculously red apple sits on the table.
 
 [[CODE]]
-// TODO: "the woman" instead of "Oracle"
-c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId, hawkmanJacketId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+if (w.actionHasBeenPerformed("talk_to_oracle_greetings")) {
+  c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId, hawkmanJacketId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+}
 [[ENDCODE]]
 
 DESCRIPTION:
 [[CODE]]
-c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId, hawkmanJacketId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+if (w.actionHasBeenPerformed("talk_to_oracle_greetings")) {
+  c.describeWorthiness(who: oracle, what: [akxeId, compassId, dragonEggId, lairOfGodStarId, northSkullId, sixtyFiverShieldId, hawkmanJacketId], especially: [compassId, northSkullId], how: "{approvingly|with respect}");
+}
 [[ENDCODE]]
 
 // TODO: the raven can say a random word

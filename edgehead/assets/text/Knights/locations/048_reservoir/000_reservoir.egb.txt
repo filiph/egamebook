@@ -4,7 +4,7 @@ APPROACH: $reservoir FROM $training_grounds
 // ---
 ROOM: $reservoir
 
-POS: 20, 46
+POS: 21, 46
 
 FIRST_MAP_NAME: Damp Place
 FIRST_HINT: Corridors around this place smell of stale water. A faint splashing can be heard.
