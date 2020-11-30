@@ -191,6 +191,9 @@ class Report {
           // Uncomment the line below to debug this problem if the debugger
           // refuses to stop at the assertion.
           // print("$a and $b aren't differentiated enough");
+          log.severe(
+              "Entities ${a.id} and ${b.id} aren't differentiated enough: "
+              "$a versus $b");
           return false;
         }
       }
