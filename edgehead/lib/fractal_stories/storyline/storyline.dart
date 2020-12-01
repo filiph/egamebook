@@ -104,8 +104,11 @@ class Report {
       this.startsThread = false,
       this.replacesThread = false,
       this.time})
-      : assert(_checkDifferentiated(
-            [subject, object, object2, owner, objectOwner, object2Owner])),
+      : assert(
+            _checkDifferentiated(
+                [subject, object, object2, owner, objectOwner, object2Owner]),
+            "Entities not differentiated enough in $string: "
+            "$subject, $object, $object2, $owner, $objectOwner, $object2Owner"),
         assert(actionThread != null || startsThread == false,
             "actionThread is null"),
         assert(actionThread != null || replacesThread == false,
