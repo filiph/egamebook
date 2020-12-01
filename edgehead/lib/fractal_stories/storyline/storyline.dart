@@ -60,10 +60,10 @@ class Report {
   ///
   /// Given the following string of reports of the same [actionThread]:
   ///
-  /// * (startsThread) <subject> tr<ies> to ruin <object's> stance
-  /// * <subject> do<esn't> get fooled
-  /// * <subject> deflect<s> the feint
-  /// * (replacesThread) <subject> deflect<s> <object's> feint
+  /// * (startsThread) `<subject> tr<ies> to ruin <object's> stance`
+  /// * `<subject> do<esn't> get fooled`
+  /// * `<subject> deflect<s> the feint`
+  /// * (replacesThread) `<subject> deflect<s> <object's> feint`
   ///
   /// If these reports are in a continuous string, then only
   /// "I deflect goblin's feint" will be printed.
