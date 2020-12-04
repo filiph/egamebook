@@ -13,16 +13,20 @@ MAP_NAME: Smithy
 HINT: The involuntary workplace of my brother Sarn under the orc rule.
 
 FIRST_DESCRIPTION:
-// TODO: describe crawling through a high ventilation shaft
-My brother, Sarn, working for the orcs, forging weapons. He seems not fully aware of his surroundings.
+There's an iron door here that is shut and locked but [we] find a way through a high ventilation shaft. The crawlspace is tight and full of rat droppings but at least it allows an unseen approach.
+
+Finally, I am able to peek through a large hole in the shaft, and look down on the room below.
+
+My brother, Sarn, is forging a battle axe, using some piece of ancient metal equipment as a handle.
 
 [[CODE]]
 c.learn(SarnFacts.seenPersonally);
 [[ENDCODE]]
 
-He is being guarded by an orc jailer. He's working on a battle axe at the anvil, using some piece of ancient metal equipment as a handle.
-
 ![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)
+
+He is being guarded by an orc jailer.
+
 
 DESCRIPTION: $NONE
 
@@ -70,7 +74,7 @@ The orc jailer takes an iron mace and advances towards me.
 
 "Step back, inventor," he says to Sarn. "Let me deal with this worm."
 
-Sarn retreats to a corner of the room and looks at the floor, waiting.
+The orc pushes Sarn roughly to the side and he falls head first into a wall, then slumps to the floor.
 
 [[CODE]]
 c.startOptionalFight();

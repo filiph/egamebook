@@ -3,7 +3,7 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-The fight is over. I wheel around and turn to my brother. He looks at the dead jailer, then at me. Does he even recognize me?
+The fight is over. I wheel around and turn to my brother who is slowly coming to life after the rough fall. He looks at the dead jailer, then at me. Does he even recognize me?
 
 * “I came for you.”
 
@@ -15,19 +15,73 @@ The fight is over. I wheel around and turn to my brother. He looks at the dead j
 
 -
 
-<> I wait a little, but there’s nothing more.
+<> I wait a little, but there’s nothing more for a long time.
 
-* “What did they do to you?”
+Then, straining, Sarn looks into my eyes. "Thank you, [[IF c.playerIsMale]]brother[[ELSE]]sister[[ENDIF]]."
 
-  No response. <>
+* "Thank you? You'll have to do better than that!"
 
-* “I guess karma finally caught up with you, brother.”
+  "Well, what do you expect? <>
 
-  And yet, I feel none of the satisfaction I expected. <>
+* "What wouldn't I do for my beloved brother."
+
+  Sarn searches my face, looking for evidence of snark. "I didn't ask for your help, [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]]. I thanked you. Did you expect a speech? <>
 
 -
 
-<> Sarn just stands there, as if waiting for orders. From whom, though? The jailer is dead.
+<> Should I shower you with gifts? I don't know if you noticed, but I don't have much to give here."
+
+* "How about an apology?"
+
+  He purses his lips and doesn't reply. <>
+
+* "Don't you remember the last time we saw each other?"
+
+  He sighs and bows his head. "Of course I do."
+
+  I don't think he does. I don't think he realizes what happened next. <>
+
+-
+
+<> I tell him about the freezing, sleepless nights up in Falling Rock. How I was hoping that he would show up after all. How I was sure it was all a big misunderstanding.
+
+Because: how could anyone leave their family, I thought, at such a time? How could anyone abandon their father when he was so obviously broken? How could they desert their [[IF c.playerHasAsthma]]asthmatic[[ENDIF]][[IF c.playerHasWoodenFoot]]crippled[[ENDIF]][[IF c.playerHasDebt]]indebted[[ENDIF]] sibling, too young and frail to make ends meet?
+
+"Stop it," Sarn says. "What I did wasn't fair to you or dad, I admit. I was as broken by mom's death as he was, only in a different way. Dad was spending nights at her grave, repeating old conversations. I spent my nights planning. Preparing."
+
+He meets my eyes and points a finger at his head. "Dad was escaping by going into the past. I was escaping into the future." I notice his finger is shaking. I have never seen Sarn this angry.
+
+"It wasn't fair to the family," he says. Both his hands are shaking uncontrollably now. "But I was following my passion. Didn't our mother teach us about following our passion?"
+
+* "She didn't mention abandoning the family."
+
+  "I knew you wouldn't understand," he says. <>
+
+* "What's wrong with your hands?"
+
+  "Nothing's wrong with my hands, [[IF c.playerIsMale]]brother[[ELSE]]sister[[ENDIF]]," he says. <>
+
+-
+
+<> He is in pain now. I see it on his face. This isn't anger, it's something else. Sarn goes to his knees, gripping his head.
+
+"I hate you," he whispers, shaking. "You come all this way only to remind me of my failure."
+
+* "I hate you, too, brother."
+
+  There is defeat in Sarn's face. He kneels and shakes, eyes closed.
+
+* "Let's say I also followed my passion."
+
+  "Enough!" he roars. His whole body trembles and he closes his eyes. 
+
+* "We should stop this, you're not well."
+
+  There's a subtle nod as Sarn closes his eyes and tries to control his trembling.
+
+- 
+
+I watch him for a few moments, than help him to his knees. We should get out of here.
 
 
 // —--
@@ -38,11 +92,13 @@ PREREQUISITES:
 !c.getRoomRoaming().monstersAlive
 
 INK:
-I usher Sarn out of the smithy and through the places I know, downwards. Sarn is obedient but slow to react. I can’t risk combat with my brother in tow.
+I usher Sarn out of the smithy and through the places I know, downwards. Sarn is obedient but slow to react. I can’t risk combat with him in tow.
 
-If anyone is to kill him, it is going to be me.
+If anyone is to kill my brother, it is going to be me.
 
-After a tedious journey down the Pyramid, we arrive at the Bleeds.
+As we make our way through the orcs' territory, I keep a close watch on Sarn's face and hands. He is still trembling. His agony is only getting stronger, it seems, though he tries to conceal it. In a dark corner, I check his body for wounds, but find nothing.
+
+A silent hour later, we arrive at the Bleeds.
 
 [[CODE]]
 c.movePlayer('bleeds_main');
@@ -88,15 +144,15 @@ In a moment, Sarn, Jisad and I sit on the porch, facing the center of the Bleeds
 
 -
 
-<> During our descent from the top of the Pyramid, Sarn reacted less and less, with shorter sentences. I realize that the scumbag is dying. Something in my brother is dying.
+<> I realize that the scumbag is dying. Something in my brother is dying.
 
-“The fight is not over.”
+“The fight is not over,” Jisad says.
 
-I turn around in surprise. This is Jisad talking.
+I turn around in surprise.
 
 * “What do you mean?”
 
-  “There are things larger than ourselves,” Jisad says, straightening on his seat. “Larger than life. We can take what we want for ourselves, we can solve our own little problems.”
+  “There are things larger than ourselves,” he says, straightening on the seat. “Larger than life. We can take what we want for ourselves, we can solve our own little problems.”
 
   Jisad touches just below his missing eyes.
 
@@ -104,7 +160,7 @@ I turn around in surprise. This is Jisad talking.
 
 * “What fight?”
 
-  “You came here to accomplish something,” Jisad says. “Everyone does. And you succeeded.”
+  “You came here to accomplish something,” he says. “Everyone does. And you succeeded.”
 
   He turns to me, as if trying to make eye contact.
 

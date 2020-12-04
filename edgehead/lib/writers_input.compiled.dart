@@ -3239,7 +3239,7 @@ class SaveSarn extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I drop down next to Sarn. He looks surprised but there is no recognition in his eyes.\n\nThe orc jailer takes an iron mace and advances towards me.\n\n"Step back, inventor," he says to Sarn. "Let me deal with this worm."\n\nSarn retreats to a corner of the room and looks at the floor, waiting.\n\n',
+        'I drop down next to Sarn. He looks surprised but there is no recognition in his eyes.\n\nThe orc jailer takes an iron mace and advances towards me.\n\n"Step back, inventor," he says to Sarn. "Let me deal with this worm."\n\nThe orc pushes Sarn roughly to the side and he falls head first into a wall, then slumps to the floor.\n\n',
         isRaw: true);
     c.startOptionalFight();
 
@@ -3287,13 +3287,15 @@ final Room smithy = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      final weSubstitution =
+          getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'My brother, Sarn, working for the orcs, forging weapons. He seems not fully aware of his surroundings.\n\n',
+          'There\'s an iron door here that is shut and locked but ${weSubstitution} find a way through a high ventilation shaft. The crawlspace is tight and full of rat droppings but at least it allows an unseen approach.\n\nFinally, I am able to peek through a large hole in the shaft, and look down on the room below.\n\nMy brother, Sarn, is forging a battle axe, using some piece of ancient metal equipment as a handle.\n\n',
           isRaw: true);
       c.learn(SarnFacts.seenPersonally);
 
       s.add(
-          '\nHe is being guarded by an orc jailer. He\'s working on a battle axe at the anvil, using some piece of ancient metal equipment as a handle.\n\n![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)\n',
+          '\n![Illustration of Sarn, my brother, working with an anvil. An orc jailer is in the background.](sarn.png)\n\nHe is being guarded by an orc jailer.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -3389,7 +3391,7 @@ final sarnRescueInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The fight is over. I wheel around and turn to my brother. He looks at the dead jailer, then at me. Does he even recognize me?\n',
+        'The fight is over. I wheel around and turn to my brother who is slowly coming to life after the rough fall. He looks at the dead jailer, then at me. Does he even recognize me?\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -3426,11 +3428,24 @@ final sarnRescueInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I wait a little, but there’s nothing more.\n', isRaw: true);
+    s.add('I wait a little, but there’s nothing more for a long time.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_56c7cddbe = c.playerIsMale ? '''brother''' : '''sister''';
+    s.add(
+        'Then, straining, Sarn looks into my eyes. "Thank you, ${ifBlock_56c7cddbe}."\n',
+        isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" “What did they do to you?” """.trim(),
+      command: r""" "Thank you? You'll have to do better than that!" """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -3438,13 +3453,12 @@ final sarnRescueInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('No response.\n', isRaw: true);
+          s.add('"Well, what do you expect?\n', isRaw: true);
         }),
       ],
     ),
     InkChoiceNode(
-      command:
-          r""" “I guess karma finally caught up with you, brother.” """.trim(),
+      command: r""" "What wouldn't I do for my beloved brother." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -3452,7 +3466,9 @@ final sarnRescueInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('And yet, I feel none of the satisfaction I expected.\n',
+          final ifBlock_20579df5 = c.playerIsMale ? '''boy''' : '''girl''';
+          s.add(
+              'Sarn searches my face, looking for evidence of snark. "I didn\'t ask for your help, ${ifBlock_20579df5}. I thanked you. Did you expect a speech?\n',
               isRaw: true);
         }),
       ],
@@ -3465,7 +3481,215 @@ final sarnRescueInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Sarn just stands there, as if waiting for orders. From whom, though? The jailer is dead.\n',
+        'Should I shower you with gifts? I don\'t know if you noticed, but I don\'t have much to give here."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "How about an apology?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('He purses his lips and doesn\'t reply.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command:
+          r""" "Don't you remember the last time we saw each other?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('He sighs and bows his head. "Of course I do."\n', isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I don\'t think he does. I don\'t think he realizes what happened next.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I tell him about the freezing, sleepless nights up in Falling Rock. How I was hoping that he would show up after all. How I was sure it was all a big misunderstanding.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_24ee97316 = c.playerHasAsthma ? '''asthmatic''' : '''''';
+    final ifBlock_4377667ba = c.playerHasWoodenFoot ? '''crippled''' : '''''';
+    final ifBlock_3c5937db = c.playerHasDebt ? '''indebted''' : '''''';
+    s.add(
+        'Because: how could anyone leave their family, I thought, at such a time? How could anyone abandon their father when he was so obviously broken? How could they desert their ${ifBlock_24ee97316}${ifBlock_4377667ba}${ifBlock_3c5937db} sibling, too young and frail to make ends meet?\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Stop it," Sarn says. "What I did wasn\'t fair to you or dad, I admit. I was as broken by mom\'s death as he was, only in a different way. Dad was spending nights at her grave, repeating old conversations. I spent my nights planning. Preparing."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'He meets my eyes and points a finger at his head. "Dad was escaping by going into the past. I was escaping into the future." I notice his finger is shaking. I have never seen Sarn this angry.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"It wasn\'t fair to the family," he says. Both his hands are shaking uncontrollably now. "But I was following my passion. Didn\'t our mother teach us about following our passion?"\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "She didn't mention abandoning the family." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"I knew you wouldn\'t understand," he says.\n', isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What's wrong with your hands?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final ifBlock_56c7cddbe =
+              c.playerIsMale ? '''brother''' : '''sister''';
+          s.add(
+              '"Nothing\'s wrong with my hands, ${ifBlock_56c7cddbe}," he says.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'He is in pain now. I see it on his face. This isn\'t anger, it\'s something else. Sarn goes to his knees, gripping his head.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"I hate you," he whispers, shaking. "You come all this way only to remind me of my failure."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "I hate you, too, brother." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'There is defeat in Sarn\'s face. He kneels and shakes, eyes closed.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Let's say I also followed my passion." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Enough!" he roars. His whole body trembles and he closes his eyes.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "We should stop this, you're not well." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'There\'s a subtle nod as Sarn closes his eyes and tries to control his trembling.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I watch him for a few moments, than help him to his knees. We should get out of here.\n',
         isRaw: true);
   }),
 ]);
@@ -3477,7 +3701,7 @@ final takeSarnToBleedsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I usher Sarn out of the smithy and through the places I know, downwards. Sarn is obedient but slow to react. I can’t risk combat with my brother in tow.\n',
+        'I usher Sarn out of the smithy and through the places I know, downwards. Sarn is obedient but slow to react. I can’t risk combat with him in tow.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3487,7 +3711,8 @@ final takeSarnToBleedsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('If anyone is to kill him, it is going to be me.\n', isRaw: true);
+    s.add('If anyone is to kill my brother, it is going to be me.\n',
+        isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3497,8 +3722,17 @@ final takeSarnToBleedsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'After a tedious journey down the Pyramid, we arrive at the Bleeds.\n',
+        'As we make our way through the orcs\' territory, I keep a close watch on Sarn\'s face and hands. He is still trembling. His agony is only getting stronger, it seems, though he tries to conceal it. In a dark corner, I check his body for wounds, but find nothing.\n',
         isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('A silent hour later, we arrive at the Bleeds.\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3599,7 +3833,7 @@ final takeSarnToBleedsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'During our descent from the top of the Pyramid, Sarn reacted less and less, with shorter sentences. I realize that the scumbag is dying. Something in my brother is dying.\n',
+        'I realize that the scumbag is dying. Something in my brother is dying.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3609,7 +3843,7 @@ final takeSarnToBleedsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('“The fight is not over.”\n', isRaw: true);
+    s.add('“The fight is not over,” Jisad says.\n', isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3618,7 +3852,7 @@ final takeSarnToBleedsInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I turn around in surprise. This is Jisad talking.\n', isRaw: true);
+    s.add('I turn around in surprise.\n', isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
@@ -3631,7 +3865,7 @@ final takeSarnToBleedsInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '“There are things larger than ourselves,” Jisad says, straightening on his seat. “Larger than life. We can take what we want for ourselves, we can solve our own little problems.”\n',
+              '“There are things larger than ourselves,” he says, straightening on the seat. “Larger than life. We can take what we want for ourselves, we can solve our own little problems.”\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3666,7 +3900,7 @@ final takeSarnToBleedsInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '“You came here to accomplish something,” Jisad says. “Everyone does. And you succeeded.”\n',
+              '“You came here to accomplish something,” he says. “Everyone does. And you succeeded.”\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
