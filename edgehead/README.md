@@ -225,7 +225,7 @@ If you're feeling especially paranoid (e.g. before a production release),
 you can run the fuzzy test in an infinite loop with the following Unix command:
 
 ```bash
-while pub run test --run-skipped; do :; done
+while pub run test -t long-running --run-skipped; do :; done
 ```
 
 The command will run forever unless a test fails or until you press `Ctrl-C`.
