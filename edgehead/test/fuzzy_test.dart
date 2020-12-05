@@ -11,7 +11,7 @@ import '../bin/default_savegames.dart';
 import '../bin/play.dart';
 
 void main() {
-  test("edgehead runs to completion", () async {
+  test("edgehead runs to completion from start", () async {
     final runner =
         CliRunner(true, true, null, maxTimeAutomated: maxTimeAutomated);
     await runner.initialize(EdgeheadGame());

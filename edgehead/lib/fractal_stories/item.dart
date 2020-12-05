@@ -193,5 +193,5 @@ abstract class Item extends Object
   @override
   String toString() =>
       'Item<$name, $id, adj=$adjective,${isCommon ? ' common,' : ''} '
-      'dmg=$damageCapability>';
+      'dmg=$damageCapability, frstOwnr=$firstOwnerId>';
 }

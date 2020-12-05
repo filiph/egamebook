@@ -68,8 +68,18 @@ class TakeDroppedWeapon extends OnGroundItemAction {
       a.report(s, "<subject> pick<s> <object> up$offHandString", object: item);
     }
     if (previousWeapon == null) {
+      // Barehanded takes a weapon from the ground.
       a.report(s, "<subject> wield<s> <object>", object: item);
     } else {
+      // An armed actor takes a weapon from the ground, replacing his old one.
+      if (item.name == previousWeapon.name &&
+          item.adjective == previousWeapon.adjective &&
+          item.firstOwnerId == previousWeapon.firstOwnerId) {
+        log.severe("Entities ${item.id} and ${previousWeapon.id} aren't "
+            "differentiated enough: $item versus $previousWeapon");
+        throw StateError('$a tries to replace $previousWeapon with $item. '
+            'We got here by ${context.world.actionHistory.describe()}');
+      }
       a.report(
           s,
           "<subject> wield<s> <object>, "
