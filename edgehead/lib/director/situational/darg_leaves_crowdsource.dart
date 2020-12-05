@@ -7,11 +7,6 @@ final _dargLeavesCrowdsource = Rule(_id++, 3, true, (ApplicabilityContext c) {
       c.minutesSinceFirstVisit('crowdsource') > 1 &&
       c.playerDistanceTo('crowdsource') > 1;
 }, (ActionContext c) {
-  if ((c.world.global as EdgeheadGlobalState).isInTesterMode) {
-    final Storyline s = c.outputStoryline;
-    s.add('(DEBUG: Darg left Crowdsource.)', isRaw: true);
-  }
-
   c.outputWorld.updateActorById(dargId, (b) => b.currentRoomName = 'darg_tent');
   // Move the shaman somewhere hidden.
   c.outputWorld.updateActorById(

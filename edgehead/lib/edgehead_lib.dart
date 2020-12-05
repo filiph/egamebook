@@ -42,7 +42,7 @@ class EdgeheadGame extends Book {
   /// When this is `true`, new games will be started with
   /// [EdgeheadGlobalState.isInTesterMode] on. This means some tester
   /// conveniences will be enabled.
-  static const bool startNewGamesInTesterMode = false;
+  static const bool startNewGamesInTesterMode = true;
 
   final Logger log = Logger('KnightsGame');
 
