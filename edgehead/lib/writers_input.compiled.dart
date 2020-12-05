@@ -739,7 +739,7 @@ final bigOEndInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People don\'t complain. They know that what they are about to witness transcends this brief moment of discomfort. Somehow, they all know what the thing in my hands means.\n',
+        'Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People don\'t complain. They know that what they are about to witness transcends this brief moment of discomfort. They all know what the thing in my hands means.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -749,10 +749,37 @@ final bigOEndInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_1d0ea1020 = c.hasHappened(evSavedSarn)
-        ? '''Sarn comes to the fore. He looks much better now. Still scared, but less fuzzy than before. For the first time in years, I smile at him. He starts quietly weeping.'''
-        : '''I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.''';
-    s.add('${ifBlock_1d0ea1020}\n', isRaw: true);
+    Ruleset(
+        Rule(785638670, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.hasHappened(evSavedSarn);
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Sarn comes to the front. He looks much better now. The shaking is gone. There are tears in his eyes now.\n\n"I do regret what I did, Aren," he says. "I left you and our father when you needed me most. I was selfish and I am really, really sorry."\n\nI search for what to say but all I can do is give a little nod.\n\nSeeing this subtle movement, Sarn starts quietly sobbing. His face goes into pieces. Tears go streaming down his cheeks. But he straightens and nods back.\n',
+              isRaw: true);
+        }),
+        Rule(794016591, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.\n',
+              isRaw: true);
+        })).apply(c);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {

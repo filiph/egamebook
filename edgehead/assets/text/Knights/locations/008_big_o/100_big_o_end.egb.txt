@@ -10,9 +10,27 @@ It has started raining outside. The large raindrops drum on the windowpanes, and
 
 An hour later, I'm descending through the Pyramid. No one tries to stop me. Even the orcs move out of the way. They all look, mesmerized by what I hold in my hands.
 
-Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People don't complain. They know that what they are about to witness transcends this brief moment of discomfort. Somehow, they all know what the thing in my hands means.
+Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People don't complain. They know that what they are about to witness transcends this brief moment of discomfort. They all know what the thing in my hands means.
 
-[[IF c.hasHappened(evSavedSarn)]]Sarn comes to the fore. He looks much better now. Still scared, but less fuzzy than before. For the first time in years, I smile at him. He starts quietly weeping.[[ELSE]]I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.[[ENDIF]]
+[[RULESET]]
+[[RULE]]
+  c.hasHappened(evSavedSarn)
+[[THEN]]
+  Sarn comes to the front. He looks much better now. The shaking is gone. There are tears in his eyes now. 
+
+  "I do regret what I did, Aren," he says. "I left you and our father when you needed me most. I was selfish and I am really, really sorry."
+
+  I search for what to say but all I can do is give a little nod.
+
+  Seeing this subtle movement, Sarn starts quietly sobbing. His face goes into pieces. Tears go streaming down his cheeks. But he straightens and nods back.
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+  I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.
+[[ENDRULE]]
+[[ENDRULESET]]
+
 
 The crowd is formed. Two dozen men and women are soaking in the downpour, watching me in silence. I raise my posession for everyone to see.
 
