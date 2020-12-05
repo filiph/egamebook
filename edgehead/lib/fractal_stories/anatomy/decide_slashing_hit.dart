@@ -37,6 +37,8 @@ WeaponAssaultResult decideSlashingHit(
     if (part == null) {
       throw ArgumentError("$designation not found in $target");
     }
+    assert(!part.isSevered,
+        "$part is being slashed even though it has been already severed");
   }
 
   SlashSuccessLevel success = weapon.damageCapability.isCleaving
@@ -123,10 +125,13 @@ WeaponAssaultResult _addMajorCut(
   );
 }
 
-/// Cuts off the body part. The [bodyPart] must be severable.
+/// Cuts off the body part. The [bodyPart] must be severable (and mustn't be
+/// already [BodyPart.isSevered]).
 WeaponAssaultResult _cleaveOff(Actor target, BodyPart bodyPart, Item weapon,
     RandomIntGetter randomGetter) {
   assert(bodyPart.isSeverable);
+  assert(!bodyPart.isSevered,
+      "$bodyPart is already severed when we're cleaving it off");
 
   bool startedBlind = target.anatomy.isBlind;
 

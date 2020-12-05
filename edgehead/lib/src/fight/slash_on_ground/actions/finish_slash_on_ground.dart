@@ -58,10 +58,14 @@ class FinishSlashOnGround extends OtherActorAction {
       w.randomInt,
       designation: w.randomChoose([
         BodyPartDesignation.torso,
-        BodyPartDesignation.primaryArm,
-        BodyPartDesignation.secondaryArm,
-        BodyPartDesignation.leftLeg,
-        BodyPartDesignation.rightLeg
+        if (enemy.anatomy.primaryWeaponAppendageAvailable)
+          BodyPartDesignation.primaryArm,
+        if (enemy.anatomy.secondaryWeaponAppendageAvailable)
+          BodyPartDesignation.secondaryArm,
+        if (enemy.anatomy.hasHealthyLegs) ...[
+          BodyPartDesignation.leftLeg,
+          BodyPartDesignation.rightLeg
+        ],
       ]),
     );
 

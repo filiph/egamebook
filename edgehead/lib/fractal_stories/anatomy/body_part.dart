@@ -139,7 +139,7 @@ abstract class BodyPart extends Object
   /// Is the body part severed (cleaved in half)?
   ///
   /// This is only `true` for the body part that was actually cleaved in half.
-  /// It's descendants are not severed (they just happen to be attached to
+  /// It's descendants are not "[isSevered]" (they just happen to be attached to
   /// a severed part).
   bool get isSevered;
 
