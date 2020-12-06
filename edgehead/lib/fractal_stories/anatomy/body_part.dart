@@ -141,6 +141,11 @@ abstract class BodyPart extends Object
   /// This is only `true` for the body part that was actually cleaved in half.
   /// It's descendants are not "[isSevered]" (they just happen to be attached to
   /// a severed part).
+  ///
+  /// A body part that is [isSevered] is part of the anatomy (as a stub of
+  /// the former limb, for example). But it is dead ([hitpoints] should be
+  /// set to `0`) and it won't show up in [getDescendantParts] (and therefore
+  /// no in [Anatomy.allParts]).
   bool get isSevered;
 
   /// When this body part is destroyed or severed, does the owner die?

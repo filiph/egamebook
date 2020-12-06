@@ -82,13 +82,10 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   @memoized
   bool get hasCrippledLegs {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
-    for (final part in allParts) {
-      if ((part.designation == BodyPartDesignation.leftLeg ||
-              part.designation == BodyPartDesignation.rightLeg) &&
-          part.isAnimatedAndActive) {
-        return false;
-      }
-    }
+    final leftLeg = findByDesignation(BodyPartDesignation.leftLeg);
+    if (leftLeg != null && leftLeg.isAnimatedAndActive) return false;
+    final rightLeg = findByDesignation(BodyPartDesignation.rightLeg);
+    if (rightLeg != null && rightLeg.isAnimatedAndActive) return false;
     return true;
   }
 
@@ -102,14 +99,10 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   @memoized
   bool get hasHealthyLegs {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
-    for (final part in allParts) {
-      if ((part.designation == BodyPartDesignation.leftLeg ||
-              part.designation == BodyPartDesignation.rightLeg) &&
-          part.isActive &&
-          !part.isAnimated) {
-        return false;
-      }
-    }
+    final leftLeg = findByDesignation(BodyPartDesignation.leftLeg);
+    if (leftLeg == null || !leftLeg.isAnimatedAndActive) return false;
+    final rightLeg = findByDesignation(BodyPartDesignation.rightLeg);
+    if (rightLeg == null || !rightLeg.isAnimatedAndActive) return false;
     return true;
   }
 
