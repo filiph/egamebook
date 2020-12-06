@@ -1,3 +1,4 @@
+import 'package:edgehead/edgehead_save_serialize.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -67,6 +68,7 @@ class FinishSlashOnGround extends OtherActorAction {
           BodyPartDesignation.rightLeg
         ],
       ]),
+      savegameGetter: () => serializeWorldState(context.world),
     );
 
     final threadId = getThreadId(sim, w, slashOnGroundSituationName);

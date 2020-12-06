@@ -8,6 +8,7 @@ import 'package:edgehead/edgehead_actors.dart';
 import 'package:edgehead/edgehead_director.dart';
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/edgehead_ids.dart';
+import 'package:edgehead/edgehead_save_serialize.dart';
 import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/book.dart';
@@ -372,14 +373,11 @@ class EdgeheadGame extends Book {
 
     if (recs.isEmpty) {
       // Fail fast for no recommendations in debug mode.
-      String serializeWorldState() =>
-          json.encode(edgehead_serializer.serializers
-              .serializeWith(WorldState.serializer, world));
       assert(
           false,
           "No recommendations for ${actor.name} in $situation.\n"
           "How we got here: ${world.actionHistory.describe()}\n"
-          "Savegame: ${serializeWorldState()}");
+          "Savegame: ${serializeWorldState(world)}");
 
       // Try to recover when in production. Hacky. Not sure this will work
       // and could lead into an infinite loop.
@@ -497,6 +495,7 @@ class EdgeheadGame extends Book {
               MapBuilder<String, String>(performance.additionalStrings)
           ..isImplicit = performance.action.isImplicit);
         callbacks[choice] = () async {
+          selected = performance;
           await _applySelected(
               performance, actorTurn, performances.length, storyline);
 
@@ -509,8 +508,7 @@ class EdgeheadGame extends Book {
         };
         choices.add(choice);
       }
-      final serializedSavegame = json.encode(edgehead_serializer.serializers
-          .serializeWith(WorldState.serializer, world));
+      final serializedSavegame = serializeWorldState(world);
       // Save for debug use. Overwrites the previous savegame.
       _latestSavegameDebug = serializedSavegame;
       final savegame = SaveGameBuilder()
@@ -535,6 +533,7 @@ class EdgeheadGame extends Book {
       await _applySelected(
           selected, actorTurn, recs.performances.length, storyline);
     }
+    log.info(() => '${actor.name} (id=${actor.id}) selected $selected');
 
     storyline.generateFinishedOutput().forEach(elementsSink.add);
 

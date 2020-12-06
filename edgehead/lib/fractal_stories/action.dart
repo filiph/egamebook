@@ -504,6 +504,9 @@ class Performance<T> {
     }
   }
 
+  @override
+  String toString() => 'Performance<${action.name}, $commandSentence>';
+
   void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world,
       String description) {
     if (description == null) {

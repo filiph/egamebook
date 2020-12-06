@@ -23,6 +23,7 @@ WeaponAssaultResult decideSlashingHit(
   RandomIntGetter randomGetter, {
   BodyPartDesignation designation,
   BodyPart bodyPart,
+  String Function() savegameGetter,
 }) {
   assert(target.hitpoints > 0);
   assert(weapon.damageCapability.isSlashing);
@@ -37,8 +38,11 @@ WeaponAssaultResult decideSlashingHit(
     if (part == null) {
       throw ArgumentError("$designation not found in $target");
     }
-    assert(!part.isSevered,
-        "$part is being slashed even though it has been already severed");
+    assert(
+        !part.isSevered,
+        "$part is being slashed even though it has been already severed: "
+        "target $target, designation $designation, body part $bodyPart. "
+        "savegame = ${savegameGetter != null ? savegameGetter() : 'NONE'}");
   }
 
   SlashSuccessLevel success = weapon.damageCapability.isCleaving
