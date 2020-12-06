@@ -103,5 +103,5 @@ class FinishCrackSkull extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      a.currentWeaponOrBodyPart.damageCapability.isBlunt;
+      a.currentWeaponOrBodyPart?.damageCapability?.isBlunt ?? false;
 }
