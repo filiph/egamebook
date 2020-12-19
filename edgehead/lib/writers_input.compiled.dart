@@ -11649,9 +11649,10 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
     positionY: 81,
     mapName: 'The Keep\'s Gate',
     firstMapName: 'The Keep',
-    hint: 'The entrance to the abandoned aristocratic mansion.',
+    hint:
+        'The entrance to the abandoned aristocratic mansion embedded into the Pyramid.',
     firstHint:
-        'This part of the Pyramid seems to have been carved into an artistocratic residence. This is the floor where I saw the lady.');
+        'This part of the Pyramid seems to have been carved into an artistocratic residence. This is the floor where I saw the lady with the katana.');
 final Approach keepBedroomFromKeepDining =
     Approach('keep_dining', 'keep_bedroom', '', null);
 final Approach keepBedroomFromKeepGate =
@@ -16910,8 +16911,8 @@ final Room goblinSkirmishMain = Room(
     generateGoblinCampFight,
     null,
     fightIsOptional: true,
-    positionX: 11,
-    positionY: 97,
+    positionX: 9,
+    positionY: 96,
     mapName: 'Goblin Camp',
     firstMapName: 'Closer to the Smoke Stack',
     hint: 'A shared place of rest for the goblins who travel through here.',
