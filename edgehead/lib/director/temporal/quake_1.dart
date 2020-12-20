@@ -39,10 +39,12 @@ void _quake1Apply(ActionContext c) {
     s.add('An earthquake.', isRaw: true);
   }
   s.addParagraph();
-  s.add("""But this is not an ordinary earthquake. 
-  Earthquakes aren't accompanied by a terrifying roar. 
-  Earthquakes don't fill a person's mind 
-  with bizarre images of walking giants.""", isRaw: true);
+  s.add(
+      "But this is not an ordinary earthquake. "
+      "Earthquakes aren't accompanied by a terrifying roar. "
+      "Earthquakes don't fill a person's mind "
+      "with bizarre images of walking giants.",
+      isRaw: true);
   s.addParagraph();
   s.add("""As suddenly as the quake started, it ends.""", isRaw: true);
 
