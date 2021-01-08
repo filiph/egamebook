@@ -11461,6 +11461,8 @@ class DestroyGateWithAxe extends RoamingAction {
 
     w.recordCustom(evKeepDestroyedGate);
 
+    s.add('\nThis reveals a beatifully decorated passage into the Keep.\n',
+        isRaw: true);
     return '${a.name} successfully performs DestroyGateWithAxe';
   }
 
@@ -11588,7 +11590,9 @@ class OpenGateUnlock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I unlock the gate using the steps I learned.\n\n', isRaw: true);
+    s.add(
+        'I unlock the gate using the steps I learned. This reveals a beatifully decorated passage into the Keep.\n\n',
+        isRaw: true);
     w.recordCustom(evKeepUnlockedGate);
 
     return '${a.name} successfully performs OpenGateUnlock';

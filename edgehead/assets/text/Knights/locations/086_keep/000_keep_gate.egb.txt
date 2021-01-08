@@ -61,7 +61,7 @@ PREREQUISITES:
 c.knows(KeepGateFacts.keepGateUnlock)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I unlock the gate using the steps I learned.
+I unlock the gate using the steps I learned. This reveals a beatifully decorated passage into the Keep.
 
 [[CODE]]
 w.recordCustom(evKeepUnlockedGate);
@@ -83,6 +83,8 @@ a.report(s, "<subject> chop<s> down the gate with <objectNounWithAdjective>", ob
 
 w.recordCustom(evKeepDestroyedGate);
 [[ENDCODE]]
+
+This reveals a beatifully decorated passage into the Keep.
 
 
 NOTES:
