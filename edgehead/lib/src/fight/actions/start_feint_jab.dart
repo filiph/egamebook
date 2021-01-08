@@ -16,7 +16,7 @@ class FeintJab extends FeintSlash {
   String get attackVerb => 'jab';
 
   @override
-  FeintType get feintType => FeintType.slash;
+  FeintType get feintType => FeintType.jab;
 
   @override
   String get name => className;
