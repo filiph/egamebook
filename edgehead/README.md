@@ -327,4 +327,6 @@ dart2native benchmark/full.dart && ./benchmark/full.exe; tput bel
 | 78cc8107 Actually fix ... | 9.73 | 0.26 | 31 | Increase of options. |
 | 66f07c71 Run build | 8.29 | 0.05 | 37 | |
 | 97e17d04 Use BuiltList | 5.05 | 0.02 | 60 | |
-| latest: Speed up hateTowards | 3.64 | 0.02 | 83 | |
+| d2b01ea5 Speed up hateTowards | 3.64 | 0.02 | 83 | |
+| 2c36cb7e Avoid hateTowards bug | 2.17 | 0.01 | 139 | |
+| latest: Avoid logging ... | 2.14 | 0.01 | 140 | |

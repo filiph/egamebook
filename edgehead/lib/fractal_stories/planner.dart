@@ -240,14 +240,6 @@ class ActorPlanner {
       if (current.world.situations.isEmpty) {
         log.finest("- leaf node: world.situations is empty (end of book)");
 
-        var mainActorInFuture = current.world.actors
-            .firstWhere((a) => a.id == actorId, orElse: () => null);
-
-        if (mainActorInFuture == null) {
-          log.finest(() => "- this actor ($actorId) has been removed");
-          continue;
-        }
-
         var score = initialActor.scoreWorld(current.world, simulation);
 
         var stats = ConsequenceStats(
