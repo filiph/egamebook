@@ -153,8 +153,9 @@ class WritersInputGenerator extends Generator {
       // We must call this to force computation of the constant value.
       // Otherwise, metadata.constantValue might be `null`.
       metadata.computeConstantValue();
-      final constant = ConstantReader(metadata.constantValue);
-      if (annotationChecker.isExactlyType(metadata.constantValue.type)) {
+      final value = metadata.computeConstantValue();
+      final constant = ConstantReader(value);
+      if (annotationChecker.isExactlyType(value.type)) {
         return AnnotatedElement(constant, library.element);
       }
     }
