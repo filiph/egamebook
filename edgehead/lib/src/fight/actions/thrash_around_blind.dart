@@ -41,7 +41,7 @@ class ThrashAroundBlind extends Action<Nothing> {
   String applySuccess(ActionContext context, void _) {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
-    a.report(s, "<subject> {blindly|} thrash<es> around");
+    a.report(s, "<subject> blindly thrash<es> around");
     return "${a.name} thrashes around";
   }
 
