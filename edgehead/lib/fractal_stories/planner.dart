@@ -172,22 +172,23 @@ class ActorPlanner {
       int maxOrder,
       int maxConsequences) sync* {
     // Actor object changes during planning, so we need to look up via id.
-    var mainActor = initial.world.getActorById(actorId);
-    var startTurn = ActorTurn(mainActor, initial.world.time);
-    var context = ApplicabilityContext(mainActor, simulation, initial.world);
+    var initialActor = initial.world.getActorById(actorId);
+    var startTurn = ActorTurn(initialActor, initial.world.time);
+    var context = ApplicabilityContext(initialActor, simulation, initial.world);
 
     log.finer("=====");
     log.finer(() => "_getConsequenceStats for firstAction "
-        "'${firstPerformance.commandPath}' of ${mainActor.name}");
+        "'${firstPerformance.commandPath}' of ${initialActor.name}");
     log.finer(() => "- firstAction == $firstPerformance");
 
-    if (!firstPerformance.action.isApplicable(context, mainActor, simulation,
+    if (!firstPerformance.action.isApplicable(context, initialActor, simulation,
         initial.world, firstPerformance.object)) {
       log.finer("- firstAction not applicable");
       return;
     }
 
-    ActorScore initialScore = mainActor.scoreWorld(initial.world, simulation);
+    ActorScore initialScore =
+        initialActor.scoreWorld(initial.world, simulation);
 
     log.finer(() => "- current: initialScore=$initialScore, "
         "cumProb=${initial.cumulativeProbability} "
@@ -239,21 +240,21 @@ class ActorPlanner {
       if (current.world.situations.isEmpty) {
         log.finest("- leaf node: world.situations is empty (end of book)");
 
-        var mainActor = current.world.actors
+        var mainActorInFuture = current.world.actors
             .firstWhere((a) => a.id == actorId, orElse: () => null);
 
-        if (mainActor == null) {
+        if (mainActorInFuture == null) {
           log.finest(() => "- this actor ($actorId) has been removed");
           continue;
         }
 
-        var score = mainActor.scoreWorld(current.world, simulation);
+        var score = initialActor.scoreWorld(current.world, simulation);
 
         var stats = ConsequenceStats(
             score, current.cumulativeProbability, current.order);
 
         log.finest(() => "- $stats");
-        log.finest(() => formatAiConsequence(mainActor, initial,
+        log.finest(() => formatAiConsequence(initialActor, initial,
             firstPerformance, current, score, score - initialScore));
 
         yield stats;
