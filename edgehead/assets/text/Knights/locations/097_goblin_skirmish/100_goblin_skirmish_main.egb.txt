@@ -3,7 +3,7 @@ APPROACH: $goblin_skirmish_main FROM $goblin_skirmish_patrol
 // ---
 ROOM: $goblin_skirmish_main
 
-POS: 9, 96
+POS: 7, 95
 
 FIRST_MAP_NAME: Closer to the Smoke Stack
 FIRST_HINT: Not too far to the source of the smoke now.
