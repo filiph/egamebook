@@ -673,7 +673,8 @@ class ShadowGraph {
   /// For example, [Pronoun.HE] will not identify anything at first, until
   /// a report mentions an entity that uses the pronoun as [Entity.pronoun].
   List<Map<Identifier, Entity>> _getIdentifiersThroughoutStory() {
-    final result = List<Map<Identifier, Entity>>(reports.length);
+    final result = List<Map<Identifier, Entity>>.filled(reports.length, null,
+        growable: false);
     var previous = <Identifier, Entity>{};
 
     /// Used to ensure that no two unrelated entities have the same id.
