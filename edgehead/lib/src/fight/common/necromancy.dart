@@ -253,7 +253,7 @@ List<Actor> _getFightSituationCorpses(ApplicabilityContext context) {
           !actor.isAnimated &&
           (situation.playerTeamIds.contains(actor.id) ||
               situation.enemyTeamIds.contains(actor.id)))
-      .toList(growable: false);
+      .toList();
 }
 
 List<Actor> _getRoomRoamingCorpses(ApplicabilityContext context) {
@@ -272,7 +272,7 @@ List<Actor> _getRoomRoamingCorpses(ApplicabilityContext context) {
       !a.isAnimated &&
       sim.getRoomParent(sim.getRoomByName(a.currentRoomName)) == currentRoom);
 
-  return corpses.toList(growable: false);
+  return corpses.toList();
 }
 
 bool _isDecapitated(Actor actor) {
