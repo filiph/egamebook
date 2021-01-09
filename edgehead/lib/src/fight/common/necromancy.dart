@@ -99,9 +99,10 @@ bool isFollowedByUndeadActor(ApplicabilityContext context, Actor necromancer) {
 bool isFollowedByUndeadInsect(ApplicabilityContext context) =>
     getUndeadInsectName(context) != null;
 
-/// Raises one of the [corpses] and reports on it.
+/// Raises one of the corpses that currently share the room with
+/// [context.actor]. Reports on it.
 ///
-/// If [corpses] is empty
+/// If no suitable corpse is found, then an insect will be raised.
 String raiseDead(ActionContext context) {
   final a = context.actor;
   final s = context.outputStoryline;
@@ -112,6 +113,18 @@ String raiseDead(ActionContext context) {
   final corpses = duringCombat
       ? _getFightSituationCorpses(context)
       : _getRoomRoamingCorpses(context);
+
+  final decapitatedCorpse =
+      corpses.firstWhere(_isDecapitated, orElse: () => null);
+  if (decapitatedCorpse != null) {
+    decapitatedCorpse.report(s, "<subject> twitch<es>");
+    decapitatedCorpse.report(
+        s,
+        "But, ultimately, I am not good enough of a necromancer "
+        "to raise a {decapitated|beheaded} corpse.",
+        wholeSentence: true);
+    corpses.removeWhere(_isDecapitated);
+  }
 
   if (corpses.isEmpty) {
     final insect = w.randomChoose([
@@ -260,4 +273,12 @@ List<Actor> _getRoomRoamingCorpses(ApplicabilityContext context) {
       sim.getRoomParent(sim.getRoomByName(a.currentRoomName)) == currentRoom);
 
   return corpses.toList(growable: false);
+}
+
+bool _isDecapitated(Actor actor) {
+  final neck = actor.anatomy.findByDesignation(BodyPartDesignation.neck);
+  if (neck.isSevered) return true;
+  final head = actor.anatomy.findByDesignation(BodyPartDesignation.head);
+  if (head.isSevered) return true;
+  return false;
 }
