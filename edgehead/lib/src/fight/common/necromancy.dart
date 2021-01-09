@@ -11,10 +11,7 @@ import 'package:meta/meta.dart';
 
 /// Takes a dead [corpse] and transforms it into an undead [Actor], assigned
 /// to the [necromancer]'s team.
-///
-/// Also heals vital body parts (torso, neck), so that the resulting creature
-/// can function.
-Actor buildCorpse(Actor necromancer, Actor corpse) {
+ActorBuilder buildCorpse(Actor necromancer, Actor corpse) {
   final corpseBuilder = corpse.toBuilder();
 
   String adjective, name;
@@ -54,17 +51,7 @@ Actor buildCorpse(Actor necromancer, Actor corpse) {
     ..npc.followingActorId = necromancer.id
     ..team = necromancer.team.toBuilder();
 
-  // Heal all vital parts.
-  deepReplaceBodyPart(
-    corpseBuilder,
-    (part) => part.isVital,
-    (b) {
-      if (b.hitpoints > 0) return;
-      b.hitpoints = 1;
-    },
-  );
-
-  return corpseBuilder.build();
+  return corpseBuilder;
 }
 
 /// Necromancy in places with no dead humanoids will result in raising
@@ -149,7 +136,27 @@ String raiseDead(ActionContext context) {
   w.recordCustom(CustomEvent.actorRaisingUndead, actor: corpse);
 
   final raisedCorpse = buildCorpse(a, corpse);
-  w.updateActorById(corpse.id, (b) => b.replace(raisedCorpse));
+
+  // Heal vital body parts (torso, neck), so that the resulting creature
+  // can function.
+  final healedParts = <BodyPart>{};
+  deepReplaceBodyPart(
+    raisedCorpse,
+    (part) => part.isVital,
+    (b) {
+      if (b.hitpoints > 0) return;
+      b.hitpoints = 1;
+      healedParts.add(b.build());
+    },
+  );
+  if (healedParts.length > 1) {
+    s.addEnumeration("", healedParts, "mend");
+  } else if (healedParts.length == 1) {
+    healedParts.single.report(s, "<owner's> <subject> mend<s>", owner: corpse);
+  }
+  final healedCorpse = raisedCorpse.build();
+
+  w.updateActorById(corpse.id, (b) => b.replace(healedCorpse));
 
   if (duringCombat) {
     final situation = context.world.currentSituation as FightSituation;
