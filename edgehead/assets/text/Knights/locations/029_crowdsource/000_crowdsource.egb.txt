@@ -10,7 +10,7 @@ POS: 27, 29
 FIRST_MAP_NAME: Religious Place
 FIRST_HINT: Orc symbols indicate a temple, a sacrificial place, or both.
 
-MAP_NAME: Crowd's Temple
+MAP_NAME: Orcrowd's Temple
 HINT: A temple with no windows, lit by torches. The darkness and the rows of columns provide good opportunities to hide.
 
 FIRST_DESCRIPTION:

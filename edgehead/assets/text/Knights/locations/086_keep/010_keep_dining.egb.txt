@@ -62,6 +62,7 @@ And then, as if to illustrate the point, Lady Hope's face goes to rigor mortis, 
 
 [[CODE]]
 c.learn(DogheadFacts.somethingCalledDoghead);
+c.markHappened(evKilledHope);
 [[ENDCODE]]
 
 DESCRIPTION: $NONE

@@ -2410,7 +2410,7 @@ final Room crowdsource = Room(
     fightIsOptional: true,
     positionX: 27,
     positionY: 29,
-    mapName: 'Crowd\'s Temple',
+    mapName: 'Orcrowd\'s Temple',
     firstMapName: 'Religious Place',
     hint:
         'A temple with no windows, lit by torches. The darkness and the rows of columns provide good opportunities to hide.',
@@ -2474,7 +2474,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
     fightIsOptional: true,
     positionX: 27,
     positionY: 29,
-    mapName: 'Crowd\'s Temple',
+    mapName: 'Orcrowd\'s Temple',
     firstMapName: 'Religious Place',
     hint:
         'A temple with no windows, lit by torches. The darkness and the rows of columns provide good opportunities to hide.',
@@ -11953,6 +11953,7 @@ final Room keepDining = Room(
           'Lady Hope is defeated, but her head is still talking. \n\n"I see you, young friend," the head says. "I see your ambition. I see your talents. I see your brutality, which I like most of all."\n\nA barren approximation of a laugh leaves the throat.\n\n"Too many young people limit themselves," the head continues. "They limit their effect on the world. You don\'t. But I warn you: you\'re not to cross me. You\'re not to ascend to the top. If you do, you die. You are not Doghead. It is not your fate to save this place. And that means, if you cross me, your fate is to die."\n\nAnd then, as if to illustrate the point, Lady Hope\'s face goes to rigor mortis, her features suddenly aging and wrinkling, and she talks no more.\n\n',
           isRaw: true);
       c.learn(DogheadFacts.somethingCalledDoghead);
+      c.markHappened(evKilledHope);
     });
 final Approach keepServantsFromKeepBedroom =
     Approach('keep_bedroom', 'keep_servants', '', null,
