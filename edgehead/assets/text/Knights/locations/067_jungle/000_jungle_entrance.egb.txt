@@ -27,9 +27,3 @@ Corridors full of vegetation. Path through that, like a path in a forest, but in
 
 VARIANT_UPDATE_DESCRIPTION:
 Muddy footprints lead into the jungle.
-
-
-NOTES:
-
-TODO: Make it harder to get to the jungle. Add at least one "twisty little passages" area in between staging area and jungle.
-- The lizardman: he can be find either here or in the reservoir.

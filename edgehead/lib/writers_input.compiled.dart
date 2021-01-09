@@ -5416,7 +5416,7 @@ final talkToOracleDeathlessInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO "They are a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
+        '"They are a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -5466,7 +5466,7 @@ final talkToOracleDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO "There\'s a prophesy. A man with a dog\'s head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."\n',
+        '"There\'s a prophesy. A man with a dog\'s head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -6078,7 +6078,7 @@ class OracleGiveNorthSkull extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Oracle is very thankful.\n\nTODO\n\n', isRaw: true);
+    s.add('Oracle is very thankful.\n\n\n', isRaw: true);
     c.removeItemFromPlayer(northSkullId);
 
     return '${a.name} successfully performs OracleGiveNorthSkull';
@@ -7023,7 +7023,7 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'They are extremely happy.\n\nTODO: explain how I gained there respect, and they allow me to visit their shrine\n\n',
+        'They are extremely happy.\n\nTODO: explain how I gained their respect, and they allow me to visit their shrine\n\n',
         isRaw: true);
     c.markHappened(evDeathlessRespectGained);
     c.removeItemFromPlayer(lairOfGodStarId);
@@ -11764,7 +11764,7 @@ class SearchBedroom extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'TODO: Everything is gone. Except: a family portrait. The looters didn\'t touch it - superstition?\n',
+        'Everything is gone. Except: a family portrait. The looters didn\'t touch it - superstition?\n',
         isRaw: true);
     return '${a.name} successfully performs SearchBedroom';
   }

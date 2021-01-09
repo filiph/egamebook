@@ -31,8 +31,8 @@ COMMAND: furniture >> search
 FOR_LOCATION: $keep_bedroom
 
 COMPLETE_SUCCESS_DESCRIPTION:
-TODO: Everything is gone. Except: a family portrait. The looters didn't touch it - superstition?
-
+Everything is gone. Except: a family portrait. The looters didn't touch it - superstition?
+// TODO: expand on this.
 
 // ---
 ACTION: $examine_family_portrait

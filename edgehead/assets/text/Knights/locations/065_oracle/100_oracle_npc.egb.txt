@@ -135,7 +135,7 @@ c.hasItem(northSkullId)
 COMPLETE_SUCCESS_DESCRIPTION:
 Oracle is very thankful.
 
-TODO
+// TODO: explain how she's delighted
 
 [[CODE]]
 c.removeItemFromPlayer(northSkullId);
@@ -156,7 +156,9 @@ c.knows(DogheadFacts.somethingCalledDoghead)
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
 
 INK:
-TODO "There's a prophesy. A man with a dog's head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."
+"There's a prophesy. A man with a dog's head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."
+
+// TODO: make the quote into prose
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
@@ -274,7 +276,9 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 c.knows(DeathlessFacts.somethingCalledDeathless)
 
 INK:
-TODO "They are a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
+"They are a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
+
+// TODO: make the quote into prose
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
