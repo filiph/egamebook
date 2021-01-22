@@ -7124,6 +7124,76 @@ final Approach dragonEggRoomFromDeathlessVillage =
   final Actor a = c.actor;
   return c.hasHappened(evDeathlessRespectGained);
 });
+
+class DragonEggUse extends RoamingAction {
+  @override
+  final String name = 'dragon_egg_use';
+
+  static final DragonEggUse singleton = DragonEggUse();
+
+  @override
+  List<String> get commandPathTemplate => ['Inventory', 'Dragon Egg', 'use'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (!(c.hasItem(dragonEggId) &&
+        !c.playerRoom.isSynthetic &&
+        c.playerRoom.isOnMap &&
+        !c.getRoomRoaming().monstersAlive)) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I take the Dragon Egg out and turn it in my hand. The shape is mesmerizing. Beautiful. A true artifact of the ancients.\n\nArgo warned me only to use it in combat. I shake my head. No, this is too good be thrown away at the enemy. I remove the pin, just as she told me, and release the lever. There\'s an audible click inside the egg as I do so.\n\nThe lever comes off, so I now hold the lever in my left hand and the egg in my right hand. The device looks more like an actual egg now, without the lever. I enjoy the symmetry.\n\nNothing seems to be happening. I put the egg closer to my ear in case there are any more clicks to be heard. Nothing. Not a s—\n\n',
+        isRaw: true);
+    w.updateActorById(playerId, (b) => b.hitpoints = 0);
+
+    return '${a.name} successfully performs DragonEggUse';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform DragonEggUse';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage =>
+      'Argo said the egg is to be used in combat. But it\'s tempting to try and use it now.';
+  @override
+  bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
+}
+
 final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7131,7 +7201,7 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The sacred shrine of the Deathless.\n\nThere\'s a pedestal here, and on it, the legendary Dragon Egg.\n\n![Illustration of a pedestal with "Ovum Draconis" written on it. On the pedestal, there is a frag grenade.](dragonegg.png)\n\nTODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It\'s a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It\'s a frag grenade.)\n\n',
+      'The sacred shrine of the Deathless.\n\nThere\'s a pedestal here, and on it, the legendary Dragon Egg.\n\n![Illustration of a pedestal with "Ovum Draconis" written on it. On the pedestal, there is a frag grenade.](dragonegg.png)\n\nTODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It\'s a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It\'s a frag grenade.)\n\nTODO: "Do not use it before its time. Use it in combat only, and only in the direst of situations."\n\n',
       isRaw: true);
   c.giveNewItemToPlayer(dragonEgg);
   c.markHappened(evReceivedDragonEgg);
@@ -18321,6 +18391,7 @@ final allActions = <RoamingAction>[
   OracleAppleExamine.singleton,
   OracleAppleTake.singleton,
   GiveLairOfGodStarToDeathless.singleton,
+  DragonEggUse.singleton,
   AttackLizardNearPond.singleton,
   PondHelicopterExamine.singleton,
   ArgoAskDeathless.singleton,

@@ -22,9 +22,42 @@ There's a pedestal here, and on it, the legendary Dragon Egg.
 
 TODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It's a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It's a frag grenade.)
 
+TODO: "Do not use it before its time. Use it in combat only, and only in the direst of situations."
+
 [[CODE]]
 c.giveNewItemToPlayer(dragonEgg);
 c.markHappened(evReceivedDragonEgg);
 [[ENDCODE]]
 
 DESCRIPTION: $NONE
+
+
+// ---
+ACTION: $dragon_egg_use
+COMMAND: Inventory >> Dragon Egg >> use
+
+HINT: Argo said the egg is to be used in combat. But it's tempting to try and use it now.
+
+PREREQUISITES:
+c.hasItem(dragonEggId)
+&&
+!c.playerRoom.isSynthetic
+&&
+c.playerRoom.isOnMap
+&&
+!c.getRoomRoaming().monstersAlive
+
+REPEATABLE: $TRUE
+
+COMPLETE_SUCCESS_DESCRIPTION:
+I take the Dragon Egg out and turn it in my hand. The shape is mesmerizing. Beautiful. A true artifact of the ancients.
+
+Argo warned me only to use it in combat. I shake my head. No, this is too good be thrown away at the enemy. I remove the pin, just as she told me, and release the lever. There's an audible click inside the egg as I do so.
+
+The lever comes off, so I now hold the lever in my left hand and the egg in my right hand. The device looks more like an actual egg now, without the lever. I enjoy the symmetry.
+
+Nothing seems to be happening. I put the egg closer to my ear in case there are any more clicks to be heard. Nothing. Not a s—
+
+[[CODE]]
+w.updateActorById(playerId, (b) => b.hitpoints = 0);
+[[ENDCODE]]
