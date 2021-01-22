@@ -9235,7 +9235,7 @@ final Approach stagingAreaFromPyramidEntrance =
       ? '''Doghead'''
       : '''a "Doghead"''';
   Ruleset(
-      Rule(253556709, 1, false, (ApplicabilityContext c) {
+      Rule(1002482003, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -9247,7 +9247,7 @@ final Approach stagingAreaFromPyramidEntrance =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
         s.add(
-            'As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to ${ifBlock_6718c6f98}. Messages like "Where is Doghead?" and "Doghead save us".\n\n',
+            'As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to ${ifBlock_6718c6f98}. \n\n![An inartistic writing on a wall saying Doghead](graffiti.png)\n\nMessages like "Where is Doghead?" and "Doghead save us" are on almost every step.\n\n',
             isRaw: true);
         c.learn(DogheadFacts.somethingCalledDoghead);
 

@@ -4,7 +4,11 @@ DESCRIPTION:
 [[RULE]]
 !c.playerHasVisited("staging_area")
 [[THEN]]
-As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to [[IF c.knows(DogheadFacts.somethingCalledDoghead)]]Doghead[[ELSE]]a "Doghead"[[ENDIF]]. Messages like "Where is Doghead?" and "Doghead save us".
+As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to [[IF c.knows(DogheadFacts.somethingCalledDoghead)]]Doghead[[ELSE]]a "Doghead"[[ENDIF]]. 
+
+![An inartistic writing on a wall saying Doghead](graffiti.png)
+
+Messages like "Where is Doghead?" and "Doghead save us" are on almost every step.
 
 [[CODE]]
 c.learn(DogheadFacts.somethingCalledDoghead);
