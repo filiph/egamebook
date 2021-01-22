@@ -3155,7 +3155,7 @@ class KarlUseNecromancy extends RoamingAction {
     c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 
     Ruleset(
-        Rule(715270306, 1, false, (ApplicabilityContext c) {
+        Rule(455269039, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -3169,6 +3169,9 @@ class KarlUseNecromancy extends RoamingAction {
           s.add(
               '\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s going on with Karl?"\n\nTODO: They go in, and are killed. Then, some more thrashing, then silence.\n\n',
               isRaw: true);
+          // Make sure to actually kill the two.
+          w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
+          w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
         }),
         Rule(775067539, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;

@@ -42,6 +42,12 @@ c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 
 TODO: They go in, and are killed. Then, some more thrashing, then silence.
 
+[[CODE]]
+  // Make sure to actually kill the two.
+  w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
+  w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
+[[ENDCODE]]
+
 [[ENDRULE]]
 [[RULE]]
   $DEFAULT
