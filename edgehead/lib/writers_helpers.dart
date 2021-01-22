@@ -96,27 +96,27 @@ void describeCompass(ActionContext c) {
 
     if (x < 0) {
       if (slope >= 2.0) {
-        return 'above';
+        return 'roughly above';
       } else if (slope >= 0.5) {
         return 'above and to the west';
       } else if (slope >= -0.5) {
-        return 'to the west';
+        return 'roughly to the west';
       } else if (slope >= -2.0) {
         return 'below and to the west';
       } else {
-        return 'below';
+        return 'roughly below';
       }
     } else {
       if (slope >= 2.0) {
-        return 'below';
+        return 'roughly below';
       } else if (slope >= 0.5) {
         return 'below and to the east';
       } else if (slope >= -0.5) {
-        return 'to the east';
+        return 'roughly to the east';
       } else if (slope >= -2.0) {
         return 'above and to the east';
       } else {
-        return 'above';
+        return 'roughly above';
       }
     }
   }
