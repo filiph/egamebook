@@ -136,9 +136,15 @@ Big O still walks in a wide circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[EN
 
     * * * "You are wise >> ... and you will live forever."
 
-        TODO: player joins the cause
+        I kneel before Osiris and bow my head. When I look up, he smiles with satisfaction.
 
-        TODO: Yet all this time I wonder if I made the right choice.
+        In the following years, we work together to make San Francisco into the fortress that Osiris envisioned. The orcs make competent captains and warriors. Goblins and kobolds build pallisades, traps and pits. Giants work tirelessly on machines of war.
+
+        Soon, the last vestiges of humanity leave the area. Osiris and I are free.
+
+        As I overlook the Bay, frail old hand resting on the ancient window pane, watching the orcish warships sail out to plunder, do I wonder if I made the right choice? Of course I do.
+
+        But, alas, the fight is over.
 
         [[CODE]]
         w.popSituationsUntil(RoomRoamingSituation.className, c);

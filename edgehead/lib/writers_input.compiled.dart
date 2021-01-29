@@ -569,7 +569,9 @@ final finalFightInkInk = InkAst([
                       final Actor a = c.actor;
                       final WorldStateBuilder w = c.outputWorld;
                       final Storyline s = c.outputStoryline;
-                      s.add('TODO: player joins the cause\n', isRaw: true);
+                      s.add(
+                          'I kneel before Osiris and bow my head. When I look up, he smiles with satisfaction.\n',
+                          isRaw: true);
                     }),
                     InkParagraphNode((c) => c.outputStoryline.addParagraph()),
                     InkParagraphNode((ActionContext c) {
@@ -579,8 +581,39 @@ final finalFightInkInk = InkAst([
                       final WorldStateBuilder w = c.outputWorld;
                       final Storyline s = c.outputStoryline;
                       s.add(
-                          'TODO: Yet all this time I wonder if I made the right choice.\n',
+                          'In the following years, we work together to make San Francisco into the fortress that Osiris envisioned. The orcs make competent captains and warriors. Goblins and kobolds build pallisades, traps and pits. Giants work tirelessly on machines of war.\n',
                           isRaw: true);
+                    }),
+                    InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add(
+                          'Soon, the last vestiges of humanity leave the area. Osiris and I are free.\n',
+                          isRaw: true);
+                    }),
+                    InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add(
+                          'As I overlook the Bay, frail old hand resting on the ancient window pane, watching the orcish warships sail out to plunder, do I wonder if I made the right choice? Of course I do.\n',
+                          isRaw: true);
+                    }),
+                    InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+                    InkParagraphNode((ActionContext c) {
+                      final WorldState originalWorld = c.world;
+                      final Simulation sim = c.simulation;
+                      final Actor a = c.actor;
+                      final WorldStateBuilder w = c.outputWorld;
+                      final Storyline s = c.outputStoryline;
+                      s.add('But, alas, the fight is over.\n', isRaw: true);
                     }),
                     InkParagraphNode((c) => c.outputStoryline.addParagraph()),
                     InkParagraphNode((ActionContext c) {
