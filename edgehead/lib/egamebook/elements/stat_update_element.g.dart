@@ -6,50 +6,34 @@ part of egamebook.element.stat_update;
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<StatUpdate<Object>> _$statUpdateSerializer =
-    new _$StatUpdateSerializer();
+Serializer<StatUpdate> _$statUpdateSerializer = new _$StatUpdateSerializer();
 
-class _$StatUpdateSerializer
-    implements StructuredSerializer<StatUpdate<Object>> {
+class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
   @override
   final Iterable<Type> types = const [StatUpdate, _$StatUpdate];
   @override
   final String wireName = 'StatUpdate';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, StatUpdate<Object> object,
+  Iterable<Object> serialize(Serializers serializers, StatUpdate object,
       {FullType specifiedType = FullType.unspecified}) {
-    final isUnderspecified =
-        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
-    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
-    final parameterT =
-        isUnderspecified ? FullType.object : specifiedType.parameters[0];
-
     final result = <Object>[
       'change',
-      serializers.serialize(object.change, specifiedType: parameterT),
+      serializers.serialize(object.change, specifiedType: const FullType(int)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'newValue',
-      serializers.serialize(object.newValue, specifiedType: parameterT),
+      serializers.serialize(object.newValue,
+          specifiedType: const FullType(int)),
     ];
 
     return result;
   }
 
   @override
-  StatUpdate<Object> deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+  StatUpdate deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final isUnderspecified =
-        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
-    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
-    final parameterT =
-        isUnderspecified ? FullType.object : specifiedType.parameters[0];
-
-    final result = isUnderspecified
-        ? new StatUpdateBuilder<Object>()
-        : serializers.newBuilder(specifiedType) as StatUpdateBuilder;
+    final result = new StatUpdateBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -58,16 +42,16 @@ class _$StatUpdateSerializer
       final dynamic value = iterator.current;
       switch (key) {
         case 'change':
-          result.change =
-              serializers.deserialize(value, specifiedType: parameterT);
+          result.change = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'newValue':
-          result.newValue =
-              serializers.deserialize(value, specifiedType: parameterT);
+          result.newValue = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -76,16 +60,16 @@ class _$StatUpdateSerializer
   }
 }
 
-class _$StatUpdate<T> extends StatUpdate<T> {
+class _$StatUpdate extends StatUpdate {
   @override
-  final T change;
+  final int change;
   @override
   final String name;
   @override
-  final T newValue;
+  final int newValue;
 
-  factory _$StatUpdate([void Function(StatUpdateBuilder<T>) updates]) =>
-      (new StatUpdateBuilder<T>()..update(updates)).build();
+  factory _$StatUpdate([void Function(StatUpdateBuilder) updates]) =>
+      (new StatUpdateBuilder()..update(updates)).build();
 
   _$StatUpdate._({this.change, this.name, this.newValue}) : super._() {
     if (change == null) {
@@ -97,17 +81,14 @@ class _$StatUpdate<T> extends StatUpdate<T> {
     if (newValue == null) {
       throw new BuiltValueNullFieldError('StatUpdate', 'newValue');
     }
-    if (T == dynamic) {
-      throw new BuiltValueMissingGenericsError('StatUpdate', 'T');
-    }
   }
 
   @override
-  StatUpdate<T> rebuild(void Function(StatUpdateBuilder<T>) updates) =>
+  StatUpdate rebuild(void Function(StatUpdateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  StatUpdateBuilder<T> toBuilder() => new StatUpdateBuilder<T>()..replace(this);
+  StatUpdateBuilder toBuilder() => new StatUpdateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -134,25 +115,24 @@ class _$StatUpdate<T> extends StatUpdate<T> {
   }
 }
 
-class StatUpdateBuilder<T>
-    implements Builder<StatUpdate<T>, StatUpdateBuilder<T>> {
-  _$StatUpdate<T> _$v;
+class StatUpdateBuilder implements Builder<StatUpdate, StatUpdateBuilder> {
+  _$StatUpdate _$v;
 
-  T _change;
-  T get change => _$this._change;
-  set change(T change) => _$this._change = change;
+  int _change;
+  int get change => _$this._change;
+  set change(int change) => _$this._change = change;
 
   String _name;
   String get name => _$this._name;
   set name(String name) => _$this._name = name;
 
-  T _newValue;
-  T get newValue => _$this._newValue;
-  set newValue(T newValue) => _$this._newValue = newValue;
+  int _newValue;
+  int get newValue => _$this._newValue;
+  set newValue(int newValue) => _$this._newValue = newValue;
 
   StatUpdateBuilder();
 
-  StatUpdateBuilder<T> get _$this {
+  StatUpdateBuilder get _$this {
     if (_$v != null) {
       _change = _$v.change;
       _name = _$v.name;
@@ -163,22 +143,22 @@ class StatUpdateBuilder<T>
   }
 
   @override
-  void replace(StatUpdate<T> other) {
+  void replace(StatUpdate other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$StatUpdate<T>;
+    _$v = other as _$StatUpdate;
   }
 
   @override
-  void update(void Function(StatUpdateBuilder<T>) updates) {
+  void update(void Function(StatUpdateBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$StatUpdate<T> build() {
+  _$StatUpdate build() {
     final _$result = _$v ??
-        new _$StatUpdate<T>._(change: change, name: name, newValue: newValue);
+        new _$StatUpdate._(change: change, name: name, newValue: newValue);
     replace(_$result);
     return _$result;
   }

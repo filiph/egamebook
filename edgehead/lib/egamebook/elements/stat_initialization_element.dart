@@ -12,18 +12,18 @@ part 'stat_initialization_element.g.dart';
 ///
 /// This is meant to be sent by the [Book] just after initialization
 /// (new game or loaded game) to create the starting UI state.
-abstract class StatInitialization<T> extends ElementBase
-    implements Built<StatInitialization<T>, StatInitializationBuilder<T>> {
+abstract class StatInitialization extends ElementBase
+    implements Built<StatInitialization, StatInitializationBuilder> {
   static Serializer<StatInitialization> get serializer =>
       _$statInitializationSerializer;
 
-  factory StatInitialization([void updates(StatInitializationBuilder<T> b)]) =
-      _$StatInitialization<T>;
+  factory StatInitialization([void updates(StatInitializationBuilder b)]) =
+      _$StatInitialization;
 
   StatInitialization._();
 
   /// The value of the stat at the beginning of play.
-  T get initialValue;
+  int get initialValue;
 
   /// Name of the stat. Corresponds to [Stat.name].
   String get name;
@@ -44,14 +44,14 @@ abstract class StatInitialization<T> extends ElementBase
 
   /// Creates a sanity initialization.
   static StatInitialization sanity(int initial) {
-    return StatInitialization<int>((b) => b
+    return StatInitialization((b) => b
       ..name = "sanity"
       ..initialValue = initial);
   }
 
   /// Creates a stamina initialization.
   static StatInitialization stamina(int initial) {
-    return StatInitialization<int>((b) => b
+    return StatInitialization((b) => b
       ..name = "stamina"
       ..initialValue = initial);
   }

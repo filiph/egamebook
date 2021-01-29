@@ -6,29 +6,23 @@ part of egamebook.element.stat_initialization;
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<StatInitialization<Object>> _$statInitializationSerializer =
+Serializer<StatInitialization> _$statInitializationSerializer =
     new _$StatInitializationSerializer();
 
 class _$StatInitializationSerializer
-    implements StructuredSerializer<StatInitialization<Object>> {
+    implements StructuredSerializer<StatInitialization> {
   @override
   final Iterable<Type> types = const [StatInitialization, _$StatInitialization];
   @override
   final String wireName = 'StatInitialization';
 
   @override
-  Iterable<Object> serialize(
-      Serializers serializers, StatInitialization<Object> object,
+  Iterable<Object> serialize(Serializers serializers, StatInitialization object,
       {FullType specifiedType = FullType.unspecified}) {
-    final isUnderspecified =
-        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
-    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
-    final parameterT =
-        isUnderspecified ? FullType.object : specifiedType.parameters[0];
-
     final result = <Object>[
       'initialValue',
-      serializers.serialize(object.initialValue, specifiedType: parameterT),
+      serializers.serialize(object.initialValue,
+          specifiedType: const FullType(int)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
     ];
@@ -37,18 +31,10 @@ class _$StatInitializationSerializer
   }
 
   @override
-  StatInitialization<Object> deserialize(
+  StatInitialization deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final isUnderspecified =
-        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
-    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
-    final parameterT =
-        isUnderspecified ? FullType.object : specifiedType.parameters[0];
-
-    final result = isUnderspecified
-        ? new StatInitializationBuilder<Object>()
-        : serializers.newBuilder(specifiedType) as StatInitializationBuilder;
+    final result = new StatInitializationBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -57,8 +43,8 @@ class _$StatInitializationSerializer
       final dynamic value = iterator.current;
       switch (key) {
         case 'initialValue':
-          result.initialValue =
-              serializers.deserialize(value, specifiedType: parameterT);
+          result.initialValue = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
@@ -71,15 +57,15 @@ class _$StatInitializationSerializer
   }
 }
 
-class _$StatInitialization<T> extends StatInitialization<T> {
+class _$StatInitialization extends StatInitialization {
   @override
-  final T initialValue;
+  final int initialValue;
   @override
   final String name;
 
   factory _$StatInitialization(
-          [void Function(StatInitializationBuilder<T>) updates]) =>
-      (new StatInitializationBuilder<T>()..update(updates)).build();
+          [void Function(StatInitializationBuilder) updates]) =>
+      (new StatInitializationBuilder()..update(updates)).build();
 
   _$StatInitialization._({this.initialValue, this.name}) : super._() {
     if (initialValue == null) {
@@ -88,19 +74,16 @@ class _$StatInitialization<T> extends StatInitialization<T> {
     if (name == null) {
       throw new BuiltValueNullFieldError('StatInitialization', 'name');
     }
-    if (T == dynamic) {
-      throw new BuiltValueMissingGenericsError('StatInitialization', 'T');
-    }
   }
 
   @override
-  StatInitialization<T> rebuild(
-          void Function(StatInitializationBuilder<T>) updates) =>
+  StatInitialization rebuild(
+          void Function(StatInitializationBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  StatInitializationBuilder<T> toBuilder() =>
-      new StatInitializationBuilder<T>()..replace(this);
+  StatInitializationBuilder toBuilder() =>
+      new StatInitializationBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -124,13 +107,13 @@ class _$StatInitialization<T> extends StatInitialization<T> {
   }
 }
 
-class StatInitializationBuilder<T>
-    implements Builder<StatInitialization<T>, StatInitializationBuilder<T>> {
-  _$StatInitialization<T> _$v;
+class StatInitializationBuilder
+    implements Builder<StatInitialization, StatInitializationBuilder> {
+  _$StatInitialization _$v;
 
-  T _initialValue;
-  T get initialValue => _$this._initialValue;
-  set initialValue(T initialValue) => _$this._initialValue = initialValue;
+  int _initialValue;
+  int get initialValue => _$this._initialValue;
+  set initialValue(int initialValue) => _$this._initialValue = initialValue;
 
   String _name;
   String get name => _$this._name;
@@ -138,7 +121,7 @@ class StatInitializationBuilder<T>
 
   StatInitializationBuilder();
 
-  StatInitializationBuilder<T> get _$this {
+  StatInitializationBuilder get _$this {
     if (_$v != null) {
       _initialValue = _$v.initialValue;
       _name = _$v.name;
@@ -148,22 +131,22 @@ class StatInitializationBuilder<T>
   }
 
   @override
-  void replace(StatInitialization<T> other) {
+  void replace(StatInitialization other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$StatInitialization<T>;
+    _$v = other as _$StatInitialization;
   }
 
   @override
-  void update(void Function(StatInitializationBuilder<T>) updates) {
+  void update(void Function(StatInitializationBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$StatInitialization<T> build() {
+  _$StatInitialization build() {
     final _$result = _$v ??
-        new _$StatInitialization<T>._(initialValue: initialValue, name: name);
+        new _$StatInitialization._(initialValue: initialValue, name: name);
     replace(_$result);
     return _$result;
   }

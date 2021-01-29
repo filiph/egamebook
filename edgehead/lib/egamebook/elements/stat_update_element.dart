@@ -8,22 +8,22 @@ import 'element_base.dart';
 
 part 'stat_update_element.g.dart';
 
-abstract class StatUpdate<T> extends ElementBase
-    implements Built<StatUpdate<T>, StatUpdateBuilder<T>> {
+abstract class StatUpdate extends ElementBase
+    implements Built<StatUpdate, StatUpdateBuilder> {
   static Serializer<StatUpdate> get serializer => _$statUpdateSerializer;
 
-  factory StatUpdate([void updates(StatUpdateBuilder<T> b)]) = _$StatUpdate<T>;
+  factory StatUpdate([void updates(StatUpdateBuilder b)]) = _$StatUpdate;
 
   StatUpdate._();
 
   /// The change of the value, e.g. `-1`.
-  T get change;
+  int get change;
 
   /// Name of the stat. Corresponds to [Stat.name].
   String get name;
 
   /// The value of the stat after the update, e.g. `2`.
-  T get newValue;
+  int get newValue;
 
   /// The kind of stat that this update is changing.
   ///
@@ -41,7 +41,7 @@ abstract class StatUpdate<T> extends ElementBase
 
   /// Creates a sanity update.
   static StatUpdate sanity(int initial, int change) {
-    return StatUpdate<int>((b) => b
+    return StatUpdate((b) => b
       ..name = "sanity"
       ..change = change
       ..newValue = initial + change);
@@ -49,7 +49,7 @@ abstract class StatUpdate<T> extends ElementBase
 
   /// Creates a stamina update.
   static StatUpdate stamina(int initial, int change) {
-    return StatUpdate<int>((b) => b
+    return StatUpdate((b) => b
       ..name = "stamina"
       ..change = change
       ..newValue = initial + change);
