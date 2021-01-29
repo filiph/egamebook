@@ -72,9 +72,9 @@ PREREQUISITES:
 c.isInIdleRoom
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The star is small enough to fit into my palm. It says "Lair of God".
+The star is small enough to fit into my palm. In the center of the star, there is an inscription in ancient, mangled type. It says "Lair of God" in bold lettering.
 
-TODO: image of a "Lamb of God" christmas star, but the writing is so mangled that it could be mistaken for "Lair of God"
+![Illustration of a writing of the words "LAIR OF GOD", although it's clear that the inscription originally said "LAMB OF GOD".](artifact-star.png)
 
 [[CODE]]
 c.learn(ArtifactStarFacts.artifactStarSeen);

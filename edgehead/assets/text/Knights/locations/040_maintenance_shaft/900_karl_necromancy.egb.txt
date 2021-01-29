@@ -39,17 +39,17 @@ c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 
 "What's going on?" the berserker asks and picks up his battle axe. "What's going on with Karl?"
 
-The two approach the large gate and open it to peek inside. Almost instantly, a giant hand pushes the door open so hard that it launches the berserker across the room. Hitting the wall snaps his neck, and he doesn't move anymore.
+The two approach the large gate and open it to peek inside. Almost instantly, a giant hand pushes the door open so hard that it launches the berserker across the room. Hitting the wall snaps his neck, and he does not move anymore.
 
-From my perspective above the room, it's hard to see the creature beyond the gate. But it's clearly a giant, and it's clearly out of its mind with pain. The guttural roar is deafening, and blood is filling the floor beneath its feet.
+From my perspective above the room, it is hard to see the creature beyond the gate. But it is clearly a giant, and it is clearly out of its mind with pain. The guttural roar is deafening, and blood is filling the floor beneath its feet.
 
-The orc captain starts backing up from the gate but the giant creature lunges forward and smashes the orc with the back of its hand. There isn't even time for a scream.
+The orc captain starts backing up from the gate but the giant creature lunges forward and smashes the orc with the back of its hand. There isn't even time for a scream. The captain is dead instantly.
 
-The creature doesn't stop. It takes a few steps forward, holding its belly with one hand. Then it trips, twists, and falls on its back. I can see the stomach, running with blood. Something is puncturing it from inside.
+The creature does not stop. It takes a few steps forward, holding its belly with one hand. Then it trips, twists, and falls on its back. I can see the stomach, running with blood. Something is puncturing it from inside.
 
-I realize it's the undead I just raised. A bird-headed creature, a hawkman, is cutting its way out of the giant's belly with its beak. The undead's movements are mechanical, imprecise, but the beak is sharp enough. The giant is losing blood quickly.
+I realize it is the undead I just raised. A bird-headed creature, a hawkman, is cutting its way out of the giant's belly with its beak. The undead's movements are mechanical, imprecise, but the beak is sharp enough. The giant is losing blood quickly.
 
-When the hawkman's head is finally out, the guttural roar gets louder. Using the last of its strength, the giant puts its hand on the hawkman, then rips. The bird head rolls on the floor, dead again.
+When the hawkman's head is finally out, the guttural roar gets louder. Using the last of its strength, the giant puts its hand on the hawkman, then yanks. The bird head rolls on the floor, dead again.
 
 Soon after, the giant stops moving.
 
