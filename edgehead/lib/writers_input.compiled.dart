@@ -3168,7 +3168,8 @@ class KarlUseNecromancy extends RoamingAction {
       return false;
     }
     if (!(!c.hasHappened(evKarlKilled) &&
-        !w.actionHasBeenPerformedSuccessfully('karl_use_necromancy'))) {
+        !w.actionHasBeenPerformedSuccessfully('karl_use_necromancy') &&
+        !c.hasHappened(evKarlGuardsKilled))) {
       return false;
     }
     return true;
@@ -3187,39 +3188,15 @@ class KarlUseNecromancy extends RoamingAction {
     c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
     c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 
-    Ruleset(
-        Rule(455269039, 1, false, (ApplicabilityContext c) {
-          final WorldState w = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          return !c.hasHappened(evKarlGuardsKilled);
-        }, (ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add(
-              '\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s going on with Karl?"\n\nTODO: They go in, and are killed. Then, some more thrashing, then silence.\n\n',
-              isRaw: true);
-          // Make sure to actually kill the two.
-          w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
-          w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
-        }),
-        Rule(775067539, 0, false, (ApplicabilityContext c) {
-          final WorldState w = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          return true;
-        }, (ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-        })).apply(c);
-    c.markHappened(evKarlKilled);
+    s.add(
+        '\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s going on with Karl?"\n\nThe two approach the large gate and open it to peek inside. Almost instantly, a giant hand pushes the door open so hard that it launches the berserker across the room. Hitting the wall snaps his neck, and he doesn\'t move anymore.\n\nFrom my perspective above the room, it\'s hard to see the creature beyond the gate. But it\'s clearly a giant, and it\'s clearly out of its mind with pain. The guttural roar is deafening, and blood is filling the floor beneath its feet.\n\nThe orc captain starts backing up from the gate but the giant creature lunges forward and smashes the orc with the back of its hand. There isn\'t even time for a scream.\n\nThe creature doesn\'t stop. It takes a few steps forward, holding its belly with one hand. Then it trips, twists, and falls on its back. I can see the stomach, running with blood. Something is puncturing it from inside.\n\nI realize it\'s the undead I just raised. A bird-headed creature, a hawkman, is cutting its way out of the giant\'s belly with its beak. The undead\'s movements are mechanical, imprecise, but the beak is sharp enough. The giant is losing blood quickly.\n\nWhen the hawkman\'s head is finally out, the guttural roar gets louder. Using the last of its strength, the giant puts its hand on the hawkman, then rips. The bird head rolls on the floor, dead again.\n\nSoon after, the giant stops moving.\n\nI wish I could raise this new corpse, but it is well beyond my capability.\n\n',
+        isRaw: true);
     c.markHappened(evKarlGuardsKilled);
+    // Make sure to actually kill the two.
+    w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
+    w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
+
+    c.markHappened(evKarlKilled);
     c.markHappened(evKarlKilledViaNecromancy);
 
     return '${a.name} successfully performs KarlUseNecromancy';
@@ -4377,7 +4354,7 @@ final Room godsLair = Room(
     hint:
         'A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.',
     firstHint:
-        'An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.',
+        'An antechamber to a much bigger room, with a guard post and a huge, reinforced gate. At least two orcs are on guard.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -4398,7 +4375,7 @@ final Room godsLairAfterNecromancy = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The gate is open. On it, there is a small star decoration.\n\nBeyond the gate, a giant\'s carcass lies. Its belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.\n',
+          'The room is dominated by the giant\'s carcass and its open belly. The hawkman\'s head is lying nearby, still within the puddle of the giant\'s blood, and the bodies of the two orcs sprawl on opposing sides of the room.\n\nThe gate is open. On it, there is a small star decoration.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -4425,8 +4402,10 @@ final Room godsLairAfterNecromancy = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The gate is severly damaged. Through a crack, I can see a giant\'s carcass. Its belly is teared open from the inside, by a humanoid figure with a bird head.\n',
+          'The room is dominated by the giant\'s carcass and its open belly. The hawkman\'s head is lying nearby, still within the puddle of the giant\'s blood, and the bodies of the two orcs sprawl on opposing sides of the room.\n\nThe gate is open. On it, there is a small star decoration.\n\n',
           isRaw: true);
+      assert(false,
+          "This should not happen: necromancy on the taheen cannot be performed after already visiting gods_lair.");
     },
     isIdle: true,
     positionX: 35,
@@ -4436,7 +4415,7 @@ final Room godsLairAfterNecromancy = Room(
     hint:
         'A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.',
     firstHint:
-        'An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.',
+        'An antechamber to a much bigger room, with a guard post and a huge, reinforced gate. At least two orcs are on guard.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -17920,7 +17899,7 @@ class PerformNecromancyElsewhere extends RoamingAction {
     if (!(!c.getRoomRoaming().monstersAlive &&
         !c.playerRoom.isSynthetic &&
         c.playerRoom.isOnMap &&
-        !storyNecromanyHasPrecedence(c))) {
+        !storyNecromancyHasPrecedence(c))) {
       return false;
     }
     return true;

@@ -8,7 +8,7 @@ FLAGS: $IDLE
 POS: 35, 42
 
 FIRST_MAP_NAME: Guard Room
-FIRST_HINT: An antechamber to a much bigger room, with a guard post and a huge, reinforced gate.
+FIRST_HINT: An antechamber to a much bigger room, with a guard post and a huge, reinforced gate. At least two orcs are on guard.
 
 MAP_NAME: God's Lair
 HINT: A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.
@@ -43,19 +43,22 @@ VARIANT_OF: $gods_lair
 RULE: c.hasHappened(evKarlKilledViaNecromancy)
 
 FIRST_DESCRIPTION:
-// Note: This is the first time player is in the room (incl. parent), so we know they didn't kill the guards themselves.
-The gate is open. On it, there is a small star decoration.
+// Note: This is the first time the player is in the room (incl. parent), so we know they didn't kill the guards themselves.
+The room is dominated by the giant's carcass and its open belly. The hawkman's head is lying nearby, still within the puddle of the giant's blood, and the bodies of the two orcs sprawl on opposing sides of the room.
 
-Beyond the gate, a giant's carcass lies. Its belly is teared open from the inside, by a humanoid figure with a bird head. Two dead orcs lie next to a wall.
+The gate is open. On it, there is a small star decoration.
 
 // TODO: let the player take their weapons
 // TODO: optional - one of the orc still lives, easy fight
 
-
 VARIANT_UPDATE_DESCRIPTION:
-The gate is severly damaged. Through a crack, I can see a giant's carcass. Its belly is teared open from the inside, by a humanoid figure with a bird head.
+The room is dominated by the giant's carcass and its open belly. The hawkman's head is lying nearby, still within the puddle of the giant's blood, and the bodies of the two orcs sprawl on opposing sides of the room.
 
-// TODO: allow opening the gate and bringing the taheen with us as a companion.
+The gate is open. On it, there is a small star decoration.
+
+[[CODE]]
+assert(false, "This should not happen: necromancy on the taheen cannot be performed after already visiting gods_lair.");
+[[ENDCODE]]
 
 DESCRIPTION: $NONE
 

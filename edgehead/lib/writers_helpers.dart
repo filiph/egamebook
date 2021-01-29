@@ -569,9 +569,11 @@ String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
 ///
 /// For example, a puzzle might call for the player to raise dead at a specific
 /// room. In that case, we don't want the menu to show _two_ necromancy actions.
-bool storyNecromanyHasPrecedence(ApplicabilityContext c) {
+bool storyNecromancyHasPrecedence(ApplicabilityContext c) {
+  // Keep in sync with karl_necromancy.egb.
   if (c.playerRoom.name == 'maintenance_shaft' &&
-      !c.world.actionHasBeenPerformedSuccessfully('karl_use_necromancy')) {
+      !c.world.actionHasBeenPerformedSuccessfully('karl_use_necromancy') &&
+      !c.hasHappened(evKarlGuardsKilled)) {
     return true;
   }
 

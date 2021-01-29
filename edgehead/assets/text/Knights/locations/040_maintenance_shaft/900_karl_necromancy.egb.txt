@@ -3,9 +3,13 @@ ACTION: $karl_use_necromancy
 COMMAND: Skills >> Necromancy
 FOR_LOCATION: $maintenance_shaft
 PREREQUISITES:
+// Keep prerequisites in sync with [storyNecromancyHasPrecedence].
 !c.hasHappened(evKarlKilled)
 &&
 !w.actionHasBeenPerformedSuccessfully('karl_use_necromancy')
+&&
+// Only allow necromancy for killing the guards, to avoid combinatorial explosion.
+!c.hasHappened(evKarlGuardsKilled)
 
 REPEATABLE: $TRUE
 
@@ -33,33 +37,32 @@ c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
 c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 [[ENDCODE]]
 
-[[RULESET]]
-[[RULE]]
-  !c.hasHappened(evKarlGuardsKilled)
-[[THEN]]
-
 "What's going on?" the berserker asks and picks up his battle axe. "What's going on with Karl?"
 
-TODO: They go in, and are killed. Then, some more thrashing, then silence.
+The two approach the large gate and open it to peek inside. Almost instantly, a giant hand pushes the door open so hard that it launches the berserker across the room. Hitting the wall snaps his neck, and he doesn't move anymore.
+
+From my perspective above the room, it's hard to see the creature beyond the gate. But it's clearly a giant, and it's clearly out of its mind with pain. The guttural roar is deafening, and blood is filling the floor beneath its feet.
+
+The orc captain starts backing up from the gate but the giant creature lunges forward and smashes the orc with the back of its hand. There isn't even time for a scream.
+
+The creature doesn't stop. It takes a few steps forward, holding its belly with one hand. Then it trips, twists, and falls on its back. I can see the stomach, running with blood. Something is puncturing it from inside.
+
+I realize it's the undead I just raised. A bird-headed creature, a hawkman, is cutting its way out of the giant's belly with its beak. The undead's movements are mechanical, imprecise, but the beak is sharp enough. The giant is losing blood quickly.
+
+When the hawkman's head is finally out, the guttural roar gets louder. Using the last of its strength, the giant puts its hand on the hawkman, then rips. The bird head rolls on the floor, dead again.
+
+Soon after, the giant stops moving.
+
+I wish I could raise this new corpse, but it is well beyond my capability.
 
 [[CODE]]
+  c.markHappened(evKarlGuardsKilled);
   // Make sure to actually kill the two.
   w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
   w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
-[[ENDCODE]]
 
-[[ENDRULE]]
-[[RULE]]
-  $DEFAULT
-[[THEN]]
-// Nothing here. The guards are dead already.
-[[ENDRULE]]
-[[ENDRULESET]]
-
-[[CODE]]
-c.markHappened(evKarlKilled);
-c.markHappened(evKarlGuardsKilled);
-c.markHappened(evKarlKilledViaNecromancy);
+  c.markHappened(evKarlKilled);
+  c.markHappened(evKarlKilledViaNecromancy);
 [[ENDCODE]]
 
 
