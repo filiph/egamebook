@@ -11273,7 +11273,21 @@ final talkToAdaAfterQuake2Ink = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('TODO: Ada asks for help. "Knights are leaving. This is bad."\n',
+    final youngSirSubstitution = c.playerSalutation;
+    s.add(
+        'Ada shakes her head. "I\'ll be frank with you, ${youngSirSubstitution}. I don\'t think I have ever seen people this frightened. Seeing the Knights leave like that..." She pauses. "I think it finally hits."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
+    s.add(
+        'Ada\'s hand goes through her hair, and she sighs. "Please, ${youngSirSubstitution}, help."\n',
         isRaw: true);
   }),
 ]);

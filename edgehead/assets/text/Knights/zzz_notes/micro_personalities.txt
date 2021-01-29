@@ -1,7 +1,7 @@
 
 # Micro-personality (for randomly generated knights)
 
-TODO: decide whether I need this. The idea is that many knights will die in a fight, and we don't want this to prevent the player from learning important things. Dialogue should be central to the prose, but we can't have dialogue if everyone is dead (or undead).
+The idea is that many knights will die in a fight, and we don't want this to prevent the player from learning important things. Dialogue should be central to the prose, but we can't have dialogue if everyone is dead (or undead).
 
 Many dialogues are actually possible with almost any character. The ink "file" has access to the personality of the person we're talking to.
 

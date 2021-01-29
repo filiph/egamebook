@@ -41,8 +41,6 @@ c.hasHappened(evQuake2)
 w.actionHasBeenPerformed("talk_to_ada_greetings")
 
 INK:
-TODO: Ada asks for help. "Knights are leaving. This is bad."
+Ada shakes her head. "I'll be frank with you, [young sir]. I don't think I have ever seen people this frightened. Seeing the Knights leave like that..." She pauses. "I think it finally hits."
 
-
-NOTES:
-- Ada should ask for help
+Ada's hand goes through her hair, and she sighs. "Please, [young sir], help."
