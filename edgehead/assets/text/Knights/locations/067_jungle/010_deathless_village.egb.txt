@@ -47,9 +47,32 @@ PREREQUISITES:
 c.hasItem(lairOfGodStarId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-They are extremely happy.
+I approach with the Artifact Star in hand. When the villagers realize I am offering the item to them, there is a brief moment of complete silence. Then, everybody moves at once.
 
-TODO: explain how I gained their respect, and they allow me to visit their shrine
+[[RULESET]]
+[[RULE]]
+  w.actionHasBeenPerformed("argo_greet")
+[[THEN]]
+  In a few heartbeats, Argo stands before me.
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+  In a few heartbeats, a child stands before me. I learn that her name is Argo and that she is the leader of the Deathless.
+[[ENDRULE]]
+[[ENDRULESET]]
+
+"I kneel before your generosity," she says. And she kneels, and the rest of the villagers immediately follow suit.
+
+Argo smiles at me. "We have been hoping to win back the Artifact Star from the orcs for years. But we are not fighters. None of us have the talents required to stand up to the orcish host."
+
+She opens her arms and stands up. "You do. And you chose to use your talents for good."
+
+With ceremonial slowness, she takes the star from my hand. "You are now a friend of the Deathless. As such, you will command respect from each and every one of us." She speaks loudly, clearly. The rest of the villagers still kneel, watching me silently.
+
+Argo the turns around to her people. "The Star will be deposited in the Sacred Shrine, next to the Dragon Egg. And I think our friend has deserved full access."
+
+I now have access to the shrine of the Deathless, not far from here.
 
 [[CODE]]
 c.markHappened(evDeathlessRespectGained);

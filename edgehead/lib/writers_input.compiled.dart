@@ -7038,7 +7038,39 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'They are extremely happy.\n\nTODO: explain how I gained their respect, and they allow me to visit their shrine\n\n',
+        'I approach with the Artifact Star in hand. When the villagers realize I am offering the item to them, there is a brief moment of complete silence. Then, everybody moves at once.\n\n',
+        isRaw: true);
+    Ruleset(
+        Rule(168568278, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return w.actionHasBeenPerformed("argo_greet");
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(' In a few heartbeats, Argo stands before me.\n', isRaw: true);
+        }),
+        Rule(648784387, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              ' In a few heartbeats, a child stands before me. I learn that her name is Argo and that she is the leader of the Deathless.\n',
+              isRaw: true);
+        })).apply(c);
+    s.add(
+        '\n"I kneel before your generosity," she says. And she kneels, and the rest of the villagers immediately follow suit.\n\nArgo smiles at me. "We have been hoping to win back the Artifact Star from the orcs for years. But we are not fighters. None of us have the talents required to stand up to the orcish host."\n\nShe opens her arms and stands up. "You do. And you chose to use your talents for good."\n\nWith ceremonial slowness, she takes the star from my hand. "You are now a friend of the Deathless. As such, you will command respect from each and every one of us." She speaks loudly, clearly. The rest of the villagers still kneel, watching me silently.\n\nArgo the turns around to her people. "The Star will be deposited in the Sacred Shrine, next to the Dragon Egg. And I think our friend has deserved full access."\n\nI now have access to the shrine of the Deathless, not far from here.\n\n',
         isRaw: true);
     c.markHappened(evDeathlessRespectGained);
     c.removeItemFromPlayer(lairOfGodStarId);
@@ -7136,6 +7168,273 @@ final Approach dragonEggRoomFromDeathlessVillage =
   final Actor a = c.actor;
   return c.hasHappened(evDeathlessRespectGained);
 });
+final dragonEggExamineInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I slowly approach the pedestal. The Dragon Egg is clearly of ancient origin: it doesn\'t look like anything I have ever seen. It is also spectacularly well preserved.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "How come the egg is like new?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The Deathless who held the branch earlier shrugs. "We do not know, Friend of the Deathless. This place, the Pyramid, seems to have that effect."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "How did you find this?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The Deathless who held the branch earlier speaks: "It was found near the pond, Friend of the Deathless. Down there in the jungle. A brother lost his life retreiving it."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Something shuffles behind me and the Deathless bow their heads. I turn around and see that Argo has entered the clearing.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"The Dragon Egg has been the most sacred artifact of our people since we lost access to the Lair of God," she says. "But it is also a weapon."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "How can you know it is a weapon?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Oracle told us," Argo says. "She knows these things. According to her,\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "What kind of weapon is it?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"From what we understand,\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'it is a thrown weapon. You can only ever use it once, to devastating effect."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Argo slowly circles the pedestal and stops on the other side, facing me. "I think," she says, haltingly, "that it is in the spirit of our mission to offer the Dragon Egg to you."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "What do you mean?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"I mean," Argo says with sudden confidence, "that the Dragon Egg can be yours.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Why would you do that?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('Argo smiles with sudden confidence. "It\'s simple.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'You have shown strength and purpose. A holy weapon like the Dragon Egg befits you. It will aid in your fight."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_231c8aa07 = c.playerIsMale ? '''man''' : '''woman''';
+    s.add(
+        'She turns to the onlooking villagers. "We now have the Artifact Star, a much more peaceful symbol of the ancients. I believe it is in our tribe\'s interest to provide the Dragon Egg to this noble ${ifBlock_231c8aa07}."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The villagers bow their heads and Argo slowly lifts the Dragon Egg from its pedestal.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"This Dragon Egg is now yours, Friend of the Deathless," she says. "Use it in combat only, and only in the direst of situations. Remember: once it is used, it will disappear forever."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I take the Dragon Egg in my hands. It is surprisingly heavy and cold. The lever and the pin at the top, I learn, are what sets the device in motion. Carefully, I place the egg in a pocket on my chest.\n',
+        isRaw: true);
+  }),
+]);
+
+class DragonEggExamine extends RoamingAction {
+  @override
+  final String name = 'dragon_egg_examine';
+
+  static final DragonEggExamine singleton = DragonEggExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Dragon Egg', 'Examine'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('dragon_egg_room') != true) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "dragon_egg_examine_ink",
+    ));
+    return '${a.name} successfully performs DragonEggExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform DragonEggExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
+}
 
 class DragonEggUse extends RoamingAction {
   @override
@@ -7213,7 +7512,7 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The sacred shrine of the Deathless.\n\nThere\'s a pedestal here, and on it, the legendary Dragon Egg.\n\n![Illustration of a pedestal with "Ovum Draconis" written on it. On the pedestal, there is a frag grenade.](dragonegg.png)\n\nTODO: The Deathless decide they will give me the Dragon Egg, to aid in my quest. It\'s a big deal. I receive the dragon egg. The Deathless explain to me its operation. (It\'s a frag grenade.)\n\nTODO: "Do not use it before its time. Use it in combat only, and only in the direst of situations."\n\n',
+      'The Deathless lead me through thick foliage and across narrow beams high above the jungle. A single misstep would mean a long fall, and certain death.\n\nSoon, though, the hidden path takes a turn, and leads into a small clearing. One of the Deathless holds a branch so it doesn\'t hit me, and announces: "The Sacred Shrine."\n\nThere\'s a pedestal here, illuminated by rays of sunlight. Only one thing lies on the top of the pedestal: a dark green oval shape. The ancient Dragon Egg.\n\n![Illustration of a pedestal with "Ovum Draconis" written on it. On the pedestal, there is a frag grenade.](dragonegg.png)\n\n',
       isRaw: true);
   c.giveNewItemToPlayer(dragonEgg);
   c.markHappened(evReceivedDragonEgg);
@@ -7227,8 +7526,8 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
 }, null, null,
     positionX: 22,
     positionY: 58,
-    mapName: 'Sacred Place',
-    firstMapName: 'Sacred Place',
+    mapName: 'Sacred Shrine',
+    firstMapName: 'Sacred Shrine',
     hint: 'The place with the Dragon Egg.',
     firstHint:
         'A well-hidden place of worship near the village of the Deathless.');
@@ -18417,6 +18716,7 @@ final allActions = <RoamingAction>[
   OracleAppleExamine.singleton,
   OracleAppleTake.singleton,
   GiveLairOfGodStarToDeathless.singleton,
+  DragonEggExamine.singleton,
   DragonEggUse.singleton,
   AttackLizardNearPond.singleton,
   PondHelicopterExamine.singleton,
@@ -18519,6 +18819,7 @@ final allInks = <String, InkAst>{
   'talk_to_oracle_quake_1_ink': talkToOracleQuake1Ink,
   'talk_to_oracle_sixty_fiver_ink': talkToOracleSixtyFiverInk,
   'oracle_apple_examine_ink': oracleAppleExamineInk,
+  'dragon_egg_examine_ink': dragonEggExamineInk,
   'pond_helicopter_examine_ink': pondHelicopterExamineInk,
   'argo_ask_deathless_ink': argoAskDeathlessInk,
   'argo_ask_dragon_egg_ink': argoAskDragonEggInk,
