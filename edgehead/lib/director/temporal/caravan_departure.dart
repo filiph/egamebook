@@ -11,7 +11,7 @@ final _caravanDeparture = Rule(_id++, 2, true, (ApplicabilityContext c) {
       // We must be above.
       c.playerParentRoom.positionY < 90 &&
       // Miguel newly available in the HQ area.
-      c.inRoomParent('knights_hq_main') &&
+      !c.inRoomParent('knights_hq_main') &&
       // Not in a populated room, since caravan departure replaces Quake2.
       !c.inPopulatedRoom &&
       c.world.time
