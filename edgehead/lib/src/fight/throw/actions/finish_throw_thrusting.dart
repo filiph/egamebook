@@ -119,7 +119,8 @@ class FinishThrowThrusting extends OtherActorAction {
     }
 
     moveProjectileToGround(w, a, projectile, false);
-    return "${a.name} hits ${enemy.name} with thrown ${projectile.name}";
+    return "${a.name} hits ${enemy.name} with thrown ${projectile.name} "
+        "($result)";
   }
 
   @override

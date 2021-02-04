@@ -138,7 +138,8 @@ class FinishBite extends OtherActorAction {
 
       killHumanoid(context, result.victim.id);
     }
-    return "${a.name} bites${killed ? ' (and kills)' : ''} ${enemy.name}";
+    return "${a.name} bites${killed ? ' (and kills)' : ''} ${enemy.name} "
+        "($result)";
   }
 
   @override

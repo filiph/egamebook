@@ -74,7 +74,7 @@ class FinishSlashOnGround extends OtherActorAction {
     final threadId = getThreadId(sim, w, slashOnGroundSituationName);
     applySlash(result, context, enemy, threadId);
 
-    return "${a.name} slashes  ${enemy.name} while on the ground";
+    return "${a.name} slashes ${enemy.name} while on the ground ($result)";
   }
 
   @override

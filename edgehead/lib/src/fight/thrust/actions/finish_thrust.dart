@@ -62,7 +62,7 @@ class FinishThrust extends OtherActorAction {
     final thread = getThreadId(sim, w, thrustSituationName);
     applyThrust(result, context, enemy, thread);
 
-    return "${a.name} thrusts at ${enemy.name}";
+    return "${a.name} thrusts at ${enemy.name} ($result)";
   }
 
   @override

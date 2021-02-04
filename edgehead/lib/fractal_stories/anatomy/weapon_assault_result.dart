@@ -70,4 +70,17 @@ class WeaponAssaultResult {
   });
 
   bool get didSeverBodyPart => severedPart != null;
+
+  @override
+  String toString() {
+    final properties = <String>[];
+    if (touchedPart != null) properties.add(touchedPart?.name ?? 'null');
+    if (severedPart != null) properties.add('severedPart');
+    if (slashSuccessLevel != null) properties.add(slashSuccessLevel.toString());
+    if (disabled) properties.add('disabled');
+    if (willFall) properties.add('willFall');
+    if (willDropCurrentWeapon) properties.add('willDropCurrentWeapon');
+    if (wasBlinding) properties.add('wasBlinding');
+    return 'WeaponAssaultResult<${properties.join(', ')}>';
+  }
 }

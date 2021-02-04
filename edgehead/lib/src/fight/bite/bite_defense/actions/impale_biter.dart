@@ -207,7 +207,7 @@ class ImpaleBiter extends OtherActorAction {
     }
 
     w.popSituationsUntil("FightSituation", context);
-    return "${a.name} impales ${enemy.name}";
+    return "${a.name} impales ${enemy.name} ($result)";
   }
 
   @override

@@ -101,7 +101,8 @@ class CounterSweepFeet extends OtherActorAction {
 
     w.popSituationsUntil("FightSituation", context);
 
-    return "${a.name} successfully counters a sweep feet from ${enemy.name}";
+    return "${a.name} successfully counters a sweep feet from ${enemy.name} "
+        "($result)";
   }
 
   @override

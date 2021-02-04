@@ -112,7 +112,7 @@ class FinishBluntSwing extends OtherActorAction {
       killHumanoid(context, result.victim.id);
     }
     return "${a.name} blunt-swings"
-        "${killed ? ' (and kills)' : ''} ${enemy.name}";
+        "${killed ? ' (and kills)' : ''} ${enemy.name} ($result)";
   }
 
   @override

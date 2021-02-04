@@ -73,7 +73,7 @@ class FinishSlash extends OtherActorAction {
     final threadId = getThreadId(sim, w, slashSituationName);
     applySlash(result, context, enemy, threadId);
 
-    return "${a.name} slashes ${enemy.name}";
+    return "${a.name} slashes ${enemy.name} ($result)";
   }
 
   @override

@@ -67,7 +67,7 @@ class FinishThrustOnGround extends OtherActorAction {
     final thread = getThreadId(sim, w, thrustOnGroundSituationName);
     applyThrust(result, context, enemy, thread);
 
-    return "${a.name} thrusts ${enemy.name} while on the ground";
+    return "${a.name} thrusts ${enemy.name} while on the ground ($result)";
   }
 
   @override
