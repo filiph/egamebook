@@ -19,6 +19,10 @@ HINT: The cramped rooms where the servants of the Keep's owner once lived and wo
 FIRST_DESCRIPTION:
 Clear signs of goblin activity. But deserted. A curious skull-shaped device in the middle of the room.
 
+[[CODE]]
+c.learn(kbKeepServantsLocation);
+[[ENDCODE]]
+
 DESCRIPTION: $NONE
 
 

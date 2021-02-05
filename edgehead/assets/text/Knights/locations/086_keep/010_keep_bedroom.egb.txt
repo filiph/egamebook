@@ -3,6 +3,8 @@ PREREQUISITES:
 c.hasHappened(evKeepUnlockedGate)
 ||
 c.hasHappened(evKeepDestroyedGate)
+||
+c.playerHasVisited("keep_bedroom")
 
 APPROACH: $keep_bedroom FROM $keep_dining
 APPROACH: $keep_bedroom FROM $keep_servants

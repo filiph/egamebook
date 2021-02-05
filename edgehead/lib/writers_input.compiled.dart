@@ -12064,7 +12064,8 @@ final Approach keepBedroomFromKeepGate =
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   return c.hasHappened(evKeepUnlockedGate) ||
-      c.hasHappened(evKeepDestroyedGate);
+      c.hasHappened(evKeepDestroyedGate) ||
+      c.playerHasVisited("keep_bedroom");
 });
 final Approach keepBedroomFromKeepServants =
     Approach('keep_servants', 'keep_bedroom', '', null);
@@ -12519,8 +12520,9 @@ final Room keepServants = Room('keep_servants', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'Clear signs of goblin activity. But deserted. A curious skull-shaped device in the middle of the room.\n',
+      'Clear signs of goblin activity. But deserted. A curious skull-shaped device in the middle of the room.\n\n',
       isRaw: true);
+  c.learn(kbKeepServantsLocation);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
