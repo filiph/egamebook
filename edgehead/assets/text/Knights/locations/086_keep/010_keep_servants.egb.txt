@@ -3,6 +3,8 @@ PREREQUISITES:
 c.knows(kbKeepServantsLocation)
 
 APPROACH: $keep_servants FROM $top_of_climb
+DESCRIPTION:
+I climb down the elevator shaft. All the exits are shut except for one almost at the very bottom of the tower. It leads to narrow passage paneled with wood, and then into a cramped room inside the Keep.
 
 // ---
 ROOM: $keep_servants
@@ -34,7 +36,7 @@ This is human skull made into a device.
 
 ![Illustration of some kind of device inset in a human skull.](northskull.png)
 
-Next to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.
+Next to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to [[IF c.playerHasVisited("keep_servants", from: "top_of_climb")]]the narrow passage connecting this room to the elevator shaft[[ELSE]]a corner of the room that, after closer inspection, hides a narrow crawlspace[[ENDIF]].
 
 [[IF c.hasItem(compassId)]]As I circle the "North Skull", the compass always points directly at it.[[ENDIF]]
 

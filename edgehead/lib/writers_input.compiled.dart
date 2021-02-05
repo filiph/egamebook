@@ -12362,7 +12362,16 @@ final Approach keepServantsFromKeepBedroom =
   return c.knows(kbKeepServantsLocation);
 });
 final Approach keepServantsFromTopOfClimb =
-    Approach('top_of_climb', 'keep_servants', '', null);
+    Approach('top_of_climb', 'keep_servants', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add(
+      'I climb down the elevator shaft. All the exits are shut except for one almost at the very bottom of the tower. It leads to narrow passage paneled with wood, and then into a cramped room inside the Keep.\n',
+      isRaw: true);
+});
 
 class NorthSkullExamine extends RoamingAction {
   @override
@@ -12391,11 +12400,15 @@ class NorthSkullExamine extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_3d15c1ad0 = c.playerHasVisited("keep_servants",
+            from: "top_of_climb")
+        ? '''the narrow passage connecting this room to the elevator shaft'''
+        : '''a corner of the room that, after closer inspection, hides a narrow crawlspace''';
     final ifBlock_465f63bbc = c.hasItem(compassId)
         ? '''As I circle the "North Skull", the compass always points directly at it.'''
         : '''''';
     s.add(
-        'This is human skull made into a device. \n\n![Illustration of some kind of device inset in a human skull.](northskull.png)\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to a corner of the room that, after closer inspection, hides a narrow crawlspace.\n\n${ifBlock_465f63bbc}\n',
+        'This is human skull made into a device. \n\n![Illustration of some kind of device inset in a human skull.](northskull.png)\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to ${ifBlock_3d15c1ad0}.\n\n${ifBlock_465f63bbc}\n',
         isRaw: true);
     return '${a.name} successfully performs NorthSkullExamine';
   }

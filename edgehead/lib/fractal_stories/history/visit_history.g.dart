@@ -66,6 +66,9 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
     final result = <Object>[
       'actorId',
       serializers.serialize(object.actorId, specifiedType: const FullType(int)),
+      'fromRoomName',
+      serializers.serialize(object.fromRoomName,
+          specifiedType: const FullType(String)),
       'roomName',
       serializers.serialize(object.roomName,
           specifiedType: const FullType(String)),
@@ -96,6 +99,10 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
+          break;
+        case 'fromRoomName':
+          result.fromRoomName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
         case 'parentRoomName':
           result.parentRoomName = serializers.deserialize(value,
@@ -213,6 +220,8 @@ class _$VisitRecord extends VisitRecord {
   @override
   final int actorId;
   @override
+  final String fromRoomName;
+  @override
   final String parentRoomName;
   @override
   final String roomName;
@@ -222,10 +231,18 @@ class _$VisitRecord extends VisitRecord {
   factory _$VisitRecord([void Function(VisitRecordBuilder) updates]) =>
       (new VisitRecordBuilder()..update(updates)).build();
 
-  _$VisitRecord._({this.actorId, this.parentRoomName, this.roomName, this.time})
+  _$VisitRecord._(
+      {this.actorId,
+      this.fromRoomName,
+      this.parentRoomName,
+      this.roomName,
+      this.time})
       : super._() {
     if (actorId == null) {
       throw new BuiltValueNullFieldError('VisitRecord', 'actorId');
+    }
+    if (fromRoomName == null) {
+      throw new BuiltValueNullFieldError('VisitRecord', 'fromRoomName');
     }
     if (roomName == null) {
       throw new BuiltValueNullFieldError('VisitRecord', 'roomName');
@@ -247,6 +264,7 @@ class _$VisitRecord extends VisitRecord {
     if (identical(other, this)) return true;
     return other is VisitRecord &&
         actorId == other.actorId &&
+        fromRoomName == other.fromRoomName &&
         parentRoomName == other.parentRoomName &&
         roomName == other.roomName &&
         time == other.time;
@@ -255,7 +273,9 @@ class _$VisitRecord extends VisitRecord {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, actorId.hashCode), parentRoomName.hashCode),
+        $jc(
+            $jc($jc($jc(0, actorId.hashCode), fromRoomName.hashCode),
+                parentRoomName.hashCode),
             roomName.hashCode),
         time.hashCode));
   }
@@ -264,6 +284,7 @@ class _$VisitRecord extends VisitRecord {
   String toString() {
     return (newBuiltValueToStringHelper('VisitRecord')
           ..add('actorId', actorId)
+          ..add('fromRoomName', fromRoomName)
           ..add('parentRoomName', parentRoomName)
           ..add('roomName', roomName)
           ..add('time', time))
@@ -277,6 +298,10 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
   int _actorId;
   int get actorId => _$this._actorId;
   set actorId(int actorId) => _$this._actorId = actorId;
+
+  String _fromRoomName;
+  String get fromRoomName => _$this._fromRoomName;
+  set fromRoomName(String fromRoomName) => _$this._fromRoomName = fromRoomName;
 
   String _parentRoomName;
   String get parentRoomName => _$this._parentRoomName;
@@ -296,6 +321,7 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
   VisitRecordBuilder get _$this {
     if (_$v != null) {
       _actorId = _$v.actorId;
+      _fromRoomName = _$v.fromRoomName;
       _parentRoomName = _$v.parentRoomName;
       _roomName = _$v.roomName;
       _time = _$v.time;
@@ -322,6 +348,7 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
     final _$result = _$v ??
         new _$VisitRecord._(
             actorId: actorId,
+            fromRoomName: fromRoomName,
             parentRoomName: parentRoomName,
             roomName: roomName,
             time: time);

@@ -243,7 +243,7 @@ abstract class RoomRoamingSituation extends Object
     for (final member in getPartyOf(actor, sim, w.build())) {
       // The actors have already been moved at the start of method.
       // Here we just record their visit.
-      w.recordVisit(member, room);
+      w.recordVisit(member, room, actor.currentRoomName);
     }
   }
 

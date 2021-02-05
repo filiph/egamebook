@@ -438,7 +438,7 @@ abstract class WorldStateBuilder
             parentRoomName: room.parent));
   }
 
-  void recordVisit(Actor actor, Room room) {
+  void recordVisit(Actor actor, Room room, String fromRoomName) {
     final key = VisitHistory.getKey(room);
     visitHistory.records.add(
         key,
@@ -446,7 +446,8 @@ abstract class WorldStateBuilder
             time: time,
             actorId: actor.id,
             roomName: room.name,
-            parentRoomName: room.parent));
+            parentRoomName: room.parent,
+            fromRoomName: fromRoomName));
   }
 
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {

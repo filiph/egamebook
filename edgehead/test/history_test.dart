@@ -29,7 +29,7 @@ void main() {
       expect(world.visitHistory.query(aren, outside).hasHappened, isFalse);
       expect(world.visitHistory.query(aren, inside).hasHappened, isFalse);
       final w = world.toBuilder();
-      w.recordVisit(aren, outside);
+      w.recordVisit(aren, outside, "somewhere");
       final updated = w.build();
       expect(updated.visitHistory.query(aren, outside).hasHappened, isTrue);
       expect(updated.visitHistory.query(aren, inside).hasHappened, isFalse);

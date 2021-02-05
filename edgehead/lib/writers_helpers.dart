@@ -1068,10 +1068,12 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   }
 
   /// Returns `true` if player has ever visited [roomName].
-  bool playerHasVisited(String roomName, {bool includeVariants = false}) {
+  bool playerHasVisited(String roomName,
+      {bool includeVariants = false, String from}) {
     final room = simulation.getRoomByName(roomName);
     return world.visitHistory
-        .query(player, room, includeVariants: includeVariants)
+        .query(player, room,
+            includeVariants: includeVariants, fromRoomName: from)
         .hasHappened;
   }
 }
