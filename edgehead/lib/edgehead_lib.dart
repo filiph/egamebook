@@ -138,13 +138,15 @@ class EdgeheadGame extends Book {
       world = edgehead_serializer.serializers.deserializeWith(
           WorldState.serializer, json.decode(saveGameSerialized));
       // ignore: avoid_catching_errors
-    } on ArgumentError catch (e) {
+    } on ArgumentError catch (e, s) {
       log.severe(parseErrorMessage);
-      throw EdgeheadSaveGameParseException('Couldn\'t parse savegame', e);
+      throw EdgeheadSaveGameParseException(
+          'Couldn\'t parse savegame', e, s.toString());
       // ignore: avoid_catching_errors
-    } on DeserializationError catch (e) {
+    } on DeserializationError catch (e, s) {
       log.severe(parseErrorMessage);
-      throw EdgeheadSaveGameParseException('Couldn\'t parse savegame', e);
+      throw EdgeheadSaveGameParseException(
+          'Couldn\'t parse savegame', e, s.toString());
     }
     _sendInitialStats();
   }
@@ -554,9 +556,12 @@ class EdgeheadGame extends Book {
 class EdgeheadSaveGameParseException implements Exception {
   final Error underlyingError;
 
+  final String stackTrace;
+
   final String message;
 
-  const EdgeheadSaveGameParseException(this.message, this.underlyingError);
+  const EdgeheadSaveGameParseException(
+      this.message, this.underlyingError, this.stackTrace);
 
   @override
   String toString() => '$message -- underlyingError: $underlyingError';
