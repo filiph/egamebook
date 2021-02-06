@@ -40,7 +40,7 @@ INK:
 
     * * "No, a blacksmith."
 
-        "Ah. He's a mender with the Knights." 
+        "Ah. He's a mender with the Knights," he says. <>
 
 * "A blacksmith."
 
@@ -56,19 +56,19 @@ INK:
 
         * * * "Who repairs it when there's a chink in the blade?"
 
-            "Oh!" he says. 
+            "Oh!" he says.
 
         - - -
 
-        "I know what you're driving at. You mean a mender. Your Sarn is a mender with the Knights."
+        "I know what you're driving at. You mean a mender. Your Sarn is a mender with the Knights." He nods. <> 
 
     * * "The Knights recruited him."
 
-        "Oh, you mean a mender."
+        "Oh, you mean a mender," he says. <>
 
 -
 
-"Well, I don't know of a mender called Sarn."
+<> "Well, I don't know of a mender called Sarn."
 
 [[RULESET]]
 [[RULE]]

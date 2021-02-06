@@ -13159,7 +13159,8 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('"Ah. He\'s a mender with the Knights."\n', isRaw: true);
+                s.add('"Ah. He\'s a mender with the Knights," he says.\n',
+                    isRaw: true);
               }),
             ],
           ),
@@ -13233,7 +13234,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '"I know what you\'re driving at. You mean a mender. Your Sarn is a mender with the Knights."\n',
+                    '"I know what you\'re driving at. You mean a mender. Your Sarn is a mender with the Knights." He nods.\n',
                     isRaw: true);
               }),
             ],
@@ -13247,7 +13248,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final Actor a = c.actor;
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
-                s.add('"Oh, you mean a mender."\n', isRaw: true);
+                s.add('"Oh, you mean a mender," he says.\n', isRaw: true);
               }),
             ],
           ),
@@ -13255,7 +13256,6 @@ final talkToMiguelAboutBrotherInk = InkAst([
       ],
     ),
   ]),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
