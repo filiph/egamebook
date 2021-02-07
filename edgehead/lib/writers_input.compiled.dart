@@ -14334,6 +14334,7 @@ class BleedsTraderGoblins extends RoamingAction {
       return false;
     }
     if (!(w.actionHasBeenPerformed("bleeds_trader_greet") &&
+        !c.hasHappened(evGoblinCampCleared) &&
         c.inRoomWith(leroyId))) {
       return false;
     }
