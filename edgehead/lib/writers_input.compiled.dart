@@ -6713,13 +6713,17 @@ final oracleAppleExamineInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_1fb640d51 =
+        w.actionHasBeenPerformed("talk_to_oracle_greetings")
+            ? '''Oracle'''
+            : '''the woman''';
     final ifBlock_77cb64ee3 = c.playerHasWoodenFoot
         ? ''', glancing at the wooden stump I have for a foot'''
         : '''''';
     final ifBlock_5daa17d61 =
         c.playerHasAsthma ? ''' while I have a little fit of cough''' : '''''';
     s.add(
-        '"You can have it if you want," Oracle says${ifBlock_77cb64ee3}${ifBlock_5daa17d61}. "You need it more than I do."\n',
+        '"You can have it if you want," ${ifBlock_1fb640d51} says${ifBlock_77cb64ee3}${ifBlock_5daa17d61}. "You need it more than I do."\n',
         isRaw: true);
   }),
   InkForkNode([
