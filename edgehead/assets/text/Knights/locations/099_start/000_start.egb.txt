@@ -175,7 +175,7 @@ A goblin, bloodlust in his eyes, emerges from his hiding place to stand a few pa
 
 * Attack ((There is no way around this. The goblin is clearly set on fighting us. May as well seize initiative before more of them show up.))
 
-    "I escape war only to be dragged into *this* mess?" Tamara says through gritted teeth. But she moves forward, pointing her battered sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
+    "I escape war only to be dragged into _this_ mess?" Tamara says through gritted teeth. But she moves forward, pointing her battered sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
 
     [[CODE]]
     w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
