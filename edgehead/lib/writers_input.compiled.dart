@@ -256,7 +256,7 @@ final finalFightInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'He takes a moment to relish in my confusion. I force my face to harden again. He chuckles again.\n',
+        'He takes a moment to relish in my confusion. I force my expression to harden. He chuckles again.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -344,8 +344,11 @@ final finalFightInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     final ifBlock_1aaeebfe6 = c.playerIsAlone ? '''me''' : '''us''';
+    final ifBlock_12a11f627 = c.hasItem(dragonEggId)
+        ? '''Almost unconsciously, my hand touches the Dragon Egg hidden in my pocket.'''
+        : '''''';
     s.add(
-        'Big O starts to circle around ${ifBlock_1aaeebfe6}, still well out of reach. "And instead of support, necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Here, the necromancers are at the top."\n',
+        'Big O starts to circle around ${ifBlock_1aaeebfe6}, still well out of reach. ${ifBlock_12a11f627} "And instead of support," Big O says, "necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Not in San Francisco. Here, the necromancers are at the top."\n',
         isRaw: true);
   }),
   InkForkNode([
