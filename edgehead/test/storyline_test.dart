@@ -69,8 +69,7 @@ void main() {
     storyline.add("<subject> enter<s> the room", subject: gorilla);
     storyline.add("<subject> say<s>: \"Isn't this great?\"",
         subject: gorilla, endSentence: true);
-    expect(
-        storyline.realizeAsString(), endsWith("says: “Isn’t this great?”"));
+    expect(storyline.realizeAsString(), endsWith("says: “Isn’t this great?”"));
     storyline.clear();
     storyline.add("<subject> say<s>: \"Well, I think it's great.\"",
         subject: gorilla);
