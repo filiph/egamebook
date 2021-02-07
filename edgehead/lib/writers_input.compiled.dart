@@ -5039,7 +5039,7 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I am in a maze of twisty little passages, all alike. All crawling with cockroaches.\n\nThe place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. I quickly realize this is a sort of a farm. The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest.\n',
+      'I am in a maze of twisty little passages, all alike. All crawling with cockroaches.\n\nThe place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. I quickly realize this is a sort of a farm. The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;

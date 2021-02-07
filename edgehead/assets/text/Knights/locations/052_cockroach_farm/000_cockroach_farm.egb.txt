@@ -15,7 +15,7 @@ HINT: The main source of food for the orcs.
 FIRST_DESCRIPTION:
 I am in a maze of twisty little passages, all alike. All crawling with cockroaches.
 
-The place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. I quickly realize this is a sort of a farm. The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest.
+The place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. I quickly realize this is a sort of a farm. The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches.
 
 DESCRIPTION: $NONE
 
