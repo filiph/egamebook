@@ -392,7 +392,7 @@ final finalFightInkInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    'Big O mocks a sad expression with his dog eyes. "Oh no, are you going to cry, you absolute snowflake? A few people here met an undeserved fate. Isn\'t that something that happens _every single day?_ Normally, people suffer for idiotic reasons, such as greed and senseless war. In contrast, the folks down there are suffering for a good cause, even if they don\'t know it.\n',
+                    'Big O mocks a sad expression with his dog eyes. "Oh no, are you going to cry, you absolute snowflake? A few people here met an undeserved fate. Isn\'t that something that happens _every_ _single_ _day?_ Normally, people suffer for idiotic reasons, such as greed and senseless war. In contrast, the folks down there are suffering for a good cause, even if they don\'t know it.\n',
                     isRaw: true);
               }),
             ],
@@ -5319,7 +5319,7 @@ final askOracleAboutKeepInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '“That they did,” she says. “There was a lot of screaming, and quite a few beatings as well. I don’t miss _that_. I do miss being younger, though. And having access to all those books seemed magical at the time.”\n',
+        '“That they did,” she says. “There was a lot of screaming, and quite a few beatings as well. I don’t miss _that._ I do miss being younger, though. And having access to all those books seemed magical at the time.”\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -14354,7 +14354,7 @@ class BleedsTraderGoblins extends RoamingAction {
     assert(c.inRoomWith(leroyId));
 
     s.add(
-        '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less than a mile_ from The Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
+        '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west, less than a mile from here."\n\n"There\'s a goblin camp _less_ _than_ _a_ _mile_ from the Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
         isRaw: true);
     c.learn(kbLeroyKnowsGoblinSmoke);
 
