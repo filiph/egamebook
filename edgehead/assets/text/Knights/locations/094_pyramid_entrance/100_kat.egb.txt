@@ -27,6 +27,10 @@ INK:
 
 "Good to meet you, Aren."
 
+[[CODE]]
+w.updateActorById(katId, (b) => b..name = 'Kat'..adjective = null..nameIsProperNoun = true);
+[[ENDCODE]]
+
 // ---
 ACTION: $talk_to_kat_about_brother
 COMMAND: Kat, the guardswoman >> Talk >> "I'm looking for a Sarn of Falling Rock."

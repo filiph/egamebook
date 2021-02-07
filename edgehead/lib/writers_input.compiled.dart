@@ -12780,6 +12780,20 @@ final talkToKatGreetingsInk = InkAst([
     final Storyline s = c.outputStoryline;
     s.add('"Good to meet you, Aren."\n', isRaw: true);
   }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.updateActorById(
+        katId,
+        (b) => b
+          ..name = 'Kat'
+          ..adjective = null
+          ..nameIsProperNoun = true);
+  }),
 ]);
 
 class TalkToKatAboutBrother extends RoamingAction {
@@ -13442,6 +13456,20 @@ final talkToMiguelGreetingsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add('"Miguel."\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.updateActorById(
+        miguelId,
+        (b) => b
+          ..name = 'Miguel'
+          ..adjective = null
+          ..nameIsProperNoun = true);
   }),
 ]);
 

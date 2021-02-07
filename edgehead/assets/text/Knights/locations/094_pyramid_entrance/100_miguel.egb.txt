@@ -19,6 +19,10 @@ The knight nods.
 
 "Miguel."
 
+[[CODE]]
+w.updateActorById(miguelId, (b) => b..name = 'Miguel'..adjective = null..nameIsProperNoun = true);
+[[ENDCODE]]
+
 // ---
 ACTION: $talk_to_miguel_about_brother
 COMMAND: Miguel, the guardsman >> Talk >> "I'm looking for a Sarn of Falling Rock."

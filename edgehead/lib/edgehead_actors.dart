@@ -124,8 +124,9 @@ final Actor edgeheadDarg = Actor.initialized(
 final Actor edgeheadKat = Actor.initialized(
   katId,
   StatefulRandom(~katId).next,
-  "Kat",
-  nameIsProperNoun: true,
+  // Will be replaced by "Kat".
+  "guardswoman",
+  adjective: "tall",
   pronoun: Pronoun.SHE,
   currentRoomName: 'pyramid_entrance',
   currentWeapon: Item.weapon(234313, WeaponType.sword,
@@ -168,8 +169,9 @@ final Actor edgeheadLeroy = Actor.initialized(
 final Actor edgeheadMiguel = Actor.initialized(
   miguelId,
   StatefulRandom(~miguelId).next,
-  "Miguel",
-  nameIsProperNoun: true,
+  // Will be replaced by "Miguel"
+  "guardsman",
+  adjective: "bleary-eyed",
   pronoun: Pronoun.HE,
   currentRoomName: 'pyramid_entrance',
   currentWeapon: Item.weapon(234312, WeaponType.axe,
