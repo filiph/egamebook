@@ -70,17 +70,17 @@ void main() {
     storyline.add("<subject> say<s>: \"Isn't this great?\"",
         subject: gorilla, endSentence: true);
     expect(
-        storyline.realizeAsString(), endsWith("says: \"Isn't this great?\""));
+        storyline.realizeAsString(), endsWith("says: “Isn’t this great?”"));
     storyline.clear();
     storyline.add("<subject> say<s>: \"Well, I think it's great.\"",
         subject: gorilla);
     expect(storyline.realizeAsString(),
-        endsWith("says: \"Well, I think it's great.\""));
+        endsWith("says: “Well, I think it’s great.”"));
     storyline.clear();
     storyline.add("<subject> exclaim<s>: \"Well? Say something!\"",
         subject: gorilla);
     expect(storyline.realizeAsString(),
-        endsWith("exclaims: \"Well? Say something!\""));
+        endsWith("exclaims: “Well? Say something!”"));
   });
 
   test("fixing .'. in sentences", () {
@@ -90,12 +90,12 @@ void main() {
     storyline.add("<subject> enter<s> the room", subject: gorilla);
     storyline.add("<subject> say<s>: 'Isn't this great?'",
         subject: gorilla, endSentence: true);
-    expect(storyline.realizeAsString(), endsWith("says: 'Isn't this great?'"));
+    expect(storyline.realizeAsString(), endsWith("says: 'Isn’t this great?'"));
     storyline.clear();
     storyline.add("<subject> say<s>: 'Well, I think it's great.'",
         subject: gorilla);
     expect(storyline.realizeAsString(),
-        endsWith("says: 'Well, I think it's great.'"));
+        endsWith("says: 'Well, I think it’s great.'"));
     storyline.clear();
     storyline.add("<subject> exclaim<s>: 'Well? Say something!'",
         subject: gorilla);
@@ -239,7 +239,7 @@ void main() {
     storyline.add("<object2's> <subject> <is> faster",
         object2: player, subject: gun, but: true);
     expect(storyline.realizeAsString(),
-        matches("The enemy's ship aims her guns at me.+ my gun is faster."));
+        matches("The enemy’s ship aims her guns at me.+ my gun is faster."));
   });
 
   test("we don't show 'my the sword' even if Randomly is involved", () {
@@ -415,8 +415,8 @@ void main() {
     expect(
         storyline.realizeAsString(),
         isIn([
-          "Tamara's teeth bite empty air.",
-          "Tamara's teeth snap at empty air."
+          "Tamara’s teeth bite empty air.",
+          "Tamara’s teeth snap at empty air."
         ]));
   });
 
@@ -909,7 +909,7 @@ void main() {
 
       final result = storyline.realizeAsString();
       expect(result, matches(r'blue (goblin|one) deflects'));
-      expect(result, contains("red one's fist"));
+      expect(result, contains("red one’s fist"));
     });
 
     test("A swings at B's C. A cuts across B's D.", () {
@@ -926,7 +926,7 @@ void main() {
       expect(graph.qualifications.first.object, IdentifierLevel.adjectiveNoun);
 
       expect(
-          result, matches(r"The red goblin swings at the blue goblin's neck"));
+          result, matches(r"The red goblin swings at the blue goblin’s neck"));
       expect(result, contains('his throat'));
     });
   });
@@ -1133,7 +1133,7 @@ void main() {
             subject: aren, object: orcSword, object2: mySword);
 
         final result = storyline.realizeAsString();
-        expect(result, contains('the orc\'s sword'));
+        expect(result, contains('the orc’s sword'));
         expect(result, contains('with my'));
       });
 
@@ -1163,8 +1163,8 @@ void main() {
         final result = storyline.realizeAsString();
         expect(result, isNot(contains('rusty')));
         expect(result, isNot(contains('shiny')));
-        expect(result, contains('orc\'s sword'));
-        expect(result, contains('goblin\'s sword'));
+        expect(result, contains('orc’s sword'));
+        expect(result, contains('goblin’s sword'));
       });
 
       test(
@@ -1181,7 +1181,7 @@ void main() {
         storyline.add('<subject> freeze<s> for a while', subject: goblin);
 
         final result = storyline.realizeAsString();
-        expect(result, contains("goblin's"));
+        expect(result, contains("goblin’s"));
         expect(result, isNot(contains('he freezes')));
       });
 
@@ -1204,7 +1204,7 @@ void main() {
             object2: mySword);
 
         final result = storyline.realizeAsString();
-        expect(result, contains('hit the orc\'s sword'));
+        expect(result, contains('hit the orc’s sword'));
       });
     });
   });
@@ -1295,7 +1295,7 @@ void main() {
         subject: undead, objectOwner: goblin, object: goblinNeck);
 
     final result = storyline.realizeAsString();
-    expect(result, contains("the goblin's neck"));
+    expect(result, contains("the goblin’s neck"));
   });
 
   test("a sentence with clashing name throws", () {
@@ -1339,6 +1339,75 @@ void main() {
     final result = storyline.realizeAsString();
     expect(result, isNot(contains("with it")));
     expect(result, contains("with the spear at"));
+  });
+
+  group('smartifyQuotes', () {
+    group('double quotes', () {
+      test('whole sentence', () {
+        expect(
+          Storyline.smartifyQuotes('"I do not thing this is necessary."'),
+          '“I do not thing this is necessary.”',
+        );
+      });
+      test('colon direct speach', () {
+        expect(
+          Storyline.smartifyQuotes('He said: "I am here."'),
+          'He said: “I am here.”',
+        );
+      });
+      test('he said sentence', () {
+        expect(
+          Storyline.smartifyQuotes('"I like this," he said.'),
+          '“I like this,” he said.',
+        );
+      });
+      test('question mark', () {
+        expect(
+          Storyline.smartifyQuotes('"What?" he asked.'),
+          '“What?” he asked.',
+        );
+      });
+      test('exclamation mark', () {
+        expect(
+          Storyline.smartifyQuotes('"No!" he shouted.'),
+          '“No!” he shouted.',
+        );
+      });
+    });
+
+    group('contractions', () {
+      test('cannot', () {
+        expect(
+          Storyline.smartifyQuotes("You can't be serious!"),
+          "You can’t be serious!",
+        );
+      });
+      test('possessive', () {
+        expect(
+          Storyline.smartifyQuotes("Aren's dagger"),
+          "Aren’s dagger",
+        );
+      });
+      test('possessive end of word', () {
+        expect(
+          Storyline.smartifyQuotes("Czechs' pride"),
+          "Czechs’ pride",
+        );
+      });
+      test('possessive end of word and sentence', () {
+        expect(
+          Storyline.smartifyQuotes("dogs'"),
+          "dogs’",
+        );
+      });
+    });
+
+    test('longer sentence', () {
+      expect(
+        Storyline.smartifyQuotes('"E=mc2" is Einstein\'s signature.'),
+        '“E=mc2” is Einstein’s signature.',
+      );
+    });
   });
 }
 

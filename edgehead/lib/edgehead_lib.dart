@@ -485,9 +485,14 @@ class EdgeheadGame extends Book {
                 performance.additionalData.isNotEmpty,
             'Go actions should have path data: $performance.');
 
+        final smartifiedCommandPath =
+            performance.commandPath.map(Storyline.smartifyQuotes);
+        final smartifiedCommandSentence =
+            Storyline.smartifyQuotes(performance.commandSentence);
+
         final choice = Choice((b) => b
-          ..commandPath = ListBuilder<String>(performance.commandPath)
-          ..commandSentence = performance.commandSentence
+          ..commandPath = ListBuilder<String>(smartifiedCommandPath)
+          ..commandSentence = smartifiedCommandSentence
           ..helpMessage = performance.action
               .getHelpMessage(performance.context, performance.object)
           ..successChance = performance.successChance.value

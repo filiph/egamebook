@@ -236,6 +236,14 @@ class Storyline {
 
   static final _vowelsRegExp = RegExp(r"[aeiouy]", caseSensitive: false);
 
+  /// A regular expression for replacing `"` with smart quotes. Inspired
+  /// by https://stackoverflow.com/a/42354550/1416886.
+  static final RegExp _doubleQuotesSmartify = RegExp(r'(\s|^)"([^"]+)"');
+
+  /// A regular expression for replacing `'` with smart quote. Inspired
+  /// by https://stackoverflow.com/a/42354550/1416886.
+  static final RegExp _contractionSmartify = RegExp(r"([A-Za-z])'");
+
   /// Internal list of reports. This is constructed by filtering [_records].
   List<Report> _immutableReports;
 
@@ -739,6 +747,9 @@ class Storyline {
       return "${m[1]}${m[2]}${m[3]}";
     });
 
+    // Replace dumb quotes with smart quotes.
+    s = smartifyQuotes(s);
+
     // Construct the text.
     final text = TextOutput((b) => b..markdownText = s);
 
@@ -848,6 +859,40 @@ class Storyline {
     } else {
       return true;
     }
+  }
+
+  /// When something is [IdentifierLevel.ownerNoun]
+  /// or [IdentifierLevel.ownerAdjectiveNoun], we should add
+  /// the `"<*wner>` stopword before it (unless it's already there).
+  String _addOwnerStopwords(String string, ShadowReport report) {
+    String result = string;
+
+    void maybeAddOwnerPossessiveBefore(
+        ComplementType complement, ComplementType ownerComplement) {
+      final entity = report.getEntityByType(complement);
+      if (entity == null) return;
+
+      final level = report.qualifications.getByType(complement);
+      if (level != IdentifierLevel.ownerNoun &&
+          level != IdentifierLevel.ownerAdjectiveNoun) return;
+
+      result = result.replaceAll(complement.generic,
+          "${ownerComplement.genericPossessive} ${complement.generic}");
+
+      // Clear duplicates.
+      result = result.replaceAll(
+          "${ownerComplement.genericPossessive} "
+          "${ownerComplement.genericPossessive}",
+          ownerComplement.genericPossessive);
+    }
+
+    maybeAddOwnerPossessiveBefore(ComplementType.SUBJECT, ComplementType.OWNER);
+    maybeAddOwnerPossessiveBefore(
+        ComplementType.OBJECT, ComplementType.OBJECT_OWNER);
+    maybeAddOwnerPossessiveBefore(
+        ComplementType.OBJECT2, ComplementType.OBJECT2_OWNER);
+
+    return result;
   }
 
   /// Given [str] which still has stopwords (such as
@@ -1110,6 +1155,67 @@ class Storyline {
     return result;
   }
 
+  /// Detects if two or more of the [report]'s entities are the same thing,
+  /// and replaces the stopwords.
+  ///
+  /// For example, a report like "<subject> draws <objectOwner's> <object>"
+  /// will be rewritten to "<subject> draws <subject's> <object>" if
+  /// the object's owner _is_ the subject.
+  String _consolidateStopwords(String string, ShadowReport report) {
+    var result = string;
+    void maybeReplace(ComplementType candidate, Entity candidateEntity,
+        ComplementType replacement, Entity replacementEntity) {
+      if (candidateEntity == null) return;
+      if (replacementEntity == null) return;
+      if (candidateEntity.id != replacementEntity.id) return;
+
+      result = result.replaceAll(candidate.generic, replacement.generic);
+      result = result.replaceAll(
+          candidate.genericPossessive, replacement.genericPossessive);
+    }
+
+    maybeReplace(ComplementType.OWNER, report.owner, ComplementType.OBJECT,
+        report.object);
+    maybeReplace(ComplementType.OWNER, report.owner, ComplementType.OBJECT2,
+        report.object2);
+    maybeReplace(ComplementType.OWNER, report.owner,
+        ComplementType.OBJECT_OWNER, report.objectOwner);
+    maybeReplace(ComplementType.OWNER, report.owner,
+        ComplementType.OBJECT2_OWNER, report.object2Owner);
+
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.SUBJECT, report.subject);
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.OBJECT2, report.object2);
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.OWNER, report.owner);
+    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
+        ComplementType.OBJECT2_OWNER, report.object2Owner);
+
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.SUBJECT, report.subject);
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.OBJECT, report.object);
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.OWNER, report.owner);
+    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
+        ComplementType.OBJECT_OWNER, report.objectOwner);
+
+    // We're not replacing OWNER with SUBJECT or OBJECT_OWNER with OBJECT,
+    // because that would lead to "<subject's> <subject>".
+    if (report.subject != null && report.owner != null) {
+      assert(report.subject.id != report.owner.id);
+    }
+    if (report.object != null && report.objectOwner != null) {
+      assert(report.object.id != report.objectOwner.id);
+    }
+    if (report.object2 != null && report.object2Owner != null) {
+      assert(report.object2.id != report.object2Owner.id);
+    }
+
+    return result;
+  }
+
   /// If [entity] is non-null, then _every_ variant of [str] must contain
   /// [pattern]. If [entity] is `null`, then _no_ variant of [str]
   /// can contain [pattern].
@@ -1329,41 +1435,6 @@ class Storyline {
     return result;
   }
 
-  /// When something is [IdentifierLevel.ownerNoun]
-  /// or [IdentifierLevel.ownerAdjectiveNoun], we should add
-  /// the `"<*wner>` stopword before it (unless it's already there).
-  String _addOwnerStopwords(String string, ShadowReport report) {
-    String result = string;
-
-    void maybeAddOwnerPossessiveBefore(
-        ComplementType complement, ComplementType ownerComplement) {
-      final entity = report.getEntityByType(complement);
-      if (entity == null) return;
-
-      final level = report.qualifications.getByType(complement);
-      if (level != IdentifierLevel.ownerNoun &&
-          level != IdentifierLevel.ownerAdjectiveNoun) return;
-
-      result = result.replaceAll(complement.generic,
-          "${ownerComplement.genericPossessive} ${complement.generic}");
-
-      // Clear duplicates.
-      result = result.replaceAll(
-          "${ownerComplement.genericPossessive} "
-          "${ownerComplement.genericPossessive}",
-          ownerComplement.genericPossessive);
-    }
-
-    maybeAddOwnerPossessiveBefore(ComplementType.SUBJECT, ComplementType.OWNER);
-    maybeAddOwnerPossessiveBefore(
-        ComplementType.OBJECT, ComplementType.OBJECT_OWNER);
-    maybeAddOwnerPossessiveBefore(
-        ComplementType.OBJECT2, ComplementType.OBJECT2_OWNER);
-
-    return result;
-  }
-
-  // Never show "the guard's it".
   /// Taking care of all the exceptions and rules when comparing
   /// different reports call: [: sameSubject(i, i+1) ... :]
   bool _sameSubject(int i, int j) {
@@ -1386,6 +1457,17 @@ class Storyline {
     } else {
       return "$firstLetter${result.substring(1)}";
     }
+  }
+
+  /// Takes a string with "dumb" quotes, such as
+  /// `"E=mc2" is Einstein's signature` and replaces quotes with
+  /// the typographically correct variants ("smart" quotes), such as
+  /// `“E=mc2” is Einstein’s signature`.
+  static String smartifyQuotes(String input) {
+    return input
+        .replaceAllMapped(_contractionSmartify, (match) => '${match.group(1)}’')
+        .replaceAllMapped(_doubleQuotesSmartify,
+            (match) => '${match.group(1)}“${match.group(2)}”');
   }
 
   /// Takes the string, and first searches for keys in [first]. Once that is
@@ -1431,67 +1513,6 @@ class Storyline {
     for (final key in following.keys) {
       result = result.replaceAll(key, following[key]);
     }
-    return result;
-  }
-
-  /// Detects if two or more of the [report]'s entities are the same thing,
-  /// and replaces the stopwords.
-  ///
-  /// For example, a report like "<subject> draws <objectOwner's> <object>"
-  /// will be rewritten to "<subject> draws <subject's> <object>" if
-  /// the object's owner _is_ the subject.
-  String _consolidateStopwords(String string, ShadowReport report) {
-    var result = string;
-    void maybeReplace(ComplementType candidate, Entity candidateEntity,
-        ComplementType replacement, Entity replacementEntity) {
-      if (candidateEntity == null) return;
-      if (replacementEntity == null) return;
-      if (candidateEntity.id != replacementEntity.id) return;
-
-      result = result.replaceAll(candidate.generic, replacement.generic);
-      result = result.replaceAll(
-          candidate.genericPossessive, replacement.genericPossessive);
-    }
-
-    maybeReplace(ComplementType.OWNER, report.owner, ComplementType.OBJECT,
-        report.object);
-    maybeReplace(ComplementType.OWNER, report.owner, ComplementType.OBJECT2,
-        report.object2);
-    maybeReplace(ComplementType.OWNER, report.owner,
-        ComplementType.OBJECT_OWNER, report.objectOwner);
-    maybeReplace(ComplementType.OWNER, report.owner,
-        ComplementType.OBJECT2_OWNER, report.object2Owner);
-
-    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
-        ComplementType.SUBJECT, report.subject);
-    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
-        ComplementType.OBJECT2, report.object2);
-    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
-        ComplementType.OWNER, report.owner);
-    maybeReplace(ComplementType.OBJECT_OWNER, report.objectOwner,
-        ComplementType.OBJECT2_OWNER, report.object2Owner);
-
-    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
-        ComplementType.SUBJECT, report.subject);
-    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
-        ComplementType.OBJECT, report.object);
-    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
-        ComplementType.OWNER, report.owner);
-    maybeReplace(ComplementType.OBJECT2_OWNER, report.object2Owner,
-        ComplementType.OBJECT_OWNER, report.objectOwner);
-
-    // We're not replacing OWNER with SUBJECT or OBJECT_OWNER with OBJECT,
-    // because that would lead to "<subject's> <subject>".
-    if (report.subject != null && report.owner != null) {
-      assert(report.subject.id != report.owner.id);
-    }
-    if (report.object != null && report.objectOwner != null) {
-      assert(report.object.id != report.objectOwner.id);
-    }
-    if (report.object2 != null && report.object2Owner != null) {
-      assert(report.object2.id != report.object2Owner.id);
-    }
-
     return result;
   }
 }
