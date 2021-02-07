@@ -59,7 +59,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 
 The goblins near the fire pit stand up. One of them, I realize, is almost naked and doesn't have a weapon near him. He grabs a branch from the fire.
 
-The other one, the one I decide looks like the leader of the group, readies a sharp hatchet. An ugly scar slants through his face.
+The other one, the one I decide looks like the leader of the group, readies a razor-sharp, evil-looking hatchet. An ugly scar slants through his face.
 
 "Amak, you f—" he starts saying, but then I am already on him.
 
@@ -121,7 +121,7 @@ PREREQUISITES:
 w.actionHasBeenPerformed('compass_examine')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I take the compass.
+I take the compass and add it among the items I carry.
 
 [[CODE]]
 c.giveNewItemToPlayer(compass);

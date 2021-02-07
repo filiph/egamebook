@@ -186,7 +186,9 @@ FightSituation generateBleedsGoblinSkirmishPatrol(ActionContext c,
     [albinoGoblin],
     "{muddy |wet |}ground",
     roomRoamingSituation,
-    {},
+    {
+      3: amak_will_teach_you,
+    },
   );
 }
 
