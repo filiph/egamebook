@@ -17,7 +17,7 @@ const String startCrackSkullOnGroundHelpMessage =
 
 ReasonedSuccessChance computeCrackSkullOnGroundChance(
         Actor a, Simulation sim, WorldState w, Actor enemy) =>
-    getCombatMoveChance(a, enemy, 0.6, [
+    getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
       const Modifier(50, CombatReason.dexterity),
       Penalty(a.currentDamageCapability.length >= 2 ? 40 : 90,
           CombatReason.targetHasWeapon),

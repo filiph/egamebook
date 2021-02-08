@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 
 ReasonedSuccessChance computeJumpBackBite(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.9, [
+  return getCombatMoveChance(a, enemy, 0.9, w.statefulRandomState, [
     const Modifier(90, CombatReason.dexterity),
     const Modifier(10, CombatReason.balance),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),

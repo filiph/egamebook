@@ -113,7 +113,8 @@ class WrestleWeaponOnGround extends EnemyTargetAction with CombatCommandPath {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return getCombatMoveChance(a, enemy, a.holdsSomeWeapon ? 0.2 : 0.4, [
+    return getCombatMoveChance(
+        a, enemy, a.holdsSomeWeapon ? 0.2 : 0.4, world.statefulRandomState, [
       const Modifier(50, CombatReason.dexterity),
       const Bonus(90, CombatReason.targetHasAllEyesDisabled),
     ]);

@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/feint/feint_situation.dart';
 
 ReasonedSuccessChance computeCounterFeint(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.3, const [
+  return getCombatMoveChance(a, enemy, 0.3, w.statefulRandomState, const [
     Modifier(20, CombatReason.dexterity),
     Modifier(20, CombatReason.balance),
     ...disabledModifiers,

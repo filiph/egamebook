@@ -10,7 +10,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 
 ReasonedSuccessChance computeEvadeOnGroundChance(
         Actor a, Simulation sim, WorldState w, Actor enemy) =>
-    getCombatMoveChance(a, enemy, 0.6, [
+    getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
       const Modifier(50, CombatReason.dexterity),
       const Penalty(50, CombatReason.performerHasLimitedVision),
     ]);

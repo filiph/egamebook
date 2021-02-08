@@ -28,3 +28,5 @@ final _leroyQuits = Rule(_id++, 2, true, (ApplicabilityContext c) {
     b.currentRoomName = 'bleeds_trader_hut';
   });
 });
+
+// TODO: leroy simply quits when being too long with Aren

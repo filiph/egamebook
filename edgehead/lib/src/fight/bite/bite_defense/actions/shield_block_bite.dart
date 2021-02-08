@@ -13,7 +13,7 @@ import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart'
 
 ReasonedSuccessChance computeShieldBlockBite(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.6, [
+  return getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
     const Modifier(50, CombatReason.dexterity),
     const Modifier(30, CombatReason.balance),
     const Bonus(50, CombatReason.targetHasSecondaryArmDisabled),

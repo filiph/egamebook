@@ -17,7 +17,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 ReasonedSuccessChance computeStartSweepFeet(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   assert(a.isPlayer);
-  return getCombatMoveChance(a, enemy, 0.6, [
+  return getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
     const Modifier(70, CombatReason.dexterity),
     const Modifier(70, CombatReason.balance),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),

@@ -24,7 +24,7 @@ const String startThrustOnGroundHelpMessage =
 ReasonedSuccessChance computeStartThrustOnGroundPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
   assert(a.isPlayer);
-  return getCombatMoveChance(a, enemy, 0.5, [
+  return getCombatMoveChance(a, enemy, 0.5, w.statefulRandomState, [
     const Modifier(20, CombatReason.dexterity),
     const Penalty(60, CombatReason.targetHasShield),
     const Bonus(90, CombatReason.targetHasAllEyesDisabled),

@@ -10,7 +10,7 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 
 ReasonedSuccessChance computeRollAwayFromBluntSwing(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.5, [
+  return getCombatMoveChance(a, enemy, 0.5, w.statefulRandomState, [
     const Modifier(90, CombatReason.dexterity),
     const Modifier(10, CombatReason.balance),
     const Bonus(20, CombatReason.targetHasOneLegDisabled),

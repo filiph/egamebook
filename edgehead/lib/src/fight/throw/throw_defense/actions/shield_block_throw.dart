@@ -13,7 +13,7 @@ import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
 
 ReasonedSuccessChance computeShieldBlockThrow(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.7, [
+  return getCombatMoveChance(a, enemy, 0.7, w.statefulRandomState, [
     const Modifier(50, CombatReason.dexterity),
     const Modifier(30, CombatReason.balance),
     const Penalty(100, CombatReason.performerHasLimitedVision),

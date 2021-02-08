@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 
 ReasonedSuccessChance computeOnGroundParry(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.5, [
+  return getCombatMoveChance(a, enemy, 0.5, w.statefulRandomState, [
     const Modifier(70, CombatReason.dexterity),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),
     const Bonus(90, CombatReason.targetHasAllEyesDisabled),

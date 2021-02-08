@@ -153,7 +153,7 @@ class SwingBluntAtLeaper extends EnemyTargetAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final chance = getCombatMoveChance(a, enemy, 0.2, [
+    final chance = getCombatMoveChance(a, enemy, 0.2, w.statefulRandomState, [
       const Modifier(40, CombatReason.dexterity),
       const Modifier(30, CombatReason.height),
       const Modifier(20, CombatReason.balance),

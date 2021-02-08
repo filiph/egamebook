@@ -17,7 +17,7 @@ const String startThrowHarmlessHelpMessage =
 
 ReasonedSuccessChance computeThrowHarmlessPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.2, [
+  return getCombatMoveChance(a, enemy, 0.2, w.statefulRandomState, [
     const Modifier(30, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(10, CombatReason.balance),

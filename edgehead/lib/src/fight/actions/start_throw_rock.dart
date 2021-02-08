@@ -20,7 +20,7 @@ const String startThrowRockHelpMessage =
 
 ReasonedSuccessChance computeThrowRockPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.3, [
+  return getCombatMoveChance(a, enemy, 0.3, w.statefulRandomState, [
     const Modifier(50, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(20, CombatReason.balance),

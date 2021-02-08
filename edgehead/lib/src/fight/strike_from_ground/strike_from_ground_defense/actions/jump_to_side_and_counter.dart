@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/strike_from_ground/strike_from_ground_situati
 
 ReasonedSuccessChance computeJumpToSide(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.4, [
+  return getCombatMoveChance(a, enemy, 0.4, w.statefulRandomState, [
     const Modifier(60, CombatReason.dexterity),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(50, CombatReason.targetHasAllLegsDisabled),

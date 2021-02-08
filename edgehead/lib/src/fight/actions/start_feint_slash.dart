@@ -17,7 +17,7 @@ import 'package:meta/meta.dart';
 
 ReasonedSuccessChance computeStartFeint(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.8, const [
+  return getCombatMoveChance(a, enemy, 0.8, w.statefulRandomState, const [
     Modifier(95, CombatReason.dexterity),
     Modifier(50, CombatReason.balance),
     ...disabledModifiers,

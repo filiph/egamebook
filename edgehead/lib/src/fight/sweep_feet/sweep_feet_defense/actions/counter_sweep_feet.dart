@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/sweep_feet/sweep_feet_situation.dart';
 
 ReasonedSuccessChance computeCounterSweepFeet(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.3, const [
+  return getCombatMoveChance(a, enemy, 0.3, w.statefulRandomState, const [
     Modifier(30, CombatReason.dexterity),
     Modifier(20, CombatReason.balance),
     ...disabledModifiers,

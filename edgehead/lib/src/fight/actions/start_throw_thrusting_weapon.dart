@@ -25,7 +25,8 @@ ReasonedSuccessChance computeThrowThrustingWeaponPlayer(
   final hasDagger =
       a.currentWeapon?.damageCapability?.type == WeaponType.dagger ?? false;
   final hasThrowingWeapon = hasSpear || hasDagger;
-  return getCombatMoveChance(a, enemy, hasThrowingWeapon ? 0.3 : 0.01, [
+  return getCombatMoveChance(
+      a, enemy, hasThrowingWeapon ? 0.3 : 0.01, w.statefulRandomState, [
     Modifier(hasThrowingWeapon ? 20 : 10, CombatReason.dexterity),
     const Penalty(20, CombatReason.targetHasShield),
     Modifier(hasThrowingWeapon ? 20 : 10, CombatReason.balance),

@@ -10,7 +10,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 
 ReasonedSuccessChance computeCatchProjectile(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.05, [
+  return getCombatMoveChance(a, enemy, 0.05, w.statefulRandomState, [
     const Modifier(30, CombatReason.dexterity),
     const Penalty(30, CombatReason.performerHasLimitedVision),
   ]);

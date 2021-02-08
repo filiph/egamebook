@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/throw/move_projectile_to_ground.dart';
 
 ReasonedSuccessChance computeDodgeThrow(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.6, [
+  return getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
     const Modifier(60, CombatReason.dexterity),
     const Modifier(30, CombatReason.balance),
     const Penalty(100, CombatReason.performerHasLimitedVision),

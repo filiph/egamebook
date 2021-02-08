@@ -11,7 +11,7 @@ import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 
 ReasonedSuccessChance computeOpportunityThrust(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.4, [
+  return getCombatMoveChance(a, enemy, 0.4, w.statefulRandomState, [
     const Modifier(20, CombatReason.dexterity),
     const Penalty(20, CombatReason.targetHasShield),
     const Modifier(20, CombatReason.balance),

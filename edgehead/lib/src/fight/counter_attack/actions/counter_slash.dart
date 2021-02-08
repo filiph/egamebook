@@ -24,7 +24,7 @@ const String counterSlashHelpMessage =
 /// it lets the enemy defend (otherwise).
 ReasonedSuccessChance computeCounterSlash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.6, [
+  return getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
     const Modifier(50, CombatReason.dexterity),
     // No weaponReach modifier. Counter slash can be effective even with
     // a short weapon.

@@ -20,7 +20,7 @@ const String counterBluntSwingHelpMessage =
 /// Will the actor be able to even execute the counter?
 ReasonedSuccessChance computeCounterBluntSwing(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.6, [
+  return getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
     const Modifier(50, CombatReason.dexterity),
     const Penalty(50, CombatReason.targetHasShield),
     const Modifier(50, CombatReason.balance),

@@ -125,7 +125,7 @@ class ImpaleLeaper extends EnemyTargetAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final chance = getCombatMoveChance(a, enemy, 0.4, [
+    final chance = getCombatMoveChance(a, enemy, 0.4, w.statefulRandomState, [
       const Modifier(50, CombatReason.dexterity),
       const Modifier(30, CombatReason.height),
       const Modifier(20, CombatReason.balance),

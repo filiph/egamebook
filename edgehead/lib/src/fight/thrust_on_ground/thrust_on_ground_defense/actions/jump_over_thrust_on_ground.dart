@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart'
 
 ReasonedSuccessChance computeJumpOverThrustOnGround(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.9, [
+  return getCombatMoveChance(a, enemy, 0.9, w.statefulRandomState, [
     const Modifier(30, CombatReason.dexterity),
     const Bonus(50, CombatReason.targetHasOneEyeDisabled),
     const Bonus(90, CombatReason.targetHasAllEyesDisabled),

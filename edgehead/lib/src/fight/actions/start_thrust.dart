@@ -29,7 +29,7 @@ ReasonedSuccessChance computeThrustAtBodyPartChance(
   const maxBase = 0.6;
   final base = lerpDouble(bodyPart.thrustSurface, 0, 8, minBase, maxBase);
 
-  return getCombatMoveChance(a, enemy, base, [
+  return getCombatMoveChance(a, enemy, base, w.statefulRandomState, [
     const Modifier(30, CombatReason.dexterity),
     const Modifier(30, CombatReason.weaponReach),
     const Penalty(30, CombatReason.targetHasShield),

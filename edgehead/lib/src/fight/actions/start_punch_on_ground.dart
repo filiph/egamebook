@@ -17,7 +17,7 @@ const String startPunchOnGroundHelpMessage =
 
 ReasonedSuccessChance computeStartPunchOnGround(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.7, [
+  return getCombatMoveChance(a, enemy, 0.7, w.statefulRandomState, [
     const Modifier(75, CombatReason.dexterity),
     ...disabledModifiers,
   ]);

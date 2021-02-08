@@ -80,7 +80,7 @@ class SmackWithHarmlessItem extends EnemyTargetAction with CombatCommandPath {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return getCombatMoveChance(a, enemy, 0.3, [
+    return getCombatMoveChance(a, enemy, 0.3, world.statefulRandomState, [
       const Modifier(50, CombatReason.dexterity),
       const Modifier(30, CombatReason.balance),
       const Bonus(40, CombatReason.targetHasAllEyesDisabled),

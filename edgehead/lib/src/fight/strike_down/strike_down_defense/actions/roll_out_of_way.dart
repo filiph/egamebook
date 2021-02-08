@@ -14,7 +14,7 @@ ReasonedSuccessChance computeRollOutOfWay(
   final didRecentlyRoll = recentlyRolledOutOfWay(w, a);
   final base = didRecentlyRoll ? 0.3 : 0.9;
 
-  return getCombatMoveChance(a, enemy, base, [
+  return getCombatMoveChance(a, enemy, base, w.statefulRandomState, [
     const Modifier(70, CombatReason.dexterity),
     const Bonus(30, CombatReason.targetHasOneLegDisabled),
     const Bonus(90, CombatReason.targetHasAllLegsDisabled),

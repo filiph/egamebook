@@ -16,7 +16,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 ReasonedSuccessChance computeStartPullDown(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.05, [
+  return getCombatMoveChance(a, enemy, 0.05, w.statefulRandomState, [
     const Modifier(20, CombatReason.dexterity),
     const Modifier(10, CombatReason.balance),
     ...disabledModifiers,

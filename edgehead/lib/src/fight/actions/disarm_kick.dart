@@ -87,7 +87,7 @@ class DisarmKick extends EnemyTargetAction with CombatCommandPath {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return getCombatMoveChance(a, enemy, 0.6, [
+    return getCombatMoveChance(a, enemy, 0.6, world.statefulRandomState, [
       const Modifier(50, CombatReason.dexterity),
       const Modifier(30, CombatReason.balance),
       const Bonus(90, CombatReason.targetHasAllEyesDisabled),

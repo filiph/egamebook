@@ -31,7 +31,7 @@ ReasonedSuccessChance computeStartBiteAtBodyPartGenerator(
       math.max(bodyPart.swingSurfaceLeft, bodyPart.swingSurfaceRight) / 10, 1);
   final base = minBase + maxBase * relativeBiteSurface;
 
-  return getCombatMoveChance(a, enemy, base, [
+  return getCombatMoveChance(a, enemy, base, w.statefulRandomState, [
     const Modifier(30, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(30, CombatReason.balance),

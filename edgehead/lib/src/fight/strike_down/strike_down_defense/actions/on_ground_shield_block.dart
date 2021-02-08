@@ -12,7 +12,7 @@ import 'package:edgehead/src/fight/common/defense_situation.dart';
 
 ReasonedSuccessChance computeOnGroundShieldBlock(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.7, [
+  return getCombatMoveChance(a, enemy, 0.7, w.statefulRandomState, [
     const Modifier(70, CombatReason.dexterity),
   ]);
 }

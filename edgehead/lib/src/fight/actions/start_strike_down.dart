@@ -33,7 +33,7 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
       WeaponType.dagger.defaultLength;
   final base = (didRecentlyRoll ? 0.8 : 0.4) - (hasShortBlade ? 0.1 : 0);
 
-  return getCombatMoveChance(a, enemy, base, [
+  return getCombatMoveChance(a, enemy, base, w.statefulRandomState, [
     const Modifier(50, CombatReason.dexterity),
     const Penalty(30, CombatReason.targetHasShield),
     const Modifier(30, CombatReason.balance),

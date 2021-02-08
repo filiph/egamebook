@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
+import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:meta/meta.dart';
 
 /// Modifiers applicable to most combat situations. These will make it easier
@@ -48,6 +51,9 @@ const List<CombatReason> reasonsRequiringPenalties = [
   CombatReason.targetHasShield,
 ];
 
+/// Used in [varyChance].
+final StatefulRandom _statefulRandom = StatefulRandom(42);
+
 /// This is a convenience method for constructing [ReasonedSuccessChance]
 /// for the combat in Edgehead.
 ///
@@ -63,7 +69,7 @@ const List<CombatReason> reasonsRequiringPenalties = [
 ///
 /// Example:
 ///
-///    return getCombatMoveChance(a, enemy, 0.5, [
+///    return getCombatMoveChance(a, enemy, 0.5, w.statefulRandomState, [
 ///      const Bonus(90, CombatReason.dexterity),
 ///      const Bonus(30, CombatReason.balance),
 ///    ]);
@@ -73,8 +79,16 @@ const List<CombatReason> reasonsRequiringPenalties = [
 /// stance. The difference in dexterity of the two actors can nudge
 /// the success chance almost all the way (`90`) up to 100%, or down to 0%. The
 /// combat stance can change the final success chance, too, but only by 30%.
-ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
-    Actor target, double base, List<Modifier<CombatReason>> modifiers) {
+///
+/// If [randomSeed] isn't `null`, then the combat chance will be varied
+/// according to [varyChance].
+ReasonedSuccessChance<CombatReason> getCombatMoveChance(
+  Actor performer,
+  Actor target,
+  double base,
+  int randomSeed,
+  List<Modifier<CombatReason>> modifiers,
+) {
   assert(base > 0.0, "For sureFailures, use ReasonedSuccessChance.sureFailure");
   assert(
       base < 1.0, "For sureSuccesses, use ReasonedSuccessChance.sureSuccess");
@@ -121,8 +135,54 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(Actor performer,
     }
   }
 
+  if (randomSeed != null) {
+    value = varyChance(value, randomSeed);
+  }
+
   return ReasonedSuccessChance<CombatReason>(value,
       successReasons: successReasons, failureReasons: failureReasons);
+}
+
+/// Takes a chance [value] (from 0.0 to 1.0) and a [randomSeed], and varies
+/// the chance.
+@visibleForTesting
+double varyChance(double value, int randomSeed) {
+  assert(value >= 0.0);
+  assert(value <= 1.0);
+
+  /// The minimum distance between the resulting value and any of
+  /// the extremities (0 and 1).
+  const padding = 0.02;
+
+  if (value < padding || value > 1.0 - padding) return value;
+
+  // Set random according to the current state of the world.
+  _statefulRandom.loadState(randomSeed);
+
+  /// The max value change. For example, if initial value is 0.5, then
+  /// the resulting value must be 0.5 ± maxVariance.
+  const maxVariance = 0.3;
+
+  /// The max value change represented as a ratio of the distance between
+  /// the initial value and one of the extremities (0 or 1).
+  const scale = 0.7;
+
+  final distanceToClosestExtremity = min(
+    (value - 0.0).abs(),
+    (1.0 - value).abs(),
+  );
+
+  final scaledDistance = distanceToClosestExtremity * scale;
+  final clampedDistance = min(scaledDistance, maxVariance);
+
+  /// A random position on the scale from 0 to 2 times clamped distance
+  /// (from the value minus the distance to the value plus the distance,
+  /// so 2 distance in total).
+  final randomPosition = _statefulRandom.nextDouble() * clampedDistance * 2;
+
+  // The final number is the minimum (value minus distance) plus the random
+  // position.
+  return (value - clampedDistance) + randomPosition;
 }
 
 /// Returns the portion of body parts with given [function] that are disabled

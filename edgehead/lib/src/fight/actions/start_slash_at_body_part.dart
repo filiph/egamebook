@@ -35,7 +35,7 @@ ReasonedSuccessChance computeStartSlashAtBodyPartGenerator(
       math.max(bodyPart.swingSurfaceLeft, bodyPart.swingSurfaceRight) / 10, 1);
   final base = minBase + maxBase * relativeSlashSurface;
 
-  return getCombatMoveChance(a, enemy, base, const [
+  return getCombatMoveChance(a, enemy, base, w.statefulRandomState, const [
     Modifier(30, CombatReason.dexterity),
     Modifier(30, CombatReason.balance),
     Modifier(30, CombatReason.weaponReach),

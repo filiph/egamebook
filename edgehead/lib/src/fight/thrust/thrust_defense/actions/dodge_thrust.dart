@@ -13,7 +13,7 @@ import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart'
 
 ReasonedSuccessChance computeDodgeThrust(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.6, [
+  return getCombatMoveChance(a, enemy, 0.6, w.statefulRandomState, [
     const Modifier(60, CombatReason.dexterity),
     const Modifier(50, CombatReason.balance),
     const Bonus(50, CombatReason.targetHasOneLegDisabled),

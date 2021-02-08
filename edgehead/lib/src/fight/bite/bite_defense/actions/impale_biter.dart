@@ -213,7 +213,7 @@ class ImpaleBiter extends OtherActorAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final chance = getCombatMoveChance(a, enemy, 0.3, [
+    final chance = getCombatMoveChance(a, enemy, 0.3, w.statefulRandomState, [
       const Modifier(40, CombatReason.dexterity),
       const Modifier(30, CombatReason.height),
       const Modifier(20, CombatReason.balance),

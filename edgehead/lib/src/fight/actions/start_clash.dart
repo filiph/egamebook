@@ -16,7 +16,7 @@ import 'package:edgehead/src/predetermined_result.dart';
 
 ReasonedSuccessChance computeStartClash(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  return getCombatMoveChance(a, enemy, 0.8, [
+  return getCombatMoveChance(a, enemy, 0.8, w.statefulRandomState, [
     const Modifier(95, CombatReason.dexterity),
     const Modifier(30, CombatReason.balance),
     ...disabledModifiers,
