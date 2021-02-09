@@ -29,7 +29,7 @@ void deepReplaceBodyPart(ActorBuilder builder,
 void _updateWalker(
     BodyPart built,
     BodyPartBuilder builder,
-    bool whereFilter(BodyPart bodyPart),
+    bool Function(BodyPart bodyPart) whereFilter,
     BodyPartUpdater update,
     BodyPartUpdater descendantUpdate,
     bool hasAfflictedParent) {

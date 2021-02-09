@@ -43,6 +43,7 @@ abstract class StatInitialization extends ElementBase
   }
 
   /// Creates a sanity initialization.
+  /// ignore: prefer_constructors_over_static_methods
   static StatInitialization sanity(int initial) {
     return StatInitialization((b) => b
       ..name = "sanity"
@@ -50,6 +51,7 @@ abstract class StatInitialization extends ElementBase
   }
 
   /// Creates a stamina initialization.
+  /// ignore: prefer_constructors_over_static_methods
   static StatInitialization stamina(int initial) {
     return StatInitialization((b) => b
       ..name = "stamina"

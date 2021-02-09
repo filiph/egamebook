@@ -30,9 +30,9 @@ void main() {
         subject: gorilla, time: 3);
     expect(
         storyline.realizeAsString(),
-        matches("The ship trembles. There is something wrong with the "
-            "engines. I gesture to Gorilla.+"
-            "uns towards the engine room\."));
+        matches(r"The ship trembles\. There is something wrong with the "
+            r"engines\. I gesture to Gorilla.+"
+            r"uns towards the engine room\."));
   });
 
   test('I am not', () {

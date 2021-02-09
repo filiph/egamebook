@@ -40,6 +40,7 @@ abstract class StatUpdate extends ElementBase
   }
 
   /// Creates a sanity update.
+  /// ignore: prefer_constructors_over_static_methods
   static StatUpdate sanity(int initial, int change) {
     return StatUpdate((b) => b
       ..name = "sanity"
@@ -48,6 +49,7 @@ abstract class StatUpdate extends ElementBase
   }
 
   /// Creates a stamina update.
+  /// ignore: prefer_constructors_over_static_methods
   static StatUpdate stamina(int initial, int change) {
     return StatUpdate((b) => b
       ..name = "stamina"

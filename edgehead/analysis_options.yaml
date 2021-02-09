@@ -1,4 +1,4 @@
-include: package:pedantic/analysis_options.yaml
+include: package:lint/analysis_options_package.yaml
 
 analyzer:
   strong-mode:
@@ -7,122 +7,13 @@ analyzer:
 
 linter:
   rules:
-    always_put_required_named_parameters_first: true
-    always_require_non_null_named_parameters: true
-    annotate_overrides: true
-    avoid_annotating_with_dynamic: true
-    avoid_bool_literals_in_conditional_expressions: true
-    avoid_catches_without_on_clauses: true
-    avoid_catching_errors: true
-    avoid_classes_with_only_static_members: true
-    avoid_double_and_int_checks: true
-    avoid_empty_else: true
-    avoid_field_initializers_in_const_classes: true
-    avoid_function_literals_in_foreach_calls: true
-    avoid_implementing_value_types: true
-    avoid_init_to_null: true
-    avoid_js_rounded_ints: true
-    avoid_null_checks_in_equality_operators: true
-    avoid_relative_lib_imports: true
-    avoid_return_types_on_setters: true
-    avoid_returning_null: true
-    avoid_returning_null_for_future: true
-    avoid_returning_null_for_void: true
-    avoid_returning_this: true
-    avoid_setters_without_getters: true
-    avoid_shadowing_type_parameters: true
-    avoid_single_cascade_in_expression_statements: true
-    avoid_slow_async_io: true
-    avoid_types_as_parameter_names: true
-    avoid_unused_constructor_parameters: true
-    avoid_void_async: true
-    await_only_futures: true
-    camel_case_types: true
-    cancel_subscriptions: true
-    close_sinks: true
-    constant_identifier_names: true
-    control_flow_in_finally: true
-    curly_braces_in_flow_control_structures: true
-    directives_ordering: true
-    empty_catches: true
-    empty_constructor_bodies: true
-    empty_statements: true
-    file_names: true
-    hash_and_equals: true
-    implementation_imports: true
-    invariant_booleans: true
-    iterable_contains_unrelated_type: true
-    join_return_with_assignment: true
-    library_names: true
-    library_prefixes: true
+    avoid_print: false  # Agree in theory, should get rid of those print() calls
+    avoid_escaping_inner_quotes: false
+    avoid_positional_boolean_parameters: false  # Agree in theory
+    avoid_redundant_argument_values: false  # Building body parts is nicer
     lines_longer_than_80_chars: true
-    list_remove_unrelated_type: true
-    literal_only_boolean_expressions: true
-    no_adjacent_strings_in_list: true
-    no_duplicate_case_values: true
-    non_constant_identifier_names: true
-    null_closures: true
-    omit_local_variable_types: false  # TODO: clean up and turn on
-    one_member_abstracts: true
-    only_throw_errors: true
-    overridden_fields: true
-    package_api_docs: true
-    package_names: true
-    package_prefixed_library_names: true
-    parameter_assignments: true
-    prefer_adjacent_string_concatenation: true
-    prefer_asserts_in_initializer_lists: true
-    prefer_collection_literals: true
-    prefer_conditional_assignment: true
-    prefer_const_constructors: true
-    prefer_const_constructors_in_immutables: true
-    prefer_const_declarations: true
-    prefer_const_literals_to_create_immutables: true
-    prefer_constructors_over_static_methods: false
-    prefer_contains: true
-    prefer_equal_for_default_values: true
-    prefer_final_fields: true
-    prefer_final_in_for_each: true
-    prefer_foreach: true
-    prefer_function_declarations_over_variables: true
-    prefer_generic_function_type_aliases: true
-    prefer_initializing_formals: true
-    prefer_is_empty: true
-    prefer_is_not_empty: true
-    prefer_iterable_whereType: true
-    prefer_mixin: true
-    prefer_null_aware_operators: true
-    prefer_single_quotes: false  # Too many apostrophes in strings.
-    prefer_typing_uninitialized_variables: true
-    prefer_void_to_null: true
-    provide_deprecation_message: true
-    recursive_getters: true
-    slash_for_doc_comments: true
-    sort_pub_dependencies: true
-    sort_unnamed_constructors_first: true
-    test_types_in_equals: true
-    throw_in_finally: true
-    type_annotate_public_apis: true
-    type_init_formals: true
-    unawaited_futures: true
-    unnecessary_await_in_return: true
-    unnecessary_brace_in_string_interps: true
-    unnecessary_const: true
-    unnecessary_getters_setters: true
-    unnecessary_lambdas: true
-    unnecessary_new: true
-    unnecessary_null_aware_assignments: true
-    unnecessary_null_in_if_null_operators: true
-    unnecessary_overrides: true
-    unnecessary_parenthesis: true
-    unnecessary_statements: true
-    unnecessary_this: true
-    unrelated_type_equality_checks: true
-    use_full_hex_values_for_flutter_colors: true
-    use_function_type_syntax_for_parameters: false  # TODO: clean up
-    use_rethrow_when_possible: true
-    use_setters_to_change_properties: true
-    use_string_buffers: true
-    use_to_and_as_if_applicable: true
-    valid_regexps: true
-    void_checks: true
+    missing_whitespace_between_adjacent_strings: false  # Storyline has this
+    prefer_if_elements_to_conditional_expressions: false  # I like ternary more
+    prefer_final_locals: false  # Verbose
+    unnecessary_raw_strings: false  # It seem safer to raw some strings
+    use_function_type_syntax_for_parameters: false  # Agree in theory

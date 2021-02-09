@@ -63,7 +63,9 @@ class AttackDirection extends EnumClass {
 
   BodyPartDesignation toBodyPartDesignation() {
     assert(
-        this != AttackDirection.fromRight && this != AttackDirection.fromLeft,
+        this != AttackDirection.fromRight &&
+            this != AttackDirection.fromLeft &&
+            this != AttackDirection.unspecified,
         "This method only supports specific body targets.");
 
     switch (this) {
@@ -82,6 +84,9 @@ class AttackDirection extends EnumClass {
       case AttackDirection.rightEye:
         return BodyPartDesignation.rightEye;
       case AttackDirection.torso:
+      case AttackDirection.fromLeft: // Added just in case
+      case AttackDirection.fromRight: // Added just in case
+      case AttackDirection.unspecified: // Added just in case
         return BodyPartDesignation.torso;
       case AttackDirection.head:
         return BodyPartDesignation.head;
@@ -93,14 +98,27 @@ class AttackDirection extends EnumClass {
 
   static AttackDirection fromBodyPartDesignation(
       BodyPartDesignation designation) {
+    assert(
+        designation != BodyPartDesignation.none &&
+            designation != BodyPartDesignation.tail &&
+            designation != BodyPartDesignation.teeth &&
+            designation != BodyPartDesignation.primaryHand &&
+            designation != BodyPartDesignation.secondaryHand,
+        "Designation $designation doesn't correspond to any attack direction");
+
     switch (designation) {
       case BodyPartDesignation.torso:
+      case BodyPartDesignation.none: // Added just in case.
+      case BodyPartDesignation.tail: // Added just in case.
         return AttackDirection.torso;
       case BodyPartDesignation.head:
+      case BodyPartDesignation.teeth: // Added just in case.
         return AttackDirection.head;
       case BodyPartDesignation.primaryArm:
+      case BodyPartDesignation.primaryHand: // Added just in case.
         return AttackDirection.primaryArm;
       case BodyPartDesignation.secondaryArm:
+      case BodyPartDesignation.secondaryHand: // Added just in case.
         return AttackDirection.secondaryArm;
       case BodyPartDesignation.leftLeg:
         return AttackDirection.leftLeg;

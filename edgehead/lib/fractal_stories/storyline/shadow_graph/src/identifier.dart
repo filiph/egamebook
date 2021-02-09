@@ -267,7 +267,7 @@ class ReportIdentifiers {
   }
 
   @override
-  String toString() => "$runtimeType<subject=$_subjectRange, "
+  String toString() => "ReportIdentifiers<subject=$_subjectRange, "
       "object=$_objectRange, object2=$_object2Range>";
 
   IdentifierLevel _ensureSingle(Set<IdentifierLevel> set, String debugLabel) {
