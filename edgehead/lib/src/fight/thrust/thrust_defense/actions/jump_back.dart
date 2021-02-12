@@ -66,8 +66,12 @@ class JumpBackFromThrust extends OtherActorAction {
     Storyline s = context.outputStoryline;
     a.report(s, "<subject> {leap<s>|jump<s>} {back|backwards|out of reach}",
         positive: true);
-    s.add("<owner's> <subject> {slash<es>|cut<s>} empty air",
-        subject: enemy.currentWeaponOrBodyPart, owner: enemy);
+    s.add(
+        "<owner's> <subject> {stop<s> {inches|an inch} from|only touch<es>} "
+        "<object's> skin",
+        subject: enemy.currentWeaponOrBodyPart,
+        owner: enemy,
+        object: a);
     w.popSituationsUntil("FightSituation", context);
     return "${a.name} jumps back from ${enemy.name}'s attack";
   }
