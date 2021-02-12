@@ -12654,7 +12654,7 @@ final talkToKatAboutDevlingInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Don\'t underestimate it. There\'s a reason the Knights are leaving, and it\'s not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."\n',
+        'Kat raises her eyebrows and looks you up and down. "Don\'t underestimate it," she says. "There\'s a reason the Knights are leaving, and it\'s not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12674,7 +12674,7 @@ final talkToKatAboutDevlingInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"You would do well to ask the locals. There\'s so much I don\'t know about this place."\n',
+        'Does she know about any specific parts of the Pyramid I should avoid? Not really. "You would do well to ask the locals," she says. "There\'s so much I don\'t know about this place."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -13318,7 +13318,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '"I know what you\'re driving at. You mean a mender. Your Sarn is a mender with the Knights." He nods.\n',
+                    '"I know what you\'re driving at. You mean a _mender._ Your Sarn is a mender with the Knights." He nods.\n',
                     isRaw: true);
               }),
             ],
@@ -13392,16 +13392,16 @@ final talkToMiguelAboutDevlingInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_e7f3070f = w
+    final ifBlock_55fca3a2f = w
             .actionHasBeenPerformed("talk_to_kat_about_devling")
-        ? '''What Kat said. I'd just add that'''
-        : '''You should probably ask Kat. She's the smarter and more experienced of us two. But I'll say that''';
+        ? '''What Kat said," he says. "I'd just add that'''
+        : '''You should probably ask Kat here. She's the smarter and more experienced of us two," he says, flicking his eyes at her briefly. "But I'll say that''';
     final ifBlock_c48d1a8b = !w
             .actionHasBeenPerformed("talk_to_miguel_about_dragon_egg")
         ? '''I've heard locals talk of a device of war called the Dragon Egg.'''
-        : ''' the Dragon Egg is worth pursuing for someone like you.''';
+        : '''the Dragon Egg is worth pursuing for someone like you.''';
     s.add(
-        '"${ifBlock_e7f3070f} ${ifBlock_c48d1a8b} If I were you, no offense, I\'d try to find any advantage possible against the orcs and the other creatures of the upside."\n',
+        '"${ifBlock_55fca3a2f} ${ifBlock_c48d1a8b} If I were you, no offense, I\'d try to find any advantage possible against the orcs and the other creatures of the upside."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -13425,7 +13425,7 @@ final talkToMiguelAboutDragonEggInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"It\'s an ancient device of war, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it, ${youngSirSubstitution}."\n',
+        '"It\'s an ancient device of war, somewhere in the Pyramid." He shrugs. "If I knew more, I\'d go find it myself, ${youngSirSubstitution}."\n',
         isRaw: true);
   }),
 ]);
@@ -13437,7 +13437,7 @@ final talkToMiguelAboutLadyInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Lady Hope. Our local undead. Just stands there with that sweet katana at the ready."\n',
+        '"Lady Hope," he says. "Our local undead. Just stands there with that sweet katana at the ready."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),

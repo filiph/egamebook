@@ -83,14 +83,14 @@ c.inRoomWith(katId)
 w.actionHasBeenPerformed("talk_to_kat_greetings")
 
 INK:
-"Don't underestimate it. There's a reason the Knights are leaving, and it's not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."
+Kat raises her eyebrows and looks you up and down. "Don't underestimate it," she says. "There's a reason the Knights are leaving, and it's not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."
 
 [[CODE]]
 c.learn(KnightsFacts.knightsAreLeaving);
 c.learn(OrcsFacts.inPyramid);
 [[ENDCODE]]
 
-"You would do well to ask the locals. There's so much I don't know about this place."
+Does she know about any specific parts of the Pyramid I should avoid? Not really. "You would do well to ask the locals," she says. "There's so much I don't know about this place."
 
 [[CODE]]
 c.learn(DelvingFacts.infoHelps);
