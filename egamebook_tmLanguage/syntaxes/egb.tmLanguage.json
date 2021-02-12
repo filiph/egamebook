@@ -36,6 +36,9 @@
 			"include": "#ink_choice"
 		},
 		{
+			"include": "#image"
+		},
+		{
 			"include": "#markdown"
 		}
 	],
@@ -165,6 +168,18 @@
 			},{
 				"name": "keyword.egb",
 				"match": "^\\s*\\-[\\-\\s]*"
+			}]
+		},
+		"image": {
+			"patterns": [{
+				"begin": "^\\s*(!\\[)",
+				"end": "(\\]\\(.+\\))$",
+				"captures": {
+					"1": {"name": "keyword.egb"}
+				},
+				"patterns": [
+					{"include": "source.egb"}
+				]
 			}]
 		},
 		"markdown": {
