@@ -815,7 +815,7 @@ final bigOEndInkInk = InkAst([
           s.add(
               'I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.\n',
               isRaw: true);
-        })).apply(c);
+        })).apply(ActionContext.updatedFrom(c));
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -1415,7 +1415,7 @@ final dargHeadTalkInkInk = InkAst([
           s.add(
               'I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.\n\nI risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\nBut then, Darg\'s undead lips start moving. He _speaks._\n\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n',
               isRaw: true);
-        })).apply(c);
+        })).apply(ActionContext.updatedFrom(c));
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -3826,7 +3826,7 @@ final takeSarnToBleedsInk = InkAst([
           s.add(
               '\nI ask if I can rest with my brother on his porch.\n\n“Of course!” Jisad says. “Brother, you say? Take chairs from the kitchen and bring them. You can sit beside me.”\n',
               isRaw: true);
-        })).apply(c);
+        })).apply(ActionContext.updatedFrom(c));
   }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -7074,7 +7074,7 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
           s.add(
               ' In a few heartbeats, a child stands before me. I learn that her name is Argo and that she is the leader of the Deathless.\n',
               isRaw: true);
-        })).apply(c);
+        })).apply(ActionContext.updatedFrom(c));
     s.add(
         '\n"I kneel before your generosity," she says. And she kneels, and the rest of the villagers immediately follow suit.\n\nArgo smiles at me. "We have been hoping to win back the Artifact Star from the orcs for years. But we are not fighters. None of us have the talents required to stand up to the orcish host."\n\nShe opens her arms and stands up. "You do. And you chose to use your talents for good."\n\nWith ceremonial slowness, she takes the star from my hand. "You are now a friend of the Deathless. As such, you will command respect from each and every one of us." She speaks loudly, clearly. The rest of the villagers still kneel, watching me silently.\n\nArgo the turns around to her people. "The Star will be deposited in the Sacred Shrine, next to the Dragon Egg. And I think our friend has deserved full access."\n\nI now have access to the shrine of the Deathless, not far from here.\n\n',
         isRaw: true);
@@ -9583,7 +9583,7 @@ final Approach stagingAreaFromPyramidEntrance =
         final Actor a = c.actor;
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
-      })).apply(c);
+      })).apply(ActionContext.updatedFrom(c));
 });
 final Room stagingArea = Room('staging_area', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -12547,6 +12547,70 @@ final Approach pyramidEntranceFromBleedsMain =
     Approach('bleeds_main', 'pyramid_entrance', '', null);
 final Approach pyramidEntranceFromStagingArea =
     Approach('staging_area', 'pyramid_entrance', '', null);
+
+class ObserveKnights extends RoamingAction {
+  @override
+  final String name = 'observe_knights';
+
+  static final ObserveKnights singleton = ObserveKnights();
+
+  @override
+  List<String> get commandPathTemplate => ['Entrance', 'Observe'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(miguelId) && c.inRoomWith(katId))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} successfully performs ObserveKnights';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform ObserveKnights';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
+}
+
 final Room pyramidEntrance = Room('pyramid_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -13318,7 +13382,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-        })).apply(c);
+        })).apply(ActionContext.updatedFrom(c));
   }),
 ]);
 final talkToMiguelAboutDevlingInk = InkAst([
@@ -14157,7 +14221,7 @@ class BleedsMainObserveVillage extends RoamingAction {
           s.add(
               'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. ${ifBlock_646ab8e51}\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. ${ifBlock_2464a34ed}\n',
               isRaw: true);
-        })).apply(c);
+        })).apply(ActionContext.updatedFrom(c));
     c.learn(JisadFacts.blindPerson);
 
     return '${a.name} successfully performs BleedsMainObserveVillage';
@@ -14203,7 +14267,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands—unnaturally well-preserved—above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
       isRaw: true);
   c.learn(kbTrader);
   c.learn(kbGoblinCampSmoke);
@@ -16558,7 +16622,7 @@ final Room bleedsMainAfterQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands—unnaturally well-preserved—above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -16610,7 +16674,7 @@ final Room bleedsMainAfterQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands—unnaturally well-preserved—above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -17298,7 +17362,7 @@ class GoblinCampAttack extends RoamingAction {
           s.add(
               ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. The two I heard arguing sit next to a fire pit. There is another one, sleeping on the ground, close to where I start my attack. I run past him and easily kill him as he\'s waking up.\n',
               isRaw: true);
-        })).apply(c);
+        })).apply(ActionContext.updatedFrom(c));
     s.add(
         '\nThe goblins near the fire pit stand up. One of them, I realize, is almost naked and doesn\'t have a weapon near him. He grabs a branch from the fire.\n\nThe other one, the one I decide looks like the leader of the group, readies a razor-sharp, evil-looking hatchet. An ugly scar slants through his face.\n\n"Amak, you f—" he starts saying, but then I am already on him.\n\n',
         isRaw: true);
@@ -18101,6 +18165,9 @@ final Room meadowFight = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       final youngSirSubstitution = c.playerSalutation;
+      final ifBlock_198aa3036 = c.isHurt(tamaraId)
+          ? '''Tamara is sitting on the ground now and tending to her wounds. I give her the sword back. "This place is not for me, ${youngSirSubstitution}. And I say it's not for you, either." She winces, and looks at me.'''
+          : '''Tamara checks her gear and sheathes the sword that I give back to her. Then she looks at me.''';
       final ifBlock_52e534a1a = c.isHurt(tamaraId)
           ? '''Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, ${youngSirSubstitution}. And I say it's not for you, either." She winces, and looks at me.'''
           : '''Tamara checks her gear and sheathes her sword. Then she looks at me.''';
@@ -18111,9 +18178,9 @@ final Room meadowFight = Room(
       s.add(
           '\nMy hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.\n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.\n\n\nThe fight is over.\n\n',
           isRaw: true);
-      if (!w.wasKilled(tamaraId)) {
+      if (!originalWorld.wasKilled(tamaraId)) {
         if (c.hasItem(tamaraSwordId)) {
-          final sword = player.inventory.items
+          final sword = c.player.inventory.items
               .singleWhere((item) => item.id == tamaraSwordId);
           c.removeItemFromPlayer(tamaraSwordId);
           w.updateActorById(tamaraId, (b) => b..inventory.add(sword));
@@ -18154,7 +18221,7 @@ final Room meadowFight = Room(
                 ' I look into Tamara\'s undead eyes.\n\n "I\'m sorry."\n\n She doesn\'t respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n',
                 isRaw: true);
           }),
-          Rule(234480273, 1, false, (ApplicabilityContext c) {
+          Rule(594899268, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -18165,8 +18232,39 @@ final Room meadowFight = Room(
             final Actor a = c.actor;
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
+            Ruleset(
+                Rule(983084064, 1, false, (ApplicabilityContext c) {
+                  final WorldState w = c.world;
+                  final Simulation sim = c.simulation;
+                  final Actor a = c.actor;
+                  return c.hasHappened('gives_sword_back_to_tamara');
+                }, (ActionContext c) {
+                  final WorldState originalWorld = c.world;
+                  final Simulation sim = c.simulation;
+                  final Actor a = c.actor;
+                  final WorldStateBuilder w = c.outputWorld;
+                  final Storyline s = c.outputStoryline;
+                  s.add(
+                      ' ${ifBlock_198aa3036} "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n',
+                      isRaw: true);
+                }),
+                Rule(901131188, 0, false, (ApplicabilityContext c) {
+                  final WorldState w = c.world;
+                  final Simulation sim = c.simulation;
+                  final Actor a = c.actor;
+                  return true;
+                }, (ActionContext c) {
+                  final WorldState originalWorld = c.world;
+                  final Simulation sim = c.simulation;
+                  final Actor a = c.actor;
+                  final WorldStateBuilder w = c.outputWorld;
+                  final Storyline s = c.outputStoryline;
+                  s.add(
+                      ' ${ifBlock_52e534a1a} "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n',
+                      isRaw: true);
+                })).apply(ActionContext.updatedFrom(c));
             s.add(
-                ' ${ifBlock_52e534a1a} "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n\n I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n\n Tamara understands. ${ifBlock_781966055} "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
+                '\n I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n\n Tamara understands. ${ifBlock_781966055} "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
                 isRaw: true);
             w.updateActorById(tamaraId, (b) => b.isActive = false);
           }),
@@ -18183,7 +18281,7 @@ final Room meadowFight = Room(
             final Storyline s = c.outputStoryline;
             throw StateError(
                 "Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
-          })).apply(c);
+          })).apply(ActionContext.updatedFrom(c));
       c.giveNewItemToPlayer(letterFromFather);
     },
     whereDescription: 'among the trees',
@@ -18807,6 +18905,7 @@ final allActions = <RoamingAction>[
   TakeFamilyPortrait.singleton,
   NorthSkullExamine.singleton,
   NorthSkullTake.singleton,
+  ObserveKnights.singleton,
   TalkToKatAboutBrother.singleton,
   TalkToKatAboutDevling.singleton,
   TalkToKatAboutLady.singleton,
