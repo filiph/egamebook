@@ -15,7 +15,7 @@ MAP_NAME: The Keep's Gate
 HINT: The entrance to the abandoned aristocratic mansion embedded into the Pyramid.
 
 FIRST_DESCRIPTION:
-The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood.
+The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.
 
 This is a lord's house, except it doesn't stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.
 
@@ -28,12 +28,20 @@ COMMAND: gate >> examine
 FOR_LOCATION: $keep_gate
 
 COMPLETE_SUCCESS_DESCRIPTION:
-// TODO: by the time we examine, the gate could have been destroyed
-The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.
+[[RULESET]]
+[[RULE]]
+  c.hasHappened('destroy_gate_with_axe')
+[[THEN]]
+  The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build. A shame that I had to destroy it.
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+  The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.
+[[ENDRULE]]
+[[ENDRULESET]]
 
-// Include some hints that Ada might know about it.
-
-A big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".
+A big warning sign on the wall says "Haunted." Below the paint, there is an older, fainter sign. It says "Eat the rich."
 
 
 // ---
@@ -67,6 +75,7 @@ I unlock the gate using the steps I learned. This reveals a beatifully decorated
 w.recordCustom(evKeepUnlockedGate);
 [[ENDCODE]]
 
+
 // ---
 ACTION: $destroy_gate_with_axe
 COMMAND: gate >> destroy
@@ -78,10 +87,10 @@ c.player.inventory.hasWeapon(WeaponType.axe)
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
-final axe = c.player.inventory.findBestWeapon(type: WeaponType.axe);
-a.report(s, "<subject> chop<s> down the gate with <objectNounWithAdjective>", object: axe);
+  final axe = c.player.inventory.findBestWeapon(type: WeaponType.axe);
+  a.report(s, "<subject> chop<s> down the gate with <objectNounWithAdjective>", object: axe);
 
-w.recordCustom(evKeepDestroyedGate);
+  w.recordCustom(evKeepDestroyedGate);
 [[ENDCODE]]
 
 This reveals a beatifully decorated passage into the Keep.

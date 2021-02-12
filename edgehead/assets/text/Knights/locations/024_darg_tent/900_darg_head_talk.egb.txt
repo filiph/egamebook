@@ -11,7 +11,7 @@ I am almost about to retreat back to the shadows when I hear a soft, gurgling so
 [[RULE]]
 c.hasHappened(evKilledHope)
 [[THEN]]
-I am reminded of my fight with Lady Hope.
+I am reminded of my fight with Lady Hope. The necromancer is speaking through dead flesh again.
 [[ENDRULE]]
 [[RULE]]
 // Haven't seen this yet.

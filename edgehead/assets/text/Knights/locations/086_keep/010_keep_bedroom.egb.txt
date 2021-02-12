@@ -22,7 +22,7 @@ HINT: Though derelict, these are still the nicest parts of the Keep.
 FIRST_DESCRIPTION:
 Redwood parquetry, the wooden flooring of the rich, creaks underfoot.
 
-This is where the aristocracy lived: the Lord's quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.
+This is where the aristocracy lived: the Lord's quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But there is some sign of activity. Smallish footprints, with scratchmarks.
 
 DESCRIPTION: $NONE
 
@@ -33,8 +33,8 @@ COMMAND: furniture >> search
 FOR_LOCATION: $keep_bedroom
 
 COMPLETE_SUCCESS_DESCRIPTION:
-Everything is gone. Except: a family portrait. The looters didn't touch it - superstition?
-// TODO: expand on this.
+Everything is gone. Except: a family portrait. The painting leans against the wall, in clear sight. The looters didn't touch it - superstition?
+
 
 // ---
 ACTION: $examine_family_portrait
@@ -46,7 +46,7 @@ w.actionHasBeenPerformed('search_bedroom')
 COMPLETE_SUCCESS_DESCRIPTION:
 The portrait depicts an aristocratic family. Handsome people.
 
-A young, striking lady stands in the front. Kind of bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription says "For our beloved Lady Hope".
+A young, striking lady stands in the front. Her expression is fashionably bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription says: "For our beloved Lady Hope."
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);
@@ -61,7 +61,6 @@ PREREQUISITES:
 w.actionHasBeenPerformed('examine_family_portrait')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-
 I take the family portrait. It's kind of unwieldy and awkward to hold, so I keep it in front of me.
 
 [[CODE]]

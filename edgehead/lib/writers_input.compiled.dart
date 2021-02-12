@@ -1388,7 +1388,7 @@ final dargHeadTalkInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     Ruleset(
-        Rule(654961362, 1, false, (ApplicabilityContext c) {
+        Rule(48764348, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -1399,7 +1399,9 @@ final dargHeadTalkInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('I am reminded of my fight with Lady Hope.\n', isRaw: true);
+          s.add(
+              'I am reminded of my fight with Lady Hope. The necromancer is speaking through dead flesh again.\n',
+              isRaw: true);
         }),
         Rule(99175816, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
@@ -11927,8 +11929,39 @@ class ExamineGate extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    Ruleset(
+        Rule(941095189, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.hasHappened('destroy_gate_with_axe');
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              ' The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build. A shame that I had to destroy it.\n',
+              isRaw: true);
+        }),
+        Rule(1029409601, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              ' The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.\n',
+              isRaw: true);
+        })).apply(ActionContext.updatedFrom(c));
     s.add(
-        'The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.\n\n\nA big warning sign on the wall says "Haunted." Below the paint, an older, fainter sign says "Eat the rich".\n',
+        '\nA big warning sign on the wall says "Haunted." Below the paint, there is an older, fainter sign. It says "Eat the rich."\n',
         isRaw: true);
     return '${a.name} successfully performs ExamineGate';
   }
@@ -12042,7 +12075,7 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood.\n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
+      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.\n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -12104,7 +12137,7 @@ class ExamineFamilyPortrait extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'The portrait depicts an aristocratic family. Handsome people.\n\nA young, striking lady stands in the front. Kind of bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription says "For our beloved Lady Hope".\n\n',
+        'The portrait depicts an aristocratic family. Handsome people.\n\nA young, striking lady stands in the front. Her expression is fashionably bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription says: "For our beloved Lady Hope."\n\n',
         isRaw: true);
     c.learn(LadyHopeFacts.ladyHopeName);
 
@@ -12169,7 +12202,7 @@ class SearchBedroom extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Everything is gone. Except: a family portrait. The looters didn\'t touch it - superstition?\n',
+        'Everything is gone. Except: a family portrait. The painting leans against the wall, in clear sight. The looters didn\'t touch it - superstition?\n',
         isRaw: true);
     return '${a.name} successfully performs SearchBedroom';
   }
@@ -12282,7 +12315,7 @@ final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'Redwood parquetry, the wooden flooring of the rich, creaks underfoot.\n\nThis is where the aristocracy lived: the Lord\'s quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But, there is some sign of activity. Smallish footprints.\n',
+      'Redwood parquetry, the wooden flooring of the rich, creaks underfoot.\n\nThis is where the aristocracy lived: the Lord\'s quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But there is some sign of activity. Smallish footprints, with scratchmarks.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -12315,7 +12348,41 @@ final Room keepDining = Room(
       c.learn(LadyHopeFacts.ladyHopeName);
 
       s.add(
-          '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.png)\n\n\nAs I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.\n\nI risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\nBut then, Lady Hope\'s undead lips start moving. She _speaks._\n\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n\n"You made it rather far, I admit." The body starts walking towards me. "But now you die."\n\n',
+          '\n![Illustration of Lady Hope, an undead woman with a katana.](hope.png)\n\n',
+          isRaw: true);
+      Ruleset(
+          Rule(777155909, 1, false, (ApplicabilityContext c) {
+            final WorldState w = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            return c.hasHappened(evKilledDarg);
+          }, (ActionContext c) {
+            final WorldState originalWorld = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            final WorldStateBuilder w = c.outputWorld;
+            final Storyline s = c.outputStoryline;
+            s.add(
+                ' As I approach, a forced, unnatural smile distorts the undead face. I am reminded of my fight with Darg. The necromancer is speaking through dead flesh again.\n',
+                isRaw: true);
+          }),
+          Rule(187674643, 0, false, (ApplicabilityContext c) {
+            final WorldState w = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            return true;
+          }, (ActionContext c) {
+            final WorldState originalWorld = c.world;
+            final Simulation sim = c.simulation;
+            final Actor a = c.actor;
+            final WorldStateBuilder w = c.outputWorld;
+            final Storyline s = c.outputStoryline;
+            s.add(
+                ' As I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.\n\n I risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\n But then, Lady Hope\'s undead lips start moving. She _speaks._\n\n "Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n',
+                isRaw: true);
+          })).apply(ActionContext.updatedFrom(c));
+      s.add(
+          '\n"You made it rather far, I admit." The body starts walking towards me. "But now you die."\n\n',
           isRaw: true);
       if (c.hasItem(familyPortraitId)) {
         s.add(
@@ -12376,7 +12443,7 @@ final Approach keepServantsFromTopOfClimb =
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I climb down the elevator shaft. All the exits are shut except for one almost at the very bottom of the tower. It leads to narrow passage paneled with wood, and then into a cramped room inside the Keep.\n',
+      'I climb down the elevator shaft. All the exits are shut except for one almost at the very bottom of the tower. It leads to a narrow passage paneled with wood, and then into a cramped room inside the Keep.\n',
       isRaw: true);
 });
 
@@ -12415,7 +12482,7 @@ class NorthSkullExamine extends RoamingAction {
         ? '''As I circle the "North Skull", the compass always points directly at it.'''
         : '''''';
     s.add(
-        'This is human skull made into a device. \n\n![Illustration of some kind of device inset in a human skull.](northskull.png)\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW". An arrow points to ${ifBlock_3d15c1ad0}.\n\n${ifBlock_465f63bbc}\n',
+        'This is a human skull made into a device. \n\n![Illustration of some kind of device inset in a human skull.](northskull.png)\n\nNext to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW." An arrow points to ${ifBlock_3d15c1ad0}.\n\n${ifBlock_465f63bbc}\n',
         isRaw: true);
     return '${a.name} successfully performs NorthSkullExamine';
   }
@@ -12526,7 +12593,7 @@ final Room keepServants = Room('keep_servants', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'Clear signs of goblin activity. But deserted. A curious skull-shaped device in the middle of the room.\n\n',
+      'Clear signs of goblin activity: scratches on the floor, a pile of bones in one of the corners, and the stench of goblin excrement. A curious skull-shaped device sit in the middle of the room.\n\n',
       isRaw: true);
   c.learn(kbKeepServantsLocation);
 }, (ActionContext c) {
