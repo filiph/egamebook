@@ -22,19 +22,19 @@ PREREQUISITES:
 w.actionHasBeenPerformed("talk_to_ada_greetings")
 
 INK:
-"Ah, this? That's Doghead, of course. People in the Pyramid believe a creature with a human body and a dog's head will come and save us in our direst moment."
+"Ah, this?" She lifts the item to her eye level and I can smell the wood. "That's Doghead, of course. People in the Pyramid believe a creature with a human body and a dog's head will come and save us in our direst moment."
 
 * "Are there dog-headed creatures?"
 
-"I have never seen one. I know of hawkmen, of course, and lizardmen. I have never seen or heard of any tale of a dog-headed person, though. Except for this one." She shows me the wooden figure. "I can't know if it's true. <>
+    "I have never seen one. I know of hawkmen, of course, and lizardmen. I have never seen or heard of any tale of a dog-headed person, though. Except for this one." She shows me the wooden figure. "I can't know if it's true. <>
 
 * "What religion is that?"
 
-"It's not a religion. Doghead is not a god. A hero, yes, but not a god. If you're asking me where the tale came from, I can't tell. <>
+    "It's not a religion. Doghead is not a god. A hero, yes, but not a god. If you're asking me where the tale came from, I can't tell. <>
 
 -
 
-<> All I know is that this has been said for generations. My mother taught me about Doghead"
+<> All I know is that this has been said for generations. My mother taught me about Doghead."
 
 [[CODE]]
 c.learn(DogheadFacts.dogheadMyth);
@@ -44,16 +44,16 @@ Ada looks around. "I think people need Doghead more today than ever before in my
 
 * "Why?"
 
-"The Knights are leaving. Big O at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."
+    "The Knights are leaving. Big O at the top is growing in power. Orcs are getting bolder. There are goblins crawling all around the Pyramid. And the quakes are getting more frequent." Ada shakes her head. "This is our direst moment."
 
-[[CODE]]
-c.learn(BigOFacts.someoneCalledBigO);
-c.learn(ConetFacts.quakesOften);
-[[ENDCODE]]
+    [[CODE]]
+    c.learn(BigOFacts.someoneCalledBigO);
+    c.learn(ConetFacts.quakesOften);
+    [[ENDCODE]]
 
 * "I guess so."
 
-Ada nods.
+    Ada nods.
 
 -
 
@@ -69,15 +69,15 @@ w.actionHasBeenPerformed("talk_to_ada_greetings")
 c.knows(BigOFacts.someoneCalledBigO)
 
 INK:
-"As much as anyone here, [young sir]. When I was younger, we called him Osiris. Big O is a nickname that people gave him. He's a constant presence, even though we don't ever see him."
+"As much as anyone here, [young sir]," Ada says. "When I was younger, we called him Osiris. Big O is a nickname that people gave him. He's a constant presence, even though we don't ever see him."
 
 * "What does he do?"
 
-"People say different things. At night, we can see the lights change. Dark red and bright violet, what have you. There are sounds and screams, sometimes, and they don't seem to be coming from the Orcs. I don't know <>
+    Ada shrugs and puts her whittling knife to the figure. "People say different things. At night, we can see the lights change. Dark red and bright violet, what have you. There are sounds and screams, sometimes, and they don't seem to be coming from the Orcs. I don't know <>
 
 * "How come you never see him?"
 
-"He's up there, at the very top. He never goes down, never shows. He's been locked up there for decades now, and nobody knows <>
+    "He's up there, at the very top," Ada says, pointing with her whittling knife to the ceiling. "He never goes down, never shows. He's been locked up there for decades now, and nobody knows <>
 
 -
 
@@ -109,15 +109,15 @@ c.learn(ConetFacts.quakesOften);
 
 * "Aren't you worried?"
 
-She shrugs. "This one was stronger than most, but people will repair the damage."
+    She shrugs. "This one was stronger than most, but people will repair the damage."
 
 * "Earthquake every day?"
 
-"I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. [[IF !c.hasHappened(evOrcOffensive)]]She's very knowledgeable, Oracle. She knows a lot about this place. She reads books, you know.[[ELSE]]She was very knowledgeable, you know.[[ENDIF]]"
+    "I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. [[IF !c.hasHappened(evOrcOffensive)]]She's very knowledgeable, Oracle. She knows a lot about this place. She reads books, you know.[[ELSE]]She was very knowledgeable, you know.[[ENDIF]]"
 
-[[CODE]]
-c.learn(OracleFacts.someoneCalledOracle);
-[[ENDCODE]]
+    [[CODE]]
+    c.learn(OracleFacts.someoneCalledOracle);
+    [[ENDCODE]]
 
 
 // ---
@@ -136,13 +136,15 @@ c.knows(OracleFacts.someoneCalledOracle)
 !c.knows(OracleFacts.personally)
 
 INK:
-"She's the wisest person I know. Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor." Ada chuckles. "As high as possible without being quartered by the orcs. She likes the view."
+"She's the wisest person I know," Ada says, with something like pride. "Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor." 
+
+She chuckles. "As high as possible without being quartered by the orcs. She likes the view."
 
 [[CODE]]
 c.learn(OracleFacts.location);
 [[ENDCODE]]
 
-"She never had a kid. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."
+Ada's little wooden figure gets another cut and a wooden chip flies past my [[IF c.playerHasWoodenFoot]]crippled [[ENDIF]]leg. "Oracle never had a kid, you know. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."
 
 
 // ---
@@ -158,19 +160,19 @@ INK:
 
 * "Tell me about the dangers, then."
 
-"Orcs, monsters. Bad magic, from Big O at the very top. One person just cannot face it all alone. You should <>
+    "Orcs, monsters. Bad magic, from Big O at the very top. One person just cannot face it all alone. You should <>
 
-[[CODE]]
-c.learn(BigOFacts.someoneCalledBigO);
-[[ENDCODE]]
+    [[CODE]]
+    c.learn(BigOFacts.someoneCalledBigO);
+    [[ENDCODE]]
 
 * "How can I stay safe?"
 
-"If you _must_ go further, you mean? I hope you need not. But if you do, 
+    "If you _must_ go further, you mean? I hope you need not. But if you do, <>
 
 -
 
-<> seek help from others. The Deathless have been friendly to us farmers. Oracle is a beautiful person. The Knights are leaving, but they are good people, at heart."
+<> seek help from others. The Deathless have been friendly to us farmers. Oracle is a beautiful person. The Knights are leaving, but they are good people, too."
 
 [[CODE]]
 c.learn(DeathlessFacts.somethingCalledDeathless);
@@ -178,7 +180,7 @@ c.learn(OracleFacts.someoneCalledOracle);
 c.learn(KnightsFacts.knightsAreLeaving);
 [[ENDCODE]]
 
-"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I've heard of the Dragon Egg, an ancient device of war of that sort."
+"And remember to equip yourself," Ada says, looking at my tunic and gear. "There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I've heard of the Dragon Egg, an ancient device of war of that sort."
 
 [[CODE]]
 c.learn(DragonEggFacts.anAncientWeapon);
@@ -197,4 +199,4 @@ w.actionHasBeenPerformed("talk_to_ada_greetings")
 c.knows(DragonEggFacts.anAncientWeapon)
 
 INK:
-"Oh, you should not ask an old woman about such things. I know it's a device of war. I know it's powerful. People have claimed it's somewhere in the Pyramid. But where? And what it is, exactly? I don't know."
+"Oh, you should not ask an old woman about such things," she says. "I know it's a device of war. I know it's powerful. People claim it's somewhere in the Pyramid. But where? And what it is, exactly? I don't know."

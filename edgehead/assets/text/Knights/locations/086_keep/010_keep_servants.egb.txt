@@ -53,7 +53,7 @@ PREREQUISITES:
 w.actionHasBeenPerformed('north_skull_examine')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I take the North Skull.
+I take the North Skull. As I straighten up, my heart stops. Something moves in the corner of the room. But then I realize it was only my shadow.
 
 [[CODE]]
 c.giveNewItemToPlayer(northSkull);

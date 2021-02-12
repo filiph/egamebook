@@ -2,25 +2,24 @@ APPROACH: $staging_area FROM $pyramid_entrance
 DESCRIPTION:
 [[RULESET]]
 [[RULE]]
-!c.playerHasVisited("staging_area")
+    !c.playerHasVisited("staging_area")
 [[THEN]]
-As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to [[IF c.knows(DogheadFacts.somethingCalledDoghead)]]Doghead[[ELSE]]a "Doghead"[[ENDIF]]. 
+    As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to [[IF c.knows(DogheadFacts.somethingCalledDoghead)]]Doghead[[ELSE]]a "Doghead"[[ENDIF]]. 
 
-![An inartistic writing on a wall saying Doghead](graffiti.png)
+    ![An inartistic writing on a wall saying Doghead](graffiti.png)
 
-Messages like "Where is Doghead?" and "Doghead save us" are on almost every step.
+    Messages like "Where is Doghead?" and "Doghead save us" are on almost every step.
 
-[[CODE]]
-c.learn(DogheadFacts.somethingCalledDoghead);
-[[ENDCODE]]
+    [[CODE]]
+    c.learn(DogheadFacts.somethingCalledDoghead);
+    [[ENDCODE]]
 
-Finally I reach a point where the stairs are too damaged to continue up. There's a doorway, and I go through it.
-
+    Finally I reach a point where the stairs are too damaged to continue up. There's a doorway, and I go through it.
 [[ENDRULE]]
 [[RULE]]
-$DEFAULT
+    $DEFAULT
 [[THEN]]
-// Pass.
+    // Pass.
 [[ENDRULE]]
 [[ENDRULESET]]
 

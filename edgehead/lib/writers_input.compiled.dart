@@ -9554,7 +9554,7 @@ final Approach stagingAreaFromPyramidEntrance =
       ? '''Doghead'''
       : '''a "Doghead"''';
   Ruleset(
-      Rule(1002482003, 1, false, (ApplicabilityContext c) {
+      Rule(978387384, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -9566,15 +9566,15 @@ final Approach stagingAreaFromPyramidEntrance =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
         s.add(
-            'As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to ${ifBlock_6718c6f98}. \n\n![An inartistic writing on a wall saying Doghead](graffiti.png)\n\nMessages like "Where is Doghead?" and "Doghead save us" are on almost every step.\n\n',
+            ' As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to ${ifBlock_6718c6f98}. \n\n ![An inartistic writing on a wall saying Doghead](graffiti.png)\n\n Messages like "Where is Doghead?" and "Doghead save us" are on almost every step.\n\n',
             isRaw: true);
         c.learn(DogheadFacts.somethingCalledDoghead);
 
         s.add(
-            '\nFinally I reach a point where the stairs are too damaged to continue up. There\'s a doorway, and I go through it.\n\n',
+            '\n Finally I reach a point where the stairs are too damaged to continue up. There\'s a doorway, and I go through it.\n',
             isRaw: true);
       }),
-      Rule(389695249, 0, false, (ApplicabilityContext c) {
+      Rule(257575313, 0, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -9681,7 +9681,7 @@ final talkToHorsemanWhiteDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'Doghead is a local myth. A creature with a dog\'s head and a human\'s body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone\'s problems. It\'s magical thinking. Bullshit from centuries ago. Go ask Oracle."\n',
+        'Doghead is a local myth. A creature with a dog\'s head and a human\'s body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone\'s problems. Classic magical thinking. Bullshit from generations ago. Go ask Oracle."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -9745,7 +9745,7 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Why would this Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."\n',
+        'The officer shakes his head. "Why would this Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -9773,6 +9773,32 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
         }),
       ],
     ),
+    InkChoiceNode(
+      command: r""" "Some people are not cowards." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The officer looks at me for a long while. Is he considering using that sword that sways by his side? But then he merely smirks. "Whatever your story is, kid, you should really be leaving." He turns and shouts some commands at the servants.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'When he is done and sees I\'m still there, he shakes his head. "I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
   ]),
   InkForkNode([
     InkChoiceNode(
@@ -9784,7 +9810,8 @@ final talkToHorsemanWhiteGreetingsInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('"How old is he? Cannot he take care of himself?"\n',
+          s.add(
+              '"Bah! How old is this brother of yours? Cannot he take care of himself?"\n',
               isRaw: true);
         }),
       ],
@@ -10546,7 +10573,7 @@ final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n\n',
+      'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.\n\nAn old woman is whittling a little dog-headed figure from wood.\n\n',
       isRaw: true);
   c.describeWorthiness(
       who: farmers,
@@ -10645,7 +10672,6 @@ final talkToAdaAboutDelvingInk = InkAst([
       ],
     ),
   ]),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -10653,7 +10679,7 @@ final talkToAdaAboutDelvingInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'seek help from others. The Deathless have been friendly to us farmers. Oracle is a beautiful person. The Knights are leaving, but they are good people, at heart."\n',
+        'seek help from others. The Deathless have been friendly to us farmers. Oracle is a beautiful person. The Knights are leaving, but they are good people, too."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -10674,7 +10700,7 @@ final talkToAdaAboutDelvingInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"And remember to equip yourself. There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I\'ve heard of the Dragon Egg, an ancient device of war of that sort."\n',
+        '"And remember to equip yourself," Ada says, looking at my tunic and gear. "There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I\'ve heard of the Dragon Egg, an ancient device of war of that sort."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -10696,7 +10722,7 @@ final talkToAdaAboutDragonEggInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Oh, you should not ask an old woman about such things. I know it\'s a device of war. I know it\'s powerful. People have claimed it\'s somewhere in the Pyramid. But where? And what it is, exactly? I don\'t know."\n',
+        '"Oh, you should not ask an old woman about such things," she says. "I know it\'s a device of war. I know it\'s powerful. People claim it\'s somewhere in the Pyramid. But where? And what it is, exactly? I don\'t know."\n',
         isRaw: true);
   }),
 ]);
@@ -10708,7 +10734,18 @@ final talkToAdaAboutOracleInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"She\'s the wisest person I know. Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor." Ada chuckles. "As high as possible without being quartered by the orcs. She likes the view."\n',
+        '"She\'s the wisest person I know," Ada says, with something like pride. "Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She chuckles. "As high as possible without being quartered by the orcs. She likes the view."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -10726,8 +10763,9 @@ final talkToAdaAboutOracleInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_4f06a29a4 = c.playerHasWoodenFoot ? '''crippled ''' : '''''';
     s.add(
-        '"She never had a kid. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."\n',
+        'Ada\'s little wooden figure gets another cut and a wooden chip flies past my ${ifBlock_4f06a29a4}leg. "Oracle never had a kid, you know. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."\n',
         isRaw: true);
   }),
 ]);
@@ -10740,7 +10778,7 @@ final talkToAdaBigOInk = InkAst([
     final Storyline s = c.outputStoryline;
     final youngSirSubstitution = c.playerSalutation;
     s.add(
-        '"As much as anyone here, ${youngSirSubstitution}. When I was younger, we called him Osiris. Big O is a nickname that people gave him. He\'s a constant presence, even though we don\'t ever see him."\n',
+        '"As much as anyone here, ${youngSirSubstitution}," Ada says. "When I was younger, we called him Osiris. Big O is a nickname that people gave him. He\'s a constant presence, even though we don\'t ever see him."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -10754,7 +10792,7 @@ final talkToAdaBigOInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '"People say different things. At night, we can see the lights change. Dark red and bright violet, what have you. There are sounds and screams, sometimes, and they don\'t seem to be coming from the Orcs. I don\'t know\n',
+              'Ada shrugs and puts her whittling knife to the figure. "People say different things. At night, we can see the lights change. Dark red and bright violet, what have you. There are sounds and screams, sometimes, and they don\'t seem to be coming from the Orcs. I don\'t know\n',
               isRaw: true);
         }),
       ],
@@ -10769,7 +10807,7 @@ final talkToAdaBigOInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '"He\'s up there, at the very top. He never goes down, never shows. He\'s been locked up there for decades now, and nobody knows\n',
+              '"He\'s up there, at the very top," Ada says, pointing with her whittling knife to the ceiling. "He never goes down, never shows. He\'s been locked up there for decades now, and nobody knows\n',
               isRaw: true);
         }),
       ],
@@ -10803,7 +10841,7 @@ final talkToAdaDogheadFigureInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Ah, this? That\'s Doghead, of course. People in the Pyramid believe a creature with a human body and a dog\'s head will come and save us in our direst moment."\n',
+        '"Ah, this?" She lifts the item to her eye level and I can smell the wood. "That\'s Doghead, of course. People in the Pyramid believe a creature with a human body and a dog\'s head will come and save us in our direst moment."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -10845,7 +10883,7 @@ final talkToAdaDogheadFigureInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'All I know is that this has been said for generations. My mother taught me about Doghead"\n',
+        'All I know is that this has been said for generations. My mother taught me about Doghead."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -11490,7 +11528,7 @@ final Room farmersVillageQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nAn old woman is whittling a little dog-headed figure from wood. She looks familiar.\n\n',
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nAn old woman is whittling a little dog-headed figure from wood.\n\n',
           isRaw: true);
       c.describeWorthiness(
           who: farmers,
@@ -11677,7 +11715,7 @@ final Room farmersVillageQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nThe farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\nAmong all this, an old woman is whittling a little dog-headed figure from wood. She looks familiar.\n\n',
+          'The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people run around, trying to repair the damage of the quake, repairing doors, cleaning debris. Yet others seem to ignore all that, instead focusing on packing.\n\nThe farmers are in full panic. Someone\'s crying about a person on the Slopes. \n\nAmong all this, an old woman is whittling a little dog-headed figure from wood.\n\n',
           isRaw: true);
       c.describeWorthiness(
           who: farmers,
@@ -12547,7 +12585,9 @@ class NorthSkullTake extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('I take the North Skull.\n\n', isRaw: true);
+    s.add(
+        'I take the North Skull. As I straighten up, my heart stops. Something moves in the corner of the room. But then I realize it was only my shadow.\n\n',
+        isRaw: true);
     c.giveNewItemToPlayer(northSkull);
 
     return '${a.name} successfully performs NorthSkullTake';
