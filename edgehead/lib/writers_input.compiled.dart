@@ -3195,7 +3195,6 @@ class KarlUseNecromancy extends RoamingAction {
         '\n"What\'s going on?" the berserker asks and picks up his battle axe. "What\'s going on with Karl?"\n\nThe two approach the large gate and open it to peek inside. Almost instantly, a giant hand pushes the door open so hard that it launches the berserker across the room. Hitting the wall snaps his neck, and he does not move anymore.\n\nFrom my perspective above the room, it is hard to see the creature beyond the gate. But it is clearly a giant, and it is clearly out of its mind with pain. The guttural roar is deafening, and blood is filling the floor beneath its feet.\n\nThe orc captain starts backing up from the gate but the giant creature lunges forward and smashes the orc with the back of its hand. There isn\'t even time for a scream. The captain is dead instantly.\n\nThe creature does not stop. It takes a few steps forward, holding its belly with one hand. Then it trips, twists, and falls on its back. I can see the stomach, running with blood. Something is puncturing it from inside.\n\nI realize it is the undead I just raised. A bird-headed creature, a hawkman, is cutting its way out of the giant\'s belly with its beak. The undead\'s movements are mechanical, imprecise, but the beak is sharp enough. The giant is losing blood quickly.\n\nWhen the hawkman\'s head is finally out, the guttural roar gets louder. Using the last of its strength, the giant puts its hand on the hawkman, then yanks. The bird head rolls on the floor, dead again.\n\nSoon after, the giant stops moving.\n\nI wish I could raise this new corpse, but it is well beyond my capability.\n\n',
         isRaw: true);
     c.markHappened(evKarlGuardsKilled);
-    // Make sure to actually kill the two.
     w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
     w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
 
@@ -17780,17 +17779,13 @@ final startInkInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-// Make Tamara fall and lose initiative.
           w.updateActorById(
               tamaraId,
               (b) => b
                 ..pose = Pose.onGround
                 ..initiative = 0
                 ..inventory.add(tamarasDagger));
-// TODO: Add the cut to Tamara's anatomy
-// Make goblin also lose initiative.
           w.updateActorById(firstGoblinId, (b) => b.initiative = 10);
-// Give branch to player.
           w.updateActorById(
               playerId, (b) => b.inventory.equip(startBranch, a.anatomy));
         }),
@@ -18114,10 +18109,20 @@ final Room meadowFight = Room(
       w.updateActorById(firstGoblinId, (b) => b.initiative = 10);
 
       s.add(
-          '\nMy hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.\n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.\n\n\n',
+          '\nMy hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.\n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.\n\n\nThe fight is over.\n\n',
           isRaw: true);
+      if (!w.wasKilled(tamaraId)) {
+        if (c.hasItem(tamaraSwordId)) {
+          final sword = player.inventory.items
+              .singleWhere((item) => item.id == tamaraSwordId);
+          c.removeItemFromPlayer(tamaraSwordId);
+          w.updateActorById(tamaraId, (b) => b..inventory.add(sword));
+          w.recordCustom('gives_sword_back_to_tamara');
+        }
+      }
+
       Ruleset(
-          Rule(175509328, 2, false, (ApplicabilityContext c) {
+          Rule(242410184, 2, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -18130,10 +18135,10 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                '"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n\nNo time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n',
+                ' "Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.\n\n No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n',
                 isRaw: true);
           }),
-          Rule(852520620, 2, false, (ApplicabilityContext c) {
+          Rule(2444185, 2, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -18146,10 +18151,10 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                'I look into Tamara\'s undead eyes.\n\n"I\'m sorry."\n\nShe doesn\'t respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n',
+                ' I look into Tamara\'s undead eyes.\n\n "I\'m sorry."\n\n She doesn\'t respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n',
                 isRaw: true);
           }),
-          Rule(832916590, 1, false, (ApplicabilityContext c) {
+          Rule(234480273, 1, false, (ApplicabilityContext c) {
             final WorldState w = c.world;
             final Simulation sim = c.simulation;
             final Actor a = c.actor;
@@ -18161,7 +18166,7 @@ final Room meadowFight = Room(
             final WorldStateBuilder w = c.outputWorld;
             final Storyline s = c.outputStoryline;
             s.add(
-                '\nThe fight is over.\n\n\n${ifBlock_52e534a1a} "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n\nI remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n\nTamara understands. ${ifBlock_781966055} "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
+                ' ${ifBlock_52e534a1a} "You are welcome to tag along with me back to safety. I\'ll give you a discount for the way back."\n\n I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.\n\n Tamara understands. ${ifBlock_781966055} "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
                 isRaw: true);
             w.updateActorById(tamaraId, (b) => b.isActive = false);
           }),

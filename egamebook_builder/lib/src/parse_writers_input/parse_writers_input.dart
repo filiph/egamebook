@@ -10,7 +10,7 @@ import 'types.dart';
 /// A map of types of object that can be defined by writer.
 const List<String> objectTypes = ["ROOM", "ACTION", "APPROACH"];
 
-final RegExp commentPattern = RegExp(r"^//.*");
+final RegExp commentPattern = RegExp(r"^\s*//.*");
 
 final RegExp keyPattern = RegExp(r"^([A-Z_]+):");
 

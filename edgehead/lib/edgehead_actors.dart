@@ -208,7 +208,7 @@ final Actor edgeheadTamara = Actor.initialized(
   initiative: 1500,
   currentRoomName: Simulation.preStartBookName,
   followingActorId: playerId,
-  currentWeapon: Item.weapon(2342341, WeaponType.sword,
+  currentWeapon: Item.weapon(tamaraSwordId, WeaponType.sword,
       adjective: "battered", firstOwnerId: tamaraId),
 );
 

@@ -32,45 +32,54 @@ But this, this was something different entirely. Fast. Violent. Messy. This was 
 
 // TODO: let Tamara hang around (camp?), or even follow Aren to The Bleeds. Move the content below to separate actions.
 
+The fight is over.
+
+[[CODE]]
+// Give tamara her sword back if she's alive.
+if (!w.wasKilled(tamaraId)) {
+  if (c.hasItem(tamaraSwordId)) {
+    final sword = player.inventory.items.singleWhere((item) => item.id == tamaraSwordId);
+    c.removeItemFromPlayer(tamaraSwordId);
+    w.updateActorById(tamaraId, (b) => b..inventory.add(sword));
+    w.recordCustom('gives_sword_back_to_tamara'); 
+  }
+}
+[[ENDCODE]]
+
 [[RULESET]]
 [[RULE]]
   !w.wasKilled(tamaraId)
 [[THEN]]
+  // TODO: stand up if Tamara ended the fight down, and isn't hurt
+  // TODO: Tamara should take her sword if the player has it
+  [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, [young sir]. And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount for the way back."
 
-The fight is over.
+  I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
 
-// TODO: reiterate Brother here. We need to make sure the player knows what their goal is.
+  Tamara understands. [[IF c.isHurt(tamaraId)]]She slowly stands up, and shrugs.[[ENDIF]] "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.
 
-// TODO: stand up if Tamara ended the fight down, and isn't hurt
-// TODO: Tamara should take her sword if the player has it
-[[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, [young sir]. And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount for the way back."
-
-I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
-
-Tamara understands. [[IF c.isHurt(tamaraId)]]She slowly stands up, and shrugs.[[ENDIF]] "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.
-
-[[CODE]]
-w.updateActorById(tamaraId, (b) => b.isActive = false);
-[[ENDCODE]]
+  [[CODE]]
+  w.updateActorById(tamaraId, (b) => b.isActive = false);
+  [[ENDCODE]]
 
 [[ENDRULE]]
 
 [[RULE]]
 w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated
 [[THEN]]
-"Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.
+  "Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.
 
-No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
+  No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
 [[ENDRULE]]
 
 [[RULE]]
-w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead
+  w.wasKilled(tamaraId) && w.getActorById(tamaraId).anatomy.isUndead
 [[THEN]]
-I look into Tamara's undead eyes.
+  I look into Tamara's undead eyes.
 
-"I'm sorry."
+  "I'm sorry."
 
-She doesn't respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
+  She doesn't respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
 [[ENDRULE]]
 
 [[RULE]]

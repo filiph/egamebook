@@ -66,6 +66,8 @@ const int startBranchId = 77021;
 
 const int tamarasDaggerId = 77002;
 
+const int tamaraSwordId = 77038;
+
 const int theNullId = 77037;
 
 const int tridentId = 77026;

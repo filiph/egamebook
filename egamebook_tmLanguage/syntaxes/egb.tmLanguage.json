@@ -139,7 +139,7 @@
 		"comments": {
 			"patterns": [{
 				"name": "comment.line.double-slash",
-				"begin": "^//",
+				"begin": "^\\s*//",
 				"end": "$",
 				"patterns": [{
 					"match": "\\bTODO\\b",
