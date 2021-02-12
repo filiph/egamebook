@@ -117,8 +117,8 @@
 		},
 		"ruleset": {
 			"patterns": [{
-				"begin": "^(\\[\\[RULE\\]\\])$",
-				"end": "^(\\[\\[THEN\\]\\])$",
+				"begin": "^\\s*(\\[\\[RULE\\]\\])$",
+				"end": "^\\s*(\\[\\[THEN\\]\\])$",
 				"captures": {
 					"1": {"name": "keyword.egb"}
 				},
@@ -127,7 +127,7 @@
 				]
 			},{
 				"name": "keyword.egb",
-				"match": "^\\[\\[(RULESET|ENDRULE|ENDRULESET)\\]\\]$"
+				"match": "^\\s*\\[\\[(RULESET|ENDRULE|ENDRULESET)\\]\\]$"
 			}]
 		},
 		"substitutions": {
