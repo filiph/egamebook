@@ -45,6 +45,17 @@ class ActionContext extends ApplicabilityContext {
       this.outputStoryline,
       this.successChance)
       : super(actor, simulation, world);
+
+  /// Creates a copy of [other] with updated values from [other.outputWorld].
+  ActionContext.updatedFrom(ActionContext other)
+      : this(
+            other.currentAction,
+            other.outputWorld.getActorById(other.actor.id),
+            other.simulation,
+            other.outputWorld.build(),
+            other.outputWorld,
+            other.outputStoryline,
+            other.successChance);
 }
 
 /// This is all the context an action (or rule) needs to see if it's applicable.

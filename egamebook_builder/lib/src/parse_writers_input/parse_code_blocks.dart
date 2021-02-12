@@ -394,14 +394,18 @@ class SequenceBlockVisitor {
     //           (c) => outcome = 43),
     //       new Rule(44, 0, false, (c) => true,
     //           (c) => outcome = 44),
-    //     ).apply(context);
+    //     ).apply(ActionContext.updatedFrom(c));
     assert(ruleset.type == BlockType.ruleset);
     final parsedRules =
         ruleset.children.map<_ParsedRule>(_visitRule).toList(growable: false);
     parsedRules.sort();
     final Expression rulesetConstructor = rulesetType
         .newInstance(parsedRules.map((rule) => rule.instanceBuilder));
-    return rulesetConstructor.property('apply').call([refer("c")]);
+
+    final updatedContext =
+        actionContextType.newInstanceNamed('updatedFrom', [refer('c')]);
+
+    return rulesetConstructor.property('apply').call([updatedContext]);
   }
 }
 
