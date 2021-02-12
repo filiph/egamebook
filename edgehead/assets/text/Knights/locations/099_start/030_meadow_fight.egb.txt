@@ -36,9 +36,9 @@ The fight is over.
 
 [[CODE]]
 // Give tamara her sword back if she's alive.
-if (!w.wasKilled(tamaraId)) {
+if (!originalWorld.wasKilled(tamaraId)) {
   if (c.hasItem(tamaraSwordId)) {
-    final sword = player.inventory.items.singleWhere((item) => item.id == tamaraSwordId);
+    final sword = c.player.inventory.items.singleWhere((item) => item.id == tamaraSwordId);
     c.removeItemFromPlayer(tamaraSwordId);
     w.updateActorById(tamaraId, (b) => b..inventory.add(sword));
     w.recordCustom('gives_sword_back_to_tamara'); 
@@ -50,9 +50,19 @@ if (!w.wasKilled(tamaraId)) {
 [[RULE]]
   !w.wasKilled(tamaraId)
 [[THEN]]
-  // TODO: stand up if Tamara ended the fight down, and isn't hurt
-  // TODO: Tamara should take her sword if the player has it
-  [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, [young sir]. And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount for the way back."
+  [[RULESET]]
+  [[RULE]]
+    c.hasHappened('gives_sword_back_to_tamara')
+  [[THEN]]
+    [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. I give her the sword back. "This place is not for me, [young sir]. And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes the sword that I give back to her. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount for the way back."
+  [[ENDRULE]]
+
+  [[RULE]]
+    $DEFAULT
+  [[THEN]]
+    [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, [young sir]. And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount for the way back."
+  [[ENDRULE]]
+  [[ENDRULESET]]
 
   I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
 
