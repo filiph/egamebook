@@ -88,8 +88,6 @@ This reveals a beatifully decorated passage into the Keep.
 
 
 NOTES:
-// TODO: the three different ways to get past the gate: Talk to someone and learn the access path; Use stamina to move open a nailed door, or use an axe.; Descend from way above
-
 // A patrol might come by at points.
 
 // Vignette
