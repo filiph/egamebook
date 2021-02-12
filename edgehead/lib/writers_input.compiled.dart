@@ -8931,11 +8931,10 @@ final talkToMiguelAboutDesertingInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"I can\'t just guard down there. What am I, an onlooker? I have to change things."\n',
+        '"I can\'t just guard down there," he says. "What am I, an onlooker? I have to change things."\n',
         isRaw: true);
   }),
-]);
-final talkToMiguelAfterCaravanDepartedInk = InkAst([
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
@@ -8943,7 +8942,7 @@ final talkToMiguelAfterCaravanDepartedInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"The Knights of San Francisco are no more. Look, if you are in the business of hurting the orcs, take me with you."\n',
+        'He looks around and lowers his voice. "The Knights of San Francisco are no more, as far as I\'m concerned. Look, if you are in the business of hurting the orcs, take me with you."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -9007,77 +9006,6 @@ class TalkToMiguelAboutDeserting extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     return '${a.name} fails to perform TalkToMiguelAboutDeserting';
-  }
-
-  @override
-  ReasonedSuccessChance<void> getSuccessChance(
-      Actor a, Simulation sim, WorldState w, void _) {
-    return ReasonedSuccessChance.sureSuccess;
-  }
-
-  @override
-  bool get rerollable => false;
-  @override
-  Resource get rerollResource => null;
-  @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
-    return 'Will I be successful?';
-  }
-
-  @override
-  String get helpMessage => null;
-  @override
-  bool get isAggressive => false;
-  @override
-  bool get isImmediate => false;
-}
-
-class TalkToMiguelAfterCaravanDeparted extends RoamingAction {
-  @override
-  final String name = 'talk_to_miguel_after_caravan_departed';
-
-  static final TalkToMiguelAfterCaravanDeparted singleton =
-      TalkToMiguelAfterCaravanDeparted();
-
-  @override
-  List<String> get commandPathTemplate =>
-      ['Miguel, the guardsman', 'Talk', '"Why are you still here?"'];
-  @override
-  bool isApplicable(
-      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    if (c.inRoomParent('knights_hq_main') != true) {
-      return false;
-    }
-    if (!(c.inRoomWith(miguelId) &&
-        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
-        c.hasHappened(evCaravanDeparted))) {
-      return false;
-    }
-    return w.actionNeverUsed(name);
-  }
-
-  @override
-  String applySuccess(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    w.pushSituation(InkSituation.initialized(
-      w.randomInt(),
-      "talk_to_miguel_after_caravan_departed_ink",
-    ));
-    return '${a.name} successfully performs TalkToMiguelAfterCaravanDeparted';
-  }
-
-  @override
-  String applyFailure(ActionContext c, void _) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    return '${a.name} fails to perform TalkToMiguelAfterCaravanDeparted';
   }
 
   @override
@@ -9247,7 +9175,7 @@ final Room knightsHqQuake3 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the deserted bunks of the Knights of San Francisco.\n\nSilence. The knights have left.\n',
+          'I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the deserted bunks of the Knights of San Francisco.\n\nThere is nobody here.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -9303,7 +9231,7 @@ final Room elevator12 = Room('elevator_12', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'Darkness shrouds most of the vertical shaft above, except for a single bright slit many floors above. Down here, only a narrow passage connects the elevator shaft with the corridors surrounding it.\n',
+      'Darkness shrouds most of the vertical shaft, except for a single bright slit many floors above. Down here, only a narrow passage connects the elevator shaft with the corridors surrounding it.\n\nI smell oil and metal, and everything sounds like in a cave.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -9327,7 +9255,7 @@ final Room slopes = Room('slopes', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.\n\nA large writing on the wall says "Doghead will come".\n\n',
+      'The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.\n\nA large writing on the wall says "Doghead will come."\n\n',
       isRaw: true);
   c.learn(DogheadFacts.somethingCalledDoghead);
 }, (ActionContext c) {
@@ -18987,7 +18915,6 @@ final allActions = <RoamingAction>[
   ArgoAskQuake1.singleton,
   ArgoGreet.singleton,
   TalkToMiguelAboutDeserting.singleton,
-  TalkToMiguelAfterCaravanDeparted.singleton,
   TalkToGreenWomanAboutSlopesDeath.singleton,
   TalkToHorsemanWhiteAboutDevling.singleton,
   TalkToHorsemanWhiteAboutOracle.singleton,
@@ -19089,8 +19016,6 @@ final allInks = <String, InkAst>{
   'argo_ask_quake_1_ink': argoAskQuake1Ink,
   'argo_greet_ink': argoGreetInk,
   'talk_to_miguel_about_deserting_ink': talkToMiguelAboutDesertingInk,
-  'talk_to_miguel_after_caravan_departed_ink':
-      talkToMiguelAfterCaravanDepartedInk,
   'talk_to_green_woman_about_slopes_death_ink':
       talkToGreenWomanAboutSlopesDeathInk,
   'talk_to_horseman_white_about_oracle_ink': talkToHorsemanWhiteAboutOracleInk,
