@@ -33,6 +33,9 @@
 			"include": "#comments"
 		},
 		{
+			"include": "#ink_choice"
+		},
+		{
 			"include": "#markdown"
 		}
 	],
@@ -153,6 +156,15 @@
 					"match": "\\bTODO\\b",
 					"name": "keyword.todo"
 				}]
+			}]
+		},
+		"ink_choice": {
+			"patterns": [{
+				"name": "keyword.egb",
+				"match": "^\\s*\\*[\\*\\s]*"
+			},{
+				"name": "keyword.egb",
+				"match": "^\\s*\\-[\\-\\s]*"
 			}]
 		},
 		"markdown": {
