@@ -13,12 +13,6 @@ import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:meta/meta.dart';
 
-export 'package:edgehead/edgehead_facts_enums.dart';
-export 'package:edgehead/edgehead_facts_strings.dart';
-export 'package:edgehead/edgehead_ids.dart';
-export 'package:edgehead/edgehead_items.dart';
-export 'package:edgehead/src/fight/common/necromancy.dart';
-
 extension ActionContextHelpers on ActionContext {
   void movePlayer(String locationName) {
     getRoomRoaming().moveActor(player, this, locationName);
@@ -73,10 +67,6 @@ extension ActionContextHelpers on ActionContext {
     final item =
         player.inventory.items.singleWhere((item) => item.id == itemId);
     outputWorld.updateActorById(playerId, (b) => b..inventory.remove(item));
-  }
-
-  Actor get player {
-    return outputWorld.getActorById(playerId);
   }
 
   void increaseSanityFromPeople() {
@@ -299,10 +289,6 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
         return isMale ? 'sir Aren' : 'lady Aren';
     }
     throw StateError('Wrong worthiness: $worthiness');
-  }
-
-  Actor get player {
-    return world.getActorById(playerId);
   }
 
   /// The room the player is currently in. If they are in a variant,

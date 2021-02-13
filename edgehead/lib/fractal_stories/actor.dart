@@ -44,6 +44,9 @@ abstract class Actor extends Object
 
   static Serializer<Actor> get serializer => _$actorSerializer;
 
+  /// The [Actor.id] of the player.
+  static const playerId = 1;
+
   factory Actor.initialized(
     int id,
     RandomIdGetter randomIdGetter,

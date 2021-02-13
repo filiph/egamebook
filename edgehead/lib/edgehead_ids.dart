@@ -9,6 +9,8 @@
 /// [WorldStateBuilder.recordCustom()].
 library edgehead.ids;
 
+import 'package:edgehead/fractal_stories/actor.dart';
+
 part 'edgehead_ids_actors.dart';
 part 'edgehead_ids_events.dart';
 part 'edgehead_ids_items.dart';

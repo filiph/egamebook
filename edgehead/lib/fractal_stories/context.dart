@@ -56,6 +56,13 @@ class ActionContext extends ApplicabilityContext {
             other.outputWorld,
             other.outputStoryline,
             other.successChance);
+
+  /// Same as [ApplicabilityContext.player], except this getter gets
+  /// the most recent player (updates in [outputWorld] count).
+  @override
+  Actor get player {
+    return outputWorld.getActorById(Actor.playerId);
+  }
 }
 
 /// This is all the context an action (or rule) needs to see if it's applicable.
@@ -71,4 +78,8 @@ class ApplicabilityContext {
   final WorldState world;
 
   const ApplicabilityContext(this.actor, this.simulation, this.world);
+
+  Actor get player {
+    return world.getActorById(Actor.playerId);
+  }
 }

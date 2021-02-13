@@ -44,7 +44,7 @@ const int orcBerserkerId = 6014;
 const int orcCaptainId = 6015;
 
 /// [edgeheadPlayer]'s [Actor.id].
-const int playerId = 1;
+const int playerId = Actor.playerId;
 
 const int shamanId = 6012;
 
