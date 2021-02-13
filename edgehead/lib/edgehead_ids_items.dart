@@ -8,6 +8,8 @@ const int barbecuedSquirrelId = 77017;
 
 const int bigOScytheId = 77030;
 
+const int cockroachCakeId = 77039;
+
 const int compassId = 77007;
 
 const int conetKoboldWrenchId = 77034;

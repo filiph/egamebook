@@ -13,7 +13,10 @@ MAP_NAME: Training Grounds
 HINT: A small army of orcs, goblins and kobolds, all training for war.
 
 FIRST_DESCRIPTION:
-A small army of orcs, goblins and kobolds, all training for war.
+A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. Over a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.
+
+They are so absorbed in the training that [we] have no trouble staying unseen.
+
 
 DESCRIPTION: $NONE
 
@@ -25,7 +28,9 @@ VARIANT_OF: $training_grounds
 RULE: c.hasHappened(evOpenedDam)
 
 FIRST_DESCRIPTION:
-An army of orcs, goblins and kobolds, all training for war.
+A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. Over a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.
+
+They are so absorbed in the training that [we] have no trouble staying unseen.
 
 The training grounds are dripping wet.
 
@@ -34,4 +39,4 @@ The training grounds are dripping wet.
 
 NOTES:
 
-* someone can talk about Darg's akxe, and how it's actually a key.
+- idea: someone is killed as we're watching. Player can raise the dead, wreaking havoc.

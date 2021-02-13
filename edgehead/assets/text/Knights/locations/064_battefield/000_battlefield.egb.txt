@@ -17,10 +17,11 @@ HINT: A floor devoid of walls.
 WHERE: among the columns
 
 FIRST_DESCRIPTION:
-// TODO: mention that part of the floor is collapsed into the jungle below
-It's very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can't quite place.
+It's very different from the other floors. There are no walls, and from the staircase opening one can see all the surviving windows. About a third of the floor has collapsed into the jungle below.
 
-As soon as [we] climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.
+There are rows of concrete pillars and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can't quite place.
+
+As soon as [we] climb the last stair and enter the floor proper, two warriors step out from behind the pillars. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.
 
 ![Illustration of an orc and a goblin. The orc is wielding a huge machete and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)
 
@@ -28,7 +29,7 @@ The goblin's face contorts with hatred as soon as he sees me, but the orc just l
 
 "Big mistake," the orc says with mock sadness. "Big mistake for you. This is no longer a place for human swine."
 
-"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalps."
+"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalp."
 
 The two attack.
 
@@ -44,7 +45,9 @@ generateBattlefieldFight
 DESCRIPTION: $NONE
 
 AFTER_MONSTERS_CLEARED:
-The fight is over. [We] stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
+The fight is over. [We] stand in the middle of this large room and I finally understand what that strange smell is. It is old, dried blood.
+
+There is no old corpse here. The orcs must have moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
 
 A glorious battle this was, I'm sure. It became a scab.
 

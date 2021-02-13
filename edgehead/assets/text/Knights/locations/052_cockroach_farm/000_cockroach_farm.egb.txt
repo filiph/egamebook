@@ -15,7 +15,9 @@ HINT: The main source of food for the orcs.
 FIRST_DESCRIPTION:
 I am in a maze of twisty little passages, all alike. All crawling with cockroaches.
 
-The place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. I quickly realize this is a sort of a farm. The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches.
+The place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. This is some sort of a farm.
+
+The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches.
 
 DESCRIPTION: $NONE
 
@@ -29,9 +31,30 @@ RULE: c.hasHappened(evOpenedDam)
 FIRST_DESCRIPTION:
 I am in a maze of twisty little passages, all alike. A few wet cockroaches are crawling around, but most of the place is empty.
 
-I quickly realize this was a sort of a farm. The orcs were letting the cockroaches multiply, feeding them with whatever they’d eat. There are shovels and chests here, prepared for harvest. But most of the cockroaches have been swept away by water.
+I quickly realize this was a sort of a farm. The orcs were letting the cockroaches multiply, feeding them with whatever they’d eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches. But most of the cockroaches have been swept away by water.
 
 VARIANT_UPDATE_DESCRIPTION:
-The whole area is wet. There are puddles of water everywhere, and a few cockroaches scurrying between them.
+The whole area is wet. There are puddles of water everywhere, and a few cockroaches scurrying between them. The harvest has been swept away.
 
 DESCRIPTION: $NONE
+
+
+// ---
+ACTION: $cockroach_cake_take
+COMMAND: A disk on the ground >> Pick up
+HINT: There's a hand-sized disk on the ground here. It's brown and it gleams a little.
+FOR_LOCATION: cockroach_farm
+PREREQUISITES:
+!c.hasHappened(evOpenedDam)
+
+INK:
+I approach the disk and realize it's made of dead cockroach bodies, pressed together into some kind of a cake.
+
+Cockroaches are nutritious. At least that's what my father told me once. But, looking at the tangle of elytra and insect legs, I wonder if I'd be able to put something like this in my stomach.
+
+I put the cake in my tunic.
+
+[[CODE]]
+c.giveNewItemToPlayer(cockroachCake);
+[[ENDCODE]]
+

@@ -2646,8 +2646,53 @@ final Room barracks = Room('barracks', (ActionContext c) {
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'A large room taking up two floors. Bunk beds, and a dining area. ${weSubstitutionCapitalized} stay hidden.\n\nI find a barbecued bat on a stool out of sight.\n',
+      'A large room taking up two floors. Bunk beds, and a dining area. ${weSubstitutionCapitalized} stay hidden.\n\n',
       isRaw: true);
+  Ruleset(
+      Rule(594936585, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return c.playerHasAsthma;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            ' As I duck to walk beneath a snuffed torch on the wall, I have to stop. My lungs suddenly feel as if on fire. I have a strong urge to cough. My asthma.\n\n There are orcs nearby that would surely hear me. I hold my breath and curl beneath the torch. Pain. Suffocation. Fear.\n\n After ten long heartbeats, I am able to swallow and the urge subsides. I wait a few more moments before breathing again. After that, I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.\n',
+            isRaw: true);
+      }),
+      Rule(223301922, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return false /*c.playerHasWoodenFoot*/;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            '\n\n\n\n I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.\n',
+            isRaw: true);
+      }),
+      Rule(571428451, 0, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(' I find a barbecued bat on a stool out of sight.\n',
+            isRaw: true);
+      })).apply(ActionContext.updatedFrom(c));
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -5033,6 +5078,116 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
         'Corridors around this place smell of stale water. A faint splashing can be heard.');
 final Approach cockroachFarmFromJunction =
     Approach('junction', 'cockroach_farm', '', null);
+final cockroachCakeTakeInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I approach the disk and realize it\'s made of dead cockroach bodies, pressed together into some kind of a cake.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Cockroaches are nutritious. At least that\'s what my father told me once. But, looking at the tangle of elytra and insect legs, I wonder if I\'d be able to put something like this in my stomach.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I put the cake in my tunic.\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.giveNewItemToPlayer(cockroachCake);
+  }),
+]);
+
+class CockroachCakeTake extends RoamingAction {
+  @override
+  final String name = 'cockroach_cake_take';
+
+  static final CockroachCakeTake singleton = CockroachCakeTake();
+
+  @override
+  List<String> get commandPathTemplate => ['A disk on the ground', 'Pick up'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('ockroach_farm') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOpenedDam))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "cockroach_cake_take_ink",
+    ));
+    return '${a.name} successfully performs CockroachCakeTake';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform CockroachCakeTake';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage =>
+      'There\'s a hand-sized disk on the ground here. It\'s brown and it gleams a little.';
+  @override
+  bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
+}
+
 final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -5040,7 +5195,7 @@ final Room cockroachFarm = Room('cockroach_farm', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I am in a maze of twisty little passages, all alike. All crawling with cockroaches.\n\nThe place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. I quickly realize this is a sort of a farm. The orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches.\n',
+      'I am in a maze of twisty little passages, all alike. All crawling with cockroaches.\n\nThe place smells awful. There is rotten food on the floor for the cockroaches to eat and almost no air movement. This is some sort of a farm.\n\nThe orcs are letting the cockroaches multiply, feeding them with whatever they’ll eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -5066,7 +5221,7 @@ final Room cockroachFarmAfterOpenDam = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I am in a maze of twisty little passages, all alike. A few wet cockroaches are crawling around, but most of the place is empty.\n\nI quickly realize this was a sort of a farm. The orcs were letting the cockroaches multiply, feeding them with whatever they’d eat. There are shovels and chests here, prepared for harvest. But most of the cockroaches have been swept away by water.\n',
+          'I am in a maze of twisty little passages, all alike. A few wet cockroaches are crawling around, but most of the place is empty.\n\nI quickly realize this was a sort of a farm. The orcs were letting the cockroaches multiply, feeding them with whatever they’d eat. There are shovels and chests here, prepared for harvest. A harvest of cockroaches. But most of the cockroaches have been swept away by water.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -5093,7 +5248,7 @@ final Room cockroachFarmAfterOpenDam = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The whole area is wet. There are puddles of water everywhere, and a few cockroaches scurrying between them.\n',
+          'The whole area is wet. There are puddles of water everywhere, and a few cockroaches scurrying between them. The harvest has been swept away.\n',
           isRaw: true);
     },
     positionX: 30,
@@ -5113,7 +5268,9 @@ final Room trainingGrounds = Room('training_grounds', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
-  s.add('A small army of orcs, goblins and kobolds, all training for war.\n',
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
+  s.add(
+      'A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. Over a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.\n\nThey are so absorbed in the training that ${weSubstitution} have no trouble staying unseen.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -5137,8 +5294,10 @@ final Room trainingGroundsAfterDamOpened = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      final weSubstitution =
+          getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'An army of orcs, goblins and kobolds, all training for war.\n\nThe training grounds are dripping wet.\n',
+          'A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. Over a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.\n\nThey are so absorbed in the training that ${weSubstitution} have no trouble staying unseen.\n\nThe training grounds are dripping wet.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -5198,7 +5357,7 @@ final Room battlefield = Room(
       final weSubstitution =
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the windows. There are rows of columns and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the columns. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge machete and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc says with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalps."\n\nThe two attack.\n\n',
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the surviving windows. About a third of the floor has collapsed into the jungle below.\n\nThere are rows of concrete pillars and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the pillars. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge machete and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc says with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalp."\n\nThe two attack.\n\n',
           isRaw: true);
       c.learn(OrcsFacts.inPyramid);
       c.learn(SixtyFiversFacts.shieldSeen);
@@ -5229,7 +5388,7 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and for the first time I notice the faint smell of old, dried blood. Except for the new ones, there is no corpse here. The orcs moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nSearching through the orc\'s posession, I find a loaf of stale bread.\n\n',
+          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and I finally understand what that strange smell is. It is old, dried blood.\n\nThere is no old corpse here. The orcs must have moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nSearching through the orc\'s posession, I find a loaf of stale bread.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(staleBread);
     },
@@ -18892,6 +19051,7 @@ final allActions = <RoamingAction>[
   ReservoirDamWheelLeft.singleton,
   ReservoirDamWheelRight.singleton,
   ReservoirFollowFootprints.singleton,
+  CockroachCakeTake.singleton,
   AskOracleAboutKeep.singleton,
   AskOracleAboutKeepGate.singleton,
   OracleGiveNorthSkull.singleton,
@@ -18999,6 +19159,7 @@ final allInks = <String, InkAst>{
   'sarn_rescue_ink_ink': sarnRescueInkInk,
   'take_sarn_to_bleeds_ink': takeSarnToBleedsInk,
   'reservoir_follow_footprints_ink': reservoirFollowFootprintsInk,
+  'cockroach_cake_take_ink': cockroachCakeTakeInk,
   'ask_oracle_about_keep_ink': askOracleAboutKeepInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,

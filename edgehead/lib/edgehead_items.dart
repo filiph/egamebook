@@ -37,6 +37,14 @@ final Item barbecuedSquirrel = Item(
       .toBuilder(),
 );
 
+final Item cockroachCake = Item(
+  cockroachCakeId,
+  name: 'cockroach cake',
+  adjective: 'brown',
+  damageCapability: DamageCapability(WeaponType.harmless).toBuilder(),
+  edibility: Edibility.disgusting.toBuilder(),
+);
+
 final Item compass = Item(
   compassId,
   name: 'compass',
