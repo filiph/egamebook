@@ -23,6 +23,27 @@ MAP_NAME: Traffic Hub on 26th Floor
 HINT: An area of increased foot traffic in the heart of the orcs’ outpost.
 
 FIRST_DESCRIPTION:
-This place is a traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. [We] have no trouble staying unseen.
+This place is a traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots.
+
+[[RULESET]]
+[[RULE]]
+  c.playerHasWoodenFoot
+[[THEN]]
+  As [we] scuttle from one dark corner to the next, my wooden foot gets stuck in a large crack in the concrete floor. My heart sinks. I am halfway between shadows, and I hear orc voices approaching.
+
+  I jerk the leg but that only makes the wood drive deeper into the crack. Someone's shadow hits a nearby wall and I know I have only a few heartbeats left.
+
+  I push off with my good foot, moving in the opposite direction than I was going. Back to where I was before. It works, and my wooden stump gets loose. As I retreat into the shadow, a group of four orcs swiftly crosses the corridor.
+
+  One of them almost trips up on that same crack in the floor.
+[[ENDRULE]]
+
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+  [We] have no trouble staying unseen.
+[[ENDRULE]]
+[[ENDRULESET]]
+
 
 DESCRIPTION: $NONE

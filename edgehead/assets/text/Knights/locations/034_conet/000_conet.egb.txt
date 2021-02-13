@@ -20,11 +20,11 @@ HINT: A room filled with a large device.
 FIRST_DESCRIPTION:
 A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.
 
-A primitive writing on the entrance says "Conet".
+There is a writing on the entrance:
 
-// TODO: "There is a writing on the entrance: PICTURE"
+![Illustration of a primitive writing on the wall, saying "Conet"](conet.png)
 
-[We] stay hidden.
+A word I do not understand. [We] stay hidden.
 
 
 DESCRIPTION: $NONE

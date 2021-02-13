@@ -2664,11 +2664,11 @@ final Room barracks = Room('barracks', (ActionContext c) {
             ' As I duck to walk beneath a snuffed torch on the wall, I have to stop. My lungs suddenly feel as if on fire. I have a strong urge to cough. My asthma.\n\n There are orcs nearby that would surely hear me. I hold my breath and curl beneath the torch. Pain. Suffocation. Fear.\n\n After ten long heartbeats, I am able to swallow and the urge subsides. I wait a few more moments before breathing again. After that, I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.\n',
             isRaw: true);
       }),
-      Rule(223301922, 1, false, (ApplicabilityContext c) {
+      Rule(600319710, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
-        return false /*c.playerHasWoodenFoot*/;
+        return c.playerHasWoodenFoot;
       }, (ActionContext c) {
         final WorldState originalWorld = c.world;
         final Simulation sim = c.simulation;
@@ -3024,7 +3024,7 @@ final Room conet = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.\n\nA primitive writing on the entrance says "Conet".\n\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          'A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.\n\nThere is a writing on the entrance:\n\n![Illustration of a primitive writing on the wall, saying "Conet"](conet.png)\n\nA word I do not understand. ${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -4497,11 +4497,42 @@ final Room junction = Room('junction', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
+  final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   final weSubstitutionCapitalized =
       getWeOrI(a, sim, originalWorld, capitalized: true);
   s.add(
-      'This place is a traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots. ${weSubstitutionCapitalized} have no trouble staying unseen.\n',
+      'This place is a traffic hub. Squads of orcs travel in every conceivable direction. Some are climbing rickety ladders upwards or downwards, others walk loudly across unkempt rooms. There are many paths through here, and many hiding spots.\n\n',
       isRaw: true);
+  Ruleset(
+      Rule(517650853, 1, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return c.playerHasWoodenFoot;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(
+            ' As ${weSubstitution} scuttle from one dark corner to the next, my wooden foot gets stuck in a large crack in the concrete floor. My heart sinks. I am halfway between shadows, and I hear orc voices approaching.\n\n I jerk the leg but that only makes the wood drive deeper into the crack. Someone\'s shadow hits a nearby wall and I know I have only a few heartbeats left.\n\n I push off with my good foot, moving in the opposite direction than I was going. Back to where I was before. It works, and my wooden stump gets loose. As I retreat into the shadow, a group of four orcs swiftly crosses the corridor.\n\n One of them almost trips up on that same crack in the floor.\n',
+            isRaw: true);
+      }),
+      Rule(221528414, 0, false, (ApplicabilityContext c) {
+        final WorldState w = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        return true;
+      }, (ActionContext c) {
+        final WorldState originalWorld = c.world;
+        final Simulation sim = c.simulation;
+        final Actor a = c.actor;
+        final WorldStateBuilder w = c.outputWorld;
+        final Storyline s = c.outputStoryline;
+        s.add(' ${weSubstitutionCapitalized} have no trouble staying unseen.\n',
+            isRaw: true);
+      })).apply(ActionContext.updatedFrom(c));
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -18373,14 +18404,9 @@ final Room meadowFight = Room(
           '\nMy hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.\n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.\n\n\nThe fight is over.\n\n',
           isRaw: true);
       if (!originalWorld.wasKilled(tamaraId)) {
-        if (c.player.inventory.items
-            .where((item) => item.id == tamaraSwordId)
-            .isNotEmpty) {
+        if (c.hasItem(tamaraSwordId)) {
           final sword = c.player.inventory.items
-              .singleWhere((item) => item.id == tamaraSwordId, orElse: () {
-            throw StateError(
-                'for some reason, c.hasItem worked but items.singleWhere did not. searching for $tamaraSwordId among [${c.player.inventory.items.map((i) => i.toString()).join(', ')}]');
-          });
+              .singleWhere((item) => item.id == tamaraSwordId);
           c.removeItemFromPlayer(tamaraSwordId);
           w.updateActorById(tamaraId, (b) => b..inventory.add(sword));
           w.recordCustom('gives_sword_back_to_tamara');
