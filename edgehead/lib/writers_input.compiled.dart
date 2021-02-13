@@ -18373,9 +18373,14 @@ final Room meadowFight = Room(
           '\nMy hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.\n\nBut this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.\n\n\nThe fight is over.\n\n',
           isRaw: true);
       if (!originalWorld.wasKilled(tamaraId)) {
-        if (c.hasItem(tamaraSwordId)) {
+        if (c.player.inventory.items
+            .where((item) => item.id == tamaraSwordId)
+            .isNotEmpty) {
           final sword = c.player.inventory.items
-              .singleWhere((item) => item.id == tamaraSwordId);
+              .singleWhere((item) => item.id == tamaraSwordId, orElse: () {
+            throw StateError(
+                'for some reason, c.hasItem worked but items.singleWhere did not. searching for $tamaraSwordId among [${c.player.inventory.items.map((i) => i.toString()).join(', ')}]');
+          });
           c.removeItemFromPlayer(tamaraSwordId);
           w.updateActorById(tamaraId, (b) => b..inventory.add(sword));
           w.recordCustom('gives_sword_back_to_tamara');
