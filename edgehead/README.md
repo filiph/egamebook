@@ -214,9 +214,9 @@ completion or error.
 
 Run all the tests, including the long-running ones, using this command:
 
-    pub run --checked test --run-skipped
+    pub run --enable-asserts test --run-skipped
     
-The `--checked` flag tells Dart to run assertions and generally be more 
+The `--enable-asserts` flag tells Dart to run assertions and generally be more 
 fail-fast. It also makes the code run a few percent slower.
 
 #### Overnight fuzzy-test
@@ -225,7 +225,7 @@ If you're feeling especially paranoid (e.g. before a production release),
 you can run the fuzzy test in an infinite loop with the following Unix command:
 
 ```bash
-while pub run test -t long-running --run-skipped; do :; done
+while pub run --enable-asserts test -t long-running --run-skipped; do :; done
 ```
 
 The command will run forever unless a test fails or until you press `Ctrl-C`.
@@ -235,7 +235,17 @@ test suite several times in a row. Like this:
 
 ```bash
 for n in {1..10}; do echo "=== Run number ${n} ==="; \
-  pub run test --run-skipped; done
+  pub run --enable-asserts test --run-skipped; done
+```
+
+#### Sharded testing
+
+To run tests in parallel, you can use sharding:
+
+```bash
+$ pub run --enable-asserts test --total-shards 3 --shard-index 0 --run-skipped
+$ pub run --enable-asserts test --total-shards 3 --shard-index 1 --run-skipped
+$ pub run --enable-asserts test --total-shards 3 --shard-index 2 --run-skipped
 ```
 
 ### Playing on the command line
