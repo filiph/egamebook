@@ -13,7 +13,7 @@ HINT: The room with the trap door in the ceiling and the curious lock mechanism.
 POS: 26, 22
 
 FIRST_DESCRIPTION:
-A dark room without windows. A stone staircase leads up to a trap door in the ceiling.
+I come to a dark room without windows, at the very center of the floor. A stone staircase leads up to a trap door in the ceiling.
 
 A curious lock mechanism guards the trap door from being opened.
 

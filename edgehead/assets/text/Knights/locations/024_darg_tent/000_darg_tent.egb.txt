@@ -6,14 +6,15 @@ ROOM: $darg_tent
 POS: 33, 23
 
 FIRST_MAP_NAME: On Top of the Eastern Shaft
-FIRST_HINT: There is access to the outside of the Pyramid here. The walls close to the ancient door are painted red and decorated with human teeth and other signs of orc power.
+FIRST_HINT: There is access to the outside of the Pyramid here. The walls next to the ancient door are painted red and decorated with human teeth and other signs of orc power.
 
 MAP_NAME: Orc Leader's Tent
 HINT: A tent placed on top of the Eastern shaft, overlooking the bay.
 
-
 FIRST_DESCRIPTION:
-Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.
+This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.
+
+A richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.
 
 DESCRIPTION: $NONE
 
@@ -23,7 +24,7 @@ FIGHT_SITUATION:
 generateDargTentFight
 
 AFTER_MONSTERS_CLEARED:
-The fight is over. I look around and there are no more orcs. They probably didn't consider it necessary to post guards around this remote place.
+The fight is over. I look around, half expecting a company of orcs. But not a single one has come. They probably didn't consider it necessary to post guards around this remote place, and the wind has swept away the sound of battle.
 
 [[CODE]]
 c.markHappened(evKilledDarg);
@@ -47,7 +48,11 @@ RULE:
 c.hasHappened(evDargLeftCrowdsource)
 
 FIRST_DESCRIPTION:
-Tent outside, at the top of the elevator structure. Overlooking the bay. Darg, the leader of the orcs I first saw in the orcs' temple, is here.
+This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.
+
+A richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.
+
+As I consider that, I see a large figure through the flaps of the tent. It is Darg, the leader of the orcs I first saw in the orcs' temple.
 
 // No need to talk about Darg's weapon or appearance. If we see him here, that means we saw him in Crowdsource before.
 
@@ -73,7 +78,9 @@ c.hasHappened(evKilledDarg)
 !c.hasHappened(evDargLeftCrowdsource)
 
 FIRST_DESCRIPTION:
-Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.
+This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.
+
+A richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.
 
 VARIANT_UPDATE_DESCRIPTION:
 Darg won't be needing this tent anymore.

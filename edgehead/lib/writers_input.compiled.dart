@@ -1101,7 +1101,7 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A dark room without windows. A stone staircase leads up to a trap door in the ceiling.\n\nA curious lock mechanism guards the trap door from being opened.\n',
+      'I come to a dark room without windows, at the very center of the floor. A stone staircase leads up to a trap door in the ceiling.\n\nA curious lock mechanism guards the trap door from being opened.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -1203,7 +1203,7 @@ final Room dargTent = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.\n',
+          'This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.\n\nA richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -1223,7 +1223,7 @@ final Room dargTent = Room(
     firstMapName: 'On Top of the Eastern Shaft',
     hint: 'A tent placed on top of the Eastern shaft, overlooking the bay.',
     firstHint:
-        'There is access to the outside of the Pyramid here. The walls close to the ancient door are painted red and decorated with human teeth and other signs of orc power.',
+        'There is access to the outside of the Pyramid here. The walls next to the ancient door are painted red and decorated with human teeth and other signs of orc power.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -1231,7 +1231,7 @@ final Room dargTent = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The fight is over. I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          'The fight is over. I look around, half expecting a company of orcs. But not a single one has come. They probably didn\'t consider it necessary to post guards around this remote place, and the wind has swept away the sound of battle.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -1251,7 +1251,7 @@ final Room dargTentAfterDargArrived = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay. Darg, the leader of the orcs I first saw in the orcs\' temple, is here.\n\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          'This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.\n\nA richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.\n\nAs I consider that, I see a large figure through the flaps of the tent. It is Darg, the leader of the orcs I first saw in the orcs\' temple.\n\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -1290,7 +1290,7 @@ final Room dargTentAfterDargArrived = Room(
     firstMapName: 'On Top of the Eastern Shaft',
     hint: 'A tent placed on top of the Eastern shaft, overlooking the bay.',
     firstHint:
-        'There is access to the outside of the Pyramid here. The walls close to the ancient door are painted red and decorated with human teeth and other signs of orc power.',
+        'There is access to the outside of the Pyramid here. The walls next to the ancient door are painted red and decorated with human teeth and other signs of orc power.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -1298,7 +1298,7 @@ final Room dargTentAfterDargArrived = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The fight is over. I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          'The fight is over. I look around, half expecting a company of orcs. But not a single one has come. They probably didn\'t consider it necessary to post guards around this remote place, and the wind has swept away the sound of battle.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -1316,7 +1316,7 @@ final Room dargTentAfterDargKilled = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Tent outside, at the top of the elevator structure. Overlooking the bay. Some important orc must be stationed here.\n',
+          'This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.\n\nA richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -1352,7 +1352,7 @@ final Room dargTentAfterDargKilled = Room(
     firstMapName: 'On Top of the Eastern Shaft',
     hint: 'A tent placed on top of the Eastern shaft, overlooking the bay.',
     firstHint:
-        'There is access to the outside of the Pyramid here. The walls close to the ancient door are painted red and decorated with human teeth and other signs of orc power.',
+        'There is access to the outside of the Pyramid here. The walls next to the ancient door are painted red and decorated with human teeth and other signs of orc power.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -1360,7 +1360,7 @@ final Room dargTentAfterDargKilled = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'The fight is over. I look around and there are no more orcs. They probably didn\'t consider it necessary to post guards around this remote place.\n\n',
+          'The fight is over. I look around, half expecting a company of orcs. But not a single one has come. They probably didn\'t consider it necessary to post guards around this remote place, and the wind has swept away the sound of battle.\n\n',
           isRaw: true);
       c.markHappened(evKilledDarg);
 
@@ -1970,7 +1970,7 @@ final Room outlook = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'A hawkman is looking into the distance, looking bored. He sees me immediately, but doesn\'t seem to care.\n\n![Illustration of a man with a hawk\'s head, dressed in an ancient suit, and a sicle for a weapon.](hawkman.png)\n\nHe is wearing an ancient suit, miraculously preserved.\n',
+          'A small door opens to a platform overlooking the ruins of San Francisco. Cold wind hits me in the face, bringing with it tiny droplets of water.\n\nAt the other end of the platform, a solitary hawkman is looking into the distance. He probably saw me opening the door, but doesn\'t seem to care.\n\n![Illustration of a man with a hawk\'s head, dressed in an ancient suit, and a sicle for a weapon.](hawkman.png)\n\nHe is wearing an ancient suit, miraculously preserved.\n',
           isRaw: true);
     },
     (ActionContext c) {

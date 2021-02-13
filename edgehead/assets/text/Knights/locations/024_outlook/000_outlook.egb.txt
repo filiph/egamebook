@@ -12,7 +12,9 @@ MAP_NAME: Outlook
 HINT: A place for a sentry with excellent eyes.
 
 FIRST_DESCRIPTION:
-A hawkman is looking into the distance, looking bored. He sees me immediately, but doesn't seem to care.
+A small door opens to a platform overlooking the ruins of San Francisco. Cold wind hits me in the face, bringing with it tiny droplets of water.
+
+At the other end of the platform, a solitary hawkman is looking into the distance. He probably saw me opening the door, but doesn't seem to care.
 
 ![Illustration of a man with a hawk's head, dressed in an ancient suit, and a sicle for a weapon.](hawkman.png)
 
