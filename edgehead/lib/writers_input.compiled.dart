@@ -2016,8 +2016,12 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
+  final ifBlock_223242beb =
+      c.world.visitHistory.getLatestOnly(a).parentRoomName == "keep_servants"
+          ? '''Orc language can be heard from behind the walls.'''
+          : '''''';
   s.add(
-      'A huge, dark pit. The bottom is unseen, in complete darkness.\n\nOrc language is heard from behind the walls.\n\n',
+      'A huge, dark pit. The bottom is unseen, in complete darkness.\n\n${ifBlock_223242beb}\n\n',
       isRaw: true);
   c.learn(OrcsFacts.inPyramid);
 }, (ActionContext c) {
@@ -2313,7 +2317,7 @@ class CrowdsourceAttack extends RoamingAction {
     final weSubstitutionCapitalized =
         getWeOrI(a, sim, originalWorld, capitalized: true);
     s.add(
-        '${weSubstitutionCapitalized} step from behind the columns and approach the two orcs.\n\n"Humans?" the shaman says. "Here?"\n\n"Looks like a child," Darg says, readying his battle axe. "Must have found a crawlspace to get here."\n\nThe shaman readies the ceremonial dagger from her side and takes position next to Darg. "Let\'s kill together, Darg. Like in Oak Land so many moons ago."\n\nDarg grins.\n\n',
+        '${weSubstitutionCapitalized} step from behind the pillars and approach the two orcs.\n\n"Humans?" the shaman says. "Here?"\n\n"Looks like a child," Darg says, readying his battle axe. "Must have found a crawlspace to get here."\n\nThe shaman readies the ceremonial dagger from her side and takes position next to Darg. "Let\'s kill together, Darg. Like in Oak Land so many moons ago."\n\nDarg grins.\n\n',
         isRaw: true);
     c.startOptionalFight();
 
@@ -2432,7 +2436,7 @@ final Room crowdsource = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of columns provide good opportunities to hide.\n\nI can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          'This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of pillars provide good opportunities to hide.\n\nI can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -2451,7 +2455,7 @@ final Room crowdsource = Room(
     mapName: 'Orcrowd\'s Temple',
     firstMapName: 'Religious Place',
     hint:
-        'A temple with no windows, lit by torches. The darkness and the rows of columns provide good opportunities to hide.',
+        'A temple with no windows, lit by torches. The darkness and the rows of pillars provide good opportunities to hide.',
     firstHint: 'Orc symbols indicate a temple, a sacrificial place, or both.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -2480,7 +2484,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of columns provide good opportunities to hide.\n\nI can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
+          'This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of pillars provide good opportunities to hide.\n\nI can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.\n\nDarg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.\n\n![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)\n\n${weSubstitutionCapitalized} stay hidden.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -2515,7 +2519,7 @@ final Room crowdsourceAfterOrcsLeft = Room(
     mapName: 'Orcrowd\'s Temple',
     firstMapName: 'Religious Place',
     hint:
-        'A temple with no windows, lit by torches. The darkness and the rows of columns provide good opportunities to hide.',
+        'A temple with no windows, lit by torches. The darkness and the rows of pillars provide good opportunities to hide.',
     firstHint: 'Orc symbols indicate a temple, a sacrificial place, or both.',
     afterMonstersCleared: (ActionContext c) {
       final WorldState originalWorld = c.world;

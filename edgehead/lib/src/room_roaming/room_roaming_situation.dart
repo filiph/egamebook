@@ -161,14 +161,7 @@ abstract class RoomRoamingSituation extends Object
     // Make a copy of the context after the relocation has been applied,
     // so that describers below can depend on the player and their entourage
     // to already be where they're going.
-    final afterMoveContext = ActionContext(
-        context.currentAction,
-        w.getActorById(actor.id),
-        context.simulation,
-        w.build(),
-        w,
-        context.outputStoryline,
-        context.successChance);
+    final afterMoveContext = ActionContext.updatedFrom(context);
 
     if (!hasVisitedAnyVariant) {
       // The very first time here.

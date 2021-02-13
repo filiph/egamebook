@@ -11,10 +11,10 @@ FIRST_MAP_NAME: Religious Place
 FIRST_HINT: Orc symbols indicate a temple, a sacrificial place, or both.
 
 MAP_NAME: Orcrowd's Temple
-HINT: A temple with no windows, lit by torches. The darkness and the rows of columns provide good opportunities to hide.
+HINT: A temple with no windows, lit by torches. The darkness and the rows of pillars provide good opportunities to hide.
 
 FIRST_DESCRIPTION:
-This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of columns provide good opportunities to hide.
+This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of pillars provide good opportunities to hide.
 
 I can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.
 
@@ -140,7 +140,7 @@ COMMAND: Orcs >> Attack
 IS_IMMEDIATE: $TRUE
 
 COMPLETE_SUCCESS_DESCRIPTION:
-[We] step from behind the columns and approach the two orcs.
+[We] step from behind the pillars and approach the two orcs.
 
 "Humans?" the shaman says. "Here?"
 
