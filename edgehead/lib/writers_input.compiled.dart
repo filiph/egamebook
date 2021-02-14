@@ -5851,6 +5851,129 @@ final askOracleAboutKeepInk = InkAst([
     c.learn(LadyHopeFacts.ladyHopeName);
   }),
 ]);
+final oracleGiveNorthSkullInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Oracle sees the device and immediately starts giggling with joy. "Well that is just incredible," she says. "Such an exquisite piece."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She takes the skull gingerly in her hands and starts turning it around, examining it from all sides. "I will need to de-activate it, of course," she says.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'There is a rustle of feathers and Corax lands on Oracle\'s shoulder. He moves his head to point his right eye at the device. "What, you don\'t want to _invite_ the goblins here?"\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Did you know, Corax," she says, "that sarcasm is the lowest form of wit, right?"\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'The bird takes off again, and lands on a table. "That is _fascinating,"_ he says.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
+    s.add(
+        'Oracle smiles and nods at me. "Thank you, ${youngSirSubstitution}. You have provided me with a rare opportunity to study the enemy."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.removeItemFromPlayer(northSkullId);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "What enemy?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She points above. "Big O. I am doubtful the goblins or the orcs are clever enough to build a device like this. This is not ancient technology, but it is certainly _some_ technology. Or magic. Or both."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "How will you study it?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"How do you study anything," she says. "You take it apart."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Is it that rare?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"I have certainly never seen anything like this. The device seems to weld _some_ kind of technology with _some_ kind of magic. Combining two fields like that: such things are always powerful."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+]);
 final talkToOracleDeathlessInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -5909,7 +6032,18 @@ final talkToOracleDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"There\'s a prophesy. A man with a dog\'s head will come and save this place. The Pyramid was never an easy place to live in. Even before the Orcs came, death and violence was common."\n',
+        '"There\'s an old ditty," Oracle says. "A head of a dog, a body of man, a better age for all began."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She glances out the window, at the gray and the green. "The Pyramid was never an easy place," she says. "Never very inviting. Even before the Orcs came, death and violence was common. The Knights have been stationed here for generations, but even a force such as that cannot fully prevent peril in a place like San Francisco."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -5929,7 +6063,7 @@ final talkToOracleDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"The Knights have been stationed here for generations, but even a force such as that cannot fully prevent peril in a place like San Francisco. The woods have been always crawling with vile creatures. The power of the Pyramid has always attracted the corrupt and the evil. I think the villagers and the farmers clinged to this tale. It gives them hope."\n',
+        'Oracle extends her arm, as if to touch the forest below us. "The woods have been always crawling with vile creatures. The power of the Pyramid has always attracted the corrupt and the wicked. I think the villagers and the farmers clinged to this tale. It gives them hope."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -5940,7 +6074,7 @@ final talkToOracleDogheadInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"Now, with the Orcs and Big O and goblins, the popularity of the tale of the Doghead is only getting stronger."\n',
+        'She turns to me. "Now, with the Orcs and Big O and goblins, the demand for such a tale is only getting stronger. That little rhyme about _a_ _head_ _of_ _a_ _dog,_ _a_ _body_ _of_ _man,_ it\'s on everyone\'s mind."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -6522,9 +6656,10 @@ class OracleGiveNorthSkull extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add('Oracle is very thankful.\n\n\n', isRaw: true);
-    c.removeItemFromPlayer(northSkullId);
-
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "oracle_give_north_skull_ink",
+    ));
     return '${a.name} successfully performs OracleGiveNorthSkull';
   }
 
@@ -19626,6 +19761,7 @@ final allInks = <String, InkAst>{
   'reservoir_water_examine_ink': reservoirWaterExamineInk,
   'cockroach_cake_take_ink': cockroachCakeTakeInk,
   'ask_oracle_about_keep_ink': askOracleAboutKeepInk,
+  'oracle_give_north_skull_ink': oracleGiveNorthSkullInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
   'talk_to_oracle_doghead_ink': talkToOracleDogheadInk,
   'talk_to_oracle_dragon_egg_ink': talkToOracleDragonEggInk,
