@@ -324,7 +324,7 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
         .hasHappened;
   }
 
-  /// Returns `true` if player currently is in a room with [roomName],
+  /// Returns `true` if player currently is in [roomName],
   /// or a variant of that room.
   bool inRoomParent(String roomName) {
     final parentRoom = simulation.getRoomParent(playerRoom);

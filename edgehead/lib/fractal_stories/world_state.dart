@@ -237,8 +237,27 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   /// been created yet. This happens when the actor is yet to be
   /// built with a fight situation generator, for example. Since this function
   /// checks [customHistory] for [CustomEvent.actorDeath] events, it's safe
-  /// to use it even for NPCs that haven't yet been generated.
+  /// to use it even for NPCs that haven't yet been generated. Same goes for
+  /// actors that have been removed from play (because they are dead
+  /// and their corpse is lost, for example).
   bool wasKilled(int actorId) {
+    // First, check if the the actor exists in [actors] and their hitpoints.
+    final candidates =
+        actors.where((actor) => actor.id == actorId).toList(growable: false);
+    assert(candidates.length <= 1,
+        'Too many actors with the same id: $candidates');
+    if (candidates.length == 1 && candidates.single.isActive) {
+      if (candidates.single.isAnimated) {
+        // The actor is fine.
+        return false;
+      } else {
+        // The actor is dead (not animated).
+        return true;
+      }
+    }
+
+    // We also check [customHistory] in case the actor isn't in the [actors] set
+    // but we have a record of their demise.
     return customHistory
         .query(name: CustomEvent.actorDeath, actorId: actorId)
         .hasHappened;
