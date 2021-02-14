@@ -14,8 +14,6 @@ Going to the end of the shaft, I can see [[IF !c.hasHappened(evKarlGuardsKilled)
 
 [[IF !c.hasHappened(evKarlKilled)]]A guttural breathing sounds come from beyond the gate.[[ENDIF]]
 
-// TODO: if Karl still here and alive, hear a guttural breating "just beyond the gate"
-
 DESCRIPTION: $NONE
 
 

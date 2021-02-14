@@ -26,17 +26,8 @@ A large room taking up two floors. Bunk beds, and a dining area. [We] stay hidde
   There are orcs nearby that would surely hear me. I hold my breath and curl beneath the torch. Pain. Suffocation. Fear.
 
   After ten long heartbeats, I am able to swallow and the urge subsides. I wait a few more moments before breathing again. After that, I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.
-[[ENDRULE]]
 
-[[RULE]]
-  c.playerHasWoodenFoot
-[[THEN]]
-
-
-  // XXX START HERE - similar as above, but with the wooden leg making a sound
-
-
-  I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.
+  I almost cry with happiness.
 [[ENDRULE]]
 
 [[RULE]]
@@ -45,8 +36,6 @@ A large room taking up two floors. Bunk beds, and a dining area. [We] stay hidde
   I find a barbecued bat on a stool out of sight.
 [[ENDRULE]]
 [[ENDRULESET]]
-
-
 
 
 DESCRIPTION: $NONE

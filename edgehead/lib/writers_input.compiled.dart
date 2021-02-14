@@ -2653,7 +2653,7 @@ final Room barracks = Room('barracks', (ActionContext c) {
       'A large room taking up two floors. Bunk beds, and a dining area. ${weSubstitutionCapitalized} stay hidden.\n\n',
       isRaw: true);
   Ruleset(
-      Rule(594936585, 1, false, (ApplicabilityContext c) {
+      Rule(289329998, 1, false, (ApplicabilityContext c) {
         final WorldState w = c.world;
         final Simulation sim = c.simulation;
         final Actor a = c.actor;
@@ -2665,22 +2665,7 @@ final Room barracks = Room('barracks', (ActionContext c) {
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
         s.add(
-            ' As I duck to walk beneath a snuffed torch on the wall, I have to stop. My lungs suddenly feel as if on fire. I have a strong urge to cough. My asthma.\n\n There are orcs nearby that would surely hear me. I hold my breath and curl beneath the torch. Pain. Suffocation. Fear.\n\n After ten long heartbeats, I am able to swallow and the urge subsides. I wait a few more moments before breathing again. After that, I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.\n',
-            isRaw: true);
-      }),
-      Rule(600319710, 1, false, (ApplicabilityContext c) {
-        final WorldState w = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        return c.playerHasWoodenFoot;
-      }, (ActionContext c) {
-        final WorldState originalWorld = c.world;
-        final Simulation sim = c.simulation;
-        final Actor a = c.actor;
-        final WorldStateBuilder w = c.outputWorld;
-        final Storyline s = c.outputStoryline;
-        s.add(
-            '\n\n\n\n I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.\n',
+            ' As I duck to walk beneath a snuffed torch on the wall, I have to stop. My lungs suddenly feel as if on fire. I have a strong urge to cough. My asthma.\n\n There are orcs nearby that would surely hear me. I hold my breath and curl beneath the torch. Pain. Suffocation. Fear.\n\n After ten long heartbeats, I am able to swallow and the urge subsides. I wait a few more moments before breathing again. After that, I quickly scuttle to a more remote area, where I find a barbecued bat on a stool out of sight.\n\n I almost cry with happiness.\n',
             isRaw: true);
       }),
       Rule(571428451, 0, false, (ApplicabilityContext c) {
