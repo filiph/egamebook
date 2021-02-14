@@ -81,7 +81,7 @@ enum SarnFacts {
 }
 
 enum SixtyFiversFacts {
-  shieldSeen,
+  numberSeen,
   significance,
 }
 

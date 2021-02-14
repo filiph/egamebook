@@ -8,18 +8,18 @@ ROOM: $battlefield
 
 POS: 28, 54
 
-FIRST_MAP_NAME: Battlefield Floor
+FIRST_MAP_NAME: Sixteenth Floor
 FIRST_HINT: The frontier between the humans at the bottom and the orcs at the top. Currently held and guarded by the orcs.
 
 MAP_NAME: Battlefield Floor
-HINT: A floor devoid of walls.
+HINT: The sixteenth floor, devoid of walls.
 
 WHERE: among the columns
 
 FIRST_DESCRIPTION:
 It's very different from the other floors. There are no walls, and from the staircase opening one can see all the surviving windows. About a third of the floor has collapsed into the jungle below.
 
-There are rows of concrete pillars and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can't quite place.
+There are rows of concrete pillars and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can't quite place, not entirely unpleasant.
 
 As soon as [we] climb the last stair and enter the floor proper, two warriors step out from behind the pillars. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.
 
@@ -35,7 +35,7 @@ The two attack.
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
-c.learn(SixtyFiversFacts.shieldSeen);
+c.learn(SixtyFiversFacts.numberSeen);
 [[ENDCODE]]
 
 
@@ -47,9 +47,9 @@ DESCRIPTION: $NONE
 AFTER_MONSTERS_CLEARED:
 The fight is over. [We] stand in the middle of this large room and I finally understand what that strange smell is. It is old, dried blood.
 
-There is no old corpse here. The orcs must have moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
+There are no old corpses here, but there must have been many. This was a battlefield. The orcs must have moved the bodies elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
 
-A glorious battle this was, I'm sure. It became a scab.
+A glorious battle this was, I'm sure. It became an enormous scab.
 
 Whatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.
 

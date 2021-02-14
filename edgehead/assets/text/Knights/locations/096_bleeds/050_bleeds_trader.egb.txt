@@ -165,7 +165,7 @@ w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
 "The hell you can! You're a trader, Leroy! You're no fighter." Leroy's father is shaking. When he remembers that I'm there with them, he apologizes, then turns back to Leroy. "Son, I forget that you are a grown man now. But... it is my wish that you don't go."
 
 NOTES:
-// TODO: Put the trader vs son conflict into context. 
+// Optional: Put the trader vs son conflict into context. 
 //       Trader talk is to the point. You can even buy stuff.
 //       You can talk to Leroy without even talking to his father.
 

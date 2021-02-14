@@ -164,7 +164,7 @@ A goblin, bloodlust in his eyes, emerges from his hiding place to stand a few pa
         ..pose = Pose.onGround
         ..initiative = 0
         ..inventory.add(tamarasDagger));
-    // TODO: Add the cut to Tamara's anatomy
+    // Optional: Add the cut to Tamara's anatomy
     // Make goblin also lose initiative.
     w.updateActorById(firstGoblinId, (b) => b.initiative = 10);
     // Give branch to player.

@@ -30,7 +30,7 @@ My hands are shaking and I put them on the sides of my neck to stop the shudder.
 
 But this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.
 
-// TODO: let Tamara hang around (camp?), or even follow Aren to The Bleeds. Move the content below to separate actions.
+// Optional: let Tamara hang around (camp?), or even follow Aren to The Bleeds. Move the content below to separate actions.
 
 The fight is over.
 

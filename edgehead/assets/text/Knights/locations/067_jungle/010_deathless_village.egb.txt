@@ -82,10 +82,10 @@ c.removeItemFromPlayer(lairOfGodStarId);
 
 NOTES:
 
-TODO: Make it harder to get here. Add at least one "twisty little passages" area in between jungle entrance and here. Or just "jungle floor", which is the place where you can meet lizard man
+Optional: Make it harder to get here. Add at least one "twisty little passages" area in between jungle entrance and here. Or just "jungle floor", which is the place where you can meet lizard man
 
-TODO: Village >> Observe - shows a bit more info, plus mentions a sarcofagus for a dead marine.
+Optional: Village >> Observe - shows a bit more info, plus mentions a sarcofagus for a dead marine.
 
-TODO: raising a well-preserved marine _and then putting him to rest_ should also trigger evDeathlessRespectGained / or maybe, we can't raise the well-presrved marine (too old) but instead we raise an insect, which will delight Argo.
+Optional: raising a well-preserved marine _and then putting him to rest_ should also trigger evDeathlessRespectGained / or maybe, we can't raise the well-presrved marine (too old) but instead we raise an insect, which will delight Argo.
 
-TODO: killing the lizardman when he's in the Jungle should also trigger evDeathlessRespectGained
+Optional: killing the lizardman when he's in the Jungle should also trigger evDeathlessRespectGained - we should have a variant here just after lizardman is killed near the pond - for that, we need to also modify the end of the "give star to deathless action" and also "dragon_egg_room"

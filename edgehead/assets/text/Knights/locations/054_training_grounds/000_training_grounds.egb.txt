@@ -13,7 +13,13 @@ MAP_NAME: Training Grounds
 HINT: A small army of orcs, goblins and kobolds, all training for war.
 
 FIRST_DESCRIPTION:
-A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. Over a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.
+A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. The rooms and corridors are almost bare except for wooden poles, crude targets, and the occassional number 65 written on the wall.
+
+[[CODE]]
+c.learn(SixtyFiversFacts.numberSeen);
+[[ENDCODE]]
+
+Over a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.
 
 They are so absorbed in the training that [we] have no trouble staying unseen.
 

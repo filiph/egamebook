@@ -17,7 +17,7 @@ DESCRIPTION: $NONE
 
 NOTES:
 
-- TODO: connect to the elevator shaft
+- Optional: connect to the elevator shaft
 
 - Maybe only allow visiting this place after some time.
 - Should be dangerous.

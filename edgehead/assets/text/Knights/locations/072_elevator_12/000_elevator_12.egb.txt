@@ -1,5 +1,5 @@
 APPROACH: $elevator_12 FROM $knights_hq_main
-// TODO: PREREQUISITES - only after someone tells me
+// Optional: PREREQUISITES - only after someone tells me
 
 APPROACH: $elevator_12 FROM $elevator_28
 DESCRIPTION: [We] climb down using an ancient rusty ladder.
@@ -24,4 +24,4 @@ DESCRIPTION: $NONE
 
 NOTES:
 
-- TODO: Make this hard to reach at first. The elevator shaft can also be accessed through the Floating Point. This access point is known to Oracle.
+- Optional: Make this hard to reach at first. The elevator shaft can also be accessed through the Floating Point. This access point is known to Oracle.

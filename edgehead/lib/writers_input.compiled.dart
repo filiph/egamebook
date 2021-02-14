@@ -5535,7 +5535,12 @@ final Room trainingGrounds = Room('training_grounds', (ActionContext c) {
   final Storyline s = c.outputStoryline;
   final weSubstitution = getWeOrI(a, sim, originalWorld, capitalized: false);
   s.add(
-      'A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. Over a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.\n\nThey are so absorbed in the training that ${weSubstitution} have no trouble staying unseen.\n',
+      'A small army of orcs, goblins and kobolds, all training for war. Three floors are dedicated to weapons sparring and exercise. The rooms and corridors are almost bare except for wooden poles, crude targets, and the occassional number 65 written on the wall.\n\n',
+      isRaw: true);
+  c.learn(SixtyFiversFacts.numberSeen);
+
+  s.add(
+      '\nOver a hundred vile creatures grunt and sweat, striving in a singular focus to become better. Better at killing.\n\nThey are so absorbed in the training that ${weSubstitution} have no trouble staying unseen.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -5622,10 +5627,10 @@ final Room battlefield = Room(
       final weSubstitution =
           getWeOrI(a, sim, originalWorld, capitalized: false);
       s.add(
-          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the surviving windows. About a third of the floor has collapsed into the jungle below.\n\nThere are rows of concrete pillars and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the pillars. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge machete and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc says with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalp."\n\nThe two attack.\n\n',
+          'It\'s very different from the other floors. There are no walls, and from the staircase opening one can see all the surviving windows. About a third of the floor has collapsed into the jungle below.\n\nThere are rows of concrete pillars and two larger structures housing the staircases and the elevator, but this is the closest the Pyramid has to an open field. There is a strange smell here that I can\'t quite place, not entirely unpleasant.\n\nAs soon as ${weSubstitution} climb the last stair and enter the floor proper, two warriors step out from behind the pillars. One of them is a huge orc with a fittingly large machete, and an ancient shield. The other is a goblin, wielding a bone hatchet.\n\n![Illustration of an orc and a goblin. The orc is wielding a huge machete and a shield with "Speed Limit 65" on it. The goblin is wielding a bone hatchet.](65ers.png)\n\nThe goblin\'s face contorts with hatred as soon as he sees me, but the orc just laughs.\n\n"Big mistake," the orc says with mock sadness. "Big mistake for you. This is no longer a place for human swine."\n\n"Big mistake for him," the goblin agrees. "But good news for us. Darg rewards human scalp."\n\nThe two attack.\n\n',
           isRaw: true);
       c.learn(OrcsFacts.inPyramid);
-      c.learn(SixtyFiversFacts.shieldSeen);
+      c.learn(SixtyFiversFacts.numberSeen);
     },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
@@ -5640,8 +5645,8 @@ final Room battlefield = Room(
     positionX: 28,
     positionY: 54,
     mapName: 'Battlefield Floor',
-    firstMapName: 'Battlefield Floor',
-    hint: 'A floor devoid of walls.',
+    firstMapName: 'Sixteenth Floor',
+    hint: 'The sixteenth floor, devoid of walls.',
     firstHint:
         'The frontier between the humans at the bottom and the orcs at the top. Currently held and guarded by the orcs.',
     afterMonstersCleared: (ActionContext c) {
@@ -5653,7 +5658,7 @@ final Room battlefield = Room(
       final weSubstitutionCapitalized =
           getWeOrI(a, sim, originalWorld, capitalized: true);
       s.add(
-          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and I finally understand what that strange smell is. It is old, dried blood.\n\nThere is no old corpse here. The orcs must have moved them elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became a scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nSearching through the orc\'s posession, I find a loaf of stale bread.\n\n',
+          'The fight is over. ${weSubstitutionCapitalized} stand in the middle of this large room and I finally understand what that strange smell is. It is old, dried blood.\n\nThere are no old corpses here, but there must have been many. This was a battlefield. The orcs must have moved the bodies elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.\n\nA glorious battle this was, I\'m sure. It became an enormous scab.\n\nWhatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.\n\nSearching through the orc\'s posession, I find a loaf of stale bread.\n\n',
           isRaw: true);
       c.giveNewItemToPlayer(staleBread);
     },
@@ -5982,7 +5987,18 @@ final talkToOracleDeathlessInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"They are a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
+        '"A cult," Corax says and does a little jump with his raven feet for emphasis.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Well," Oracle says, "they _are_ a cult. They worship the ancients, and all artifacts from them. They\'ve been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -5994,35 +6010,47 @@ final talkToOracleDeathlessInk = InkAst([
     final Storyline s = c.outputStoryline;
     c.learn(OrcsFacts.inPyramid);
   }),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '"They used to inhabit a lot more of the Pyramid. These days, they live in a village in the part known as the Jungle. It\'s the big hole in the building on the west side, overgrown with vegetation."\n',
-        isRaw: true);
-  }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    c.learn(DeathlessFacts.location);
-  }),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    s.add(
-        '"The Deathless are not dangerous. I think they want to live forever but... who doesn\'t."\n',
-        isRaw: true);
-  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Where are they?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"They used to inhabit a lot more of the Pyramid," she says. "These days, they live in a village in the part known as the Jungle. It\'s the big hole in the building on the west side, overgrown with vegetation."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(DeathlessFacts.location);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Are they dangerous?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"They are not," she says. "I think they want to live forever but... who doesn\'t."\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
 ]);
 final talkToOracleDogheadInk = InkAst([
   InkParagraphNode((ActionContext c) {
@@ -6112,21 +6140,22 @@ final talkToOracleDragonEggInk = InkAst([
               '"The Deathless! They have had it for generations. It\'s ancient, after all. But in a remarkably good shape, I\'ll tell you. Something about this place just makes ancient things last."\n',
               isRaw: true);
         }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          c.learn(DeathlessFacts.somethingCalledDeathless);
+          c.learn(DragonEggFacts.deathlessHaveIt);
+        }),
       ],
     ),
   ]),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-  InkParagraphNode((ActionContext c) {
-    final WorldState originalWorld = c.world;
-    final Simulation sim = c.simulation;
-    final Actor a = c.actor;
-    final WorldStateBuilder w = c.outputWorld;
-    final Storyline s = c.outputStoryline;
-    c.learn(DragonEggFacts.deathlessHaveIt);
-  }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "Why are Deathless the 'wrong hands' for it?" """.trim(),
+      command: r""" "Why are Deathless the ‘wrong hands’ for it?" """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -6134,7 +6163,9 @@ final talkToOracleDragonEggInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          s.add('"They won\'t use it. It\'s a relic for them."\n', isRaw: true);
+          s.add(
+              '"They won\'t use it," Oracle says. "It\'s a relic for them."\n',
+              isRaw: true);
         }),
       ],
     ),
@@ -6397,7 +6428,78 @@ final talkToOracleOrcsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"There are still things I\'d like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."\n',
+        '"They have completely taken over the upside," she says. "After the sixteenth floor, it\'s all orc territory."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Corax croaks. Oracle passes me to lean on a table, and I catch a whiff of the smell of coffee.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Is that coffee?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'She smiles. "Yes, yes it is. A rare luxury from the south. Something the ancients drank in large cups. Guzzled, even. Gulped."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Murdered," Corax says helpfully.\n', isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Anyway," she says, "it helps me think. Let\'s see. The orcs?\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Please continue." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Oh, I was finished," she says. "Well.\n', isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'There are still things I\'d like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -6410,6 +6512,16 @@ final talkToOracleOrcsInk = InkAst([
     c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
     c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
     c.learn(DeathlessFacts.somethingCalledDeathless);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'She sighs. "But it was taken over by the orcs, like everything else. And they have some creature there, in the shrine. Something big. I don\'t think the Lair of God looks anything like I remember these days."\n',
+        isRaw: true);
   }),
 ]);
 final talkToOracleQuake1Ink = InkAst([
@@ -6444,7 +6556,7 @@ final talkToOracleSixtyFiverInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" "Why is 65 evil?" """.trim(),
+      command: r""" "What makes 65 evil?" """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -6453,8 +6565,28 @@ final talkToOracleSixtyFiverInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              '"You know the two forces, four directions, eight gods, and so on. All the good things, all the true things, come in perfect numbers. Sixty four is one of them. Sixty four callings. Sixty five is a spit in the face of truth. It\'s like taking a symbol of Tengri, but putting it upside down. We don\'t know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason." Oracle runs her fingers through her hair.\n',
+              '"You know the two forces, four directions, eight gods, and so on? All the good things, all the true things, come in perfect numbers. Sixty four is one of them. Sixty four callings."\n',
               isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Oracle runs her fingers through her hair. "Sixty five is a spit in the face of truth. It\'s like taking a symbol of Tengri, but putting it upside down. We don\'t know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason."\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"Of _course,"_ Corax says.\n', isRaw: true);
         }),
       ],
     ),
@@ -6471,7 +6603,7 @@ final talkToOracleSixtyFiverInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"I think the orcs love it. It gives them a way to say: Look! The ancients had evil in them. The culture you so revere is a failed, evil empire. Something like that."\n',
+        '"I think the orcs love it," Oracle says. "It gives them a way to say: Look! The ancients had evil in them. The culture you so revere is a failed, evil empire. Something like that."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -7061,7 +7193,8 @@ class TalkToOracleOrcs extends RoamingAction {
     }
     if (!(!c.hasHappened(evOrcOffensive) &&
         c.knows(OrcsFacts.inPyramid) &&
-        w.actionHasBeenPerformed("talk_to_oracle_greetings"))) {
+        w.actionHasBeenPerformed("talk_to_oracle_greetings") &&
+        !c.playerHasVisited('gods_lair', includeVariants: true))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -7193,7 +7326,7 @@ class TalkToOracleSixtyFiver extends RoamingAction {
 
   @override
   List<String> get commandPathTemplate =>
-      ['Oracle', 'Talk', '"What\'s the significance of \'65\'?"'];
+      ['Oracle', 'Talk', '"What\'s the significance of ‘65’?"'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -7202,7 +7335,7 @@ class TalkToOracleSixtyFiver extends RoamingAction {
     }
     if (!(!c.hasHappened(evOrcOffensive) &&
         w.actionHasBeenPerformed("talk_to_oracle_greetings") &&
-        c.knows(SixtyFiversFacts.shieldSeen) &&
+        c.knows(SixtyFiversFacts.numberSeen) &&
         !c.knows(SixtyFiversFacts.significance))) {
       return false;
     }
@@ -13683,8 +13816,11 @@ class TalkToKatAboutBrother extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_528a0209b = c.playerHasBlackHair ? '''black''' : '''''';
+    final ifBlock_bbc234dd = c.playerHasBrownHair ? '''brown''' : '''''';
+    final ifBlock_7c7d9c11 = c.playerHasBlondHair ? '''blond''' : '''''';
     s.add(
-        '"Sarn of Falling Rock," she repeats. "I don\'t think I remember that name."\n\nShe looks closer at me. "But those eyes. They look familiar." She nods. "Yes, I think I\'ve seen those eyes around here, though I didn\'t know their name."\n\n',
+        '"Sarn of Falling Rock," she repeats. "I don\'t think I remember that name."\n\nShe looks closer at me. "But those eyes. They look familiar." She nods. "And the ${ifBlock_528a0209b}${ifBlock_bbc234dd}${ifBlock_7c7d9c11} hair. Yes, I think I\'ve seen your brother around here. But that\'s as much as I can tell you, unfortunately."\n\n',
         isRaw: true);
     c.learn(SarnFacts.wasHere);
 
@@ -14221,6 +14357,35 @@ final talkToMiguelAboutDragonEggInk = InkAst([
         isRaw: true);
   }),
 ]);
+final talkToMiguelAboutKilledLadyInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Miguel nods with respect. "So," he smirks, "you killed Hope?"\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "She was already dead." """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
+    s.add(
+        '"Fair point. You have more in you than meets the eye, ${youngSirSubstitution}."\n',
+        isRaw: true);
+  }),
+]);
 final talkToMiguelAboutLadyInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -14513,6 +14678,78 @@ class TalkToMiguelAboutDragonEgg extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     return '${a.name} fails to perform TalkToMiguelAboutDragonEgg';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
+}
+
+class TalkToMiguelAboutKilledLady extends RoamingAction {
+  @override
+  final String name = 'talk_to_miguel_about_killed_lady';
+
+  static final TalkToMiguelAboutKilledLady singleton =
+      TalkToMiguelAboutKilledLady();
+
+  @override
+  List<String> get commandPathTemplate =>
+      ['Miguel, the guardsman', 'Talk', '"I took care of Lady Hope."'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('pyramid_entrance') != true) {
+      return false;
+    }
+    if (!(c.inRoomWith(miguelId) &&
+        w.actionHasBeenPerformed("talk_to_miguel_greetings") &&
+        c.knows(LadyHopeFacts.ladyHopeName) &&
+        c.hasHappened(evKilledHope))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "talk_to_miguel_about_killed_lady_ink",
+    ));
+    return '${a.name} successfully performs TalkToMiguelAboutKilledLady';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform TalkToMiguelAboutKilledLady';
   }
 
   @override
@@ -19707,6 +19944,7 @@ final allActions = <RoamingAction>[
   TalkToMiguelAboutBrother.singleton,
   TalkToMiguelAboutDevling.singleton,
   TalkToMiguelAboutDragonEgg.singleton,
+  TalkToMiguelAboutKilledLady.singleton,
   TalkToMiguelAboutLady.singleton,
   TalkToMiguelGreetings.singleton,
   TalkToKatAfterOrcOffensive.singleton,
@@ -19801,6 +20039,7 @@ final allInks = <String, InkAst>{
   'talk_to_miguel_about_brother_ink': talkToMiguelAboutBrotherInk,
   'talk_to_miguel_about_devling_ink': talkToMiguelAboutDevlingInk,
   'talk_to_miguel_about_dragon_egg_ink': talkToMiguelAboutDragonEggInk,
+  'talk_to_miguel_about_killed_lady_ink': talkToMiguelAboutKilledLadyInk,
   'talk_to_miguel_about_lady_ink': talkToMiguelAboutLadyInk,
   'talk_to_miguel_greetings_ink': talkToMiguelGreetingsInk,
   'talk_to_kat_after_orc_offensive_ink': talkToKatAfterOrcOffensiveInk,

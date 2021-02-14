@@ -250,6 +250,12 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return query.latest.data as String;
   }
 
+  bool get playerHasBlondHair => playerHairColor == "blond";
+
+  bool get playerHasBrownHair => playerHairColor == "brown";
+
+  bool get playerHasBlackHair => playerHairColor == "black";
+
   bool get playerHasDebt {
     final query =
         world.customHistory.query(name: ActionContextHelpers._playerHasDebt);

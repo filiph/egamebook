@@ -44,8 +44,7 @@ w.actionHasBeenPerformed("talk_to_kat_greetings")
 COMPLETE_SUCCESS_DESCRIPTION:
 "Sarn of Falling Rock," she repeats. "I don't think I remember that name."
 
-// TODO: mentioned the color of the eyes, as set up in the beginning
-She looks closer at me. "But those eyes. They look familiar." She nods. "Yes, I think I've seen those eyes around here, though I didn't know their name."
+She looks closer at me. "But those eyes. They look familiar." She nods. "And the [[IF c.playerHasBlackHair]]black[[ENDIF]][[IF c.playerHasBrownHair]]brown[[ENDIF]][[IF c.playerHasBlondHair]]blond[[ENDIF]] hair. Yes, I think I've seen your brother around here. But that's as much as I can tell you, unfortunately."
 
 [[CODE]]
 c.learn(SarnFacts.wasHere);

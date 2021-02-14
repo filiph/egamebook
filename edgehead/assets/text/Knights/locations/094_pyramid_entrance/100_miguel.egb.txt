@@ -158,3 +158,27 @@ c.learn(LadyHopeFacts.ladyHopeName);
 * "Sweet katana?"
 
   He smiles. "Didn't you notice? She wields the sword like she's always ready to slash someone in half. Beautiful weapon."
+
+
+// ---
+ACTION: $talk_to_miguel_about_killed_lady
+COMMAND: Miguel, the guardsman >> Talk >> "I took care of Lady Hope."
+FOR_LOCATION: $pyramid_entrance
+
+PREREQUISITES:
+c.inRoomWith(miguelId)
+&&
+w.actionHasBeenPerformed("talk_to_miguel_greetings")
+&&
+c.knows(LadyHopeFacts.ladyHopeName)
+&&
+c.hasHappened(evKilledHope)
+
+INK:
+Miguel nods with respect. "So," he smirks, "you killed Hope?"
+
+* "She was already dead."
+
+-
+
+"Fair point. You have more in you than meets the eye, [young sir]."

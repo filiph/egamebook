@@ -208,17 +208,38 @@ PREREQUISITES:
 c.knows(OrcsFacts.inPyramid)
 &&
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
+&&
+// Optional: make a variant of this action for when Aren already cleared the Lair of God
+!c.playerHasVisited('gods_lair', includeVariants: true)
 
 INK:
-// TODO: rewrite this draft to readable prose
-// TODO: use other prose if Aren already cleared the Lair of God
-"There are still things I'd like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star. But it was taken over by the orcs, and they have some creature there. Something big."
+"They have completely taken over the upside," she says. "After the sixteenth floor, it's all orc territory."
+
+Corax croaks. Oracle passes me to lean on a table, and I catch a whiff of the smell of coffee.
+
+* "Is that coffee?"
+
+  She smiles. "Yes, yes it is. A rare luxury from the south. Something the ancients drank in large cups. Guzzled, even. Gulped."
+
+  "Murdered," Corax says helpfully.
+
+  "Anyway," she says, "it helps me think. Let's see. The orcs? <>
+
+* "Please continue."
+
+  "Oh, I was finished," she says. "Well. <>
+
+-
+
+<> There are still things I'd like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star."
 
 [[CODE]]
 c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
 c.learn(ArtifactStarFacts.artifactStarInLairOfGod);
 c.learn(DeathlessFacts.somethingCalledDeathless);
 [[ENDCODE]]
+
+She sighs. "But it was taken over by the orcs, like everything else. And they have some creature there, in the shrine. Something big. I don't think the Lair of God looks anything like I remember these days."
 
 
 // ---
@@ -298,21 +319,25 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 c.knows(DeathlessFacts.somethingCalledDeathless)
 
 INK:
-"They are a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
+"A cult," Corax says and does a little jump with his raven feet for emphasis.
 
-// TODO: make the quote into prose
+"Well," Oracle says, "they _are_ a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
 [[ENDCODE]]
 
-"They used to inhabit a lot more of the Pyramid. These days, they live in a village in the part known as the Jungle. It's the big hole in the building on the west side, overgrown with vegetation."
+* "Where are they?"
 
-[[CODE]]
-c.learn(DeathlessFacts.location);
-[[ENDCODE]]
+  "They used to inhabit a lot more of the Pyramid," she says. "These days, they live in a village in the part known as the Jungle. It's the big hole in the building on the west side, overgrown with vegetation."
 
-"The Deathless are not dangerous. I think they want to live forever but... who doesn't."
+  [[CODE]]
+  c.learn(DeathlessFacts.location);
+  [[ENDCODE]]
+
+* "Are they dangerous?"
+
+  "They are not," she says. "I think they want to live forever but... who doesn't."
 
 
 // ---
@@ -337,15 +362,16 @@ INK:
 
   "The Deathless! They have had it for generations. It's ancient, after all. But in a remarkably good shape, I'll tell you. Something about this place just makes ancient things last."
 
+  [[CODE]]
+  c.learn(DeathlessFacts.somethingCalledDeathless);
+  c.learn(DragonEggFacts.deathlessHaveIt);
+  [[ENDCODE]]
+
 -
 
-[[CODE]]
-c.learn(DragonEggFacts.deathlessHaveIt);
-[[ENDCODE]]
+* "Why are Deathless the ‘wrong hands’ for it?"
 
-* "Why are Deathless the 'wrong hands' for it?"
-
-  "They won't use it. It's a relic for them."
+  "They won't use it," Oracle says. "It's a relic for them."
 
 * "How can I get it?"
 
@@ -354,7 +380,7 @@ c.learn(DragonEggFacts.deathlessHaveIt);
 
 // ---
 ACTION: $talk_to_oracle_sixty_fiver
-COMMAND: Oracle >> Talk >> "What's the significance of '65'?"
+COMMAND: Oracle >> Talk >> "What's the significance of ‘65’?"
 FOR_LOCATION: $oracle_main
 
 PREREQUISITES:
@@ -363,29 +389,33 @@ PREREQUISITES:
 &&
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
 &&
-c.knows(SixtyFiversFacts.shieldSeen)
+c.knows(SixtyFiversFacts.numberSeen)
 &&
 !c.knows(SixtyFiversFacts.significance)
 
 INK:
 "These are artifacts left by the ancients that puzzle the good and delight the evil. Why would the ancients, in their wisdom, leave behind such beatiful renditions of an evil number?"
 
-* "Why is 65 evil?"
+* "What makes 65 evil?"
 
-  "You know the two forces, four directions, eight gods, and so on. All the good things, all the true things, come in perfect numbers. Sixty four is one of them. Sixty four callings. Sixty five is a spit in the face of truth. It's like taking a symbol of Tengri, but putting it upside down. We don't know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason." Oracle runs her fingers through her hair.
+  "You know the two forces, four directions, eight gods, and so on? All the good things, all the true things, come in perfect numbers. Sixty four is one of them. Sixty four callings."
+  
+  Oracle runs her fingers through her hair. "Sixty five is a spit in the face of truth. It's like taking a symbol of Tengri, but putting it upside down. We don't know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason."
+
+  "Of _course,"_ Corax says.
 
 * "Do you have a theory?"
 
 -
 
-"I think the orcs love it. It gives them a way to say: Look! The ancients had evil in them. The culture you so revere is a failed, evil empire. Something like that."
+"I think the orcs love it," Oracle says. "It gives them a way to say: Look! The ancients had evil in them. The culture you so revere is a failed, evil empire. Something like that."
 
 [[CODE]]
 c.learn(SixtyFiversFacts.significance);
 [[ENDCODE]]
 
 
-// TODO: ask about BigO
+// Optional: ask about BigO
 
 NOTES:
 // Oracle has a pet crow that talks.

@@ -60,12 +60,6 @@ I see [[IF w.actionHasBeenPerformed("talk_to_kat_greetings")]]Kat[[ELSE]]the wom
 Both, then. Love _and_ hate.
 
 NOTES:
-// TODO: make the following into actual actions
-//       but any talking leads to unlocking of the entrance for the player
-//       use this as an opportunity to teach player about stuff
-// TODO: allow examining the gate, which is built in "the nortonian style"
-// TODO: at least one of the knights needs to re-appear again, as a hireable NPC
-
 
 // Vignette
 
