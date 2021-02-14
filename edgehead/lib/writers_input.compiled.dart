@@ -21,6 +21,8 @@ import 'package:edgehead/fractal_stories/time/actor_turn.dart' show ActorTurn;
 import 'package:edgehead/fractal_stories/room_approach.dart' show Approach;
 import 'package:edgehead/fractal_stories/context.dart'
     show ApplicabilityContext;
+import 'package:edgehead/fractal_stories/history/custom_event_history.dart'
+    show CustomEvent;
 import 'package:edgehead/fractal_stories/ink_ast.dart' show InkAst;
 import 'package:edgehead/fractal_stories/ink_ast.dart' show InkChoiceNode;
 import 'package:edgehead/fractal_stories/ink_ast.dart' show InkForkNode;
@@ -335,6 +337,57 @@ final finalFightInkInk = InkAst([
     s.add(
         'He hits the floor with the handle of his scythe for emphasis. The marble cracks in a delicate web of lines. "They will call you a \'neck\'. They will hate and laugh at you behind your back. At best, they will ignore your talent. They will act as if your talent doesn’t exist. What a stupidity! You and I have the power to fight death itself."\n',
         isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    Ruleset(
+        Rule(524156053, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.playerHasAsthma;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I cough. And then again. And again. The more I try to fight it, the worse it gets, and soon, I\'m deep in a coughing fit.\n',
+              isRaw: true);
+        }),
+        Rule(110108716, 1, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return c.playerHasWoodenFoot;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I have to shift my bad leg and the wooden stump makes a sound on the marble. Big O briefly looks down and smiles. I raise my chin and keep my gaze level.\n',
+              isRaw: true);
+        }),
+        Rule(389695249, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+        })).apply(ActionContext.updatedFrom(c));
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -1376,8 +1429,11 @@ final dargHeadTalkInkInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final ifBlock_213c65e31 = c.inRoomParent("crowdsource")
+        ? '''to retreat back to the shadows'''
+        : '''leave''';
     s.add(
-        'I am almost about to retreat back to the shadows when I hear a soft, gurgling sound. Darg\'s head opens its dead eyes, and an ugly, unnatural grin appears on the face.\n',
+        'I am almost about ${ifBlock_213c65e31} when I hear a soft, gurgling sound. Darg\'s head opens its dead eyes, and an ugly, unnatural grin appears on the face.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -3232,7 +3288,10 @@ class KarlUseNecromancy extends RoamingAction {
         isRaw: true);
     c.markHappened(evKarlGuardsKilled);
     w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
+    w.recordCustom(CustomEvent.actorDeath,
+        actor: w.getActorById(orcBerserkerId));
     w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
+    w.recordCustom(CustomEvent.actorDeath, actor: w.getActorById(orcCaptainId));
 
     c.markHappened(evKarlKilled);
     c.markHappened(evKarlKilledViaNecromancy);
@@ -4587,6 +4646,125 @@ final reservoirFollowFootprintsInk = InkAst([
     c.movePlayer('jungle_entrance');
   }),
 ]);
+final reservoirWaterExamineInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I am almost certain there is something moving just below the surface of the water. Something bigger than a fish. But the water is filthy and the room is dark.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" Investigate """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I crouch close to the water, keeping my head low in order to read the surface better. For a long while, nothing happens. In fact, the room seems to get quieter.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Then, all of a sudden, something human-sized appears only a few feet away, still under the surface, making a large wave moving directly at me. The thing is unnaturally fast in the water.\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" Jump away """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'I leap backwards and the thing in the water immediately changes direction and subsides, until there is no more wave. The reservoir becomes still again.\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" Keep watching """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'The wave comes at me swiftly. Then, a slick reptilian head emerges surprisingly close to where I crouch, and something long and sharp pierces my {chest|neck}.\n',
+                    isRaw: true);
+              }),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    'It\'s a clean thrust, and I know then and there I have only a few heartbeats left in me. With sudden clarity, I see the creature leap out of the water, and pull out its spear easily from my body.\n',
+                    isRaw: true);
+              }),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '![Illustration of a lizardman with a spear.](lizardman.png)\n',
+                    isRaw: true);
+              }),
+              InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                w.updateActorById(playerId, (b) => b.hitpoints = 0);
+                w.recordCustom(CustomEvent.actorDeath, actor: c.player);
+              }),
+            ],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" Leave it be """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The sensible thing to do with an unknown, large creature in its element.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+]);
 
 class ReservoirDamExamine extends RoamingAction {
   @override
@@ -5052,6 +5230,73 @@ class ReservoirFollowFootprints extends RoamingAction {
   bool get isImmediate => false;
 }
 
+class ReservoirWaterExamine extends RoamingAction {
+  @override
+  final String name = 'reservoir_water_examine';
+
+  static final ReservoirWaterExamine singleton = ReservoirWaterExamine();
+
+  @override
+  List<String> get commandPathTemplate => ['Water', 'Observe'];
+  @override
+  bool isApplicable(
+      ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
+    if (c.inRoomParent('reservoir') != true) {
+      return false;
+    }
+    if (!(!c.hasHappened(evOpenedDam))) {
+      return false;
+    }
+    return w.actionNeverUsed(name);
+  }
+
+  @override
+  String applySuccess(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "reservoir_water_examine_ink",
+    ));
+    return '${a.name} successfully performs ReservoirWaterExamine';
+  }
+
+  @override
+  String applyFailure(ActionContext c, void _) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    return '${a.name} fails to perform ReservoirWaterExamine';
+  }
+
+  @override
+  ReasonedSuccessChance<void> getSuccessChance(
+      Actor a, Simulation sim, WorldState w, void _) {
+    return ReasonedSuccessChance.sureSuccess;
+  }
+
+  @override
+  bool get rerollable => false;
+  @override
+  Resource get rerollResource => null;
+  @override
+  String getRollReason(Actor a, Simulation sim, WorldState w, void _) {
+    return 'Will I be successful?';
+  }
+
+  @override
+  String get helpMessage => null;
+  @override
+  bool get isAggressive => false;
+  @override
+  bool get isImmediate => false;
+}
+
 final Room reservoir = Room('reservoir', null, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -5078,7 +5323,7 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'A huge empty room, with the floor covered with sludge and slimy carcasses. The are orc and goblin corpses there, too.\n\nMuddy footprints lead away from the reservoir.\n',
+      'A huge empty room, with the floor covered with sludge and slimy carcasses. There are orc and goblin corpses there, too.\n\nMuddy footprints lead away from the reservoir.\n',
       isRaw: true);
 }, null, null,
     parent: 'reservoir',
@@ -7654,6 +7899,7 @@ class DragonEggUse extends RoamingAction {
         'I take the Dragon Egg out and turn it in my hand. The shape is mesmerizing. Beautiful. A true artifact of the ancients.\n\nArgo warned me only to use it in combat. I shake my head. No, this is too good be thrown away at the enemy. I remove the pin, just as she told me, and release the lever. There\'s an audible click inside the egg as I do so.\n\nThe lever comes off, so I now hold the lever in my left hand and the egg in my right hand. The device looks more like an actual egg now, without the lever. I enjoy the symmetry.\n\nNothing seems to be happening. I put the egg closer to my ear in case there are any more clicks to be heard. Nothing. Not a s—\n\n',
         isRaw: true);
     w.updateActorById(playerId, (b) => b.hitpoints = 0);
+    w.recordCustom(CustomEvent.actorDeath, actor: c.player);
 
     return '${a.name} successfully performs DragonEggUse';
   }
@@ -12761,6 +13007,67 @@ final Approach pyramidEntranceFromBleedsMain =
     Approach('bleeds_main', 'pyramid_entrance', '', null);
 final Approach pyramidEntranceFromStagingArea =
     Approach('staging_area', 'pyramid_entrance', '', null);
+final observeKnightsInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'It\'s the only visible entrance to the Pyramid. A recently added redwood frame decorates the ancient opening. Some lord probably thought that the original shape was too simple, too blunt, too unnatural. Perfect rectangles like that just don\'t feel like a real part of this world.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I look at the knights. Both are wearing the same livery and a similar helmet. They don\'t speak, opting instead to look directly at me or scan the surroundings.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I wonder how it must be, having to spend so much time with a single person, idly waiting together. Do they grow to love each other? Or hate? Both?\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_7187bc575 = w.actionHasBeenPerformed("talk_to_kat_greetings")
+        ? '''Kat'''
+        : '''the woman''';
+    final ifBlock_6d6326fdf =
+        w.actionHasBeenPerformed("talk_to_miguel_greetings")
+            ? '''Miguel'''
+            : '''the man''';
+    s.add(
+        'I see ${ifBlock_7187bc575} secretly looking at ${ifBlock_6d6326fdf}, shaking her head, smiling.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Both, then. Love _and_ hate.\n', isRaw: true);
+  }),
+]);
 
 class ObserveKnights extends RoamingAction {
   @override
@@ -12789,6 +13096,10 @@ class ObserveKnights extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "observe_knights_ink",
+    ));
     return '${a.name} successfully performs ObserveKnights';
   }
 
@@ -19071,6 +19382,7 @@ final allActions = <RoamingAction>[
   ReservoirDamWheelLeft.singleton,
   ReservoirDamWheelRight.singleton,
   ReservoirFollowFootprints.singleton,
+  ReservoirWaterExamine.singleton,
   CockroachCakeTake.singleton,
   AskOracleAboutKeep.singleton,
   AskOracleAboutKeepGate.singleton,
@@ -19179,6 +19491,7 @@ final allInks = <String, InkAst>{
   'sarn_rescue_ink_ink': sarnRescueInkInk,
   'take_sarn_to_bleeds_ink': takeSarnToBleedsInk,
   'reservoir_follow_footprints_ink': reservoirFollowFootprintsInk,
+  'reservoir_water_examine_ink': reservoirWaterExamineInk,
   'cockroach_cake_take_ink': cockroachCakeTakeInk,
   'ask_oracle_about_keep_ink': askOracleAboutKeepInk,
   'talk_to_oracle_deathless_ink': talkToOracleDeathlessInk,
@@ -19212,6 +19525,7 @@ final allInks = <String, InkAst>{
   'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,
   'talk_to_ada_quake_1_ink': talkToAdaQuake1Ink,
   'talk_to_ada_after_quake_2_ink': talkToAdaAfterQuake2Ink,
+  'observe_knights_ink': observeKnightsInk,
   'talk_to_kat_about_devling_ink': talkToKatAboutDevlingInk,
   'talk_to_kat_about_lady_ink': talkToKatAboutLadyInk,
   'talk_to_kat_greetings_ink': talkToKatGreetingsInk,

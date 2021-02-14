@@ -4,8 +4,7 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-// TODO: make a variant for when we do this near Darg's tent (i.e. no "shadows")
-I am almost about to retreat back to the shadows when I hear a soft, gurgling sound. Darg's head opens its dead eyes, and an ugly, unnatural grin appears on the face.
+I am almost about [[IF c.inRoomParent("crowdsource")]]to retreat back to the shadows[[ELSE]]leave[[ENDIF]] when I hear a soft, gurgling sound. Darg's head opens its dead eyes, and an ugly, unnatural grin appears on the face.
 
 [[RULESET]]
 [[RULE]]

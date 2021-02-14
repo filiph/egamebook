@@ -38,7 +38,7 @@ It's a dog's head.
 
   "Osiris," he nods. "Big O. Whatever the vermin down there call me these days."
 
-// TODO: Player has choice to call him Big O. (renames BigO's entity) or ignore that, or even degrade him ("I will call you fucker instead.")
+// Optional: Player has choice to call him Big O. (renames BigO's entity) or ignore that, or even degrade him ("I will call you fucker instead.")
 
   He starts casually walking down the stairs, talking the whole way. "I'm the big bad at the top. But as you can see, I'm also the big hero." He chuckles: a sharp, unpleasant sound. "The Doghead. <>
 
@@ -51,8 +51,6 @@ It's a dog's head.
 -
 
 <> I invented the folk tale two hundred years ago. You'd be surprised how easy it is to get something like that going. People find a few 'ancient' artifacts and their imagination does the rest."
-
-// TODO: big O notices asthma / wooden foot
 
 He takes a moment to relish in my confusion. I force my expression to harden. He chuckles again.
 
@@ -73,6 +71,24 @@ He takes a moment to relish in my confusion. I force my expression to harden. He
 He reaches the bottom of the stairs. "You. Are. A. Necromancer. You're not one of them. No, you're not, whatever you think now. They might like you now, but you know what happens soon."
 
 He hits the floor with the handle of his scythe for emphasis. The marble cracks in a delicate web of lines. "They will call you a 'neck'. They will hate and laugh at you behind your back. At best, they will ignore your talent. They will act as if your talent doesn’t exist. What a stupidity! You and I have the power to fight death itself."
+
+[[RULESET]]
+[[RULE]]
+  c.playerHasAsthma
+[[THEN]]
+  I cough. And then again. And again. The more I try to fight it, the worse it gets, and soon, I'm deep in a coughing fit.
+[[ENDRULE]]
+[[RULE]]
+  c.playerHasWoodenFoot
+[[THEN]]
+  I have to shift my bad leg and the wooden stump makes a sound on the marble. Big O briefly looks down and smiles. I raise my chin and keep my gaze level.
+[[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+  // Pass.
+[[ENDRULE]]
+[[ENDRULESET]]
 
 Big O starts to circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]], still well out of reach. [[IF c.hasItem(dragonEggId)]]Almost unconsciously, my hand touches the Dragon Egg hidden in my pocket.[[ENDIF]] "And instead of support," Big O says, "necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Not in San Francisco. Here, the necromancers are at the top."
 

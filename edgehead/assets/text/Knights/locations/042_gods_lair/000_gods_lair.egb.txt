@@ -48,8 +48,8 @@ The room is dominated by the giant's carcass and its open belly. The hawkman's h
 
 The gate is open. On it, there is a small star decoration.
 
-// TODO: let the player take their weapons
-// TODO: optional - one of the orc still lives, easy fight
+// Optional: let the player take their weapons
+// Optional: one of the orc still lives, easy fight
 
 VARIANT_UPDATE_DESCRIPTION:
 The room is dominated by the giant's carcass and its open belly. The hawkman's head is lying nearby, still within the puddle of the giant's blood, and the bodies of the two orcs sprawl on opposing sides of the room.
@@ -100,7 +100,7 @@ c.giveNewItemToPlayer(lairOfGodStar);
 [[ENDCODE]]
 
 
-// TODO: if Aren killed the guards, allow taheen necromancy, and opening the gate
+// Optional: if Aren killed the guards, allow taheen necromancy, and opening the gate
 
 NOTES:
 

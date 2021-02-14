@@ -59,7 +59,9 @@ I wish I could raise this new corpse, but it is well beyond my capability.
   c.markHappened(evKarlGuardsKilled);
   // Make sure to actually kill the two.
   w.updateActorById(orcBerserkerId, (b) => b.hitpoints = 0);
+  w.recordCustom(CustomEvent.actorDeath, actor: w.getActorById(orcBerserkerId));
   w.updateActorById(orcCaptainId, (b) => b.hitpoints = 0);
+  w.recordCustom(CustomEvent.actorDeath, actor: w.getActorById(orcCaptainId));
 
   c.markHappened(evKarlKilled);
   c.markHappened(evKarlKilledViaNecromancy);

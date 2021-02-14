@@ -115,4 +115,5 @@ Nothing seems to be happening. I put the egg closer to my ear in case there are 
 
 [[CODE]]
 w.updateActorById(playerId, (b) => b.hitpoints = 0);
+w.recordCustom(CustomEvent.actorDeath, actor: c.player);
 [[ENDCODE]]

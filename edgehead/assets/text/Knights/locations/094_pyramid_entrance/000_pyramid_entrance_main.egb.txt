@@ -48,7 +48,7 @@ FOR_LOCATION: $pyramid_entrance
 PREREQUISITES:
 c.inRoomWith(miguelId) && c.inRoomWith(katId)
 
-DESCRIPTION:
+INK:
 It's the only visible entrance to the Pyramid. A recently added redwood frame decorates the ancient opening. Some lord probably thought that the original shape was too simple, too blunt, too unnatural. Perfect rectangles like that just don't feel like a real part of this world.
 
 I look at the knights. Both are wearing the same livery and a similar helmet. They don't speak, opting instead to look directly at me or scan the surroundings.

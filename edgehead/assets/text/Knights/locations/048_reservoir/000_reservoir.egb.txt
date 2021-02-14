@@ -21,8 +21,6 @@ Everything is wet here, even the ceiling. Condensed water forms drops that land 
 
 Something big just moved in the water.
 
-// TODO: action: observe the water
-
 
 // ---
 ROOM: $reservoir_after_open_dam
@@ -31,12 +29,48 @@ VARIANT_OF: $reservoir
 RULE: c.hasHappened(evOpenedDam)
 
 DESCRIPTION:
-A huge empty room, with the floor covered with sludge and slimy carcasses. The are orc and goblin corpses there, too.
+A huge empty room, with the floor covered with sludge and slimy carcasses. There are orc and goblin corpses there, too.
 
 Muddy footprints lead away from the reservoir.
 
-// TODO: action: examine footprints - leads player to pond, to make things easier
-// TODO: write the action that describes the dam before we open it
+
+// ---
+ACTION: $reservoir_water_examine
+COMMAND: Water >> Observe
+FOR_LOCATION: $reservoir
+PREREQUISITES:
+!c.hasHappened(evOpenedDam)
+
+INK:
+I am almost certain there is something moving just below the surface of the water. Something bigger than a fish. But the water is filthy and the room is dark.
+
+* Investigate
+
+  I crouch close to the water, keeping my head low in order to read the surface better. For a long while, nothing happens. In fact, the room seems to get quieter.
+
+  Then, all of a sudden, something human-sized appears only a few feet away, still under the surface, making a large wave moving directly at me. The thing is unnaturally fast in the water.
+
+  * * Jump away
+
+    I leap backwards and the thing in the water immediately changes direction and subsides, until there is no more wave. The reservoir becomes still again.
+
+  * * Keep watching
+
+    The wave comes at me swiftly. Then, a slick reptilian head emerges surprisingly close to where I crouch, and something long and sharp pierces my {chest|neck}.
+
+    It's a clean thrust, and I know then and there I have only a few heartbeats left in me. With sudden clarity, I see the creature leap out of the water, and pull out its spear easily from my body.
+
+    ![Illustration of a lizardman with a spear.](lizardman.png)
+
+    [[CODE]]
+    // Kill player.
+    w.updateActorById(playerId, (b) => b.hitpoints = 0);
+    w.recordCustom(CustomEvent.actorDeath, actor: c.player);
+    [[ENDCODE]]
+
+* Leave it be
+
+  The sensible thing to do with an unknown, large creature in its element.
 
 
 // ---

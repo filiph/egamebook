@@ -26,6 +26,7 @@ final allNeededTypes = <TypeReference>[
   actorTurnType,
   approachType,
   applicabilityContextType,
+  customEventType,
   inkAstType,
   inkChoiceNodeType,
   inkForkNodeType,
@@ -68,6 +69,10 @@ final builderType = TypeReference((b) => b
 final builtType = TypeReference((b) => b
   ..symbol = 'Built'
   ..url = 'package:built_value/built_value.dart');
+
+final customEventType = TypeReference((b) => b
+  ..symbol = 'CustomEvent'
+  ..url = 'package:edgehead/fractal_stories/history/custom_event_history.dart');
 
 final dateTimeType = TypeReference((b) => b..symbol = 'DateTime');
 
