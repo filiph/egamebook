@@ -6450,8 +6450,9 @@ class AskOracleAboutKeepGate extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
+    final youngSirSubstitution = c.playerSalutation;
     s.add(
-        'Oracle describes a convoluted series of steps to open the gate. I ask her to repeat some of the steps several times to make sure I remember.\n\n',
+        'Oracle describes a convoluted series of steps to open the gate, which she calls an "algorithm." It involves pushing seemingly decorative parts of the gate in a precise order. \n\n"At the very end, make sure you turn the crest _eight_ times," she says. "Not seven, not nine. _Eight._ Like the Eight Gods. Don\'t forget, ${youngSirSubstitution}."\n\n\n',
         isRaw: true);
     c.learn(KeepGateFacts.keepGateUnlock);
 
@@ -12155,6 +12156,138 @@ final Approach keepGateFromKeepBedroom =
     Approach('keep_bedroom', 'keep_gate', '', null);
 final Approach keepGateFromStagingArea =
     Approach('staging_area', 'keep_gate', '', null);
+final openGateUnlockInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I start following the steps I learned. It is quite easy to find the decorative parts that I need to push, turn or pull: they seem more polished than the rest of the gate. They are polished by fingers performing the ritual over and over again, for decades.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Finally, I am at the very end of the "algorithm." All that\'s left is to turn the crest in the middle of the gate.\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" 7 times """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I am pretty sure it was seven times, a lucky number. When I\'m done with the seventh revolution, I step back. The gate stands still for a while, then something clicks inside.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I am showered by countless little darts, shooting diagonally from the ceiling. A curtain of blood covers my eyes, and the view of the gate fades to eternal black.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          w.updateActorById(playerId, (b) => b.hitpoints = 0);
+          w.recordCustom(CustomEvent.actorDeath, actor: c.player);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" 8 times """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Eight times, like the Eight Gods. When I\'ve finished the eighth revolution, I step back. The gate stands still for a while, then something clicks inside.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The wings of the gate open and reveal a beatifully decorated passage into the Keep.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          w.recordCustom(evKeepUnlockedGate);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" 9 times """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I am pretty sure it was nine times, like with cat lives. When I\'m done with the ninth revolution, I step back. The gate stands still for a while, then something clicks inside.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'I am showered by countless little darts, shooting diagonally from the ceiling. A curtain of blood covers my eyes, and the view of the gate fades to eternal black.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          w.updateActorById(playerId, (b) => b.hitpoints = 0);
+          w.recordCustom(CustomEvent.actorDeath, actor: c.player);
+        }),
+      ],
+    ),
+  ]),
+]);
 
 class AttemptOpenGate extends RoamingAction {
   @override
@@ -12418,11 +12551,10 @@ class OpenGateUnlock extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'I unlock the gate using the steps I learned. This reveals a beatifully decorated passage into the Keep.\n\n',
-        isRaw: true);
-    w.recordCustom(evKeepUnlockedGate);
-
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "open_gate_unlock_ink",
+    ));
     return '${a.name} successfully performs OpenGateUnlock';
   }
 
@@ -19525,6 +19657,7 @@ final allInks = <String, InkAst>{
   'talk_to_ada_greetings_ink': talkToAdaGreetingsInk,
   'talk_to_ada_quake_1_ink': talkToAdaQuake1Ink,
   'talk_to_ada_after_quake_2_ink': talkToAdaAfterQuake2Ink,
+  'open_gate_unlock_ink': openGateUnlockInk,
   'observe_knights_ink': observeKnightsInk,
   'talk_to_kat_about_devling_ink': talkToKatAboutDevlingInk,
   'talk_to_kat_about_lady_ink': talkToKatAboutLadyInk,

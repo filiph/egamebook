@@ -68,12 +68,44 @@ PREREQUISITES:
 &&
 c.knows(KeepGateFacts.keepGateUnlock)
 
-COMPLETE_SUCCESS_DESCRIPTION:
-I unlock the gate using the steps I learned. This reveals a beatifully decorated passage into the Keep.
+INK:
+I start following the steps I learned. It is quite easy to find the decorative parts that I need to push, turn or pull: they seem more polished than the rest of the gate. They are polished by fingers performing the ritual over and over again, for decades.
 
-[[CODE]]
-w.recordCustom(evKeepUnlockedGate);
-[[ENDCODE]]
+Finally, I am at the very end of the "algorithm." All that's left is to turn the crest in the middle of the gate.
+
+* 7 times
+
+  I am pretty sure it was seven times, a lucky number. When I'm done with the seventh revolution, I step back. The gate stands still for a while, then something clicks inside.
+
+  I am showered by countless little darts, shooting diagonally from the ceiling. A curtain of blood covers my eyes, and the view of the gate fades to eternal black.
+
+  [[CODE]]
+  // Kill player.
+  w.updateActorById(playerId, (b) => b.hitpoints = 0);
+  w.recordCustom(CustomEvent.actorDeath, actor: c.player);
+  [[ENDCODE]]
+
+* 8 times
+
+  Eight times, like the Eight Gods. When I've finished the eighth revolution, I step back. The gate stands still for a while, then something clicks inside.
+  
+  The wings of the gate open and reveal a beatifully decorated passage into the Keep.
+
+  [[CODE]]
+  w.recordCustom(evKeepUnlockedGate);
+  [[ENDCODE]]
+
+* 9 times
+
+  I am pretty sure it was nine times, like with cat lives. When I'm done with the ninth revolution, I step back. The gate stands still for a while, then something clicks inside.
+
+  I am showered by countless little darts, shooting diagonally from the ceiling. A curtain of blood covers my eyes, and the view of the gate fades to eternal black.
+
+  [[CODE]]
+  // Kill player.
+  w.updateActorById(playerId, (b) => b.hitpoints = 0);
+  w.recordCustom(CustomEvent.actorDeath, actor: c.player);
+  [[ENDCODE]]
 
 
 // ---

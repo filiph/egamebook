@@ -179,7 +179,7 @@ c.movePlayer('jungle_entrance');
 
 
 NOTES:
-- TODO: also allow following the water?
+- Optional: also allow following the water?
 
 // Vignette
 

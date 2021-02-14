@@ -33,4 +33,4 @@ if (w.actionHasBeenPerformed("talk_to_oracle_greetings")) {
 }
 [[ENDCODE]]
 
-// TODO: the raven can say a random word
+// Optional: the raven can say a random word
