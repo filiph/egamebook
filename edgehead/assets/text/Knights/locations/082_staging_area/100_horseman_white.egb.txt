@@ -2,8 +2,9 @@
 ACTION: $talk_to_horseman_white_greetings
 COMMAND: Officer >> Talk >> "Greetings."
 FOR_LOCATION: $staging_area
-
-// TODO: add prerequisites so that the conversation is different after Sarn has been saved.
+PREREQUISITES:
+!c.hasHappened(evSavedSarn)
+// Optional: add a separate "greetings" action when it's initiated after Sarn has been saved. Currently, it is not possible to talk to the officer after Sarn is saved.
 
 INK:
 // Subtext: the knight is scared, he wants out
@@ -38,7 +39,7 @@ The officer shakes his head. "Why would this Sarn of Falling Rock be here, of al
 
 -
 
-// TODO: more options here
+// Optional: more options here
 * "I'm here to find my brother."
 
   "Bah! How old is this brother of yours? Cannot he take care of himself?"

@@ -62,7 +62,8 @@ Ruleset get edgeheadDirectorRuleset {
     _default,
     _playerHurt,
     _dargLeavesCrowdsource,
-    _leroyQuits,
+    _leroyQuitsAfterGoblinCamp,
+    _leroyQuitsUpside,
     // Environmental.
     _karlHeardFirstTime,
     // Temporal.

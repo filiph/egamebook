@@ -10897,6 +10897,9 @@ class TalkToHorsemanWhiteGreetings extends RoamingAction {
     if (c.inRoomParent('staging_area') != true) {
       return false;
     }
+    if (!(!c.hasHappened(evSavedSarn))) {
+      return false;
+    }
     return w.actionNeverUsed(name);
   }
 

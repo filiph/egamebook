@@ -41,7 +41,7 @@ ACTION: $bleeds_trader_greet
 COMMAND: Trader >> “How is business?”
 FOR_LOCATION: $bleeds_trader_hut
 
-// TODO: rewrite so that we don't need Leroy here
+// Optional: rewrite so that we don't need Leroy here
 PREREQUISITES: c.inRoomWith(leroyId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -76,7 +76,7 @@ w.actionHasBeenPerformed("bleeds_trader_greet")
 &&
 !c.hasHappened(evGoblinCampCleared)
 &&
-// TODO: rewrite so that we don't need Leroy here
+// Optional: rewrite so that we don't need Leroy here
 c.inRoomWith(leroyId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
