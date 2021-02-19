@@ -23,7 +23,7 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-I am finally here, in the ancient ruins of San Francisco. I have reached my destination at last. My brother is here, somewhere in this dense forest, among fragments of a long lost civilization.
+I am finally here, in the ancient ruins of San Francisco. I have reached my destination at last. My brother is here, somewhere in this dense forest, among fragments of a long-lost civilization.
 
 
 * I am a young woman >> ... with black hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))

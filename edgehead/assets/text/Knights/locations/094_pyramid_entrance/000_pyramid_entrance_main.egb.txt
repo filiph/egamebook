@@ -51,7 +51,21 @@ c.inRoomWith(miguelId) && c.inRoomWith(katId)
 INK:
 It's the only visible entrance to the Pyramid. A recently added redwood frame decorates the ancient opening. Some lord probably thought that the original shape was too simple, too blunt, too unnatural. Perfect rectangles like that just don't feel like a real part of this world.
 
-I look at the knights. Both are wearing the same livery and a similar helmet. They don't speak, opting instead to look directly at me or scan the surroundings.
+A few paces to the right, an ancient bronze plaque.
+
+* Examine it
+
+  The bronze tablet is set in a concrete block, overgrown with dark green vines. "Transamerica Pyramid," it says. "Built in 1972." That's more than a thousand years ago.
+
+  I look back at the entrance and the knights. <>
+
+* Leave it be
+
+  I look at the knights. <>
+
+-
+
+<> Both are wearing the same livery and a similar helmet. They don't speak, opting instead to look directly at me or scan the surroundings.
 
 I wonder how it must be, having to spend so much time with a single person, idly waiting together. Do they grow to love each other? Or hate? Both?
 
