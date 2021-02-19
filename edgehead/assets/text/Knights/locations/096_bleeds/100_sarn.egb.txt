@@ -74,4 +74,6 @@ Sarn listens intently. There seems to be a little bit of recognition in his face
 
 NOTES:
 
+- Optional: a choice to leave with Sarn, ending the game early
+
 There could be a Sarn >> Kill option if we wanted to be a lot darker. That would end the game? If not, then we'd have to tread carefully, especially around the ending. If we do end the game with killing Sarn, then the "Win" screen must reflect that it's just one of the choices.

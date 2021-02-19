@@ -150,7 +150,61 @@ In a moment, Sarn, Jisad and I sit on the porch, facing the center of the Bleeds
 
 I turn around in surprise.
 
-* “What do you mean?”
+* "The fight is over, Jisad."
+
+  "You really think that?" he says. "You truly think you're done?" He shakes his head.
+
+* "Why do you say that?"
+
+-
+
+"First of all," Jisad says, "the fight is never _really_ over, is it. You fight for one thing. You win." He snaps his fingers. "Immediately, there's another signpost to strive for. Another fort to conquer."
+
+* "That is just bad planning."
+
+  "No, that's just human nature," Jisad replies. "If humans were satisfied with what they have, do you think we'd invent clothes? Houses?" He points rougly towards the Pyramid. "Giant towers?"
+
+  "Second of all," he says, touching Sarn's shoulder, "your brother <>
+
+* "Well, I came here for Sarn, and I found him."
+
+  "You found a _bit_ of him, no?" he says. "Your brother <>
+
+-
+
+<> is clearly not well. I've seen this before. A lethargy that deepens as you get farther away from the very top of the Pyramid." The wind changes direction, and it brings the damp smell of wet concrete from the ancient building. "Your brother is bound."
+
+* "To what?"
+
+  "That I don't know, [young sir]."  
+
+  * * "You have seen this before?"
+
+* "You have seen this before?"
+
+-
+
+"My son," Jisad says. "He is dead now, thank the Eight Gods. The lethargy is just the beginning, you see. Then comes something much worse."
+
+Jisad takes a deep breath. "It… it _split_ him. It fractured him. I don't know how to describe it."
+
+* "Try."
+
+  "It was as if Sven — that's my son's name — it was as if he shattered. He was still in the general shape of… of a human. But there were shards of him, floating. We could see his inside through the cracks."
+
+  * * "Did it hurt?"
+
+    "We don't know," Jisad says. "He wasn't able to speak by then."
+
+  * * "I am sorry."
+
+* "You do not need to."
+
+-
+
+"Your new signpost, your new fort, is up there." Jisad nods in the direction of the tower. "You have proved you are capable of walking the cuts, among the orcs."
+
+* “I almost died there.”
 
   “There are things larger than ourselves,” he says, straightening on the seat. “Larger than life. We can take what we want for ourselves, we can solve our own little problems.”
 
@@ -158,7 +212,7 @@ I turn around in surprise.
 
   “But that doesn’t mean the fight is over. The fight is not over.”
 
-* “What fight?”
+* “The fight is over for me.”
 
   “You came here to accomplish something,” he says. “Everyone does. And you succeeded.”
 
@@ -174,8 +228,9 @@ I turn around in surprise.
 
 -
 
-“The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal.”
+"The real fight is larger," Jisad says. "It carries on even after we die. If you take up _that_ fight, you become immortal.”
 
 [[CODE]]
 c.markHappened(evTookSarnToBleeds);
 [[ENDCODE]]
+

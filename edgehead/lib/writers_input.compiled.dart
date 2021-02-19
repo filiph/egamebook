@@ -3993,7 +3993,193 @@ final takeSarnToBleedsInk = InkAst([
   }),
   InkForkNode([
     InkChoiceNode(
-      command: r""" “What do you mean?” """.trim(),
+      command: r""" "The fight is over, Jisad." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"You really think that?" he says. "You truly think you\'re done?" He shakes his head.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Why do you say that?" """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"First of all," Jisad says, "the fight is never _really_ over, is it. You fight for one thing. You win." He snaps his fingers. "Immediately, there\'s another signpost to strive for. Another fort to conquer."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "That is just bad planning." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"No, that\'s just human nature," Jisad replies. "If humans were satisfied with what they have, do you think we\'d invent clothes? Houses?" He points rougly towards the Pyramid. "Giant towers?"\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"Second of all," he says, touching Sarn\'s shoulder, "your brother\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "Well, I came here for Sarn, and I found him." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add('"You found a _bit_ of him, no?" he says. "Your brother\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'is clearly not well. I\'ve seen this before. A lethargy that deepens as you get farther away from the very top of the Pyramid." The wind changes direction, and it brings the damp smell of wet concrete from the ancient building. "Your brother is bound."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "To what?" """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final youngSirSubstitution = c.playerSalutation;
+          s.add('"That I don\'t know, ${youngSirSubstitution}."\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "You have seen this before?" """.trim(),
+            consequence: [],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "You have seen this before?" """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"My son," Jisad says. "He is dead now, thank the Eight Gods. The lethargy is just the beginning, you see. Then comes something much worse."\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'Jisad takes a deep breath. "It… it _split_ him. It fractured him. I don\'t know how to describe it."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" "Try." """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              '"It was as if Sven — that\'s my son\'s name — it was as if he shattered. He was still in the general shape of… of a human. But there were shards of him, floating. We could see his inside through the cracks."\n',
+              isRaw: true);
+        }),
+        InkForkNode([
+          InkChoiceNode(
+            command: r""" "Did it hurt?" """.trim(),
+            consequence: [
+              InkParagraphNode((ActionContext c) {
+                final WorldState originalWorld = c.world;
+                final Simulation sim = c.simulation;
+                final Actor a = c.actor;
+                final WorldStateBuilder w = c.outputWorld;
+                final Storyline s = c.outputStoryline;
+                s.add(
+                    '"We don\'t know," Jisad says. "He wasn\'t able to speak by then."\n',
+                    isRaw: true);
+              }),
+            ],
+          ),
+          InkChoiceNode(
+            command: r""" "I am sorry." """.trim(),
+            consequence: [],
+          ),
+        ]),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" "You do not need to." """.trim(),
+      consequence: [],
+    ),
+  ]),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        '"Your new signpost, your new fort, is up there." Jisad nods in the direction of the tower. "You have proved you are capable of walking the cuts, among the orcs."\n',
+        isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" “I almost died there.” """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -4028,7 +4214,7 @@ final takeSarnToBleedsInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" “What fight?” """.trim(),
+      command: r""" “The fight is over for me.” """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -4091,7 +4277,7 @@ final takeSarnToBleedsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '“The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal.”\n',
+        '"The real fight is larger," Jisad says. "It carries on even after we die. If you take up _that_ fight, you become immortal.”\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
