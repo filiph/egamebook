@@ -6,19 +6,58 @@ c.isInIdleRoom
 &&
 c.hasItem(letterFromFatherId)
 
-COMPLETE_SUCCESS_DESCRIPTION:
+INK:
 I take the letter from my pocket and read it.
 
-Son,
+[[IF c.playerIsMale]]Son[[ELSE]]Daughter[[ENDIF]],
 
-I learned about your plans from a family friend. Although I hope you don't mean to execute them, I am writing this letter. I will come back home as soon as I am able.
+I learned about your plans from a family friend. Although I hope you don't mean to execute them, I am writing this letter.
 
-There is good life for you in Falling Rock, despite everything. The mountains may seem dull and remote to your young heart, but they are safe.
+There is a good life for you in Falling Rock, despite everything. The mountains may seem dull and remote to your young heart, but they are safe.
 
-I am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training. Don't follow your brother's footsteps. Don't make my my heart break for the third time.
+I am surprised by the brash move. From you, of all people. Remember your health. Stay home. Don't follow your brother's footsteps. Don't make my heart break for the third time.
 
-- Father
+Father
 
 [[CODE]]
 c.giveSanityToPlayer(2);
 [[ENDCODE]]
+
+I carefully fold the paper and keep my thumb pressed against the broken wax seal. Without conscious thought, I start tapping the seal with the thumb, rhythmically. Tap. Tap. Tap. A nervous tic I picked up on the way here.
+
+[[IF !c.hasHappened(evSavedSarn)]]_No,_ _Father._ _I_ must _find_ _the_ _coward,_ _and_ _confront_ _him._[[ENDIF]]
+
+* For what he did, he deserves punishment.
+
+    [[CODE]]
+    w.recordCustom("goal_deserves_punishment");
+    [[ENDCODE]]
+
+    _Nobody_ should be able to get away with what Sarn did and feel no consequences. Mother dead. Father rudderless and sad beyond imagining. Small [[IF c.playerIsMale]]brother[[ELSE]]sister[[ENDIF]], me, frightened.
+
+    Sarn was supposed to help, and instead he took off, to find riches or advanture in San Francisco. For that, by the Eight Gods, he must be punished. 
+
+* He must know what his running away did to us.
+
+    [[CODE]]
+    w.recordCustom("goal_must_know");
+    [[ENDCODE]]
+
+    Sarn left just after Mother died, when Father rudderless and sad beyond imagining, and I frightened. Is it possible that he didn't know what he was doing? That his young head couldn't imagine what _another_ loss of a member would do to a struggling family?
+
+    Sarn must learn what happened. He cannot live his life without knowing that his act of cowardice almost broke Father, and me.
+
+* I want revenge.
+
+    [[CODE]]
+    w.recordCustom("goal_revenge");
+    [[ENDCODE]]
+
+    Sarn must suffer. I have long wanted to make him feel the same kind of despair and destitution that Father and I had to go through after he left. As if it wasn't enough that Mother died, and that Father was sad beyond imagining from it.
+
+    The coward took off then, and he must not be forgiven. I must have vengeance.
+
+-
+
+// TODO: w.recordCustom('...') -> then at end of play, check custom and say stuff like: "I vowed to punish him, but how can one punish someone in this state."
+// TODO: w.hasHappened('...') in sarn_rescue

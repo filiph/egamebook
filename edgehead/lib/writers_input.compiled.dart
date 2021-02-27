@@ -19701,6 +19701,206 @@ class PerformNecromancyElsewhere extends RoamingAction {
   bool get isImmediate => false;
 }
 
+final readLetterFromFatherInk = InkAst([
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('I take the letter from my pocket and read it.\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_1561e0ee8 = c.playerIsMale ? '''Son''' : '''Daughter''';
+    s.add('${ifBlock_1561e0ee8},\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'There is a good life for you in Falling Rock, despite everything. The mountains may seem dull and remote to your young heart, but they are safe.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I am surprised by the brash move. From you, of all people. Remember your health. Stay home. Don\'t follow your brother\'s footsteps. Don\'t make my heart break for the third time.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add('Father\n', isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    c.giveSanityToPlayer(2);
+  }),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    s.add(
+        'I carefully fold the paper and keep my thumb pressed against the broken wax seal. Without conscious thought, I start tapping the seal with the thumb, rhythmically. Tap. Tap. Tap. A nervous tic I picked up on the way here.\n',
+        isRaw: true);
+  }),
+  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+  InkParagraphNode((ActionContext c) {
+    final WorldState originalWorld = c.world;
+    final Simulation sim = c.simulation;
+    final Actor a = c.actor;
+    final WorldStateBuilder w = c.outputWorld;
+    final Storyline s = c.outputStoryline;
+    final ifBlock_16710beb4 = !c.hasHappened(evSavedSarn)
+        ? '''_No,_ _Father._ _I_ must _find_ _the_ _coward,_ _and_ _confront_ _him._'''
+        : '''''';
+    s.add('${ifBlock_16710beb4}\n', isRaw: true);
+  }),
+  InkForkNode([
+    InkChoiceNode(
+      command: r""" For what he did, he deserves punishment. """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          w.recordCustom("goal_deserves_punishment");
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          final ifBlock_56c7cddbe =
+              c.playerIsMale ? '''brother''' : '''sister''';
+          s.add(
+              '_Nobody_ should be able to get away with what Sarn did and feel no consequences. Mother dead. Father rudderless and sad beyond imagining. Small ${ifBlock_56c7cddbe}, me, frightened.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Sarn was supposed to help, and instead he took off, to find riches or advanture in San Francisco. For that, by the Eight Gods, he must be punished.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" He must know what his running away did to us. """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          w.recordCustom("goal_must_know");
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Sarn left just after Mother died, when Father rudderless and sad beyond imagining, and I frightened. Is it possible that he didn\'t know what he was doing? That his young head couldn\'t imagine what _another_ loss of a member would do to a struggling family?\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Sarn must learn what happened. He cannot live his life without knowing that his act of cowardice almost broke Father, and me.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+    InkChoiceNode(
+      command: r""" I want revenge. """.trim(),
+      consequence: [
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          w.recordCustom("goal_revenge");
+        }),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'Sarn must suffer. I have long wanted to make him feel the same kind of despair and destitution that Father and I had to go through after he left. As if it wasn\'t enough that Mother died, and that Father was sad beyond imagining from it.\n',
+              isRaw: true);
+        }),
+        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
+        InkParagraphNode((ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          s.add(
+              'The coward took off then, and he must not be forgiven. I must have vengeance.\n',
+              isRaw: true);
+        }),
+      ],
+    ),
+  ]),
+]);
+
 class ReadLetterFromFather extends RoamingAction {
   @override
   final String name = 'read_letter_from_father';
@@ -19726,11 +19926,10 @@ class ReadLetterFromFather extends RoamingAction {
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    s.add(
-        'I take the letter from my pocket and read it.\n\nSon,\n\nI learned about your plans from a family friend. Although I hope you don\'t mean to execute them, I am writing this letter. I will come back home as soon as I am able.\n\nThere is good life for you in Falling Rock, despite everything. The mountains may seem dull and remote to your young heart, but they are safe.\n\nI am surprised by the brash move. From you, of all people. Remember your health. Stay home and continue your training. Don\'t follow your brother\'s footsteps. Don\'t make my my heart break for the third time.\n\n- Father\n\n',
-        isRaw: true);
-    c.giveSanityToPlayer(2);
-
+    w.pushSituation(InkSituation.initialized(
+      w.randomInt(),
+      "read_letter_from_father_ink",
+    ));
     return '${a.name} successfully performs ReadLetterFromFather';
   }
 
@@ -20290,5 +20489,6 @@ final allInks = <String, InkAst>{
   'bleeds_blind_guide_quake_1_ink': bleedsBlindGuideQuake1Ink,
   'bleeds_blind_guide_whats_wrong_ink': bleedsBlindGuideWhatsWrongInk,
   'sarn_talk_in_bleeds_ink': sarnTalkInBleedsInk,
-  'start_ink_ink': startInkInk
+  'start_ink_ink': startInkInk,
+  'read_letter_from_father_ink': readLetterFromFatherInk
 };

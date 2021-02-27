@@ -31,7 +31,7 @@ void _quake3Apply(ActionContext c) {
   final s = c.outputStoryline;
   s.addParagraph();
 
-  s.add('Suddenly, a third quake violently shakes with everything around me. ',
+  s.add('Suddenly, a third quake violently shakes with everything around me.',
       isRaw: true);
   if (c.hasHappened(evConetDestroyed) &&
       // Check that we haven't said this in quake2 already.
