@@ -244,6 +244,8 @@ class Storyline {
   /// by https://stackoverflow.com/a/42354550/1416886.
   static final RegExp _contractionSmartify = RegExp(r"([A-Za-z])'");
 
+  static final _twoOrMoreSpaces = RegExp('[ ]{2,}');
+
   /// Internal list of reports. This is constructed by filtering [_records].
   List<Report> _immutableReports;
 
@@ -749,6 +751,9 @@ class Storyline {
 
     // Replace dumb quotes with smart quotes.
     s = smartifyQuotes(s);
+
+    // Fix repeated spaces, such as 'Hello  there' -> 'Hello there'.
+    s = collapseSpaces(s);
 
     // Construct the text.
     final text = TextOutput((b) => b..markdownText = s);
@@ -1457,6 +1462,12 @@ class Storyline {
     } else {
       return "$firstLetter${result.substring(1)}";
     }
+  }
+
+  /// When there is more than one consecutive space (`"  "`), we transform it
+  /// into just one space (`" "`).
+  static String collapseSpaces(String input) {
+    return input.replaceAll(_twoOrMoreSpaces, ' ');
   }
 
   /// Takes a string with "dumb" quotes, such as

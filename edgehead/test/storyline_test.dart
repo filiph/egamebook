@@ -1348,7 +1348,7 @@ void main() {
           '“I do not thing this is necessary.”',
         );
       });
-      test('colon direct speach', () {
+      test('colon direct speech', () {
         expect(
           Storyline.smartifyQuotes('He said: "I am here."'),
           'He said: “I am here.”',
@@ -1406,6 +1406,28 @@ void main() {
         Storyline.smartifyQuotes('"E=mc2" is Einstein\'s signature.'),
         '“E=mc2” is Einstein’s signature.',
       );
+    });
+  });
+
+  group('collapseSpaces', () {
+    test("doesn't touch normal text", () {
+      expect(Storyline.collapseSpaces('Hey there, this is completely normal.'),
+          'Hey there, this is completely normal.');
+    });
+
+    test("collapses two spaces", () {
+      expect(Storyline.collapseSpaces('Hey there,  this is not.'),
+          'Hey there, this is not.');
+    });
+
+    test("collapses three spaces", () {
+      expect(Storyline.collapseSpaces('Hey there,   this is not.'),
+          'Hey there, this is not.');
+    });
+
+    test("doesn't affect newlines", () {
+      expect(Storyline.collapseSpaces('Hey there, \n\nNew paragraph!'),
+          'Hey there, \n\nNew paragraph!');
     });
   });
 }
