@@ -9,22 +9,22 @@ FLAGS: $IDLE
 POS: 20, 81
 
 FIRST_MAP_NAME: The Keep
-FIRST_HINT: This part of the Pyramid seems to have been carved into an artistocratic residence. This is the floor where I saw the lady with the katana.
+FIRST_HINT: This part of the Pyramid seems to have been rebuilt at some point into an aristocratic residence. This is the floor where I saw the lady with the katana.
 
 MAP_NAME: The Keep's Gate
-HINT: The entrance to the abandoned aristocratic mansion embedded into the Pyramid.
+HINT: The entrance to the abandoned aristocratic residence within the Pyramid.
 
 FIRST_DESCRIPTION:
-The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.
+The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is made from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.
 
-This is a lord's house, except it doesn't stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.
+This is a lord's home, except it doesn't stand on top of a hill or next to a lake. Instead, it was fashioned from some of the more well-preserved rooms in the ancient building.
 
 DESCRIPTION: $NONE
 
 
 // ---
 ACTION: $examine_gate
-COMMAND: gate >> examine
+COMMAND: Gate >> Examine
 FOR_LOCATION: $keep_gate
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -32,44 +32,48 @@ COMPLETE_SUCCESS_DESCRIPTION:
 [[RULE]]
   c.hasHappened('destroy_gate_with_axe')
 [[THEN]]
-  The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build. A shame that I had to destroy it.
+  The strict simplicity of the ancient building gives way to Nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build. A shame that I had to destroy it.
 [[ENDRULE]]
 [[RULE]]
   $DEFAULT
 [[THEN]]
-  The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.
+  The strict simplicity of the ancient building gives way to Nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.
 [[ENDRULE]]
 [[ENDRULESET]]
 
-A big warning sign on the wall says "Haunted." Below the paint, there is an older, fainter sign. It says "Eat the rich."
+A big warning sign on the wall says "HAUNTED." Below the paint, there is an older, fainter sign. It says "eat the rich."
 
 
 // ---
 ACTION: $attempt_open_gate
-COMMAND: gate >> open
+COMMAND: Gate >> Open
 FOR_LOCATION: $keep_gate
 PREREQUISITES:
 !c.hasHappened(evKeepDestroyedGate)
 &&
 !c.knows(KeepGateFacts.keepGateUnlock)
+&&
+!c.playerHasVisited("keep_bedroom")
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I attempt to open the gate but it's closed tight. Maybe there's a trick to unlock it using some of the intricate woodwork, but my random mashing of various ornaments does nothing.
+I attempt to open the gate but it's closed tight. Maybe there's a trick to unlocking it using some of the intricate woodwork, but my random mashing of various ornaments does nothing.
 
 I could also bring it down using an axe. It's wood, after all.
 
 
 // ---
 ACTION: $open_gate_unlock
-COMMAND: gate >> open
+COMMAND: Gate >> Open
 FOR_LOCATION: $keep_gate
 PREREQUISITES:
 !c.hasHappened(evKeepDestroyedGate)
 &&
 c.knows(KeepGateFacts.keepGateUnlock)
+&&
+!c.playerHasVisited("keep_bedroom")
 
 INK:
-I start following the steps I learned. It is quite easy to find the decorative parts that I need to push, turn or pull: they seem more polished than the rest of the gate. They are polished by fingers performing the ritual over and over again, for decades.
+I start following the steps I learned. It is quite easy to find the decorative parts that I need to push, turn, or pull: they seem more polished than the rest of the gate. They are polished by fingers performing the ritual over and over again, for decades.
 
 Finally, I am at the very end of the "algorithm." All that's left is to turn the crest in the middle of the gate.
 
@@ -88,8 +92,7 @@ Finally, I am at the very end of the "algorithm." All that's left is to turn the
 * 8 times
 
   Eight times, like the Eight Gods. When I've finished the eighth revolution, I step back. The gate stands still for a while, then something clicks inside.
-  
-  The wings of the gate open and reveal a beatifully decorated passage into the Keep.
+  The wings of the gate open and reveal a beautifully decorated passage into the Keep.
 
   [[CODE]]
   w.recordCustom(evKeepUnlockedGate);
@@ -97,7 +100,7 @@ Finally, I am at the very end of the "algorithm." All that's left is to turn the
 
 * 9 times
 
-  I am pretty sure it was nine times, like with cat lives. When I'm done with the ninth revolution, I step back. The gate stands still for a while, then something clicks inside.
+  I am pretty sure it was nine times, nine like cat lives. When I'm done with the ninth revolution, I step back. The gate stands still for a while, then something clicks inside.
 
   I am showered by countless little darts, shooting diagonally from the ceiling. A curtain of blood covers my eyes, and the view of the gate fades to eternal black.
 
@@ -110,12 +113,14 @@ Finally, I am at the very end of the "algorithm." All that's left is to turn the
 
 // ---
 ACTION: $destroy_gate_with_axe
-COMMAND: gate >> destroy
+COMMAND: Gate >> Destroy
 FOR_LOCATION: $keep_gate
 PREREQUISITES:
 c.player.inventory.hasWeapon(WeaponType.axe)
 &&
 !c.hasHappened(evKeepUnlockedGate)
+&&
+!c.playerHasVisited("keep_bedroom")
 
 COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
@@ -125,7 +130,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
   w.recordCustom(evKeepDestroyedGate);
 [[ENDCODE]]
 
-This reveals a beatifully decorated passage into the Keep.
+This reveals a beautifully decorated passage into the Keep.
 
 
 NOTES:

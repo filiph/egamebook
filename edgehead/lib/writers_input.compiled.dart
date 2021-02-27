@@ -12621,7 +12621,7 @@ final openGateUnlockInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I start following the steps I learned. It is quite easy to find the decorative parts that I need to push, turn or pull: they seem more polished than the rest of the gate. They are polished by fingers performing the ritual over and over again, for decades.\n',
+        'I start following the steps I learned. It is quite easy to find the decorative parts that I need to push, turn, or pull: they seem more polished than the rest of the gate. They are polished by fingers performing the ritual over and over again, for decades.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12682,18 +12682,7 @@ final openGateUnlockInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'Eight times, like the Eight Gods. When I\'ve finished the eighth revolution, I step back. The gate stands still for a while, then something clicks inside.\n',
-              isRaw: true);
-        }),
-        InkParagraphNode((c) => c.outputStoryline.addParagraph()),
-        InkParagraphNode((ActionContext c) {
-          final WorldState originalWorld = c.world;
-          final Simulation sim = c.simulation;
-          final Actor a = c.actor;
-          final WorldStateBuilder w = c.outputWorld;
-          final Storyline s = c.outputStoryline;
-          s.add(
-              'The wings of the gate open and reveal a beatifully decorated passage into the Keep.\n',
+              'Eight times, like the Eight Gods. When I\'ve finished the eighth revolution, I step back. The gate stands still for a while, then something clicks inside.\nThe wings of the gate open and reveal a beautifully decorated passage into the Keep.\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12717,7 +12706,7 @@ final openGateUnlockInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I am pretty sure it was nine times, like with cat lives. When I\'m done with the ninth revolution, I step back. The gate stands still for a while, then something clicks inside.\n',
+              'I am pretty sure it was nine times, nine like cat lives. When I\'m done with the ninth revolution, I step back. The gate stands still for a while, then something clicks inside.\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -12753,7 +12742,7 @@ class AttemptOpenGate extends RoamingAction {
   static final AttemptOpenGate singleton = AttemptOpenGate();
 
   @override
-  List<String> get commandPathTemplate => ['gate', 'open'];
+  List<String> get commandPathTemplate => ['Gate', 'Open'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -12761,7 +12750,8 @@ class AttemptOpenGate extends RoamingAction {
       return false;
     }
     if (!(!c.hasHappened(evKeepDestroyedGate) &&
-        !c.knows(KeepGateFacts.keepGateUnlock))) {
+        !c.knows(KeepGateFacts.keepGateUnlock) &&
+        !c.playerHasVisited("keep_bedroom"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12775,7 +12765,7 @@ class AttemptOpenGate extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I attempt to open the gate but it\'s closed tight. Maybe there\'s a trick to unlock it using some of the intricate woodwork, but my random mashing of various ornaments does nothing.\n\nI could also bring it down using an axe. It\'s wood, after all.\n',
+        'I attempt to open the gate but it\'s closed tight. Maybe there\'s a trick to unlocking it using some of the intricate woodwork, but my random mashing of various ornaments does nothing.\n\nI could also bring it down using an axe. It\'s wood, after all.\n',
         isRaw: true);
     return '${a.name} successfully performs AttemptOpenGate';
   }
@@ -12820,7 +12810,7 @@ class DestroyGateWithAxe extends RoamingAction {
   static final DestroyGateWithAxe singleton = DestroyGateWithAxe();
 
   @override
-  List<String> get commandPathTemplate => ['gate', 'destroy'];
+  List<String> get commandPathTemplate => ['Gate', 'Destroy'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -12828,7 +12818,8 @@ class DestroyGateWithAxe extends RoamingAction {
       return false;
     }
     if (!(c.player.inventory.hasWeapon(WeaponType.axe) &&
-        !c.hasHappened(evKeepUnlockedGate))) {
+        !c.hasHappened(evKeepUnlockedGate) &&
+        !c.playerHasVisited("keep_bedroom"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -12848,7 +12839,7 @@ class DestroyGateWithAxe extends RoamingAction {
 
     w.recordCustom(evKeepDestroyedGate);
 
-    s.add('\nThis reveals a beatifully decorated passage into the Keep.\n',
+    s.add('\nThis reveals a beautifully decorated passage into the Keep.\n',
         isRaw: true);
     return '${a.name} successfully performs DestroyGateWithAxe';
   }
@@ -12893,7 +12884,7 @@ class ExamineGate extends RoamingAction {
   static final ExamineGate singleton = ExamineGate();
 
   @override
-  List<String> get commandPathTemplate => ['gate', 'examine'];
+  List<String> get commandPathTemplate => ['Gate', 'Examine'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -12911,7 +12902,7 @@ class ExamineGate extends RoamingAction {
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     Ruleset(
-        Rule(941095189, 1, false, (ApplicabilityContext c) {
+        Rule(77061314, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -12923,10 +12914,10 @@ class ExamineGate extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              ' The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build. A shame that I had to destroy it.\n',
+              ' The strict simplicity of the ancient building gives way to Nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build. A shame that I had to destroy it.\n',
               isRaw: true);
         }),
-        Rule(1029409601, 0, false, (ApplicabilityContext c) {
+        Rule(355928282, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -12938,11 +12929,11 @@ class ExamineGate extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              ' The strict simplicity of the ancient building gives way to nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.\n',
+              ' The strict simplicity of the ancient building gives way to Nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
     s.add(
-        '\nA big warning sign on the wall says "Haunted." Below the paint, there is an older, fainter sign. It says "Eat the rich."\n',
+        '\nA big warning sign on the wall says "HAUNTED." Below the paint, there is an older, fainter sign. It says "eat the rich."\n',
         isRaw: true);
     return '${a.name} successfully performs ExamineGate';
   }
@@ -12987,7 +12978,7 @@ class OpenGateUnlock extends RoamingAction {
   static final OpenGateUnlock singleton = OpenGateUnlock();
 
   @override
-  List<String> get commandPathTemplate => ['gate', 'open'];
+  List<String> get commandPathTemplate => ['Gate', 'Open'];
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
@@ -12995,7 +12986,8 @@ class OpenGateUnlock extends RoamingAction {
       return false;
     }
     if (!(!c.hasHappened(evKeepDestroyedGate) &&
-        c.knows(KeepGateFacts.keepGateUnlock))) {
+        c.knows(KeepGateFacts.keepGateUnlock) &&
+        !c.playerHasVisited("keep_bedroom"))) {
       return false;
     }
     return w.actionNeverUsed(name);
@@ -13055,7 +13047,7 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.\n\nThis is a lord\'s house, except it doesn\'t stand on top of a hill or next to a lake. Instead, it is embedded in the ancient building.\n',
+      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is made from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.\n\nThis is a lord\'s home, except it doesn\'t stand on top of a hill or next to a lake. Instead, it was fashioned from some of the more well-preserved rooms in the ancient building.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -13071,9 +13063,9 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
     mapName: 'The Keep\'s Gate',
     firstMapName: 'The Keep',
     hint:
-        'The entrance to the abandoned aristocratic mansion embedded into the Pyramid.',
+        'The entrance to the abandoned aristocratic residence within the Pyramid.',
     firstHint:
-        'This part of the Pyramid seems to have been carved into an artistocratic residence. This is the floor where I saw the lady with the katana.');
+        'This part of the Pyramid seems to have been rebuilt at some point into an aristocratic residence. This is the floor where I saw the lady with the katana.');
 final Approach keepBedroomFromKeepDining =
     Approach('keep_dining', 'keep_bedroom', '', null);
 final Approach keepBedroomFromKeepGate =
