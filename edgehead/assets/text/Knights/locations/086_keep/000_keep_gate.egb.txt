@@ -1,5 +1,8 @@
 APPROACH: $keep_gate FROM $staging_area
+
 APPROACH: $keep_gate FROM $keep_bedroom
+DESCRIPTION:
+[[IF !c.playerHasVisited('keep_gate')]]I open a massive door and walk through it into a corridor that looks a lot less ornamented than anything in the Keep. I turn around to behold the entrance to this aristocratic home.[[ENDIF]]
 
 // ---
 ROOM: $keep_gate
@@ -15,7 +18,7 @@ MAP_NAME: The Keep's Gate
 HINT: The entrance to the abandoned aristocratic residence within the Pyramid.
 
 FIRST_DESCRIPTION:
-The plain, ancient geometry of the Pyramid's hallways is suddenly disrupted by a massive gate. The gate is made from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.
+The plain, ancient geometry of the Pyramid's hallways is disrupted by a massive gate. The gate is made from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.
 
 This is a lord's home, except it doesn't stand on top of a hill or next to a lake. Instead, it was fashioned from some of the more well-preserved rooms in the ancient building.
 

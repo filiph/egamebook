@@ -12610,7 +12610,17 @@ final Room farmersVillageQuake2 = Room(
     firstHint:
         'From the outside, this part of the Pyramid is covered with vines, and there are clear signs of settlement in the windows.');
 final Approach keepGateFromKeepBedroom =
-    Approach('keep_bedroom', 'keep_gate', '', null);
+    Approach('keep_bedroom', 'keep_gate', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  final ifBlock_78dfcecc6 = !c.playerHasVisited('keep_gate')
+      ? '''I open a massive door and walk through it into a corridor that looks a lot less ornamented than anything in the Keep. I turn around to behold the entrance to this aristocratic home.'''
+      : '''''';
+  s.add('${ifBlock_78dfcecc6}\n', isRaw: true);
+});
 final Approach keepGateFromStagingArea =
     Approach('staging_area', 'keep_gate', '', null);
 final openGateUnlockInk = InkAst([
@@ -13047,7 +13057,7 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'The plain, ancient geometry of the Pyramid\'s hallways is suddenly disrupted by a massive gate. The gate is made from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.\n\nThis is a lord\'s home, except it doesn\'t stand on top of a hill or next to a lake. Instead, it was fashioned from some of the more well-preserved rooms in the ancient building.\n',
+      'The plain, ancient geometry of the Pyramid\'s hallways is disrupted by a massive gate. The gate is made from dark, richly ornamented redwood, and a rich wet scent fills the space in front of it.\n\nThis is a lord\'s home, except it doesn\'t stand on top of a hill or next to a lake. Instead, it was fashioned from some of the more well-preserved rooms in the ancient building.\n',
       isRaw: true);
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
