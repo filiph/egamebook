@@ -278,7 +278,7 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     final query = world.customHistory
         .query(name: ActionContextHelpers._describedWorthinessEvent);
     final count = query.count;
-    return min(count ~/ 2, 3);
+    return min(count, 3);
   }
 
   String get playerSalutation {
