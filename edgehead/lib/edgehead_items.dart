@@ -7,8 +7,8 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 final Item akxe = Item.weapon(
   akxeId,
   WeaponType.axe,
-  name: 'akxe',
-  adjective: 'steel',
+  name: 'poleaxe',
+  adjective: 'large',
   firstOwnerId: dargId,
   isCleaving: true,
 );
