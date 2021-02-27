@@ -15474,7 +15474,7 @@ class BleedsMainObserveVillage extends RoamingAction {
               'With the caravan, the village is lively. The villagers have their doors open, talking with each other and with the arrivals.\n\nThe talking and commotion is especially vivid near the local trader\'s building. On the other end of the liveliness spectrum, there\'s a small dwelling with a porch here that most people ignore. ${ifBlock_473d070da}\n',
               isRaw: true);
         }),
-        Rule(502605258, 0, false, (ApplicabilityContext c) {
+        Rule(21078918, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -15486,7 +15486,7 @@ class BleedsMainObserveVillage extends RoamingAction {
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. ${ifBlock_646ab8e51}\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. ${ifBlock_2464a34ed}\n',
+              'Whichever direction I look, I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. ${ifBlock_646ab8e51}\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. ${ifBlock_2464a34ed}\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
     c.learn(JisadFacts.blindPerson);
@@ -15534,7 +15534,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add(
-      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands—unnaturally well-preserved—above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+      'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands — unnaturally well-preserved — above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. Its buildings cluster around the entrance to the towering structure. Later, I learn the locals call the settlement “the Bleeds.”\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
       isRaw: true);
   c.learn(kbTrader);
   c.learn(kbGoblinCampSmoke);
@@ -15546,6 +15546,21 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
   final Actor a = c.actor;
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
+  c.describeWorthiness(
+      who: bleedsVillagers,
+      what: [
+        lairOfGodStarId,
+        akxeId,
+        sixtyFiverShieldId,
+        hawkmanJacketId,
+        dragonEggId,
+        familyPortraitId,
+        katanaId,
+        compassId
+      ],
+      especially: [hawkmanJacketId, dragonEggId, katanaId],
+      how: "{approvingly|with respect}");
+
   c.increaseSanityFromPeople();
 }, null, null,
     isIdle: true,
@@ -15553,7 +15568,7 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
     positionY: 98,
     mapName: 'The Bleeds',
     firstMapName: 'Some Buildings',
-    hint: 'This is a small village close the entrance to the Pyramid.',
+    hint: 'This is a small village close to the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach bleedsTraderHutFromBleedsMain =
@@ -17800,6 +17815,21 @@ final Room bleedsMainDuringCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      c.describeWorthiness(
+          who: bleedsVillagers,
+          what: [
+            lairOfGodStarId,
+            akxeId,
+            sixtyFiverShieldId,
+            hawkmanJacketId,
+            dragonEggId,
+            familyPortraitId,
+            katanaId,
+            compassId
+          ],
+          especially: [hawkmanJacketId, dragonEggId, katanaId],
+          how: "{approvingly|with respect}");
+
       c.increaseSanityFromPeople();
     },
     null,
@@ -17828,7 +17858,7 @@ final Room bleedsMainDuringCaravan = Room(
     positionY: 98,
     mapName: 'The Bleeds',
     firstMapName: 'Some Buildings',
-    hint: 'This is a small village close the entrance to the Pyramid.',
+    hint: 'This is a small village close to the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Room bleedsMainAfterCaravan = Room(
@@ -17847,6 +17877,21 @@ final Room bleedsMainAfterCaravan = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      c.describeWorthiness(
+          who: bleedsVillagers,
+          what: [
+            lairOfGodStarId,
+            akxeId,
+            sixtyFiverShieldId,
+            hawkmanJacketId,
+            dragonEggId,
+            familyPortraitId,
+            katanaId,
+            compassId
+          ],
+          especially: [hawkmanJacketId, dragonEggId, katanaId],
+          how: "{approvingly|with respect}");
+
       c.increaseSanityFromPeople();
     },
     null,
@@ -17877,7 +17922,7 @@ final Room bleedsMainAfterCaravan = Room(
     positionY: 98,
     mapName: 'The Bleeds',
     firstMapName: 'Some Buildings',
-    hint: 'This is a small village close the entrance to the Pyramid.',
+    hint: 'This is a small village close to the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Room bleedsMainAfterQuake1 = Room(
@@ -17889,7 +17934,7 @@ final Room bleedsMainAfterQuake1 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands—unnaturally well-preserved—above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands — unnaturally well-preserved — above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. Its buildings cluster around the entrance to the towering structure. Later, I learn the locals call the settlement “the Bleeds.”\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -17902,6 +17947,21 @@ final Room bleedsMainAfterQuake1 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      c.describeWorthiness(
+          who: bleedsVillagers,
+          what: [
+            lairOfGodStarId,
+            akxeId,
+            sixtyFiverShieldId,
+            hawkmanJacketId,
+            dragonEggId,
+            familyPortraitId,
+            katanaId,
+            compassId
+          ],
+          especially: [hawkmanJacketId, dragonEggId, katanaId],
+          how: "{approvingly|with respect}");
+
       c.increaseSanityFromPeople();
     },
     null,
@@ -17929,7 +17989,7 @@ final Room bleedsMainAfterQuake1 = Room(
     positionY: 98,
     mapName: 'The Bleeds',
     firstMapName: 'Some Buildings',
-    hint: 'This is a small village close the entrance to the Pyramid.',
+    hint: 'This is a small village close to the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Room bleedsMainAfterQuake2 = Room(
@@ -17941,7 +18001,7 @@ final Room bleedsMainAfterQuake2 = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands—unnaturally well-preserved—above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
+          'I finally see it. The Pyramid.\n\n![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)\n\nThe highest tower in the known world, by far. Built ages ago, it still stands — unnaturally well-preserved — above the overgrown rubble that once was a prosperous city of the ancients.\n\nBelow the Pyramid there\'s a small village. Its buildings cluster around the entrance to the towering structure. Later, I learn the locals call the settlement “the Bleeds.”\n\nThere is a trader\'s shop here. A mile to the west, I see a pillar of black smoke rising to the sky.\n\n',
           isRaw: true);
       c.learn(kbTrader);
       c.learn(kbGoblinCampSmoke);
@@ -17954,6 +18014,21 @@ final Room bleedsMainAfterQuake2 = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
+      c.describeWorthiness(
+          who: bleedsVillagers,
+          what: [
+            lairOfGodStarId,
+            akxeId,
+            sixtyFiverShieldId,
+            hawkmanJacketId,
+            dragonEggId,
+            familyPortraitId,
+            katanaId,
+            compassId
+          ],
+          especially: [hawkmanJacketId, dragonEggId, katanaId],
+          how: "{approvingly|with respect}");
+
       c.increaseSanityFromPeople();
     },
     null,
@@ -17983,7 +18058,7 @@ final Room bleedsMainAfterQuake2 = Room(
     positionY: 98,
     mapName: 'The Bleeds',
     firstMapName: 'Some Buildings',
-    hint: 'This is a small village close the entrance to the Pyramid.',
+    hint: 'This is a small village close to the entrance to the Pyramid.',
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach goblinSkirmishPatrolFromBleedsMain =

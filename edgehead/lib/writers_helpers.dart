@@ -44,6 +44,12 @@ final Entity oracle = Entity(
   pronoun: Pronoun.SHE,
 );
 
+final Entity bleedsVillagers = Entity(
+  id: 978004,
+  name: "villagers",
+  pronoun: Pronoun.THEY,
+);
+
 bool bothAreAlive(Actor a, Actor b) {
   return a.isAnimatedAndActive && b.isAnimatedAndActive;
 }

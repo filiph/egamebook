@@ -21,16 +21,16 @@ FIRST_MAP_NAME: Some Buildings
 FIRST_HINT: There seems to be a village or at least a homestead next to the Pyramid.
 
 MAP_NAME: The Bleeds
-HINT: This is a small village close the entrance to the Pyramid.
+HINT: This is a small village close to the entrance to the Pyramid.
 
 FIRST_DESCRIPTION:
 I finally see it. The Pyramid.
 
 ![Illustration of a skyscraper with a huge hole in it, but still standing.](pyramid.png)
 
-The highest tower in the known world, by far. Built ages ago, it still stands—unnaturally well-preserved—above the overgrown rubble that once was a prosperous city of the ancients.
+The highest tower in the known world, by far. Built ages ago, it still stands — unnaturally well-preserved — above the overgrown rubble that once was a prosperous city of the ancients.
 
-Below the Pyramid there's a small village. It huddles around the entrance to the structure. Later, I learn the locals call the settlement “The Bleeds”.
+Below the Pyramid there's a small village. Its buildings cluster around the entrance to the towering structure. Later, I learn the locals call the settlement “the Bleeds.”
 
 There is a trader's shop here. A mile to the west, I see a pillar of black smoke rising to the sky.
 
@@ -46,6 +46,8 @@ takeInventory(c);
 DESCRIPTION:
 
 [[CODE]]
+c.describeWorthiness(who: bleedsVillagers, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId, dragonEggId, familyPortraitId, katanaId, compassId], especially: [hawkmanJacketId, dragonEggId, katanaId], how: "{approvingly|with respect}");
+
 c.increaseSanityFromPeople();
 [[ENDCODE]]
 
@@ -68,7 +70,7 @@ The talking and commotion is especially vivid near the local trader's building. 
 [[RULE]]
   $DEFAULT
 [[THEN]]
-At any point I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. [[IF !c.hasHappened(evQuake1)]]Something bad is happening.[[ENDIF]]
+Whichever direction I look, I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. [[IF !c.hasHappened(evQuake1)]]Something bad is happening.[[ENDIF]]
 
 Every door is shut except for two. One is the entrance into the trader's shop. The second open door belongs to a small dwelling with a porch. [[IF c.knows(JisadFacts.name)]]Jisad sits outside on a stool.[[ELSE]]A blind man sits outside on a stool, wearing a coat.[[ENDIF]]
 [[ENDRULE]]
