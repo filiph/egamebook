@@ -104,7 +104,10 @@ extension ActionContextHelpers on ActionContext {
 
   static const String _playerHairColor = "player_hair_color";
 
+  @Deprecated('use playerHasBurntFace')
   static const String _playerHasDebt = "player_has_debt";
+
+  static const String _playerHasBurntFace = "player_has_burnt_face";
 
   static const String _playerHasWoodenFoot = "player_has_wooden_foot";
 
@@ -138,7 +141,7 @@ extension ActionContextHelpers on ActionContext {
 
     switch (debilitation) {
       case 0:
-        set(_playerHasDebt);
+        set(_playerHasBurntFace);
         break;
       case 1:
         set(_playerHasWoodenFoot);
@@ -256,9 +259,16 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
 
   bool get playerHasBlackHair => playerHairColor == "black";
 
+  @Deprecated('use playerHasBurntFace')
   bool get playerHasDebt {
     final query =
         world.customHistory.query(name: ActionContextHelpers._playerHasDebt);
+    return query.hasHappened;
+  }
+
+  bool get playerHasBurntFace {
+    final query = world.customHistory
+        .query(name: ActionContextHelpers._playerHasBurntFace);
     return query.hasHappened;
   }
 
