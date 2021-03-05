@@ -157,7 +157,10 @@ FightSituation generateBattlefieldFight(ActionContext c,
     [sixtyFiverOrc, sixtyFiverGoblin],
     "{battlefield|concrete} floor",
     roomRoamingSituation,
-    {},
+    {
+      4: battlefield_floor_have_that_scalp,
+      6: battlefield_floor_spit,
+    },
     items: const [],
   );
 }
@@ -173,7 +176,10 @@ FightSituation generateBigOFight(ActionContext c,
     [bigO],
     "marble floor",
     roomRoamingSituation,
-    {},
+    {
+      3: big_o_shame,
+      6: big_o_realize,
+    },
     items: const [],
   );
 }
@@ -212,7 +218,9 @@ FightSituation generateConetFight(ActionContext c,
     [conetKobold],
     "{cracked |}floor",
     roomRoamingSituation,
-    {},
+    {
+      4: kobold_fight_not_fun,
+    },
     items: const [],
   );
 }
@@ -241,7 +249,8 @@ FightSituation generateCrowdsourceFight(ActionContext c,
     "{temple |}floor",
     roomRoamingSituation,
     {
-      // TODO: guard joins the fight
+      5: darg_fight_impressed,
+      9: darg_fight_berserk,
     },
     items: const [],
   );
@@ -269,7 +278,10 @@ FightSituation generateDargTentFight(ActionContext c,
     [edgeheadDarg],
     "flat roof",
     roomRoamingSituation,
-    {},
+    {
+      3: darg_fight_impressed,
+      7: darg_fight_berserk,
+    },
     items: const [],
   );
 }
@@ -285,7 +297,9 @@ FightSituation generateGoblinCampFight(ActionContext c,
     [campNakedGoblin, campLeaderGoblin],
     "ash-covered ground",
     roomRoamingSituation,
-    {},
+    {
+      4: goblin_camp_thats_new,
+    },
     items: const [],
   );
 }
@@ -315,7 +329,9 @@ FightSituation generateGodsLairFight(ActionContext c,
     [orcBerserker, orcCaptain],
     "{concrete |}floor",
     roomRoamingSituation,
-    {},
+    {
+      3: gods_lair_stand_still,
+    },
     items: const [],
   );
 }
@@ -353,7 +369,8 @@ FightSituation generateJailerFight(ActionContext c,
     "{|concrete} floor",
     roomRoamingSituation,
     {
-      4: jailer_fight_sarn_looking,
+      3: jailer_fight_sarn_looking,
+      5: jailer_fight_spit,
     },
     items: const [
       // TODO: some kind of a weapon?
@@ -373,8 +390,8 @@ FightSituation generateLadyHopeFight(ActionContext c,
     "wooden floor",
     roomRoamingSituation,
     {
-      // TODO: fight events when Lady Hope sees the portrait
-      // TODO: taunts from Big O
+      2: lady_hope_interested,
+      5: lady_hope_worm,
     },
     items: const [],
   );
@@ -391,7 +408,9 @@ FightSituation generateLizardmanFight(ActionContext c,
     [lizardman],
     "grass",
     roomRoamingSituation,
-    {},
+    {
+      3: lizardman_good_fight,
+    },
     items: [
       Item.weapon(
         w.randomInt(),
