@@ -27,7 +27,7 @@ void _quake1Apply(ActionContext c) {
   final Storyline s = c.outputStoryline;
   s.addParagraph();
   s.add(
-      'Suddenly, the ground moves under my feet and I fall down. '
+      'Suddenly, the ground moves under my feet, and I fall down. '
       'The whole world starts shaking violently, '
       'and a loud roar fills my ears.',
       isRaw: true);
@@ -46,7 +46,7 @@ void _quake1Apply(ActionContext c) {
       "with bizarre images of walking giants.",
       isRaw: true);
   s.addParagraph();
-  s.add("""As suddenly as the quake started, it ends.""", isRaw: true);
+  s.add("As suddenly as the quake started, it ends.", isRaw: true);
 
   c.outputWorld.recordCustom(evQuake1);
   c.learn(ConetFacts.quakeHappened);

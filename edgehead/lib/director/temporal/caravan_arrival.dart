@@ -19,7 +19,7 @@ final _caravanArrival = Rule(_id++, 2, true, (ApplicabilityContext c) {
   final Storyline s = c.outputStoryline;
   s.addParagraph();
   s.add(
-      'I can hear loud commotion from way below, outside the Pyramid. '
+      'I can hear a loud commotion from way below, outside the Pyramid. '
       'Then a loud horn which sounds a bit familiar, '
       'though I cannot place it. Someone arrived at the Bleeds, it seems.',
       isRaw: true);

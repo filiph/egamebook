@@ -28,7 +28,7 @@ final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
       "from far ${isAbove ? 'below' : 'above'}. "
       "It takes me a minute to realize what it is. It's a sound of battle. "
       "Someone in the Pyramid, "
-      "in one of the ${isAbove ? 'lower' : 'higher'} floors, "
+      "on one of the ${isAbove ? 'lower' : 'higher'} floors, "
       "is engaging in combat.",
       isRaw: true);
 

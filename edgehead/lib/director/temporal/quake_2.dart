@@ -37,7 +37,7 @@ void _quake2Apply(ActionContext c) {
 
   if (c.hasHappened(evConetDestroyed)) {
     s.add(
-        "I thought I've destroyed the source of the quakes, "
+        "I thought I had destroyed the source of the quakes, "
         "but apparently not.",
         isRaw: true);
   }

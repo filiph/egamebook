@@ -20,7 +20,7 @@ final _leroyQuitsAfterGoblinCamp =
   s.add(
       'Leroy turns to me. "We did it. And I am proud. '
       'But now I need to go back to my father. Thank you." '
-      'Leroy leaves towards the trader\'s shop.',
+      "Leroy leaves, heading toward the trader's shop.",
       isRaw: true);
   w.updateActorById(leroyId, (b) {
     b.npc
@@ -49,10 +49,10 @@ final _leroyQuitsUpside = Rule(_id++, 2, true, (ApplicabilityContext c) {
   s.addParagraph();
   s.add(
       'Leroy turns to me. "Look, sir. I was hoping to help with the goblins '
-      'near The Bleeds. To defend our village. I\'m not with you to '
-      '_attack_ the orcs _in_ _the_ _cuts._ '
+      'near the Bleeds. To defend our village. I\'m not with you to '
+      '_attack_ the orcs! '
       'I\'ll leave now, if that\'s alright with you, sir." '
-      'He does not wait for an answer and  skips through the shadows, '
+      'He does not wait for an answer and skips through the shadows, '
       'heading downstairs.',
       isRaw: true);
   w.updateActorById(leroyId, (b) {

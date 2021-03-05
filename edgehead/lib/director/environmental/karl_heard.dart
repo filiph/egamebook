@@ -12,7 +12,7 @@ final _karlHeardFirstTime = Rule(_id++, 1, true, (ApplicabilityContext c) {
   s.addParagraph();
   s.add(
       'Somewhere way above, something large groans. '
-      'The sound is guttural, low, as rolling thunder.',
+      'The sound is guttural, low, like rolling thunder.',
       isRaw: true);
   c.outputWorld.recordCustom(evKarlHeardFirstTime);
 });

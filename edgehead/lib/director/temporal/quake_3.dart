@@ -31,7 +31,7 @@ void _quake3Apply(ActionContext c) {
   final s = c.outputStoryline;
   s.addParagraph();
 
-  s.add('Suddenly, a third quake violently shakes with everything around me.',
+  s.add('Suddenly, a third quake violently shakes everything around me.',
       isRaw: true);
   if (c.hasHappened(evConetDestroyed) &&
       // Check that we haven't said this in quake2 already.
@@ -41,13 +41,13 @@ void _quake3Apply(ActionContext c) {
           .time
           .isAfter(c.world.customHistory.query(name: evQuake2).latest.time)) {
     s.add(
-        "I thought I've destroyed the source of the quakes, "
+        "I thought I had destroyed the source of the quakes, "
         "but apparently not.",
         isRaw: true);
   }
   s.add(
       'I cover my ears but the roar persists. '
-      'The see the faces of the giants now, hungry for war.',
+      'I see the faces of the giants now, hungry for war.',
       isRaw: true);
   s.addParagraph();
   s.add(
