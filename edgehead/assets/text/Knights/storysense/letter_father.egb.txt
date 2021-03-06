@@ -17,7 +17,7 @@ There is a good life for you in Falling Rock, despite everything. The mountains 
 
 I am surprised by the brash move. From you, of all people. Remember your health. Stay home. Don't follow your brother's footsteps. Don't make my heart break for the third time.
 
-Father
+— Father
 
 [[CODE]]
 c.giveSanityToPlayer(2);
