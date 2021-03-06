@@ -391,6 +391,7 @@ final finalFightInkInk = InkAst([
               'Big O squints and observes my face. I have to fight the urge to hide the burnt side.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -871,6 +872,7 @@ final bigOEndInkInk = InkAst([
               'I think about Sarn. He died somewhere in the Pyramid, I am sure of it. He paid for the suffering he brought upon his own family. Good riddance.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -1476,6 +1478,7 @@ final dargHeadTalkInkInk = InkAst([
               'I am duly impressed. Someone must be puppeteering the body. A highly skilled necromancer, perhaps.\n\nI risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\nBut then, Darg\'s undead lips start moving. He _speaks._\n\n"Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -2721,6 +2724,7 @@ final Room barracks = Room('barracks', (ActionContext c) {
         s.add(' I find a barbecued bat on a stool out of sight.\n',
             isRaw: true);
       })).apply(ActionContext.updatedFrom(c));
+  s.addParagraph();
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -3622,6 +3626,7 @@ final sarnRescueInkInk = InkAst([
               'I was looking forward to revenge. A beating, at least, but I admit I fantasized about blood as well. The pure selfishness with which Sarn left a broken ${ifBlock_20579df5} and a broken father instead of working with them to get the family back on track — there\'s only one answer to that. Violence.\n\nI would have given anything to have Sarn this close, to be able to shower him with blow after blow. <>\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
@@ -4009,6 +4014,7 @@ final takeSarnToBleedsInk = InkAst([
               '\nI ask if I can rest with my brother on his porch.\n\n“Of course!” Jisad says. “Brother, you say? Bring out two chairs from my kitchen. You can sit beside me.”\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
   }),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -4668,6 +4674,7 @@ final Room junction = Room('junction', (ActionContext c) {
         s.add(' ${weSubstitutionCapitalized} have no trouble staying unseen.\n',
             isRaw: true);
       })).apply(ActionContext.updatedFrom(c));
+  s.addParagraph();
 }, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7863,6 +7870,7 @@ class GiveLairOfGodStarToDeathless extends RoamingAction {
               ' In a few heartbeats, a child stands before me. I learn that her name is Argo and that she is the leader of the Deathless.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
     s.add(
         '\n"I kneel before your generosity," she says. And she kneels, and the rest of the villagers immediately follow suit.\n\nArgo smiles at me. "We have been hoping to win back the Artifact Star from the orcs for years. But we are not fighters. None of us have the talents required to stand up to the orcish host."\n\nShe opens her arms and stands up. "You do. And you chose to use your talents for good."\n\nWith ceremonial slowness, she takes the star from my hand. "You are now a friend of the Deathless. As such, you will command respect from each and every one of us." She speaks loudly, clearly. The rest of the villagers still kneel, watching me silently.\n\nArgo then turns around to her people. "The Star will be deposited in the Sacred Shrine, next to the Dragon Egg. And I think our friend deserves full access."\n\nI now have access to the shrine of the Deathless, not far from here.\n\n',
         isRaw: true);
@@ -10304,6 +10312,7 @@ final Approach stagingAreaFromPyramidEntrance =
         final WorldStateBuilder w = c.outputWorld;
         final Storyline s = c.outputStoryline;
       })).apply(ActionContext.updatedFrom(c));
+  s.addParagraph();
 });
 final Room stagingArea = Room('staging_area', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -12830,6 +12839,7 @@ class ExamineGate extends RoamingAction {
               ' The strict simplicity of the ancient building gives way to Nortonian redwood panels. A fine piece of carpentry. Obviously expensive to build.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
     s.add(
         '\nA big warning sign on the wall says "HAUNTED." Below the paint, there is an older, fainter sign. It says "eat the rich."\n',
         isRaw: true);
@@ -13251,6 +13261,7 @@ final Room keepDining = Room(
                 ' As I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be puppeteering the body. A highly skilled necromancer, perhaps.\n\n I risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.\n\n But then, Lady Hope\'s undead lips start moving. She _speaks._\n\n "Welcome, young one." The voice is dry and labored, but nevertheless understandable. A talking corpse is something I\'ve never even considered before. This is obviously necromancy of some higher level.\n',
                 isRaw: true);
           })).apply(ActionContext.updatedFrom(c));
+      s.addParagraph();
       s.add(
           '\n"You made it rather far, I admit." The body starts walking toward me. "But now you die."\n\n',
           isRaw: true);
@@ -14441,6 +14452,7 @@ final talkToMiguelAboutBrotherInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
   }),
 ]);
 final talkToMiguelAboutDevlingInk = InkAst([
@@ -15381,6 +15393,7 @@ class BleedsMainObserveVillage extends RoamingAction {
               'Whichever direction I look, I can see at least a few villagers going about their business. They all walk fast and seldom talk to each other. ${ifBlock_646ab8e51}\n\nEvery door is shut except for two. One is the entrance into the trader\'s shop. The second open door belongs to a small dwelling with a porch. ${ifBlock_2464a34ed}\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
     c.learn(JisadFacts.blindPerson);
 
     return '${a.name} successfully performs BleedsMainObserveVillage';
@@ -18659,6 +18672,7 @@ class GoblinCampAttack extends RoamingAction {
               ' ${weSubstitutionCapitalized} leap from hiding and charge the goblins. The two I heard arguing sit next to a fire pit. There is another one, sleeping on the ground, close to where I start my attack. I run past him and easily kill him as he\'s waking up.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
+    s.addParagraph();
     s.add(
         '\nThe goblins near the fire pit stand up. One of them, I realize, is almost naked and doesn\'t have a weapon near him. He grabs a branch from the fire.\n\nThe other one, the one I decide looks like the leader of the group, readies a razor-sharp, evil-looking hatchet. An ugly scar slants through his face.\n\n"Amak, you f—" he starts saying, but then I am already on him.\n\n',
         isRaw: true);
@@ -19559,6 +19573,7 @@ final Room meadowFight = Room(
                       ' ${ifBlock_519842faa} "You are welcome to tag along with me back to safety. I\'ll give you a discount on my services for the way back."\n',
                       isRaw: true);
                 })).apply(ActionContext.updatedFrom(c));
+            s.addParagraph();
             s.add(
                 '\n I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, now showing through the redwoods to the north.\n\n Tamara understands. ${ifBlock_781966055} "I will leave you to it, then. My work here is done." In a few moments, she disappears among the trees and the bushes to the south.\n\n',
                 isRaw: true);
@@ -19578,6 +19593,7 @@ final Room meadowFight = Room(
             throw StateError(
                 "Tamara's state wasn't planned for: ${w.getActorById(tamaraId)}");
           })).apply(ActionContext.updatedFrom(c));
+      s.addParagraph();
       c.giveNewItemToPlayer(letterFromFather);
     },
     whereDescription: 'among the trees',

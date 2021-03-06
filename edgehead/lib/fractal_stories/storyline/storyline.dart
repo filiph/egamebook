@@ -751,9 +751,12 @@ class Storyline {
 
     // Replace dumb quotes with smart quotes.
     s = smartifyQuotes(s);
+    assert(!s.contains('"'));
+    assert(!s.contains("'"));
 
     // Fix repeated spaces, such as 'Hello  there' -> 'Hello there'.
     s = collapseSpaces(s);
+    assert(!s.contains('  '));
 
     // Construct the text.
     final text = TextOutput((b) => b..markdownText = s);
@@ -1464,8 +1467,8 @@ class Storyline {
     }
   }
 
-  /// When there is more than one consecutive space (`"  "`), we transform it
-  /// into just one space (`" "`).
+  /// When there is more than one consecutive spaces (`"  "`),
+  /// we transform them into just one space (`" "`).
   static String collapseSpaces(String input) {
     return input.replaceAll(_twoOrMoreSpaces, ' ');
   }

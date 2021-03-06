@@ -340,6 +340,9 @@ class SequenceBlockVisitor {
         break;
       case BlockType.ruleset:
         _builder.addExpression(_visitRuleset(block));
+        // Add newlines after each ruleset.
+        _builder.addExpression(
+            refer(storylineParameter.name).property("addParagraph").call([]));
         break;
       case BlockType.rule:
       case BlockType.ruleCondition:

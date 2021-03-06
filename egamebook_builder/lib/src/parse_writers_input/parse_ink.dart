@@ -79,7 +79,7 @@ String parseInk(String name, String text) {
       final describerCode = describer.accept(_dartEmitter).toString();
 
       buf.writeln('InkParagraphNode($describerCode), ');
-      // Mark this paragraph a
+
       previousWasParagraph = !isCodeParagraph;
       previousParagraphHadGlue = paragraph.hasEndingGlue;
     }
