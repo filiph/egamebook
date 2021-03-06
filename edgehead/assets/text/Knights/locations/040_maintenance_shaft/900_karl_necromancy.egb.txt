@@ -29,7 +29,7 @@ return ReasonedSuccessChance.sureSuccess;
 
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I perform necromancy. I feel I have awaken something human-sized but not entirely human. Then, a terrible roar and thrashing comes from beyond the gate.
+I perform necromancy. I feel I have awakened something human-sized but not entirely human. Then, a terrible roar and thrashing comes from beyond the gate.
 
 [[CODE]]
 // Keep in sync with FightSituation's RaiseDead.applySuccess.
@@ -37,9 +37,9 @@ c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
 c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
 [[ENDCODE]]
 
-"What's going on?" the berserker asks and picks up his battle axe. "What's going on with Karl?"
+"What's going on?" the berserker asks, picking up his battle axe. "What's going on with Karl?"
 
-The two approach the large gate and open it to peek inside. Almost instantly, a giant hand pushes the door open so hard that it launches the berserker across the room. Hitting the wall snaps his neck, and he does not move anymore.
+The two approach the large gate and open it to peek inside. Almost instantly, a giant hand pushes the door open so hard that it launches the berserker across the room. Hitting the wall snaps the beserker’s neck, and he does not move anymore.
 
 From my perspective above the room, it is hard to see the creature beyond the gate. But it is clearly a giant, and it is clearly out of its mind with pain. The guttural roar is deafening, and blood is filling the floor beneath its feet.
 
@@ -71,3 +71,5 @@ I wish I could raise this new corpse, but it is well beyond my capability.
 FAILURE_BEGINNING_DESCRIPTION:
 // Keep in sync with FightSituation's RaiseDead.applyFailure.
 I try to perform the necromantic incantation but I fail. [[IF a.sanity < 1]]My sanity is already gone.[[ENDIF]][[IF isFollowedByUndeadActor(c, a) || isFollowedByUndeadInsect(c)]]My powers are not strong enough to hold two unliving minds, and I already have an undead follower.[[ENDIF]] Nothing happens.
+
+It is a shame. I feel an interesting, freshly dead body somewhere nearby.

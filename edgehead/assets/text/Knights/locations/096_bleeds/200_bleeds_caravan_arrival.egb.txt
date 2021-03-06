@@ -11,11 +11,13 @@ throw StateError("Player should have been to the Bleeds already.");
 [[ENDCODE]]
 
 VARIANT_UPDATE_DESCRIPTION:
-The road that leads from the Pyramid entrance, between the buildings of the Bleeds, and into the forest of San Francisco, is full of wagons, bulls, and new people. A caravan has arrived. They're clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.
+The road that leads from the Pyramid entrance into the forest of San Francisco, passing through the Bleeds, is full of wagons, bulls, and new people. A caravan has arrived. They're clearly not stopping for long. The bulls are still in their harnesses, the people are not sitting down, and there is nobody setting up tents.
 
-There is some commotion around the trader's shop, not surprisingly. People are moving goods through the back. 
+There is some commotion around the trader's shop, not surprisingly. People are moving goods through the back.
 
 [[CODE]]
+c.describeWorthiness(who: bleedsVillagers, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId, dragonEggId, familyPortraitId, katanaId, compassId], especially: [hawkmanJacketId, dragonEggId, katanaId], how: "{approvingly|with respect}");
+
 c.increaseSanityFromPeople();
 [[ENDCODE]]
 

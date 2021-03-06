@@ -8,12 +8,12 @@ FIRST_MAP_NAME: A Clean Chamber
 FIRST_HINT: Far apart from most of the commotion, this part of the Pyramid clearly sees much less regular use. The corridors are empty and clean, and they all converge on this one silent room.
 
 MAP_NAME: Antechamber
-HINT: The room with the trap door in the ceiling and the curious lock mechanism.
+HINT: The room with the trap door in the ceiling and that curious lock mechanism.
 
 POS: 26, 22
 
 FIRST_DESCRIPTION:
-I come to a dark room without windows, at the very center of the floor. A stone staircase leads up to a trap door in the ceiling.
+I come to a dark room without windows, at the very center of the 39th floor. A stone staircase leads up to a trap door in the ceiling.
 
 A curious lock mechanism guards the trap door from being opened.
 
@@ -22,11 +22,11 @@ DESCRIPTION: $NONE
 
 // ---
 ACTION: $examine_antechamber_lock
-COMMAND: lock mechanism >> examine
+COMMAND: Lock mechanism >> Examine
 FOR_LOCATION: $big_o_antechamber
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The mechanism is complex and delicate. Not quite ancient but definitely a work of someone skillful.
+The mechanism is complex and delicate. Not quite ancient but definitely the work of someone skillful.
 
 In contrast to the intricate texture of the bulk of the mechanism, the center of the lock is simple. An elegant circle, about the size of my palm. This must be the equivalent of a key slit.
 
@@ -35,7 +35,7 @@ In contrast to the intricate texture of the bulk of the mechanism, the center of
 
 // ---
 ACTION: $open_antechamber_lock
-COMMAND: lock mechanism >> open with the badge
+COMMAND: Lock mechanism >> Open with the badge
 FOR_LOCATION: $big_o_antechamber
 
 PREREQUISITES:
@@ -44,7 +44,6 @@ w.actionHasBeenPerformed('examine_antechamber_lock')
 c.hasItem(theNullId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I climb up the ladder and place the metal circle in the center of the mechanism. It fits perfectly. Something in the trapdoor clicks, and it slowly opens, as if held by an invisible hand.
+I climb up the staircase and place the metal circle in the center of the mechanism. It fits perfectly. Something in the trap door clicks, and the door slowly opens, as if held by an invisible hand.
 
-The ladder leads upwards, through a dark shaft and into a sun-lit space far above.
-
+A ladder leads upwards, through a dark shaft and into a sunlit space far above.

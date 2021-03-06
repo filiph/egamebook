@@ -15,9 +15,9 @@ HINT: A large, filthy pool in the middle of the building.
 FLAGS: $IDLE
 
 DESCRIPTION:
-A large, filthy pool in the middle of the building, covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. There's an iron dam here, preventing the water from spilling into the corridors of the Pyramid.
+A large, filthy pool in the middle of the building, surrounded by a ledge and covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. It would have been intended to distribute water to the upper floors, but I wouldn't want to taste what's collected there now. There's an iron dam here, preventing the water from spilling into the corridors of the Pyramid.
 
-Everything is wet here, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.
+Everything is wet, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.
 
 Something big just moved in the water.
 
@@ -29,7 +29,7 @@ VARIANT_OF: $reservoir
 RULE: c.hasHappened(evOpenedDam)
 
 DESCRIPTION:
-A huge empty room, with the floor covered with sludge and slimy carcasses. There are orc and goblin corpses there, too.
+A huge empty room, with the floor covered in sludge and slimy carcasses. There are orc and goblin corpses there, too.
 
 Muddy footprints lead away from the reservoir.
 
@@ -58,7 +58,7 @@ I am almost certain there is something moving just below the surface of the wate
 
     The wave comes at me swiftly. Then, a slick reptilian head emerges surprisingly close to where I crouch, and something long and sharp pierces my {chest|neck}.
 
-    It's a clean thrust, and I know then and there I have only a few heartbeats left in me. With sudden clarity, I see the creature leap out of the water, and pull out its spear easily from my body.
+    It's a clean thrust, and I know then and there I have only a few heartbeats left in me. With sudden clarity, I see the creature leap out of the water, and pull its spear out easily from my body.
 
     ![Illustration of a lizardman with a spear.](lizardman.png)
 
@@ -79,7 +79,7 @@ COMMAND: Dam >> Examine
 FOR_LOCATION: $reservoir
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The low waves of the reservoir go up and down the face of the dam, producing an occassional splash where the dam meets with the solid, reinforced walls. The doors of the dam are almost all rust now, though they were probably white in the ancient times. At least that's what I gather from the small islands of white on the otherwise dark red surface.
+The low waves of the reservoir go up and down the face of the dam, producing an occasional splash where the dam meets with the solid, reinforced walls. The doors of the dam are almost all rust now, though they were probably white in the ancient times. At least that's what I gather from the small islands of white on the otherwise dark red surface.
 
 The dam is topped with a little bridge. There's an iron wheel here which is connected to the dam beneath with a massive rod.
 
@@ -99,8 +99,8 @@ REPEATABLE: $TRUE
 COMPLETE_SUCCESS_PROBABILITY:
 return const ReasonedSuccessChance<void>(0.4);
 
-COMPLETE_SUCCESS_DESCRIPTION: 
-I lean on the wheel and push hard to the right. To my surprise, the wheel does move a bit but then immediately stops. A feint thud escapes from below.
+COMPLETE_SUCCESS_DESCRIPTION:
+I lean on the wheel and push hard to the right. To my surprise, the wheel does move a bit but then immediately stops. A faint thud escapes from below.
 
 
 FAILURE_BEGINNING_DESCRIPTION:
@@ -109,13 +109,13 @@ FAILURE_BEGINNING_DESCRIPTION:
 RESCUE_COMMAND: Try harder
 RESCUE_HINT: I still have some stamina left in me.
 RESCUE_PREREQUISITES: a.stamina > 0
-RESCUE_EFFECT: 
+RESCUE_EFFECT:
 w.updateActorById(a.id, (b) => b..stamina -= 1);
 RESCUE_DESCRIPTION:
-After laboring over the wheel for some time, I get it to move, but only a bit. It moves maybe a an inch and then stops. A feint thud escapes from below.
+After laboring over the wheel for some time, I get it to move, but only a bit. It moves maybe an inch and then stops. A faint thud escapes from below.
 
 CONTINUATION_OF_FAILURE_COMMAND: Give up
-CONTINUATION_OF_FAILURE_DESCRIPTION: 
+CONTINUATION_OF_FAILURE_DESCRIPTION:
 I shrug and let off the wheel.
 
 
@@ -133,12 +133,12 @@ REPEATABLE: $TRUE
 COMPLETE_SUCCESS_PROBABILITY:
 return const ReasonedSuccessChance<void>(0.4);
 
-COMPLETE_SUCCESS_DESCRIPTION: 
-I lean on the wheel and push hard to the left. To my surprise, the wheel does move. Before I know it, the wheel turns easily, and sound of rushing water fills the room.
+COMPLETE_SUCCESS_DESCRIPTION:
+I lean on the wheel and push hard to the left. To my surprise, the wheel does move. Before I know it, the wheel turns easily, and the sound of rushing water fills the room.
 
-In only a few moments, the reservoir empties. As it does, I think I can see a creature on the opposite side of the room. It jumps from the quickly subsiding water surface onto a ledge, and quickly disappears in shadows. It leaves muddy footprints behind.
+In only a few moments, the reservoir empties. As it does, I think I can see a creature on the opposite side of the room. It jumps from the fast-subsiding water surface onto a ledge and quickly disappears in shadows. It leaves muddy footprints behind.
 
-SUCCESS_EFFECT: 
+SUCCESS_EFFECT:
 c.markHappened(evOpenedDam);
 
 FAILURE_BEGINNING_DESCRIPTION:
@@ -147,15 +147,15 @@ FAILURE_BEGINNING_DESCRIPTION:
 RESCUE_COMMAND: Try harder
 RESCUE_HINT: I still have some stamina left in me.
 RESCUE_PREREQUISITES: a.stamina > 0
-RESCUE_EFFECT: 
+RESCUE_EFFECT:
 w.updateActorById(a.id, (b) => b..stamina -= 1);
 RESCUE_DESCRIPTION:
-After laboring over the wheel for some time, I get it to move. At first, it moves by only an inch and stops again. But something gives way then, and suddenly the wheel turns easily. Sound of rushing water fills the room.
+After laboring over the wheel for some time, I get it to move. At first, it moves by only an inch and stops again. But something gives way then, and suddenly the wheel turns easily. The sound of rushing water fills the room.
 
-In only a few moments, the reservoir empties. As it does, I think I can see a creature on the opposite side of the room. It jumps from the quickly subsiding water surface onto a ledge, and quickly disappears in shadows. It leaves muddy footprints behind.
+In only a few moments, the reservoir empties. As it does, I think I can see a creature on the opposite side of the room. It jumps from the fast-subsiding water surface onto a ledge and quickly disappears in shadows. It leaves muddy footprints behind.
 
 CONTINUATION_OF_FAILURE_COMMAND: Give up
-CONTINUATION_OF_FAILURE_DESCRIPTION: 
+CONTINUATION_OF_FAILURE_DESCRIPTION:
 I shrug and let off the wheel.
 
 
@@ -167,9 +167,9 @@ PREREQUISITES:
 c.hasHappened(evOpenedDam)
 
 INK:
-[We] use the same ledge as the creature and follow the muddy footprints. After leaving the reservoir area, the footprints beeline to a tight crawlspace out of sight. The creature must be as unwelcome among the orcs as any human.
+[We] use the same ledge as the creature and follow the muddy footprints. After leaving the reservoir area, the footprints beeline to a tight crawl space out of sight. The creature must be as unwelcome among the orcs as any human.
 
-The footprints continue downward. There is no wandering — the creature must know these parts well. 
+The footprints continue downward. There is no wandering — the creature must know these parts well.
 
 After a long while, the creature's trail leads us all the way to the enormous hole in the Pyramid and the foliage that fills the space.
 

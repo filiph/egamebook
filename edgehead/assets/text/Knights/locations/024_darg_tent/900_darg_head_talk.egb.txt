@@ -4,7 +4,7 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-I am almost about [[IF c.inRoomParent("crowdsource")]]to retreat back to the shadows[[ELSE]]leave[[ENDIF]] when I hear a soft, gurgling sound. Darg's head opens its dead eyes, and an ugly, unnatural grin appears on the face.
+I am almost about to [[IF c.inRoomParent("crowdsource")]]retreat back to the shadows[[ELSE]]leave[[ENDIF]] when I hear a soft, gurgling sound. Darg's head opens its dead eyes, and an ugly, unnatural grin appears on the face.
 
 [[RULESET]]
 [[RULE]]
@@ -16,7 +16,7 @@ I am reminded of my fight with Lady Hope. The necromancer is speaking through de
 // Haven't seen this yet.
 $DEFAULT
 [[THEN]]
-I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.
+I am duly impressed. Someone must be puppeteering the body. A highly skilled necromancer, perhaps.
 
 I risk a quick look around. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.
 
@@ -30,23 +30,13 @@ But then, Darg's undead lips start moving. He _speaks._
 
 * "I respect yours."
 
-* "That is irrelevant."
+   "Good," the head says. "You must understand, I seek nothing less than immortality. Not of myself, mind you. Immortality of civilization, of culture."
 
 * "Shut up."
 
 -
 
-"I try to keep my head clear of emotions, and for the past few decades, I have succeeded. He who wants to amount to anything in life must rid himself of all distractions."
-
-* "I agree."
-
-* "I don't care."
-
-* "What are you trying to amount to?"
-
--
-
-"Nothing less than immortality. Not of myself, mind you. Immortality of civilization, of culture." Darg's dead gaze slowly slides towards the floor but the mouth keeps talking. "What happened to the ancients cannot happen to us. I will make sure of it."
+Darg's dead gaze slowly slides toward the floor but the mouth keeps talking. "What happened to the ancients cannot happen to us. I will make sure of it."
 
 The muscles on Darg's head finally loosen and his tongue touches the ground.
 
@@ -54,7 +44,7 @@ I knee down to inspect the dead body. Surely, the necromancer behind the talking
 
 But I find no such thing. Despite my instincts, I must assume that the necromancer is able to do all of this remotely, without the help of any device. I shudder. No human can possibly endure such concentration. Such pain.
 
-On Darg's chest, I find a circular iron badge. It has nothing embossed in it but that simplicity somehow makes it even more impressive. I take it.
+On Darg's chest, I find a circular iron badge. It has nothing embossed in it, but that simplicity somehow makes it even more impressive. I take it.
 
 [[CODE]]
 c.giveNewItemToPlayer(theNull);

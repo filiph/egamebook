@@ -21,9 +21,9 @@ Sarn continues rocking, and <>
 
 <> he keeps staring into distance.
 
-Did I travel all this way, did I go through all this, for nothing? [[IF c.playerHasWoodenFoot]]My left foot starts to itch. The foot that isn't there anymore.[[ENDIF]][[IF c.playerHasAsthma]]I feel my lungs constrict. I fight off the urge to cough, and remember the cold, cold nights after my brother left.[[ENDIF]][[IF c.playerHasDebt]]My right hand makes a fist as I remember the months after my brother left, and the crippling debt that is still with us today.[[ENDIF]]
+Did I travel all this way, did I go through all this, for nothing? [[IF c.playerHasWoodenFoot]]My left foot starts to itch. The foot that isn't there anymore.[[ENDIF]][[IF c.playerHasAsthma]]I feel my lungs constrict. I fight off the urge to cough, and I remember the cold, cold nights after my brother left.[[ENDIF]][[IF c.playerHasBurntFace]]My right hand touches the burnt side of my face.[[ENDIF]]
 
-I have to finish this. My brother left to seek his adventure, leaving my father and I in poverty and misery. I don't owe him nothing. But the people living here, under the tyranny of whatever it is at the top, deserve my help.
+I have to finish this. My brother left to seek his adventure, leaving my father and me in poverty and misery. I don't owe him anything. But the people living here, under the tyranny of whoever it is at the top, deserve my help.
 
 I will show my brother what it is to be a decent human being.
 
@@ -39,7 +39,7 @@ c.hasHappened(evSavedSarn)
 !w.actionHasBeenPerformed('sarn_take_his_hammer')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-The hammer is extremely well done and menacing.
+The hammer is extremely well made and menacing.
 
 
 // ---
@@ -60,7 +60,7 @@ c.giveNewItemToPlayer(sarnHammer);
 
 // ---
 ACTION: $sarn_read_letter
-COMMAND: Inventory >> letter from my father >> read to Sarn
+COMMAND: Inventory >> Letter from my father >> Read to Sarn
 FOR_LOCATION: $bleeds_main
 
 PREREQUISITES:
@@ -69,7 +69,11 @@ c.hasHappened(evSavedSarn)
 c.hasItem(letterFromFatherId)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-Sarn listens intently. There seems to be a little bit of recognition in his face. By the time I finish reading, he looks happier, though still out of it.
+I hope father's handwriting and his talk of "dull mountains" might bring Sarn's mind back from wherever it is.
+
+He listens intently. There seems to be a little bit of recognition in his face. By the time I finish reading, he looks happier.
+
+But, moments later, his face wipes again, and he continues rocking back and forth.
 
 
 NOTES:

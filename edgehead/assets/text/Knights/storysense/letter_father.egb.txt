@@ -1,5 +1,5 @@
-ACTION: $read_letter_from_father
-COMMAND: Inventory >> letter from my father >> read
+﻿ACTION: $read_letter_from_father
+COMMAND: Inventory >> Letter from my father >> Read
 
 PREREQUISITES:
 c.isInIdleRoom
@@ -33,9 +33,9 @@ I carefully fold the paper and keep my thumb pressed against the broken wax seal
     w.recordCustom("goal_deserves_punishment");
     [[ENDCODE]]
 
-    _Nobody_ should be able to get away with what Sarn did and feel no consequences. Mother dead. Father rudderless and sad beyond imagining. Small [[IF c.playerIsMale]]brother[[ELSE]]sister[[ENDIF]], me, frightened.
+    _Nobody_ should be able to get away with what Sarn did and feel no consequences. Mother dead. Father rudderless and sad beyond imagining. Little [[IF c.playerIsMale]]brother[[ELSE]]sister[[ENDIF]], me, frightened.
 
-    Sarn was supposed to help, and instead he took off, to find riches or advanture in San Francisco. For that, by the Eight Gods, he must be punished. 
+    Sarn was supposed to help, and instead he took off, to find riches or adventure in San Francisco. For that, by the Eight Gods, he must be punished.
 
 * He must know what his running away did to us.
 
@@ -43,9 +43,9 @@ I carefully fold the paper and keep my thumb pressed against the broken wax seal
     w.recordCustom("goal_must_know");
     [[ENDCODE]]
 
-    Sarn left just after Mother died, when Father rudderless and sad beyond imagining, and I frightened. Is it possible that he didn't know what he was doing? That his young head couldn't imagine what _another_ loss of a member would do to a struggling family?
+    Sarn left just after Mother died, when Father was rudderless and sad beyond imagining. I was so terrified of what would come next. Is it possible that Sarn didn't know what he was doing? That his young head couldn't imagine what _another_ loss of a member would do to a struggling family?
 
-    Sarn must learn what happened. He cannot live his life without knowing that his act of cowardice almost broke Father, and me.
+    He must learn what happened. He cannot live his life without knowing that his act of cowardice almost broke Father, and me.
 
 * I want revenge.
 

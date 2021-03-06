@@ -7,18 +7,18 @@ c.inRoomWith(katId)
 
 INK:
 // Subtext: Kat is a bit self-conscious about her name. But she's professional.
-"Greetings to you!" The woman smiles. "My name is Kat."
+"Greetings to you!" The woman smiles[[IF c.playerHasBurntFace]], though she flinches a bit when she sees my face.[[ENDIF]]. "My name is Kat."
 
 * "Kat?"
 
   The woman's face sharpens. "Kat, yes. That's my name. What's yours?"
-  
+
   * * "Aren."
-  
+
   * * "Kat with a K, like Katherine?"
 
   "Yes. But don't call me that. And your name is..."
-  
+
   * * * "Aren."
 
 * "Mine's Aren."
@@ -44,7 +44,7 @@ w.actionHasBeenPerformed("talk_to_kat_greetings")
 COMPLETE_SUCCESS_DESCRIPTION:
 "Sarn of Falling Rock," she repeats. "I don't think I remember that name."
 
-She looks closer at me. "But those eyes. They look familiar." She nods. "And the [[IF c.playerHasBlackHair]]black[[ENDIF]][[IF c.playerHasBrownHair]]brown[[ENDIF]][[IF c.playerHasBlondHair]]blond[[ENDIF]] hair. Yes, I think I've seen your brother around here. But that's as much as I can tell you, unfortunately."
+She looks closer at me. "But those eyes. They look familiar." She nods. "And the [[IF c.playerHasBlackHair]]black[[ENDIF]][[IF c.playerHasBrownHair]]brown[[ENDIF]][[IF c.playerHasBlondHair]]blond[[ENDIF]] hair. Your brother? Yes, I think I've seen him around here. But that's as much as I can tell you, unfortunately."
 
 [[CODE]]
 c.learn(SarnFacts.wasHere);
@@ -82,7 +82,7 @@ c.inRoomWith(katId)
 w.actionHasBeenPerformed("talk_to_kat_greetings")
 
 INK:
-Kat raises her eyebrows and looks you up and down. "Don't underestimate it," she says. "There's a reason the Knights are leaving, and it's not because we are cowards. The Orcs in the Pyramid are well armed, numerous, and bolder every day."
+Kat raises her eyebrows and looks me up and down. "Don't underestimate it," she says. "There's a reason the Knights are leaving, and it's not because we are cowards. The orcs in the Pyramid are well armed, numerous, and bolder every day."
 
 [[CODE]]
 c.learn(KnightsFacts.knightsAreLeaving);
@@ -138,4 +138,3 @@ INK:
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);
 [[ENDCODE]]
-

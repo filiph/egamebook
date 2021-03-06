@@ -12,12 +12,12 @@ FLAGS: $IDLE
 POS: 32, 67
 
 MAP_NAME: Elevator Shaft Entrance on the 12th Floor
-HINT: A rare access to the ancient elevator shaft.
+HINT: A rare access point to the ancient elevator shaft.
 
-FIRST_DESCRIPTION: 
-Darkness shrouds most of the vertical shaft, except for a single bright slit many floors above. Down here, only a narrow passage connects the elevator shaft with the corridors surrounding it.
+FIRST_DESCRIPTION:
+Darkness shrouds most of the vertical shaft, except for a single bright slit many floors above. Down here on the 12th floor, only a narrow passage connects the elevator shaft with the corridors surrounding it.
 
-I smell oil and metal, and everything sounds like in a cave.
+I smell oil and metal, and everything sounds like the inside of a cave.
 
 DESCRIPTION: $NONE
 

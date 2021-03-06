@@ -8,7 +8,7 @@ FLAGS: $IDLE
 POS: 39, 58
 
 FIRST_MAP_NAME: Someone's Study
-FIRST_HINT: A room with a good view of the forest of San Francisco and the Bay.
+FIRST_HINT: A room with a good view of the forest and the San Francisco Bay.
 
 MAP_NAME: Oracle's Study
 HINT: A place full of books and the smell of coffee.

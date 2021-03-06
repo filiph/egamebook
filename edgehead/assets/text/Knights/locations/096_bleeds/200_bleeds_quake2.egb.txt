@@ -15,5 +15,7 @@ VARIANT_UPDATE_DESCRIPTION:
 The people are quite a bit more nervous than before. There is talk about a farmer falling to his death on the Slopes.
 
 [[CODE]]
+c.describeWorthiness(who: bleedsVillagers, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId, dragonEggId, familyPortraitId, katanaId, compassId], especially: [hawkmanJacketId, dragonEggId, katanaId], how: "{approvingly|with respect}");
+
 c.increaseSanityFromPeople();
 [[ENDCODE]]

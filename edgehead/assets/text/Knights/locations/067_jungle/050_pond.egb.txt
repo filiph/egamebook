@@ -10,7 +10,7 @@ MAP_NAME: Pond
 HINT: A small body of water at the bottom of the crater.
 
 FIRST_DESCRIPTION:
-[We] follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
+[We] follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads toward a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by twisted iron beams.
 
 DESCRIPTION: $NONE
 
@@ -21,7 +21,7 @@ VARIANT_OF: $pond
 RULE: c.hasHappened(evOpenedDam)
 
 FIRST_DESCRIPTION:
-[We] follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads towards a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by damaged pillars.
+[We] follow a narrow path through the foliage, smelling the crispness of pine needles and the smell of fresh, cold air. The path leads toward a clearing with a pond. A strange, big, ancient object is suspended above the pond, held above the ground by twisted iron beams.
 
 On one side of the pond, in plain sight but outside my immediate reach, a lizardman.
 
@@ -51,9 +51,9 @@ The color and proportions are different, but after a few moments I recognize the
 
 * Take a closer look
 
-    The vehicle sits above the calm surface of the pond, and almost blends with the  surrounding vegetation. It looks like it was destroyed in the ancient times, when thing like it could still fly. I can see the path it took, all those millennia ago, through the structure of the Pyramid. Its demise made room for this jungle.
+    The vehicle sits above the calm surface of the pond, and it almost blends in with the surrounding vegetation. It looks like it was destroyed in the ancient times, when things like it could still fly. I can see the path it took, all those centuries ago, through the structure of the Pyramid. Its demise made room for this jungle.
 
-    There are flowers and burned out candles on top of its metal nose.
+    There are fresh flowers and burned out candles on top of its metal nose.
 
 * Leave it be
 
@@ -77,4 +77,3 @@ c.movePlayer('pond_lizard_rock');
 
 NOTES:
 Helicopter: it was a machine that could fly like an insect. I never imagined it so big. This one is ruined. But it is also well preserved, and there are flowers and burned out candles on top of its metal nose.
-

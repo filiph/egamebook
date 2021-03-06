@@ -29,7 +29,7 @@ w.actionHasBeenPerformed("talk_to_kat_greetings")
 c.hasHappened(evOrcOffensive)
 
 INK:
-"It's the orcs. They attacked. They took over the Oracle's observatory, threatened to bring the fight to the farmers. Miguel was right. I cannot leave it be. If you want my help, I'll follow you."
+"It's the orcs. They attacked. They took over Oracle's observatory, threatened to bring the fight to the farmers. Miguel was right. I cannot leave it be. If you want my help, I'll follow you."
 
 [[CODE]]
 assert(c.world.getActorById(katId).isAnimatedAndActive);
@@ -38,5 +38,3 @@ c.outputWorld.updateActorById(katId, (b) {
   assert(b.currentRoomName == 'pyramid_entrance');
 });
 [[ENDCODE]]
-
-

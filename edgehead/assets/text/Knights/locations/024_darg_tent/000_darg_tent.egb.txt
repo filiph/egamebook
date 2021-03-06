@@ -9,12 +9,12 @@ FIRST_MAP_NAME: On Top of the Eastern Shaft
 FIRST_HINT: There is access to the outside of the Pyramid here. The walls next to the ancient door are painted red and decorated with human teeth and other signs of orc power.
 
 MAP_NAME: Orc Leader's Tent
-HINT: A tent placed on top of the Eastern shaft, overlooking the bay.
+HINT: A tent placed on top of the eastern shaft, overlooking the Bay.
 
 FIRST_DESCRIPTION:
-This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.
+This is a concrete platform sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it. The air is fresh, and I can hear the twitter of local birds again.
 
-A richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.
+A richly decorated tent sits at the center of the platform. I can see dagger and sabre motifs, painted in red on the off-white tent. Some important orc must be stationed here.
 
 DESCRIPTION: $NONE
 
@@ -24,7 +24,7 @@ FIGHT_SITUATION:
 generateDargTentFight
 
 AFTER_MONSTERS_CLEARED:
-The fight is over. I look around, half expecting a company of orcs. But not a single one has come. They probably didn't consider it necessary to post guards around this remote place, and the wind has swept away the sound of battle.
+The fight is over. I look around, half-expecting a company of orcs. But not a single one has come. They probably didn't consider it necessary to post guards around this remote place, and the wind has swept away the sound of battle.
 
 [[CODE]]
 c.markHappened(evKilledDarg);
@@ -48,11 +48,11 @@ RULE:
 c.hasHappened(evDargLeftCrowdsource)
 
 FIRST_DESCRIPTION:
-This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.
+This is a concrete platform sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it. The air is fresh, and I can hear the twitter of local birds again.
 
-A richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.
+A richly decorated tent sits at the center of the platform. I can see dagger and sabre motifs, painted in red on the off-white tent. Some important orc must be stationed here.
 
-As I consider that, I see a large figure through the flaps of the tent. It is Darg, the leader of the orcs I first saw in the orcs' temple.
+As I consider that, I see a large figure through the flaps of the tent. It is Darg, the orc leader I first saw in the Orcs’ Temple.
 
 // No need to talk about Darg's weapon or appearance. If we see him here, that means we saw him in Crowdsource before.
 
@@ -61,7 +61,7 @@ As I consider that, I see a large figure through the flaps of the tent. It is Da
 [We] stay hidden.
 
 VARIANT_UPDATE_DESCRIPTION:
-Darg, the leader of the orcs I first saw in the orcs' temple, is here.
+Darg, the orc leader I first saw in the Orcs’ Temple, is here.
 
 ![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)
 
@@ -78,9 +78,9 @@ c.hasHappened(evKilledDarg)
 !c.hasHappened(evDargLeftCrowdsource)
 
 FIRST_DESCRIPTION:
-This is a concrete platorm sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it.
+This is a concrete platform sitting over six hundred feet above the redwood forest. I can clearly see the Bay from here, and the ancient bridge over it. The air is fresh, and I can hear the twitter of local birds again.
 
-A richly decorated tent sits at the center of the platform. I can see dagger and sabre motives, painted in red color on the off-white tent. Some important orc must be stationed here.
+A richly decorated tent sits at the center of the platform. I can see dagger and sabre motifs, painted in red on the off-white tent. Some important orc must be stationed here.
 
 VARIANT_UPDATE_DESCRIPTION:
 Darg won't be needing this tent anymore.
@@ -101,7 +101,7 @@ IS_IMMEDIATE: $TRUE
 COMPLETE_SUCCESS_DESCRIPTION:
 [We] approach Darg's tent. Darg spots me and looks surprised at first, then amused.
 
-"A human child, here?" Darg says, readying his battle axe. "Must have found a crawlspace to get here." He grins. "Never mind, [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]]. I'll dance on your bones."
+"A human child, here?" Darg says, readying his poleaxe. "Must have found a crawl space to get here." He grins. "Never mind, [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]]. I'll dance on your bones."
 
 [[CODE]]
 c.startOptionalFight();

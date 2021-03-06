@@ -8,7 +8,7 @@ FLAGS: $IDLE
 
 POS: 26, 94
 
-MAP_NAME: Pyramid's Entrance
+MAP_NAME: Pyramid Entrance
 HINT: This is the only side of the Pyramid that allows access from outside.
 
 FIRST_MAP_NAME: The Pyramid
@@ -17,15 +17,15 @@ FIRST_HINT: This is the place. The legendary structure built by the ancients, st
 
 FIRST_DESCRIPTION:
 // majestic
-As [we] approach, I can't stop looking up at the structure. The wind changes here, and there is a musty smell coming from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.
+As [we] approach, I can't stop looking up at the structure. The wind changes here, and it brings a musty smell from the vines that envelop the bottom of the building. From this perspective, the Pyramid is especially massive.
 
-Two knights, a woman and a man, are on guard.
+Two Knights, a woman and a man, are on guard.
 
-![Illustration of two knights: a woman with a sword and a man with a halberd](guards.png)
+![Illustration of two Knights: a woman with a sword and a man with a halberd](guards.png)
 
 The man has been crying, judging from his eyes.
 
-Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. She is armed with a katana, from the looks of it.
+Four stories above, in a corner room of the Pyramid, an eerily motionless woman stands, looking out. She is armed with a gleaming, ancient sword. A katana, from the looks of it.
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyInKeep);
@@ -49,7 +49,7 @@ PREREQUISITES:
 c.inRoomWith(miguelId) && c.inRoomWith(katId)
 
 INK:
-It's the only visible entrance to the Pyramid. A recently added redwood frame decorates the ancient opening. Some lord probably thought that the original shape was too simple, too blunt, too unnatural. Perfect rectangles like that just don't feel like a real part of this world.
+It's the only visible entrance to the Pyramid. A recently-added redwood frame decorates the ancient opening. Some lord probably thought that the original shape was too simple, too blunt, too unnatural. Perfect rectangles like that just don't feel like a real part of this world.
 
 A few paces to the right, an ancient bronze plaque.
 
@@ -57,15 +57,15 @@ A few paces to the right, an ancient bronze plaque.
 
   The bronze tablet is set in a concrete block, overgrown with dark green vines. "Transamerica Pyramid," it says. "Built in 1972." That's more than a thousand years ago.
 
-  I look back at the entrance and the knights. <>
+  I look back at the entrance and the Knights. <>
 
 * Leave it be
 
-  I look at the knights. <>
+  I look at the Knights. <>
 
 -
 
-<> Both are wearing the same livery and a similar helmet. They don't speak, opting instead to look directly at me or scan the surroundings.
+<> Both wear the same uniform, though their helmets differ slightly. They don't speak, opting instead to look directly at me or scan the surroundings.
 
 I wonder how it must be, having to spend so much time with a single person, idly waiting together. Do they grow to love each other? Or hate? Both?
 

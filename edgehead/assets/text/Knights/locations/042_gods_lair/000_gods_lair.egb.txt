@@ -11,15 +11,15 @@ FIRST_MAP_NAME: Guard Room
 FIRST_HINT: An antechamber to a much bigger room, with a guard post and a huge, reinforced gate. At least two orcs are on guard.
 
 MAP_NAME: God's Lair
-HINT: A temple to the ancients, overtaken by the orcs some time ago. For them, it serves as a pen for a huge creature, Karl.
+HINT: A temple to the ancients, overtaken by the orcs some time ago. For the orcs, the space serves as a pen for a huge creature, Karl.
 
 
-FIRST_DESCRIPTION: 
+FIRST_DESCRIPTION:
 Two orcs, a berserker and a captain, watch me approach in amazement.
 
 "You!" the berserker bellows, readying his battle axe. "Stand still so I can chop off your head."
 
-The captain readies a large, bone-decorated knife, and confidently starts towards me.
+The captain readies a large, bone-decorated knife, and confidently starts toward me.
 
 
 DESCRIPTION: $NONE
@@ -66,7 +66,7 @@ FIGHT_SITUATION: null
 
 // ---
 ACTION: $karl_examine_star
-COMMAND: star decoration >> Examine
+COMMAND: Star decoration >> Examine
 FOR_LOCATION: $gods_lair
 PREREQUISITES:
 c.isInIdleRoom
@@ -74,7 +74,7 @@ c.isInIdleRoom
 COMPLETE_SUCCESS_DESCRIPTION:
 The star is small enough to fit into my palm. In the center of the star, there is an inscription in ancient, mangled type. It says "Lair of God" in bold lettering.
 
-![Illustration of a writing of the words "LAIR OF GOD", although it's clear that the inscription originally said "LAMB OF GOD".](artifact-star.png)
+![Illustration of a writing of the words "LAIR OF GOD", although it's clear that the inscription originally said "LAMB OF GOD."](artifact-star.png)
 
 [[CODE]]
 c.learn(ArtifactStarFacts.artifactStarSeen);
@@ -105,6 +105,6 @@ c.giveNewItemToPlayer(lairOfGodStar);
 NOTES:
 
 * The sound here is the same guttural growl that the player hears when exploring.
-* Allow opening the gate: 
+* Allow opening the gate:
   * If no necromancy was NOT performed, then the giant is sleeping. We can kill it, or go somewhere else. (Later, an event will set Karl loose, and he will decimate the orcs, then fall down from the pyramid.)
   * If necromancy was performed, we can examine the dead giant and the dead taheen.

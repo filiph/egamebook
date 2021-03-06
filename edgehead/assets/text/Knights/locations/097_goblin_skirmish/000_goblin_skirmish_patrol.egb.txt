@@ -11,7 +11,7 @@ ROOM: $goblin_skirmish_patrol
 POS: 15, 97
 
 FIRST_MAP_NAME: Smoke
-FIRST_HINT: The smoke is as black as death but the pillar is narrow. Looks like nothing more than a camp fire. Someone is not afraid to be found.
+FIRST_HINT: The smoke is as black as death but the pillar is narrow. Looks like nothing more than a campfire. Someone is not afraid to be found.
 
 MAP_NAME: Wilderness near the Bleeds
 HINT: It's the place where I met the albino goblin.
@@ -25,7 +25,7 @@ When [we] come out of a particularly nasty shrub, I hear a short, guttural sound
 
 He doesn't wait for an answer and readies a spear. The spear is painted white: as white as the albino's skin.
 
-The goblin is starting to advance towards me.
+The goblin is starting to advance toward me.
 
 
 DESCRIPTION: $NONE
@@ -34,4 +34,4 @@ FIGHT_SITUATION:
 generateBleedsGoblinSkirmishPatrol
 
 AFTER_MONSTERS_CLEARED:
-The fight is over. 
+The fight is over.

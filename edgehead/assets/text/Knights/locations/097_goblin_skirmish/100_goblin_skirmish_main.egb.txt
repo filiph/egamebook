@@ -25,7 +25,7 @@ generateGoblinCampFight
 DESCRIPTION: $NONE
 
 AFTER_MONSTERS_CLEARED:
-The fight is over, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there's a barbecued squirrel on a stick next to the fire.) 
+The fight is over, and now I have time to look the camp over. It has clearly been used before: the ground is compacted near the fire, and there are old squirrel bones all over the place. (The killed goblins were about to add another set of bones to the disarray: there's a barbecued squirrel on a stick next to the fire.)
 
 This must be a shared place of rest for the goblins who travel through here. But on what journey?
 
@@ -48,7 +48,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 [[RULE]]
   w.actionHasBeenPerformed("observe_goblin_camp")
 [[THEN]]
-  [We] leap from hiding and charge the goblins. I run past the lying goblin and easily kill him as he's waking up.
+  [We] leap from hiding and charge the goblins. I run past the sleeping goblin and easily kill him as he's waking up.
 [[ENDRULE]]
 [[RULE]]
   $DEFAULT
@@ -70,14 +70,14 @@ c.startOptionalFight();
 
 // ---
 ACTION: $barbecued_squirrel_examine
-COMMAND: Barbecued Squirrel >> Examine
+COMMAND: Barbecued squirrel >> Examine
 FOR_LOCATION: $goblin_skirmish_main
 
 PREREQUISITES:
 !c.getRoomRoaming().monstersAlive
 
 COMPLETE_SUCCESS_DESCRIPTION:
-It's a bulky squirrel, western gray from the looks of it, thoroughly barbecued and impaled with a thin wooden stick. No one has touched it yet.
+It's a meaty squirrel, western gray from the looks of it, thoroughly barbecued and impaled with a thin wooden stick. No one has touched it yet.
 
 
 // ---
@@ -121,7 +121,7 @@ PREREQUISITES:
 w.actionHasBeenPerformed('compass_examine')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I take the compass and add it among the items I carry.
+I take the compass and add it to the items I carry.
 
 [[CODE]]
 c.giveNewItemToPlayer(compass);

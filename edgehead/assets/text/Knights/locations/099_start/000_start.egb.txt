@@ -26,7 +26,7 @@ INK:
 I am finally here, in the ancient ruins of San Francisco. I have reached my destination at last. My brother is here, somewhere in this dense forest, among fragments of a long-lost civilization.
 
 
-* I am a young woman >> ... with black hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young woman >> ... with black hair >> ... and a hideous burn over the right side of my face. ((Others will be repulsed by the gruesome sight.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 0, 0);
@@ -44,7 +44,7 @@ c.recordCharacterChoice(0, 0, 1);
 c.recordCharacterChoice(0, 0, 2);
 [[ENDCODE]]
 
-* I am a young woman >> ... with brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young woman >> ... with brown hair >> ... and a hideous burn over the right side of my face. ((Others will be repulsed by the gruesome sight.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 1, 0);
@@ -62,7 +62,7 @@ c.recordCharacterChoice(0, 1, 1);
 c.recordCharacterChoice(0, 1, 2);
 [[ENDCODE]]
 
-* I am a young woman >> ... with blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young woman >> ... with blond hair >> ... and a hideous burn over the right side of my face. ((Others will be repulsed by the gruesome sight.))
 
 [[CODE]]
 c.recordCharacterChoice(0, 2, 0);
@@ -80,7 +80,7 @@ c.recordCharacterChoice(0, 2, 1);
 c.recordCharacterChoice(0, 2, 2);
 [[ENDCODE]]
 
-* I am a young man >> ... with black hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young man >> ... with black hair >> ... and a hideous burn over the right side of my face. ((Others will be repulsed by the gruesome sight.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 0, 0);
@@ -98,7 +98,7 @@ c.recordCharacterChoice(1, 0, 1);
 c.recordCharacterChoice(1, 0, 2);
 [[ENDCODE]]
 
-* I am a young man >> ... with brown hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young man >> ... with brown hair >> ... and a hideous burn over the right side of my face. ((Others will be repulsed by the gruesome sight.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 1, 0);
@@ -116,7 +116,7 @@ c.recordCharacterChoice(1, 1, 1);
 c.recordCharacterChoice(1, 1, 2);
 [[ENDCODE]]
 
-* I am a young man >> ... with blond hair >> ... and a large debt. ((Debts don't go away. They grow in size and importance and change friendship into enmity.))
+* I am a young man >> ... with blond hair >> ... and a hideous burn over the right side of my face. ((Others will be repulsed by the gruesome sight.))
 
 [[CODE]]
 c.recordCharacterChoice(1, 2, 0);
@@ -173,9 +173,9 @@ A goblin, bloodlust in his eyes, emerges from his hiding place to stand a few pa
 
     The goblin growls like a wolf, standing above Tamara. She's had time to draw her battered sword but not much else. The goblin <>
 
-* Attack ((There is no way around this. The goblin is clearly set on fighting us. May as well seize initiative before more of them show up.))
+* Attack ((There is no way around this. The goblin is clearly set on fighting us. May as well seize the initiative before more of them show up.))
 
-    "I escape war only to be dragged into _this_ mess?" Tamara says through gritted teeth. But she moves forward, pointing her battered sword at the goblin. With her off hand, she hands me her dagger. "You'll need it, [young sir]."
+    "I escape war only to be dragged into _this_ mess?" Tamara says through gritted teeth. But she moves forward, pointing her battered sword at the goblin. With her other hand, she hands me her dagger. "You'll need it, [young sir]."
 
     [[CODE]]
     w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
@@ -194,9 +194,9 @@ A goblin, bloodlust in his eyes, emerges from his hiding place to stand a few pa
         w.updateActorById(playerId, (b) => b.inventory.equip(tamarasDagger, a.anatomy));
         [[ENDCODE]]
 
-        I take the dagger and point it at the goblin. It's surprisingly heavy but well-balanced. 
-        
-        The goblin attacks. As he runs towards us, he <>
+        I take the dagger and point it at the goblin. It's surprisingly heavy but well balanced.
+      
+        The goblin attacks. As he runs toward us, he <>
 
     * * Take a rock from the ground instead.
 
@@ -205,7 +205,7 @@ A goblin, bloodlust in his eyes, emerges from his hiding place to stand a few pa
         w.updateActorById(playerId, (b) => b.inventory.equip(rockFromMeadow, a.anatomy));
         [[ENDCODE]]
 
-        I pick up a mossy rock that sits right next to my {left|right} foot. It's hard and heavy in my palm. As soon as I straighten with the rock in my hand, the goblin attacks. As he runs towards us, he <>
+        I pick up a mossy rock that sits right next to my right foot. It's hard and heavy in my palm. As soon as I straighten with the rock in my hand, the goblin attacks. As he runs toward us, he <>
 
 -
 

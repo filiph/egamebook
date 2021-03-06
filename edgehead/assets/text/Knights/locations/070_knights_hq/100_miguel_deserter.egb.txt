@@ -11,7 +11,7 @@ w.actionHasBeenPerformed("talk_to_miguel_greetings")
 c.hasHappened(evQuake2)
 
 INK:
-"I can't just guard down there," he says. "What am I, an onlooker? I have to change things."
+"I can't just guard down there," Miguel says. "What am I, an onlooker? I have to change things."
 
 He looks around and lowers his voice. "The Knights of San Francisco are no more, as far as I'm concerned. Look, if you are in the business of hurting the orcs, take me with you."
 

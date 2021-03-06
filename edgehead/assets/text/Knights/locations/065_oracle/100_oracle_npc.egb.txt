@@ -1,5 +1,5 @@
 // Oracle notes:
-// 
+//
 // - Super excited. Optimistic. Positive. Joie de vivre.
 
 // ---
@@ -21,7 +21,7 @@ INK:
 
 * “Yes.”
 
-  “You came to the right person, then.” She steps back, leaving a feint scent of coffee behind. “Welcome.”
+  “You came to the right person, then.” She steps back, leaving a faint scent of coffee behind. “Welcome.”
 
 
   Something moves behind me. “Welcome!” I wheel around and see a big dark bird perched on top of some books. “Welcome!” it says again.
@@ -32,7 +32,7 @@ INK:
 
 * “It can talk?”
 
-  “Well,” Oracle says, “all ravens can talk if you teach them. It’s a trait they’ve had since the time of the ancients. But Corax doesn’t just repeat what he hears.” 
+  “Well,” Oracle says, “all ravens can talk if you teach them. It’s a trait they’ve had since the time of the ancients. But Corax doesn’t just repeat what he hears.”
 
   “No I don’t,” Corax says.
 
@@ -42,7 +42,7 @@ INK:
 
   “Well met indeed, [young sir],” Corax says with a nod.
 
-  Oracle smiles with satisfaction. <>
+  "I think he likes you," Oracle tells me with a surprised smile. <>
 
 -
 
@@ -66,7 +66,7 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 INK:
 “Ah, the Keep!” Oracle says. “I worked there as a kid. I sometimes miss those days.”
 
-Corax raises his head from a bowl of seed. “You told me it was horrible! You told me the nobility treated you as garbage.”
+Corax raises his head from a bowl of seed. “You told me it was horrible! You told me the nobility treated you like garbage.”
 
 “That they did,” she says. “There was a lot of screaming, and quite a few beatings as well. I don’t miss _that._ I do miss being younger, though. And having access to all those books seemed magical at the time.”
 
@@ -74,7 +74,7 @@ Corax raises his head from a bowl of seed. “You told me it was horrible! You t
 
   “It was the seat of power,” Oracle says. “Back in those days, San Francisco wasn’t as lawless as it is today. There were no orcs, no goblins, nothing.”
 
-“Paradise,” the bird says, and its claws make a little sound on the books.
+“Paradise,” the bird says, and his claws make a little sound on the books.
 
 “Well,” Oracle says, “not quite. Anyway, the lords have been living in the Keep with their families for generations. By having their home in the Pyramid itself, they were close to the farmers: the ones who sent the most coin to their coffers. And of course, living in the highest tower in the world brings a measure of pride and stature.”
 
@@ -86,7 +86,7 @@ Corax nods and straightens, showing his black breast.
 
   “Death,” says Corax.
 
-  [[IF c.hasHappened(evKilledHope)]]”News travel fast in the Pyramid,” Oracle smiles. “We know you were able to kill [[ELSE]]”The nobility that ruled from the Keep are all dead, that’s true,” Oracle says. “But that doesn’t make the Keep safe. One of the dead is still walking: [[ENDIF]] <>
+  [[IF c.hasHappened(evKilledHope)]]”News travels fast in the Pyramid,” Oracle smiles. “We know you were able to kill [[ELSE]]”The nobility that ruled from the Keep are all dead, that’s true,” Oracle says. “But that doesn’t make the Keep safe. One of the dead is still walking: [[ENDIF]] <>
 
 -
 
@@ -112,7 +112,7 @@ w.actionHasBeenPerformed("talk_to_oracle_greetings")
 c.knows(KeepGateFacts.oracleWorkedInKeep)
 
 COMPLETE_SUCCESS_DESCRIPTION:
-Oracle describes a convoluted series of steps to open the gate, which she calls an "algorithm." It involves pushing seemingly decorative parts of the gate in a precise order. 
+Oracle describes a convoluted series of steps to open the gate, which she calls an "algorithm." It involves pushing seemingly decorative parts of the gate in a precise order.
 
 "At the very end, make sure you turn the crest _eight_ times," she says. "Not seven, not nine. _Eight._ Like the Eight Gods. Don't forget, [young sir]."
 
@@ -137,13 +137,13 @@ c.hasItem(northSkullId)
 INK:
 Oracle sees the device and immediately starts giggling with joy. "Well that is just incredible," she says. "Such an exquisite piece."
 
-She takes the skull gingerly in her hands and starts turning it around, examining it from all sides. "I will need to de-activate it, of course," she says.
+She takes the skull gingerly in her hands and starts turning it around, examining it from all sides. "I will need to deactivate it, of course," she says.
 
 There is a rustle of feathers and Corax lands on Oracle's shoulder. He moves his head to point his right eye at the device. "What, you don't want to _invite_ the goblins here?"
 
-"Did you know, Corax," she says, "that sarcasm is the lowest form of wit, right?"
+"Did you know, Corax," she says, "that sarcasm is the lowest form of wit?"
 
-The bird takes off again, and lands on a table. "That is _fascinating,"_ he says.
+The bird takes off again and lands on a table. "That is _fascinating,"_ he says.
 
 Oracle smiles and nods at me. "Thank you, [young sir]. You have provided me with a rare opportunity to study the enemy."
 
@@ -157,7 +157,7 @@ c.removeItemFromPlayer(northSkullId);
 
 * "How will you study it?"
 
-  "How do you study anything," she says. "You take it apart."
+  "How do you study anything?" she responds. "You take it apart."
 
 * "Is it that rare?"
 
@@ -178,18 +178,18 @@ c.knows(DogheadFacts.somethingCalledDoghead)
 w.actionHasBeenPerformed("talk_to_oracle_greetings")
 
 INK:
-"There's an old ditty," Oracle says. "A head of a dog, a body of man, a better age for all began." 
+"There's an old ditty," Oracle says. "A head of a dog, a body of man, a better age for all began."
 
-She glances out the window, at the gray and the green. "The Pyramid was never an easy place," she says. "Never very inviting. Even before the Orcs came, death and violence was common. The Knights have been stationed here for generations, but even a force such as that cannot fully prevent peril in a place like San Francisco."
+She glances out the window, at the gray and the green. "The Pyramid was never an easy place," she says. "Never very inviting. Even before the orcs came, death and violence was common. The Knights have been stationed here for generations, but even a force such as that cannot fully prevent peril in a place like San Francisco."
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
 c.learn(DogheadFacts.dogheadMyth);
 [[ENDCODE]]
 
-Oracle extends her arm, as if to touch the forest below us. "The woods have been always crawling with vile creatures. The power of the Pyramid has always attracted the corrupt and the wicked. I think the villagers and the farmers clinged to this tale. It gives them hope."
+Oracle extends her arm, as if to touch the forest below us. "The woods have been always crawling with vile creatures. The power of the Pyramid has always attracted the corrupt and the wicked. I think the villagers and the farmers clung to this tale. It gave them hope."
 
-She turns to me. "Now, with the Orcs and Big O and goblins, the demand for such a tale is only getting stronger. That little rhyme about _a_ _head_ _of_ _a_ _dog,_ _a_ _body_ _of_ _man,_ it's on everyone's mind."
+She turns to me. "Now, with the orcs and Big O and goblins, the demand for such a tale is only getting stronger. That little rhyme about _a_ _head_ _of_ _a_ _dog,_ _a_ _body_ _of_ _man,_ it's on everyone's mind."
 
 [[CODE]]
 c.learn(BigOFacts.someoneCalledBigO);
@@ -231,7 +231,7 @@ Corax croaks. Oracle passes me to lean on a table, and I catch a whiff of the sm
 
 -
 
-<> There are still things I'd like to see again, up there. The Lair of God is one. It was a beautiful temple, 2 floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star."
+<> There are still things I'd like to see again, up there. The Lair of God is one. It was a beautiful temple, two floors high, with spectacular views of the Bay. Built by the Deathless. It had an artifact in it, an ancient star."
 
 [[CODE]]
 c.learn(ArtifactStarFacts.lairOfGodTempleTakenByOrcs);
@@ -289,7 +289,7 @@ INK:
 
   * * "I knew that."
 
-    "Did you, now." Oracle looks at you with piercing eyes. "I guess you did, [young sir]." She smiles.
+    "Did you, now." Oracle looks at me with piercing eyes. "I guess you did, [young sir]." She smiles.
 
   * * "Tell me your earthquake theory."
 
@@ -321,7 +321,7 @@ c.knows(DeathlessFacts.somethingCalledDeathless)
 INK:
 "A cult," Corax says and does a little jump with his raven feet for emphasis.
 
-"Well," Oracle says, "they _are_ a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knight, or the orcs."
+"Well," Oracle says, "they _are_ a cult. They worship the ancients, and all artifacts from them. They've been here in the Pyramid for longer than the farmers, or the Knights, or the orcs."
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);
@@ -329,7 +329,7 @@ c.learn(OrcsFacts.inPyramid);
 
 * "Where are they?"
 
-  "They used to inhabit a lot more of the Pyramid," she says. "These days, they live in a village in the part known as the Jungle. It's the big hole in the building on the west side, overgrown with vegetation."
+  "They used to inhabit a lot more of the Pyramid," she says. "These days, they live in a village in the part known as the jungle. It's the big hole in the building on the west side, overgrown with vegetation."
 
   [[CODE]]
   c.learn(DeathlessFacts.location);
@@ -337,7 +337,7 @@ c.learn(OrcsFacts.inPyramid);
 
 * "Are they dangerous?"
 
-  "They are not," she says. "I think they want to live forever but... who doesn't."
+  "They are not," she says. "I think they want to live forever but... who doesn't?"
 
 
 // ---
@@ -356,7 +356,7 @@ c.knows(DragonEggFacts.anAncientWeapon)
 !c.knows(DragonEggFacts.deathlessHaveIt)
 
 INK:
-"What can I tell you about the Dragon Egg! Ha! A small, powerful thing. An end to any dispute. Shame it's in the wrong hands."
+"What can I tell you about the Dragon Egg? Ha! A small, powerful thing. An end to any dispute. Shame it's in the wrong hands."
 
 * "Whose hands?"
 
@@ -394,13 +394,13 @@ c.knows(SixtyFiversFacts.numberSeen)
 !c.knows(SixtyFiversFacts.significance)
 
 INK:
-"These are artifacts left by the ancients that puzzle the good and delight the evil. Why would the ancients, in their wisdom, leave behind such beatiful renditions of an evil number?"
+"These are artifacts left by the ancients that puzzle the good and delight the evil. Why would the ancients, in their wisdom, leave behind such beautiful renditions of an evil number?"
 
 * "What makes 65 evil?"
 
-  "You know the two forces, four directions, eight gods, and so on? All the good things, all the true things, come in perfect numbers. Sixty four is one of them. Sixty four callings."
-  
-  Oracle runs her fingers through her hair. "Sixty five is a spit in the face of truth. It's like taking a symbol of Tengri, but putting it upside down. We don't know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason."
+  "You know the Two Forces, Four Directions, Eight Gods, and so on? All the good things, all the true things, come in perfect numbers. Sixty-four is one of them. Sixty-four Callings."
+
+  Oracle runs her fingers through her hair. "Sixty-five is a spit in the face of truth. It's like taking a symbol of Tengri, but putting it upside down. We don't know why the ancients chose 65 as a number to be printed and shown, to be _obeyed._ They must have had their reason."
 
   "Of _course,"_ Corax says.
 
@@ -441,9 +441,9 @@ That's not a goal. It's a waypoint. What are you trying to do?
 
 -
 
-That, again, is not a goal. It's a way to achieve something. What are you trying to do? What will 
+That, again, is not a goal. It's a way to achieve something. What are you trying to do? What will
 
-* 
+*
 
 // Vignette
 

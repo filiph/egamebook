@@ -17,4 +17,4 @@ throw StateError("Player should have been here, as the rule above stipulates.");
 [[ENDCODE]]
 
 VARIANT_UPDATE_DESCRIPTION:
-The circle of women and men is no longer here. Most of them left.
+The circle of women and men is no longer here.

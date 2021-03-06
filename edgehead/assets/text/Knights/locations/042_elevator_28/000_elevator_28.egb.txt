@@ -13,7 +13,7 @@ POS: 32, 42
 MAP_NAME: Elevator Shaft Entrance on 28th Floor
 HINT: The metal doors on the side of the dark vertical shaft are half-open here, letting some light in.
 
-FIRST_DESCRIPTION: 
+FIRST_DESCRIPTION:
 Orc noises from all around, but thankfully no orc in sight. [[IF !c.hasHappened(evKarlGuardsKilled)]]Brutal laughter from the east.[[ENDIF]]
 
 [[CODE]]

@@ -15,7 +15,7 @@ MAP_NAME: Farmers' Village
 HINT: A settlement of people who farm the vines that grow on the outside of the Pyramid.
 
 FIRST_DESCRIPTION:
-The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well dressed people go about their business. Polite nods in my direction.
+The corridors here look more like streets. Painted walls on either side, with wooden windows in them, and doors. Well-dressed people go about their business. Polite nods in my direction.
 
 An old woman is whittling a little dog-headed figure from wood.
 

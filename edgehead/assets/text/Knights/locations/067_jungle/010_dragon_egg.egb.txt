@@ -16,7 +16,7 @@ HINT: The place with the Dragon Egg.
 FIRST_DESCRIPTION:
 The Deathless lead me through thick foliage and across narrow beams high above the jungle. A single misstep would mean a long fall, and certain death.
 
-Soon, though, the hidden path takes a turn, and leads into a small clearing. One of the Deathless holds a branch so it doesn't hit me, and announces: "The Sacred Shrine."
+Soon, though, the hidden path takes a turn and leads into a small clearing. One of the Deathless holds a branch so it doesn't hit me, announcing: "The Sacred Shrine."
 
 There's a pedestal here, illuminated by rays of sunlight. Only one thing lies on the top of the pedestal: a dark green oval shape. The ancient Dragon Egg.
 
@@ -44,7 +44,7 @@ I slowly approach the pedestal. The Dragon Egg is clearly of ancient origin: it 
 
 * "How did you find this?"
 
-    The Deathless who held the branch earlier speaks: "It was found near the pond, Friend of the Deathless. Down there in the jungle. A brother lost his life retreiving it."
+    The Deathless who held the branch earlier speaks: "It was found near the pond, Friend of the Deathless. Down there in the jungle. A brother lost his life retrieving it."
 
 -
 
@@ -107,7 +107,7 @@ REPEATABLE: $TRUE
 COMPLETE_SUCCESS_DESCRIPTION:
 I take the Dragon Egg out and turn it in my hand. The shape is mesmerizing. Beautiful. A true artifact of the ancients.
 
-Argo warned me only to use it in combat. I shake my head. No, this is too good be thrown away at the enemy. I remove the pin, just as she told me, and release the lever. There's an audible click inside the egg as I do so.
+Argo warned me only to use it in combat. I shake my head. No, this is too good to be thrown away at the enemy. I remove the pin, just as she told me, and release the lever. There's an audible click inside the egg as I do so.
 
 The lever comes off, so I now hold the lever in my left hand and the egg in my right hand. The device looks more like an actual egg now, without the lever. I enjoy the symmetry.
 

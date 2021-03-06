@@ -4,7 +4,7 @@ DESCRIPTION:
 [[RULE]]
     !c.playerHasVisited("staging_area")
 [[THEN]]
-    As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to [[IF c.knows(DogheadFacts.somethingCalledDoghead)]]Doghead[[ELSE]]a "Doghead"[[ENDIF]]. 
+    As I climb the Infinite Staircase, I read the writings on the wall. Many of them refer to [[IF c.knows(DogheadFacts.somethingCalledDoghead)]]Doghead.[[ELSE]]a "Doghead."[[ENDIF]]
 
     ![An inartistic writing on a wall saying Doghead](graffiti.png)
 
@@ -35,14 +35,14 @@ FLAGS: $IDLE
 
 POS: 26, 76
 
-FIRST_MAP_NAME: Up the stairs
-FIRST_HINT: The Entrance leads directly to what the locals call the Infinite Staircase. From a few floors above, I can hear simple commands spoken in bored voices, and loud shuffling.
+FIRST_MAP_NAME: Up the Stairs
+FIRST_HINT: The entrance leads directly to what the locals call the Infinite Staircase. Sound travels from a few floors above — I can hear simple commands spoken in bored voices, and loud shuffling.
 
 MAP_NAME: The Staging Area
-HINT: This is a large room without doors which the Knights of San Francisco are using as the logistic base for their retreat.
+HINT: This is a large room without windows that the Knights of San Francisco are using as the base for their retreat.
 
 FIRST_DESCRIPTION:
-This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
+This is a large room without windows. It is teeming with Knights and their servants, who are carrying in chests, bedding, and furniture from the upper floors. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
 
 DESCRIPTION:
 

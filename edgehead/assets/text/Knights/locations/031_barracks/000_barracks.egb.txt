@@ -56,6 +56,6 @@ c.giveNewItemToPlayer(barbecuedBat);
 
 NOTES:
 
-* What could we do here? 
+* What could we do here?
   * See some vile creatures play a game, with the option to attack? Orc playing cards with some goblins, and cheating (the goblins obviously know this, but don't say anything)
   * Someone big (Ettin?) eating a human leg

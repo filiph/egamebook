@@ -7,9 +7,9 @@ PREREQUISITES:
 !c.hasHappened(evOrcOffensive)
 
 INK:
-The apple is one of the Fruits grown on the slopes of the Pyramid. This one is especially large and extremely red.
+The apple is one of the Fruits grown on the Slopes of the Pyramid. This one is especially large and extremely red.
 
-"You can have it if you want," [[IF w.actionHasBeenPerformed("talk_to_oracle_greetings")]]Oracle[[ELSE]]the woman[[ENDIF]] says[[IF c.playerHasWoodenFoot]], glancing at the wooden stump I have for a foot[[ENDIF]][[IF c.playerHasAsthma]] while I have a little fit of cough[[ENDIF]]. "You need it more than I do."
+"You can have it if you want," [[IF w.actionHasBeenPerformed("talk_to_oracle_greetings")]]Oracle[[ELSE]]the woman[[ENDIF]] says[[IF c.playerHasWoodenFoot]], glancing at the wooden stump I have for a foot[[ENDIF]][[IF c.playerHasBurntFace]], glancing at the burnt side of my face[[ENDIF]][[IF c.playerHasAsthma]] while I have a little coughing fit[[ENDIF]]. "You need it more than I do."
 
 * "Is it dangerous?"
 
@@ -36,4 +36,3 @@ It feels strangely heavy in my palm.
 [[CODE]]
 c.giveNewItemToPlayer(oracleApple);
 [[ENDCODE]]
-

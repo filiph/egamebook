@@ -16,7 +16,7 @@ A small door opens to a platform overlooking the ruins of San Francisco. Cold wi
 
 At the other end of the platform, a solitary hawkman is looking into the distance. He probably saw me opening the door, but doesn't seem to care.
 
-![Illustration of a man with a hawk's head, dressed in an ancient suit, and a sicle for a weapon.](hawkman.png)
+![Illustration of a man with a hawk's head, dressed in an ancient suit, with a sickle for a weapon.](hawkman.png)
 
 He is wearing an ancient suit, miraculously preserved.
 
@@ -45,7 +45,7 @@ COMMAND: Hawkman >> Examine
 INK:
 I have seen hawkmen before. They are vicious creatures. Intelligent predators with fragile bodies but superhuman agility.
 
-Hawkmen are often mercenaries. They are effective, ruthless, and expensive. Though most people think that at least part of their real motivation is in the thrill of the battle and the kill.
+Hawkmen are often mercenaries. They are effective, ruthless, and expensive. Though most people think that at least part of their real motivation is the thrill of the battle and the kill.
 
 This particular hawkman seems to be one of the more successful ones. The suit and the sharp sickle are proof.
 
@@ -73,7 +73,7 @@ The hawkman gives me a condescending look.
 
 -
 
-<> starts towards me. The high wind ruffles the feathers at the back of his head as he walks. 
+<> starts toward me. The high wind ruffles the feathers at the back of his head as he walks.
 
 * Attack
 
@@ -120,7 +120,7 @@ c.giveNewItemToPlayer(hawkmanJacket);
 
 NOTES:
 
-Possibilities: 
+Possibilities:
 
 * theme of this encounter is "sell out to a corporation" - but that would make the discussion too long
 * let the player decide why they hate hawkmen (killed mother, racism, traditional enemy)

@@ -12,7 +12,7 @@ ROOM: $conet
 POS: 19, 38
 
 FIRST_MAP_NAME: Some Mechanism
-FIRST_HINT: Somethings is making a quiet chafing sounds. Reminds me of millstones.
+FIRST_HINT: Something is making quiet chafing sounds. Reminds me of millstones.
 
 MAP_NAME: Conet
 HINT: A room filled with a large device.
@@ -20,7 +20,7 @@ HINT: A room filled with a large device.
 FIRST_DESCRIPTION:
 A kobold is operating a large device. He is turning a huge wheel, drawing some kind of a spring.
 
-There is a writing on the entrance:
+There is writing on the entrance:
 
 ![Illustration of a primitive writing on the wall, saying "Conet"](conet.png)
 
@@ -64,9 +64,9 @@ COMMAND: Device >> Examine
 INK:
 The device occupies most of the room. It is made of massive redwood beams and concrete blocks, but also delicate machinery. The air smells of oiled wood and kobold sweat.
 
-A large pillar of wood, concrete and metal stands in the center. A large spring rolls around this pillar and vibrates with strange, anxious energy. [[IF c.hasHappened(evConetDestroyed)]]This spring was being drawn by the kobold's turning of the wheel.[[ELSE]]This spring is being drawn, very slowly, by the kobold's turning of the wheel.[[ENDIF]]
+A large pillar of wood, concrete, and metal stands in the center. A large spring rolls around this pillar and vibrates with strange, anxious energy. [[IF c.hasHappened(evConetDestroyed)]]This spring was being drawn by the kobold's turning of the wheel.[[ELSE]]This spring is being drawn, very slowly, by the kobold's turning of the wheel.[[ENDIF]]
 
-Only after focusing on this centerpiece do I realize that there is a subtle symmetry in the room. Rings of cracks on the floor radiate from the pillar outward, getting feinter as they recede from the core.
+Only after focusing on this centerpiece do I realize that there is a subtle symmetry in the room. Rings of cracks on the floor radiate from the pillar outward, getting fainter as they recede from the core.
 
 This is the source of the earthquakes. I am sure of it.
 
@@ -107,7 +107,7 @@ The kobold is talking to himself as he's turning the wheel.
 
 "How I wish I could be down there and fight," he says. "What I'd give to be able to crack some skulls."
 
-He swings his free hand as if holding a weapon. "You talkin' to me?" he says to an imaginary foe. "You talkin' to me? Who the hell do you think you're talking to?"
+He swings his free hand as if holding a weapon. "You coming at me?" he says to an imaginary foe. "You coming at me? I'm faster than you, you son of a—"
 
 Another swing of a hand, and a grin.
 
@@ -118,5 +118,3 @@ NOTES:
 - Attracting "evil" / giants from far away.
 - This is on the 32nd floor (binary symbolism).
 - rejected: one of the kobolds is actually undead. He talks to me during the fight and after I kill him. It is obvious that the talking is done remotely, by some necromancer with amazing skill. The necromancer is discouraging me from getting involved.
-
-

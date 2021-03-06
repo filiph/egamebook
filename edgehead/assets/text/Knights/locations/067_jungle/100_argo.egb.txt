@@ -6,7 +6,7 @@ COMMAND: Child >> Talk >> “Greetings!”
 FOR_LOCATION: $deathless_village
 
 INK:
-"Greetings, traveler. My name is Argo. I am of this tribe that calls itself the Deathless." The child is younger than me, and has to look up when speaking to me. Nevertheless, she holds herself as a queen.
+"Greetings, traveler. My name is Argo. I am of this tribe that calls itself the Deathless." The child is younger than me, and she has to look up when speaking to me. Nevertheless, she holds herself as a queen.
 
 * "It is a pleasure to meet you, Argo."
 
@@ -26,7 +26,7 @@ INK:
 
 * "Aren, your majesty."
 
-  She smiles. "Well met, sir."
+  She smiles. "Well met, [[IF c.playerIsMale]]sir[[ELSE]]lady[[ENDIF]]."
 
 -
 
@@ -42,13 +42,13 @@ PREREQUISITES:
 w.actionHasBeenPerformed("argo_greet")
 
 INK:
-Argo bows. She wears a perfume, and her motion sends its floral scent towards me. "I am delighted. Most people think of us as a cult, and few take the time to ask us directly."
+Argo bows. She wears a perfume, and her motion sends its floral scent toward me. "I am delighted. Most people think of us as a cult, and few take the time to ask us directly."
 
 She opens her arms and invites me to take a look at the village. "Do we look like cultists to you?"
 
 * "Looks can be deceiving."
 
-  Argo laughs, smiles, and waves her hand dismissively. "True. And same goes for words. Words can be deceiving, too." She pauses, looking at the concrete floor.
+  Argo laughs, smiles, and waves her hand dismissively. "True. And the same goes for words. Words can be deceiving, too." She pauses, looking at the concrete floor.
 
   "Cult," she recites after a moment. "A relatively small group of people having religious beliefs or practices regarded by others as strange or sinister."
 
@@ -74,7 +74,7 @@ She opens her arms and invites me to take a look at the village. "Do we look lik
 
 * "This building?"
 
-  Argo shakes her head, smiling again. "Incorrect," she says. "We worship the Eight Gods. Just like everyone else." She looks to the ceiling. "Well, almost everyone else. As for the Pyramid, we do not worship it. We do admire the people that built it. The ancients. Just imagine: those people were could erect a hundred places like this building."
+  Argo shakes her head, smiling again. "Incorrect," she says. "We worship the Eight Gods. Just like everyone else." She looks to the ceiling. "Well, almost everyone else. As for the Pyramid, we do not worship it. We do admire the people that built it. The ancients. Just imagine: those people could erect a hundred places like this building."
 
   She stomps on the floor. "This. They were able to build it. The ancients must have been a lot closer to the Eight Gods than we are."
 
@@ -88,7 +88,7 @@ She opens her arms and invites me to take a look at the village. "Do we look lik
 
   * * "Why do you live secluded, then?"
 
-    "Well, this place was built by the ancients," she says. "And we do admire them. We know they weren't gods. Only people. But they were people who could erect places like the Pyramid."
+    "Well, this place was built by the ancients," she says. "We know they weren't gods. Only people. But they were people who could erect places like the Pyramid."
 
   - -
 
@@ -100,7 +100,7 @@ She opens her arms and invites me to take a look at the village. "Do we look lik
 
 * "Or maybe they were just better builders."
 
-  "Unlikely," Argo says. "The did a lot more than just build. Don't forget who put the goddess Iss in the sky. The ancients."
+  "Unlikely," Argo says. "They did a lot more than just build. Don't forget who put the goddess Iss in the sky. The ancients."
 
 -
 

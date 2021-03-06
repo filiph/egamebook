@@ -17,7 +17,7 @@ MAP_NAME: Servants' Quarters
 HINT: The cramped rooms where the servants of the Keep's owner once lived and worked.
 
 FIRST_DESCRIPTION:
-Clear signs of goblin activity: scratches on the floor, a pile of bones in one of the corners, and the stench of goblin excrement. A curious skull-shaped device sit in the middle of the room.
+Clear signs of goblin activity: scratches on the floor, a pile of bones in one of the corners, and the stench of goblin excrement. A curious skull-shaped device sits in the middle of the room.
 
 [[CODE]]
 c.learn(kbKeepServantsLocation);
@@ -35,13 +35,13 @@ PREREQUISITES:
 !w.actionHasBeenPerformed('north_skull_take')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-This is a human skull made into a device. 
+This is a human skull made into a device.
 
 ![Illustration of some kind of device inset in a human skull.](northskull.png)
 
-Next to it, a crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW." An arrow points to [[IF c.playerHasVisited("keep_servants", from: "top_of_climb")]]the narrow passage connecting this room to the elevator shaft[[ELSE]]a corner of the room that, after closer inspection, hides a narrow crawlspace[[ENDIF]].
+Next to it, crude goblin-tongue writing says "YOU FOUND NORTH SKULL STUPID! GO UP NOW." An arrow points to [[IF c.playerHasVisited("keep_servants", from: "top_of_climb")]]the narrow passage connecting this room to the elevator shaft[[ELSE]]a corner of the room that, after closer inspection, hides a narrow crawl space[[ENDIF]].
 
-[[IF c.hasItem(compassId)]]As I circle the "North Skull", the compass always points directly at it.[[ENDIF]]
+[[IF c.hasItem(compassId)]]I reach into my pocket and pull out the compass. As I circle the "North Skull," the device always points directly at it.[[ENDIF]]
 
 
 // ---
@@ -53,7 +53,7 @@ PREREQUISITES:
 w.actionHasBeenPerformed('north_skull_examine')
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I take the North Skull. As I straighten up, my heart stops. Something moves in the corner of the room. But then I realize it was only my shadow.
+I take the North Skull. As I straighten up, my heart stops. Something is moving in the corner of the room. But then I realize it was only my shadow.
 
 [[CODE]]
 c.giveNewItemToPlayer(northSkull);

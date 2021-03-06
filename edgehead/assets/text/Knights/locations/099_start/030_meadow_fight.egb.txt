@@ -28,7 +28,7 @@ w.updateActorById(firstGoblinId, (b) => b.initiative = 10);
 
 My hands are shaking and I put them on the sides of my neck to stop the shudder. As a necromancer, I am used to death. The long, unmoving part of it, mostly.
 
-But this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I have not seen before. My hands are still shaking.
+But this, this was something different entirely. Fast. Violent. Messy. This was the savage face of death that I had not seen before. My hands are still shaking.
 
 // Optional: let Tamara hang around (camp?), or even follow Aren to The Bleeds. Move the content below to separate actions.
 
@@ -41,7 +41,7 @@ if (!originalWorld.wasKilled(tamaraId)) {
     final sword = c.player.inventory.items.singleWhere((item) => item.id == tamaraSwordId);
     c.removeItemFromPlayer(tamaraSwordId);
     w.updateActorById(tamaraId, (b) => b..inventory.add(sword));
-    w.recordCustom('gives_sword_back_to_tamara'); 
+    w.recordCustom('gives_sword_back_to_tamara');
   }
 }
 [[ENDCODE]]
@@ -54,19 +54,19 @@ if (!originalWorld.wasKilled(tamaraId)) {
   [[RULE]]
     c.hasHappened('gives_sword_back_to_tamara')
   [[THEN]]
-    [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. I give her the sword back. "This place is not for me, [young sir]. And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes the sword that I give back to her. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount for the way back."
+    [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. I give her the sword back. "This place is not for me, [young sir]," she declares. "And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes the sword that I give back to her. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount on my services for the way back."
   [[ENDRULE]]
 
   [[RULE]]
     $DEFAULT
   [[THEN]]
-    [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, [young sir]. And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount for the way back."
+    [[IF c.isHurt(tamaraId)]]Tamara is sitting on the ground now and tending to her wounds. "This place is not for me, [young sir]," she declares. "And I say it's not for you, either." She winces, and looks at me.[[ELSE]]Tamara checks her gear and sheathes her sword. Then she looks at me.[[ENDIF]] "You are welcome to tag along with me back to safety. I'll give you a discount on my services for the way back."
   [[ENDRULE]]
   [[ENDRULESET]]
 
-  I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
+  I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, now showing through the redwoods to the north.
 
-  Tamara understands. [[IF c.isHurt(tamaraId)]]She slowly stands up, and shrugs.[[ENDIF]] "I will leave you to it, then. We are quits now." In a few moments, she disappears among the trees and the bushes to the south.
+  Tamara understands. [[IF c.isHurt(tamaraId)]]She slowly stands up, and shrugs.[[ENDIF]] "I will leave you to it, then. My work here is done." In a few moments, she disappears among the trees and the bushes to the south.
 
   [[CODE]]
   w.updateActorById(tamaraId, (b) => b.isActive = false);
@@ -79,7 +79,7 @@ w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated
 [[THEN]]
   "Sorry, Tamara." I kneel next to her and put her in the position of a proper warrior death, with back to the ground and arms crossed over the body.
 
-  No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
+  No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, now showing through the redwoods to the north.
 [[ENDRULE]]
 
 [[RULE]]
@@ -89,7 +89,7 @@ w.wasKilled(tamaraId) && !w.getActorById(tamaraId).isAnimated
 
   "I'm sorry."
 
-  She doesn't respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, showing through the redwoods to the north.
+  She doesn't respond, so I nod, and tell her corpse to follow me. No time to be sentimental. Despite the death and the danger, I remember my brother. The reason I came all this way. I lift my head to look at the white building, my destination, now showing through the redwoods to the north.
 [[ENDRULE]]
 
 [[RULE]]

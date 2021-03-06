@@ -6,8 +6,8 @@ PREREQUISITES:
 c.inRoomWith(miguelId)
 
 INK:
-// Subtext: the knight is taking himself seriously.
-The knight nods.
+// Subtext: the Knight is taking himself seriously.
+The Knight nods.
 
 "Welcome," he says, and there is a bit of sarcasm in his voice.
 
@@ -35,8 +35,8 @@ w.actionHasBeenPerformed("talk_to_miguel_greetings")
 w.actionNeverUsed("talk_to_kat_about_brother")
 
 INK:
-// Subtext: The knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.
-"Sarn? Doesn't ring the bell. Who is he?"
+// Subtext: The Knight-man is frustrated that his "legacy" (defending the innocent) cannot be fulfilled. The woman just wants to provide strength where needed, doesn't want to fight if not necessary.
+"Sarn? Doesn't ring a bell. Who is he?"
 
 * "He came here to join the Knights."
 
@@ -48,7 +48,7 @@ INK:
 
 * "A blacksmith."
 
-    "There are no blacksmiths here." Miguel gestures around, towards the ruins and the forest.
+    "There are no blacksmiths here." Miguel gestures around, toward the ruins and the forest.
 
     * * "Whose work is your sword, then?"
 
@@ -64,7 +64,7 @@ INK:
 
         - - -
 
-        "I know what you're driving at. You mean a _mender._ Your Sarn is a mender with the Knights." He nods. <> 
+        "I know what you're driving at. You mean a _mender._ Your Sarn is a mender with the Knights." He nods. <>
 
     * * "The Knights recruited him."
 
@@ -125,7 +125,7 @@ w.actionHasBeenPerformed("talk_to_miguel_greetings")
 c.knows(DragonEggFacts.anAncientWeapon)
 
 INK:
-"It's an ancient device of war, somewhere in the Pyramid." He shrugs. "If I knew more, I'd go find it myself, [young sir]."
+"It's an ancient device of war, somewhere in the Pyramid." He shrugs. "No one knows if it's good or bad, just that it's powerful. If I knew more, I'd go find it myself, [young sir]."
 
 
 // ---
@@ -153,7 +153,7 @@ c.learn(LadyHopeFacts.ladyHopeName);
 
 * "Is she dangerous?"
 
-  "Well, she sure _looks_ dangerous, doesn't she. But that place she's standing in is the dining room of the old Keep. Nobody goes near that place."
+  "Well, she sure _looks_ dangerous, doesn't she? But that place she's standing in is the dining room of the old Keep. Nobody goes near that place."
 
 * "Sweet katana?"
 
@@ -175,7 +175,7 @@ c.knows(LadyHopeFacts.ladyHopeName)
 c.hasHappened(evKilledHope)
 
 INK:
-Miguel nods with respect. "So," he smirks, "you killed Hope?"
+Miguel nods with respect. "So," he says, "you killed Hope?"
 
 * "She was already dead."
 

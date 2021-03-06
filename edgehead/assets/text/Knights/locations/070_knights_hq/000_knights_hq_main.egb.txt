@@ -10,11 +10,11 @@ FLAGS: $IDLE
 
 POS: 37, 65
 
-MAP_NAME: Command Post
-HINT: This is the original center of operations of the Knights of San Francisco. 
+MAP_NAME: Knights’ Headquarters
+HINT: This is the original center of operations of the Knights of San Francisco.
 
 FIRST_DESCRIPTION:
-I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.
+I come to the Knights’ Headquarters. A large room overlooking the Bay. Latrines on the right hang out of the window frames, providing fertilizer to the Slopes below. To the left, as far from the latrines as possible, the bunks where a few of the Knights are sleeping.
 
 DESCRIPTION: $NONE
 

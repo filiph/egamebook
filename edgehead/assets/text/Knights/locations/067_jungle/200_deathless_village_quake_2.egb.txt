@@ -6,7 +6,7 @@ VARIANT_OF: $deathless_village
 RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
 
 FIRST_DESCRIPTION:
-On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.
+On a ledge of the Pyramid overlooking the jungle, a village of cultists. They call themselves the Deathless, and they are said to worship the ancients. Their leader is a child.
 
 They are freaked out by the most recent quake.
 
@@ -22,7 +22,7 @@ c.increaseSanityFromPeople();
 
 
 VARIANT_UPDATE_DESCRIPTION:
-The cargo cultists are freaked out by the most recent quake.
+The cultists are freaked out by the most recent quake.
 
 [[CODE]]
 c.describeWorthiness(who: cultists, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId], especially: [lairOfGodStarId, hawkmanJacketId], how: "{approvingly|with respect}");

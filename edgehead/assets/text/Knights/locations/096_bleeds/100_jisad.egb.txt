@@ -27,7 +27,7 @@ c.learn(JisadFacts.name);
 
 * "The blind guide?"
 
-  "I know a lot about this place, and because I am — you know — blind, everyone around here calls me the Blind Guide." He smiles and leans over, lowering his voice. "I think they find it funny."
+  "I know a lot about this place, and because I am — you know — blind, everyone around here calls me the blind guide." He smiles and leans over, lowering his voice. "I think they find it funny."
 
   * * "Hilarious."
 
@@ -43,13 +43,13 @@ c.learn(JisadFacts.name);
 
 * "I am Aren."
 
-[[IF c.playerHasAsthma]]I have a fit of cough but soon get it under control.[[ENDIF]]
+[[IF c.playerHasAsthma]]I have a bout of coughing but soon get it under control.[[ENDIF]][[IF c.playerHasBurntFace]]It is so nice to talk to someone who does not see my face.[[ENDIF]]
 
 -
 
 "Welcome to San Francisco, Aren." Jisad spreads his arms and pretends to look around with his unseeing eyes. "Beautiful, no?" He grins. I take in the ruins, overgrown with redwood trees, and the shacks of the Bleeds nestled among them.
 
-"You just arrived. Must be tired. I'll give you this." He pulls up a green apple. "It's a fruit grown on the slopes of the Pyramid."
+"You just arrived. Must be tired. I'll give you this." He pulls up a green apple. "It's a Fruit grown on the Slopes of the Pyramid."
 
 * "Looks like an ordinary apple."
 
@@ -85,11 +85,11 @@ INK:
 
 * "Who can help me?"
 
-  "That depends. What was your brother doing here?"
+  "That depends. What was he doing here?"
 
   * * "He came here to join the Knights."
 
-    "Well, then, ask the Knights. Most of them are still here, though the lot is leaving as we speak." Jisad shrugs. 
+    "Well, then, ask the Knights. Most of them are still here, though the lot are trying to leave as we speak." Jisad shrugs.
 
     [[CODE]]
     c.learn(KnightsFacts.knightsAreLeaving);
@@ -99,11 +99,11 @@ INK:
 
   * * "I don't really know."
 
-    Jisad nods solemnly. "Well then, you will have to ask everybody, won't you. Or, of course, if you make it that far, you can <>
+    Jisad nods solemnly. "Well then, you will have to ask everybody, won't you? Or, of course, if you make it that far, you can <>
 
   - -
 
-  <> ask Oracle. She's the most knowledgeable of us all." 
+  <> ask Oracle. She's the most knowledgeable of us all."
 
   [[CODE]]
   c.learn(OracleFacts.someoneCalledOracle);
@@ -196,7 +196,7 @@ w.actionHasBeenPerformed("bleeds_blind_guide_whats_wrong")
 c.knows(OrcsFacts.inPyramid)
 
 INK:
-"I was here when the Orcs first came, when they took over the very top of the Pyramid. I think they came with Big O, or at least their coming woke Big O to activity." He sniffs. "The Orcs later pushed down, taking the Lair of God, desecrating it with some vile creature." 
+"I was here when the orcs first came, when they took over the very top of the Pyramid. I think they came with Big O, or at least their coming woke Big O to activity." He sniffs. "The orcs later pushed down, taking the Lair of God, desecrating it with some vile creature."
 
 Jisad shakes his head.
 
@@ -237,7 +237,7 @@ c.learn(BigOFacts.isWizard);
 
 -
 
-<> know is that there's someone up there, above the Orcs. People say there are strange lights coming out of those top floors, during some nights."
+<> know is that there's someone up there, above the orcs. People say there are strange lights coming out of those top floors some nights."
 
 [[CODE]]
 c.learn(BigOFacts.unseen);
@@ -265,7 +265,7 @@ c.learn(ConetFacts.quakesOften);
 
 * "Why are they happening?"
 
-"Why does anything happen? Why is the wind blowing, ruffling our hair? Why is the sea, that nasty bitch, full of salt and hatred? Why are birds singing, instead of just yelling like the other animals?" He shrugs. "These are questions for the gods, not for a blind man."
+"Why does anything happen? Why is the wind blowing, ruffling our hair? Why is the sea full of salt and hatred? Why are birds singing, instead of just yelling like the other animals?" He shrugs. "These are questions for the gods, not for a blind man."
 
 * "Thank the Eight Gods."
 
@@ -301,11 +301,11 @@ INK:
 
   - -
 
-  <> You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it's best to find friends, allies. There are powerful devices of war to be had, in the Pyramid, like the Dragon Egg or a katana."
+  <> You are unlikely to beat the orcs alone, with whatever weapons you have brought. As always, it's best to find friends, allies. There are powerful devices of war to be had in the Pyramid, like the Dragon Egg or a katana."
 
   He scratches just under one of his unseeing eyes.
 
-  "And remember, you can always just turn around and run from here."
+  "And remember, you can always just turn around and run away from here."
 
   [[CODE]]
   c.learn(DragonEggFacts.anAncientWeapon);
@@ -345,7 +345,7 @@ c.knows(OracleFacts.someoneCalledOracle)
 !c.knows(OracleFacts.personally)
 
 INK:
-"What, you're still here? Damn, [young sir], you're persistent." Jisad clicks with his tongue. "Oracle. She's not been here as long as I, but she knows more about all this place than I or anyone else."
+"What, you're still here? Damn, [young sir], you're persistent." Jisad clicks with his tongue. "Oracle. She's not been here as long as I, but she knows more about this place than anyone."
 
 * "How come?"
 
@@ -357,11 +357,11 @@ INK:
 
   "No," he chuckles. "She came as a young woman, working as a servant in the Keep on the fifth floor. But, I'm at least as old as she is, and I was born here."
 
-  He shifts. "I remember more. But, the books she reads remember yet more. She trades that information, and other she acquires, <>
+  He shifts. "I remember more. But, the books she reads remember yet more. She trades that information, and other news she acquires, <>
 
 -
 
-<> on the East side of the Pyramid. She has a room just below the battlefield floor. Quite dangerous, this close to the Orcs. But the height gives her an advantage. A better view of the surroundings."
+<> on the east side of the Pyramid. She has a room just below the Battlefield floor. Quite dangerous, this close to the orcs. But the height gives her an advantage. A better view of the surroundings."
 
 [[CODE]]
 c.learn(OracleFacts.location);

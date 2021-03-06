@@ -5,14 +5,14 @@ ROOM: $maintenance_shaft
 
 POS: 34, 40
 MAP_NAME: Maintenance Shaft
-HINT: A narrow crawlspace above the 28th floor.
+HINT: A narrow crawl space above the 28th floor.
 
 FIRST_DESCRIPTION:
 Musty, dark place. Through cracks, I can see rooms under me.
 
 Going to the end of the shaft, I can see [[IF !c.hasHappened(evKarlGuardsKilled)]]two orcs below, guarding some kind of a large gate. A berserker and a captain.[[ELSE]]a room below, with a large gate.[[ENDIF]]
 
-[[IF !c.hasHappened(evKarlKilled)]]A guttural breathing sounds come from beyond the gate.[[ENDIF]]
+[[IF !c.hasHappened(evKarlKilled)]]Guttural breathing sounds come from beyond the gate. And something else. I sense a fresh corpse that way, too. Something strange.[[ENDIF]]
 
 DESCRIPTION: $NONE
 
@@ -29,7 +29,7 @@ PREREQUISITES:
 COMPLETE_SUCCESS_DESCRIPTION:
 The two are laughing.
 
-"He ate him whole, didn't he?" the orc captain says. "I've never seen Karl do that."
+"He ate him whole, didn't he?" the orc captain says. "I've never seen Karl do that before."
 
 "We should feed him something even bigger next time," the berserker smirks. "A horse, maybe."
 
@@ -37,6 +37,6 @@ The two are laughing.
 
 The berserker nods. "Even better, it looks like we don't need to worry about chopping the carcasses from now on."
 
-"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn't he."
+"Yah. A whole hawkman in one swallow." The captain shakes his head. "Karl is full of surprises, isn't he?"
 
 If I understand correctly, there's a corpse of a hawkman lying in some nearby creature's belly. That creature must be gigantic, whatever it is.

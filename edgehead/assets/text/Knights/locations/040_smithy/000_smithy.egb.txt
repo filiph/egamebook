@@ -13,9 +13,9 @@ MAP_NAME: Smithy
 HINT: The involuntary workplace of my brother Sarn under the orc rule.
 
 FIRST_DESCRIPTION:
-There's an iron door here that is shut and locked but [we] find a way through a high ventilation shaft. The crawlspace is tight and full of rat droppings but at least it allows an unseen approach.
+There's an iron door here that is shut and locked but [we] find a way through a high ventilation shaft. The crawlspace is tight and full of rat droppings, but at least it allows an unseen approach.
 
-Finally, I am able to peek through a large hole in the shaft, and look down on the room below.
+Finally, I am able to peek through a large hole in the shaft, and I look down on the room below.
 
 My brother, Sarn, is forging a battle axe, using some piece of ancient metal equipment as a handle.
 
@@ -68,13 +68,13 @@ FOR_LOCATION: $smithy
 IS_IMMEDIATE: $TRUE
 
 COMPLETE_SUCCESS_DESCRIPTION:
-I drop down next to Sarn. He looks surprised but there is no recognition in his eyes.
+I drop down next to Sarn. He looks surprised, but there is no recognition in his eyes.
 
-The orc jailer takes an iron mace and advances towards me.
+The orc jailer takes an iron mace and advances toward me.
 
-"Step back, inventor," he says to Sarn. "Let me deal with this worm."
+"Step back, weaponsmith," he says to Sarn. "Let me deal with this worm."
 
-The orc pushes Sarn roughly to the side and he falls head first into a wall, then slumps to the floor.
+The orc pushes Sarn roughly to the side, and Sarn falls headfirst into a wall, then slumps to the floor.
 
 [[CODE]]
 c.startOptionalFight();

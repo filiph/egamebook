@@ -4,7 +4,7 @@ ROOM: $pyramid_entrance_during_caravan
 VARIANT_OF: $pyramid_entrance
 
 RULE:
-c.hasHappened(evCaravanArrived) && 
+c.hasHappened(evCaravanArrived) &&
 !c.hasHappened(evCaravanDeparted) &&
 c.playerHasVisited('pyramid_entrance', includeVariants: true)
 

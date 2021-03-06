@@ -17,7 +17,7 @@ FOR_LOCATION: $start_bogus_location
 COMMAND: N/A
 
 INK:
-[We] ascend the ladder through the dark. [[IF !c.hasHappened(evSavedSarn)]]I hear a distant scream from way bellow and for a second I think I recognize my brother's voice. But, there's no time for that now.[[ENDIF]] I emerge in the middle of a sun-lit space far above the forest of San Francisco. I can see the shape of the overgrown Bay Bridge to the southeast. The iconic Black Gate guards the Bay far to the northwest, immersed in fog.
+[We] ascend the ladder through the dark. [[IF !c.hasHappened(evSavedSarn)]]I hear a distant scream from way below and for a second I think I recognize my brother's voice. But there's no time for that now.[[ENDIF]] I emerge in the middle of a sunlit space far above the forest of San Francisco. I can see the shape of the overgrown Bay Bridge to the southeast. The iconic Black Gate guards the Bay far to the northwest, immersed in fog.
 
 My eyes are now accustomed to the light. The space is open, with only a few pieces of furniture here and there. An exquisite chair, two workshop tables, a satin divan, a heavy white chest. All the windowpanes I can see are unbroken and pristine, though they vary slightly in color and texture. The air smells of the ocean. Whatever Big O is, he is rich. Richer than most kings.
 
@@ -25,7 +25,7 @@ My eyes are now accustomed to the light. The space is open, with only a few piec
 
 "You are a fool."
 
-The voice comes from above. I look up and see that there is a second floor to this space, connected to the first one with a narrow staircase without a rail.
+The voice comes from above. I look up and see that there is a second floor overlooking half this space, connected to the first one by a narrow staircase without a rail.
 A figure stands at the edge of a concrete plate, looking down. At first I only see the outline of a tall man. It's only after a few heartbeats that I realize there is something wrong with the head. It's not a human head.
 
 ![Illustration of Big O, a necromancer with a dog's head.](bigo.png)
@@ -50,7 +50,7 @@ It's a dog's head.
 
 -
 
-<> I invented the folk tale two hundred years ago. You'd be surprised how easy it is to get something like that going. People find a few 'ancient' artifacts and their imagination does the rest."
+<> I invented the folktale two hundred years ago. You'd be surprised how easy it is to get something like that going. People find a few ‘ancient’ artifacts and their imagination does the rest."
 
 He takes a moment to relish in my confusion. I force my expression to harden. He chuckles again.
 
@@ -70,7 +70,7 @@ He takes a moment to relish in my confusion. I force my expression to harden. He
 
 He reaches the bottom of the stairs. "You. Are. A. Necromancer. You're not one of them. No, you're not, whatever you think now. They might like you now, but you know what happens soon."
 
-He hits the floor with the handle of his scythe for emphasis. The marble cracks in a delicate web of lines. "They will call you a 'neck'. They will hate and laugh at you behind your back. At best, they will ignore your talent. They will act as if your talent doesn’t exist. What a stupidity! You and I have the power to fight death itself."
+He hits the floor with the handle of his scythe for emphasis. The marble cracks in a delicate web of lines. "They will call you a ‘neck.’ They will hate and laugh at you behind your back. At best, they will ignore your talent. They will act as if your talent doesn’t exist. What stupidity! You and I have the power to fight death itself."
 
 [[RULESET]]
 [[RULE]]
@@ -81,16 +81,16 @@ He hits the floor with the handle of his scythe for emphasis. The marble cracks 
 [[RULE]]
   c.playerHasWoodenFoot
 [[THEN]]
-  I have to shift my bad leg and the wooden stump makes a sound on the marble. Big O briefly looks down and smiles. I raise my chin and keep my gaze level.
+  I have to shift my bad leg, and the wooden stump makes a sound on the marble. Big O briefly looks down and smiles. I raise my chin and keep my gaze level.
 [[ENDRULE]]
 [[RULE]]
-  $DEFAULT
+  c.playerHasBurntFace
 [[THEN]]
-  // Pass.
+  Big O squints and observes my face. I have to fight the urge to hide the burnt side.
 [[ENDRULE]]
 [[ENDRULESET]]
 
-Big O starts to circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]], still well out of reach. [[IF c.hasItem(dragonEggId)]]Almost unconsciously, my hand touches the Dragon Egg hidden in my pocket.[[ENDIF]] "And instead of support," Big O says, "necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Not in San Francisco. Here, the necromancers are at the top."
+Big O starts to circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]], still well out of reach. [[IF c.hasItem(dragonEggId)]]Almost unconsciously, my hand touches the Dragon Egg hidden in my pocket. [[ENDIF]] "And instead of support," Big O says, "necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Not in San Francisco. Here, the necromancers are at the top."
 
 * "Not just necromancers. Also orcs and goblins."
 
@@ -102,7 +102,7 @@ Big O starts to circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]], still
 
   * * "They are literally killing and enslaving innocent people."
 
-    Big O mocks a sad expression with his dog eyes. "Oh no, are you going to cry, you absolute snowflake? A few people here met an undeserved fate. Isn't that something that happens _every_ _single_ _day?_ Normally, people suffer for idiotic reasons, such as greed and senseless war. In contrast, the folks down there are suffering for a good cause, even if they don't know it. <>
+    Big O mocks a sad expression with his dog eyes. "Oh no, are you going to cry? A few people here met an undeserved fate. Isn't that something that happens _every_ _single_ _day?_ Normally, people suffer for idiotic reasons, such as greed and senseless war. In contrast, the folks down there are suffering for a good cause, even if they don't know it. <>
 
 * "What are you trying to do here?"
 
@@ -114,11 +114,11 @@ Big O starts to circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]], still
 
 Big O still walks in a wide circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]]. There's a spark in his eyes now.
 
-"That can't happen again. I will not allow it." He places his off hand at his chest. "Humanity cannot lose knowledge if it's in the mind of an immortal. Civilization will not end if it's strong enough to withstand anything."
+"That can't happen again. I will not allow it." He places his free hand on his chest. "Humanity cannot lose knowledge if it's in the mind of an immortal. Civilization will not end if it's strong enough to withstand anything."
 
 * "You call this civilization?"
 
-  "To disrupt the status quo, you have to move fast and break things. At the other end of all this, we will have a much better version of society. A strong, efficient, everlasting. The tools — the orcs and goblins and giants — will help us get there. It's the only way."
+  "To disrupt the status quo, you have to move fast and break things. At the other end of all this, we will have a much better version of society. Strong, efficient, everlasting. The tools — the orcs and goblins and giants — will help us get there. It's the only way."
 
 * "How does attacking innocents help?"
 
@@ -154,11 +154,11 @@ Big O still walks in a wide circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[EN
 
         I kneel before Osiris and bow my head. When I look up, he smiles with satisfaction.
 
-        In the following years, we work together to make San Francisco into the fortress that Osiris envisioned. The orcs make competent captains and warriors. Goblins and kobolds build pallisades, traps and pits. Giants work tirelessly on machines of war.
+        In the following years, we work together to make San Francisco into the fortress that Osiris envisioned. The orcs make competent captains and warriors. Goblins and kobolds build palisades, traps, and pits. Giants work tirelessly on machines of war.
 
         Soon, the last vestiges of humanity leave the area. Osiris and I are free.
 
-        As I overlook the Bay, frail old hand resting on the ancient window pane, watching the orcish warships sail out to plunder, do I wonder if I made the right choice? Of course I do.
+        As I overlook the Bay, my frail old hand resting on the ancient windowpane, watching the orcish warships sail out to plunder, do I wonder if I made the right choice? Of course I do.
 
         But, alas, the fight is over.
 
@@ -173,10 +173,10 @@ ROOM: $big_o_observatory
 POS: 26, 16
 
 FIRST_MAP_NAME: The Very Top
-FIRST_HINT: The staircase is all marble and concrete, an exquisite combination of ancient minimalism and current excess. It leads up to a sun lit space.
+FIRST_HINT: A dark shaft with a ladder leads upwards to a sunlit space.
 
 MAP_NAME: Observatory
-HINT: At the very top of the Pyramid, a room for the Lich King.
+HINT: At the very top of the Pyramid, a sunlit, luxurious room.
 
 DESCRIPTION: $NONE
 

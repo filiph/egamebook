@@ -6,9 +6,9 @@ VARIANT_OF: $knights_hq_main
 RULE: c.hasHappened(evQuake3)
 
 FIRST_DESCRIPTION:
-I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the deserted bunks of the Knights of San Francisco.
+I come to the Knights’ Headquarters. A large room overlooking the Bay. Latrines on the right hang out of the window frames, providing fertilizer to the Slopes below. To the left, as far from the latrines as possible, the deserted bunks of the Knights of San Francisco.
 
 There is nobody here.
 
 VARIANT_UPDATE_DESCRIPTION:
-Silence. The knights have left.
+Silence. The Knights have left.

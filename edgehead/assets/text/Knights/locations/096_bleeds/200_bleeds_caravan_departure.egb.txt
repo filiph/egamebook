@@ -14,6 +14,8 @@ VARIANT_UPDATE_DESCRIPTION:
 The road is covered in recent footprints and hoofprints. The air faintly smells of bulls. [[IF c.playerHasVisited("bleeds_main_during_caravan")]]The caravan has left.[[ENDIF]]
 
 [[CODE]]
+c.describeWorthiness(who: bleedsVillagers, what: [lairOfGodStarId, akxeId, sixtyFiverShieldId, hawkmanJacketId, dragonEggId, familyPortraitId, katanaId, compassId], especially: [hawkmanJacketId, dragonEggId, katanaId], how: "{approvingly|with respect}");
+
 c.increaseSanityFromPeople();
 [[ENDCODE]]
 

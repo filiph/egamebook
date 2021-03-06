@@ -73,7 +73,7 @@ INK:
 
 * "What does he do?"
 
-    Ada shrugs and puts her whittling knife to the figure. "People say different things. At night, we can see the lights change. Dark red and bright violet, what have you. There are sounds and screams, sometimes, and they don't seem to be coming from the Orcs. I don't know <>
+    Ada shrugs and puts her whittling knife to the figure. "People say different things. At night, we can see the lights change. Dark red and bright violet, what have you. There are sounds and screams sometimes, and they don't seem to be coming from the orcs. I don't know <>
 
 * "How come you never see him?"
 
@@ -111,9 +111,9 @@ c.learn(ConetFacts.quakesOften);
 
     She shrugs. "This one was stronger than most, but people will repair the damage."
 
-* "Earthquake every day?"
+* "An earthquake every day is normal?"
 
-    "I think Oracle once told me that this area is prone to earthquakes since at least the time of the ancients. [[IF !c.hasHappened(evOrcOffensive)]]She's very knowledgeable, Oracle. She knows a lot about this place. She reads books, you know.[[ELSE]]She was very knowledgeable, you know.[[ENDIF]]"
+    "Oracle once told me that this area has been prone to earthquakes since at least the time of the ancients. [[IF !c.hasHappened(evOrcOffensive)]]She's very knowledgeable, Oracle. She knows a lot about this place. She reads books, you know.[[ELSE]]She was very knowledgeable, you know.[[ENDIF]]"
 
     [[CODE]]
     c.learn(OracleFacts.someoneCalledOracle);
@@ -136,7 +136,7 @@ c.knows(OracleFacts.someoneCalledOracle)
 !c.knows(OracleFacts.personally)
 
 INK:
-"She's the wisest person I know," Ada says, with something like pride. "Lives in a room many floors up above us. Up above the Knights Headquarters, even, just below the Battlefield floor." 
+"She's the wisest person I know," Ada says, with something like pride. "Lives in a room many floors above us. Up above the Knights’ Headquarters, even, just below the Battlefield floor."
 
 She chuckles. "As high as possible without being quartered by the orcs. She likes the view."
 
@@ -144,7 +144,7 @@ She chuckles. "As high as possible without being quartered by the orcs. She like
 c.learn(OracleFacts.location);
 [[ENDCODE]]
 
-Ada's little wooden figure gets another cut and a wooden chip flies past my [[IF c.playerHasWoodenFoot]]crippled [[ENDIF]]leg. "Oracle never had a kid, you know. Could invest all that time in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."
+Ada's little wooden figure gets another cut and a wooden chip flies past my [[IF c.playerHasWoodenFoot]]crippled [[ENDIF]]leg. "Oracle never had a kid, you know. Had all that time to invest in learning and experiencing. Not that I envy her, no. I could not live without kids. Just explaining how she knows as much as she does."
 
 
 // ---
@@ -180,7 +180,7 @@ c.learn(OracleFacts.someoneCalledOracle);
 c.learn(KnightsFacts.knightsAreLeaving);
 [[ENDCODE]]
 
-"And remember to equip yourself," Ada says, looking at my tunic and gear. "There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I've heard of the Dragon Egg, an ancient device of war of that sort."
+"And remember to equip yourself," Ada says, looking at my tunic and gear. "There are different weapons to be found, even here in the downside of the Pyramid. A good weapon can be the difference between life and death. A _great_ weapon can decide a conflict without the need for a fight. I've heard the Dragon Egg is that sort of weapon."
 
 [[CODE]]
 c.learn(DragonEggFacts.anAncientWeapon);

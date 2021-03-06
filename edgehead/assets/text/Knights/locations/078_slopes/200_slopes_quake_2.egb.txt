@@ -6,13 +6,13 @@ VARIANT_OF: $slopes
 RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
 
 FIRST_DESCRIPTION:
-The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking Fruit on the slopes are all down on the ground, gathered around a dead body.
+The steep slope of the Pyramid is covered in vines from this point down. Young men and women who would normally be picking Fruit on the Slopes are all at the base of the Pyramid, gathered around a dead body.
 
 A woman dressed in green is standing next to me, looking down.
 
 
 VARIANT_UPDATE_DESCRIPTION:
-The young men and women are all down on the ground, gathered around a dead body.
+The young men and women are all at the base of the Pyramid, gathered around a dead body.
 
 A woman dressed in green is standing next to me, looking down.
 
@@ -28,7 +28,7 @@ c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
 INK:
 She clicks her tongue. "They should have been more careful, that's what happened."
 
-* "Was it the scream I heard, when the quake struck?"
+* "Was this the scream I heard, when the quake struck?"
 
 * "Hard to be careful on the face of a building when a quake hits."
 

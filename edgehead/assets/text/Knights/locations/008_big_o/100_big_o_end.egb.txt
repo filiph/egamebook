@@ -16,11 +16,11 @@ Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People
 [[RULE]]
   c.hasHappened(evSavedSarn)
 [[THEN]]
-  Sarn comes to the front. He looks much better now. The shaking is gone. There are tears in his eyes now. 
+  Sarn comes to the front. He looks much better now. The shaking is gone. There are tears in his eyes now.
 
   "I do regret what I did, Aren," he says. "I left you and our father when you needed me most. I was selfish and I am really, really sorry."
 
-  I search for what to say but all I can do is give a little nod.
+  I search for what to say, but all I can do is give a little nod.
 
   Seeing this subtle movement, Sarn starts quietly sobbing. His face goes into pieces. Tears go streaming down his cheeks. But he straightens and nods back.
 [[ENDRULE]]
@@ -32,9 +32,9 @@ Down in the Bleeds, I wait for a crowd to form. We all stand in the rain. People
 [[ENDRULESET]]
 
 
-The crowd is formed. Two dozen men and women are soaking in the downpour, watching me in silence. I raise my posession for everyone to see.
+A crowd has formed. Two dozen men and women are soaking in the downpour, watching me in silence. I raise my possession for everyone to see.
 
-![Illustration Big O's head in my arms. Before me, a group of people.](doghead.png)
+![Illustration of Big O's head in my arms. Before me, a group of people.](doghead.png)
 
 * "I am the Doghead."
 

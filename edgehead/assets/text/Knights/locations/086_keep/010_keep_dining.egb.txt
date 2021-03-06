@@ -11,10 +11,10 @@ MAP_NAME: Dining Room
 HINT: The place where the Lord of the Keep dined with his family. A place with a good view of the redwoods outside.
 
 FIRST_MAP_NAME: Dining Room
-FIRST_HINT: I can see a female figure silhouetted against a tall window. She is not moving but I can feel she's alive, or at the very least undead. She waits.
+FIRST_HINT: I can see a female figure silhouetted against a tall window. She is not moving, but I can feel she's alive, or at the very least undead. She waits.
 
 FIRST_DESCRIPTION:
-[[IF c.knows(LadyHopeFacts.ladyHopeName)]]Lady Hope faces me and prepares for battle.[[ELSE]]An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.[[ENDIF]] I wonder if she saw my brother.
+[[IF c.knows(LadyHopeFacts.ladyHopeName)]]Lady Hope faces me and prepares for battle.[[ELSE]]An undead woman faces me and prepares for battle. Later, I find out her name is Lady Hope.[[ENDIF]] I wonder if she’s seen my brother.
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);
@@ -33,7 +33,7 @@ c.learn(LadyHopeFacts.ladyHopeName);
 [[RULE]]
   $DEFAULT
 [[THEN]]
-  As I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be pupetteering the body. A highly skilled necromancer, perhaps.
+  As I approach, a forced, unnatural smile distorts the undead face. I am duly impressed. Someone must be puppeteering the body. A highly skilled necromancer, perhaps.
 
   I risk a quick look around the room. Nobody else is here. The necromancer must be doing this from afar. Even more impressive.
 
@@ -43,7 +43,7 @@ c.learn(LadyHopeFacts.ladyHopeName);
 [[ENDRULE]]
 [[ENDRULESET]]
 
-"You made it rather far, I admit." The body starts walking towards me. "But now you die."
+"You made it rather far, I admit." The body starts walking toward me. "But now you die."
 
 [[CODE]]
 if (c.hasItem(familyPortraitId)) {
@@ -61,7 +61,7 @@ FIGHT_SITUATION:
 generateLadyHopeFight
 
 AFTER_MONSTERS_CLEARED:
-Lady Hope is defeated, but her head is still talking. 
+Lady Hope is defeated, but her head is still talking.
 
 "I see you, young friend," the head says. "I see your ambition. I see your talents. I see your brutality, which I like most of all."
 

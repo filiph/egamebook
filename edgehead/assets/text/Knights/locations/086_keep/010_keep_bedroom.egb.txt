@@ -20,16 +20,16 @@ MAP_NAME: Lord's Quarters
 HINT: Though derelict, these are still the nicest parts of the Keep.
 
 FIRST_DESCRIPTION:
-Redwood parquetry, the wooden flooring of the rich, creaks underfoot.
+Redwood parquetry — the wooden flooring of the rich — creaks underfoot.
 
-This is where the aristocracy lived: the Lord's quarters. The place has been ransacked, and is mostly covered in dust and spiderwebs. But there is some sign of activity. Smallish footprints, with scratchmarks.
+This is where the aristocracy lived: the Lord's Quarters. The place has been ransacked, and it is mostly covered in dust and spiderwebs. But there is some sign of activity. Smallish footprints, with scratch marks.
 
 DESCRIPTION: $NONE
 
 
 // ---
 ACTION: $search_bedroom
-COMMAND: furniture >> search
+COMMAND: Furniture >> Search
 FOR_LOCATION: $keep_bedroom
 
 COMPLETE_SUCCESS_DESCRIPTION:
@@ -38,7 +38,7 @@ Everything is gone. Except: a family portrait. The painting leans against the wa
 
 // ---
 ACTION: $examine_family_portrait
-COMMAND: family portrait >> examine
+COMMAND: Family portrait >> Examine
 FOR_LOCATION: $keep_bedroom
 PREREQUISITES:
 w.actionHasBeenPerformed('search_bedroom')
@@ -46,7 +46,7 @@ w.actionHasBeenPerformed('search_bedroom')
 COMPLETE_SUCCESS_DESCRIPTION:
 The portrait depicts an aristocratic family. Handsome people.
 
-A young, striking lady stands in the front. Her expression is fashionably bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription says: "For our beloved Lady Hope."
+A young, striking lady stands in the front. Her expression is fashionably bored. It is clear the portrait was meant for her, as a memento for her later years. An inscription reads, "For our beloved Lady Hope."
 
 [[CODE]]
 c.learn(LadyHopeFacts.ladyHopeName);
@@ -55,7 +55,7 @@ c.learn(LadyHopeFacts.ladyHopeName);
 
 // ---
 ACTION: $take_family_portrait
-COMMAND: family portrait >> take
+COMMAND: Family portrait >> Take
 FOR_LOCATION: $keep_bedroom
 PREREQUISITES:
 w.actionHasBeenPerformed('examine_family_portrait')
@@ -72,7 +72,7 @@ NOTES:
 // Vignette:
 // Wooden floor in the Keep
 
-Uneven after the years. But it does give the appearance of a castle, among the ancient flat walls. 
+Uneven after the years. But it does give the appearance of a castle, among the ancient flat walls.
 
 The sound is different, hollow.
 

@@ -1,5 +1,5 @@
 APPROACH: $battlefield FROM $knights_hq_main
-DESCRIPTION: [We] climb up the stairs from the Command Post to the sixteenth floor.
+DESCRIPTION: [We] climb up the stairs from the Knights’ Headquarters to the sixteenth floor.
 
 APPROACH: $battlefield FROM $training_grounds
 
@@ -47,13 +47,13 @@ DESCRIPTION: $NONE
 AFTER_MONSTERS_CLEARED:
 The fight is over. [We] stand in the middle of this large room and I finally understand what that strange smell is. It is old, dried blood.
 
-There are no old corpses here, but there must have been many. This was a battlefield. The orcs must have moved the bodies elsewhere, or maybe they just tossed them through the window panes. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after hot bath.
+There are no old corpses here, but there must have been many. This was a battlefield. The orcs must have moved the bodies elsewhere, or maybe they just tossed them through the windows. The blood, though, they did not clear. And so death is here, filling the room, like steam fills a room after a hot bath.
 
 A glorious battle this was, I'm sure. It became an enormous scab.
 
 Whatever the reason for this cleared space had been in the ancient times, I can imagine how the Knights preferred it for battle when they still had the numbers. There is no way to go past it, and the plan is so open you can conceivably use archers, and formations.
 
-Searching through the orc's posession, I find a loaf of stale bread.
+Searching through the orc's possessions, I find a loaf of stale bread.
 
 [[CODE]]
 c.giveNewItemToPlayer(staleBread);

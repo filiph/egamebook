@@ -10,15 +10,15 @@ POS: 27, 29
 FIRST_MAP_NAME: Religious Place
 FIRST_HINT: Orc symbols indicate a temple, a sacrificial place, or both.
 
-MAP_NAME: Orcrowd's Temple
+MAP_NAME: Orcs’ Temple
 HINT: A temple with no windows, lit by torches. The darkness and the rows of pillars provide good opportunities to hide.
 
 FIRST_DESCRIPTION:
 This room serves as a temple for the orcs. It has no windows and is lit by torches. The darkness and the rows of pillars provide good opportunities to hide.
 
-I can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, and a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.
+I can only see two orcs here. One of them is a shaman: an old but muscular female orc, with a long chain of human teeth around her neck, a ceremonial dagger at her side. The shaman is talking with another orc, addressing him as Darg.
 
-Darg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large battle axe made from ancient parts serves as both his weapon and his symbol of power.
+Darg is larger and considerably more muscular than the shaman. He is the leader of this orc outpost. A large poleaxe made from ancient parts serves as both his weapon and his symbol of power.
 
 ![Illustration of Darg, a huge orc with a weapon that resembles a battle axe.](darg.png)
 
@@ -98,21 +98,21 @@ The shaman sighs and takes a step toward Darg. Her hushed voice reverberates thr
 
         * * * Listen some more
 
-            "You don't know that," Darg says and watches the shaman, once again, take a step towards him.
+            "You don't know that," Darg says and watches the shaman, once again, take a step toward him.
 
-            "Of course I do, Darg," the shaman says. "Didn't you hear the hawk? He saw a company of knights leaving the tower and traveling south. They've abandoned this place."
+            "Of course I do, Darg," the shaman says. "Didn't you hear the hawk? He saw a company of Knights leaving the tower and traveling south. They've abandoned this place."
 
-            "It might have been only a part of them," Darg says. "Others might be still inside."
+            "It might have been only some of them," Darg says. "Others might be still inside."
 
             * * * * Listen some more
 
-                "So what," the shaman grins and places her hand on Darg's crotch. "We'll kill them."
+                "So what?" The shaman grins and places her hand on Darg's crotch. "We'll kill them."
 
                 Darg freezes, then slowly pulls away her hand. "We'll wait for the Maker's decision," he says. "The Maker's plan is larger than the tower itself. Attacking now seems obvious, but it can be a bad mistake."
 
                 The shaman draws away from Darg but says nothing. I can hear her breathe.
 
-                "Knowing to avoid bad mistakes like this is why I have the Null," Darg says. "I know the crowd is only a small part of this machine, and I don't see where it fits." He gestures to encompass the room. "Now prepare for the daily."
+                "Knowing to avoid bad mistakes like this is how I earned the Null," Darg says. "I know the crowd is only a small part of this machine, and I don't see where it fits." He gestures to encompass the room. "Now prepare for the daily."
 
                 The shaman frowns but moves away from Darg and starts preparing the temple for some kind of a ritual. Darg watches her work.
 
@@ -144,7 +144,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 
 "Humans?" the shaman says. "Here?"
 
-"Looks like a child," Darg says, readying his battle axe. "Must have found a crawlspace to get here."
+"Looks like a child," Darg says, readying his poleaxe. "Must have found a crawl space to get in here."
 
 The shaman readies the ceremonial dagger from her side and takes position next to Darg. "Let's kill together, Darg. Like in Oak Land so many moons ago."
 
@@ -159,7 +159,7 @@ c.startOptionalFight();
 // THIS ROOM IS INACCESSIBLE. IT IS ONLY A WAY TO HIDE THE SHAMAN.
 ROOM: $crowdsource_vestry
 POS: 28, 30
-MAP_NAME: Crowd's Temple's Vestry
+MAP_NAME: Orcs’ Temple Vestry
 DESCRIPTION: $NONE
 
 

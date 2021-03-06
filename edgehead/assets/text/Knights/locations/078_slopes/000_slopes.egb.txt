@@ -7,13 +7,13 @@ FLAGS: $IDLE
 
 POS: 44, 74
 
-MAP_NAME: Slopes
+MAP_NAME: The Slopes
 HINT: The farmland on the outer wall of the Pyramid.
 
 FIRST_DESCRIPTION:
 The steep slope of the Pyramid is covered in vines from this point down. Young men and women are picking Fruit.
 
-A large writing on the wall says "Doghead will come."
+Large writing on the wall reads, "Doghead will come."
 
 [[CODE]]
 c.learn(DogheadFacts.somethingCalledDoghead);

@@ -6,7 +6,7 @@ VARIANT_OF: $knights_hq_main
 RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
 
 FIRST_DESCRIPTION:
-I come to the headquarters. A large room overlooking the bay. Latrines on the right, hanging out of the window frames, providing fertilizer to the farmer slope below. To the left, as far from the latrines as possible, the bunks where a few of the knights sleep.
+I come to the Knights’ Headquarters. A large room overlooking the Bay. Latrines on the right hang out of the window frames, providing fertilizer to the Slopes below. To the left, as far from the latrines as possible, the bunks where a few of the Knights are sleeping.
 
 There's a small circle of armed men and women talking excitedly in the middle of the room.
 

@@ -10,27 +10,27 @@ FLAGS: $IDLE
 POS: 41, 96
 
 FIRST_MAP_NAME: Trader's Shop
-FIRST_HINT: A mossy, stone building without a porch. The sign "Trader" is written above a window in simple grafitti letters.
+FIRST_HINT: A mossy, stone building without a porch. The sign "Trader" is written above a window in simple graffiti letters.
 
 MAP_NAME: Trader's Shop
-HINT: The shop of Joseph and his son, Leroy. Sells basic items for the inhabitants of The Bleeds, and the Farmers of the Pyramid.
+HINT: The shop of the local trader and his son, Leroy. Sells basic items for the inhabitants of the Bleeds and for the farmers of the Pyramid.
 
 FIRST_DESCRIPTION:
 [We] enter a small building made of stone. It's dark in here but cozy.
-A gray haired trader greets me and gestures around.
+A gray-haired trader greets me and gestures around.
 
-"Everything is for sale. And for good price, too."
+"Everything is for sale. And for a good price, too."
 
 I don't really have any money, so I just nod and smile.
 
-DESCRIPTION: 
+DESCRIPTION:
 The trader {nods|pretends to smile} as [we] enter his shop.
 
 [[CODE]]
 if (c.inRoomWith(leroyId) &&
-    w.getActorById(leroyId).anatomy.isUndead && 
+    w.getActorById(leroyId).anatomy.isUndead &&
     !c.hasHappened(evJisadSeesUndeadLeroy)) {
-  s.add('He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Sir," he says, his eyes wet, "please have mercy on the soul of this young boy. Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.', wholeSentence: true);
+  s.add('He then takes a second look at his son, and freezes. After a long while of silence, he turns to me. "Please have mercy on the soul of this young boy," he says, his eyes wet. "Please release him from... this. Please give him back his death." He looks back at Leroy, and then down on the wooden counter.', wholeSentence: true);
   w.recordCustom(evJisadSeesUndeadLeroy);
 }
 [[ENDCODE]]
@@ -57,7 +57,7 @@ This is the first time I notice a person sitting in one corner of the room, quie
 
 "Well why wouldn't I leave, father? We all should. What awaits us here? It's just... it's just..."
 
-The trader shakes his head and interjects: "What awaits us anywhere else?"
+The trader shakes his head and interjects, "What awaits us anywhere else?"
 
 "... death or slavery." Leroy deems his point made, ignoring his father's interjection. He goes back to his work.
 
@@ -98,7 +98,7 @@ The trader, obviously satisfied, turns back to me. "The suckers are closing in f
 
 "What smoke?" the trader says.
 
-"There's a camp to the west, less than a mile from here."
+"There's a camp to the west,” Leroy says. “Less than a mile from here."
 
 "There's a goblin camp _less_ _than_ _a_ _mile_ from the Bleeds? How do I not know this?"
 
@@ -144,19 +144,19 @@ COMPLETE_SUCCESS_DESCRIPTION:
 assert(c.inRoomWith(leroyId));
 [[ENDCODE]]
 
-"They are to the west. It doesn't seem like there is a lot of them. We thought the Knights would get rid of them for sure."
+"It's to the west. It doesn't seem like there are a lot of goblins there. We thought the Knights would get rid of them for sure."
 
-"But the Knights are leaving." The trader looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
+"But the Knights are leaving," says the trader. He looks at me for reaction and when he doesn't get any, he turns back to his son. "The Knights are leaving," he repeats.
 
 [[CODE]]
 c.learn(KnightsFacts.knightsAreLeaving);
 [[ENDCODE]]
 
-"Well, if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
+"Well,” says Leroy, “if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
 
 The trader groans. "Don't be stupid, Leroy."
 
-"I mean it! [[IF c.playerIsMale]]Sir[[ELSE]]Lady[[ENDIF]], you seem as an adventurous soul. If you ever want my help, just ask." He points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."
+"I mean it! [[IF c.playerIsMale]]Sir[[ELSE]]Lady[[ENDIF]], you seem to be an adventurous soul. If you ever want my help, just ask." Leroy points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."
 
 [[CODE]]
 w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
@@ -165,7 +165,7 @@ w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
 "The hell you can! You're a trader, Leroy! You're no fighter." Leroy's father is shaking. When he remembers that I'm there with them, he apologizes, then turns back to Leroy. "Son, I forget that you are a grown man now. But... it is my wish that you don't go."
 
 NOTES:
-// Optional: Put the trader vs son conflict into context. 
+// Optional: Put the trader vs son conflict into context.
 //       Trader talk is to the point. You can even buy stuff.
 //       You can talk to Leroy without even talking to his father.
 
@@ -175,5 +175,3 @@ I enter the shop. It's less of a hut than most buildings in this place, but stil
 "Welcome," says the old man with a big tired smile.
 
 The young man scoffs. He nods at me, then returns to his work.
-
-

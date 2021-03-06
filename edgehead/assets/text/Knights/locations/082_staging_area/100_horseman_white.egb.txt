@@ -7,25 +7,25 @@ PREREQUISITES:
 // Optional: add a separate "greetings" action when it's initiated after Sarn has been saved. Currently, it is not possible to talk to the officer after Sarn is saved.
 
 INK:
-// Subtext: the knight is scared, he wants out
+// Subtext: the Knight is scared, he wants out
 
-"Greetings. What's your business here?" The knight takes a second good look at me[[IF c.playerHasWoodenFoot]], especially at my wooden foot[[ENDIF]]. "You look far from home."
+"Greetings. What's your business here?" The officer takes a second good look at me[[IF c.playerHasWoodenFoot]], especially at my wooden foot[[ENDIF]][[IF c.playerHasBurntFace]], especially at my face[[ENDIF]]. "You look far from home."
 
 * "I am far from home, yes."
 
-  "Let me guess, a backwater place somewhere to the East?" He snickers. "No matter. Why are you here?"
+  "Let me guess, a backwater place somewhere to the east?" He snickers. "No matter. Why are you here?"
 
-  * * "I am searching for a Sarn of Falling Rock"
+  * * "I am searching for a Sarn of Falling Rock."
 
 * "I am looking for my brother, Sarn of Falling Rock."
 
 -
 
-The officer shakes his head. "Why would this Sarn of Falling Rock be here, of all places? Any thinking man will go as far away from here as possible."
+The officer shakes his head. "Why would this Sarn of Falling Rock be here, of all places? Any thinking man would go as far away from here as possible."
 
 * "Yet you are here."
 
-  "I wouldn't be a very good Knight if I fled from my company, would I. But if you ask me... Wait." The knight shouts some commands at the servants, makes a short note in his book, and continues. "If you ask me, the withdrawal from here cannot come fast enough. I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
+  "I wouldn't be a very good Knight if I fled from my company, would I? But if you ask me... Wait." The officer shouts some commands at the servants, makes a short note in his book, and continues. "If you ask me, the withdrawal from here cannot come fast enough. I will not flee myself, but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
 
   [[CODE]]
   c.learn(KnightsFacts.knightsAreLeaving);
@@ -33,22 +33,21 @@ The officer shakes his head. "Why would this Sarn of Falling Rock be here, of al
 
 * "Some people are not cowards."
 
-  The officer looks at me for a long while. Is he considering using that sword that sways by his side? But then he merely smirks. "Whatever your story is, kid, you should really be leaving." He turns and shouts some commands at the servants. 
-  
-  When he is done and sees I'm still there, he shakes his head. "I will not flee myself but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live." 
+  The officer looks at me for a long while. Is he considering using that sword that sways by his side? But then he merely smirks. "Whatever your story is, kid, you should really be leaving." He turns and shouts some commands at the servants.
+   When he is done and sees I'm still there, he shakes his head. "I will not flee myself, but I will gladly withdraw with the rest. And you, you should leave as soon as possible if you want to live."
 
 -
 
 // Optional: more options here
 * "I'm here to find my brother."
 
-  "Bah! How old is this brother of yours? Cannot he take care of himself?"
+  "Bah! How old is this brother of yours? Can’t he take care of himself?"
 
 -
 
 * "Maybe he can't."
 
-  "So what? He's not your responsibility, kid. People think that but that's not how the world works. People don't owe each other nothing." He pauses. "Which brings me to the fact that <>
+  "So what? He's not your responsibility, kid. People think that, but that's not how the world works. People don't owe each other anything." He pauses. "Which brings me to the fact that <>
 
 * "I am not here to care for him."
 
@@ -64,7 +63,7 @@ The officer shakes his head. "Why would this Sarn of Falling Rock be here, of al
 
 * "You don't remember your subordinates?"
 
-  "Look, kid. There are hundreds of Knights in this place. They come and go. I can't know all of them." He scratches his nose. Then he looks down on his book and opens it at a page in the back. <>
+  "Look, kid. There are hundreds of Knights in this place. They come and go. I can't know all of them." He scratches his nose. Then he looks down at his book and opens it to a page in the back. <>
 
 -
 
@@ -72,15 +71,15 @@ The officer shakes his head. "Why would this Sarn of Falling Rock be here, of al
 
 * "Who captured him?"
 
-  "The Orcs, of course."
+  "The orcs, of course."
 
 * "So, he's not dead?"
 
-  "He probably is. We just mark him as captured because that's what we know for sure. But the Orcs, they don't seem the sort that takes good care of their prisoners, if you know what I mean."
+  "He probably is. We just mark him as captured because that's what we know for sure. But the orcs, they don't seem the sort that take good care of their prisoners, if you know what I mean."
 
 * "What happened?"
 
-  "I don't know. There were a lot of skirmishes with the Orcs lately. Looks like your Sarn of Falling Rock was unlucky enough to be caught in one of them."
+  "I don't know. There were a lot of skirmishes with the orcs lately. Looks like your Sarn of Falling Rock was unlucky enough to be caught in one of them."
 
 -
 
@@ -89,13 +88,9 @@ c.learn(OrcsFacts.inPyramid);
 c.learn(SarnFacts.wasCaptured);
 [[ENDCODE]]
 
-The officer sighs, and his expression softens. "Look, kid. This is the kind of thing I have to say to people every day. Someone died. You cared for them. That's the bullshit we live in. The sooner we all get out of here, the better." He extends an arm. "I am White. Horseman White."
+The officer sighs, and his expression softens. "Look, kid. This is the kind of thing I have to say to people every day. Someone died. You cared about them. That's the bullshit we live in. The sooner we all get out of here, the better." He extends a hand to shake. "I am White. Horseman White."
 
 * "I am Aren."
-
-  "Okay. I will probably not remember that."
-
-* "I don't care."
 
   "Okay."
 
@@ -123,7 +118,7 @@ Horseman White seems offended. "Why are you asking me this?"
 
 -
 
-<> Doghead is a local myth. A creature with a dog's head and a human's body. He or she is supposed to come and save the day at some point. Just turns up and solves everyone's problems. Classic magical thinking. Bullshit from generations ago. Go ask Oracle."
+<> Doghead is a local myth. A creature with a dog's head and a human's body. He or she is supposed to come and save the day at some point. Just turn up and solve everyone's problems. Classic magical thinking. Bullshit from generations ago. Go ask Oracle."
 
 [[CODE]]
 c.learn(DogheadFacts.dogheadMyth);
@@ -142,7 +137,7 @@ w.actionHasBeenPerformed("talk_to_horseman_white_greetings")
 c.knows(KnightsFacts.knightsAreLeaving)
 
 INK:
-"Take your pick, child." He starts counting with fingers. "The horde of Orcs at the upper floors? The wizard, Big O, at the very top? The goblins everywhere? The earthquakes, or whatever they are?" He wiggles the four fingers. "There's probably more I'm forgetting. The point is, the Knights were meant as a force to provide safety, to keep an occassional bandit or such in check."
+"Take your pick, child." He starts counting with fingers. "The horde of orcs at the upper floors? The wizard, Big O, at the very top? The goblins everywhere? The earthquakes, or whatever they are?" He wiggles the four fingers. "There's probably more I'm forgetting. The point is, the Knights of San Francisco were meant as a force to provide safety, to keep an occasional bandit or such in check."
 
 He pounds his chest. "We are not meant to be slaughtered like pigs."
 
@@ -154,7 +149,7 @@ c.learn(OrcsFacts.inPyramid);
 
 // ---
 ACTION: $talk_to_horseman_white_quake_1
-COMMAND: Horseman White >> Talk >> "Was than an earthquake?"
+COMMAND: Horseman White >> Talk >> "Was that an earthquake?"
 FOR_LOCATION: $staging_area
 
 PREREQUISITES:

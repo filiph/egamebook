@@ -7,13 +7,13 @@ ROOM: $deathless_village
 POS: 21, 64
 
 FIRST_MAP_NAME: Village in the Jungle
-FIRST_HINT: I can see some buildings through the canopy of leaves. The buildings are placed on a ledge overlooking the crater.
+FIRST_HINT: I can see some buildings through the canopy of leaves. The buildings are placed on a ledge of the Pyramid overlooking the crater.
 
 MAP_NAME: Village of the Deathless
-HINT: A village of cultists positioned on a ledge overlooking the jungle.
+HINT: A village of cultists positioned on a ledge of the Pyramid overlooking the jungle.
 
 FIRST_DESCRIPTION:
-On a ledge overlooking the jungle, a village of cultists. They call themselves the Deathless, and they worship the ancients. Their leader is a child.
+On a ledge of the Pyramid overlooking the jungle, a village of cultists. They call themselves the Deathless, and they are said to worship the ancients. Their leader is a child.
 
 [[CODE]]
 c.learn(DeathlessFacts.sawDeathless);
@@ -40,7 +40,7 @@ c.increaseSanityFromPeople();
 
 // ---
 ACTION: $give_lair_of_god_star_to_deathless
-COMMAND: Inventory >> Artifact Star >> give to the Deathless
+COMMAND: Inventory >> Artifact Star >> Give to the Deathless
 FOR_LOCATION: $deathless_village
 
 PREREQUISITES:
@@ -53,7 +53,7 @@ I approach with the Artifact Star in hand. When the villagers realize I am offer
 [[RULE]]
   w.actionHasBeenPerformed("argo_greet")
 [[THEN]]
-  In a few heartbeats, Argo stands before me.
+  Argo stands before me.
 [[ENDRULE]]
 [[RULE]]
   $DEFAULT
@@ -70,7 +70,7 @@ She opens her arms and stands up. "You do. And you chose to use your talents for
 
 With ceremonial slowness, she takes the star from my hand. "You are now a friend of the Deathless. As such, you will command respect from each and every one of us." She speaks loudly, clearly. The rest of the villagers still kneel, watching me silently.
 
-Argo the turns around to her people. "The Star will be deposited in the Sacred Shrine, next to the Dragon Egg. And I think our friend has deserved full access."
+Argo then turns around to her people. "The Star will be deposited in the Sacred Shrine, next to the Dragon Egg. And I think our friend deserves full access."
 
 I now have access to the shrine of the Deathless, not far from here.
 

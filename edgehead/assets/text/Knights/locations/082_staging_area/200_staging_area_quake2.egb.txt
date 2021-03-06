@@ -6,7 +6,7 @@ VARIANT_OF: $staging_area
 RULE: c.hasHappened(evQuake2) && !c.hasHappened(evCaravanDeparted)
 
 FIRST_DESCRIPTION:
-This is a large room without windows. It is teeming with knights and their servants, who are carrying chests, bedding and furniture. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
+This is a large room without windows. It is teeming with Knights and their servants, who are carrying in chests, bedding, and furniture from the upper floors. All these items are being lined up against the north wall, and an officer with a large book is walking left and right, making notes.
 
 The new quake has toppled quite a few things. Nobody seems to care anymore. People just try to get out.
 
