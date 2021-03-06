@@ -29,8 +29,8 @@ void main() {
 
   test("don't produce duplicates", () {
     final ifBlocks =
-    IfBlock.parse("This has [[IF true]]two[[ELSE]]what?[[ENDIF]] "
-        "[[IF true]]two[[ELSE]]what?[[ENDIF]] identical blocks.");
+        IfBlock.parse("This has [[IF true]]two[[ELSE]]what?[[ENDIF]] "
+            "[[IF true]]two[[ELSE]]what?[[ENDIF]] identical blocks.");
     expect(ifBlocks, hasLength(1));
   });
 }
