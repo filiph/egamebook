@@ -25,7 +25,7 @@ c.giveSanityToPlayer(2);
 
 I carefully fold the paper and keep my thumb pressed against the broken wax seal. Without conscious thought, I start tapping the seal with the thumb, rhythmically. Tap. Tap. Tap. A nervous tic I picked up on the way here.
 
-[[IF !c.hasHappened(evSavedSarn)]]_No,_ _Father._ _I_ must _find_ _the_ _coward,_ _and_ _confront_ _him._[[ENDIF]]
+[[IF !c.hasHappened(evSavedSarn)]]_No,_ _Father._ _I_ _must_ _find_ _the_ _coward,_ _and_ _confront_ _him._[[ENDIF]]
 
 * For what he did, he deserves punishment.
 
@@ -58,6 +58,3 @@ I carefully fold the paper and keep my thumb pressed against the broken wax seal
     The coward took off then, and he must not be forgiven. I must have vengeance.
 
 -
-
-// TODO: w.recordCustom('...') -> then at end of play, check custom and say stuff like: "I vowed to punish him, but how can one punish someone in this state."
-// TODO: w.hasHappened('...') in sarn_rescue

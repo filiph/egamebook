@@ -19835,10 +19835,10 @@ final readLetterFromFatherInk = InkAst([
     final Actor a = c.actor;
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
-    final ifBlock_16710beb4 = !c.hasHappened(evSavedSarn)
-        ? '''_No,_ _Father._ _I_ must _find_ _the_ _coward,_ _and_ _confront_ _him._'''
+    final ifBlock_5065ca633 = !c.hasHappened(evSavedSarn)
+        ? '''_No,_ _Father._ _I_ _must_ _find_ _the_ _coward,_ _and_ _confront_ _him._'''
         : '''''';
-    s.add('${ifBlock_16710beb4}\n', isRaw: true);
+    s.add('${ifBlock_5065ca633}\n', isRaw: true);
   }),
   InkForkNode([
     InkChoiceNode(
