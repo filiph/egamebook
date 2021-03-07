@@ -19858,10 +19858,8 @@ final readLetterFromFatherInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
-          final ifBlock_56c7cddbe =
-              c.playerIsMale ? '''brother''' : '''sister''';
           s.add(
-              '_Nobody_ should be able to get away with what Sarn did and feel no consequences. Mother dead. Father rudderless and sad beyond imagining. Little ${ifBlock_56c7cddbe}, me, frightened.\n',
+              '_Nobody_ should be able to get away with what Sarn did and feel no consequences. He left just after Mother died. He let Father and I steep in despair and destitution.\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -19894,8 +19892,10 @@ final readLetterFromFatherInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
+          final ifBlock_56c7cddbe =
+              c.playerIsMale ? '''brother''' : '''sister''';
           s.add(
-              'Sarn left just after Mother died, when Father was rudderless and sad beyond imagining. I was so terrified of what would come next. Is it possible that Sarn didn\'t know what he was doing? That his young head couldn\'t imagine what _another_ loss of a member would do to a struggling family?\n',
+              'Sarn took off just after Mother died. He left behind a devastated Father, and a little ${ifBlock_56c7cddbe}, terrified of what would come next. Is it possible that Sarn didn\'t know what he was doing? Could he not imagine what _another_ loss of a member would do to a struggling family?\n',
               isRaw: true);
         }),
         InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -19906,7 +19906,7 @@ final readLetterFromFatherInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'He must learn what happened. He cannot live his life without knowing that his act of cowardice almost broke Father, and me.\n',
+              'He must learn what happened. He cannot live his life without knowing that his act of cowardice broke Father, and me.\n',
               isRaw: true);
         }),
       ],
