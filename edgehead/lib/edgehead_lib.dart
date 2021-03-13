@@ -27,6 +27,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/stat.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:logging/logging.dart';
+import 'package:slot_machine/result.dart' as slot;
 
 class EdgeheadGame extends Book {
   static final StatSetting<int> sanitySetting = StatSetting<int>(
@@ -181,13 +182,21 @@ class EdgeheadGame extends Book {
     } else {
       var resourceName =
           performance.action.rerollResource.toString().split('.').last;
-      var result = await showSlotMachine(
-          chance.toDouble(),
-          performance.action
-              .getRollReason(actor, simulation, world, performance.object),
-          rerollable: performance.action.rerollable &&
-              actor.hasResource(performance.action.rerollResource),
-          rerollEffectDescription: "drain $resourceName");
+
+      slot.SessionResult result;
+      try {
+        result = await showSlotMachine(
+            chance.toDouble(),
+            performance.action
+                .getRollReason(actor, simulation, world, performance.object),
+            rerollable: performance.action.rerollable &&
+                actor.hasResource(performance.action.rerollResource),
+            rerollEffectDescription: "drain $resourceName");
+      } on CancelledInteraction {
+        log.info('Player cancelled slot machine');
+        return;
+      }
+
       consequence =
           consequences.where((c) => c.isSuccess == result.isSuccess).single;
 
