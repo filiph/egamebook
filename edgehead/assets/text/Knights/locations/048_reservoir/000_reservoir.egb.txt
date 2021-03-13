@@ -14,12 +14,14 @@ HINT: A large, filthy pool in the middle of the building.
 
 FLAGS: $IDLE
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 A large, filthy pool in the middle of the building, surrounded by a ledge and covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. It would have been intended to distribute water to the upper floors, but I wouldn't want to taste what's collected there now. There's an iron dam here, preventing the water from spilling into the corridors of the Pyramid.
 
 Everything is wet, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.
 
 Something big just moved in the water.
+
+DESCRIPTION: $NONE
 
 
 // ---
@@ -28,10 +30,17 @@ VARIANT_OF: $reservoir
 
 RULE: c.hasHappened(evOpenedDam)
 
-DESCRIPTION:
+FIRST_DESCRIPTION:
 A huge empty room, with the floor covered in sludge and slimy carcasses. There are orc and goblin corpses there, too.
 
 Muddy footprints lead away from the reservoir.
+
+VARIANT_UPDATE_DESCRIPTION:
+A huge empty room, with the floor covered in sludge and slimy carcasses. There are orc and goblin corpses there, too.
+
+Muddy footprints lead away from the reservoir.
+
+DESCRIPTION: $NONE
 
 
 // ---
@@ -171,7 +180,7 @@ INK:
 
 The footprints continue downward. There is no wandering — the creature must know these parts well.
 
-After a long while, the creature's trail leads us all the way to the enormous hole in the Pyramid and the foliage that fills the space.
+After a long while, the creature's trail leads me all the way to the enormous hole in the Pyramid and the foliage that fills the space.
 
 [[CODE]]
 c.movePlayer('jungle_entrance');

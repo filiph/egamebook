@@ -4727,7 +4727,7 @@ final reservoirFollowFootprintsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'After a long while, the creature\'s trail leads us all the way to the enormous hole in the Pyramid and the foliage that fills the space.\n',
+        'After a long while, the creature\'s trail leads me all the way to the enormous hole in the Pyramid and the foliage that fills the space.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
@@ -5391,7 +5391,7 @@ class ReservoirWaterExamine extends RoamingAction {
   bool get isImmediate => false;
 }
 
-final Room reservoir = Room('reservoir', null, (ActionContext c) {
+final Room reservoir = Room('reservoir', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -5400,6 +5400,13 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
   s.add(
       'A large, filthy pool in the middle of the building, surrounded by a ledge and covered with a layer of green sludge. The reservoir was clearly built by the ancients, with their straight lines and craftsmanship of the highest quality. It would have been intended to distribute water to the upper floors, but I wouldn\'t want to taste what\'s collected there now. There\'s an iron dam here, preventing the water from spilling into the corridors of the Pyramid.\n\nEverything is wet, even the ceiling. Condensed water forms drops that land back on the water surface, making a hollow sound in the large room.\n\nSomething big just moved in the water.\n',
       isRaw: true);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
 }, null, null,
     isIdle: true,
     positionX: 21,
@@ -5409,17 +5416,28 @@ final Room reservoir = Room('reservoir', null, (ActionContext c) {
     hint: 'A large, filthy pool in the middle of the building.',
     firstHint:
         'Corridors around this place smell of stale water. A faint splashing can be heard.');
-final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
+final Room reservoirAfterOpenDam = Room(
+    'reservoir_after_open_dam',
     (ActionContext c) {
-  final WorldState originalWorld = c.world;
-  final Simulation sim = c.simulation;
-  final Actor a = c.actor;
-  final WorldStateBuilder w = c.outputWorld;
-  final Storyline s = c.outputStoryline;
-  s.add(
-      'A huge empty room, with the floor covered in sludge and slimy carcasses. There are orc and goblin corpses there, too.\n\nMuddy footprints lead away from the reservoir.\n',
-      isRaw: true);
-}, null, null,
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'A huge empty room, with the floor covered in sludge and slimy carcasses. There are orc and goblin corpses there, too.\n\nMuddy footprints lead away from the reservoir.\n',
+          isRaw: true);
+    },
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add('', isRaw: true);
+    },
+    null,
+    null,
     parent: 'reservoir',
     prerequisite: Prerequisite(364228247, 1, true, (ApplicabilityContext c) {
       final WorldState w = c.world;
@@ -5427,6 +5445,16 @@ final Room reservoirAfterOpenDam = Room('reservoir_after_open_dam', null,
       final Actor a = c.actor;
       return c.hasHappened(evOpenedDam);
     }),
+    variantUpdateDescribe: (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+      s.add(
+          'A huge empty room, with the floor covered in sludge and slimy carcasses. There are orc and goblin corpses there, too.\n\nMuddy footprints lead away from the reservoir.\n',
+          isRaw: true);
+    },
     isIdle: true,
     positionX: 21,
     positionY: 46,
