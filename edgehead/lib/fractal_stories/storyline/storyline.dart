@@ -343,9 +343,9 @@ class Storyline {
     assert(
         _entityAndSubstringExistTogether(
             str, object, OBJECT_NOT_OBJECT2_REGEXP),
-        "'$str' lacks object");
+        "'$str' lacks object ($object)");
     assert(_entityAndSubstringExistTogether(str, object2, "<object2"),
-        "'$str' lacks object2");
+        "'$str' lacks object2 ($object2)");
 
     bool wholeSentenceAutoDetected =
         (str.endsWith(".") || str.endsWith("!") || str.endsWith("?")) &&
