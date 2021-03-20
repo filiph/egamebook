@@ -44,14 +44,22 @@ FOR_LOCATION: $bleeds_trader_hut
 // Optional: rewrite so that we don't need Leroy here
 PREREQUISITES: c.inRoomWith(leroyId)
 
-COMPLETE_SUCCESS_DESCRIPTION:
+INK:
 The trader shrugs.
 
 "It's terrible. Everyone is afraid, nobody buys anything. Well, except for travel gear. But we're out of that until the next caravan." He glides his hand over the counter to suggest that there is nothing left.
 
-_"Why travel gear?"_
+* "Afraid of what?"
 
-"People are leaving. Even _he_ wants to leave."
+  "Orcs, goblins, kobolds, you name it," he says. "And I get it, sir. I get it. San Francisco is getting more dangerous every day. But is it _so_ dangerous we all have to leave? <>
+
+* "Why travel gear?"
+  
+  "People are leaving. <>
+
+-
+
+<> Even _he_ wants to leave."
 
 This is the first time I notice a person sitting in one corner of the room, quietly {polishing a strip of leather|sewing two strips of leather together|pinching holes into a strip of leather}. The man introduces himself as Leroy. He is the trader's son.
 
