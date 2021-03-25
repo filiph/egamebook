@@ -47,7 +47,7 @@ final battlefield_floor_spit = EventCallback((c, sim, w, s) {
     return;
   }
 
-  goblin.report(s, '<subject> spit<s> in my direction', wholeSentence: true);
+  goblin.report(s, '<subject> spit<s> in my direction.', wholeSentence: true);
 });
 
 final big_o_realize = EventCallback((c, sim, w, s) {
