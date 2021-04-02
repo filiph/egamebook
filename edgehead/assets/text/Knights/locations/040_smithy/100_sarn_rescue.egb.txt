@@ -21,19 +21,19 @@ The fight is over. I wheel around and turn to my brother, who is slowly coming t
 [[RULE]]
    c.hasHappened("goal_deserves_punishment")
 [[THEN]]
-   I vowed to punish Sarn for his selfishness. For leaving a broken [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]] and a broken father instead of helping them make ends meet and find their footing again. <>
+   I vowed to punish Sarn for his selfishness. For leaving a broken [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]] and a broken father instead of helping them make ends meet and find their footing again.
 [[ENDRULE]]
 [[RULE]]
    c.hasHappened("goal_must_know")
 [[THEN]]
-   I vowed to — I _needed_ to — tell him what his act of selfishness meant. What life looked like for a father and young [[IF c.playerIsMale]]son[[ELSE]]daughter[[ENDIF]] in Falling Rock after his departure. I wanted to tell him so badly. <>
+   I vowed to — I _needed_ to — tell him what his act of selfishness meant. What life looked like for a father and young [[IF c.playerIsMale]]son[[ELSE]]daughter[[ENDIF]] in Falling Rock after his departure. I wanted to tell him so badly.
 [[ENDRULE]]
 [[RULE]]
    c.hasHappened("goal_revenge")
 [[THEN]]
    I was looking forward to revenge. A beating, at least, but I admit I fantasized about blood as well. The pure selfishness with which Sarn left a broken [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]] and a broken father instead of helping them make ends meet and find their footing again — there's only one answer to that. Violence.
 
-   I would have given anything to have Sarn this close, to be able to shower him with blow after blow. <>
+   I would have given anything to have Sarn this close, to be able to shower him with blow after blow.
 [[ENDRULE]]
 [[RULE]]
    $DEFAULT
@@ -41,11 +41,11 @@ The fight is over. I wheel around and turn to my brother, who is slowly coming t
    // Reusing "revenge" above in case player didn't read the father's letter. It's unlikely a player will ignore the letter on their first playthrough, so no worries too much about this.
    I was looking forward to revenge. A beating, at least, but I admit I fantasized about blood as well. The pure selfishness with which Sarn left a broken [[IF c.playerIsMale]]boy[[ELSE]]girl[[ENDIF]] and a broken father instead of working with them to get the family back on track — there's only one answer to that. Violence.
 
-   I would have given anything to have Sarn this close, to be able to shower him with blow after blow. <>
+   I would have given anything to have Sarn this close, to be able to shower him with blow after blow.
 [[ENDRULE]]
 [[ENDRULESET]]
 
-<> But how can I do that now?
+But how can I do that now?
 
 Straining, Sarn looks into my eyes. "Thank you, [[IF c.playerIsMale]]brother[[ELSE]]sister[[ENDIF]]."
 
