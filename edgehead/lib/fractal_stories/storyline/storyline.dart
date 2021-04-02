@@ -751,8 +751,10 @@ class Storyline {
 
     // Replace dumb quotes with smart quotes.
     s = smartifyQuotes(s);
-    assert(!s.contains('"'));
-    assert(!s.contains("'"));
+    assert(!s.contains('"'),
+        'Contains a straight " quote after smartifyQuotes: $s');
+    assert(!s.contains("'"),
+        "Contains a straight ' quote after smartifyQuotes: $s");
 
     // Fix repeated spaces, such as 'Hello  there' -> 'Hello there'.
     s = collapseSpaces(s);

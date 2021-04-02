@@ -208,7 +208,7 @@ I turn around in surprise.
 
 -
 
-“The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal.”
+"The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal."
 
 [[CODE]]
 c.markHappened(evTookSarnToBleeds);
