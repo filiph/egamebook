@@ -106,7 +106,7 @@ The trader, obviously satisfied, turns back to me. "The suckers are closing in f
 
 "What smoke?" the trader says.
 
-"There's a camp to the west,” Leroy says. “Less than a mile from here."
+"There's a camp to the west," Leroy says. "Less than a mile from here."
 
 "There's a goblin camp _less_ _than_ _a_ _mile_ from the Bleeds? How do I not know this?"
 
@@ -160,7 +160,7 @@ assert(c.inRoomWith(leroyId));
 c.learn(KnightsFacts.knightsAreLeaving);
 [[ENDCODE]]
 
-"Well,” says Leroy, “if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
+"Well," says Leroy, "if we aren't leaving this place like they are, it looks like we'll have to learn how to live here, without the Knights. We could take up the fight ourselves."
 
 The trader groans. "Don't be stupid, Leroy."
 

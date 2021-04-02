@@ -1773,7 +1773,7 @@ final outlookAttackInk = InkAst([
                 final WorldStateBuilder w = c.outputWorld;
                 final Storyline s = c.outputStoryline;
                 s.add(
-                    '“Coins, human,” the hawkman says. “Also, this view isn’t half bad, don’t you think? I can see the giants over the water." He chuckles again. "They are coming, you know.”\n',
+                    '"Coins, human," the hawkman says. "Also, this view isn’t half bad, don’t you think? I can see the giants over the water." He chuckles again. "They are coming, you know."\n',
                     isRaw: true);
               }),
             ],
@@ -15665,7 +15665,7 @@ class BleedsTraderGoblinSmoke extends RoamingAction {
     c.learn(KnightsFacts.knightsAreLeaving);
 
     s.add(
-        '\n"Well,” says Leroy, “if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! ${ifBlock_191880c16}, you seem to be an adventurous soul. If you ever want my help, just ask." Leroy points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
+        '\n"Well," says Leroy, "if we aren\'t leaving this place like they are, it looks like we\'ll have to learn how to live here, without the Knights. We could take up the fight ourselves."\n\nThe trader groans. "Don\'t be stupid, Leroy."\n\n"I mean it! ${ifBlock_191880c16}, you seem to be an adventurous soul. If you ever want my help, just ask." Leroy points to a chest near where he sits. "I have a long dagger and a decent shield, and I can use both."\n\n',
         isRaw: true);
     w.updateActorById(leroyId, (b) => b.npc.isHireable = true);
 
@@ -15744,7 +15744,7 @@ class BleedsTraderGoblins extends RoamingAction {
     assert(c.inRoomWith(leroyId));
 
     s.add(
-        '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west,” Leroy says. “Less than a mile from here."\n\n"There\'s a goblin camp _less_ _than_ _a_ _mile_ from the Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
+        '\nLeroy smiles wryly. "No trade means no money."\n\nHis father looks at him, annoyed. "No money means no food."\n\nLeroy looks as if he wants to add something, but thinks better of it.\n\nThe trader, obviously satisfied, turns back to me. "The suckers are closing in from all sides. A few months ago they wouldn\'t dare approach the Pyramid. But lately, they come much closer."\n\n"I could see the smoke from one of their camps a while back." Leroy talks to his leather strip.\n\n"What smoke?" the trader says.\n\n"There\'s a camp to the west," Leroy says. "Less than a mile from here."\n\n"There\'s a goblin camp _less_ _than_ _a_ _mile_ from the Bleeds? How do I not know this?"\n\nLeroy seems genuinely surprised. "I thought you knew. Everyone knows."\n\n',
         isRaw: true);
     c.learn(kbLeroyKnowsGoblinSmoke);
 
