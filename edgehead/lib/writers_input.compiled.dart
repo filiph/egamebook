@@ -3566,7 +3566,7 @@ final sarnRescueInkInk = InkAst([
     final ifBlock_20579df5 = c.playerIsMale ? '''boy''' : '''girl''';
     final ifBlock_2a347a8ff = c.playerIsMale ? '''son''' : '''daughter''';
     Ruleset(
-        Rule(462742692, 1, false, (ApplicabilityContext c) {
+        Rule(734185790, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -3578,10 +3578,10 @@ final sarnRescueInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I vowed to punish Sarn for his selfishness. For leaving a broken ${ifBlock_20579df5} and a broken father instead of helping them make ends meet and find their footing again. <>\n',
+              'I vowed to punish Sarn for his selfishness. For leaving a broken ${ifBlock_20579df5} and a broken father instead of helping them make ends meet and find their footing again.\n',
               isRaw: true);
         }),
-        Rule(1031105209, 1, false, (ApplicabilityContext c) {
+        Rule(861376907, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -3593,10 +3593,10 @@ final sarnRescueInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I vowed to — I _needed_ to — tell him what his act of selfishness meant. What life looked like for a father and young ${ifBlock_2a347a8ff} in Falling Rock after his departure. I wanted to tell him so badly. <>\n',
+              'I vowed to — I _needed_ to — tell him what his act of selfishness meant. What life looked like for a father and young ${ifBlock_2a347a8ff} in Falling Rock after his departure. I wanted to tell him so badly.\n',
               isRaw: true);
         }),
-        Rule(429134845, 1, false, (ApplicabilityContext c) {
+        Rule(240666744, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -3608,10 +3608,10 @@ final sarnRescueInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I was looking forward to revenge. A beating, at least, but I admit I fantasized about blood as well. The pure selfishness with which Sarn left a broken ${ifBlock_20579df5} and a broken father instead of helping them make ends meet and find their footing again — there\'s only one answer to that. Violence.\n\nI would have given anything to have Sarn this close, to be able to shower him with blow after blow. <>\n',
+              'I was looking forward to revenge. A beating, at least, but I admit I fantasized about blood as well. The pure selfishness with which Sarn left a broken ${ifBlock_20579df5} and a broken father instead of helping them make ends meet and find their footing again — there\'s only one answer to that. Violence.\n\nI would have given anything to have Sarn this close, to be able to shower him with blow after blow.\n',
               isRaw: true);
         }),
-        Rule(601837432, 0, false, (ApplicabilityContext c) {
+        Rule(204204291, 0, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -3623,7 +3623,7 @@ final sarnRescueInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'I was looking forward to revenge. A beating, at least, but I admit I fantasized about blood as well. The pure selfishness with which Sarn left a broken ${ifBlock_20579df5} and a broken father instead of working with them to get the family back on track — there\'s only one answer to that. Violence.\n\nI would have given anything to have Sarn this close, to be able to shower him with blow after blow. <>\n',
+              'I was looking forward to revenge. A beating, at least, but I admit I fantasized about blood as well. The pure selfishness with which Sarn left a broken ${ifBlock_20579df5} and a broken father instead of working with them to get the family back on track — there\'s only one answer to that. Violence.\n\nI would have given anything to have Sarn this close, to be able to shower him with blow after blow.\n',
               isRaw: true);
         })).apply(ActionContext.updatedFrom(c));
     s.addParagraph();
@@ -3849,7 +3849,7 @@ final sarnRescueInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '"I hate you," he whispers, shaking. "You come all this way only to remind me of my failure[b]."\n',
+        '"I hate you," he whispers, shaking. "You come all this way only to remind me of my failure."\n',
         isRaw: true);
   }),
   InkForkNode([
@@ -3869,7 +3869,7 @@ final sarnRescueInkInk = InkAst([
       ],
     ),
     InkChoiceNode(
-      command: r""" "Let's say I also followed my passion."[c] """.trim(),
+      command: r""" "Let's say I also followed my passion." """.trim(),
       consequence: [
         InkParagraphNode((ActionContext c) {
           final WorldState originalWorld = c.world;
@@ -4184,7 +4184,7 @@ final takeSarnToBleedsInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        '“The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal.”\n',
+        '"The real fight is larger," Jisad continues. "It carries on even after we die. If you take up _that_ fight, you become immortal."\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
