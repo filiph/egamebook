@@ -88,6 +88,14 @@ He hits the floor with the handle of his scythe for emphasis. The marble cracks 
 [[THEN]]
   Big O squints and observes my face. I have to fight the urge to hide the burnt side.
 [[ENDRULE]]
+[[RULE]]
+  $DEFAULT
+[[THEN]]
+  // Pass. This should never happend but let's fail gracefully in case the player has an old savegame.
+  [[CODE]]
+  assert(false, "The player doesn't have any feature: no asthma, no burnt face, no wooden foot.");
+  [[ENDCODE]]
+[[ENDRULE]]
 [[ENDRULESET]]
 
 Big O starts to circle around [[IF c.playerIsAlone]]me[[ELSE]]us[[ENDIF]], still well out of reach. [[IF c.hasItem(dragonEggId)]]Almost unconsciously, my hand touches the Dragon Egg hidden in my pocket. [[ENDIF]] "And instead of support," Big O says, "necromancers get sneers and spits. We ought to be at the top and instead we are at the bottom. But not here. Not in San Francisco. Here, the necromancers are at the top."

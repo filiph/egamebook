@@ -390,10 +390,23 @@ final finalFightInkInk = InkAst([
           s.add(
               'Big O squints and observes my face. I have to fight the urge to hide the burnt side.\n',
               isRaw: true);
+        }),
+        Rule(811640080, 0, false, (ApplicabilityContext c) {
+          final WorldState w = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          return true;
+        }, (ActionContext c) {
+          final WorldState originalWorld = c.world;
+          final Simulation sim = c.simulation;
+          final Actor a = c.actor;
+          final WorldStateBuilder w = c.outputWorld;
+          final Storyline s = c.outputStoryline;
+          assert(false,
+              "The player doesn't have any feature: no asthma, no burnt face, no wooden foot.");
         })).apply(ActionContext.updatedFrom(c));
     s.addParagraph();
   }),
-  InkParagraphNode((c) => c.outputStoryline.addParagraph()),
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
     final Simulation sim = c.simulation;
