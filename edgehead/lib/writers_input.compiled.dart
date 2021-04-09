@@ -7812,7 +7812,7 @@ final Room jungleEntranceMuddyFootprints = Room(
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
       s.add(
-          'Corridors full of vegetation. Path through that, like a path in a forest, but indoors. Muddy footprints lead into the jungle.\n',
+          'Corridors full of vegetation. Path through that, like a path in a forest, but indoors. Muddy footprints lead into the jungle, towards a body of water.\n',
           isRaw: true);
     },
     (ActionContext c) {
@@ -7838,7 +7838,8 @@ final Room jungleEntranceMuddyFootprints = Room(
       final Actor a = c.actor;
       final WorldStateBuilder w = c.outputWorld;
       final Storyline s = c.outputStoryline;
-      s.add('Muddy footprints lead into the jungle.\n', isRaw: true);
+      s.add('Muddy footprints lead into the jungle, towards a body of water.\n',
+          isRaw: true);
     },
     positionX: 20,
     positionY: 68,

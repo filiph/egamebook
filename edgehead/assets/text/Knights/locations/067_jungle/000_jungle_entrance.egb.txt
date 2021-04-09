@@ -23,7 +23,7 @@ VARIANT_OF: $jungle_entrance
 RULE: c.hasHappened(evOpenedDam)
 
 FIRST_DESCRIPTION:
-Corridors full of vegetation. Path through that, like a path in a forest, but indoors. Muddy footprints lead into the jungle.
+Corridors full of vegetation. Path through that, like a path in a forest, but indoors. Muddy footprints lead into the jungle, towards a body of water.
 
 VARIANT_UPDATE_DESCRIPTION:
-Muddy footprints lead into the jungle.
+Muddy footprints lead into the jungle, towards a body of water.
