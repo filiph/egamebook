@@ -59,9 +59,8 @@ import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.compiled.g.dart';
 
 const bool DEV_MODE = false;
-final Approach endOfRoamFromTestRandomEncounter =
-    Approach('test_random_encounter', '__END_OF_ROAM__', 'End encounter',
-        (ActionContext c) {
+final Approach endOfRoamFromRandomEncounter = Approach(
+    'random_encounter', '__END_OF_ROAM__', 'End encounter', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -69,8 +68,18 @@ final Approach endOfRoamFromTestRandomEncounter =
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
 });
-final Room testRandomEncounter = Room('test_random_encounter',
-    (ActionContext c) {
+final Approach randomEncounterFromPreRandomEncounter =
+    Approach('pre_random_encounter', 'random_encounter', r'$IMPLICIT', null);
+final Room preRandomEncounter =
+    Room('pre_random_encounter', null, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+  s.add('', isRaw: true);
+}, null, null);
+final Room randomEncounter = Room('random_encounter', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -20333,7 +20342,8 @@ abstract class GuardpostAboveChurchTakeShieldRescueSituation extends Object
 }
 
 final allRooms = <Room>[
-  testRandomEncounter,
+  preRandomEncounter,
+  randomEncounter,
   bigOObservatory,
   bigOAntechamber,
   dargTent,
@@ -20408,7 +20418,8 @@ final allRooms = <Room>[
   meadowFight
 ];
 final allApproaches = <Approach>[
-  endOfRoamFromTestRandomEncounter,
+  endOfRoamFromRandomEncounter,
+  randomEncounterFromPreRandomEncounter,
   bigOObservatoryFromBigOAntechamber,
   bigOAntechamberFromCrowdsource,
   bigOAntechamberFromTopOfClimb,

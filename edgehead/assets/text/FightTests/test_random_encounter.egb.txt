@@ -1,4 +1,15 @@
-ROOM: $test_random_encounter
+// ---
+ROOM: $pre_random_encounter
+DESCRIPTION: $NONE
+
+
+// ---
+APPROACH: $random_encounter FROM $pre_random_encounter
+COMMAND: $IMPLICIT
+
+
+// ---
+ROOM: $random_encounter
 FIRST_DESCRIPTION: $NONE
 
 POS: 0, 0
@@ -7,15 +18,9 @@ MAP_NAME: N/A
 FIGHT_SITUATION:
 generateRandomEncounter
 
-// // ---
-// APPROACH: $test_random_encounter FROM $start_tester_build
-// COMMAND: Random encounter
-// DESCRIPTION: $NONE
-
 
 // ---
-APPROACH: $__END_OF_ROAM__ FROM $test_random_encounter
+APPROACH: $__END_OF_ROAM__ FROM $random_encounter
 COMMAND: End encounter
 DESCRIPTION: $NONE
-
 

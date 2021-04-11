@@ -449,6 +449,8 @@ FightSituation generateRandomEncounter(ActionContext c,
       break;
     case 2:
       final orc = Actor.initialized(6000, w.randomInt, "orc",
+          adjective:
+              w.randomChoose(['large', 'bloodthirsty', 'murderous', 'cruel']),
           pronoun: Pronoun.HE,
           constitution: 2,
           team: defaultEnemyTeam,
@@ -650,6 +652,7 @@ Actor _makeGoblin(WorldStateBuilder w,
     String currentRoomName}) {
   final goblinId = id ?? w.randomInt();
   return Actor.initialized(goblinId, w.randomInt, "goblin",
+      adjective: w.randomChoose(['vicious', 'fierce', 'angry', 'evil']),
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: spear
@@ -657,6 +660,7 @@ Actor _makeGoblin(WorldStateBuilder w,
               adjective: spearAdjective, firstOwnerId: goblinId)
           : Item.weapon(w.randomInt(), WeaponType.sword,
               adjective: swordAdjective, firstOwnerId: goblinId),
+      dexterity: 150,
       team: defaultEnemyTeam,
       currentRoomName: currentRoomName,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
@@ -666,11 +670,14 @@ Actor _makeOrc(WorldStateBuilder w,
     {int id, int constitution = 2, String swordAdjective = 'orcish'}) {
   final orcId = id ?? w.randomInt();
   return Actor.initialized(orcId, w.randomInt, "orc",
+      adjective:
+          w.randomChoose(['large', 'bloodthirsty', 'murderous', 'cruel']),
       nameIsProperNoun: false,
       pronoun: Pronoun.HE,
       currentWeapon: Item.weapon(w.randomInt(), WeaponType.sword,
           adjective: swordAdjective, firstOwnerId: orcId),
       constitution: constitution,
+      dexterity: 170,
       team: defaultEnemyTeam,
       foldFunctionHandle: carelessMonsterFoldFunctionHandle);
 }
