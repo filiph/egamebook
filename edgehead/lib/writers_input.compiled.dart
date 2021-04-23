@@ -864,7 +864,7 @@ final bigOEndInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     Ruleset(
-        Rule(905172074, 1, false, (ApplicabilityContext c) {
+        Rule(948235391, 1, false, (ApplicabilityContext c) {
           final WorldState w = c.world;
           final Simulation sim = c.simulation;
           final Actor a = c.actor;
@@ -876,7 +876,7 @@ final bigOEndInkInk = InkAst([
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
           s.add(
-              'Sarn comes to the front. He looks much better now. The shaking is gone. There are tears in his eyes now.\n\n"I do regret what I did, Aren," he says. "I left you and our father when you needed me most. I was selfish and I am really, really sorry."\n\nI search for what to say, but all I can do is give a little nod.\n\nSeeing this subtle movement, Sarn starts quietly sobbing. His face goes into pieces. Tears go streaming down his cheeks. But he straightens and nods back.\n',
+              'Sarn comes to the front. He looks much better now. The shaking is gone. In the rain it\'s hard to tell if those are tears on his cheeks, or just raindrops.\n\n"I do regret what I did, Aren," he says. "I left you and our father when you needed me most."\n\nI search for what to say, but all I can do is give a little nod. The tiniest of acknowledgements.\n\nSeeing this subtle movement, Sarn starts quietly sobbing. His face goes into pieces. His head slumps and he stays in that pose for a few heartbeats. But then he straightens and returns the nod.\n\nThe cold rain wipes off the new tears. "I am back," he says.\n',
               isRaw: true);
         }),
         Rule(794016591, 0, false, (ApplicabilityContext c) {
