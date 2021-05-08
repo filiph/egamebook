@@ -67,7 +67,7 @@ void describeCompass(ActionContext c) {
   if (c.hasItem(northSkullId)) {
     // The skull is with the player.
     target = room;
-  } else if (w.actionHasBeenPerformed('give_north_skull_to_oracle')) {
+  } else if (w.actionHasBeenPerformed('oracle_give_north_skull')) {
     if (c.hasHappened(evOrcOffensive)) {
       target = c.simulation.getRoomByName('big_o_observatory');
     } else {
