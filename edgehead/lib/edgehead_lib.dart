@@ -535,8 +535,17 @@ class EdgeheadGame extends Book {
       try {
         final picked = await showChoices(choiceBlock);
 
+        final callback = callbacks[picked];
+        if (callback == null) {
+          log.warning("showChoices returned a choice that isn't part "
+              "of the choiceBlock\n"
+              "choice: $picked\n"
+              "choiceBlock: $choiceBlock");
+          return;
+        }
+
         // Execute the picked option.
-        await callbacks[picked]();
+        await callback();
       } on CancelledInteraction catch (e) {
         log.info("The choice-picking was interrupted: $e");
         return;
