@@ -51,7 +51,7 @@ The trader shrugs.
 
 * "Afraid of what?"
 
-  "Orcs, goblins, kobolds, you name it," he says. "And I get it, sir. I get it. San Francisco is getting more dangerous every day. But is it _so_ dangerous we all have to leave? <>
+  "Orcs, goblins, kobolds, you name it," he says. "And I get it, [young sir]. I get it. San Francisco is getting more dangerous every day. But is it _so_ dangerous we all have to leave? <>
 
 * "Why travel gear?"
   

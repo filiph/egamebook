@@ -15566,8 +15566,9 @@ final bleedsTraderGreetInk = InkAst([
           final Actor a = c.actor;
           final WorldStateBuilder w = c.outputWorld;
           final Storyline s = c.outputStoryline;
+          final youngSirSubstitution = c.playerSalutation;
           s.add(
-              '"Orcs, goblins, kobolds, you name it," he says. "And I get it, sir. I get it. San Francisco is getting more dangerous every day. But is it _so_ dangerous we all have to leave?\n',
+              '"Orcs, goblins, kobolds, you name it," he says. "And I get it, ${youngSirSubstitution}. I get it. San Francisco is getting more dangerous every day. But is it _so_ dangerous we all have to leave?\n',
               isRaw: true);
         }),
       ],
