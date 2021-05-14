@@ -302,7 +302,7 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
       case 2:
         return isMale ? 'young sir' : 'young lady';
       case 3:
-        return isMale ? 'sir Aren' : 'lady Aren';
+        return isMale ? 'Sir' : 'Lady';
     }
     throw StateError('Wrong worthiness: $worthiness');
   }
