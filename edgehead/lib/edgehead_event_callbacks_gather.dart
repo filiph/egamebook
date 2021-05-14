@@ -14,7 +14,7 @@ final amak_will_teach_you = EventCallback((c, sim, w, s) {
 
   amak.report(s, "<subject> bare<s> <subject's> teeth");
   s.addParagraph();
-  amak.report(s, '"Amak will teach you to stay in your village," he says.',
+  amak.report(s, '“Amak will teach you to stay in your village,” he says.',
       wholeSentence: true);
   s.addParagraph();
 
@@ -35,8 +35,8 @@ final battlefield_floor_have_that_scalp = EventCallback((c, sim, w, s) {
   orc.report(s, '<subject> growl<s>');
   s.addParagraph();
   s.add(
-      '"Darg will get that scalp," he says. '
-      ' "One way or another."',
+      '“Darg will get that scalp,” he says. '
+      ' “One way or another.”',
       isRaw: true);
   s.addParagraph();
 });
@@ -56,8 +56,8 @@ final big_o_realize = EventCallback((c, sim, w, s) {
   s.addParagraph();
   bigO.report(s, "<subject> stare<s> at me with hatred", endSentence: true);
   s.add(
-      'He says: "I hope you live just long enough to realize what '
-      'a terrible choice you\'ve made."',
+      'He says: “I hope you live just long enough to realize what '
+      'a terrible choice you\'ve made.”',
       isRaw: true);
   s.addParagraph();
 });
@@ -68,7 +68,7 @@ final big_o_shame = EventCallback((c, sim, w, s) {
   bigO.report(s, "<subject> shake<s> <subject's> head, looking at me",
       endSentence: true);
   s.addParagraph();
-  s.add('"Such a shame," he says. "You would have been perfect."', isRaw: true);
+  s.add('“Such a shame,” he says. “You would have been perfect.”', isRaw: true);
   s.addParagraph();
 });
 
@@ -95,8 +95,8 @@ final darg_fight_impressed = EventCallback((c, sim, w, s) {
 
   s.addParagraph();
   s.add(
-      '"Darg shows his teeth and pauses to observe me. '
-      '"You fight better than you look," he says.',
+      'Darg shows his teeth and pauses to observe me. '
+      '“You fight better than you look,” he says.',
       isRaw: true);
   s.addParagraph();
 });
@@ -117,7 +117,7 @@ final goblin_camp_thats_new = EventCallback((c, sim, w, s) {
 
   s.addParagraph();
   scarFacedGoblin.report(
-      s, '''"Well, that's new," <subject> say<s>. "Peasants attacking."''',
+      s, '''“Well, that's new,” <subject> say<s>. “Peasants attacking.”''',
       wholeSentence: true);
   s.addParagraph();
 });
@@ -130,7 +130,7 @@ final gods_lair_stand_still = EventCallback((c, sim, w, s) {
 
   berserker.report(s, "<subject> wrinkle<s> <subject's> nose");
   s.addParagraph();
-  s.add('"I said," he bellows, "stand still."', isRaw: true);
+  s.add('“I said,” he bellows, “stand still.”', isRaw: true);
   s.addParagraph();
 });
 
@@ -150,8 +150,8 @@ final jailer_fight_spit = EventCallback((c, sim, w, s) {
       endSentence: true);
   s.addParagraph();
   s.add(
-      '"I thought I’d make you an inmate," he says. '
-      '"But now I just want to kill you dead." '
+      '“I thought I’d make you an inmate,” he says. '
+      '“But now I just want to kill you dead.” '
       'This somewhat improves his mood, and he shows his teeth.',
       isRaw: true);
   s.addParagraph();
@@ -162,7 +162,7 @@ final kobold_fight_not_fun = EventCallback((c, sim, w, s) {
 
   kobold.report(s, '<subject> fume<s>', endSentence: true);
   s.addParagraph();
-  s.add('"This fighting," he says, "is not as fun as I remembered it."',
+  s.add('“This fighting,” he says, “is not as fun as I remembered it.”',
       isRaw: true);
   s.addParagraph();
 });
@@ -188,7 +188,7 @@ final lizardman_good_fight = EventCallback((c, sim, w, s) {
   s.addParagraph();
   s.add(
       'The lizardman cackles — a strange, wet sound. '
-      '"Good fffight," he says. "For fffood such as yourself."',
+      '“Good fffight,” he says. “For fffood such as yourself.”',
       isRaw: true);
   s.addParagraph();
 });
@@ -209,6 +209,6 @@ final start_tamara_bellows = EventCallback((c, sim, w, s) {
   }
   s.addParagraph();
   tamara.report(s, "<subject> bellow<s> in {frustration|anger}");
-  tamara.report(s, '"I hate this place."', wholeSentence: true);
+  tamara.report(s, '“I hate this place.”', wholeSentence: true);
   s.addParagraph();
 });
