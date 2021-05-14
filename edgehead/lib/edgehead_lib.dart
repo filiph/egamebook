@@ -149,6 +149,7 @@ class EdgeheadGame extends Book {
       throw EdgeheadSaveGameParseException(
           'Couldn\'t parse savegame', e, s.toString());
     }
+    _updateStatsFromWorld();
     _sendInitialStats();
   }
 
@@ -563,7 +564,7 @@ class EdgeheadGame extends Book {
 
   /// Updates [stamina] and [sanity] from the current [world].
   void _updateStatsFromWorld() {
-    var currentPlayer = world.getActorById(playerCharacter.id);
+    var currentPlayer = world.getActorById(playerId);
     stamina.value = currentPlayer.stamina;
     sanity.value = currentPlayer.sanity;
   }
