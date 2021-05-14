@@ -65,7 +65,7 @@ class ThrowGrenade extends Action<Nothing> {
     assert(enemies.isNotEmpty);
     final multitude = enemies.length > 1;
 
-    final inTime = context.world.currentSituation.turn <= 1;
+    final inTime = context.world.currentSituation.turn <= 3;
 
     if (inTime) {
       if (multitude) {
