@@ -10,6 +10,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Choice.serializer)
       ..add(PickChoice.serializer)
       ..add(ResolveSlotMachine.serializer)
+      ..add(SlotResult.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(int)]),
           () => new ListBuilder<int>())

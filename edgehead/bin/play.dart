@@ -298,9 +298,11 @@ class CliRunner extends Presenter<EdgeheadGame> {
   @override
   void addSlotMachine(SlotMachine element) {
     if (_forceSuccessOnNextSlotMachine || _forceFailureOnNextSlotMachine) {
+      final result =
+          _forceSuccessOnNextSlotMachine ? Result.success : Result.failure;
+
       book.accept(ResolveSlotMachine((b) => b
-        ..result =
-            _forceSuccessOnNextSlotMachine ? Result.success : Result.failure
+        ..result = SlotResult.from(result)
         ..wasRerolled = false));
       _forceSuccessOnNextSlotMachine = false;
       _forceFailureOnNextSlotMachine = false;
@@ -311,7 +313,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
         rerollEffectDescription: element.rerollEffectDescription);
     result.then((sessionResult) {
       book.accept(ResolveSlotMachine((b) => b
-        ..result = sessionResult.result
+        ..result = SlotResult.from(sessionResult.result)
         ..wasRerolled = sessionResult.wasRerolled));
     });
   }

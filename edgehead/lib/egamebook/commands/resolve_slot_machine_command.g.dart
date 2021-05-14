@@ -6,8 +6,37 @@ part of egamebook.command.resolve_slot_machine;
 // BuiltValueGenerator
 // **************************************************************************
 
+const SlotResult _$success = const SlotResult._('success');
+const SlotResult _$failure = const SlotResult._('failure');
+const SlotResult _$criticalSuccess = const SlotResult._('criticalSuccess');
+const SlotResult _$criticalFailure = const SlotResult._('criticalFailure');
+
+SlotResult _$valueOf(String name) {
+  switch (name) {
+    case 'success':
+      return _$success;
+    case 'failure':
+      return _$failure;
+    case 'criticalSuccess':
+      return _$criticalSuccess;
+    case 'criticalFailure':
+      return _$criticalFailure;
+    default:
+      throw new ArgumentError(name);
+  }
+}
+
+final BuiltSet<SlotResult> _$values =
+    new BuiltSet<SlotResult>(const <SlotResult>[
+  _$success,
+  _$failure,
+  _$criticalSuccess,
+  _$criticalFailure,
+]);
+
 Serializer<ResolveSlotMachine> _$resolveSlotMachineSerializer =
     new _$ResolveSlotMachineSerializer();
+Serializer<SlotResult> _$slotResultSerializer = new _$SlotResultSerializer();
 
 class _$ResolveSlotMachineSerializer
     implements StructuredSerializer<ResolveSlotMachine> {
@@ -22,7 +51,7 @@ class _$ResolveSlotMachineSerializer
     final result = <Object>[
       'result',
       serializers.serialize(object.result,
-          specifiedType: const FullType(slot.Result)),
+          specifiedType: const FullType(SlotResult)),
       'wasRerolled',
       serializers.serialize(object.wasRerolled,
           specifiedType: const FullType(bool)),
@@ -45,7 +74,7 @@ class _$ResolveSlotMachineSerializer
       switch (key) {
         case 'result':
           result.result = serializers.deserialize(value,
-              specifiedType: const FullType(slot.Result)) as slot.Result;
+              specifiedType: const FullType(SlotResult)) as SlotResult;
           break;
         case 'wasRerolled':
           result.wasRerolled = serializers.deserialize(value,
@@ -58,9 +87,26 @@ class _$ResolveSlotMachineSerializer
   }
 }
 
+class _$SlotResultSerializer implements PrimitiveSerializer<SlotResult> {
+  @override
+  final Iterable<Type> types = const <Type>[SlotResult];
+  @override
+  final String wireName = 'SlotResult';
+
+  @override
+  Object serialize(Serializers serializers, SlotResult object,
+          {FullType specifiedType = FullType.unspecified}) =>
+      object.name;
+
+  @override
+  SlotResult deserialize(Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      SlotResult.valueOf(serialized as String);
+}
+
 class _$ResolveSlotMachine extends ResolveSlotMachine {
   @override
-  final slot.Result result;
+  final SlotResult result;
   @override
   final bool wasRerolled;
 
@@ -112,9 +158,9 @@ class ResolveSlotMachineBuilder
     implements Builder<ResolveSlotMachine, ResolveSlotMachineBuilder> {
   _$ResolveSlotMachine _$v;
 
-  slot.Result _result;
-  slot.Result get result => _$this._result;
-  set result(slot.Result result) => _$this._result = result;
+  SlotResult _result;
+  SlotResult get result => _$this._result;
+  set result(SlotResult result) => _$this._result = result;
 
   bool _wasRerolled;
   bool get wasRerolled => _$this._wasRerolled;

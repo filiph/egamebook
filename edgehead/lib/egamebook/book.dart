@@ -72,8 +72,8 @@ abstract class Book {
     if (command is ResolveSlotMachine) {
       assert(_showChoicesCompleter == null);
       assert(_showSlotMachineCompleter != null);
-      _showSlotMachineCompleter
-          .complete(slot.SessionResult(command.result, command.wasRerolled));
+      _showSlotMachineCompleter.complete(
+          slot.SessionResult(command.result.asResult, command.wasRerolled));
       _showSlotMachineCompleter = null;
       isWaitingForInput = false;
       return;
