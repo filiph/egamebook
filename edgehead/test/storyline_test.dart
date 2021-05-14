@@ -82,26 +82,6 @@ void main() {
         endsWith("exclaims: “Well? Say something!”"));
   });
 
-  test("fixing .'. in sentences", () {
-    var storyline = Storyline();
-    var gorilla =
-        Entity(name: "Gorilla", team: playerTeam, pronoun: Pronoun.IT);
-    storyline.add("<subject> enter<s> the room", subject: gorilla);
-    storyline.add("<subject> say<s>: 'Isn't this great?'",
-        subject: gorilla, endSentence: true);
-    expect(storyline.realizeAsString(), endsWith("says: 'Isn’t this great?'"));
-    storyline.clear();
-    storyline.add("<subject> say<s>: 'Well, I think it's great.'",
-        subject: gorilla);
-    expect(storyline.realizeAsString(),
-        endsWith("says: 'Well, I think it’s great.'"));
-    storyline.clear();
-    storyline.add("<subject> exclaim<s>: 'Well? Say something!'",
-        subject: gorilla);
-    expect(storyline.realizeAsString(),
-        endsWith("exclaims: 'Well? Say something!'"));
-  });
-
   test("exchange", () {
     var storyline = Storyline();
     var player = _createPlayer("Filip");
