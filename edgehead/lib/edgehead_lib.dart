@@ -184,18 +184,13 @@ class EdgeheadGame extends Book {
           performance.action.rerollResource.toString().split('.').last;
 
       slot.SessionResult result;
-      try {
-        result = await showSlotMachine(
-            chance.toDouble(),
-            performance.action
-                .getRollReason(actor, simulation, world, performance.object),
-            rerollable: performance.action.rerollable &&
-                actor.hasResource(performance.action.rerollResource),
-            rerollEffectDescription: "drain $resourceName");
-      } on CancelledInteraction {
-        log.info('Player cancelled slot machine');
-        return;
-      }
+      result = await showSlotMachine(
+          chance.toDouble(),
+          performance.action
+              .getRollReason(actor, simulation, world, performance.object),
+          rerollable: performance.action.rerollable &&
+              actor.hasResource(performance.action.rerollResource),
+          rerollEffectDescription: "drain $resourceName");
 
       consequence =
           consequences.where((c) => c.isSuccess == result.isSuccess).single;
