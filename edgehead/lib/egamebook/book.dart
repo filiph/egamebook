@@ -58,6 +58,18 @@ abstract class Book {
   ///
   /// Custom events are redirected to [acceptCustom].
   void accept(CommandBase command) {
+    if (command is LoadGame) {
+      _showChoicesCompleter?.completeError(const CancelledInteraction.load());
+      _showSlotMachineCompleter
+          ?.completeError(const CancelledInteraction.load());
+      _showChoicesCompleter = null;
+      _showSlotMachineCompleter = null;
+
+      load(command.saveGameSerialized);
+      isWaitingForInput = false;
+      return;
+    }
+
     assert(isWaitingForInput);
 
     if (command is PickChoice) {
@@ -75,18 +87,6 @@ abstract class Book {
       _showSlotMachineCompleter.complete(
           slot.SessionResult(command.result.asResult, command.wasRerolled));
       _showSlotMachineCompleter = null;
-      isWaitingForInput = false;
-      return;
-    }
-
-    if (command is LoadGame) {
-      _showChoicesCompleter?.completeError(const CancelledInteraction.load());
-      _showSlotMachineCompleter
-          ?.completeError(const CancelledInteraction.load());
-      _showChoicesCompleter = null;
-      _showSlotMachineCompleter = null;
-
-      load(command.saveGameSerialized);
       isWaitingForInput = false;
       return;
     }
