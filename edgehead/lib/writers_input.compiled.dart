@@ -1564,7 +1564,7 @@ final dargHeadTalkInkInk = InkAst([
     final WorldStateBuilder w = c.outputWorld;
     final Storyline s = c.outputStoryline;
     s.add(
-        'I knee down to inspect the dead body. Surely, the necromancer behind the talking must have used some kind of a device to make the corpse talk. He or she could have implanted it into the windpipe a long ago.\n',
+        'I kneel down to inspect the dead body. Surely, the necromancer behind the talking must have used some kind of a device to make the corpse talk. He or she could have implanted it into the windpipe a long ago.\n',
         isRaw: true);
   }),
   InkParagraphNode((c) => c.outputStoryline.addParagraph()),
