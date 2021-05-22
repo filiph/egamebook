@@ -14773,6 +14773,7 @@ class TalkToMiguelAboutDevling extends RoamingAction {
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
     if (!(c.inRoomWith(miguelId) &&
+        c.inRoomWith(katId) &&
         w.actionHasBeenPerformed("talk_to_miguel_greetings"))) {
       return false;
     }

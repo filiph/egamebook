@@ -101,6 +101,9 @@ COMMAND: Miguel, the guardsman >> Talk >> “Any advice for someone delving in t
 PREREQUISITES:
 c.inRoomWith(miguelId)
 &&
+// The advice below assumes Miguel is next to Kat.
+c.inRoomWith(katId)
+&&
 w.actionHasBeenPerformed("talk_to_miguel_greetings")
 
 INK:
