@@ -429,6 +429,13 @@ FightSituation generateRandomEncounter(ActionContext c,
   final s = c.outputStoryline;
   final initialPlayer = c.actor;
 
+  // De-buff player so the encounters are more interesting.
+  w.updateActorById(
+      initialPlayer.id,
+      (b) => b
+        ..hitpoints = 1
+        ..dexterity = 90);
+
   final isInside = w.randomBool();
   final groundMaterial = isInside ? "{cold|gray} floor" : "{wet|muddy} ground";
 
