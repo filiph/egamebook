@@ -26,7 +26,7 @@ ReasonedSuccessChance computeThrustAtBodyPartChance(
   final bodyPart = enemy.anatomy.findByDesignation(designation);
 
   const minBase = 0.3;
-  const maxBase = 0.6;
+  const maxBase = 0.5;
   final base = lerpDouble(bodyPart.thrustSurface, 0, 8, minBase, maxBase);
 
   return getCombatMoveChance(a, enemy, base, w.statefulRandomState, [

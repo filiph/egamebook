@@ -35,6 +35,7 @@ final Actor bigO = Actor.initialized(
   nameIsProperNoun: true,
   pronoun: Pronoun.HE,
   dexterity: 160,
+  constitution: 2,
   hitpoints: 4,
   currentRoomName: 'big_o_observatory',
   currentWeapon: Item.weapon(
@@ -113,6 +114,7 @@ final Actor edgeheadDarg = Actor.initialized(
   nameIsProperNoun: true,
   pronoun: Pronoun.HE,
   dexterity: 170,
+  constitution: 2,
   hitpoints: 3,
   currentRoomName: 'crowdsource',
   currentWeapon: akxe,
