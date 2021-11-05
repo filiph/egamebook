@@ -19,16 +19,16 @@ import 'types.dart';
 Spec generateRescueSituation(
     String className,
     String writersName,
-    String rescueCommand,
+    String? rescueCommand,
     String rescueDescription,
-    String rescuePrerequisites,
-    String rescueEffect,
-    String rescueHint,
-    String continuationCommand,
+    String? rescuePrerequisites,
+    String? rescueEffect,
+    String? rescueHint,
+    String? continuationCommand,
     String continuationDescription,
-    String continuationEffect,
-    String continuationHint,
-    String successEffect) {
+    String? continuationEffect,
+    String? continuationHint,
+    String? successEffect) {
   final situationClassType = TypeReference((b) => b..symbol = className);
   final situationBuilderClassName = '${className}Builder';
   final situationBuilderClass =
@@ -92,7 +92,7 @@ Spec generateRescueSituation(
     ..requiredParameters.add(Parameter((p) => p
       ..name = 'id'
       ..type = intType))
-    ..body = refer(situationClass.name)
+    ..body = refer(situationClass.name!)
         .newInstance([
           Method((m) => m
             ..requiredParameters.add(Parameter((p) => p..name = 'b'))

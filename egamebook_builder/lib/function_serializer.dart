@@ -22,7 +22,7 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   /// Precomputed map that leads from the [Function]s to the [string]s.
   final Map<T, String> _inverseMap = {};
 
-  String _wireName;
+  String? _wireName;
 
   /// Creates a serializer for functions. Provide a [Map] from strings
   /// to the functions.
@@ -49,7 +49,7 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   /// (`void Function()`) isn't fully supported and breaks dart analyzer.
   FunctionSerializer(this._map) {
     for (final key in _map.keys) {
-      final value = _map[key];
+      final T value = _map[key]!;
       if (_wireName == null) {
         _wireName = value.runtimeType.toString();
       }
@@ -77,7 +77,7 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
   @override
   T deserialize(Serializers serializers, Object serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    return _map[serialized];
+    return _map[serialized as String]!;
   }
 
   @override
@@ -88,6 +88,6 @@ class FunctionSerializer<T extends Function> extends PrimitiveSerializer<T> {
         "Incomplete map in $this. "
         "Make sure you're gathering all the functions that you need. "
         "Function without a string representation: $object.");
-    return _inverseMap[object];
+    return _inverseMap[object]!;
   }
 }

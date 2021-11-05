@@ -24,7 +24,7 @@ void main() {
 
     // Simulate completely new load.
     final serializers = getSerializers();
-    final Object jsonObject = json.decode(str);
+    final Object? jsonObject = json.decode(str);
     final deserialized = serializers.deserialize(jsonObject,
         specifiedType: const FullType(StringReturner)) as Function;
     expect(deserialized(), "Hello.");
@@ -50,7 +50,7 @@ void main() {
     }
 
     // Simulate completely new load.
-    final Object jsonObject = json.decode(str);
+    final Object? jsonObject = json.decode(str);
     final deserialized = getSerializers().deserialize(jsonObject,
         specifiedType: const FullType(CustomTypesFunction)) as Function;
     final a = A()
@@ -64,7 +64,7 @@ void main() {
   });
 }
 
-A _latestA;
+A? _latestA;
 
 String bye() => "Bye.";
 
@@ -80,9 +80,9 @@ typedef String StringReturner();
 typedef void CustomTypesFunction(A a, B b);
 
 class A {
-  int x, y;
+  int? x, y;
 }
 
 class B {
-  int z;
+  int? z;
 }

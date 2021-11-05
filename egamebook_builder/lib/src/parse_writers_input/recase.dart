@@ -10,11 +10,11 @@ ReCase reCase(String string) {
 class ReCase {
   static const endOfRoamName = '__END_OF_ROAM__';
 
-  String _camelCase;
+  late String _camelCase;
 
-  String _pascalCase;
+  late String _pascalCase;
 
-  String _snakeCase;
+  late String _snakeCase;
 
   ReCase(String string) {
     if (string == endOfRoamName) {

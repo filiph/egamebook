@@ -8,11 +8,11 @@ import 'types.dart';
 
 Expression generateSimpleAction(
     String actionName,
-    String command,
+    String? command,
     String description,
-    String prerequisites,
-    String effect,
-    String hint,
+    String? prerequisites,
+    String? effect,
+    String? hint,
     String className) {
   if (command == null) {
     print('Command in $className is null');

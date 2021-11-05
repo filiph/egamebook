@@ -16,7 +16,7 @@ class InstanceSerializerGenerator extends Generator {
   const InstanceSerializerGenerator();
 
   @override
-  Future<String> generate(
+  Future<String?> generate(
       LibraryReader gatherLibrary, BuildStep buildStep) async {
     final result = StringBuffer();
     final typeSystem = gatherLibrary.element.typeSystem;
@@ -44,7 +44,7 @@ class InstanceSerializerGenerator extends Generator {
             "Elements annotated with @GatherInstancesFrom "
             "must be top level variable declarations.");
       }
-      final variable = element as TopLevelVariableElement;
+      final variable = element;
       if (variable.type is! InterfaceType) {
         throw InvalidGenerationSourceError(
             "Type of variable must be InstanceSerializer<T>");
@@ -94,7 +94,7 @@ class InstanceSerializerGenerator extends Generator {
       int count = 0;
 
       for (final glob in globs) {
-        final assetIds = buildStep.findAssets(Glob(glob));
+        final assetIds = buildStep.findAssets(Glob(glob!));
         await for (final id in assetIds) {
           log.finer('Gathering $instanceTypeName from $id');
           final globbedLibraryElement = await buildStep.resolver.libraryFor(id);
@@ -119,7 +119,7 @@ class InstanceSerializerGenerator extends Generator {
 
             if (topLevelElement is! ClassElement) continue;
 
-            final classEl = topLevelElement as ClassElement;
+            final classEl = topLevelElement;
             final elements = classEl.fields.where((el) =>
                 el.isStatic &&
                 typeSystem.isAssignableTo(instanceType, el.type));
@@ -152,7 +152,7 @@ class InstanceSerializerGenerator extends Generator {
         // ]
         result.writeln(", additionalTypes: [");
         for (final type in additionalTypes) {
-          result.write(type.getDisplayString(withNullability: false));
+          result.write(type!.getDisplayString(withNullability: false));
           result.writeln(",");
         }
         result.write("]");

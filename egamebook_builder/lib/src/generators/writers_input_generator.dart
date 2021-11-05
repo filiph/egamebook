@@ -23,12 +23,12 @@ class WritersInputGenerator extends Generator {
   const WritersInputGenerator();
 
   @override
-  Future<String> generate(LibraryReader library, BuildStep buildStep) async {
+  Future<String?> generate(LibraryReader library, BuildStep buildStep) async {
     final result = StringBuffer();
 
     final fileName = library.element.source.shortName.replaceAll('.dart', '');
 
-    AnnotatedElement annotation = _getGatherAnnotation(library);
+    AnnotatedElement? annotation = _getGatherAnnotation(library);
     if (annotation == null) {
       throw InvalidGenerationSourceError("File is specified as writer's input "
           "but no @GatherWriterInputFrom(['path/...']) annotation "
@@ -52,7 +52,7 @@ class WritersInputGenerator extends Generator {
 
     for (final glob in globs) {
       log.fine('Traversing glob $glob');
-      final assetIds = buildStep.findAssets(Glob(glob, recursive: true));
+      final assetIds = buildStep.findAssets(Glob(glob!, recursive: true));
       await for (final id in assetIds) {
         log.finer('Compiling $id');
         if (!validExtensions.any((ext) => id.path.endsWith(ext))) continue;
@@ -68,7 +68,7 @@ class WritersInputGenerator extends Generator {
             var action = generateAction(rawMap, path);
             objects.add(action);
             if (action.ink != null) {
-              objects.add(action.ink);
+              objects.add(action.ink!);
             }
           } else if (rawMap.keys.contains("APPROACH")) {
             final approach = generateApproach(rawMap, path);
@@ -79,7 +79,7 @@ class WritersInputGenerator extends Generator {
     }
 
     lib.directives.addAll((allNeededTypes
-        .map((type) => cb.Directive.import(type.url, show: [type.symbol]))));
+        .map((type) => cb.Directive.import(type.url!, show: [type.symbol]))));
 
     lib.directives
         .add(cb.Directive.import('package:built_value/built_value.dart'));
@@ -147,15 +147,15 @@ class WritersInputGenerator extends Generator {
     }
   }
 
-  AnnotatedElement _getGatherAnnotation(LibraryReader library) {
+  AnnotatedElement? _getGatherAnnotation(LibraryReader library) {
     final annotationChecker = TypeChecker.fromRuntime(GatherWriterInputFrom);
     for (final metadata in library.element.metadata) {
       // We must call this to force computation of the constant value.
       // Otherwise, metadata.constantValue might be `null`.
       metadata.computeConstantValue();
-      final value = metadata.computeConstantValue();
+      final value = metadata.computeConstantValue()!;
       final constant = ConstantReader(value);
-      if (annotationChecker.isExactlyType(value.type)) {
+      if (annotationChecker.isExactlyType(value.type!)) {
         return AnnotatedElement(constant, library.element);
       }
     }

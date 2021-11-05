@@ -28,12 +28,12 @@ class IfBlock {
   static Iterable<IfBlock> parse(String text) sync* {
     assert(!text.contains(_ifBlockStart) || text.contains(_ifBlockEnd),
         "Text contains start of [[IF]] but not end: '$text'");
-    final foundBlocks = Set<String>();
+    final Set<String?> foundBlocks = Set<String>();
     for (final match in _ifBlock.allMatches(text)) {
       final elseBlock = match.group(4) ?? '';
       final fullString = match.group(0);
       if (foundBlocks.contains(fullString)) continue;
-      yield IfBlock(fullString, match.group(1), match.group(2), elseBlock);
+      yield IfBlock(fullString!, match.group(1)!, match.group(2)!, elseBlock);
       foundBlocks.add(fullString);
     }
   }

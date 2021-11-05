@@ -4,6 +4,7 @@ import 'package:code_builder/code_builder.dart';
 import 'describer.dart';
 import 'generated_game_object.dart';
 import 'method_builders.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'parse_code_blocks.dart';
 import 'recase.dart';
 import 'types.dart';
@@ -37,13 +38,13 @@ class GeneratedRoom extends GeneratedGameObject {
     'DESCRIPTION'
   ];
 
-  final Map<String, String> _map;
+  final Map<String, String?> _map;
 
-  List<String> _reachableRooms;
+  List<String>? _reachableRooms;
 
-  GeneratedRoom(Map<String, String> map, String path)
+  GeneratedRoom(Map<String, String?> map, String path)
       : _map = map,
-        super(map['ROOM'], reCase(map['ROOM']).camelCase, roomType, path);
+        super(map['ROOM']!, reCase(map['ROOM']!).camelCase, roomType, path);
 
   bool get isVariant => _map.containsKey('VARIANT_OF');
 
@@ -54,10 +55,10 @@ class GeneratedRoom extends GeneratedGameObject {
     var instanceName = name;
 
     Expression fightGenerator;
-    if (_map['FIGHT_SITUATION'] == null || _map['FIGHT_SITUATION'].isEmpty) {
+    if (_map['FIGHT_SITUATION'] == null || _map['FIGHT_SITUATION']!.isEmpty) {
       fightGenerator = literal(null);
     } else {
-      fightGenerator = refer(_map['FIGHT_SITUATION'].trim());
+      fightGenerator = refer(_map['FIGHT_SITUATION']!.trim());
     }
 
     final Map<String, Expression> namedArguments = {};
@@ -70,10 +71,10 @@ class GeneratedRoom extends GeneratedGameObject {
 
       namedArguments["parent"] = literal(
           GeneratedGameObject.validateAndRemoveDollarSign(
-              _map['VARIANT_OF'].trim()));
+              _map['VARIANT_OF']!.trim()));
 
       final roomNameHash = writersName.hashCode;
-      final specificity = getSpecificity(_map['RULE']);
+      final specificity = getSpecificity(_map['RULE']!);
       final isApplicable = createApplicabilityContextMethod();
       isApplicable.block.statements.add(Code('return ${_map["RULE"]};'));
       final prerequisite = prerequisiteType.newInstance([
@@ -86,7 +87,7 @@ class GeneratedRoom extends GeneratedGameObject {
 
       if (_map.containsKey('VARIANT_UPDATE_DESCRIPTION')) {
         namedArguments['variantUpdateDescribe'] =
-            createDescriber(_map['VARIANT_UPDATE_DESCRIPTION']);
+            createDescriber(_map['VARIANT_UPDATE_DESCRIPTION']!);
       } else if (_map.containsKey('FIRST_DESCRIPTION')) {
         log.warning('Variant $writersName includes FIRST_DESCRIPTION '
             'but no VARIANT_UPDATE_DESCRIPTION.');
@@ -94,7 +95,7 @@ class GeneratedRoom extends GeneratedGameObject {
     }
 
     if (_map.containsKey('FLAGS')) {
-      final flags = _map['FLAGS'].split(' ').map((s) => s.trim()).toList();
+      final flags = _map['FLAGS']!.split(' ').map((s) => s.trim()).toList();
       for (final flag in flags) {
         switch (flag) {
           case r'$IDLE':
@@ -111,7 +112,7 @@ class GeneratedRoom extends GeneratedGameObject {
     }
 
     if (_map.containsKey('POS')) {
-      final posStrings = _map['POS'].split(',').map((s) => s.trim()).toList();
+      final posStrings = _map['POS']!.split(',').map((s) => s.trim()).toList();
       assert(posStrings.length == 2,
           'Position of a room must be given as "X, Y" (e.g. POS: 5, 7).');
       namedArguments['positionX'] = literalNum(int.parse(posStrings[0]));
@@ -147,7 +148,7 @@ class GeneratedRoom extends GeneratedGameObject {
 
     if (_map.containsKey('AFTER_MONSTERS_CLEARED')) {
       namedArguments['afterMonstersCleared'] =
-          createDescriber(_map['AFTER_MONSTERS_CLEARED']);
+          createDescriber(_map['AFTER_MONSTERS_CLEARED']!);
     }
 
     if (_map.containsKey('WHERE')) {
@@ -160,8 +161,8 @@ class GeneratedRoom extends GeneratedGameObject {
 
     var newInstance = roomType.newInstance([
       literal(writersName),
-      createDescriber(_map['FIRST_DESCRIPTION']),
-      createDescriber(_map['DESCRIPTION']),
+      createDescriber(_map['FIRST_DESCRIPTION']!),
+      createDescriber(_map['DESCRIPTION']!),
       fightGenerator,
       literal(null) /* TODO: add item generator */,
     ], namedArguments);
@@ -177,10 +178,9 @@ class GeneratedRoom extends GeneratedGameObject {
     if (!isVariant) return;
 
     final parentName =
-        GeneratedGameObject.validateAndRemoveDollarSign(_map['VARIANT_OF']);
-    final parent = rooms.singleWhere(
-        (candidate) => candidate.writersName == parentName,
-        orElse: () => null);
+        GeneratedGameObject.validateAndRemoveDollarSign(_map['VARIANT_OF']!);
+    final parent = rooms.singleWhereOrNull(
+        (candidate) => candidate.writersName == parentName);
 
     if (parent == null) {
       log.severe('Room $name is defining a parent ($parentName) but '

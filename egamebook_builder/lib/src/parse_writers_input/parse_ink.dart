@@ -196,7 +196,7 @@ String parseInk(String name, String text) {
 /// For example, "* * Open door" will return `2`.
 int _getChoiceLevel(String line) {
   if (!_whitespaceOrStar.hasMatch(line)) return 0;
-  final prefix = _whitespaceOrStar.stringMatch(line);
+  final prefix = _whitespaceOrStar.stringMatch(line)!;
   return '*'.allMatches(prefix).length;
 }
 
@@ -206,7 +206,7 @@ int _getChoiceLevel(String line) {
 /// to 2.
 ///
 /// Returns `null` for anything else.
-int _getGatherLevel(String line) {
+int? _getGatherLevel(String line) {
   if (!_gather.hasMatch(line)) return null;
   return '-'.allMatches(line).length - 1;
 }

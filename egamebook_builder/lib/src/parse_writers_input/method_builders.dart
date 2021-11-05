@@ -30,7 +30,7 @@ class MethodAndBlock {
   /// abstract.
   final BlockBuilder block;
 
-  MethodAndBlock(this.method, [BlockBuilder block])
+  MethodAndBlock(this.method, [BlockBuilder? block])
       : this.block = block ?? BlockBuilder();
 
   /// Add the [block] contents to the [method] and bake it.

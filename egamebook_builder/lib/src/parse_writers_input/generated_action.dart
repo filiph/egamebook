@@ -29,19 +29,19 @@ class GeneratedAction extends GeneratedGameObject {
 
   final Map<String, String> _map;
 
-  final GeneratedInk ink;
+  final GeneratedInk? ink;
 
   GeneratedAction(Map<String, String> map, String path)
       : _map = map,
         ink = _constructInk(map['INK'], map['ACTION'], path),
         super(
-            map['ACTION'], reCase(map['ACTION']).pascalCase, actionType, path);
+            map['ACTION']!, reCase(map['ACTION']!).pascalCase, actionType, path);
 
   @override
   Iterable<Spec> finalizeAst() sync* {
     var className = name;
-    String forLocation = _map.containsKey('FOR_LOCATION')
-        ? reCase(_map['FOR_LOCATION']).snakeCase
+    String? forLocation = _map.containsKey('FOR_LOCATION')
+        ? reCase(_map['FOR_LOCATION']!).snakeCase
         : null;
 
     var classBuilder = ClassBuilder()
@@ -49,12 +49,12 @@ class GeneratedAction extends GeneratedGameObject {
       ..extend = actionType;
 
     bool hasRescue =
-        _map.containsKey('RESCUE_COMMAND') && _map['RESCUE_COMMAND'].isNotEmpty;
+        _map.containsKey('RESCUE_COMMAND') && _map['RESCUE_COMMAND']!.isNotEmpty;
     var rescueSituationClassName = '${className}RescueSituation';
 
     var classType = TypeReference((b) => b..symbol = className);
 
-    String command = _map['COMMAND'];
+    String command = _map['COMMAND']!;
     var isImplicit = command == implicitPattern;
     var commandPathTemplate = isImplicit ? const [] : command.split(' >> ');
     final getCommandPathBuilder = Method((b) => b
@@ -100,7 +100,7 @@ class GeneratedAction extends GeneratedGameObject {
 
     if (_map.containsKey('REROLL_RESOURCE')) {
       // This action is rerollable.
-      String resourceName;
+      late String resourceName;
       switch (_map['REROLL_RESOURCE']) {
         case r'$SANITY':
           resourceName = 'sanity';
@@ -127,10 +127,10 @@ class GeneratedAction extends GeneratedGameObject {
           ..block.addExpression(literal('Will I be successful?').returned);
     classBuilder.methods.add(rollReasonBuilder.bake());
 
-    String helpMessage = _map['HINT'];
+    String? helpMessage = _map['HINT'];
     if (helpMessage != null &&
         _map.containsKey('ADVANTAGE_HINT_ADDENDUM_NEGATIVE')) {
-      helpMessage += " " + _map['ADVANTAGE_HINT_ADDENDUM_NEGATIVE'];
+      helpMessage += " " + _map['ADVANTAGE_HINT_ADDENDUM_NEGATIVE']!;
       // TODO: create the other action, with ADVANTAGE_HINT_ADDENDUM
     }
 
@@ -166,12 +166,12 @@ class GeneratedAction extends GeneratedGameObject {
           rescueSituationClassName,
           writersName,
           _map['RESCUE_COMMAND'],
-          _map['RESCUE_DESCRIPTION'],
+          _map['RESCUE_DESCRIPTION']!,
           _map['RESCUE_PREREQUISITES'],
           _map['RESCUE_EFFECT'],
           _map['RESCUE_HINT'],
           _map['CONTINUATION_OF_FAILURE_COMMAND'],
-          _map['CONTINUATION_OF_FAILURE_DESCRIPTION'],
+          _map['CONTINUATION_OF_FAILURE_DESCRIPTION']!,
           _map['CONTINUATION_OF_FAILURE_EFFECT'],
           _map['CONTINUATION_OF_FAILURE_HINT'],
           _map['SUCCESS_EFFECT']);
@@ -197,7 +197,7 @@ class GeneratedAction extends GeneratedGameObject {
       applyFailureBuilder.block.statements
           .addAll(createDescriptionStatements(failureDescription ?? ''));
       if (_map.containsKey('FAILURE_EFFECT')) {
-        addStatements(_map['FAILURE_EFFECT'], applyFailureBuilder.block);
+        addStatements(_map['FAILURE_EFFECT']!, applyFailureBuilder.block);
       }
     }
     applyFailureBuilder.block.addExpression(
@@ -221,7 +221,7 @@ class GeneratedAction extends GeneratedGameObject {
     }
 
     if (_map['SUCCESS_EFFECT'] != null) {
-      String successEffectBlock = _map['SUCCESS_EFFECT'];
+      String successEffectBlock = _map['SUCCESS_EFFECT']!;
       addStatements(successEffectBlock, applySuccessBuilder.block);
     }
 
@@ -232,7 +232,7 @@ class GeneratedAction extends GeneratedGameObject {
       addStatements(
           'w.pushSituation(InkSituation.initialized('
           'w.randomInt(),'
-          '"${ink.writersName}",'
+          '"${ink!.writersName}",'
           '));',
           applySuccessBuilder.block);
     }
@@ -242,7 +242,7 @@ class GeneratedAction extends GeneratedGameObject {
     return applySuccessBuilder.bake();
   }
 
-  Method _createGetter(String name, TypeReference type, Object returnValue) {
+  Method _createGetter(String name, TypeReference type, Object? returnValue) {
     return Method((b) => b
       ..type = MethodType.getter
       ..name = name
@@ -273,7 +273,11 @@ class GeneratedAction extends GeneratedGameObject {
     return Code('if ($conditionString) { $returnString }');
   }
 
-  Method _createIsApplicableBuilder(String forLocation) {
+  /// Creates the `isApplicable` method.
+  ///
+  /// If [forLocation] is provided, it will add code that checks whether
+  /// the actor is in the correct location (using `c.inRoomParent()`).
+  Method _createIsApplicableBuilder(String? forLocation) {
     var isApplicableBuilder =
         createContextActorSimWorldVoidMethod("isApplicable", boolType);
     if (forLocation != null) {
@@ -311,10 +315,10 @@ class GeneratedAction extends GeneratedGameObject {
 
   /// Returns a [GeneratedInk] if [source] is non-null. Returns `null`
   /// if [source] is `null`.
-  static GeneratedInk _constructInk(
-      String source, String writersName, String path) {
+  static GeneratedInk? _constructInk(
+      String? source, String? writersName, String path) {
     if (source == null) return null;
-    final name = reCase(writersName).camelCase + 'Ink';
+    final name = reCase(writersName!).camelCase + 'Ink';
     return GeneratedInk('${writersName}_ink', name, path, source);
   }
 }

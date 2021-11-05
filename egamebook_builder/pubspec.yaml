@@ -3,7 +3,7 @@ description: Builders for egamebook.
 version: 1.0.0
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   analyzer: ^2.7.0
@@ -12,6 +12,7 @@ dependencies:
   dart_style: ^2.2.0
   glob: ^2.0.2
   source_gen: ^1.1.1
+  collection: ^1.15.0-nullsafety.4
 
 dev_dependencies:
   meta: ^1.1.8

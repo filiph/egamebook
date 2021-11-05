@@ -17,14 +17,14 @@ class GeneratedApproach extends GeneratedGameObject {
 
   final _FromToTuple _tuple;
 
-  final String _prerequisites;
+  final String? _prerequisites;
 
   GeneratedApproach(Map<String, String> map, String path)
       : _map = map,
-        _tuple = _parseFromTo(map['APPROACH']),
+        _tuple = _parseFromTo(map['APPROACH']!),
         _prerequisites = map['PREREQUISITES']?.trim(),
-        super(_parseFromTo(map['APPROACH']).asWritersName,
-            _parseFromTo(map['APPROACH']).bothCamelCased, approachType, path);
+        super(_parseFromTo(map['APPROACH']!).asWritersName,
+            _parseFromTo(map['APPROACH']!).bothCamelCased, approachType, path);
 
   @override
   Iterable<Spec> finalizeAst() sync* {
@@ -34,7 +34,7 @@ class GeneratedApproach extends GeneratedGameObject {
     final namedArguments = <String, Expression>{};
     if (_prerequisites != null) {
       final isApplicableClosure = createApplicabilityContextMethod();
-      final conditional = Code(_prerequisites);
+      final conditional = Code(_prerequisites!);
       isApplicableClosure.block
           .addExpression(CodeExpression(conditional).returned);
       namedArguments['isApplicable'] = isApplicableClosure.bakeAsClosure();
@@ -46,7 +46,7 @@ class GeneratedApproach extends GeneratedGameObject {
         literal(_tuple.to.snakeCase),
         // Output r'$IMPLICIT' if this is an implicit approach.
         isImplicit ? literalString(command, raw: true) : literal(command),
-        createDescriber(_map['DESCRIPTION']),
+        createDescriber(_map['DESCRIPTION']!),
       ],
       namedArguments,
     );

@@ -56,11 +56,14 @@ Spec generateAllRooms(List<GeneratedGameObject> objects) {
 Iterable<Map<String, String>> parseWritersOutput(
     List<String> contents, AssetId id) sync* {
   var result = Map<String, String>();
-  String currentKey;
+  String? currentKey;
   var currentValue = StringBuffer();
 
   void addValue() {
-    assert(currentKey != null);
+    if (currentKey == null) {
+      throw StateError('Trying to addValue() when currentKey is null. '
+          'Value: "$currentValue"');
+    }
     var string = currentValue.toString().trim();
     if (string.isNotEmpty) {
       if (result.containsKey(currentKey)) {

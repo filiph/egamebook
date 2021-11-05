@@ -29,12 +29,12 @@ class InstanceSerializer<T> extends PrimitiveSerializer<T> {
   final Map<String, T> _map;
 
   /// Precomputed map that leads from the instances of [T] to the [string]s.
-  final Map<T, String> _inverseMap = {};
+  final Map<T?, String> _inverseMap = {};
 
   /// Additional types that this serializer can serialize.
   final List<Type> additionalTypes;
 
-  String _wireName;
+  String? _wireName;
 
   /// Creates a serializer for instances of [T]. Provide a [Map] from strings
   /// to the action instance.
@@ -77,7 +77,7 @@ class InstanceSerializer<T> extends PrimitiveSerializer<T> {
   @override
   T deserialize(Serializers serializers, Object serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    return _map[serialized];
+    return _map[serialized as String]!;
   }
 
   @override
@@ -89,6 +89,6 @@ class InstanceSerializer<T> extends PrimitiveSerializer<T> {
         "Make sure you're gathering all the instances that you need. "
         "Function without a string representation: $object. "
         "Map: $_map");
-    return _inverseMap[object];
+    return _inverseMap[object]!;
   }
 }

@@ -17,7 +17,7 @@ class FunctionSerializerGenerator extends Generator {
   const FunctionSerializerGenerator();
 
   @override
-  Future<String> generate(LibraryReader library, BuildStep buildStep) async {
+  Future<String?> generate(LibraryReader library, BuildStep buildStep) async {
     final result = StringBuffer();
 
     // Assert part import.
@@ -40,7 +40,7 @@ class FunctionSerializerGenerator extends Generator {
             "Elements annotated with @GatherFunctionsFrom "
             "must be top level variable declarations.");
       }
-      final variable = element as TopLevelVariableElement;
+      final variable = element;
       if (variable.type is! ParameterizedType) {
         throw InvalidGenerationSourceError(
             "Type of variable must be FunctionSerializer<SomeCallback>");
@@ -71,7 +71,7 @@ class FunctionSerializerGenerator extends Generator {
       //       "Annotation: $functionTypeFromAnnotation");
       // }
 
-      final String functionTypeName = functionTypeFromAnnotation.name;
+      final String functionTypeName = functionTypeFromAnnotation.name!;
 
       final variableName = "_\$"
           "${ReCase(functionTypeName).camelCase}"
@@ -87,14 +87,14 @@ class FunctionSerializerGenerator extends Generator {
           .map((dartObject) => dartObject.toStringValue());
 
       for (final glob in globs) {
-        final assetIds = buildStep.findAssets(Glob(glob));
+        final assetIds = buildStep.findAssets(Glob(glob!));
         await for (final id in assetIds) {
           final globbedLibraryElement = await buildStep.resolver.libraryFor(id);
           final globbedLibrary = LibraryReader(globbedLibraryElement);
 
           for (final element in globbedLibrary.allElements) {
             if (element is! FunctionElement) continue;
-            final func = element as FunctionElement;
+            final func = element;
             if (!globbedLibraryElement.typeSystem
                 .isAssignableTo(func.type, functionType)) continue;
 

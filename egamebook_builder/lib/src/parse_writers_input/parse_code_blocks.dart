@@ -93,7 +93,7 @@ Iterable<List<String>> _getBlockContents(
     List<String> lines, RegExp openTag, RegExp closeTag,
     {bool includeTags = true}) sync* {
   int depth = 0;
-  int start;
+  late int start;
   int end;
   for (int i = 0; i < lines.length; i++) {
     final line = lines[i];
