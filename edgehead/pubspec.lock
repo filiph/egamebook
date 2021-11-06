@@ -358,13 +358,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  slot_machine:
-    dependency: "direct main"
-    description:
-      name: slot_machine
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.1"
   source_gen:
     dependency: transitive
     description:

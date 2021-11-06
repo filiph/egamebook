@@ -8,11 +8,10 @@ import 'package:edgehead/edgehead_lib.dart';
 import 'package:edgehead/egamebook/commands/commands.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/egamebook/presenter.dart';
+import 'package:edgehead/egamebook/slot_machine_result.dart' as slot;
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:slot_machine/result.dart' as slot;
-import 'package:slot_machine/result.dart';
 
 import 'default_savegames.dart' as savegames;
 
@@ -298,8 +297,9 @@ class CliRunner extends Presenter<EdgeheadGame> {
   @override
   void addSlotMachine(SlotMachine element) {
     if (_forceSuccessOnNextSlotMachine || _forceFailureOnNextSlotMachine) {
-      final result =
-          _forceSuccessOnNextSlotMachine ? Result.success : Result.failure;
+      final result = _forceSuccessOnNextSlotMachine
+          ? slot.Result.success
+          : slot.Result.failure;
 
       book.accept(ResolveSlotMachine((b) => b
         ..result = SlotResult.from(result)

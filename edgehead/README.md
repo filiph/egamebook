@@ -339,4 +339,5 @@ dart2native benchmark/full.dart && ./benchmark/full.exe; tput bel
 | 97e17d04 Use BuiltList | 5.05 | 0.02 | 60 | |
 | d2b01ea5 Speed up hateTowards | 3.64 | 0.02 | 83 | |
 | 2c36cb7e Avoid hateTowards bug | 2.17 | 0.01 | 139 | |
-| latest: Avoid logging ... | 2.14 | 0.01 | 140 | |
+| 1a6d84ef Avoid logging removed actors | 2.14 | 0.01 | 140 | |
+| latest: Upgrade to latest ... | 1.69 | 0.00 | 178 | Still non-null-safe, running on a new M1 computer, on battery power |

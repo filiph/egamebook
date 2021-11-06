@@ -14,6 +14,7 @@ import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/book.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/egamebook/elements/stat_initialization_element.dart';
+import 'package:edgehead/egamebook/slot_machine_result.dart' as slot;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/plan_consequence.dart';
@@ -27,7 +28,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/stat.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:logging/logging.dart';
-import 'package:slot_machine/result.dart' as slot;
 
 class EdgeheadGame extends Book {
   static final StatSetting<int> sanitySetting = StatSetting<int>(

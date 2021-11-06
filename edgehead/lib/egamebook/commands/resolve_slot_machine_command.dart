@@ -3,7 +3,7 @@ library egamebook.command.resolve_slot_machine;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:slot_machine/result.dart' as slot;
+import 'package:edgehead/egamebook/slot_machine_result.dart' as slot;
 
 import 'command_base.dart';
 

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:edgehead/egamebook/commands/commands.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
+import 'package:edgehead/egamebook/slot_machine_result.dart' as slot;
 import 'package:meta/meta.dart';
-import 'package:slot_machine/result.dart' as slot;
 
 abstract class Book {
   final StreamController<ElementBase> _elementsController;
