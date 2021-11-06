@@ -43,7 +43,7 @@ class _$PronounSerializer implements StructuredSerializer<Pronoun> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'accusative':
           result.accusative = serializers.deserialize(value,
@@ -83,18 +83,10 @@ class _$Pronoun extends Pronoun {
 
   _$Pronoun._({this.accusative, this.genitive, this.nominative, this.self})
       : super._() {
-    if (accusative == null) {
-      throw new BuiltValueNullFieldError('Pronoun', 'accusative');
-    }
-    if (genitive == null) {
-      throw new BuiltValueNullFieldError('Pronoun', 'genitive');
-    }
-    if (nominative == null) {
-      throw new BuiltValueNullFieldError('Pronoun', 'nominative');
-    }
-    if (self == null) {
-      throw new BuiltValueNullFieldError('Pronoun', 'self');
-    }
+    BuiltValueNullFieldError.checkNotNull(accusative, 'Pronoun', 'accusative');
+    BuiltValueNullFieldError.checkNotNull(genitive, 'Pronoun', 'genitive');
+    BuiltValueNullFieldError.checkNotNull(nominative, 'Pronoun', 'nominative');
+    BuiltValueNullFieldError.checkNotNull(self, 'Pronoun', 'self');
   }
 
   @override
@@ -145,11 +137,12 @@ class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
   PronounBuilder();
 
   PronounBuilder get _$this {
-    if (_$v != null) {
-      _accusative = _$v.accusative;
-      _genitive = _$v.genitive;
-      _nominative = _$v.nominative;
-      _self = _$v.self;
+    final $v = _$v;
+    if ($v != null) {
+      _accusative = $v.accusative;
+      _genitive = $v.genitive;
+      _nominative = $v.nominative;
+      _self = $v.self;
       _$v = null;
     }
     return this;
@@ -157,9 +150,7 @@ class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
 
   @override
   void replace(Pronoun other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Pronoun;
   }
 
@@ -172,13 +163,17 @@ class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
   _$Pronoun build() {
     final _$result = _$v ??
         new _$Pronoun._(
-            accusative: accusative,
-            genitive: genitive,
-            nominative: nominative,
-            self: self);
+            accusative: BuiltValueNullFieldError.checkNotNull(
+                accusative, 'Pronoun', 'accusative'),
+            genitive: BuiltValueNullFieldError.checkNotNull(
+                genitive, 'Pronoun', 'genitive'),
+            nominative: BuiltValueNullFieldError.checkNotNull(
+                nominative, 'Pronoun', 'nominative'),
+            self:
+                BuiltValueNullFieldError.checkNotNull(self, 'Pronoun', 'self'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

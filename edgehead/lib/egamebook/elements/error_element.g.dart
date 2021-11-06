@@ -39,7 +39,7 @@ class _$ErrorElementSerializer implements StructuredSerializer<ErrorElement> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'message':
           result.message = serializers.deserialize(value,
@@ -66,12 +66,9 @@ class _$ErrorElement extends ErrorElement {
       (new ErrorElementBuilder()..update(updates)).build();
 
   _$ErrorElement._({this.message, this.stackTrace}) : super._() {
-    if (message == null) {
-      throw new BuiltValueNullFieldError('ErrorElement', 'message');
-    }
-    if (stackTrace == null) {
-      throw new BuiltValueNullFieldError('ErrorElement', 'stackTrace');
-    }
+    BuiltValueNullFieldError.checkNotNull(message, 'ErrorElement', 'message');
+    BuiltValueNullFieldError.checkNotNull(
+        stackTrace, 'ErrorElement', 'stackTrace');
   }
 
   @override
@@ -118,9 +115,10 @@ class ErrorElementBuilder
   ErrorElementBuilder();
 
   ErrorElementBuilder get _$this {
-    if (_$v != null) {
-      _message = _$v.message;
-      _stackTrace = _$v.stackTrace;
+    final $v = _$v;
+    if ($v != null) {
+      _message = $v.message;
+      _stackTrace = $v.stackTrace;
       _$v = null;
     }
     return this;
@@ -128,9 +126,7 @@ class ErrorElementBuilder
 
   @override
   void replace(ErrorElement other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ErrorElement;
   }
 
@@ -141,11 +137,15 @@ class ErrorElementBuilder
 
   @override
   _$ErrorElement build() {
-    final _$result =
-        _$v ?? new _$ErrorElement._(message: message, stackTrace: stackTrace);
+    final _$result = _$v ??
+        new _$ErrorElement._(
+            message: BuiltValueNullFieldError.checkNotNull(
+                message, 'ErrorElement', 'message'),
+            stackTrace: BuiltValueNullFieldError.checkNotNull(
+                stackTrace, 'ErrorElement', 'stackTrace'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

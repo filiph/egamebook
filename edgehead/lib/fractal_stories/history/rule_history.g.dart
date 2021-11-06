@@ -24,10 +24,12 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
           specifiedType: const FullType(BuiltMap,
               const [const FullType(int), const FullType(RuleRecord)])),
     ];
-    if (object.latestRule != null) {
+    Object value;
+    value = object.latestRule;
+    if (value != null) {
       result
         ..add('latestRule')
-        ..add(serializers.serialize(object.latestRule,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(RuleRecord)));
     }
     return result;
@@ -42,7 +44,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'latestRule':
           result.latestRule.replace(serializers.deserialize(value,
@@ -89,7 +91,7 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'ruleId':
           result.ruleId = serializers.deserialize(value,
@@ -116,9 +118,7 @@ class _$RuleHistory extends RuleHistory {
       (new RuleHistoryBuilder()..update(updates)).build();
 
   _$RuleHistory._({this.latestRule, this.records}) : super._() {
-    if (records == null) {
-      throw new BuiltValueNullFieldError('RuleHistory', 'records');
-    }
+    BuiltValueNullFieldError.checkNotNull(records, 'RuleHistory', 'records');
   }
 
   @override
@@ -167,9 +167,10 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
   RuleHistoryBuilder();
 
   RuleHistoryBuilder get _$this {
-    if (_$v != null) {
-      _latestRule = _$v.latestRule?.toBuilder();
-      _records = _$v.records?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _latestRule = $v.latestRule?.toBuilder();
+      _records = $v.records.toBuilder();
       _$v = null;
     }
     return this;
@@ -177,9 +178,7 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
 
   @override
   void replace(RuleHistory other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$RuleHistory;
   }
 
@@ -223,12 +222,8 @@ class _$RuleRecord extends RuleRecord {
       (new RuleRecordBuilder()..update(updates)).build();
 
   _$RuleRecord._({this.ruleId, this.time}) : super._() {
-    if (ruleId == null) {
-      throw new BuiltValueNullFieldError('RuleRecord', 'ruleId');
-    }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('RuleRecord', 'time');
-    }
+    BuiltValueNullFieldError.checkNotNull(ruleId, 'RuleRecord', 'ruleId');
+    BuiltValueNullFieldError.checkNotNull(time, 'RuleRecord', 'time');
   }
 
   @override
@@ -272,9 +267,10 @@ class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
   RuleRecordBuilder();
 
   RuleRecordBuilder get _$this {
-    if (_$v != null) {
-      _ruleId = _$v.ruleId;
-      _time = _$v.time;
+    final $v = _$v;
+    if ($v != null) {
+      _ruleId = $v.ruleId;
+      _time = $v.time;
       _$v = null;
     }
     return this;
@@ -282,9 +278,7 @@ class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
 
   @override
   void replace(RuleRecord other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$RuleRecord;
   }
 
@@ -295,10 +289,15 @@ class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
 
   @override
   _$RuleRecord build() {
-    final _$result = _$v ?? new _$RuleRecord._(ruleId: ruleId, time: time);
+    final _$result = _$v ??
+        new _$RuleRecord._(
+            ruleId: BuiltValueNullFieldError.checkNotNull(
+                ruleId, 'RuleRecord', 'ruleId'),
+            time: BuiltValueNullFieldError.checkNotNull(
+                time, 'RuleRecord', 'time'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

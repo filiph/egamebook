@@ -32,23 +32,26 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       serializers.serialize(object.nameIsProperNoun,
           specifiedType: const FullType(bool)),
     ];
-    if (object.adjective != null) {
+    Object value;
+    value = object.adjective;
+    if (value != null) {
       result
         ..add('adjective')
-        ..add(serializers.serialize(object.adjective,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.bodyPart != null) {
+    value = object.bodyPart;
+    if (value != null) {
       result
         ..add('bodyPart')
-        ..add(serializers.serialize(object.bodyPart,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(BodyPart)));
     }
-    if (object.firstOwnerId != null) {
+    value = object.firstOwnerId;
+    if (value != null) {
       result
         ..add('firstOwnerId')
-        ..add(serializers.serialize(object.firstOwnerId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -62,7 +65,7 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'adjective':
           result.adjective = serializers.deserialize(value,
@@ -135,21 +138,13 @@ class _$Item extends Item {
       this.name,
       this.nameIsProperNoun})
       : super._() {
-    if (damageCapability == null) {
-      throw new BuiltValueNullFieldError('Item', 'damageCapability');
-    }
-    if (edibility == null) {
-      throw new BuiltValueNullFieldError('Item', 'edibility');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Item', 'id');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('Item', 'name');
-    }
-    if (nameIsProperNoun == null) {
-      throw new BuiltValueNullFieldError('Item', 'nameIsProperNoun');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        damageCapability, 'Item', 'damageCapability');
+    BuiltValueNullFieldError.checkNotNull(edibility, 'Item', 'edibility');
+    BuiltValueNullFieldError.checkNotNull(id, 'Item', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, 'Item', 'name');
+    BuiltValueNullFieldError.checkNotNull(
+        nameIsProperNoun, 'Item', 'nameIsProperNoun');
   }
 
   @override
@@ -232,15 +227,16 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   ItemBuilder();
 
   ItemBuilder get _$this {
-    if (_$v != null) {
-      _adjective = _$v.adjective;
-      _bodyPart = _$v.bodyPart?.toBuilder();
-      _damageCapability = _$v.damageCapability?.toBuilder();
-      _edibility = _$v.edibility?.toBuilder();
-      _firstOwnerId = _$v.firstOwnerId;
-      _id = _$v.id;
-      _name = _$v.name;
-      _nameIsProperNoun = _$v.nameIsProperNoun;
+    final $v = _$v;
+    if ($v != null) {
+      _adjective = $v.adjective;
+      _bodyPart = $v.bodyPart?.toBuilder();
+      _damageCapability = $v.damageCapability.toBuilder();
+      _edibility = $v.edibility.toBuilder();
+      _firstOwnerId = $v.firstOwnerId;
+      _id = $v.id;
+      _name = $v.name;
+      _nameIsProperNoun = $v.nameIsProperNoun;
       _$v = null;
     }
     return this;
@@ -248,9 +244,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
 
   @override
   void replace(Item other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Item;
   }
 
@@ -270,9 +264,10 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
               damageCapability: damageCapability.build(),
               edibility: edibility.build(),
               firstOwnerId: firstOwnerId,
-              id: id,
-              name: name,
-              nameIsProperNoun: nameIsProperNoun);
+              id: BuiltValueNullFieldError.checkNotNull(id, 'Item', 'id'),
+              name: BuiltValueNullFieldError.checkNotNull(name, 'Item', 'name'),
+              nameIsProperNoun: BuiltValueNullFieldError.checkNotNull(
+                  nameIsProperNoun, 'Item', 'nameIsProperNoun'));
     } catch (_) {
       String _$failedField;
       try {
@@ -293,4 +288,4 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -127,10 +127,12 @@ class _$AttackerSituationSerializer
       'turn',
       serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
-    if (object.additionalData != null) {
+    Object value;
+    value = object.additionalData;
+    if (value != null) {
       result
         ..add('additionalData')
-        ..add(serializers.serialize(object.additionalData,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -146,7 +148,7 @@ class _$AttackerSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'additionalData':
           result.additionalData = serializers.deserialize(value,
@@ -233,7 +235,7 @@ class _$MoveEntitySerializer implements StructuredSerializer<MoveEntity> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -292,36 +294,20 @@ class _$AttackerSituation extends AttackerSituation {
       this.target,
       this.turn})
       : super._() {
-    if (attackDirection == null) {
-      throw new BuiltValueNullFieldError(
-          'AttackerSituation', 'attackDirection');
-    }
-    if (attacker == null) {
-      throw new BuiltValueNullFieldError('AttackerSituation', 'attacker');
-    }
-    if (builtEnemyTargetActionGenerators == null) {
-      throw new BuiltValueNullFieldError(
-          'AttackerSituation', 'builtEnemyTargetActionGenerators');
-    }
-    if (builtOtherActorActionGenerators == null) {
-      throw new BuiltValueNullFieldError(
-          'AttackerSituation', 'builtOtherActorActionGenerators');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('AttackerSituation', 'id');
-    }
-    if (move == null) {
-      throw new BuiltValueNullFieldError('AttackerSituation', 'move');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('AttackerSituation', 'name');
-    }
-    if (target == null) {
-      throw new BuiltValueNullFieldError('AttackerSituation', 'target');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError('AttackerSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        attackDirection, 'AttackerSituation', 'attackDirection');
+    BuiltValueNullFieldError.checkNotNull(
+        attacker, 'AttackerSituation', 'attacker');
+    BuiltValueNullFieldError.checkNotNull(builtEnemyTargetActionGenerators,
+        'AttackerSituation', 'builtEnemyTargetActionGenerators');
+    BuiltValueNullFieldError.checkNotNull(builtOtherActorActionGenerators,
+        'AttackerSituation', 'builtOtherActorActionGenerators');
+    BuiltValueNullFieldError.checkNotNull(id, 'AttackerSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(move, 'AttackerSituation', 'move');
+    BuiltValueNullFieldError.checkNotNull(name, 'AttackerSituation', 'name');
+    BuiltValueNullFieldError.checkNotNull(
+        target, 'AttackerSituation', 'target');
+    BuiltValueNullFieldError.checkNotNull(turn, 'AttackerSituation', 'turn');
   }
 
   @override
@@ -449,19 +435,20 @@ class AttackerSituationBuilder
   AttackerSituationBuilder();
 
   AttackerSituationBuilder get _$this {
-    if (_$v != null) {
-      _additionalData = _$v.additionalData;
-      _attackDirection = _$v.attackDirection;
-      _attacker = _$v.attacker;
+    final $v = _$v;
+    if ($v != null) {
+      _additionalData = $v.additionalData;
+      _attackDirection = $v.attackDirection;
+      _attacker = $v.attacker;
       _builtEnemyTargetActionGenerators =
-          _$v.builtEnemyTargetActionGenerators?.toBuilder();
+          $v.builtEnemyTargetActionGenerators.toBuilder();
       _builtOtherActorActionGenerators =
-          _$v.builtOtherActorActionGenerators?.toBuilder();
-      _id = _$v.id;
-      _move = _$v.move?.toBuilder();
-      _name = _$v.name;
-      _target = _$v.target;
-      _turn = _$v.turn;
+          $v.builtOtherActorActionGenerators.toBuilder();
+      _id = $v.id;
+      _move = $v.move.toBuilder();
+      _name = $v.name;
+      _target = $v.target;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -469,9 +456,7 @@ class AttackerSituationBuilder
 
   @override
   void replace(AttackerSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$AttackerSituation;
   }
 
@@ -487,17 +472,23 @@ class AttackerSituationBuilder
       _$result = _$v ??
           new _$AttackerSituation._(
               additionalData: additionalData,
-              attackDirection: attackDirection,
-              attacker: attacker,
+              attackDirection: BuiltValueNullFieldError.checkNotNull(
+                  attackDirection, 'AttackerSituation', 'attackDirection'),
+              attacker: BuiltValueNullFieldError.checkNotNull(
+                  attacker, 'AttackerSituation', 'attacker'),
               builtEnemyTargetActionGenerators:
                   builtEnemyTargetActionGenerators.build(),
               builtOtherActorActionGenerators:
                   builtOtherActorActionGenerators.build(),
-              id: id,
+              id: BuiltValueNullFieldError.checkNotNull(
+                  id, 'AttackerSituation', 'id'),
               move: move.build(),
-              name: name,
-              target: target,
-              turn: turn);
+              name: BuiltValueNullFieldError.checkNotNull(
+                  name, 'AttackerSituation', 'name'),
+              target: BuiltValueNullFieldError.checkNotNull(
+                  target, 'AttackerSituation', 'target'),
+              turn: BuiltValueNullFieldError.checkNotNull(
+                  turn, 'AttackerSituation', 'turn'));
     } catch (_) {
       String _$failedField;
       try {
@@ -531,15 +522,10 @@ class _$MoveEntity extends MoveEntity {
       (new MoveEntityBuilder()..update(updates)).build();
 
   _$MoveEntity._({this.id, this.name, this.firstOwnerId}) : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('MoveEntity', 'id');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('MoveEntity', 'name');
-    }
-    if (firstOwnerId == null) {
-      throw new BuiltValueNullFieldError('MoveEntity', 'firstOwnerId');
-    }
+    BuiltValueNullFieldError.checkNotNull(id, 'MoveEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, 'MoveEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(
+        firstOwnerId, 'MoveEntity', 'firstOwnerId');
   }
 
   @override
@@ -592,10 +578,11 @@ class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
   MoveEntityBuilder();
 
   MoveEntityBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _name = _$v.name;
-      _firstOwnerId = _$v.firstOwnerId;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _name = $v.name;
+      _firstOwnerId = $v.firstOwnerId;
       _$v = null;
     }
     return this;
@@ -603,9 +590,7 @@ class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
 
   @override
   void replace(MoveEntity other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$MoveEntity;
   }
 
@@ -617,10 +602,15 @@ class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
   @override
   _$MoveEntity build() {
     final _$result = _$v ??
-        new _$MoveEntity._(id: id, name: name, firstOwnerId: firstOwnerId);
+        new _$MoveEntity._(
+            id: BuiltValueNullFieldError.checkNotNull(id, 'MoveEntity', 'id'),
+            name: BuiltValueNullFieldError.checkNotNull(
+                name, 'MoveEntity', 'name'),
+            firstOwnerId: BuiltValueNullFieldError.checkNotNull(
+                firstOwnerId, 'MoveEntity', 'firstOwnerId'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -26,16 +26,18 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
     ];
-    if (object.actorId != null) {
+    Object value;
+    value = object.actorId;
+    if (value != null) {
       result
         ..add('actorId')
-        ..add(serializers.serialize(object.actorId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    if (object.data != null) {
+    value = object.data;
+    if (value != null) {
       result
         ..add('data')
-        ..add(serializers.serialize(object.data,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(Object)));
     }
     return result;
@@ -50,7 +52,7 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
@@ -105,7 +107,7 @@ class _$CustomEventHistorySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'records':
           result.records.replace(serializers.deserialize(value,
@@ -135,12 +137,8 @@ class _$CustomEvent extends CustomEvent {
       (new CustomEventBuilder()..update(updates)).build();
 
   _$CustomEvent._({this.actorId, this.data, this.name, this.time}) : super._() {
-    if (name == null) {
-      throw new BuiltValueNullFieldError('CustomEvent', 'name');
-    }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('CustomEvent', 'time');
-    }
+    BuiltValueNullFieldError.checkNotNull(name, 'CustomEvent', 'name');
+    BuiltValueNullFieldError.checkNotNull(time, 'CustomEvent', 'time');
   }
 
   @override
@@ -200,11 +198,12 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
   CustomEventBuilder();
 
   CustomEventBuilder get _$this {
-    if (_$v != null) {
-      _actorId = _$v.actorId;
-      _data = _$v.data;
-      _name = _$v.name;
-      _time = _$v.time;
+    final $v = _$v;
+    if ($v != null) {
+      _actorId = $v.actorId;
+      _data = $v.data;
+      _name = $v.name;
+      _time = $v.time;
       _$v = null;
     }
     return this;
@@ -212,9 +211,7 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
 
   @override
   void replace(CustomEvent other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$CustomEvent;
   }
 
@@ -227,7 +224,12 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
   _$CustomEvent build() {
     final _$result = _$v ??
         new _$CustomEvent._(
-            actorId: actorId, data: data, name: name, time: time);
+            actorId: actorId,
+            data: data,
+            name: BuiltValueNullFieldError.checkNotNull(
+                name, 'CustomEvent', 'name'),
+            time: BuiltValueNullFieldError.checkNotNull(
+                time, 'CustomEvent', 'time'));
     replace(_$result);
     return _$result;
   }
@@ -242,9 +244,8 @@ class _$CustomEventHistory extends CustomEventHistory {
       (new CustomEventHistoryBuilder()..update(updates)).build();
 
   _$CustomEventHistory._({this.records}) : super._() {
-    if (records == null) {
-      throw new BuiltValueNullFieldError('CustomEventHistory', 'records');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        records, 'CustomEventHistory', 'records');
   }
 
   @override
@@ -288,8 +289,9 @@ class CustomEventHistoryBuilder
   CustomEventHistoryBuilder();
 
   CustomEventHistoryBuilder get _$this {
-    if (_$v != null) {
-      _records = _$v.records?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _records = $v.records.toBuilder();
       _$v = null;
     }
     return this;
@@ -297,9 +299,7 @@ class CustomEventHistoryBuilder
 
   @override
   void replace(CustomEventHistory other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$CustomEventHistory;
   }
 
@@ -329,4 +329,4 @@ class CustomEventHistoryBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

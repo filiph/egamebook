@@ -38,7 +38,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'records':
           result.records.replace(serializers.deserialize(value,
@@ -76,10 +76,12 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
     ];
-    if (object.parentRoomName != null) {
+    Object value;
+    value = object.parentRoomName;
+    if (value != null) {
       result
         ..add('parentRoomName')
-        ..add(serializers.serialize(object.parentRoomName,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -94,7 +96,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
@@ -131,9 +133,7 @@ class _$VisitHistory extends VisitHistory {
       (new VisitHistoryBuilder()..update(updates)).build();
 
   _$VisitHistory._({this.records}) : super._() {
-    if (records == null) {
-      throw new BuiltValueNullFieldError('VisitHistory', 'records');
-    }
+    BuiltValueNullFieldError.checkNotNull(records, 'VisitHistory', 'records');
   }
 
   @override
@@ -175,8 +175,9 @@ class VisitHistoryBuilder
   VisitHistoryBuilder();
 
   VisitHistoryBuilder get _$this {
-    if (_$v != null) {
-      _records = _$v.records?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _records = $v.records.toBuilder();
       _$v = null;
     }
     return this;
@@ -184,9 +185,7 @@ class VisitHistoryBuilder
 
   @override
   void replace(VisitHistory other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$VisitHistory;
   }
 
@@ -238,18 +237,11 @@ class _$VisitRecord extends VisitRecord {
       this.roomName,
       this.time})
       : super._() {
-    if (actorId == null) {
-      throw new BuiltValueNullFieldError('VisitRecord', 'actorId');
-    }
-    if (fromRoomName == null) {
-      throw new BuiltValueNullFieldError('VisitRecord', 'fromRoomName');
-    }
-    if (roomName == null) {
-      throw new BuiltValueNullFieldError('VisitRecord', 'roomName');
-    }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('VisitRecord', 'time');
-    }
+    BuiltValueNullFieldError.checkNotNull(actorId, 'VisitRecord', 'actorId');
+    BuiltValueNullFieldError.checkNotNull(
+        fromRoomName, 'VisitRecord', 'fromRoomName');
+    BuiltValueNullFieldError.checkNotNull(roomName, 'VisitRecord', 'roomName');
+    BuiltValueNullFieldError.checkNotNull(time, 'VisitRecord', 'time');
   }
 
   @override
@@ -319,12 +311,13 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
   VisitRecordBuilder();
 
   VisitRecordBuilder get _$this {
-    if (_$v != null) {
-      _actorId = _$v.actorId;
-      _fromRoomName = _$v.fromRoomName;
-      _parentRoomName = _$v.parentRoomName;
-      _roomName = _$v.roomName;
-      _time = _$v.time;
+    final $v = _$v;
+    if ($v != null) {
+      _actorId = $v.actorId;
+      _fromRoomName = $v.fromRoomName;
+      _parentRoomName = $v.parentRoomName;
+      _roomName = $v.roomName;
+      _time = $v.time;
       _$v = null;
     }
     return this;
@@ -332,9 +325,7 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
 
   @override
   void replace(VisitRecord other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$VisitRecord;
   }
 
@@ -347,14 +338,18 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
   _$VisitRecord build() {
     final _$result = _$v ??
         new _$VisitRecord._(
-            actorId: actorId,
-            fromRoomName: fromRoomName,
+            actorId: BuiltValueNullFieldError.checkNotNull(
+                actorId, 'VisitRecord', 'actorId'),
+            fromRoomName: BuiltValueNullFieldError.checkNotNull(
+                fromRoomName, 'VisitRecord', 'fromRoomName'),
             parentRoomName: parentRoomName,
-            roomName: roomName,
-            time: time);
+            roomName: BuiltValueNullFieldError.checkNotNull(
+                roomName, 'VisitRecord', 'roomName'),
+            time: BuiltValueNullFieldError.checkNotNull(
+                time, 'VisitRecord', 'time'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -70,7 +70,7 @@ Iterable<Code> createDescriptionStatements(String text) sync* {
         "${block.condition} ? \'\'\'$body\'\'\' : \'\'\'$elseBody\'\'\';");
   }
 
-  final root = parseBlocks(text ?? '');
+  final root = parseBlocks(text);
   final visitor = SequenceBlockVisitor(ifBlocks);
   root.accept(visitor);
   yield* visitor.statements;

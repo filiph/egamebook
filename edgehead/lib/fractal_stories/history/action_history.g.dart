@@ -52,7 +52,7 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'latestAggression':
           result.latestAggression.replace(serializers.deserialize(value,
@@ -120,10 +120,12 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
       serializers.serialize(object.wasSuccess,
           specifiedType: const FullType(bool)),
     ];
-    if (object.dataString != null) {
+    Object value;
+    value = object.dataString;
+    if (value != null) {
       result
         ..add('dataString')
-        ..add(serializers.serialize(object.dataString,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -138,7 +140,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'actionName':
           result.actionName = serializers.deserialize(value,
@@ -208,19 +210,13 @@ class _$ActionHistory extends ActionHistory {
       this.latestProactiveByActorId,
       this.records})
       : super._() {
-    if (latestAggression == null) {
-      throw new BuiltValueNullFieldError('ActionHistory', 'latestAggression');
-    }
-    if (latestByActorId == null) {
-      throw new BuiltValueNullFieldError('ActionHistory', 'latestByActorId');
-    }
-    if (latestProactiveByActorId == null) {
-      throw new BuiltValueNullFieldError(
-          'ActionHistory', 'latestProactiveByActorId');
-    }
-    if (records == null) {
-      throw new BuiltValueNullFieldError('ActionHistory', 'records');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        latestAggression, 'ActionHistory', 'latestAggression');
+    BuiltValueNullFieldError.checkNotNull(
+        latestByActorId, 'ActionHistory', 'latestByActorId');
+    BuiltValueNullFieldError.checkNotNull(
+        latestProactiveByActorId, 'ActionHistory', 'latestProactiveByActorId');
+    BuiltValueNullFieldError.checkNotNull(records, 'ActionHistory', 'records');
   }
 
   @override
@@ -290,11 +286,12 @@ class ActionHistoryBuilder
   ActionHistoryBuilder();
 
   ActionHistoryBuilder get _$this {
-    if (_$v != null) {
-      _latestAggression = _$v.latestAggression?.toBuilder();
-      _latestByActorId = _$v.latestByActorId?.toBuilder();
-      _latestProactiveByActorId = _$v.latestProactiveByActorId?.toBuilder();
-      _records = _$v.records?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _latestAggression = $v.latestAggression.toBuilder();
+      _latestByActorId = $v.latestByActorId.toBuilder();
+      _latestProactiveByActorId = $v.latestProactiveByActorId.toBuilder();
+      _records = $v.records.toBuilder();
       _$v = null;
     }
     return this;
@@ -302,9 +299,7 @@ class ActionHistoryBuilder
 
   @override
   void replace(ActionHistory other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ActionHistory;
   }
 
@@ -382,33 +377,23 @@ class _$ActionRecord extends ActionRecord {
       this.wasProactive,
       this.wasSuccess})
       : super._() {
-    if (actionName == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'actionName');
-    }
-    if (description == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'description');
-    }
-    if (protagonist == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'protagonist');
-    }
-    if (sufferers == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'sufferers');
-    }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'time');
-    }
-    if (wasAggressive == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'wasAggressive');
-    }
-    if (wasFailure == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'wasFailure');
-    }
-    if (wasProactive == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'wasProactive');
-    }
-    if (wasSuccess == null) {
-      throw new BuiltValueNullFieldError('ActionRecord', 'wasSuccess');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        actionName, 'ActionRecord', 'actionName');
+    BuiltValueNullFieldError.checkNotNull(
+        description, 'ActionRecord', 'description');
+    BuiltValueNullFieldError.checkNotNull(
+        protagonist, 'ActionRecord', 'protagonist');
+    BuiltValueNullFieldError.checkNotNull(
+        sufferers, 'ActionRecord', 'sufferers');
+    BuiltValueNullFieldError.checkNotNull(time, 'ActionRecord', 'time');
+    BuiltValueNullFieldError.checkNotNull(
+        wasAggressive, 'ActionRecord', 'wasAggressive');
+    BuiltValueNullFieldError.checkNotNull(
+        wasFailure, 'ActionRecord', 'wasFailure');
+    BuiltValueNullFieldError.checkNotNull(
+        wasProactive, 'ActionRecord', 'wasProactive');
+    BuiltValueNullFieldError.checkNotNull(
+        wasSuccess, 'ActionRecord', 'wasSuccess');
   }
 
   @override
@@ -505,17 +490,18 @@ class ActionRecordBuilder
   ActionRecordBuilder();
 
   ActionRecordBuilder get _$this {
-    if (_$v != null) {
-      _actionName = _$v.actionName;
-      _dataString = _$v.dataString;
-      _description = _$v.description;
-      _protagonist = _$v.protagonist;
-      _sufferers = _$v.sufferers?.toBuilder();
-      _time = _$v.time;
-      _wasAggressive = _$v.wasAggressive;
-      _wasFailure = _$v.wasFailure;
-      _wasProactive = _$v.wasProactive;
-      _wasSuccess = _$v.wasSuccess;
+    final $v = _$v;
+    if ($v != null) {
+      _actionName = $v.actionName;
+      _dataString = $v.dataString;
+      _description = $v.description;
+      _protagonist = $v.protagonist;
+      _sufferers = $v.sufferers.toBuilder();
+      _time = $v.time;
+      _wasAggressive = $v.wasAggressive;
+      _wasFailure = $v.wasFailure;
+      _wasProactive = $v.wasProactive;
+      _wasSuccess = $v.wasSuccess;
       _$v = null;
     }
     return this;
@@ -523,9 +509,7 @@ class ActionRecordBuilder
 
   @override
   void replace(ActionRecord other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ActionRecord;
   }
 
@@ -540,16 +524,24 @@ class ActionRecordBuilder
     try {
       _$result = _$v ??
           new _$ActionRecord._(
-              actionName: actionName,
+              actionName: BuiltValueNullFieldError.checkNotNull(
+                  actionName, 'ActionRecord', 'actionName'),
               dataString: dataString,
-              description: description,
-              protagonist: protagonist,
+              description: BuiltValueNullFieldError.checkNotNull(
+                  description, 'ActionRecord', 'description'),
+              protagonist: BuiltValueNullFieldError.checkNotNull(
+                  protagonist, 'ActionRecord', 'protagonist'),
               sufferers: sufferers.build(),
-              time: time,
-              wasAggressive: wasAggressive,
-              wasFailure: wasFailure,
-              wasProactive: wasProactive,
-              wasSuccess: wasSuccess);
+              time: BuiltValueNullFieldError.checkNotNull(
+                  time, 'ActionRecord', 'time'),
+              wasAggressive: BuiltValueNullFieldError.checkNotNull(
+                  wasAggressive, 'ActionRecord', 'wasAggressive'),
+              wasFailure: BuiltValueNullFieldError.checkNotNull(
+                  wasFailure, 'ActionRecord', 'wasFailure'),
+              wasProactive: BuiltValueNullFieldError.checkNotNull(
+                  wasProactive, 'ActionRecord', 'wasProactive'),
+              wasSuccess: BuiltValueNullFieldError.checkNotNull(
+                  wasSuccess, 'ActionRecord', 'wasSuccess'));
     } catch (_) {
       String _$failedField;
       try {
@@ -566,4 +558,4 @@ class ActionRecordBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

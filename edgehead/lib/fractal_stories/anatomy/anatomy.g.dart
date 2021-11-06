@@ -38,7 +38,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'isUndead':
           result.isUndead = serializers.deserialize(value,
@@ -72,12 +72,8 @@ class _$Anatomy extends Anatomy {
       (new AnatomyBuilder()..update(updates)).build();
 
   _$Anatomy._({this.isUndead, this.torso}) : super._() {
-    if (isUndead == null) {
-      throw new BuiltValueNullFieldError('Anatomy', 'isUndead');
-    }
-    if (torso == null) {
-      throw new BuiltValueNullFieldError('Anatomy', 'torso');
-    }
+    BuiltValueNullFieldError.checkNotNull(isUndead, 'Anatomy', 'isUndead');
+    BuiltValueNullFieldError.checkNotNull(torso, 'Anatomy', 'torso');
   }
 
   @override
@@ -146,9 +142,10 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   AnatomyBuilder();
 
   AnatomyBuilder get _$this {
-    if (_$v != null) {
-      _isUndead = _$v.isUndead;
-      _torso = _$v.torso?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _isUndead = $v.isUndead;
+      _torso = $v.torso.toBuilder();
       _$v = null;
     }
     return this;
@@ -156,9 +153,7 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
 
   @override
   void replace(Anatomy other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Anatomy;
   }
 
@@ -171,8 +166,11 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   _$Anatomy build() {
     _$Anatomy _$result;
     try {
-      _$result =
-          _$v ?? new _$Anatomy._(isUndead: isUndead, torso: torso.build());
+      _$result = _$v ??
+          new _$Anatomy._(
+              isUndead: BuiltValueNullFieldError.checkNotNull(
+                  isUndead, 'Anatomy', 'isUndead'),
+              torso: torso.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -189,4 +187,4 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

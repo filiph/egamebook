@@ -43,10 +43,12 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       serializers.serialize(object.successChance,
           specifiedType: const FullType(double)),
     ];
-    if (object.helpMessage != null) {
+    Object value;
+    value = object.helpMessage;
+    if (value != null) {
       result
         ..add('helpMessage')
-        ..add(serializers.serialize(object.helpMessage,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -61,7 +63,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'actionName':
           result.actionName = serializers.deserialize(value,
@@ -138,27 +140,17 @@ class _$Choice extends Choice {
       this.isImplicit,
       this.successChance})
       : super._() {
-    if (actionName == null) {
-      throw new BuiltValueNullFieldError('Choice', 'actionName');
-    }
-    if (additionalData == null) {
-      throw new BuiltValueNullFieldError('Choice', 'additionalData');
-    }
-    if (additionalStrings == null) {
-      throw new BuiltValueNullFieldError('Choice', 'additionalStrings');
-    }
-    if (commandPath == null) {
-      throw new BuiltValueNullFieldError('Choice', 'commandPath');
-    }
-    if (commandSentence == null) {
-      throw new BuiltValueNullFieldError('Choice', 'commandSentence');
-    }
-    if (isImplicit == null) {
-      throw new BuiltValueNullFieldError('Choice', 'isImplicit');
-    }
-    if (successChance == null) {
-      throw new BuiltValueNullFieldError('Choice', 'successChance');
-    }
+    BuiltValueNullFieldError.checkNotNull(actionName, 'Choice', 'actionName');
+    BuiltValueNullFieldError.checkNotNull(
+        additionalData, 'Choice', 'additionalData');
+    BuiltValueNullFieldError.checkNotNull(
+        additionalStrings, 'Choice', 'additionalStrings');
+    BuiltValueNullFieldError.checkNotNull(commandPath, 'Choice', 'commandPath');
+    BuiltValueNullFieldError.checkNotNull(
+        commandSentence, 'Choice', 'commandSentence');
+    BuiltValueNullFieldError.checkNotNull(isImplicit, 'Choice', 'isImplicit');
+    BuiltValueNullFieldError.checkNotNull(
+        successChance, 'Choice', 'successChance');
   }
 
   @override
@@ -261,15 +253,16 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   ChoiceBuilder();
 
   ChoiceBuilder get _$this {
-    if (_$v != null) {
-      _actionName = _$v.actionName;
-      _additionalData = _$v.additionalData?.toBuilder();
-      _additionalStrings = _$v.additionalStrings?.toBuilder();
-      _commandPath = _$v.commandPath?.toBuilder();
-      _commandSentence = _$v.commandSentence;
-      _helpMessage = _$v.helpMessage;
-      _isImplicit = _$v.isImplicit;
-      _successChance = _$v.successChance;
+    final $v = _$v;
+    if ($v != null) {
+      _actionName = $v.actionName;
+      _additionalData = $v.additionalData.toBuilder();
+      _additionalStrings = $v.additionalStrings.toBuilder();
+      _commandPath = $v.commandPath.toBuilder();
+      _commandSentence = $v.commandSentence;
+      _helpMessage = $v.helpMessage;
+      _isImplicit = $v.isImplicit;
+      _successChance = $v.successChance;
       _$v = null;
     }
     return this;
@@ -277,9 +270,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
 
   @override
   void replace(Choice other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Choice;
   }
 
@@ -294,14 +285,18 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
     try {
       _$result = _$v ??
           new _$Choice._(
-              actionName: actionName,
+              actionName: BuiltValueNullFieldError.checkNotNull(
+                  actionName, 'Choice', 'actionName'),
               additionalData: additionalData.build(),
               additionalStrings: additionalStrings.build(),
               commandPath: commandPath.build(),
-              commandSentence: commandSentence,
+              commandSentence: BuiltValueNullFieldError.checkNotNull(
+                  commandSentence, 'Choice', 'commandSentence'),
               helpMessage: helpMessage,
-              isImplicit: isImplicit,
-              successChance: successChance);
+              isImplicit: BuiltValueNullFieldError.checkNotNull(
+                  isImplicit, 'Choice', 'isImplicit'),
+              successChance: BuiltValueNullFieldError.checkNotNull(
+                  successChance, 'Choice', 'successChance'));
     } catch (_) {
       String _$failedField;
       try {
@@ -322,4 +317,4 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

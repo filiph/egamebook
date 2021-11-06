@@ -50,7 +50,7 @@ class _$ReservoirDamWheelLeftRescueSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -101,7 +101,7 @@ class _$ReservoirDamWheelRightRescueSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -153,7 +153,7 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -184,14 +184,10 @@ class _$ReservoirDamWheelLeftRescueSituation
           .build();
 
   _$ReservoirDamWheelLeftRescueSituation._({this.id, this.turn}) : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError(
-          'ReservoirDamWheelLeftRescueSituation', 'id');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError(
-          'ReservoirDamWheelLeftRescueSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        id, 'ReservoirDamWheelLeftRescueSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        turn, 'ReservoirDamWheelLeftRescueSituation', 'turn');
   }
 
   @override
@@ -242,9 +238,10 @@ class ReservoirDamWheelLeftRescueSituationBuilder
   ReservoirDamWheelLeftRescueSituationBuilder();
 
   ReservoirDamWheelLeftRescueSituationBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -252,9 +249,7 @@ class ReservoirDamWheelLeftRescueSituationBuilder
 
   @override
   void replace(ReservoirDamWheelLeftRescueSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ReservoirDamWheelLeftRescueSituation;
   }
 
@@ -266,8 +261,12 @@ class ReservoirDamWheelLeftRescueSituationBuilder
 
   @override
   _$ReservoirDamWheelLeftRescueSituation build() {
-    final _$result =
-        _$v ?? new _$ReservoirDamWheelLeftRescueSituation._(id: id, turn: turn);
+    final _$result = _$v ??
+        new _$ReservoirDamWheelLeftRescueSituation._(
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'ReservoirDamWheelLeftRescueSituation', 'id'),
+            turn: BuiltValueNullFieldError.checkNotNull(
+                turn, 'ReservoirDamWheelLeftRescueSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
@@ -287,14 +286,10 @@ class _$ReservoirDamWheelRightRescueSituation
           .build();
 
   _$ReservoirDamWheelRightRescueSituation._({this.id, this.turn}) : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError(
-          'ReservoirDamWheelRightRescueSituation', 'id');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError(
-          'ReservoirDamWheelRightRescueSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        id, 'ReservoirDamWheelRightRescueSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        turn, 'ReservoirDamWheelRightRescueSituation', 'turn');
   }
 
   @override
@@ -346,9 +341,10 @@ class ReservoirDamWheelRightRescueSituationBuilder
   ReservoirDamWheelRightRescueSituationBuilder();
 
   ReservoirDamWheelRightRescueSituationBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -356,9 +352,7 @@ class ReservoirDamWheelRightRescueSituationBuilder
 
   @override
   void replace(ReservoirDamWheelRightRescueSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ReservoirDamWheelRightRescueSituation;
   }
 
@@ -371,7 +365,11 @@ class ReservoirDamWheelRightRescueSituationBuilder
   @override
   _$ReservoirDamWheelRightRescueSituation build() {
     final _$result = _$v ??
-        new _$ReservoirDamWheelRightRescueSituation._(id: id, turn: turn);
+        new _$ReservoirDamWheelRightRescueSituation._(
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'ReservoirDamWheelRightRescueSituation', 'id'),
+            turn: BuiltValueNullFieldError.checkNotNull(
+                turn, 'ReservoirDamWheelRightRescueSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
@@ -393,14 +391,10 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
 
   _$GuardpostAboveChurchTakeShieldRescueSituation._({this.id, this.turn})
       : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError(
-          'GuardpostAboveChurchTakeShieldRescueSituation', 'id');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError(
-          'GuardpostAboveChurchTakeShieldRescueSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        id, 'GuardpostAboveChurchTakeShieldRescueSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        turn, 'GuardpostAboveChurchTakeShieldRescueSituation', 'turn');
   }
 
   @override
@@ -453,9 +447,10 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
   GuardpostAboveChurchTakeShieldRescueSituationBuilder();
 
   GuardpostAboveChurchTakeShieldRescueSituationBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -463,9 +458,7 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
 
   @override
   void replace(GuardpostAboveChurchTakeShieldRescueSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$GuardpostAboveChurchTakeShieldRescueSituation;
   }
 
@@ -480,10 +473,13 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
   _$GuardpostAboveChurchTakeShieldRescueSituation build() {
     final _$result = _$v ??
         new _$GuardpostAboveChurchTakeShieldRescueSituation._(
-            id: id, turn: turn);
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'GuardpostAboveChurchTakeShieldRescueSituation', 'id'),
+            turn: BuiltValueNullFieldError.checkNotNull(
+                turn, 'GuardpostAboveChurchTakeShieldRescueSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

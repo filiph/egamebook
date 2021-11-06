@@ -6,8 +6,8 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/actions/autoloot.dart';
@@ -17,9 +17,9 @@ part 'loot_situation.g.dart';
 abstract class LootSituation extends Object
     with SituationBaseBehavior
     implements Built<LootSituation, LootSituationBuilder> {
-  static Serializer<LootSituation> get serializer => _$lootSituationSerializer;
-
   static const String className = "LootSituation";
+
+  static Serializer<LootSituation> get serializer => _$lootSituationSerializer;
 
   factory LootSituation([void updates(LootSituationBuilder b)]) =
       _$LootSituation;
@@ -48,14 +48,14 @@ abstract class LootSituation extends Object
   /// The material on the ground. It can be 'wooden floor' or 'grass'.
   String get groundMaterial;
 
-  /// The actors present at looting.
-  BuiltList<int> get playerTeamIds;
-
   @override
   int get id;
 
   @override
   String get name => className;
+
+  /// The actors present at looting.
+  BuiltList<int> get playerTeamIds;
 
   @override
   int get turn;
@@ -64,16 +64,16 @@ abstract class LootSituation extends Object
   LootSituation elapseTurn() => rebuild((b) => b..turn += 1);
 
   @override
+  Iterable<Actor> getActors(Simulation sim, WorldState w) {
+    return [_getPlayer(w.actors)];
+  }
+
+  @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {
     // Only one turn of looting.
     if (turn > 0) return ActorTurn.never;
     // Only player can loot at the moment.
     return ActorTurn(_getPlayer(world.actors), world.time);
-  }
-
-  @override
-  Iterable<Actor> getActors(Simulation sim, WorldState w) {
-    return [_getPlayer(w.actors)];
   }
 
   @override

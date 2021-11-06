@@ -87,22 +87,26 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'team',
       serializers.serialize(object.team, specifiedType: const FullType(Team)),
     ];
-    if (object.adjective != null) {
+    Object value;
+    value = object.adjective;
+    if (value != null) {
       result
         ..add('adjective')
-        ..add(serializers.serialize(object.adjective,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.currentRoomName != null) {
+    value = object.currentRoomName;
+    if (value != null) {
       result
         ..add('currentRoomName')
-        ..add(serializers.serialize(object.currentRoomName,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.director != null) {
+    value = object.director;
+    if (value != null) {
       result
         ..add('director')
-        ..add(serializers.serialize(object.director,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(DirectorCapability)));
     }
     return result;
@@ -117,7 +121,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'adjective':
           result.adjective = serializers.deserialize(value,
@@ -330,81 +334,37 @@ class _$Actor extends Actor {
       this.stamina,
       this.team})
       : super._() {
-    if (anatomy == null) {
-      throw new BuiltValueNullFieldError('Actor', 'anatomy');
-    }
-    if (constitution == null) {
-      throw new BuiltValueNullFieldError('Actor', 'constitution');
-    }
-    if (dexterity == null) {
-      throw new BuiltValueNullFieldError('Actor', 'dexterity');
-    }
-    if (foldFunctionHandle == null) {
-      throw new BuiltValueNullFieldError('Actor', 'foldFunctionHandle');
-    }
-    if (gold == null) {
-      throw new BuiltValueNullFieldError('Actor', 'gold');
-    }
-    if (hitpoints == null) {
-      throw new BuiltValueNullFieldError('Actor', 'hitpoints');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Actor', 'id');
-    }
-    if (initiative == null) {
-      throw new BuiltValueNullFieldError('Actor', 'initiative');
-    }
-    if (inventory == null) {
-      throw new BuiltValueNullFieldError('Actor', 'inventory');
-    }
-    if (isActive == null) {
-      throw new BuiltValueNullFieldError('Actor', 'isActive');
-    }
-    if (isConfused == null) {
-      throw new BuiltValueNullFieldError('Actor', 'isConfused');
-    }
-    if (isInvincible == null) {
-      throw new BuiltValueNullFieldError('Actor', 'isInvincible');
-    }
-    if (isPlayer == null) {
-      throw new BuiltValueNullFieldError('Actor', 'isPlayer');
-    }
-    if (isSurvivor == null) {
-      throw new BuiltValueNullFieldError('Actor', 'isSurvivor');
-    }
-    if (maxHitpoints == null) {
-      throw new BuiltValueNullFieldError('Actor', 'maxHitpoints');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('Actor', 'name');
-    }
-    if (nameIsProperNoun == null) {
-      throw new BuiltValueNullFieldError('Actor', 'nameIsProperNoun');
-    }
-    if (npc == null) {
-      throw new BuiltValueNullFieldError('Actor', 'npc');
-    }
-    if (pose == null) {
-      throw new BuiltValueNullFieldError('Actor', 'pose');
-    }
-    if (poseMax == null) {
-      throw new BuiltValueNullFieldError('Actor', 'poseMax');
-    }
-    if (pronoun == null) {
-      throw new BuiltValueNullFieldError('Actor', 'pronoun');
-    }
-    if (recoveringUntil == null) {
-      throw new BuiltValueNullFieldError('Actor', 'recoveringUntil');
-    }
-    if (sanity == null) {
-      throw new BuiltValueNullFieldError('Actor', 'sanity');
-    }
-    if (stamina == null) {
-      throw new BuiltValueNullFieldError('Actor', 'stamina');
-    }
-    if (team == null) {
-      throw new BuiltValueNullFieldError('Actor', 'team');
-    }
+    BuiltValueNullFieldError.checkNotNull(anatomy, 'Actor', 'anatomy');
+    BuiltValueNullFieldError.checkNotNull(
+        constitution, 'Actor', 'constitution');
+    BuiltValueNullFieldError.checkNotNull(dexterity, 'Actor', 'dexterity');
+    BuiltValueNullFieldError.checkNotNull(
+        foldFunctionHandle, 'Actor', 'foldFunctionHandle');
+    BuiltValueNullFieldError.checkNotNull(gold, 'Actor', 'gold');
+    BuiltValueNullFieldError.checkNotNull(hitpoints, 'Actor', 'hitpoints');
+    BuiltValueNullFieldError.checkNotNull(id, 'Actor', 'id');
+    BuiltValueNullFieldError.checkNotNull(initiative, 'Actor', 'initiative');
+    BuiltValueNullFieldError.checkNotNull(inventory, 'Actor', 'inventory');
+    BuiltValueNullFieldError.checkNotNull(isActive, 'Actor', 'isActive');
+    BuiltValueNullFieldError.checkNotNull(isConfused, 'Actor', 'isConfused');
+    BuiltValueNullFieldError.checkNotNull(
+        isInvincible, 'Actor', 'isInvincible');
+    BuiltValueNullFieldError.checkNotNull(isPlayer, 'Actor', 'isPlayer');
+    BuiltValueNullFieldError.checkNotNull(isSurvivor, 'Actor', 'isSurvivor');
+    BuiltValueNullFieldError.checkNotNull(
+        maxHitpoints, 'Actor', 'maxHitpoints');
+    BuiltValueNullFieldError.checkNotNull(name, 'Actor', 'name');
+    BuiltValueNullFieldError.checkNotNull(
+        nameIsProperNoun, 'Actor', 'nameIsProperNoun');
+    BuiltValueNullFieldError.checkNotNull(npc, 'Actor', 'npc');
+    BuiltValueNullFieldError.checkNotNull(pose, 'Actor', 'pose');
+    BuiltValueNullFieldError.checkNotNull(poseMax, 'Actor', 'poseMax');
+    BuiltValueNullFieldError.checkNotNull(pronoun, 'Actor', 'pronoun');
+    BuiltValueNullFieldError.checkNotNull(
+        recoveringUntil, 'Actor', 'recoveringUntil');
+    BuiltValueNullFieldError.checkNotNull(sanity, 'Actor', 'sanity');
+    BuiltValueNullFieldError.checkNotNull(stamina, 'Actor', 'stamina');
+    BuiltValueNullFieldError.checkNotNull(team, 'Actor', 'team');
   }
 
   @override
@@ -616,35 +576,36 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   ActorBuilder();
 
   ActorBuilder get _$this {
-    if (_$v != null) {
-      _adjective = _$v.adjective;
-      _anatomy = _$v.anatomy?.toBuilder();
-      _constitution = _$v.constitution;
-      _currentRoomName = _$v.currentRoomName;
-      _dexterity = _$v.dexterity;
-      _director = _$v.director?.toBuilder();
-      _foldFunctionHandle = _$v.foldFunctionHandle;
-      _gold = _$v.gold;
-      _hitpoints = _$v.hitpoints;
-      _id = _$v.id;
-      _initiative = _$v.initiative;
-      _inventory = _$v.inventory?.toBuilder();
-      _isActive = _$v.isActive;
-      _isConfused = _$v.isConfused;
-      _isInvincible = _$v.isInvincible;
-      _isPlayer = _$v.isPlayer;
-      _isSurvivor = _$v.isSurvivor;
-      _maxHitpoints = _$v.maxHitpoints;
-      _name = _$v.name;
-      _nameIsProperNoun = _$v.nameIsProperNoun;
-      _npc = _$v.npc?.toBuilder();
-      _pose = _$v.pose;
-      _poseMax = _$v.poseMax;
-      _pronoun = _$v.pronoun?.toBuilder();
-      _recoveringUntil = _$v.recoveringUntil;
-      _sanity = _$v.sanity;
-      _stamina = _$v.stamina;
-      _team = _$v.team?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _adjective = $v.adjective;
+      _anatomy = $v.anatomy.toBuilder();
+      _constitution = $v.constitution;
+      _currentRoomName = $v.currentRoomName;
+      _dexterity = $v.dexterity;
+      _director = $v.director?.toBuilder();
+      _foldFunctionHandle = $v.foldFunctionHandle;
+      _gold = $v.gold;
+      _hitpoints = $v.hitpoints;
+      _id = $v.id;
+      _initiative = $v.initiative;
+      _inventory = $v.inventory.toBuilder();
+      _isActive = $v.isActive;
+      _isConfused = $v.isConfused;
+      _isInvincible = $v.isInvincible;
+      _isPlayer = $v.isPlayer;
+      _isSurvivor = $v.isSurvivor;
+      _maxHitpoints = $v.maxHitpoints;
+      _name = $v.name;
+      _nameIsProperNoun = $v.nameIsProperNoun;
+      _npc = $v.npc.toBuilder();
+      _pose = $v.pose;
+      _poseMax = $v.poseMax;
+      _pronoun = $v.pronoun.toBuilder();
+      _recoveringUntil = $v.recoveringUntil;
+      _sanity = $v.sanity;
+      _stamina = $v.stamina;
+      _team = $v.team.toBuilder();
       _$v = null;
     }
     return this;
@@ -652,9 +613,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
 
   @override
   void replace(Actor other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Actor;
   }
 
@@ -671,31 +630,41 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
           new _$Actor._(
               adjective: adjective,
               anatomy: anatomy.build(),
-              constitution: constitution,
+              constitution: BuiltValueNullFieldError.checkNotNull(
+                  constitution, 'Actor', 'constitution'),
               currentRoomName: currentRoomName,
-              dexterity: dexterity,
+              dexterity: BuiltValueNullFieldError.checkNotNull(
+                  dexterity, 'Actor', 'dexterity'),
               director: _director?.build(),
-              foldFunctionHandle: foldFunctionHandle,
-              gold: gold,
-              hitpoints: hitpoints,
-              id: id,
-              initiative: initiative,
+              foldFunctionHandle: BuiltValueNullFieldError.checkNotNull(
+                  foldFunctionHandle, 'Actor', 'foldFunctionHandle'),
+              gold:
+                  BuiltValueNullFieldError.checkNotNull(gold, 'Actor', 'gold'),
+              hitpoints: BuiltValueNullFieldError.checkNotNull(
+                  hitpoints, 'Actor', 'hitpoints'),
+              id: BuiltValueNullFieldError.checkNotNull(id, 'Actor', 'id'),
+              initiative: BuiltValueNullFieldError.checkNotNull(
+                  initiative, 'Actor', 'initiative'),
               inventory: inventory.build(),
-              isActive: isActive,
-              isConfused: isConfused,
-              isInvincible: isInvincible,
-              isPlayer: isPlayer,
-              isSurvivor: isSurvivor,
-              maxHitpoints: maxHitpoints,
-              name: name,
-              nameIsProperNoun: nameIsProperNoun,
+              isActive: BuiltValueNullFieldError.checkNotNull(
+                  isActive, 'Actor', 'isActive'),
+              isConfused: BuiltValueNullFieldError.checkNotNull(
+                  isConfused, 'Actor', 'isConfused'),
+              isInvincible: BuiltValueNullFieldError.checkNotNull(
+                  isInvincible, 'Actor', 'isInvincible'),
+              isPlayer:
+                  BuiltValueNullFieldError.checkNotNull(isPlayer, 'Actor', 'isPlayer'),
+              isSurvivor: BuiltValueNullFieldError.checkNotNull(isSurvivor, 'Actor', 'isSurvivor'),
+              maxHitpoints: BuiltValueNullFieldError.checkNotNull(maxHitpoints, 'Actor', 'maxHitpoints'),
+              name: BuiltValueNullFieldError.checkNotNull(name, 'Actor', 'name'),
+              nameIsProperNoun: BuiltValueNullFieldError.checkNotNull(nameIsProperNoun, 'Actor', 'nameIsProperNoun'),
               npc: npc.build(),
-              pose: pose,
-              poseMax: poseMax,
+              pose: BuiltValueNullFieldError.checkNotNull(pose, 'Actor', 'pose'),
+              poseMax: BuiltValueNullFieldError.checkNotNull(poseMax, 'Actor', 'poseMax'),
               pronoun: pronoun.build(),
-              recoveringUntil: recoveringUntil,
-              sanity: sanity,
-              stamina: stamina,
+              recoveringUntil: BuiltValueNullFieldError.checkNotNull(recoveringUntil, 'Actor', 'recoveringUntil'),
+              sanity: BuiltValueNullFieldError.checkNotNull(sanity, 'Actor', 'sanity'),
+              stamina: BuiltValueNullFieldError.checkNotNull(stamina, 'Actor', 'stamina'),
               team: team.build());
     } catch (_) {
       String _$failedField;
@@ -728,4 +697,4 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

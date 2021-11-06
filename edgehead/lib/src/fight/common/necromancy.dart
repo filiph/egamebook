@@ -14,7 +14,8 @@ import 'package:meta/meta.dart';
 ActorBuilder buildCorpse(Actor necromancer, Actor corpse) {
   final corpseBuilder = corpse.toBuilder();
 
-  String adjective, name;
+  String adjective;
+  String name;
 
   if (corpse.name == 'undead') {
     // The corpse was already raised at least once. Let's not name them

@@ -26,12 +26,12 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
       'groundMaterial',
       serializers.serialize(object.groundMaterial,
           specifiedType: const FullType(String)),
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
       'playerTeamIds',
       serializers.serialize(object.playerTeamIds,
           specifiedType:
               const FullType(BuiltList, const [const FullType(int)])),
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(int)),
       'turn',
       serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
@@ -49,7 +49,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'droppedItems':
           result.droppedItems.replace(serializers.deserialize(value,
@@ -61,15 +61,15 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
           result.groundMaterial = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'playerTeamIds':
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))
               as BuiltList<Object>);
-          break;
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
@@ -88,9 +88,9 @@ class _$LootSituation extends LootSituation {
   @override
   final String groundMaterial;
   @override
-  final BuiltList<int> playerTeamIds;
-  @override
   final int id;
+  @override
+  final BuiltList<int> playerTeamIds;
   @override
   final int turn;
 
@@ -100,25 +100,18 @@ class _$LootSituation extends LootSituation {
   _$LootSituation._(
       {this.droppedItems,
       this.groundMaterial,
-      this.playerTeamIds,
       this.id,
+      this.playerTeamIds,
       this.turn})
       : super._() {
-    if (droppedItems == null) {
-      throw new BuiltValueNullFieldError('LootSituation', 'droppedItems');
-    }
-    if (groundMaterial == null) {
-      throw new BuiltValueNullFieldError('LootSituation', 'groundMaterial');
-    }
-    if (playerTeamIds == null) {
-      throw new BuiltValueNullFieldError('LootSituation', 'playerTeamIds');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('LootSituation', 'id');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError('LootSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        droppedItems, 'LootSituation', 'droppedItems');
+    BuiltValueNullFieldError.checkNotNull(
+        groundMaterial, 'LootSituation', 'groundMaterial');
+    BuiltValueNullFieldError.checkNotNull(id, 'LootSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        playerTeamIds, 'LootSituation', 'playerTeamIds');
+    BuiltValueNullFieldError.checkNotNull(turn, 'LootSituation', 'turn');
   }
 
   @override
@@ -134,8 +127,8 @@ class _$LootSituation extends LootSituation {
     return other is LootSituation &&
         droppedItems == other.droppedItems &&
         groundMaterial == other.groundMaterial &&
-        playerTeamIds == other.playerTeamIds &&
         id == other.id &&
+        playerTeamIds == other.playerTeamIds &&
         turn == other.turn;
   }
 
@@ -144,8 +137,8 @@ class _$LootSituation extends LootSituation {
     return $jf($jc(
         $jc(
             $jc($jc($jc(0, droppedItems.hashCode), groundMaterial.hashCode),
-                playerTeamIds.hashCode),
-            id.hashCode),
+                id.hashCode),
+            playerTeamIds.hashCode),
         turn.hashCode));
   }
 
@@ -154,8 +147,8 @@ class _$LootSituation extends LootSituation {
     return (newBuiltValueToStringHelper('LootSituation')
           ..add('droppedItems', droppedItems)
           ..add('groundMaterial', groundMaterial)
-          ..add('playerTeamIds', playerTeamIds)
           ..add('id', id)
+          ..add('playerTeamIds', playerTeamIds)
           ..add('turn', turn))
         .toString();
   }
@@ -176,15 +169,15 @@ class LootSituationBuilder
   set groundMaterial(String groundMaterial) =>
       _$this._groundMaterial = groundMaterial;
 
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
   ListBuilder<int> _playerTeamIds;
   ListBuilder<int> get playerTeamIds =>
       _$this._playerTeamIds ??= new ListBuilder<int>();
   set playerTeamIds(ListBuilder<int> playerTeamIds) =>
       _$this._playerTeamIds = playerTeamIds;
-
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
 
   int _turn;
   int get turn => _$this._turn;
@@ -193,12 +186,13 @@ class LootSituationBuilder
   LootSituationBuilder();
 
   LootSituationBuilder get _$this {
-    if (_$v != null) {
-      _droppedItems = _$v.droppedItems?.toBuilder();
-      _groundMaterial = _$v.groundMaterial;
-      _playerTeamIds = _$v.playerTeamIds?.toBuilder();
-      _id = _$v.id;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _droppedItems = $v.droppedItems.toBuilder();
+      _groundMaterial = $v.groundMaterial;
+      _id = $v.id;
+      _playerTeamIds = $v.playerTeamIds.toBuilder();
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -206,9 +200,7 @@ class LootSituationBuilder
 
   @override
   void replace(LootSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$LootSituation;
   }
 
@@ -224,10 +216,13 @@ class LootSituationBuilder
       _$result = _$v ??
           new _$LootSituation._(
               droppedItems: droppedItems.build(),
-              groundMaterial: groundMaterial,
+              groundMaterial: BuiltValueNullFieldError.checkNotNull(
+                  groundMaterial, 'LootSituation', 'groundMaterial'),
+              id: BuiltValueNullFieldError.checkNotNull(
+                  id, 'LootSituation', 'id'),
               playerTeamIds: playerTeamIds.build(),
-              id: id,
-              turn: turn);
+              turn: BuiltValueNullFieldError.checkNotNull(
+                  turn, 'LootSituation', 'turn'));
     } catch (_) {
       String _$failedField;
       try {
@@ -247,4 +242,4 @@ class LootSituationBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

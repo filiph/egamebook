@@ -48,16 +48,19 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       serializers.serialize(object.visitHistory,
           specifiedType: const FullType(VisitHistory)),
     ];
-    if (object.director != null) {
+    Object value;
+    value = object.director;
+    if (value != null) {
       result
         ..add('director')
-        ..add(serializers.serialize(object.director,
-            specifiedType: const FullType(Actor)));
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Actor)));
     }
-    if (object.global != null) {
+    value = object.global;
+    if (value != null) {
       result
         ..add('global')
-        ..add(serializers.serialize(object.global,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(WorldStateFlags)));
     }
     return result;
@@ -72,7 +75,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'actionHistory':
           result.actionHistory.replace(serializers.deserialize(value,
@@ -171,33 +174,22 @@ class _$WorldState extends WorldState {
       this.time,
       this.visitHistory})
       : super._() {
-    if (actionHistory == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'actionHistory');
-    }
-    if (actors == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'actors');
-    }
-    if (customHistory == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'customHistory');
-    }
-    if (ruleHistory == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'ruleHistory');
-    }
-    if (situations == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'situations');
-    }
-    if (slayHistory == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'slayHistory');
-    }
-    if (statefulRandomState == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'statefulRandomState');
-    }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'time');
-    }
-    if (visitHistory == null) {
-      throw new BuiltValueNullFieldError('WorldState', 'visitHistory');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        actionHistory, 'WorldState', 'actionHistory');
+    BuiltValueNullFieldError.checkNotNull(actors, 'WorldState', 'actors');
+    BuiltValueNullFieldError.checkNotNull(
+        customHistory, 'WorldState', 'customHistory');
+    BuiltValueNullFieldError.checkNotNull(
+        ruleHistory, 'WorldState', 'ruleHistory');
+    BuiltValueNullFieldError.checkNotNull(
+        situations, 'WorldState', 'situations');
+    BuiltValueNullFieldError.checkNotNull(
+        slayHistory, 'WorldState', 'slayHistory');
+    BuiltValueNullFieldError.checkNotNull(
+        statefulRandomState, 'WorldState', 'statefulRandomState');
+    BuiltValueNullFieldError.checkNotNull(time, 'WorldState', 'time');
+    BuiltValueNullFieldError.checkNotNull(
+        visitHistory, 'WorldState', 'visitHistory');
   }
 
   @override
@@ -387,18 +379,19 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   _$WorldStateBuilder() : super._();
 
   WorldStateBuilder get _$this {
-    if (_$v != null) {
-      super.actionHistory = _$v.actionHistory?.toBuilder();
-      super.actors = _$v.actors?.toBuilder();
-      super.customHistory = _$v.customHistory?.toBuilder();
-      super.director = _$v.director?.toBuilder();
-      super.global = _$v.global;
-      super.ruleHistory = _$v.ruleHistory?.toBuilder();
-      super.situations = _$v.situations?.toBuilder();
-      super.slayHistory = _$v.slayHistory?.toBuilder();
-      super.statefulRandomState = _$v.statefulRandomState;
-      super.time = _$v.time;
-      super.visitHistory = _$v.visitHistory?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      super.actionHistory = $v.actionHistory.toBuilder();
+      super.actors = $v.actors.toBuilder();
+      super.customHistory = $v.customHistory.toBuilder();
+      super.director = $v.director?.toBuilder();
+      super.global = $v.global;
+      super.ruleHistory = $v.ruleHistory.toBuilder();
+      super.situations = $v.situations.toBuilder();
+      super.slayHistory = $v.slayHistory.toBuilder();
+      super.statefulRandomState = $v.statefulRandomState;
+      super.time = $v.time;
+      super.visitHistory = $v.visitHistory.toBuilder();
       _$v = null;
     }
     return this;
@@ -406,9 +399,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
 
   @override
   void replace(WorldState other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$WorldState;
   }
 
@@ -431,8 +422,10 @@ class _$WorldStateBuilder extends WorldStateBuilder {
               ruleHistory: ruleHistory.build(),
               situations: situations.build(),
               slayHistory: slayHistory.build(),
-              statefulRandomState: statefulRandomState,
-              time: time,
+              statefulRandomState: BuiltValueNullFieldError.checkNotNull(
+                  statefulRandomState, 'WorldState', 'statefulRandomState'),
+              time: BuiltValueNullFieldError.checkNotNull(
+                  time, 'WorldState', 'time'),
               visitHistory: visitHistory.build());
     } catch (_) {
       String _$failedField;
@@ -466,4 +459,4 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

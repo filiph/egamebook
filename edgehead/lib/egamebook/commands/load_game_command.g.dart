@@ -35,7 +35,7 @@ class _$LoadGameSerializer implements StructuredSerializer<LoadGame> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'saveGameSerialized':
           result.saveGameSerialized = serializers.deserialize(value,
@@ -56,9 +56,8 @@ class _$LoadGame extends LoadGame {
       (new LoadGameBuilder()..update(updates)).build();
 
   _$LoadGame._({this.saveGameSerialized}) : super._() {
-    if (saveGameSerialized == null) {
-      throw new BuiltValueNullFieldError('LoadGame', 'saveGameSerialized');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        saveGameSerialized, 'LoadGame', 'saveGameSerialized');
   }
 
   @override
@@ -98,8 +97,9 @@ class LoadGameBuilder implements Builder<LoadGame, LoadGameBuilder> {
   LoadGameBuilder();
 
   LoadGameBuilder get _$this {
-    if (_$v != null) {
-      _saveGameSerialized = _$v.saveGameSerialized;
+    final $v = _$v;
+    if ($v != null) {
+      _saveGameSerialized = $v.saveGameSerialized;
       _$v = null;
     }
     return this;
@@ -107,9 +107,7 @@ class LoadGameBuilder implements Builder<LoadGame, LoadGameBuilder> {
 
   @override
   void replace(LoadGame other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$LoadGame;
   }
 
@@ -120,11 +118,13 @@ class LoadGameBuilder implements Builder<LoadGame, LoadGameBuilder> {
 
   @override
   _$LoadGame build() {
-    final _$result =
-        _$v ?? new _$LoadGame._(saveGameSerialized: saveGameSerialized);
+    final _$result = _$v ??
+        new _$LoadGame._(
+            saveGameSerialized: BuiltValueNullFieldError.checkNotNull(
+                saveGameSerialized, 'LoadGame', 'saveGameSerialized'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

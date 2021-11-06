@@ -32,11 +32,12 @@ class _$OffBalanceOpportunitySituationSerializer
       'turn',
       serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
-    if (object.culpritId != null) {
+    Object value;
+    value = object.culpritId;
+    if (value != null) {
       result
         ..add('culpritId')
-        ..add(serializers.serialize(object.culpritId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -51,7 +52,7 @@ class _$OffBalanceOpportunitySituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
@@ -93,18 +94,12 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   _$OffBalanceOpportunitySituation._(
       {this.actorId, this.culpritId, this.id, this.turn})
       : super._() {
-    if (actorId == null) {
-      throw new BuiltValueNullFieldError(
-          'OffBalanceOpportunitySituation', 'actorId');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError(
-          'OffBalanceOpportunitySituation', 'id');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError(
-          'OffBalanceOpportunitySituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        actorId, 'OffBalanceOpportunitySituation', 'actorId');
+    BuiltValueNullFieldError.checkNotNull(
+        id, 'OffBalanceOpportunitySituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        turn, 'OffBalanceOpportunitySituation', 'turn');
   }
 
   @override
@@ -169,11 +164,12 @@ class OffBalanceOpportunitySituationBuilder
   OffBalanceOpportunitySituationBuilder();
 
   OffBalanceOpportunitySituationBuilder get _$this {
-    if (_$v != null) {
-      _actorId = _$v.actorId;
-      _culpritId = _$v.culpritId;
-      _id = _$v.id;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _actorId = $v.actorId;
+      _culpritId = $v.culpritId;
+      _id = $v.id;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -181,9 +177,7 @@ class OffBalanceOpportunitySituationBuilder
 
   @override
   void replace(OffBalanceOpportunitySituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$OffBalanceOpportunitySituation;
   }
 
@@ -196,10 +190,16 @@ class OffBalanceOpportunitySituationBuilder
   _$OffBalanceOpportunitySituation build() {
     final _$result = _$v ??
         new _$OffBalanceOpportunitySituation._(
-            actorId: actorId, culpritId: culpritId, id: id, turn: turn);
+            actorId: BuiltValueNullFieldError.checkNotNull(
+                actorId, 'OffBalanceOpportunitySituation', 'actorId'),
+            culpritId: culpritId,
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'OffBalanceOpportunitySituation', 'id'),
+            turn: BuiltValueNullFieldError.checkNotNull(
+                turn, 'OffBalanceOpportunitySituation', 'turn'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

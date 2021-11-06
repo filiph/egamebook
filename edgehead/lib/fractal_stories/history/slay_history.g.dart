@@ -37,7 +37,7 @@ class _$SlayHistorySerializer implements StructuredSerializer<SlayHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'records':
           result.records.replace(serializers.deserialize(value,
@@ -70,10 +70,12 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
     ];
-    if (object.parentRoomName != null) {
+    Object value;
+    value = object.parentRoomName;
+    if (value != null) {
       result
         ..add('parentRoomName')
-        ..add(serializers.serialize(object.parentRoomName,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -88,7 +90,7 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
@@ -121,9 +123,7 @@ class _$SlayHistory extends SlayHistory {
       (new SlayHistoryBuilder()..update(updates)).build();
 
   _$SlayHistory._({this.records}) : super._() {
-    if (records == null) {
-      throw new BuiltValueNullFieldError('SlayHistory', 'records');
-    }
+    BuiltValueNullFieldError.checkNotNull(records, 'SlayHistory', 'records');
   }
 
   @override
@@ -163,8 +163,9 @@ class SlayHistoryBuilder implements Builder<SlayHistory, SlayHistoryBuilder> {
   SlayHistoryBuilder();
 
   SlayHistoryBuilder get _$this {
-    if (_$v != null) {
-      _records = _$v.records?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _records = $v.records.toBuilder();
       _$v = null;
     }
     return this;
@@ -172,9 +173,7 @@ class SlayHistoryBuilder implements Builder<SlayHistory, SlayHistoryBuilder> {
 
   @override
   void replace(SlayHistory other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SlayHistory;
   }
 
@@ -219,15 +218,9 @@ class _$SlayRecord extends SlayRecord {
 
   _$SlayRecord._({this.actorId, this.parentRoomName, this.roomName, this.time})
       : super._() {
-    if (actorId == null) {
-      throw new BuiltValueNullFieldError('SlayRecord', 'actorId');
-    }
-    if (roomName == null) {
-      throw new BuiltValueNullFieldError('SlayRecord', 'roomName');
-    }
-    if (time == null) {
-      throw new BuiltValueNullFieldError('SlayRecord', 'time');
-    }
+    BuiltValueNullFieldError.checkNotNull(actorId, 'SlayRecord', 'actorId');
+    BuiltValueNullFieldError.checkNotNull(roomName, 'SlayRecord', 'roomName');
+    BuiltValueNullFieldError.checkNotNull(time, 'SlayRecord', 'time');
   }
 
   @override
@@ -289,11 +282,12 @@ class SlayRecordBuilder implements Builder<SlayRecord, SlayRecordBuilder> {
   SlayRecordBuilder();
 
   SlayRecordBuilder get _$this {
-    if (_$v != null) {
-      _actorId = _$v.actorId;
-      _parentRoomName = _$v.parentRoomName;
-      _roomName = _$v.roomName;
-      _time = _$v.time;
+    final $v = _$v;
+    if ($v != null) {
+      _actorId = $v.actorId;
+      _parentRoomName = $v.parentRoomName;
+      _roomName = $v.roomName;
+      _time = $v.time;
       _$v = null;
     }
     return this;
@@ -301,9 +295,7 @@ class SlayRecordBuilder implements Builder<SlayRecord, SlayRecordBuilder> {
 
   @override
   void replace(SlayRecord other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SlayRecord;
   }
 
@@ -316,13 +308,16 @@ class SlayRecordBuilder implements Builder<SlayRecord, SlayRecordBuilder> {
   _$SlayRecord build() {
     final _$result = _$v ??
         new _$SlayRecord._(
-            actorId: actorId,
+            actorId: BuiltValueNullFieldError.checkNotNull(
+                actorId, 'SlayRecord', 'actorId'),
             parentRoomName: parentRoomName,
-            roomName: roomName,
-            time: time);
+            roomName: BuiltValueNullFieldError.checkNotNull(
+                roomName, 'SlayRecord', 'roomName'),
+            time: BuiltValueNullFieldError.checkNotNull(
+                time, 'SlayRecord', 'time'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

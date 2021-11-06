@@ -63,7 +63,7 @@ class _$FightSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'droppedItems':
           result.droppedItems.replace(serializers.deserialize(value,
@@ -151,35 +151,21 @@ class _$FightSituation extends FightSituation {
       this.roomRoamingSituationId,
       this.turn})
       : super._() {
-    if (droppedItems == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'droppedItems');
-    }
-    if (droppedItemsOutOfReach == null) {
-      throw new BuiltValueNullFieldError(
-          'FightSituation', 'droppedItemsOutOfReach');
-    }
-    if (enemyTeamIds == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'enemyTeamIds');
-    }
-    if (events == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'events');
-    }
-    if (groundMaterial == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'groundMaterial');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'id');
-    }
-    if (playerTeamIds == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'playerTeamIds');
-    }
-    if (roomRoamingSituationId == null) {
-      throw new BuiltValueNullFieldError(
-          'FightSituation', 'roomRoamingSituationId');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError('FightSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        droppedItems, 'FightSituation', 'droppedItems');
+    BuiltValueNullFieldError.checkNotNull(
+        droppedItemsOutOfReach, 'FightSituation', 'droppedItemsOutOfReach');
+    BuiltValueNullFieldError.checkNotNull(
+        enemyTeamIds, 'FightSituation', 'enemyTeamIds');
+    BuiltValueNullFieldError.checkNotNull(events, 'FightSituation', 'events');
+    BuiltValueNullFieldError.checkNotNull(
+        groundMaterial, 'FightSituation', 'groundMaterial');
+    BuiltValueNullFieldError.checkNotNull(id, 'FightSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        playerTeamIds, 'FightSituation', 'playerTeamIds');
+    BuiltValueNullFieldError.checkNotNull(
+        roomRoamingSituationId, 'FightSituation', 'roomRoamingSituationId');
+    BuiltValueNullFieldError.checkNotNull(turn, 'FightSituation', 'turn');
   }
 
   @override
@@ -295,16 +281,17 @@ class FightSituationBuilder
   FightSituationBuilder();
 
   FightSituationBuilder get _$this {
-    if (_$v != null) {
-      _droppedItems = _$v.droppedItems?.toBuilder();
-      _droppedItemsOutOfReach = _$v.droppedItemsOutOfReach?.toBuilder();
-      _enemyTeamIds = _$v.enemyTeamIds?.toBuilder();
-      _events = _$v.events?.toBuilder();
-      _groundMaterial = _$v.groundMaterial;
-      _id = _$v.id;
-      _playerTeamIds = _$v.playerTeamIds?.toBuilder();
-      _roomRoamingSituationId = _$v.roomRoamingSituationId;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _droppedItems = $v.droppedItems.toBuilder();
+      _droppedItemsOutOfReach = $v.droppedItemsOutOfReach.toBuilder();
+      _enemyTeamIds = $v.enemyTeamIds.toBuilder();
+      _events = $v.events.toBuilder();
+      _groundMaterial = $v.groundMaterial;
+      _id = $v.id;
+      _playerTeamIds = $v.playerTeamIds.toBuilder();
+      _roomRoamingSituationId = $v.roomRoamingSituationId;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -312,9 +299,7 @@ class FightSituationBuilder
 
   @override
   void replace(FightSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$FightSituation;
   }
 
@@ -333,11 +318,17 @@ class FightSituationBuilder
               droppedItemsOutOfReach: droppedItemsOutOfReach.build(),
               enemyTeamIds: enemyTeamIds.build(),
               events: events.build(),
-              groundMaterial: groundMaterial,
-              id: id,
+              groundMaterial: BuiltValueNullFieldError.checkNotNull(
+                  groundMaterial, 'FightSituation', 'groundMaterial'),
+              id: BuiltValueNullFieldError.checkNotNull(
+                  id, 'FightSituation', 'id'),
               playerTeamIds: playerTeamIds.build(),
-              roomRoamingSituationId: roomRoamingSituationId,
-              turn: turn);
+              roomRoamingSituationId: BuiltValueNullFieldError.checkNotNull(
+                  roomRoamingSituationId,
+                  'FightSituation',
+                  'roomRoamingSituationId'),
+              turn: BuiltValueNullFieldError.checkNotNull(
+                  turn, 'FightSituation', 'turn'));
     } catch (_) {
       String _$failedField;
       try {
@@ -363,4 +354,4 @@ class FightSituationBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

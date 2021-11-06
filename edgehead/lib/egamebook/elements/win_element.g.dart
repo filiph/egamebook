@@ -35,7 +35,7 @@ class _$WinGameSerializer implements StructuredSerializer<WinGame> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'markdownText':
           result.markdownText = serializers.deserialize(value,
@@ -56,9 +56,8 @@ class _$WinGame extends WinGame {
       (new WinGameBuilder()..update(updates)).build();
 
   _$WinGame._({this.markdownText}) : super._() {
-    if (markdownText == null) {
-      throw new BuiltValueNullFieldError('WinGame', 'markdownText');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        markdownText, 'WinGame', 'markdownText');
   }
 
   @override
@@ -97,8 +96,9 @@ class WinGameBuilder implements Builder<WinGame, WinGameBuilder> {
   WinGameBuilder();
 
   WinGameBuilder get _$this {
-    if (_$v != null) {
-      _markdownText = _$v.markdownText;
+    final $v = _$v;
+    if ($v != null) {
+      _markdownText = $v.markdownText;
       _$v = null;
     }
     return this;
@@ -106,9 +106,7 @@ class WinGameBuilder implements Builder<WinGame, WinGameBuilder> {
 
   @override
   void replace(WinGame other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$WinGame;
   }
 
@@ -119,10 +117,13 @@ class WinGameBuilder implements Builder<WinGame, WinGameBuilder> {
 
   @override
   _$WinGame build() {
-    final _$result = _$v ?? new _$WinGame._(markdownText: markdownText);
+    final _$result = _$v ??
+        new _$WinGame._(
+            markdownText: BuiltValueNullFieldError.checkNotNull(
+                markdownText, 'WinGame', 'markdownText'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

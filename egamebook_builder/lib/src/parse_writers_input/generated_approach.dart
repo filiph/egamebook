@@ -46,7 +46,7 @@ class GeneratedApproach extends GeneratedGameObject {
         literal(_tuple.to.snakeCase),
         // Output r'$IMPLICIT' if this is an implicit approach.
         isImplicit ? literalString(command, raw: true) : literal(command),
-        createDescriber(_map['DESCRIPTION']!),
+        createDescriber(_map['DESCRIPTION'] ?? ''),
       ],
       namedArguments,
     );

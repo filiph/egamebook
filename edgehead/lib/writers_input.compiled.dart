@@ -13,6 +13,7 @@
 // ignore_for_file: type_annotate_public_apis
 // ignore_for_file: unnecessary_brace_in_string_interps
 // ignore_for_file: prefer_const_constructors
+// ignore_for_file: directives_ordering
 
 import 'package:edgehead/fractal_stories/context.dart' show ActionContext;
 import 'package:edgehead/fractal_stories/writer_action.dart' show RoamingAction;
@@ -69,9 +70,21 @@ final Approach endOfRoamFromRandomEncounter = Approach(
   s.add('', isRaw: true);
 });
 final Approach randomEncounterFromPreRandomEncounter =
-    Approach('pre_random_encounter', 'random_encounter', r'$IMPLICIT', null);
-final Room preRandomEncounter =
-    Room('pre_random_encounter', null, (ActionContext c) {
+    Approach('pre_random_encounter', 'random_encounter', r'$IMPLICIT',
+        (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
+final Room preRandomEncounter = Room('pre_random_encounter', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -86,8 +99,13 @@ final Room randomEncounter = Room('random_encounter', (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;
   s.add('', isRaw: true);
-}, null, generateRandomEncounter, null,
-    positionX: 0, positionY: 0, mapName: 'N/A');
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, generateRandomEncounter, null, positionX: 0, positionY: 0, mapName: 'N/A');
 final Approach bigOObservatoryFromBigOAntechamber =
     Approach('big_o_antechamber', 'big_o_observatory', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -784,7 +802,13 @@ class FinalFightInk extends RoamingAction {
 
 final Room bigOObservatory = Room(
     'big_o_observatory',
-    null,
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+    },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;
@@ -1035,9 +1059,21 @@ class BigOEndInk extends RoamingAction {
 }
 
 final Approach bigOAntechamberFromCrowdsource =
-    Approach('crowdsource', 'big_o_antechamber', '', null);
+    Approach('crowdsource', 'big_o_antechamber', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach bigOAntechamberFromTopOfClimb =
-    Approach('top_of_climb', 'big_o_antechamber', '', null);
+    Approach('top_of_climb', 'big_o_antechamber', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class ExamineAntechamberLock extends RoamingAction {
   @override
@@ -1199,7 +1235,13 @@ final Room bigOAntechamber = Room('big_o_antechamber', (ActionContext c) {
     firstHint:
         'Far apart from most of the commotion, this part of the Pyramid clearly sees much less regular use. The corridors are empty and clean, and they all converge on this one silent room.');
 final Approach dargTentFromBarracks =
-    Approach('barracks', 'darg_tent', '', null);
+    Approach('barracks', 'darg_tent', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class DargTentAttack extends RoamingAction {
   @override
@@ -1669,7 +1711,13 @@ class DargHeadTalkInk extends RoamingAction {
 }
 
 final Approach outlookFromTopOfClimb =
-    Approach('top_of_climb', 'outlook', '', null);
+    Approach('top_of_climb', 'outlook', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final hawkmanExamineInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -2066,15 +2114,45 @@ final Room outlook = Room(
       c.markHappened(evKilledHawkman);
     });
 final Approach topOfClimbFromBarracks =
-    Approach('barracks', 'top_of_climb', '', null);
+    Approach('barracks', 'top_of_climb', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach topOfClimbFromBigOAntechamber =
-    Approach('big_o_antechamber', 'top_of_climb', '', null);
+    Approach('big_o_antechamber', 'top_of_climb', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach topOfClimbFromConet =
-    Approach('conet', 'top_of_climb', '', null);
+    Approach('conet', 'top_of_climb', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach topOfClimbFromKeepServants =
-    Approach('keep_servants', 'top_of_climb', '', null);
+    Approach('keep_servants', 'top_of_climb', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach topOfClimbFromOutlook =
-    Approach('outlook', 'top_of_climb', '', null);
+    Approach('outlook', 'top_of_climb', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -2103,11 +2181,29 @@ final Room topOfClimb = Room('top_of_climb', (ActionContext c) {
     hint:
         'A dark pit extends hundreds of feet toward the bottom of the Pyramid.');
 final Approach crowdsourceFromBarracks =
-    Approach('barracks', 'crowdsource', '', null);
+    Approach('barracks', 'crowdsource', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach crowdsourceFromBigOAntechamber =
-    Approach('big_o_antechamber', 'crowdsource', '', null);
+    Approach('big_o_antechamber', 'crowdsource', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach crowdsourceFromConet =
-    Approach('conet', 'crowdsource', '', null);
+    Approach('conet', 'crowdsource', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final crowdsourceListenInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -2602,8 +2698,13 @@ final Room crowdsourceAfterOrcsLeft = Room(
         "darg_head_talk_ink_ink",
       ));
     });
-final Room crowdsourceVestry =
-    Room('crowdsource_vestry', null, (ActionContext c) {
+final Room crowdsourceVestry = Room('crowdsource_vestry', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -2612,13 +2713,37 @@ final Room crowdsourceVestry =
   s.add('', isRaw: true);
 }, null, null, positionX: 28, positionY: 30, mapName: 'Orcs’ Temple Vestry');
 final Approach barracksFromCrowdsource =
-    Approach('crowdsource', 'barracks', '', null);
+    Approach('crowdsource', 'barracks', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach barracksFromDargTent =
-    Approach('darg_tent', 'barracks', '', null);
+    Approach('darg_tent', 'barracks', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach barracksFromJunction =
-    Approach('junction', 'barracks', '', null);
+    Approach('junction', 'barracks', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach barracksFromTopOfClimb =
-    Approach('top_of_climb', 'barracks', '', null);
+    Approach('top_of_climb', 'barracks', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final barracksTakeBarbecuedBatInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -2762,9 +2887,21 @@ final Room barracks = Room('barracks', (ActionContext c) {
     hint: 'A large room taking up two floors with bunk beds and a dining area.',
     firstHint: 'Sounds of orcs snoring.');
 final Approach conetFromCrowdsource =
-    Approach('crowdsource', 'conet', '', null);
-final Approach conetFromSmithy = Approach('smithy', 'conet', '', null,
-    isApplicable: (ApplicabilityContext c) {
+    Approach('crowdsource', 'conet', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
+final Approach conetFromSmithy =
+    Approach('smithy', 'conet', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -3161,7 +3298,13 @@ final Room conetAfterClearing = Room(
       c.markHappened(evConetDestroyed);
     });
 final Approach maintenanceShaftFromElevator28 =
-    Approach('elevator_28', 'maintenance_shaft', '', null);
+    Approach('elevator_28', 'maintenance_shaft', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class KarlListenToGuards extends RoamingAction {
   @override
@@ -3357,8 +3500,22 @@ class KarlUseNecromancy extends RoamingAction {
   bool get isImmediate => false;
 }
 
-final Approach smithyFromConet = Approach('conet', 'smithy', '', null);
-final Approach smithyFromJunction = Approach('junction', 'smithy', '', null);
+final Approach smithyFromConet =
+    Approach('conet', 'smithy', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
+final Approach smithyFromJunction =
+    Approach('junction', 'smithy', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class SaveSarn extends RoamingAction {
   @override
@@ -4365,11 +4522,29 @@ final Approach elevator28FromElevator12 =
       isRaw: true);
 });
 final Approach elevator28FromGodsLair =
-    Approach('gods_lair', 'elevator_28', '', null);
+    Approach('gods_lair', 'elevator_28', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach elevator28FromJunction =
-    Approach('junction', 'elevator_28', '', null);
+    Approach('junction', 'elevator_28', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach elevator28FromMaintenanceShaft =
-    Approach('maintenance_shaft', 'elevator_28', '', null);
+    Approach('maintenance_shaft', 'elevator_28', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room elevator28 = Room('elevator_28', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -4397,7 +4572,13 @@ final Room elevator28 = Room('elevator_28', (ActionContext c) {
     hint:
         'The metal doors on the side of the dark vertical shaft are half-open here, letting some light in.');
 final Approach godsLairFromElevator28 =
-    Approach('elevator_28', 'gods_lair', '', null);
+    Approach('elevator_28', 'gods_lair', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class KarlExamineStar extends RoamingAction {
   @override
@@ -4640,15 +4821,45 @@ final Room godsLairAfterNecromancy = Room(
       c.markHappened(evKarlGuardsKilled);
     });
 final Approach junctionFromBarracks =
-    Approach('barracks', 'junction', '', null);
+    Approach('barracks', 'junction', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach junctionFromCockroachFarm =
-    Approach('cockroach_farm', 'junction', '', null);
+    Approach('cockroach_farm', 'junction', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach junctionFromElevator28 =
-    Approach('elevator_28', 'junction', '', null);
+    Approach('elevator_28', 'junction', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach junctionFromReservoir =
-    Approach('reservoir', 'junction', '', null);
-final Approach junctionFromSmithy = Approach('smithy', 'junction', '', null,
-    isApplicable: (ApplicabilityContext c) {
+    Approach('reservoir', 'junction', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
+final Approach junctionFromSmithy =
+    Approach('smithy', 'junction', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -4714,9 +4925,21 @@ final Room junction = Room('junction', (ActionContext c) {
     firstHint:
         'In this direction, footsteps and orc voices are more frequent. But the area is also dark and full of debris. It won’t be hard to hide.');
 final Approach reservoirFromJunction =
-    Approach('junction', 'reservoir', '', null);
+    Approach('junction', 'reservoir', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach reservoirFromTrainingGrounds =
-    Approach('training_grounds', 'reservoir', '', null);
+    Approach('training_grounds', 'reservoir', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final reservoirFollowFootprintsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -5486,7 +5709,13 @@ final Room reservoirAfterOpenDam = Room(
     firstHint:
         'Corridors around this place smell of stale water. A faint splashing can be heard.');
 final Approach cockroachFarmFromJunction =
-    Approach('junction', 'cockroach_farm', '', null);
+    Approach('junction', 'cockroach_farm', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final cockroachCakeTakeInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -5668,9 +5897,21 @@ final Room cockroachFarmAfterOpenDam = Room(
     firstHint:
         'The closer I am to this area, the more I can smell rotten food and flesh. No voices, though, and no footsteps.');
 final Approach trainingGroundsFromBattlefield =
-    Approach('battlefield', 'training_grounds', '', null);
+    Approach('battlefield', 'training_grounds', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach trainingGroundsFromReservoir =
-    Approach('reservoir', 'training_grounds', '', null);
+    Approach('reservoir', 'training_grounds', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room trainingGrounds = Room('training_grounds', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -5759,7 +6000,13 @@ final Approach battlefieldFromKnightsHqMain =
       isRaw: true);
 });
 final Approach battlefieldFromTrainingGrounds =
-    Approach('training_grounds', 'battlefield', '', null);
+    Approach('training_grounds', 'battlefield', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room battlefield = Room(
     'battlefield',
     (ActionContext c) {
@@ -5809,7 +6056,13 @@ final Room battlefield = Room(
     },
     whereDescription: 'among the columns');
 final Approach oracleMainFromKnightsHqMain =
-    Approach('knights_hq_main', 'oracle_main', '', null);
+    Approach('knights_hq_main', 'oracle_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room oracleMain = Room('oracle_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7786,11 +8039,29 @@ final Room oracleAfterOrcOffensive = Room(
     firstHint:
         'A room with a good view of the forest and the San Francisco Bay.');
 final Approach jungleEntranceFromDeathlessVillage =
-    Approach('deathless_village', 'jungle_entrance', '', null);
+    Approach('deathless_village', 'jungle_entrance', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach jungleEntranceFromPond =
-    Approach('pond', 'jungle_entrance', '', null);
+    Approach('pond', 'jungle_entrance', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach jungleEntranceFromStagingArea =
-    Approach('staging_area', 'jungle_entrance', '', null);
+    Approach('staging_area', 'jungle_entrance', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room jungleEntrance = Room('jungle_entrance', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -7857,9 +8128,21 @@ final Room jungleEntranceMuddyFootprints = Room(
     hint:
         'This is where the interior of the Pyramid opens into a large crater, covered in vegetation.');
 final Approach deathlessVillageFromDragonEggRoom =
-    Approach('dragon_egg_room', 'deathless_village', '', null);
+    Approach('dragon_egg_room', 'deathless_village', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach deathlessVillageFromJungleEntrance =
-    Approach('jungle_entrance', 'deathless_village', '', null);
+    Approach('jungle_entrance', 'deathless_village', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class GiveLairOfGodStarToDeathless extends RoamingAction {
   @override
@@ -8016,8 +8299,13 @@ final Room deathlessVillage = Room('deathless_village', (ActionContext c) {
     firstHint:
         'I can see some buildings through the canopy of leaves. The buildings are placed on a ledge of the Pyramid overlooking the crater.');
 final Approach dragonEggRoomFromDeathlessVillage =
-    Approach('deathless_village', 'dragon_egg_room', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('deathless_village', 'dragon_egg_room', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -8388,9 +8676,21 @@ final Room dragonEggRoom = Room('dragon_egg_room', (ActionContext c) {
     firstHint:
         'A well-hidden place of worship near the village of the Deathless.');
 final Approach pondFromJungleEntrance =
-    Approach('jungle_entrance', 'pond', '', null);
+    Approach('jungle_entrance', 'pond', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach pondFromPondLizardRock =
-    Approach('pond_lizard_rock', 'pond', '', null);
+    Approach('pond_lizard_rock', 'pond', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final pondHelicopterExamineInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -8645,8 +8945,13 @@ final Room pondWithLizardman = Room(
     mapName: 'Pond',
     hint: 'A small body of water at the bottom of the crater.');
 final Approach pondLizardRockFromPond =
-    Approach('pond', 'pond_lizard_rock', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('pond', 'pond_lizard_rock', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -9745,13 +10050,37 @@ final Room deathlessVillageQuake3 = Room(
     firstHint:
         'I can see some buildings through the canopy of leaves. The buildings are placed on a ledge of the Pyramid overlooking the crater.');
 final Approach knightsHqMainFromBattlefield =
-    Approach('battlefield', 'knights_hq_main', '', null);
+    Approach('battlefield', 'knights_hq_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach knightsHqMainFromElevator12 =
-    Approach('elevator_12', 'knights_hq_main', '', null);
+    Approach('elevator_12', 'knights_hq_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach knightsHqMainFromOracleMain =
-    Approach('oracle_main', 'knights_hq_main', '', null);
+    Approach('oracle_main', 'knights_hq_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach knightsHqMainFromStagingArea =
-    Approach('staging_area', 'knights_hq_main', '', null);
+    Approach('staging_area', 'knights_hq_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room knightsHqMain = Room('knights_hq_main', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -10073,7 +10402,13 @@ final Approach elevator12FromElevator28 =
       isRaw: true);
 });
 final Approach elevator12FromKnightsHqMain =
-    Approach('knights_hq_main', 'elevator_12', '', null);
+    Approach('knights_hq_main', 'elevator_12', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room elevator12 = Room('elevator_12', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -10097,7 +10432,13 @@ final Room elevator12 = Room('elevator_12', (ActionContext c) {
     mapName: 'Elevator Shaft Entrance on the 12th Floor',
     hint: 'A rare access point to the ancient elevator shaft.');
 final Approach slopesFromFarmersVillage =
-    Approach('farmers_village', 'slopes', '', null);
+    Approach('farmers_village', 'slopes', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room slopes = Room('slopes', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -10314,13 +10655,37 @@ final Room slopesQuake2 = Room(
     mapName: 'The Slopes',
     hint: 'The farmland on the outer wall of the Pyramid.');
 final Approach stagingAreaFromFarmersVillage =
-    Approach('farmers_village', 'staging_area', '', null);
+    Approach('farmers_village', 'staging_area', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach stagingAreaFromJungleEntrance =
-    Approach('jungle_entrance', 'staging_area', '', null);
+    Approach('jungle_entrance', 'staging_area', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach stagingAreaFromKeepGate =
-    Approach('keep_gate', 'staging_area', '', null);
+    Approach('keep_gate', 'staging_area', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach stagingAreaFromKnightsHqMain =
-    Approach('knights_hq_main', 'staging_area', '', null);
+    Approach('knights_hq_main', 'staging_area', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach stagingAreaFromPyramidEntrance =
     Approach('pyramid_entrance', 'staging_area', '', (ActionContext c) {
   final WorldState originalWorld = c.world;
@@ -11323,9 +11688,21 @@ final Room stagingAreaQuake2 = Room(
     firstHint:
         'The entrance leads directly to what the locals call the Infinite Staircase. Sound travels from a few floors above — I can hear simple commands spoken in bored voices, and loud shuffling.');
 final Approach farmersVillageFromSlopes =
-    Approach('slopes', 'farmers_village', '', null);
+    Approach('slopes', 'farmers_village', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach farmersVillageFromStagingArea =
-    Approach('staging_area', 'farmers_village', '', null);
+    Approach('staging_area', 'farmers_village', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room farmersVillage = Room('farmers_village', (ActionContext c) {
   final WorldState originalWorld = c.world;
   final Simulation sim = c.simulation;
@@ -12571,7 +12948,13 @@ final Approach keepGateFromKeepBedroom =
   s.add('${ifBlock_78dfcecc6}\n', isRaw: true);
 });
 final Approach keepGateFromStagingArea =
-    Approach('staging_area', 'keep_gate', '', null);
+    Approach('staging_area', 'keep_gate', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final openGateUnlockInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -13027,10 +13410,21 @@ final Room keepGate = Room('keep_gate', (ActionContext c) {
     firstHint:
         'This part of the Pyramid seems to have been rebuilt at some point into an aristocratic residence. This is the floor where I saw the lady with the katana.');
 final Approach keepBedroomFromKeepDining =
-    Approach('keep_dining', 'keep_bedroom', '', null);
+    Approach('keep_dining', 'keep_bedroom', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach keepBedroomFromKeepGate =
-    Approach('keep_gate', 'keep_bedroom', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('keep_gate', 'keep_bedroom', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -13039,7 +13433,13 @@ final Approach keepBedroomFromKeepGate =
       c.playerHasVisited("keep_bedroom");
 });
 final Approach keepBedroomFromKeepServants =
-    Approach('keep_servants', 'keep_bedroom', '', null);
+    Approach('keep_servants', 'keep_bedroom', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class ExamineFamilyPortrait extends RoamingAction {
   @override
@@ -13263,7 +13663,13 @@ final Room keepBedroom = Room('keep_bedroom', (ActionContext c) {
     mapName: 'Lord\'s Quarters',
     hint: 'Though derelict, these are still the nicest parts of the Keep.');
 final Approach keepDiningFromKeepBedroom =
-    Approach('keep_bedroom', 'keep_dining', '', null);
+    Approach('keep_bedroom', 'keep_dining', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room keepDining = Room(
     'keep_dining',
     (ActionContext c) {
@@ -13361,8 +13767,13 @@ final Room keepDining = Room(
       c.markHappened(evKilledHope);
     });
 final Approach keepServantsFromKeepBedroom =
-    Approach('keep_bedroom', 'keep_servants', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('keep_bedroom', 'keep_servants', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -13546,9 +13957,21 @@ final Room keepServants = Room('keep_servants', (ActionContext c) {
     hint:
         'The cramped rooms where the servants of the Keep\'s owner once lived and worked.');
 final Approach pyramidEntranceFromBleedsMain =
-    Approach('bleeds_main', 'pyramid_entrance', '', null);
+    Approach('bleeds_main', 'pyramid_entrance', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach pyramidEntranceFromStagingArea =
-    Approach('staging_area', 'pyramid_entrance', '', null);
+    Approach('staging_area', 'pyramid_entrance', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final observeKnightsInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -15368,19 +15791,42 @@ final Room pyramidEntranceAfterQuake2 = Room(
     firstHint:
         'This is the place. The legendary structure built by the ancients, still upright after centuries. The rest of San Francisco is a wild forest.');
 final Approach bleedsMainFromBleedsTraderHut =
-    Approach('bleeds_trader_hut', 'bleeds_main', '', null);
+    Approach('bleeds_trader_hut', 'bleeds_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach bleedsMainFromGoblinSkirmishPatrol =
-    Approach('goblin_skirmish_patrol', 'bleeds_main', '', null);
+    Approach('goblin_skirmish_patrol', 'bleeds_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach bleedsMainFromMeadowFight =
-    Approach('meadow_fight', 'bleeds_main', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('meadow_fight', 'bleeds_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   return c.playerHasVisited('bleeds_main');
 });
 final Approach bleedsMainFromPyramidEntrance =
-    Approach('pyramid_entrance', 'bleeds_main', '', null);
+    Approach('pyramid_entrance', 'bleeds_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class BleedsMainObserveVillage extends RoamingAction {
   @override
@@ -15530,8 +15976,13 @@ final Room bleedsMain = Room('bleeds_main', (ActionContext c) {
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach bleedsTraderHutFromBleedsMain =
-    Approach('bleeds_main', 'bleeds_trader_hut', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('bleeds_main', 'bleeds_trader_hut', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
@@ -18194,15 +18645,26 @@ final Room bleedsMainAfterQuake2 = Room(
     firstHint:
         'There seems to be a village or at least a homestead next to the Pyramid.');
 final Approach goblinSkirmishPatrolFromBleedsMain =
-    Approach('bleeds_main', 'goblin_skirmish_patrol', '', null,
-        isApplicable: (ApplicabilityContext c) {
+    Approach('bleeds_main', 'goblin_skirmish_patrol', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, isApplicable: (ApplicabilityContext c) {
   final WorldState w = c.world;
   final Simulation sim = c.simulation;
   final Actor a = c.actor;
   return c.knows(kbGoblinCampSmoke);
 });
-final Approach goblinSkirmishPatrolFromGoblinSkirmishMain =
-    Approach('goblin_skirmish_main', 'goblin_skirmish_patrol', '', null);
+final Approach goblinSkirmishPatrolFromGoblinSkirmishMain = Approach(
+    'goblin_skirmish_main', 'goblin_skirmish_patrol', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Room goblinSkirmishPatrol = Room(
     'goblin_skirmish_patrol',
     (ActionContext c) {
@@ -18510,8 +18972,14 @@ class ObserveGoblinCamp extends RoamingAction {
   bool get isImmediate => false;
 }
 
-final Approach goblinSkirmishMainFromGoblinSkirmishPatrol =
-    Approach('goblin_skirmish_patrol', 'goblin_skirmish_main', '', null);
+final Approach goblinSkirmishMainFromGoblinSkirmishPatrol = Approach(
+    'goblin_skirmish_patrol', 'goblin_skirmish_main', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class BarbecuedSquirrelExamine extends RoamingAction {
   @override
@@ -18923,7 +19391,13 @@ final Room goblinSkirmishMain = Room(
     },
     whereDescription: 'near the campfire');
 final Approach startFromPreStartBook =
-    Approach('pre_start_book', 'start', r'$IMPLICIT', null);
+    Approach('pre_start_book', 'start', r'$IMPLICIT', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final startInkInk = InkAst([
   InkParagraphNode((ActionContext c) {
     final WorldState originalWorld = c.world;
@@ -19544,11 +20018,29 @@ final Room start = Room('start', (ActionContext c) {
     w.randomInt(),
     "start_ink_ink",
   ));
-}, null, null, null);
+}, (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+}, null, null);
 final Approach meadowFightFromBleedsMain =
-    Approach('bleeds_main', 'meadow_fight', '', null);
+    Approach('bleeds_main', 'meadow_fight', '', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 final Approach meadowFightFromStart =
-    Approach('start', 'meadow_fight', r'$IMPLICIT', null);
+    Approach('start', 'meadow_fight', r'$IMPLICIT', (ActionContext c) {
+  final WorldState originalWorld = c.world;
+  final Simulation sim = c.simulation;
+  final Actor a = c.actor;
+  final WorldStateBuilder w = c.outputWorld;
+  final Storyline s = c.outputStoryline;
+});
 
 class FirstPyramidApproach extends RoamingAction {
   @override
@@ -19617,7 +20109,13 @@ class FirstPyramidApproach extends RoamingAction {
 
 final Room meadowFight = Room(
     'meadow_fight',
-    null,
+    (ActionContext c) {
+      final WorldState originalWorld = c.world;
+      final Simulation sim = c.simulation;
+      final Actor a = c.actor;
+      final WorldStateBuilder w = c.outputWorld;
+      final Storyline s = c.outputStoryline;
+    },
     (ActionContext c) {
       final WorldState originalWorld = c.world;
       final Simulation sim = c.simulation;

@@ -44,7 +44,7 @@ class _$InkSituationSerializer implements StructuredSerializer<InkSituation> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'currentPath':
           result.currentPath.replace(serializers.deserialize(value,
@@ -86,18 +86,12 @@ class _$InkSituation extends InkSituation {
 
   _$InkSituation._({this.currentPath, this.id, this.inkAstName, this.turn})
       : super._() {
-    if (currentPath == null) {
-      throw new BuiltValueNullFieldError('InkSituation', 'currentPath');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('InkSituation', 'id');
-    }
-    if (inkAstName == null) {
-      throw new BuiltValueNullFieldError('InkSituation', 'inkAstName');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError('InkSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        currentPath, 'InkSituation', 'currentPath');
+    BuiltValueNullFieldError.checkNotNull(id, 'InkSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        inkAstName, 'InkSituation', 'inkAstName');
+    BuiltValueNullFieldError.checkNotNull(turn, 'InkSituation', 'turn');
   }
 
   @override
@@ -161,11 +155,12 @@ class InkSituationBuilder
   InkSituationBuilder();
 
   InkSituationBuilder get _$this {
-    if (_$v != null) {
-      _currentPath = _$v.currentPath?.toBuilder();
-      _id = _$v.id;
-      _inkAstName = _$v.inkAstName;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _currentPath = $v.currentPath.toBuilder();
+      _id = $v.id;
+      _inkAstName = $v.inkAstName;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -173,9 +168,7 @@ class InkSituationBuilder
 
   @override
   void replace(InkSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$InkSituation;
   }
 
@@ -191,9 +184,12 @@ class InkSituationBuilder
       _$result = _$v ??
           new _$InkSituation._(
               currentPath: currentPath.build(),
-              id: id,
-              inkAstName: inkAstName,
-              turn: turn);
+              id: BuiltValueNullFieldError.checkNotNull(
+                  id, 'InkSituation', 'id'),
+              inkAstName: BuiltValueNullFieldError.checkNotNull(
+                  inkAstName, 'InkSituation', 'inkAstName'),
+              turn: BuiltValueNullFieldError.checkNotNull(
+                  turn, 'InkSituation', 'turn'));
     } catch (_) {
       String _$failedField;
       try {
@@ -210,4 +206,4 @@ class InkSituationBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

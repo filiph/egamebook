@@ -39,7 +39,7 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'change':
           result.change = serializers.deserialize(value,
@@ -72,15 +72,9 @@ class _$StatUpdate extends StatUpdate {
       (new StatUpdateBuilder()..update(updates)).build();
 
   _$StatUpdate._({this.change, this.name, this.newValue}) : super._() {
-    if (change == null) {
-      throw new BuiltValueNullFieldError('StatUpdate', 'change');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('StatUpdate', 'name');
-    }
-    if (newValue == null) {
-      throw new BuiltValueNullFieldError('StatUpdate', 'newValue');
-    }
+    BuiltValueNullFieldError.checkNotNull(change, 'StatUpdate', 'change');
+    BuiltValueNullFieldError.checkNotNull(name, 'StatUpdate', 'name');
+    BuiltValueNullFieldError.checkNotNull(newValue, 'StatUpdate', 'newValue');
   }
 
   @override
@@ -133,10 +127,11 @@ class StatUpdateBuilder implements Builder<StatUpdate, StatUpdateBuilder> {
   StatUpdateBuilder();
 
   StatUpdateBuilder get _$this {
-    if (_$v != null) {
-      _change = _$v.change;
-      _name = _$v.name;
-      _newValue = _$v.newValue;
+    final $v = _$v;
+    if ($v != null) {
+      _change = $v.change;
+      _name = $v.name;
+      _newValue = $v.newValue;
       _$v = null;
     }
     return this;
@@ -144,9 +139,7 @@ class StatUpdateBuilder implements Builder<StatUpdate, StatUpdateBuilder> {
 
   @override
   void replace(StatUpdate other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$StatUpdate;
   }
 
@@ -158,10 +151,16 @@ class StatUpdateBuilder implements Builder<StatUpdate, StatUpdateBuilder> {
   @override
   _$StatUpdate build() {
     final _$result = _$v ??
-        new _$StatUpdate._(change: change, name: name, newValue: newValue);
+        new _$StatUpdate._(
+            change: BuiltValueNullFieldError.checkNotNull(
+                change, 'StatUpdate', 'change'),
+            name: BuiltValueNullFieldError.checkNotNull(
+                name, 'StatUpdate', 'name'),
+            newValue: BuiltValueNullFieldError.checkNotNull(
+                newValue, 'StatUpdate', 'newValue'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

@@ -197,7 +197,9 @@ class ComplementType {
     @required this.pronounNominative,
     @required this.pronounPossessive,
     @required this.pronounSelf,
+    // ignore: deprecated_consistency
     @required this.theOtherNoun,
+    // ignore: deprecated_consistency
     @required this.theOtherNounPossessive,
     this.isSubject = false,
   });

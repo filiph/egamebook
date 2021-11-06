@@ -146,7 +146,9 @@ mixin CombatCommandPath on EnemyTargetAction {
   /// Takes na iterable of body parts and returns their health status
   /// as a whole.
   String _getStatusString(Iterable<BodyPart> parts) {
-    var scratches = 0, cuts = 0, bruises = 0;
+    var scratches = 0;
+    var cuts = 0;
+    var bruises = 0;
 
     for (final part in parts) {
       scratches += part.minorCutsCount;

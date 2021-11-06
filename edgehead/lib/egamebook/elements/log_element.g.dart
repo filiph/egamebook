@@ -38,7 +38,7 @@ class _$LogElementSerializer implements StructuredSerializer<LogElement> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'level':
           result.level = serializers.deserialize(value,
@@ -65,12 +65,8 @@ class _$LogElement extends LogElement {
       (new LogElementBuilder()..update(updates)).build();
 
   _$LogElement._({this.level, this.message}) : super._() {
-    if (level == null) {
-      throw new BuiltValueNullFieldError('LogElement', 'level');
-    }
-    if (message == null) {
-      throw new BuiltValueNullFieldError('LogElement', 'message');
-    }
+    BuiltValueNullFieldError.checkNotNull(level, 'LogElement', 'level');
+    BuiltValueNullFieldError.checkNotNull(message, 'LogElement', 'message');
   }
 
   @override
@@ -116,9 +112,10 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
   LogElementBuilder();
 
   LogElementBuilder get _$this {
-    if (_$v != null) {
-      _level = _$v.level;
-      _message = _$v.message;
+    final $v = _$v;
+    if ($v != null) {
+      _level = $v.level;
+      _message = $v.message;
       _$v = null;
     }
     return this;
@@ -126,9 +123,7 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
 
   @override
   void replace(LogElement other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$LogElement;
   }
 
@@ -139,10 +134,15 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
 
   @override
   _$LogElement build() {
-    final _$result = _$v ?? new _$LogElement._(level: level, message: message);
+    final _$result = _$v ??
+        new _$LogElement._(
+            level: BuiltValueNullFieldError.checkNotNull(
+                level, 'LogElement', 'level'),
+            message: BuiltValueNullFieldError.checkNotNull(
+                message, 'LogElement', 'message'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

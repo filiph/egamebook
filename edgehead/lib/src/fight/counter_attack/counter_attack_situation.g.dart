@@ -48,7 +48,7 @@ class _$CounterAttackSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'counterAttacker':
           result.counterAttacker = serializers.deserialize(value,
@@ -90,19 +90,13 @@ class _$CounterAttackSituation extends CounterAttackSituation {
   _$CounterAttackSituation._(
       {this.counterAttacker, this.id, this.target, this.turn})
       : super._() {
-    if (counterAttacker == null) {
-      throw new BuiltValueNullFieldError(
-          'CounterAttackSituation', 'counterAttacker');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('CounterAttackSituation', 'id');
-    }
-    if (target == null) {
-      throw new BuiltValueNullFieldError('CounterAttackSituation', 'target');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError('CounterAttackSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        counterAttacker, 'CounterAttackSituation', 'counterAttacker');
+    BuiltValueNullFieldError.checkNotNull(id, 'CounterAttackSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        target, 'CounterAttackSituation', 'target');
+    BuiltValueNullFieldError.checkNotNull(
+        turn, 'CounterAttackSituation', 'turn');
   }
 
   @override
@@ -167,11 +161,12 @@ class CounterAttackSituationBuilder
   CounterAttackSituationBuilder();
 
   CounterAttackSituationBuilder get _$this {
-    if (_$v != null) {
-      _counterAttacker = _$v.counterAttacker;
-      _id = _$v.id;
-      _target = _$v.target;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _counterAttacker = $v.counterAttacker;
+      _id = $v.id;
+      _target = $v.target;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -179,9 +174,7 @@ class CounterAttackSituationBuilder
 
   @override
   void replace(CounterAttackSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$CounterAttackSituation;
   }
 
@@ -194,13 +187,17 @@ class CounterAttackSituationBuilder
   _$CounterAttackSituation build() {
     final _$result = _$v ??
         new _$CounterAttackSituation._(
-            counterAttacker: counterAttacker,
-            id: id,
-            target: target,
-            turn: turn);
+            counterAttacker: BuiltValueNullFieldError.checkNotNull(
+                counterAttacker, 'CounterAttackSituation', 'counterAttacker'),
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'CounterAttackSituation', 'id'),
+            target: BuiltValueNullFieldError.checkNotNull(
+                target, 'CounterAttackSituation', 'target'),
+            turn: BuiltValueNullFieldError.checkNotNull(
+                turn, 'CounterAttackSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

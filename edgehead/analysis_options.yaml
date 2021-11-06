@@ -1,6 +1,8 @@
 include: package:lint/analysis_options_package.yaml
 
 analyzer:
+  exclude:
+    - lib/**/*.g.dart
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
@@ -15,5 +17,6 @@ linter:
     missing_whitespace_between_adjacent_strings: false  # Storyline has this
     prefer_if_elements_to_conditional_expressions: false  # I like ternary more
     prefer_final_locals: false  # Verbose
+    require_trailing_commas: false  # Agree in theory, should fix
     unnecessary_raw_strings: false  # It seem safer to raw some strings
     use_function_type_syntax_for_parameters: false  # Agree in theory

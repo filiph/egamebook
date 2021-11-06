@@ -26,17 +26,20 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
       serializers.serialize(object.weaponInPrimaryAppendage,
           specifiedType: const FullType(bool)),
     ];
-    if (object.currentShield != null) {
+    Object value;
+    value = object.currentShield;
+    if (value != null) {
       result
         ..add('currentShield')
-        ..add(serializers.serialize(object.currentShield,
-            specifiedType: const FullType(Item)));
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Item)));
     }
-    if (object.currentWeapon != null) {
+    value = object.currentWeapon;
+    if (value != null) {
       result
         ..add('currentWeapon')
-        ..add(serializers.serialize(object.currentWeapon,
-            specifiedType: const FullType(Item)));
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Item)));
     }
     return result;
   }
@@ -50,7 +53,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'currentShield':
           result.currentShield = serializers.deserialize(value,
@@ -96,13 +99,9 @@ class _$Inventory extends Inventory {
       this.items,
       this.weaponInPrimaryAppendage})
       : super._() {
-    if (items == null) {
-      throw new BuiltValueNullFieldError('Inventory', 'items');
-    }
-    if (weaponInPrimaryAppendage == null) {
-      throw new BuiltValueNullFieldError(
-          'Inventory', 'weaponInPrimaryAppendage');
-    }
+    BuiltValueNullFieldError.checkNotNull(items, 'Inventory', 'items');
+    BuiltValueNullFieldError.checkNotNull(
+        weaponInPrimaryAppendage, 'Inventory', 'weaponInPrimaryAppendage');
   }
 
   @override
@@ -195,11 +194,12 @@ class _$InventoryBuilder extends InventoryBuilder {
   _$InventoryBuilder() : super._();
 
   InventoryBuilder get _$this {
-    if (_$v != null) {
-      super.currentShield = _$v.currentShield;
-      super.currentWeapon = _$v.currentWeapon;
-      super.items = _$v.items?.toBuilder();
-      super.weaponInPrimaryAppendage = _$v.weaponInPrimaryAppendage;
+    final $v = _$v;
+    if ($v != null) {
+      super.currentShield = $v.currentShield;
+      super.currentWeapon = $v.currentWeapon;
+      super.items = $v.items.toBuilder();
+      super.weaponInPrimaryAppendage = $v.weaponInPrimaryAppendage;
       _$v = null;
     }
     return this;
@@ -207,9 +207,7 @@ class _$InventoryBuilder extends InventoryBuilder {
 
   @override
   void replace(Inventory other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Inventory;
   }
 
@@ -227,7 +225,10 @@ class _$InventoryBuilder extends InventoryBuilder {
               currentShield: currentShield,
               currentWeapon: currentWeapon,
               items: items.build(),
-              weaponInPrimaryAppendage: weaponInPrimaryAppendage);
+              weaponInPrimaryAppendage: BuiltValueNullFieldError.checkNotNull(
+                  weaponInPrimaryAppendage,
+                  'Inventory',
+                  'weaponInPrimaryAppendage'));
     } catch (_) {
       String _$failedField;
       try {
@@ -244,4 +245,4 @@ class _$InventoryBuilder extends InventoryBuilder {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

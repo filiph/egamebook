@@ -34,7 +34,7 @@ class _$TeamSerializer implements StructuredSerializer<Team> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -55,9 +55,7 @@ class _$Team extends Team {
       (new TeamBuilder()..update(updates)).build();
 
   _$Team._({this.id}) : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Team', 'id');
-    }
+    BuiltValueNullFieldError.checkNotNull(id, 'Team', 'id');
   }
 
   @override
@@ -94,8 +92,9 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
   TeamBuilder();
 
   TeamBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
       _$v = null;
     }
     return this;
@@ -103,9 +102,7 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
 
   @override
   void replace(Team other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Team;
   }
 
@@ -116,10 +113,12 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
 
   @override
   _$Team build() {
-    final _$result = _$v ?? new _$Team._(id: id);
+    final _$result = _$v ??
+        new _$Team._(
+            id: BuiltValueNullFieldError.checkNotNull(id, 'Team', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

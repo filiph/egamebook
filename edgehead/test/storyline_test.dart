@@ -257,7 +257,8 @@ void main() {
 
   group('vs definitive article (no \'his the scimitar\')', () {
     Storyline storyline;
-    Entity orc, sword;
+    Entity orc;
+    Entity sword;
 
     setUp(() {
       storyline = Storyline();
@@ -1082,8 +1083,13 @@ void main() {
 
     group('firstOwnerId', () {
       Entity aren;
-      Actor orc, goblin;
-      Item mySword, myAxe, orcSword, goblinRustySword, orcShinySword;
+      Actor orc;
+      Actor goblin;
+      Item mySword;
+      Item myAxe;
+      Item orcSword;
+      Item goblinRustySword;
+      Item orcShinySword;
       Storyline storyline;
 
       setUp(() {

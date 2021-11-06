@@ -49,7 +49,8 @@ void main() {
     });
 
     group("Situation", () {
-      Actor a, b;
+      Actor a;
+      Actor b;
       final sim = Simulation(const [], const [], const {},
           const Ruleset.empty(), const {}, const {});
       final world = WorldState((b) => b

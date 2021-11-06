@@ -49,7 +49,7 @@ class _$RoomRoamingSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'currentRoomName':
           result.currentRoomName = serializers.deserialize(value,
@@ -91,20 +91,12 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   _$RoomRoamingSituation._(
       {this.currentRoomName, this.id, this.monstersAlive, this.turn})
       : super._() {
-    if (currentRoomName == null) {
-      throw new BuiltValueNullFieldError(
-          'RoomRoamingSituation', 'currentRoomName');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('RoomRoamingSituation', 'id');
-    }
-    if (monstersAlive == null) {
-      throw new BuiltValueNullFieldError(
-          'RoomRoamingSituation', 'monstersAlive');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError('RoomRoamingSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        currentRoomName, 'RoomRoamingSituation', 'currentRoomName');
+    BuiltValueNullFieldError.checkNotNull(id, 'RoomRoamingSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        monstersAlive, 'RoomRoamingSituation', 'monstersAlive');
+    BuiltValueNullFieldError.checkNotNull(turn, 'RoomRoamingSituation', 'turn');
   }
 
   @override
@@ -170,11 +162,12 @@ class RoomRoamingSituationBuilder
   RoomRoamingSituationBuilder();
 
   RoomRoamingSituationBuilder get _$this {
-    if (_$v != null) {
-      _currentRoomName = _$v.currentRoomName;
-      _id = _$v.id;
-      _monstersAlive = _$v.monstersAlive;
-      _turn = _$v.turn;
+    final $v = _$v;
+    if ($v != null) {
+      _currentRoomName = $v.currentRoomName;
+      _id = $v.id;
+      _monstersAlive = $v.monstersAlive;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -182,9 +175,7 @@ class RoomRoamingSituationBuilder
 
   @override
   void replace(RoomRoamingSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$RoomRoamingSituation;
   }
 
@@ -197,13 +188,17 @@ class RoomRoamingSituationBuilder
   _$RoomRoamingSituation build() {
     final _$result = _$v ??
         new _$RoomRoamingSituation._(
-            currentRoomName: currentRoomName,
-            id: id,
-            monstersAlive: monstersAlive,
-            turn: turn);
+            currentRoomName: BuiltValueNullFieldError.checkNotNull(
+                currentRoomName, 'RoomRoamingSituation', 'currentRoomName'),
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'RoomRoamingSituation', 'id'),
+            monstersAlive: BuiltValueNullFieldError.checkNotNull(
+                monstersAlive, 'RoomRoamingSituation', 'monstersAlive'),
+            turn: BuiltValueNullFieldError.checkNotNull(
+                turn, 'RoomRoamingSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

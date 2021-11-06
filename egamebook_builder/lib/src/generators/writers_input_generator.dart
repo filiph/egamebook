@@ -135,7 +135,8 @@ class WritersInputGenerator extends Generator {
         "// ignore_for_file: lines_longer_than_80_chars\n"
         "// ignore_for_file: type_annotate_public_apis\n"
         "// ignore_for_file: unnecessary_brace_in_string_interps\n"
-        "// ignore_for_file: prefer_const_constructors\n\n"
+        "// ignore_for_file: prefer_const_constructors\n"
+        "// ignore_for_file: directives_ordering\n\n"
         "$source";
 
     result.writeln(sourceWithUnusedLinterIgnore);

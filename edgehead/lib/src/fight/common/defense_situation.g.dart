@@ -57,7 +57,7 @@ class _$DefenseSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'attacker':
           result.attacker = serializers.deserialize(value,
@@ -137,33 +137,18 @@ class _$DefenseSituation extends DefenseSituation {
       this.target,
       this.turn})
       : super._() {
-    if (attacker == null) {
-      throw new BuiltValueNullFieldError('DefenseSituation', 'attacker');
-    }
-    if (builtEnemyTargetActionGenerators == null) {
-      throw new BuiltValueNullFieldError(
-          'DefenseSituation', 'builtEnemyTargetActionGenerators');
-    }
-    if (builtOtherActorActionGenerators == null) {
-      throw new BuiltValueNullFieldError(
-          'DefenseSituation', 'builtOtherActorActionGenerators');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('DefenseSituation', 'id');
-    }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('DefenseSituation', 'name');
-    }
-    if (predeterminedResult == null) {
-      throw new BuiltValueNullFieldError(
-          'DefenseSituation', 'predeterminedResult');
-    }
-    if (target == null) {
-      throw new BuiltValueNullFieldError('DefenseSituation', 'target');
-    }
-    if (turn == null) {
-      throw new BuiltValueNullFieldError('DefenseSituation', 'turn');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        attacker, 'DefenseSituation', 'attacker');
+    BuiltValueNullFieldError.checkNotNull(builtEnemyTargetActionGenerators,
+        'DefenseSituation', 'builtEnemyTargetActionGenerators');
+    BuiltValueNullFieldError.checkNotNull(builtOtherActorActionGenerators,
+        'DefenseSituation', 'builtOtherActorActionGenerators');
+    BuiltValueNullFieldError.checkNotNull(id, 'DefenseSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, 'DefenseSituation', 'name');
+    BuiltValueNullFieldError.checkNotNull(
+        predeterminedResult, 'DefenseSituation', 'predeterminedResult');
+    BuiltValueNullFieldError.checkNotNull(target, 'DefenseSituation', 'target');
+    BuiltValueNullFieldError.checkNotNull(turn, 'DefenseSituation', 'turn');
   }
 
   @override
@@ -274,17 +259,18 @@ class DefenseSituationBuilder
   DefenseSituationBuilder();
 
   DefenseSituationBuilder get _$this {
-    if (_$v != null) {
-      _attacker = _$v.attacker;
+    final $v = _$v;
+    if ($v != null) {
+      _attacker = $v.attacker;
       _builtEnemyTargetActionGenerators =
-          _$v.builtEnemyTargetActionGenerators?.toBuilder();
+          $v.builtEnemyTargetActionGenerators.toBuilder();
       _builtOtherActorActionGenerators =
-          _$v.builtOtherActorActionGenerators?.toBuilder();
-      _id = _$v.id;
-      _name = _$v.name;
-      _predeterminedResult = _$v.predeterminedResult;
-      _target = _$v.target;
-      _turn = _$v.turn;
+          $v.builtOtherActorActionGenerators.toBuilder();
+      _id = $v.id;
+      _name = $v.name;
+      _predeterminedResult = $v.predeterminedResult;
+      _target = $v.target;
+      _turn = $v.turn;
       _$v = null;
     }
     return this;
@@ -292,9 +278,7 @@ class DefenseSituationBuilder
 
   @override
   void replace(DefenseSituation other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$DefenseSituation;
   }
 
@@ -309,16 +293,24 @@ class DefenseSituationBuilder
     try {
       _$result = _$v ??
           new _$DefenseSituation._(
-              attacker: attacker,
+              attacker: BuiltValueNullFieldError.checkNotNull(
+                  attacker, 'DefenseSituation', 'attacker'),
               builtEnemyTargetActionGenerators:
                   builtEnemyTargetActionGenerators.build(),
               builtOtherActorActionGenerators:
                   builtOtherActorActionGenerators.build(),
-              id: id,
-              name: name,
-              predeterminedResult: predeterminedResult,
-              target: target,
-              turn: turn);
+              id: BuiltValueNullFieldError.checkNotNull(
+                  id, 'DefenseSituation', 'id'),
+              name: BuiltValueNullFieldError.checkNotNull(
+                  name, 'DefenseSituation', 'name'),
+              predeterminedResult: BuiltValueNullFieldError.checkNotNull(
+                  predeterminedResult,
+                  'DefenseSituation',
+                  'predeterminedResult'),
+              target: BuiltValueNullFieldError.checkNotNull(
+                  target, 'DefenseSituation', 'target'),
+              turn: BuiltValueNullFieldError.checkNotNull(
+                  turn, 'DefenseSituation', 'turn'));
     } catch (_) {
       String _$failedField;
       try {
@@ -337,4 +329,4 @@ class DefenseSituationBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

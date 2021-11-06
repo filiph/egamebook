@@ -176,7 +176,7 @@ class InstanceSerializerGenerator extends Generator {
     if (!element.isAccessibleIn(gatherLibrary.element)) {
       log.warning("${element.name} isn't accessible "
           "in ${gatherLibrary.element.displayName}. Consider adding import "
-          "of ${element.library.source.uri}");
+          "of ${element.library?.source.uri}");
     }
   }
 }

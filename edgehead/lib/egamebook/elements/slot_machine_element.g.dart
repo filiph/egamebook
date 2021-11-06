@@ -28,10 +28,12 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
       serializers.serialize(object.rollReason,
           specifiedType: const FullType(String)),
     ];
-    if (object.rerollEffectDescription != null) {
+    Object value;
+    value = object.rerollEffectDescription;
+    if (value != null) {
       result
         ..add('rerollEffectDescription')
-        ..add(serializers.serialize(object.rerollEffectDescription,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -46,7 +48,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'probability':
           result.probability = serializers.deserialize(value,
@@ -90,15 +92,12 @@ class _$SlotMachine extends SlotMachine {
       this.rerollEffectDescription,
       this.rollReason})
       : super._() {
-    if (probability == null) {
-      throw new BuiltValueNullFieldError('SlotMachine', 'probability');
-    }
-    if (rerollable == null) {
-      throw new BuiltValueNullFieldError('SlotMachine', 'rerollable');
-    }
-    if (rollReason == null) {
-      throw new BuiltValueNullFieldError('SlotMachine', 'rollReason');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        probability, 'SlotMachine', 'probability');
+    BuiltValueNullFieldError.checkNotNull(
+        rerollable, 'SlotMachine', 'rerollable');
+    BuiltValueNullFieldError.checkNotNull(
+        rollReason, 'SlotMachine', 'rollReason');
   }
 
   @override
@@ -160,11 +159,12 @@ class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
   SlotMachineBuilder();
 
   SlotMachineBuilder get _$this {
-    if (_$v != null) {
-      _probability = _$v.probability;
-      _rerollable = _$v.rerollable;
-      _rerollEffectDescription = _$v.rerollEffectDescription;
-      _rollReason = _$v.rollReason;
+    final $v = _$v;
+    if ($v != null) {
+      _probability = $v.probability;
+      _rerollable = $v.rerollable;
+      _rerollEffectDescription = $v.rerollEffectDescription;
+      _rollReason = $v.rollReason;
       _$v = null;
     }
     return this;
@@ -172,9 +172,7 @@ class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
 
   @override
   void replace(SlotMachine other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SlotMachine;
   }
 
@@ -187,13 +185,16 @@ class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
   _$SlotMachine build() {
     final _$result = _$v ??
         new _$SlotMachine._(
-            probability: probability,
-            rerollable: rerollable,
+            probability: BuiltValueNullFieldError.checkNotNull(
+                probability, 'SlotMachine', 'probability'),
+            rerollable: BuiltValueNullFieldError.checkNotNull(
+                rerollable, 'SlotMachine', 'rerollable'),
             rerollEffectDescription: rerollEffectDescription,
-            rollReason: rollReason);
+            rollReason: BuiltValueNullFieldError.checkNotNull(
+                rollReason, 'SlotMachine', 'rollReason'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
