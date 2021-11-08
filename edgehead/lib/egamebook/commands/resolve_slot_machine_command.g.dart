@@ -46,9 +46,10 @@ class _$ResolveSlotMachineSerializer
   final String wireName = 'ResolveSlotMachine';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ResolveSlotMachine object,
+  Iterable<Object?> serialize(
+      Serializers serializers, ResolveSlotMachine object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'result',
       serializers.serialize(object.result,
           specifiedType: const FullType(SlotResult)),
@@ -62,7 +63,7 @@ class _$ResolveSlotMachineSerializer
 
   @override
   ResolveSlotMachine deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ResolveSlotMachineBuilder();
 
@@ -70,7 +71,7 @@ class _$ResolveSlotMachineSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'result':
           result.result = serializers.deserialize(value,
@@ -111,10 +112,11 @@ class _$ResolveSlotMachine extends ResolveSlotMachine {
   final bool wasRerolled;
 
   factory _$ResolveSlotMachine(
-          [void Function(ResolveSlotMachineBuilder) updates]) =>
+          [void Function(ResolveSlotMachineBuilder)? updates]) =>
       (new ResolveSlotMachineBuilder()..update(updates)).build();
 
-  _$ResolveSlotMachine._({this.result, this.wasRerolled}) : super._() {
+  _$ResolveSlotMachine._({required this.result, required this.wasRerolled})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(
         result, 'ResolveSlotMachine', 'result');
     BuiltValueNullFieldError.checkNotNull(
@@ -154,15 +156,15 @@ class _$ResolveSlotMachine extends ResolveSlotMachine {
 
 class ResolveSlotMachineBuilder
     implements Builder<ResolveSlotMachine, ResolveSlotMachineBuilder> {
-  _$ResolveSlotMachine _$v;
+  _$ResolveSlotMachine? _$v;
 
-  SlotResult _result;
-  SlotResult get result => _$this._result;
-  set result(SlotResult result) => _$this._result = result;
+  SlotResult? _result;
+  SlotResult? get result => _$this._result;
+  set result(SlotResult? result) => _$this._result = result;
 
-  bool _wasRerolled;
-  bool get wasRerolled => _$this._wasRerolled;
-  set wasRerolled(bool wasRerolled) => _$this._wasRerolled = wasRerolled;
+  bool? _wasRerolled;
+  bool? get wasRerolled => _$this._wasRerolled;
+  set wasRerolled(bool? wasRerolled) => _$this._wasRerolled = wasRerolled;
 
   ResolveSlotMachineBuilder();
 
@@ -183,7 +185,7 @@ class ResolveSlotMachineBuilder
   }
 
   @override
-  void update(void Function(ResolveSlotMachineBuilder) updates) {
+  void update(void Function(ResolveSlotMachineBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

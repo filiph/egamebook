@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library randomly;
 
 import 'dart:math';

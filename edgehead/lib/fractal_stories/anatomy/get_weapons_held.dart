@@ -5,7 +5,7 @@ import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 
 /// Figures out whether [currentWeapon] is being held by [rootPart]
 /// and its descendant parts.
-bool isWeaponHeld(Item currentWeapon, BodyPart rootPart, Inventory inventory) {
+bool isWeaponHeld(Item? currentWeapon, BodyPart rootPart, Inventory inventory) {
   if (currentWeapon == null) {
     // Actor is not holding any weapon.
     return false;

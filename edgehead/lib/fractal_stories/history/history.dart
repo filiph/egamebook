@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.history;
 
 /// The result of querying a history.

@@ -19,8 +19,7 @@ abstract class SlotMachine extends ElementBase
 
   bool get rerollable;
 
-  @nullable
-  String get rerollEffectDescription;
+  String? get rerollEffectDescription;
 
   String get rollReason;
 }

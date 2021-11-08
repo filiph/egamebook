@@ -10,12 +10,12 @@ abstract class Book {
 
   /// The completer for [showChoices]. Should be `null` by default, and only
   /// `non-null` when there is a [ChoiceBlock] waiting for player input.
-  Completer<Choice> _showChoicesCompleter;
+  Completer<Choice>? _showChoicesCompleter;
 
   /// The completer for [showSlotMachine]. Should be `null` by default,
   /// and only `non-null` when there is a slot machine rolling or waiting
   /// for player input.
-  Completer<slot.SessionResult> _showSlotMachineCompleter;
+  Completer<slot.SessionResult>? _showSlotMachineCompleter;
 
   /// Whether or not the book is waiting for a command from the player.
   /// If it isn't, commands arriving to the book will throw a runtime error.
@@ -125,7 +125,7 @@ abstract class Book {
     _showChoicesCompleter = Completer<Choice>();
     _elementsController.add(choices);
     isWaitingForInput = true;
-    return _showChoicesCompleter.future;
+    return _showChoicesCompleter!.future;
   }
 
   @protected
@@ -137,7 +137,7 @@ abstract class Book {
   @protected
   Future<slot.SessionResult> showSlotMachine(
       double probability, String rollReason,
-      {bool rerollable = false, String rerollEffectDescription}) {
+      {bool rerollable = false, String? rerollEffectDescription}) {
     assert(_showSlotMachineCompleter == null);
     _showSlotMachineCompleter = Completer<slot.SessionResult>();
     _elementsController.add(SlotMachine((b) => b
@@ -146,7 +146,7 @@ abstract class Book {
       ..rerollable = rerollable
       ..rerollEffectDescription = rerollEffectDescription));
     isWaitingForInput = true;
-    return _showSlotMachineCompleter.future;
+    return _showSlotMachineCompleter!.future;
   }
 
   @protected

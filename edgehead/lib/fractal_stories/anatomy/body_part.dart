@@ -21,22 +21,22 @@ abstract class BodyPart extends Object
   factory BodyPart(
     int id,
     String name, {
-    String randomDesignation,
-    Iterable<BodyPart> children,
-    BodyPartDesignation designation,
-    BodyPartFunction function,
-    int hitpoints,
-    bool isVital,
-    bool isSeverable,
-    bool isSevered,
-    int bluntHitsCount,
-    int majorCutsCount,
-    int minorCutsCount,
-    DamageCapabilityBuilder damageCapability,
+    String? randomDesignation,
+    Iterable<BodyPart>? children,
+    BodyPartDesignation? designation,
+    BodyPartFunction? function,
+    int? hitpoints,
+    bool? isVital,
+    bool? isSeverable,
+    bool? isSevered,
+    int? bluntHitsCount,
+    int? majorCutsCount,
+    int? minorCutsCount,
+    DamageCapabilityBuilder? damageCapability,
     int swingSurfaceLeft = 1,
     int swingSurfaceRight = 1,
     int thrustSurface = 1,
-    int firstOwnerId,
+    int? firstOwnerId,
   }) =>
       _$BodyPart((b) => b
         ..id = id
@@ -72,7 +72,7 @@ abstract class BodyPart extends Object
   /// when there is another 'left eye' in the discourse. And in that case,
   /// it's much better to use something like "the goblin's left eye".
   @override
-  String get adjective => null;
+  String? get adjective => null;
 
   /// The number of blunt hits (from fists, clubs, falls, etc.) that the
   /// body part received.
@@ -83,8 +83,7 @@ abstract class BodyPart extends Object
   /// Fists, thorns, tails and similar body parts can have the ability
   /// to deal damage. Actor can spawn an item that acts as a weapon
   /// and which uses this [damageCapability].
-  @nullable
-  DamageCapability get damageCapability;
+  DamageCapability? get damageCapability;
 
   BodyPartDesignation get designation;
 

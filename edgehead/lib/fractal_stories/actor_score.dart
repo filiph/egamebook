@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:meta/meta.dart';
 
 /// Scores a given [WorldState] according to [Actor]. The different fields

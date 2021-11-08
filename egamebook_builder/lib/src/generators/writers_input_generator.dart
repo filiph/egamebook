@@ -126,7 +126,9 @@ class WritersInputGenerator extends Generator {
     final source = DartFormatter().format('${lib.build().accept(emitter)}');
 
     // TODO: add at the top as static code
-    final sourceWithUnusedLinterIgnore =
+    final sourceWithAdditionalHeader =
+        "// @dart=2.9\n"
+        "\n"
         "// ignore_for_file: constant_identifier_names\n"
         "// ignore_for_file: non_constant_identifier_names\n"
         "// ignore_for_file: unused_local_variable\n"
@@ -136,10 +138,11 @@ class WritersInputGenerator extends Generator {
         "// ignore_for_file: type_annotate_public_apis\n"
         "// ignore_for_file: unnecessary_brace_in_string_interps\n"
         "// ignore_for_file: prefer_const_constructors\n"
-        "// ignore_for_file: directives_ordering\n\n"
+        "// ignore_for_file: directives_ordering\n"
+        "\n"
         "$source";
 
-    result.writeln(sourceWithUnusedLinterIgnore);
+    result.writeln(sourceWithAdditionalHeader);
 
     if (result.isNotEmpty) {
       return result.toString();

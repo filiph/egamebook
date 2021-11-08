@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:edgehead/fractal_stories/actor.dart';
 
 /// Command path generators don't easily give you the current weapon

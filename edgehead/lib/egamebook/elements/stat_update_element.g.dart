@@ -15,9 +15,9 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
   final String wireName = 'StatUpdate';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, StatUpdate object,
+  Iterable<Object?> serialize(Serializers serializers, StatUpdate object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'change',
       serializers.serialize(object.change, specifiedType: const FullType(int)),
       'name',
@@ -31,7 +31,7 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
   }
 
   @override
-  StatUpdate deserialize(Serializers serializers, Iterable<Object> serialized,
+  StatUpdate deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new StatUpdateBuilder();
 
@@ -39,7 +39,7 @@ class _$StatUpdateSerializer implements StructuredSerializer<StatUpdate> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'change':
           result.change = serializers.deserialize(value,
@@ -68,10 +68,12 @@ class _$StatUpdate extends StatUpdate {
   @override
   final int newValue;
 
-  factory _$StatUpdate([void Function(StatUpdateBuilder) updates]) =>
+  factory _$StatUpdate([void Function(StatUpdateBuilder)? updates]) =>
       (new StatUpdateBuilder()..update(updates)).build();
 
-  _$StatUpdate._({this.change, this.name, this.newValue}) : super._() {
+  _$StatUpdate._(
+      {required this.change, required this.name, required this.newValue})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(change, 'StatUpdate', 'change');
     BuiltValueNullFieldError.checkNotNull(name, 'StatUpdate', 'name');
     BuiltValueNullFieldError.checkNotNull(newValue, 'StatUpdate', 'newValue');
@@ -110,19 +112,19 @@ class _$StatUpdate extends StatUpdate {
 }
 
 class StatUpdateBuilder implements Builder<StatUpdate, StatUpdateBuilder> {
-  _$StatUpdate _$v;
+  _$StatUpdate? _$v;
 
-  int _change;
-  int get change => _$this._change;
-  set change(int change) => _$this._change = change;
+  int? _change;
+  int? get change => _$this._change;
+  set change(int? change) => _$this._change = change;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  int _newValue;
-  int get newValue => _$this._newValue;
-  set newValue(int newValue) => _$this._newValue = newValue;
+  int? _newValue;
+  int? get newValue => _$this._newValue;
+  set newValue(int? newValue) => _$this._newValue = newValue;
 
   StatUpdateBuilder();
 
@@ -144,7 +146,7 @@ class StatUpdateBuilder implements Builder<StatUpdate, StatUpdateBuilder> {
   }
 
   @override
-  void update(void Function(StatUpdateBuilder) updates) {
+  void update(void Function(StatUpdateBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

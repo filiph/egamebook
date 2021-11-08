@@ -8,11 +8,11 @@ import 'package:meta/meta.dart';
 
 abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
-  T book;
+   T? book;
 
   final StreamController<void> _bookEndCompleter = StreamController<void>();
 
-  StreamSubscription<ElementBase> _bookSubscription;
+  StreamSubscription<ElementBase>? _bookSubscription;
 
   /// Stream that gets a new event whenever the underlying [book] ends,
   /// either with [WinGame] or with [LoseGame].
@@ -129,6 +129,6 @@ abstract class Presenter<T extends Book> implements Sink<ElementBase> {
 
   void startBook() {
     assert(book != null, "Call and await initialize() first");
-    book.start();
+    book?.start();
   }
 }

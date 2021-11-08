@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.room;
 
 import 'package:edgehead/fractal_stories/actor.dart';

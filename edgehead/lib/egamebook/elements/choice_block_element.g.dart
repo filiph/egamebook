@@ -15,9 +15,9 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
   final String wireName = 'ChoiceBlock';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ChoiceBlock object,
+  Iterable<Object?> serialize(Serializers serializers, ChoiceBlock object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'saveGame',
       serializers.serialize(object.saveGame,
           specifiedType: const FullType(SaveGame)),
@@ -31,7 +31,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
   }
 
   @override
-  ChoiceBlock deserialize(Serializers serializers, Iterable<Object> serialized,
+  ChoiceBlock deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ChoiceBlockBuilder();
 
@@ -39,17 +39,17 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'saveGame':
           result.saveGame.replace(serializers.deserialize(value,
-              specifiedType: const FullType(SaveGame)) as SaveGame);
+              specifiedType: const FullType(SaveGame))! as SaveGame);
           break;
         case 'choices':
           result.choices.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(Choice)]))
-              as BuiltList<Object>);
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(Choice)]))!
+              as BuiltList<Object?>);
           break;
       }
     }
@@ -64,10 +64,10 @@ class _$ChoiceBlock extends ChoiceBlock {
   @override
   final BuiltList<Choice> choices;
 
-  factory _$ChoiceBlock([void Function(ChoiceBlockBuilder) updates]) =>
+  factory _$ChoiceBlock([void Function(ChoiceBlockBuilder)? updates]) =>
       (new ChoiceBlockBuilder()..update(updates)).build();
 
-  _$ChoiceBlock._({this.saveGame, this.choices}) : super._() {
+  _$ChoiceBlock._({required this.saveGame, required this.choices}) : super._() {
     BuiltValueNullFieldError.checkNotNull(saveGame, 'ChoiceBlock', 'saveGame');
     BuiltValueNullFieldError.checkNotNull(choices, 'ChoiceBlock', 'choices');
   }
@@ -102,16 +102,16 @@ class _$ChoiceBlock extends ChoiceBlock {
 }
 
 class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
-  _$ChoiceBlock _$v;
+  _$ChoiceBlock? _$v;
 
-  SaveGameBuilder _saveGame;
+  SaveGameBuilder? _saveGame;
   SaveGameBuilder get saveGame => _$this._saveGame ??= new SaveGameBuilder();
-  set saveGame(SaveGameBuilder saveGame) => _$this._saveGame = saveGame;
+  set saveGame(SaveGameBuilder? saveGame) => _$this._saveGame = saveGame;
 
-  ListBuilder<Choice> _choices;
+  ListBuilder<Choice>? _choices;
   ListBuilder<Choice> get choices =>
       _$this._choices ??= new ListBuilder<Choice>();
-  set choices(ListBuilder<Choice> choices) => _$this._choices = choices;
+  set choices(ListBuilder<Choice>? choices) => _$this._choices = choices;
 
   ChoiceBlockBuilder();
 
@@ -132,7 +132,7 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
   }
 
   @override
-  void update(void Function(ChoiceBlockBuilder) updates) {
+  void update(void Function(ChoiceBlockBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -144,7 +144,7 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
           new _$ChoiceBlock._(
               saveGame: saveGame.build(), choices: choices.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'saveGame';
         saveGame.build();

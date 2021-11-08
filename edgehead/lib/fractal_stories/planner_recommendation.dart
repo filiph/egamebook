@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';

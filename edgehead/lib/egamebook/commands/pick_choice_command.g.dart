@@ -15,9 +15,9 @@ class _$PickChoiceSerializer implements StructuredSerializer<PickChoice> {
   final String wireName = 'PickChoice';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, PickChoice object,
+  Iterable<Object?> serialize(Serializers serializers, PickChoice object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'choice',
       serializers.serialize(object.choice,
           specifiedType: const FullType(Choice)),
@@ -27,7 +27,7 @@ class _$PickChoiceSerializer implements StructuredSerializer<PickChoice> {
   }
 
   @override
-  PickChoice deserialize(Serializers serializers, Iterable<Object> serialized,
+  PickChoice deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PickChoiceBuilder();
 
@@ -35,11 +35,11 @@ class _$PickChoiceSerializer implements StructuredSerializer<PickChoice> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'choice':
           result.choice.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Choice)) as Choice);
+              specifiedType: const FullType(Choice))! as Choice);
           break;
       }
     }
@@ -52,10 +52,10 @@ class _$PickChoice extends PickChoice {
   @override
   final Choice choice;
 
-  factory _$PickChoice([void Function(PickChoiceBuilder) updates]) =>
+  factory _$PickChoice([void Function(PickChoiceBuilder)? updates]) =>
       (new PickChoiceBuilder()..update(updates)).build();
 
-  _$PickChoice._({this.choice}) : super._() {
+  _$PickChoice._({required this.choice}) : super._() {
     BuiltValueNullFieldError.checkNotNull(choice, 'PickChoice', 'choice');
   }
 
@@ -85,11 +85,11 @@ class _$PickChoice extends PickChoice {
 }
 
 class PickChoiceBuilder implements Builder<PickChoice, PickChoiceBuilder> {
-  _$PickChoice _$v;
+  _$PickChoice? _$v;
 
-  ChoiceBuilder _choice;
+  ChoiceBuilder? _choice;
   ChoiceBuilder get choice => _$this._choice ??= new ChoiceBuilder();
-  set choice(ChoiceBuilder choice) => _$this._choice = choice;
+  set choice(ChoiceBuilder? choice) => _$this._choice = choice;
 
   PickChoiceBuilder();
 
@@ -109,7 +109,7 @@ class PickChoiceBuilder implements Builder<PickChoice, PickChoiceBuilder> {
   }
 
   @override
-  void update(void Function(PickChoiceBuilder) updates) {
+  void update(void Function(PickChoiceBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -119,7 +119,7 @@ class PickChoiceBuilder implements Builder<PickChoice, PickChoiceBuilder> {
     try {
       _$result = _$v ?? new _$PickChoice._(choice: choice.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'choice';
         choice.build();

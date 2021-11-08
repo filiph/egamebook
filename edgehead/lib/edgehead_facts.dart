@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library edgehead_facts;
 
 import 'package:edgehead/edgehead_facts_enums.dart';

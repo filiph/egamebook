@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library edgehead.ruleset;
 
 import 'package:edgehead/fractal_stories/context.dart';

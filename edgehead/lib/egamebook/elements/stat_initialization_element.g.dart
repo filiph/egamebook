@@ -17,9 +17,10 @@ class _$StatInitializationSerializer
   final String wireName = 'StatInitialization';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, StatInitialization object,
+  Iterable<Object?> serialize(
+      Serializers serializers, StatInitialization object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'initialValue',
       serializers.serialize(object.initialValue,
           specifiedType: const FullType(int)),
@@ -32,7 +33,7 @@ class _$StatInitializationSerializer
 
   @override
   StatInitialization deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new StatInitializationBuilder();
 
@@ -40,7 +41,7 @@ class _$StatInitializationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'initialValue':
           result.initialValue = serializers.deserialize(value,
@@ -64,10 +65,11 @@ class _$StatInitialization extends StatInitialization {
   final String name;
 
   factory _$StatInitialization(
-          [void Function(StatInitializationBuilder) updates]) =>
+          [void Function(StatInitializationBuilder)? updates]) =>
       (new StatInitializationBuilder()..update(updates)).build();
 
-  _$StatInitialization._({this.initialValue, this.name}) : super._() {
+  _$StatInitialization._({required this.initialValue, required this.name})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(
         initialValue, 'StatInitialization', 'initialValue');
     BuiltValueNullFieldError.checkNotNull(name, 'StatInitialization', 'name');
@@ -106,15 +108,15 @@ class _$StatInitialization extends StatInitialization {
 
 class StatInitializationBuilder
     implements Builder<StatInitialization, StatInitializationBuilder> {
-  _$StatInitialization _$v;
+  _$StatInitialization? _$v;
 
-  int _initialValue;
-  int get initialValue => _$this._initialValue;
-  set initialValue(int initialValue) => _$this._initialValue = initialValue;
+  int? _initialValue;
+  int? get initialValue => _$this._initialValue;
+  set initialValue(int? initialValue) => _$this._initialValue = initialValue;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
   StatInitializationBuilder();
 
@@ -135,7 +137,7 @@ class StatInitializationBuilder
   }
 
   @override
-  void update(void Function(StatInitializationBuilder) updates) {
+  void update(void Function(StatInitializationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

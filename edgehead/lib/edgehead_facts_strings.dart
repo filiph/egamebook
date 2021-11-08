@@ -1,3 +1,5 @@
+// @dart=2.9
+
 const kbGoblinCampSmoke = "kbGoblinCampSmoke";
 
 const kbKeepServantsLocation = "kbKeepServantsLocation";

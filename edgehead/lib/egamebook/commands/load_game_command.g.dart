@@ -15,9 +15,9 @@ class _$LoadGameSerializer implements StructuredSerializer<LoadGame> {
   final String wireName = 'LoadGame';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, LoadGame object,
+  Iterable<Object?> serialize(Serializers serializers, LoadGame object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'saveGameSerialized',
       serializers.serialize(object.saveGameSerialized,
           specifiedType: const FullType(String)),
@@ -27,7 +27,7 @@ class _$LoadGameSerializer implements StructuredSerializer<LoadGame> {
   }
 
   @override
-  LoadGame deserialize(Serializers serializers, Iterable<Object> serialized,
+  LoadGame deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LoadGameBuilder();
 
@@ -35,7 +35,7 @@ class _$LoadGameSerializer implements StructuredSerializer<LoadGame> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'saveGameSerialized':
           result.saveGameSerialized = serializers.deserialize(value,
@@ -52,10 +52,10 @@ class _$LoadGame extends LoadGame {
   @override
   final String saveGameSerialized;
 
-  factory _$LoadGame([void Function(LoadGameBuilder) updates]) =>
+  factory _$LoadGame([void Function(LoadGameBuilder)? updates]) =>
       (new LoadGameBuilder()..update(updates)).build();
 
-  _$LoadGame._({this.saveGameSerialized}) : super._() {
+  _$LoadGame._({required this.saveGameSerialized}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         saveGameSerialized, 'LoadGame', 'saveGameSerialized');
   }
@@ -87,11 +87,11 @@ class _$LoadGame extends LoadGame {
 }
 
 class LoadGameBuilder implements Builder<LoadGame, LoadGameBuilder> {
-  _$LoadGame _$v;
+  _$LoadGame? _$v;
 
-  String _saveGameSerialized;
-  String get saveGameSerialized => _$this._saveGameSerialized;
-  set saveGameSerialized(String saveGameSerialized) =>
+  String? _saveGameSerialized;
+  String? get saveGameSerialized => _$this._saveGameSerialized;
+  set saveGameSerialized(String? saveGameSerialized) =>
       _$this._saveGameSerialized = saveGameSerialized;
 
   LoadGameBuilder();
@@ -112,7 +112,7 @@ class LoadGameBuilder implements Builder<LoadGame, LoadGameBuilder> {
   }
 
   @override
-  void update(void Function(LoadGameBuilder) updates) {
+  void update(void Function(LoadGameBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

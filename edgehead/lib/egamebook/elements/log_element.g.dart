@@ -15,9 +15,9 @@ class _$LogElementSerializer implements StructuredSerializer<LogElement> {
   final String wireName = 'LogElement';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, LogElement object,
+  Iterable<Object?> serialize(Serializers serializers, LogElement object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'level',
       serializers.serialize(object.level,
           specifiedType: const FullType(String)),
@@ -30,7 +30,7 @@ class _$LogElementSerializer implements StructuredSerializer<LogElement> {
   }
 
   @override
-  LogElement deserialize(Serializers serializers, Iterable<Object> serialized,
+  LogElement deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LogElementBuilder();
 
@@ -38,7 +38,7 @@ class _$LogElementSerializer implements StructuredSerializer<LogElement> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'level':
           result.level = serializers.deserialize(value,
@@ -61,10 +61,10 @@ class _$LogElement extends LogElement {
   @override
   final String message;
 
-  factory _$LogElement([void Function(LogElementBuilder) updates]) =>
+  factory _$LogElement([void Function(LogElementBuilder)? updates]) =>
       (new LogElementBuilder()..update(updates)).build();
 
-  _$LogElement._({this.level, this.message}) : super._() {
+  _$LogElement._({required this.level, required this.message}) : super._() {
     BuiltValueNullFieldError.checkNotNull(level, 'LogElement', 'level');
     BuiltValueNullFieldError.checkNotNull(message, 'LogElement', 'message');
   }
@@ -99,15 +99,15 @@ class _$LogElement extends LogElement {
 }
 
 class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
-  _$LogElement _$v;
+  _$LogElement? _$v;
 
-  String _level;
-  String get level => _$this._level;
-  set level(String level) => _$this._level = level;
+  String? _level;
+  String? get level => _$this._level;
+  set level(String? level) => _$this._level = level;
 
-  String _message;
-  String get message => _$this._message;
-  set message(String message) => _$this._message = message;
+  String? _message;
+  String? get message => _$this._message;
+  set message(String? message) => _$this._message = message;
 
   LogElementBuilder();
 
@@ -128,7 +128,7 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
   }
 
   @override
-  void update(void Function(LogElementBuilder) updates) {
+  void update(void Function(LogElementBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

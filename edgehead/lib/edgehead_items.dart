@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';

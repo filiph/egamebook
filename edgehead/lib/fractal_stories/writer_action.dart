@@ -1,4 +1,7 @@
 /// Use these classes in sources generated from writer's input.
+
+// @dart=2.9
+
 library stranded.writer_action;
 
 import 'package:edgehead/fractal_stories/action.dart';

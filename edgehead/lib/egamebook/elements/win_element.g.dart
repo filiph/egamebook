@@ -15,9 +15,9 @@ class _$WinGameSerializer implements StructuredSerializer<WinGame> {
   final String wireName = 'WinGame';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, WinGame object,
+  Iterable<Object?> serialize(Serializers serializers, WinGame object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'markdownText',
       serializers.serialize(object.markdownText,
           specifiedType: const FullType(String)),
@@ -27,7 +27,7 @@ class _$WinGameSerializer implements StructuredSerializer<WinGame> {
   }
 
   @override
-  WinGame deserialize(Serializers serializers, Iterable<Object> serialized,
+  WinGame deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WinGameBuilder();
 
@@ -35,7 +35,7 @@ class _$WinGameSerializer implements StructuredSerializer<WinGame> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'markdownText':
           result.markdownText = serializers.deserialize(value,
@@ -52,10 +52,10 @@ class _$WinGame extends WinGame {
   @override
   final String markdownText;
 
-  factory _$WinGame([void Function(WinGameBuilder) updates]) =>
+  factory _$WinGame([void Function(WinGameBuilder)? updates]) =>
       (new WinGameBuilder()..update(updates)).build();
 
-  _$WinGame._({this.markdownText}) : super._() {
+  _$WinGame._({required this.markdownText}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         markdownText, 'WinGame', 'markdownText');
   }
@@ -87,11 +87,11 @@ class _$WinGame extends WinGame {
 }
 
 class WinGameBuilder implements Builder<WinGame, WinGameBuilder> {
-  _$WinGame _$v;
+  _$WinGame? _$v;
 
-  String _markdownText;
-  String get markdownText => _$this._markdownText;
-  set markdownText(String markdownText) => _$this._markdownText = markdownText;
+  String? _markdownText;
+  String? get markdownText => _$this._markdownText;
+  set markdownText(String? markdownText) => _$this._markdownText = markdownText;
 
   WinGameBuilder();
 
@@ -111,7 +111,7 @@ class WinGameBuilder implements Builder<WinGame, WinGameBuilder> {
   }
 
   @override
-  void update(void Function(WinGameBuilder) updates) {
+  void update(void Function(WinGameBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

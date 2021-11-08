@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.context;
 
 import 'package:edgehead/fractal_stories/action.dart';

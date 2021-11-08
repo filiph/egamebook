@@ -15,9 +15,9 @@ class _$TextOutputSerializer implements StructuredSerializer<TextOutput> {
   final String wireName = 'TextOutput';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, TextOutput object,
+  Iterable<Object?> serialize(Serializers serializers, TextOutput object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'markdownText',
       serializers.serialize(object.markdownText,
           specifiedType: const FullType(String)),
@@ -27,7 +27,7 @@ class _$TextOutputSerializer implements StructuredSerializer<TextOutput> {
   }
 
   @override
-  TextOutput deserialize(Serializers serializers, Iterable<Object> serialized,
+  TextOutput deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new TextOutputBuilder();
 
@@ -35,7 +35,7 @@ class _$TextOutputSerializer implements StructuredSerializer<TextOutput> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'markdownText':
           result.markdownText = serializers.deserialize(value,
@@ -52,10 +52,10 @@ class _$TextOutput extends TextOutput {
   @override
   final String markdownText;
 
-  factory _$TextOutput([void Function(TextOutputBuilder) updates]) =>
+  factory _$TextOutput([void Function(TextOutputBuilder)? updates]) =>
       (new TextOutputBuilder()..update(updates)).build();
 
-  _$TextOutput._({this.markdownText}) : super._() {
+  _$TextOutput._({required this.markdownText}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         markdownText, 'TextOutput', 'markdownText');
   }
@@ -87,11 +87,11 @@ class _$TextOutput extends TextOutput {
 }
 
 class TextOutputBuilder implements Builder<TextOutput, TextOutputBuilder> {
-  _$TextOutput _$v;
+  _$TextOutput? _$v;
 
-  String _markdownText;
-  String get markdownText => _$this._markdownText;
-  set markdownText(String markdownText) => _$this._markdownText = markdownText;
+  String? _markdownText;
+  String? get markdownText => _$this._markdownText;
+  set markdownText(String? markdownText) => _$this._markdownText = markdownText;
 
   TextOutputBuilder();
 
@@ -111,7 +111,7 @@ class TextOutputBuilder implements Builder<TextOutput, TextOutputBuilder> {
   }
 
   @override
-  void update(void Function(TextOutputBuilder) updates) {
+  void update(void Function(TextOutputBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

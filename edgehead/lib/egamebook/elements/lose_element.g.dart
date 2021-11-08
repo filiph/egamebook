@@ -15,9 +15,9 @@ class _$LoseGameSerializer implements StructuredSerializer<LoseGame> {
   final String wireName = 'LoseGame';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, LoseGame object,
+  Iterable<Object?> serialize(Serializers serializers, LoseGame object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'markdownText',
       serializers.serialize(object.markdownText,
           specifiedType: const FullType(String)),
@@ -27,7 +27,7 @@ class _$LoseGameSerializer implements StructuredSerializer<LoseGame> {
   }
 
   @override
-  LoseGame deserialize(Serializers serializers, Iterable<Object> serialized,
+  LoseGame deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LoseGameBuilder();
 
@@ -35,7 +35,7 @@ class _$LoseGameSerializer implements StructuredSerializer<LoseGame> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'markdownText':
           result.markdownText = serializers.deserialize(value,
@@ -52,10 +52,10 @@ class _$LoseGame extends LoseGame {
   @override
   final String markdownText;
 
-  factory _$LoseGame([void Function(LoseGameBuilder) updates]) =>
+  factory _$LoseGame([void Function(LoseGameBuilder)? updates]) =>
       (new LoseGameBuilder()..update(updates)).build();
 
-  _$LoseGame._({this.markdownText}) : super._() {
+  _$LoseGame._({required this.markdownText}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         markdownText, 'LoseGame', 'markdownText');
   }
@@ -87,11 +87,11 @@ class _$LoseGame extends LoseGame {
 }
 
 class LoseGameBuilder implements Builder<LoseGame, LoseGameBuilder> {
-  _$LoseGame _$v;
+  _$LoseGame? _$v;
 
-  String _markdownText;
-  String get markdownText => _$this._markdownText;
-  set markdownText(String markdownText) => _$this._markdownText = markdownText;
+  String? _markdownText;
+  String? get markdownText => _$this._markdownText;
+  set markdownText(String? markdownText) => _$this._markdownText = markdownText;
 
   LoseGameBuilder();
 
@@ -111,7 +111,7 @@ class LoseGameBuilder implements Builder<LoseGame, LoseGameBuilder> {
   }
 
   @override
-  void update(void Function(LoseGameBuilder) updates) {
+  void update(void Function(LoseGameBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

@@ -125,9 +125,9 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
   final String wireName = 'BodyPart';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, BodyPart object,
+  Iterable<Object?> serialize(Serializers serializers, BodyPart object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'bluntHitsCount',
       serializers.serialize(object.bluntHitsCount,
           specifiedType: const FullType(int)),
@@ -185,7 +185,7 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
       serializers.serialize(object.thrustSurface,
           specifiedType: const FullType(int)),
     ];
-    Object value;
+    Object? value;
     value = object.damageCapability;
     if (value != null) {
       result
@@ -197,7 +197,7 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
   }
 
   @override
-  BodyPart deserialize(Serializers serializers, Iterable<Object> serialized,
+  BodyPart deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new BodyPartBuilder();
 
@@ -205,7 +205,7 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'bluntHitsCount':
           result.bluntHitsCount = serializers.deserialize(value,
@@ -214,12 +214,12 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
         case 'children':
           result.children.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
-                      BuiltList, const [const FullType(BodyPart)]))
-              as BuiltList<Object>);
+                      BuiltList, const [const FullType(BodyPart)]))!
+              as BuiltList<Object?>);
           break;
         case 'damageCapability':
           result.damageCapability.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(DamageCapability))
+                  specifiedType: const FullType(DamageCapability))!
               as DamageCapability);
           break;
         case 'designation':
@@ -341,7 +341,7 @@ class _$BodyPart extends BodyPart {
   @override
   final BuiltList<BodyPart> children;
   @override
-  final DamageCapability damageCapability;
+  final DamageCapability? damageCapability;
   @override
   final BodyPartDesignation designation;
   @override
@@ -377,30 +377,30 @@ class _$BodyPart extends BodyPart {
   @override
   final int thrustSurface;
 
-  factory _$BodyPart([void Function(BodyPartBuilder) updates]) =>
+  factory _$BodyPart([void Function(BodyPartBuilder)? updates]) =>
       (new BodyPartBuilder()..update(updates)).build();
 
   _$BodyPart._(
-      {this.bluntHitsCount,
-      this.children,
+      {required this.bluntHitsCount,
+      required this.children,
       this.damageCapability,
-      this.designation,
-      this.firstOwnerId,
-      this.function,
-      this.hitpoints,
-      this.id,
-      this.isActive,
-      this.isSeverable,
-      this.isSevered,
-      this.isVital,
-      this.majorCutsCount,
-      this.maxHitpoints,
-      this.minorCutsCount,
-      this.name,
-      this.randomDesignation,
-      this.swingSurfaceLeft,
-      this.swingSurfaceRight,
-      this.thrustSurface})
+      required this.designation,
+      required this.firstOwnerId,
+      required this.function,
+      required this.hitpoints,
+      required this.id,
+      required this.isActive,
+      required this.isSeverable,
+      required this.isSevered,
+      required this.isVital,
+      required this.majorCutsCount,
+      required this.maxHitpoints,
+      required this.minorCutsCount,
+      required this.name,
+      required this.randomDesignation,
+      required this.swingSurfaceLeft,
+      required this.swingSurfaceRight,
+      required this.thrustSurface})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         bluntHitsCount, 'BodyPart', 'bluntHitsCount');
@@ -511,97 +511,98 @@ class _$BodyPart extends BodyPart {
 }
 
 class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
-  _$BodyPart _$v;
+  _$BodyPart? _$v;
 
-  int _bluntHitsCount;
-  int get bluntHitsCount => _$this._bluntHitsCount;
-  set bluntHitsCount(int bluntHitsCount) =>
+  int? _bluntHitsCount;
+  int? get bluntHitsCount => _$this._bluntHitsCount;
+  set bluntHitsCount(int? bluntHitsCount) =>
       _$this._bluntHitsCount = bluntHitsCount;
 
-  ListBuilder<BodyPart> _children;
+  ListBuilder<BodyPart>? _children;
   ListBuilder<BodyPart> get children =>
       _$this._children ??= new ListBuilder<BodyPart>();
-  set children(ListBuilder<BodyPart> children) => _$this._children = children;
+  set children(ListBuilder<BodyPart>? children) => _$this._children = children;
 
-  DamageCapabilityBuilder _damageCapability;
+  DamageCapabilityBuilder? _damageCapability;
   DamageCapabilityBuilder get damageCapability =>
       _$this._damageCapability ??= new DamageCapabilityBuilder();
-  set damageCapability(DamageCapabilityBuilder damageCapability) =>
+  set damageCapability(DamageCapabilityBuilder? damageCapability) =>
       _$this._damageCapability = damageCapability;
 
-  BodyPartDesignation _designation;
-  BodyPartDesignation get designation => _$this._designation;
-  set designation(BodyPartDesignation designation) =>
+  BodyPartDesignation? _designation;
+  BodyPartDesignation? get designation => _$this._designation;
+  set designation(BodyPartDesignation? designation) =>
       _$this._designation = designation;
 
-  int _firstOwnerId;
-  int get firstOwnerId => _$this._firstOwnerId;
-  set firstOwnerId(int firstOwnerId) => _$this._firstOwnerId = firstOwnerId;
+  int? _firstOwnerId;
+  int? get firstOwnerId => _$this._firstOwnerId;
+  set firstOwnerId(int? firstOwnerId) => _$this._firstOwnerId = firstOwnerId;
 
-  BodyPartFunction _function;
-  BodyPartFunction get function => _$this._function;
-  set function(BodyPartFunction function) => _$this._function = function;
+  BodyPartFunction? _function;
+  BodyPartFunction? get function => _$this._function;
+  set function(BodyPartFunction? function) => _$this._function = function;
 
-  int _hitpoints;
-  int get hitpoints => _$this._hitpoints;
-  set hitpoints(int hitpoints) => _$this._hitpoints = hitpoints;
+  int? _hitpoints;
+  int? get hitpoints => _$this._hitpoints;
+  set hitpoints(int? hitpoints) => _$this._hitpoints = hitpoints;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  bool _isActive;
-  bool get isActive => _$this._isActive;
-  set isActive(bool isActive) => _$this._isActive = isActive;
+  bool? _isActive;
+  bool? get isActive => _$this._isActive;
+  set isActive(bool? isActive) => _$this._isActive = isActive;
 
-  bool _isSeverable;
-  bool get isSeverable => _$this._isSeverable;
-  set isSeverable(bool isSeverable) => _$this._isSeverable = isSeverable;
+  bool? _isSeverable;
+  bool? get isSeverable => _$this._isSeverable;
+  set isSeverable(bool? isSeverable) => _$this._isSeverable = isSeverable;
 
-  bool _isSevered;
-  bool get isSevered => _$this._isSevered;
-  set isSevered(bool isSevered) => _$this._isSevered = isSevered;
+  bool? _isSevered;
+  bool? get isSevered => _$this._isSevered;
+  set isSevered(bool? isSevered) => _$this._isSevered = isSevered;
 
-  bool _isVital;
-  bool get isVital => _$this._isVital;
-  set isVital(bool isVital) => _$this._isVital = isVital;
+  bool? _isVital;
+  bool? get isVital => _$this._isVital;
+  set isVital(bool? isVital) => _$this._isVital = isVital;
 
-  int _majorCutsCount;
-  int get majorCutsCount => _$this._majorCutsCount;
-  set majorCutsCount(int majorCutsCount) =>
+  int? _majorCutsCount;
+  int? get majorCutsCount => _$this._majorCutsCount;
+  set majorCutsCount(int? majorCutsCount) =>
       _$this._majorCutsCount = majorCutsCount;
 
-  int _maxHitpoints;
-  int get maxHitpoints => _$this._maxHitpoints;
-  set maxHitpoints(int maxHitpoints) => _$this._maxHitpoints = maxHitpoints;
+  int? _maxHitpoints;
+  int? get maxHitpoints => _$this._maxHitpoints;
+  set maxHitpoints(int? maxHitpoints) => _$this._maxHitpoints = maxHitpoints;
 
-  int _minorCutsCount;
-  int get minorCutsCount => _$this._minorCutsCount;
-  set minorCutsCount(int minorCutsCount) =>
+  int? _minorCutsCount;
+  int? get minorCutsCount => _$this._minorCutsCount;
+  set minorCutsCount(int? minorCutsCount) =>
       _$this._minorCutsCount = minorCutsCount;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  String _randomDesignation;
-  String get randomDesignation => _$this._randomDesignation;
-  set randomDesignation(String randomDesignation) =>
+  String? _randomDesignation;
+  String? get randomDesignation => _$this._randomDesignation;
+  set randomDesignation(String? randomDesignation) =>
       _$this._randomDesignation = randomDesignation;
 
-  int _swingSurfaceLeft;
-  int get swingSurfaceLeft => _$this._swingSurfaceLeft;
-  set swingSurfaceLeft(int swingSurfaceLeft) =>
+  int? _swingSurfaceLeft;
+  int? get swingSurfaceLeft => _$this._swingSurfaceLeft;
+  set swingSurfaceLeft(int? swingSurfaceLeft) =>
       _$this._swingSurfaceLeft = swingSurfaceLeft;
 
-  int _swingSurfaceRight;
-  int get swingSurfaceRight => _$this._swingSurfaceRight;
-  set swingSurfaceRight(int swingSurfaceRight) =>
+  int? _swingSurfaceRight;
+  int? get swingSurfaceRight => _$this._swingSurfaceRight;
+  set swingSurfaceRight(int? swingSurfaceRight) =>
       _$this._swingSurfaceRight = swingSurfaceRight;
 
-  int _thrustSurface;
-  int get thrustSurface => _$this._thrustSurface;
-  set thrustSurface(int thrustSurface) => _$this._thrustSurface = thrustSurface;
+  int? _thrustSurface;
+  int? get thrustSurface => _$this._thrustSurface;
+  set thrustSurface(int? thrustSurface) =>
+      _$this._thrustSurface = thrustSurface;
 
   BodyPartBuilder();
 
@@ -640,7 +641,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   }
 
   @override
-  void update(void Function(BodyPartBuilder) updates) {
+  void update(void Function(BodyPartBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -679,7 +680,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
               swingSurfaceRight: BuiltValueNullFieldError.checkNotNull(swingSurfaceRight, 'BodyPart', 'swingSurfaceRight'),
               thrustSurface: BuiltValueNullFieldError.checkNotNull(thrustSurface, 'BodyPart', 'thrustSurface'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'children';
         children.build();

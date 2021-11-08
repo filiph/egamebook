@@ -2,6 +2,9 @@
 /// [outMin]-[outMax].
 ///
 /// Taken from https://github.com/munificent/hauberk/blob/master/lib/src/engine/core/math.dart.
+
+// @dart=2.9
+
 double lerpDouble(num value, num min, num max, double outMin, double outMax) {
   assert(min < max);
 

@@ -15,9 +15,9 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
   final String wireName = 'Anatomy';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Anatomy object,
+  Iterable<Object?> serialize(Serializers serializers, Anatomy object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'isUndead',
       serializers.serialize(object.isUndead,
           specifiedType: const FullType(bool)),
@@ -30,7 +30,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
   }
 
   @override
-  Anatomy deserialize(Serializers serializers, Iterable<Object> serialized,
+  Anatomy deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AnatomyBuilder();
 
@@ -38,7 +38,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'isUndead':
           result.isUndead = serializers.deserialize(value,
@@ -46,7 +46,7 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
           break;
         case 'torso':
           result.torso.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BodyPart)) as BodyPart);
+              specifiedType: const FullType(BodyPart))! as BodyPart);
           break;
       }
     }
@@ -60,18 +60,21 @@ class _$Anatomy extends Anatomy {
   final bool isUndead;
   @override
   final BodyPart torso;
-  List<BodyPart> __allParts;
-  Item __bodyPartWeapon;
-  bool __hasCrippledLegs;
-  bool __hasHealthyLegs;
-  bool __isBlind;
-  BodyPart __primaryWeaponAppendage;
-  BodyPart __secondaryWeaponAppendage;
+  List<BodyPart>? __allParts;
+  Item? __bodyPartWeapon;
+  bool ___bodyPartWeapon = false;
+  bool? __hasCrippledLegs;
+  bool? __hasHealthyLegs;
+  bool? __isBlind;
+  BodyPart? __primaryWeaponAppendage;
+  bool ___primaryWeaponAppendage = false;
+  BodyPart? __secondaryWeaponAppendage;
+  bool ___secondaryWeaponAppendage = false;
 
-  factory _$Anatomy([void Function(AnatomyBuilder) updates]) =>
+  factory _$Anatomy([void Function(AnatomyBuilder)? updates]) =>
       (new AnatomyBuilder()..update(updates)).build();
 
-  _$Anatomy._({this.isUndead, this.torso}) : super._() {
+  _$Anatomy._({required this.isUndead, required this.torso}) : super._() {
     BuiltValueNullFieldError.checkNotNull(isUndead, 'Anatomy', 'isUndead');
     BuiltValueNullFieldError.checkNotNull(torso, 'Anatomy', 'torso');
   }
@@ -80,7 +83,13 @@ class _$Anatomy extends Anatomy {
   List<BodyPart> get allParts => __allParts ??= super.allParts;
 
   @override
-  Item get bodyPartWeapon => __bodyPartWeapon ??= super.bodyPartWeapon;
+  Item? get bodyPartWeapon {
+    if (!___bodyPartWeapon) {
+      __bodyPartWeapon = super.bodyPartWeapon;
+      ___bodyPartWeapon = true;
+    }
+    return __bodyPartWeapon;
+  }
 
   @override
   bool get hasCrippledLegs => __hasCrippledLegs ??= super.hasCrippledLegs;
@@ -92,12 +101,22 @@ class _$Anatomy extends Anatomy {
   bool get isBlind => __isBlind ??= super.isBlind;
 
   @override
-  BodyPart get primaryWeaponAppendage =>
-      __primaryWeaponAppendage ??= super.primaryWeaponAppendage;
+  BodyPart? get primaryWeaponAppendage {
+    if (!___primaryWeaponAppendage) {
+      __primaryWeaponAppendage = super.primaryWeaponAppendage;
+      ___primaryWeaponAppendage = true;
+    }
+    return __primaryWeaponAppendage;
+  }
 
   @override
-  BodyPart get secondaryWeaponAppendage =>
-      __secondaryWeaponAppendage ??= super.secondaryWeaponAppendage;
+  BodyPart? get secondaryWeaponAppendage {
+    if (!___secondaryWeaponAppendage) {
+      __secondaryWeaponAppendage = super.secondaryWeaponAppendage;
+      ___secondaryWeaponAppendage = true;
+    }
+    return __secondaryWeaponAppendage;
+  }
 
   @override
   Anatomy rebuild(void Function(AnatomyBuilder) updates) =>
@@ -129,15 +148,15 @@ class _$Anatomy extends Anatomy {
 }
 
 class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
-  _$Anatomy _$v;
+  _$Anatomy? _$v;
 
-  bool _isUndead;
-  bool get isUndead => _$this._isUndead;
-  set isUndead(bool isUndead) => _$this._isUndead = isUndead;
+  bool? _isUndead;
+  bool? get isUndead => _$this._isUndead;
+  set isUndead(bool? isUndead) => _$this._isUndead = isUndead;
 
-  BodyPartBuilder _torso;
+  BodyPartBuilder? _torso;
   BodyPartBuilder get torso => _$this._torso ??= new BodyPartBuilder();
-  set torso(BodyPartBuilder torso) => _$this._torso = torso;
+  set torso(BodyPartBuilder? torso) => _$this._torso = torso;
 
   AnatomyBuilder();
 
@@ -158,7 +177,7 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   }
 
   @override
-  void update(void Function(AnatomyBuilder) updates) {
+  void update(void Function(AnatomyBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -172,7 +191,7 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
                   isUndead, 'Anatomy', 'isUndead'),
               torso: torso.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'torso';
         torso.build();

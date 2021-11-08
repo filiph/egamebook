@@ -3,13 +3,12 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/items/damage_capability.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
-import 'package:meta/meta.dart';
 
 /// Builds a standard humanoid body (two legs, two arms, etc.).
 /// Provide a unique seed (probably the actor's ID) so we can create
 /// random ids for each body part.
 Anatomy buildHumanoid(int id, RandomIdGetter randomIdGetter,
-    {@required bool isUndead, int constitution = 1, bool isBlind = false}) {
+    {required bool isUndead, int constitution = 1, bool isBlind = false}) {
   assert(constitution >= 1, "Cannot have creature with constitution below 1");
 
   final rightLeg = BodyPart(randomIdGetter(), "right leg",

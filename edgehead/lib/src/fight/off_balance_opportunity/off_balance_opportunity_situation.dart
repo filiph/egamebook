@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.fight.off_balance_situation;
 
 import 'package:built_value/built_value.dart';

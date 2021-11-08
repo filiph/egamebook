@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:convert';
 
 import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;

@@ -15,9 +15,9 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
   final String wireName = 'SlotMachine';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, SlotMachine object,
+  Iterable<Object?> serialize(Serializers serializers, SlotMachine object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'probability',
       serializers.serialize(object.probability,
           specifiedType: const FullType(double)),
@@ -28,7 +28,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
       serializers.serialize(object.rollReason,
           specifiedType: const FullType(String)),
     ];
-    Object value;
+    Object? value;
     value = object.rerollEffectDescription;
     if (value != null) {
       result
@@ -40,7 +40,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
   }
 
   @override
-  SlotMachine deserialize(Serializers serializers, Iterable<Object> serialized,
+  SlotMachine deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new SlotMachineBuilder();
 
@@ -48,7 +48,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'probability':
           result.probability = serializers.deserialize(value,
@@ -60,7 +60,7 @@ class _$SlotMachineSerializer implements StructuredSerializer<SlotMachine> {
           break;
         case 'rerollEffectDescription':
           result.rerollEffectDescription = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'rollReason':
           result.rollReason = serializers.deserialize(value,
@@ -79,18 +79,18 @@ class _$SlotMachine extends SlotMachine {
   @override
   final bool rerollable;
   @override
-  final String rerollEffectDescription;
+  final String? rerollEffectDescription;
   @override
   final String rollReason;
 
-  factory _$SlotMachine([void Function(SlotMachineBuilder) updates]) =>
+  factory _$SlotMachine([void Function(SlotMachineBuilder)? updates]) =>
       (new SlotMachineBuilder()..update(updates)).build();
 
   _$SlotMachine._(
-      {this.probability,
-      this.rerollable,
+      {required this.probability,
+      required this.rerollable,
       this.rerollEffectDescription,
-      this.rollReason})
+      required this.rollReason})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         probability, 'SlotMachine', 'probability');
@@ -137,24 +137,24 @@ class _$SlotMachine extends SlotMachine {
 }
 
 class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
-  _$SlotMachine _$v;
+  _$SlotMachine? _$v;
 
-  double _probability;
-  double get probability => _$this._probability;
-  set probability(double probability) => _$this._probability = probability;
+  double? _probability;
+  double? get probability => _$this._probability;
+  set probability(double? probability) => _$this._probability = probability;
 
-  bool _rerollable;
-  bool get rerollable => _$this._rerollable;
-  set rerollable(bool rerollable) => _$this._rerollable = rerollable;
+  bool? _rerollable;
+  bool? get rerollable => _$this._rerollable;
+  set rerollable(bool? rerollable) => _$this._rerollable = rerollable;
 
-  String _rerollEffectDescription;
-  String get rerollEffectDescription => _$this._rerollEffectDescription;
-  set rerollEffectDescription(String rerollEffectDescription) =>
+  String? _rerollEffectDescription;
+  String? get rerollEffectDescription => _$this._rerollEffectDescription;
+  set rerollEffectDescription(String? rerollEffectDescription) =>
       _$this._rerollEffectDescription = rerollEffectDescription;
 
-  String _rollReason;
-  String get rollReason => _$this._rollReason;
-  set rollReason(String rollReason) => _$this._rollReason = rollReason;
+  String? _rollReason;
+  String? get rollReason => _$this._rollReason;
+  set rollReason(String? rollReason) => _$this._rollReason = rollReason;
 
   SlotMachineBuilder();
 
@@ -177,7 +177,7 @@ class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
   }
 
   @override
-  void update(void Function(SlotMachineBuilder) updates) {
+  void update(void Function(SlotMachineBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

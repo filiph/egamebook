@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:io';
 
 /// This simple tool exists for the sole purpose of generating a single

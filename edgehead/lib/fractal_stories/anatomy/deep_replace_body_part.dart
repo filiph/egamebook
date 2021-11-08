@@ -12,7 +12,7 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 /// values that need to be updated.
 void deepReplaceBodyPart(ActorBuilder builder,
     bool whereFilter(BodyPart bodyPart), BodyPartUpdater update,
-    {BodyPartUpdater descendantUpdate}) {
+    {BodyPartUpdater? descendantUpdate}) {
   final actor = builder.build();
 
   // If the torso passes `whereFilter`, then we need to update that first.
@@ -31,7 +31,7 @@ void _updateWalker(
     BodyPartBuilder builder,
     bool Function(BodyPart bodyPart) whereFilter,
     BodyPartUpdater update,
-    BodyPartUpdater descendantUpdate,
+    BodyPartUpdater? descendantUpdate,
     bool hasAfflictedParent) {
   // ListBuilder.map updates the list in place.
   builder.children.map((child) {

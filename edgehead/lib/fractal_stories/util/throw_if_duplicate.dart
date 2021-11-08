@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library throw_if_duplicate;
 
 /// Throws when [set] has duplicate entries.

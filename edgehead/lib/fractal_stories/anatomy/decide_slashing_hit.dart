@@ -21,16 +21,16 @@ WeaponAssaultResult decideSlashingHit(
   Actor target,
   Item weapon,
   RandomIntGetter randomGetter, {
-  BodyPartDesignation designation,
-  BodyPart bodyPart,
-  String Function() savegameGetter,
+  BodyPartDesignation? designation,
+  BodyPart? bodyPart,
+  String Function()? savegameGetter,
 }) {
   assert(target.hitpoints > 0);
   assert(weapon.damageCapability.isSlashing);
   assert(designation != null || bodyPart != null);
   assert(designation == null || bodyPart == null);
 
-  BodyPart part = bodyPart;
+  BodyPart? part = bodyPart;
 
   if (part == null) {
     // Part not defined directly. We must find it first.
@@ -56,12 +56,9 @@ WeaponAssaultResult decideSlashingHit(
       } else {
         return _disableBySlash(target, part, weapon);
       }
-      break;
     case SlashSuccessLevel.majorCut:
       return _addMajorCut(target, part, weapon);
   }
-
-  throw UnimplementedError("this type of slash not implemented yet");
 }
 
 /// Resolves the logic of randomly selecting a body part based on
@@ -100,7 +97,7 @@ WeaponAssaultResult _addMajorCut(
   final ActorBuilder victim = target.toBuilder();
 
   // When a body part is vital, each major cut removes one actor's hit point.
-  if (designated.isVital && designated.isAnimated && !victim.isInvincible) {
+  if (designated.isVital && designated.isAnimated && !victim.isInvincible!) {
     victim.hitpoints -= 1;
   }
 
@@ -109,9 +106,9 @@ WeaponAssaultResult _addMajorCut(
     victim,
     (part) => part.id == designated.id,
     (b) {
-      b.majorCutsCount += 1;
-      if (b.hitpoints > 0) {
-        b.hitpoints -= 1;
+      b.majorCutsCount = b.majorCutsCount! + 1;
+      if (b.hitpoints! > 0) {
+        b.hitpoints = b.hitpoints! - 1;
       }
     },
   );
@@ -198,7 +195,7 @@ WeaponAssaultResult _disableBySlash(
     victim,
     (part) => part.id == bodyPart.id,
     (b) {
-      b.majorCutsCount += 1;
+      b.majorCutsCount = b.majorCutsCount! + 1;
       if (!target.isInvincible) {
         b.hitpoints = 0;
       }

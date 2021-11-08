@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.room_roaming.room_roaming_situation;
 
 import 'package:built_value/built_value.dart';

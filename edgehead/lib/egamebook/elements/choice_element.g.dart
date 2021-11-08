@@ -15,9 +15,9 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
   final String wireName = 'Choice';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Choice object,
+  Iterable<Object?> serialize(Serializers serializers, Choice object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'actionName',
       serializers.serialize(object.actionName,
           specifiedType: const FullType(String)),
@@ -43,7 +43,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
       serializers.serialize(object.successChance,
           specifiedType: const FullType(double)),
     ];
-    Object value;
+    Object? value;
     value = object.helpMessage;
     if (value != null) {
       result
@@ -55,7 +55,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
   }
 
   @override
-  Choice deserialize(Serializers serializers, Iterable<Object> serialized,
+  Choice deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ChoiceBuilder();
 
@@ -63,7 +63,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'actionName':
           result.actionName = serializers.deserialize(value,
@@ -72,19 +72,19 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
         case 'additionalData':
           result.additionalData.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(int)]))!
+              as BuiltList<Object?>);
           break;
         case 'additionalStrings':
           result.additionalStrings.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap,
-                  const [const FullType(String), const FullType(String)])));
+                  const [const FullType(String), const FullType(String)]))!);
           break;
         case 'commandPath':
           result.commandPath.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(String)]))
-              as BuiltList<Object>);
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(String)]))!
+              as BuiltList<Object?>);
           break;
         case 'commandSentence':
           result.commandSentence = serializers.deserialize(value,
@@ -92,7 +92,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           break;
         case 'helpMessage':
           result.helpMessage = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'isImplicit':
           result.isImplicit = serializers.deserialize(value,
@@ -121,24 +121,24 @@ class _$Choice extends Choice {
   @override
   final String commandSentence;
   @override
-  final String helpMessage;
+  final String? helpMessage;
   @override
   final bool isImplicit;
   @override
   final double successChance;
 
-  factory _$Choice([void Function(ChoiceBuilder) updates]) =>
+  factory _$Choice([void Function(ChoiceBuilder)? updates]) =>
       (new ChoiceBuilder()..update(updates)).build();
 
   _$Choice._(
-      {this.actionName,
-      this.additionalData,
-      this.additionalStrings,
-      this.commandPath,
-      this.commandSentence,
+      {required this.actionName,
+      required this.additionalData,
+      required this.additionalStrings,
+      required this.commandPath,
+      required this.commandSentence,
       this.helpMessage,
-      this.isImplicit,
-      this.successChance})
+      required this.isImplicit,
+      required this.successChance})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(actionName, 'Choice', 'actionName');
     BuiltValueNullFieldError.checkNotNull(
@@ -208,46 +208,46 @@ class _$Choice extends Choice {
 }
 
 class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
-  _$Choice _$v;
+  _$Choice? _$v;
 
-  String _actionName;
-  String get actionName => _$this._actionName;
-  set actionName(String actionName) => _$this._actionName = actionName;
+  String? _actionName;
+  String? get actionName => _$this._actionName;
+  set actionName(String? actionName) => _$this._actionName = actionName;
 
-  ListBuilder<int> _additionalData;
+  ListBuilder<int>? _additionalData;
   ListBuilder<int> get additionalData =>
       _$this._additionalData ??= new ListBuilder<int>();
-  set additionalData(ListBuilder<int> additionalData) =>
+  set additionalData(ListBuilder<int>? additionalData) =>
       _$this._additionalData = additionalData;
 
-  MapBuilder<String, String> _additionalStrings;
+  MapBuilder<String, String>? _additionalStrings;
   MapBuilder<String, String> get additionalStrings =>
       _$this._additionalStrings ??= new MapBuilder<String, String>();
-  set additionalStrings(MapBuilder<String, String> additionalStrings) =>
+  set additionalStrings(MapBuilder<String, String>? additionalStrings) =>
       _$this._additionalStrings = additionalStrings;
 
-  ListBuilder<String> _commandPath;
+  ListBuilder<String>? _commandPath;
   ListBuilder<String> get commandPath =>
       _$this._commandPath ??= new ListBuilder<String>();
-  set commandPath(ListBuilder<String> commandPath) =>
+  set commandPath(ListBuilder<String>? commandPath) =>
       _$this._commandPath = commandPath;
 
-  String _commandSentence;
-  String get commandSentence => _$this._commandSentence;
-  set commandSentence(String commandSentence) =>
+  String? _commandSentence;
+  String? get commandSentence => _$this._commandSentence;
+  set commandSentence(String? commandSentence) =>
       _$this._commandSentence = commandSentence;
 
-  String _helpMessage;
-  String get helpMessage => _$this._helpMessage;
-  set helpMessage(String helpMessage) => _$this._helpMessage = helpMessage;
+  String? _helpMessage;
+  String? get helpMessage => _$this._helpMessage;
+  set helpMessage(String? helpMessage) => _$this._helpMessage = helpMessage;
 
-  bool _isImplicit;
-  bool get isImplicit => _$this._isImplicit;
-  set isImplicit(bool isImplicit) => _$this._isImplicit = isImplicit;
+  bool? _isImplicit;
+  bool? get isImplicit => _$this._isImplicit;
+  set isImplicit(bool? isImplicit) => _$this._isImplicit = isImplicit;
 
-  double _successChance;
-  double get successChance => _$this._successChance;
-  set successChance(double successChance) =>
+  double? _successChance;
+  double? get successChance => _$this._successChance;
+  set successChance(double? successChance) =>
       _$this._successChance = successChance;
 
   ChoiceBuilder();
@@ -275,7 +275,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   }
 
   @override
-  void update(void Function(ChoiceBuilder) updates) {
+  void update(void Function(ChoiceBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -298,7 +298,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
               successChance: BuiltValueNullFieldError.checkNotNull(
                   successChance, 'Choice', 'successChance'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'additionalData';
         additionalData.build();

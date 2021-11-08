@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library fractal_stories.items.edibility;
 
 import 'package:built_value/built_value.dart';

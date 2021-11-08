@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';

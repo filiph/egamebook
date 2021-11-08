@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.fight.counter_attack_situation;
 
 import 'package:built_value/built_value.dart';

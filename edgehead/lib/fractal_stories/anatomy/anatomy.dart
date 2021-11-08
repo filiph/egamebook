@@ -2,6 +2,7 @@ library fractal_stories.anatomy;
 
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/fist.dart';
@@ -18,7 +19,8 @@ part 'anatomy.g.dart';
 abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   static Serializer<Anatomy> get serializer => _$anatomySerializer;
 
-  factory Anatomy({@required BodyPart torso, bool isUndead}) = _$Anatomy._;
+  factory Anatomy({required BodyPart torso, required bool isUndead}) =
+      _$Anatomy._;
 
   Anatomy._();
 
@@ -41,17 +43,17 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// Returns `null` if there are no body parts that are alive and could
   /// be used as a weapon.
   @memoized
-  Item get bodyPartWeapon {
+  Item? get bodyPartWeapon {
     int scoreBodyPart(BodyPart part) =>
-        part.damageCapability.bluntDamage +
-        part.damageCapability.slashingDamage +
-        part.damageCapability.thrustingDamage +
-        part.damageCapability.tearingDamage +
-        part.damageCapability.length;
+        part.damageCapability!.bluntDamage +
+        part.damageCapability!.slashingDamage +
+        part.damageCapability!.thrustingDamage +
+        part.damageCapability!.tearingDamage +
+        part.damageCapability!.length;
 
     final candidates = torso
         .getDescendantParts()
-        .where((p) => p.isAnimatedAndActive && !p.damageCapability.isInvalid)
+        .where((p) => p.isAnimatedAndActive && !p.damageCapability!.isInvalid)
         .toList();
 
     if (candidates.isEmpty) return null;
@@ -137,11 +139,10 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   ///
   /// It is used for holding swords, throwing spears, etc.
   @memoized
-  BodyPart get primaryWeaponAppendage {
+  BodyPart? get primaryWeaponAppendage {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
-    return allParts.singleWhere(
-        (part) => part.designation == BodyPartDesignation.primaryHand,
-        orElse: () => null);
+    return allParts.singleWhereOrNull(
+        (part) => part.designation == BodyPartDesignation.primaryHand);
   }
 
   bool get primaryWeaponAppendageAvailable =>
@@ -155,11 +156,10 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// appendage is disabled), it can be used to everything that
   /// [primaryWeaponAppendage] can, but with a hefty penalty.
   @memoized
-  BodyPart get secondaryWeaponAppendage {
+  BodyPart? get secondaryWeaponAppendage {
     assert(isHumanoid, "This function is currently assuming humanoid anatomy.");
-    return allParts.singleWhere(
-        (part) => part.designation == BodyPartDesignation.secondaryHand,
-        orElse: () => null);
+    return allParts.singleWhereOrNull(
+        (part) => part.designation == BodyPartDesignation.secondaryHand);
   }
 
   bool get secondaryWeaponAppendageAvailable =>
@@ -175,7 +175,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   ///
   /// Throws if the actor is completely crippled. You should check
   /// [anyWeaponAppendageAvailable] before accessing this getter.
-  BodyPart get weaponAppendage {
+  BodyPart? get weaponAppendage {
     if (!anyWeaponAppendageAvailable) {
       throw StateError("Trying to access weaponAppendage "
           "when the actor is crippled.");
@@ -203,7 +203,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// function does not enforce that (if you have an invalid anatomy, it will
   /// return the first body part that satisfies the designation, and will
   /// not throw).
-  BodyPart findByDesignation(BodyPartDesignation designation) {
+  BodyPart? findByDesignation(BodyPartDesignation? designation) {
     if (torso.designation == designation) return torso;
     for (final child in torso.children) {
       final result = findByDesignationFromPart(designation, child);
@@ -263,8 +263,8 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
   /// Walks the tree of body parts from [startingPart] downwards, and returns
   /// the first [BodyPart] found with [designation].
   @visibleForTesting
-  static BodyPart findByDesignationFromPart(
-      BodyPartDesignation designation, BodyPart startingPart) {
+  static BodyPart? findByDesignationFromPart(
+      BodyPartDesignation? designation, BodyPart startingPart) {
     if (startingPart.designation == designation) return startingPart;
     for (final child in startingPart.children) {
       final result = findByDesignationFromPart(designation, child);
@@ -288,7 +288,7 @@ abstract class Anatomy implements Built<Anatomy, AnatomyBuilder> {
     final needle = randomIntGetter(weightsTotal);
     int current = 0;
     for (final part in bodyPartsWithWeights.keys) {
-      current += bodyPartsWithWeights[part];
+      current += bodyPartsWithWeights[part]!;
       if (needle < current) return part;
     }
     throw StateError("Part weights aren't adding up.");

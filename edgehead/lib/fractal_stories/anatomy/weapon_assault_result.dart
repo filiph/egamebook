@@ -2,7 +2,6 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
 import 'package:edgehead/fractal_stories/item.dart';
-import 'package:meta/meta.dart';
 
 /// Result of an assault by a weapon (sword, spear, claw).
 ///
@@ -15,7 +14,7 @@ class WeaponAssaultResult {
 
   /// The body part that was severed (and should be added to the ground).
   /// This can be (and often _will_ be) `null`.
-  final Item severedPart;
+  final Item? severedPart;
 
   /// The body part that was hit (slashed, pierced, etc.).
   final BodyPart touchedPart;
@@ -46,7 +45,7 @@ class WeaponAssaultResult {
   /// [SlashSuccessLevel.majorCut].
   ///
   /// This is `null` for assaults that were not slashing.
-  final SlashSuccessLevel slashSuccessLevel;
+  final SlashSuccessLevel? slashSuccessLevel;
 
   /// Whether the current weapon will be dropped as a result of the assault.
   ///
@@ -61,12 +60,12 @@ class WeaponAssaultResult {
   const WeaponAssaultResult(
     this.victim,
     this.touchedPart, {
-    @required this.severedPart,
-    @required this.slashSuccessLevel,
-    @required this.disabled,
-    @required this.willFall,
-    @required this.willDropCurrentWeapon,
-    @required this.wasBlinding,
+    required this.severedPart,
+    required this.slashSuccessLevel,
+    required this.disabled,
+    required this.willFall,
+    required this.willDropCurrentWeapon,
+    required this.wasBlinding,
   });
 
   bool get didSeverBodyPart => severedPart != null;
@@ -74,7 +73,7 @@ class WeaponAssaultResult {
   @override
   String toString() {
     final properties = <String>[];
-    if (touchedPart != null) properties.add(touchedPart?.name ?? 'null');
+    properties.add(touchedPart.name);
     if (severedPart != null) properties.add('severedPart');
     if (slashSuccessLevel != null) properties.add(slashSuccessLevel.toString());
     if (disabled) properties.add('disabled');

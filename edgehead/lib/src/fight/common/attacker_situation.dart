@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.fight.attacker_situation;
 
 import 'package:built_collection/built_collection.dart';

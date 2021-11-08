@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:edgehead/egamebook/elements/stat_update_element.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';

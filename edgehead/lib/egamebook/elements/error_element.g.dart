@@ -16,9 +16,9 @@ class _$ErrorElementSerializer implements StructuredSerializer<ErrorElement> {
   final String wireName = 'ErrorElement';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ErrorElement object,
+  Iterable<Object?> serialize(Serializers serializers, ErrorElement object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'message',
       serializers.serialize(object.message,
           specifiedType: const FullType(String)),
@@ -31,7 +31,8 @@ class _$ErrorElementSerializer implements StructuredSerializer<ErrorElement> {
   }
 
   @override
-  ErrorElement deserialize(Serializers serializers, Iterable<Object> serialized,
+  ErrorElement deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ErrorElementBuilder();
 
@@ -39,7 +40,7 @@ class _$ErrorElementSerializer implements StructuredSerializer<ErrorElement> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'message':
           result.message = serializers.deserialize(value,
@@ -62,10 +63,11 @@ class _$ErrorElement extends ErrorElement {
   @override
   final String stackTrace;
 
-  factory _$ErrorElement([void Function(ErrorElementBuilder) updates]) =>
+  factory _$ErrorElement([void Function(ErrorElementBuilder)? updates]) =>
       (new ErrorElementBuilder()..update(updates)).build();
 
-  _$ErrorElement._({this.message, this.stackTrace}) : super._() {
+  _$ErrorElement._({required this.message, required this.stackTrace})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(message, 'ErrorElement', 'message');
     BuiltValueNullFieldError.checkNotNull(
         stackTrace, 'ErrorElement', 'stackTrace');
@@ -102,15 +104,15 @@ class _$ErrorElement extends ErrorElement {
 
 class ErrorElementBuilder
     implements Builder<ErrorElement, ErrorElementBuilder> {
-  _$ErrorElement _$v;
+  _$ErrorElement? _$v;
 
-  String _message;
-  String get message => _$this._message;
-  set message(String message) => _$this._message = message;
+  String? _message;
+  String? get message => _$this._message;
+  set message(String? message) => _$this._message = message;
 
-  String _stackTrace;
-  String get stackTrace => _$this._stackTrace;
-  set stackTrace(String stackTrace) => _$this._stackTrace = stackTrace;
+  String? _stackTrace;
+  String? get stackTrace => _$this._stackTrace;
+  set stackTrace(String? stackTrace) => _$this._stackTrace = stackTrace;
 
   ErrorElementBuilder();
 
@@ -131,7 +133,7 @@ class ErrorElementBuilder
   }
 
   @override
-  void update(void Function(ErrorElementBuilder) updates) {
+  void update(void Function(ErrorElementBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

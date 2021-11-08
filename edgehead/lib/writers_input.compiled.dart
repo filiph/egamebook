@@ -4,6 +4,8 @@
 // WritersInputGenerator
 // **************************************************************************
 
+// @dart=2.9
+
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unused_local_variable

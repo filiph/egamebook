@@ -1,3 +1,5 @@
+// @dart=2.9
+
 library stranded.history.rule;
 
 import 'package:built_collection/built_collection.dart';

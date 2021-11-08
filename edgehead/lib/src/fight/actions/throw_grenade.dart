@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:edgehead/edgehead_ids.dart' show dragonEggId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';

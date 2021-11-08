@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:edgehead/edgehead_actors_describe_overrides.dart';
 import 'package:edgehead/edgehead_director.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';

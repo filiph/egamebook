@@ -23,7 +23,6 @@ WeaponAssaultResult executeBluntHit(
     Actor target, Item weapon, BodyPartDesignation designation) {
   assert(target.hitpoints > 0);
   assert(weapon.damageCapability.isBlunt);
-  assert(designation != null);
 
   final part = target.anatomy.findByDesignation(designation);
   if (part == null) {
@@ -62,9 +61,9 @@ WeaponAssaultResult _addMajorBluntWound(
     victim,
     (part) => part.id == designated.id,
     (b) {
-      b.bluntHitsCount += 1;
-      if (vulnerableBodyPart && b.hitpoints > 0 && !target.isInvincible) {
-        b.hitpoints -= 1;
+      b.bluntHitsCount = b.bluntHitsCount! + 1;
+      if (vulnerableBodyPart && b.hitpoints! > 0 && !target.isInvincible) {
+        b.hitpoints = b.hitpoints! - 1;
       }
     },
   );
@@ -97,7 +96,7 @@ WeaponAssaultResult _disableByBluntHit(
     victim,
     (part) => part.id == bodyPart.id,
     (b) {
-      b.bluntHitsCount += 1;
+      b.bluntHitsCount = b.bluntHitsCount! + 1;
       b.hitpoints = 0;
     },
   );

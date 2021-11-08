@@ -35,8 +35,7 @@ abstract class Choice extends ElementBase
   /// like `"I try to slash the goblin's arm."`.
   String get commandSentence;
 
-  @nullable
-  String get helpMessage;
+  String? get helpMessage;
 
   /// Returns [:true:] when the choice is automatic (presenter picks it
   /// silently). Corresponds to `Action.isImplicit`.
