@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 library stranded.item;
 
@@ -10,7 +10,6 @@ import 'package:edgehead/fractal_stories/items/edibility.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/team.dart';
-import 'package:meta/meta.dart';
 
 part 'item.g.dart';
 
@@ -33,13 +32,13 @@ abstract class Item extends Object
   /// * The item is common (such as "fist"), and so [isCommon] is `true`.
   factory Item(
     int id, {
-    @required String name,
-    String adjective,
+    required String name,
+    String? adjective,
     bool nameIsProperNoun = false,
     bool isCommon = false,
-    DamageCapabilityBuilder damageCapability,
-    EdibilityBuilder edibility,
-    int firstOwnerId,
+    DamageCapabilityBuilder? damageCapability,
+    EdibilityBuilder? edibility,
+    int? firstOwnerId,
   }) {
     assert(
         nameIsProperNoun || isCommon || adjective != null,
@@ -59,8 +58,8 @@ abstract class Item extends Object
 
   factory Item.bodyPart(int id, BodyPart part) {
     assert(part.isSevered);
-    WeaponType weaponType;
-    String name;
+    late WeaponType weaponType;
+    String? name;
 
     if (part.designation == BodyPartDesignation.neck) {
       weaponType = WeaponType.rock;
@@ -84,16 +83,16 @@ abstract class Item extends Object
   }
 
   factory Item.weapon(int id, WeaponType type,
-      {String name,
-      String adjective,
+      {String? name,
+      String? adjective,
       bool nameIsProperNoun = false,
-      int bluntDamage,
-      int slashingDamage,
-      int thrustingDamage,
-      int tearingDamage,
-      int length,
+      int? bluntDamage,
+      int? slashingDamage,
+      int? thrustingDamage,
+      int? tearingDamage,
+      int? length,
       bool isCleaving = false,
-      int firstOwnerId}) {
+      int? firstOwnerId}) {
     assert(
         nameIsProperNoun || adjective != null,
         "All items that are not unique must have an adjective: "
@@ -117,13 +116,11 @@ abstract class Item extends Object
   Item._();
 
   @override
-  @nullable
-  String get adjective;
+  String? get adjective;
 
   /// The body part that constitutes this item. For example, a severed head
   /// constitutes of an "anatomy" of a neck and head and eyes and so on.
-  @nullable
-  BodyPart get bodyPart;
+  BodyPart? get bodyPart;
 
   DamageCapability get damageCapability;
 
@@ -132,8 +129,7 @@ abstract class Item extends Object
   Edibility get edibility;
 
   @override
-  @nullable
-  int get firstOwnerId;
+  int? get firstOwnerId;
 
   @override
   int get id;

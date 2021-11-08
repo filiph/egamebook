@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.item;
 
@@ -16,9 +15,9 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
   final String wireName = 'Item';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Item object,
+  Iterable<Object?> serialize(Serializers serializers, Item object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'damageCapability',
       serializers.serialize(object.damageCapability,
           specifiedType: const FullType(DamageCapability)),
@@ -33,7 +32,7 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
       serializers.serialize(object.nameIsProperNoun,
           specifiedType: const FullType(bool)),
     ];
-    Object value;
+    Object? value;
     value = object.adjective;
     if (value != null) {
       result
@@ -58,7 +57,7 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
   }
 
   @override
-  Item deserialize(Serializers serializers, Iterable<Object> serialized,
+  Item deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ItemBuilder();
 
@@ -66,28 +65,28 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'adjective':
           result.adjective = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'bodyPart':
           result.bodyPart.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BodyPart)) as BodyPart);
+              specifiedType: const FullType(BodyPart))! as BodyPart);
           break;
         case 'damageCapability':
           result.damageCapability.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(DamageCapability))
+                  specifiedType: const FullType(DamageCapability))!
               as DamageCapability);
           break;
         case 'edibility':
           result.edibility.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Edibility)) as Edibility);
+              specifiedType: const FullType(Edibility))! as Edibility);
           break;
         case 'firstOwnerId':
           result.firstOwnerId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -110,15 +109,15 @@ class _$ItemSerializer implements StructuredSerializer<Item> {
 
 class _$Item extends Item {
   @override
-  final String adjective;
+  final String? adjective;
   @override
-  final BodyPart bodyPart;
+  final BodyPart? bodyPart;
   @override
   final DamageCapability damageCapability;
   @override
   final Edibility edibility;
   @override
-  final int firstOwnerId;
+  final int? firstOwnerId;
   @override
   final int id;
   @override
@@ -126,18 +125,18 @@ class _$Item extends Item {
   @override
   final bool nameIsProperNoun;
 
-  factory _$Item([void Function(ItemBuilder) updates]) =>
+  factory _$Item([void Function(ItemBuilder)? updates]) =>
       (new ItemBuilder()..update(updates)).build();
 
   _$Item._(
       {this.adjective,
       this.bodyPart,
-      this.damageCapability,
-      this.edibility,
+      required this.damageCapability,
+      required this.edibility,
       this.firstOwnerId,
-      this.id,
-      this.name,
-      this.nameIsProperNoun})
+      required this.id,
+      required this.name,
+      required this.nameIsProperNoun})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         damageCapability, 'Item', 'damageCapability');
@@ -187,42 +186,42 @@ class _$Item extends Item {
 }
 
 class ItemBuilder implements Builder<Item, ItemBuilder> {
-  _$Item _$v;
+  _$Item? _$v;
 
-  String _adjective;
-  String get adjective => _$this._adjective;
-  set adjective(String adjective) => _$this._adjective = adjective;
+  String? _adjective;
+  String? get adjective => _$this._adjective;
+  set adjective(String? adjective) => _$this._adjective = adjective;
 
-  BodyPartBuilder _bodyPart;
+  BodyPartBuilder? _bodyPart;
   BodyPartBuilder get bodyPart => _$this._bodyPart ??= new BodyPartBuilder();
-  set bodyPart(BodyPartBuilder bodyPart) => _$this._bodyPart = bodyPart;
+  set bodyPart(BodyPartBuilder? bodyPart) => _$this._bodyPart = bodyPart;
 
-  DamageCapabilityBuilder _damageCapability;
+  DamageCapabilityBuilder? _damageCapability;
   DamageCapabilityBuilder get damageCapability =>
       _$this._damageCapability ??= new DamageCapabilityBuilder();
-  set damageCapability(DamageCapabilityBuilder damageCapability) =>
+  set damageCapability(DamageCapabilityBuilder? damageCapability) =>
       _$this._damageCapability = damageCapability;
 
-  EdibilityBuilder _edibility;
+  EdibilityBuilder? _edibility;
   EdibilityBuilder get edibility =>
       _$this._edibility ??= new EdibilityBuilder();
-  set edibility(EdibilityBuilder edibility) => _$this._edibility = edibility;
+  set edibility(EdibilityBuilder? edibility) => _$this._edibility = edibility;
 
-  int _firstOwnerId;
-  int get firstOwnerId => _$this._firstOwnerId;
-  set firstOwnerId(int firstOwnerId) => _$this._firstOwnerId = firstOwnerId;
+  int? _firstOwnerId;
+  int? get firstOwnerId => _$this._firstOwnerId;
+  set firstOwnerId(int? firstOwnerId) => _$this._firstOwnerId = firstOwnerId;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  bool _nameIsProperNoun;
-  bool get nameIsProperNoun => _$this._nameIsProperNoun;
-  set nameIsProperNoun(bool nameIsProperNoun) =>
+  bool? _nameIsProperNoun;
+  bool? get nameIsProperNoun => _$this._nameIsProperNoun;
+  set nameIsProperNoun(bool? nameIsProperNoun) =>
       _$this._nameIsProperNoun = nameIsProperNoun;
 
   ItemBuilder();
@@ -250,7 +249,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
   }
 
   @override
-  void update(void Function(ItemBuilder) updates) {
+  void update(void Function(ItemBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -270,7 +269,7 @@ class ItemBuilder implements Builder<Item, ItemBuilder> {
               nameIsProperNoun: BuiltValueNullFieldError.checkNotNull(
                   nameIsProperNoun, 'Item', 'nameIsProperNoun'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'bodyPart';
         _bodyPart?.build();
