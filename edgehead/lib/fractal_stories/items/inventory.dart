@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
@@ -25,14 +25,12 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   ///
   /// Do not assign to this directly. Use [InventoryBuilder.equipShield]
   /// instead.
-  @nullable
-  Item get currentShield;
+  Item? get currentShield;
 
   /// The weapon currently wielded by the actor.
   ///
   /// Do not assign to this directly. Use [InventoryBuilder.equip] instead.
-  @nullable
-  Item get currentWeapon;
+  Item? get currentWeapon;
 
   /// Inventory of items possessed by the actor.
   ///
@@ -74,8 +72,8 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   /// given type.
   ///
   /// Returns `null` when there are no weapons available.
-  Item findBestWeapon({WeaponType type}) {
-    Item best;
+  Item? findBestWeapon({WeaponType? type}) {
+    Item? best;
     int value = -9999999;
     for (final weapon in weapons) {
       if (type != null && weapon.damageCapability.type != type) continue;
@@ -88,23 +86,23 @@ abstract class Inventory implements Built<Inventory, InventoryBuilder> {
   }
 
   bool hasWeapon(WeaponType type) =>
-      currentWeapon != null && currentWeapon.damageCapability.type == type ||
+      currentWeapon != null && currentWeapon!.damageCapability.type == type ||
       weapons.any((w) => w.damageCapability.type == type);
 }
 
 abstract class InventoryBuilder
     implements Builder<Inventory, InventoryBuilder> {
-  bool canUseShield;
+  bool? canUseShield;
 
-  bool canUseWeapon;
+  bool? canUseWeapon;
 
-  Item currentShield;
+  Item? currentShield;
 
-  Item currentWeapon;
+  Item? currentWeapon;
 
-  bool weaponInPrimaryAppendage;
+  bool? weaponInPrimaryAppendage;
 
-  ListBuilder<Item> items;
+  ListBuilder<Item> items = ListBuilder<Item>();
 
   factory InventoryBuilder() = _$InventoryBuilder;
 
@@ -157,7 +155,7 @@ abstract class InventoryBuilder
   /// (for example, because there is no weapon in the inventory), goes
   /// barehanded using the [anatomy] anatomy.
   WeaponEquipResult equipBestAvailable(Anatomy anatomy) {
-    final Item weapon = build().findBestWeapon();
+    final Item? weapon = build().findBestWeapon();
     if (weapon != null) {
       return equip(weapon, anatomy);
     }

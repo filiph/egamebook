@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of 'inventory.dart';
 
@@ -16,9 +15,9 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
   final String wireName = 'Inventory';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Inventory object,
+  Iterable<Object?> serialize(Serializers serializers, Inventory object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'items',
       serializers.serialize(object.items,
           specifiedType:
@@ -27,7 +26,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
       serializers.serialize(object.weaponInPrimaryAppendage,
           specifiedType: const FullType(bool)),
     ];
-    Object value;
+    Object? value;
     value = object.currentShield;
     if (value != null) {
       result
@@ -46,7 +45,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
   }
 
   @override
-  Inventory deserialize(Serializers serializers, Iterable<Object> serialized,
+  Inventory deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new InventoryBuilder();
 
@@ -54,21 +53,21 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'currentShield':
           result.currentShield = serializers.deserialize(value,
-              specifiedType: const FullType(Item)) as Item;
+              specifiedType: const FullType(Item)) as Item?;
           break;
         case 'currentWeapon':
           result.currentWeapon = serializers.deserialize(value,
-              specifiedType: const FullType(Item)) as Item;
+              specifiedType: const FullType(Item)) as Item?;
           break;
         case 'items':
           result.items.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(Item)]))!
+              as BuiltList<Object?>);
           break;
         case 'weaponInPrimaryAppendage':
           result.weaponInPrimaryAppendage = serializers.deserialize(value,
@@ -83,22 +82,22 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
 
 class _$Inventory extends Inventory {
   @override
-  final Item currentShield;
+  final Item? currentShield;
   @override
-  final Item currentWeapon;
+  final Item? currentWeapon;
   @override
   final BuiltList<Item> items;
   @override
   final bool weaponInPrimaryAppendage;
 
-  factory _$Inventory([void Function(InventoryBuilder) updates]) =>
+  factory _$Inventory([void Function(InventoryBuilder)? updates]) =>
       (new InventoryBuilder()..update(updates)).build() as _$Inventory;
 
   _$Inventory._(
       {this.currentShield,
       this.currentWeapon,
-      this.items,
-      this.weaponInPrimaryAppendage})
+      required this.items,
+      required this.weaponInPrimaryAppendage})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(items, 'Inventory', 'items');
     BuiltValueNullFieldError.checkNotNull(
@@ -142,28 +141,28 @@ class _$Inventory extends Inventory {
 }
 
 class _$InventoryBuilder extends InventoryBuilder {
-  _$Inventory _$v;
+  _$Inventory? _$v;
 
   @override
-  Item get currentShield {
+  Item? get currentShield {
     _$this;
     return super.currentShield;
   }
 
   @override
-  set currentShield(Item currentShield) {
+  set currentShield(Item? currentShield) {
     _$this;
     super.currentShield = currentShield;
   }
 
   @override
-  Item get currentWeapon {
+  Item? get currentWeapon {
     _$this;
     return super.currentWeapon;
   }
 
   @override
-  set currentWeapon(Item currentWeapon) {
+  set currentWeapon(Item? currentWeapon) {
     _$this;
     super.currentWeapon = currentWeapon;
   }
@@ -171,7 +170,7 @@ class _$InventoryBuilder extends InventoryBuilder {
   @override
   ListBuilder<Item> get items {
     _$this;
-    return super.items ??= new ListBuilder<Item>();
+    return super.items;
   }
 
   @override
@@ -181,13 +180,13 @@ class _$InventoryBuilder extends InventoryBuilder {
   }
 
   @override
-  bool get weaponInPrimaryAppendage {
+  bool? get weaponInPrimaryAppendage {
     _$this;
     return super.weaponInPrimaryAppendage;
   }
 
   @override
-  set weaponInPrimaryAppendage(bool weaponInPrimaryAppendage) {
+  set weaponInPrimaryAppendage(bool? weaponInPrimaryAppendage) {
     _$this;
     super.weaponInPrimaryAppendage = weaponInPrimaryAppendage;
   }
@@ -213,7 +212,7 @@ class _$InventoryBuilder extends InventoryBuilder {
   }
 
   @override
-  void update(void Function(InventoryBuilder) updates) {
+  void update(void Function(InventoryBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -231,7 +230,7 @@ class _$InventoryBuilder extends InventoryBuilder {
                   'Inventory',
                   'weaponInPrimaryAppendage'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'items';
         items.build();
