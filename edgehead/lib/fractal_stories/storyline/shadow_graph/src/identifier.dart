@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of storyline.shadow_graph;
 
 /// A list of [IdentifierLevel]s, going from most verbose to least.
@@ -23,9 +21,9 @@ const List<IdentifierLevel> orderedQualificationLevels = [
 class Identifier {
   final IdentifierLevel level;
 
-  final String string;
+  final String? string;
 
-  final Pronoun pronoun;
+  final Pronoun? pronoun;
 
   const Identifier.adjectiveNoun(this.string)
       : level = IdentifierLevel.adjectiveNoun,
@@ -165,35 +163,35 @@ class ReportIdentifiers {
   void forEachEntityIn(Report report,
       void Function(ComplementType, Entity, Set<IdentifierLevel>) callback) {
     if (report.subject != null) {
-      callback(ComplementType.SUBJECT, report.subject, _subjectRange);
+      callback(ComplementType.SUBJECT, report.subject!, _subjectRange);
     }
     if (report.object != null) {
-      callback(ComplementType.OBJECT, report.object, _objectRange);
+      callback(ComplementType.OBJECT, report.object!, _objectRange);
     }
     if (report.object2 != null) {
-      callback(ComplementType.OBJECT2, report.object2, _object2Range);
+      callback(ComplementType.OBJECT2, report.object2!, _object2Range);
     }
 
     if (report.owner != null) {
-      callback(ComplementType.OWNER, report.owner, _ownerRange);
+      callback(ComplementType.OWNER, report.owner!, _ownerRange);
     } else if (_ownerIsForcedByRange(report.subject, _subjectRange)) {
-      callback(ComplementType.OWNER, getEntityById(report.subject.firstOwnerId),
-          _ownerRange);
+      callback(ComplementType.OWNER,
+          getEntityById(report.subject!.firstOwnerId!), _ownerRange);
     }
     if (report.objectOwner != null) {
       callback(
-          ComplementType.OBJECT_OWNER, report.objectOwner, _objectOwnerRange);
+          ComplementType.OBJECT_OWNER, report.objectOwner!, _objectOwnerRange);
     } else if (_ownerIsForcedByRange(report.object, _objectRange)) {
       callback(ComplementType.OBJECT_OWNER,
-          getEntityById(report.object.firstOwnerId), _objectOwnerRange);
+          getEntityById(report.object!.firstOwnerId!), _objectOwnerRange);
     }
     if (report.object2Owner != null) {
-      callback(ComplementType.OBJECT2_OWNER, report.object2Owner,
+      callback(ComplementType.OBJECT2_OWNER, report.object2Owner!,
           _object2OwnerRange);
     } else if (_ownerIsForcedByRange(report.object2, _object2Range)) {
       // Object2 owner is forced via _object2Range.
       callback(ComplementType.OBJECT2_OWNER,
-          getEntityById(report.object2.firstOwnerId), _object2OwnerRange);
+          getEntityById(report.object2!.firstOwnerId!), _object2OwnerRange);
     }
   }
 
@@ -218,7 +216,7 @@ class ReportIdentifiers {
   }
 
   /// Given [type], return the [Entity].
-  Entity getEntityByType(Report report, ComplementType type) {
+  Entity? getEntityByType(Report report, ComplementType type) {
     switch (type) {
       case ComplementType.SUBJECT:
         return report.subject;
@@ -229,19 +227,19 @@ class ReportIdentifiers {
       case ComplementType.OWNER:
         if (report.owner != null) return report.owner;
         if (_ownerIsForcedByRange(report.subject, _subjectRange)) {
-          return getEntityById(report.subject.firstOwnerId);
+          return getEntityById(report.subject!.firstOwnerId!);
         }
         return null;
       case ComplementType.OBJECT_OWNER:
         if (report.objectOwner != null) return report.objectOwner;
         if (_ownerIsForcedByRange(report.object, _objectRange)) {
-          return getEntityById(report.object.firstOwnerId);
+          return getEntityById(report.object!.firstOwnerId!);
         }
         return null;
       case ComplementType.OBJECT2_OWNER:
         if (report.object2Owner != null) return report.object2Owner;
         if (_ownerIsForcedByRange(report.object2, _object2Range)) {
-          return getEntityById(report.object2.firstOwnerId);
+          return getEntityById(report.object2!.firstOwnerId!);
         }
         return null;
       default:
@@ -306,7 +304,7 @@ class ReportIdentifiers {
   /// [IdentifierLevel.ownerAdjectiveNoun] are the only available identifiers
   /// for the entity. In that case, we force the inclusion of an owner
   /// in things.
-  bool _ownerIsForcedByRange(Entity entity, Set<IdentifierLevel> range) {
+  bool _ownerIsForcedByRange(Entity? entity, Set<IdentifierLevel> range) {
     if (entity == null) return false;
     if (entity.firstOwnerId == null) return false;
     // If only [IdentifierLevel.ownerNoun] is available, then owner is forced.

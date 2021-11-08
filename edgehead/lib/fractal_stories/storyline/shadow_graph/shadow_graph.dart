@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 library storyline.shadow_graph;
 
@@ -99,18 +99,18 @@ class ShadowGraph {
 
   /// For each report, this maps from different concrete identifiers
   /// (such as "he" or "the goblin") to entities in that report.
-  List<Map<Identifier, Entity>> _identifiers;
+  late List<Map<Identifier, Entity> > _identifiers;
 
   /// These are the reports. They "shadow" the storyline's original [Report]s.
   /// This provides a way to modify the nature of the reports (such as adding
   /// an entity where needed) without modifying the underlying, immutable
   /// reports.
-  List<ShadowReport> reports;
+  late List<ShadowReport> reports;
 
   factory ShadowGraph.from(Storyline storyline) {
     /// These are the reports we get from the storyline itself.
     List<Report> reports = storyline.rawReports;
-    ShadowGraph graph;
+    late ShadowGraph graph;
 
     // Try at most ten times to construct the ShadowGraph.
     //
@@ -120,7 +120,7 @@ class ShadowGraph {
       final mentionedEntities = _getAllMentionedEntities(reports);
       graph = ShadowGraph._(storyline, reports, mentionedEntities);
 
-      if (reports != null && _checkEquivalent(graph.reports, reports)) {
+      if (_checkEquivalent(graph.reports, reports)) {
         // No modification to entities in the ShadowGraph. We're done here.
         break;
       }
@@ -235,7 +235,7 @@ class ShadowGraph {
         'The entity with id=$id is missing from both '
         'currentEntities=$_mentionedEntities and from '
         '_storylineEntities=$_storylineEntities');
-    return result;
+    return result!;
   }
 
   void __assertAtLeastOneIdentifier() {
@@ -583,7 +583,7 @@ class ShadowGraph {
       final report = reports[i];
 
       if (report.string.contains(ComplementType.OWNER.genericPossessive) &&
-          report.subject.firstOwnerId != null) {
+          report.subject!.firstOwnerId != null) {
         reports[i]._reportIdentifiers._subjectRange.retainAll([
           IdentifierLevel.ownerNoun,
           IdentifierLevel.ownerAdjectiveNoun,
@@ -592,7 +592,7 @@ class ShadowGraph {
 
       if (report.string
               .contains(ComplementType.OBJECT_OWNER.genericPossessive) &&
-          report.object.firstOwnerId != null) {
+          report.object!.firstOwnerId != null) {
         reports[i]._reportIdentifiers._objectRange.retainAll([
           IdentifierLevel.ownerNoun,
           IdentifierLevel.ownerAdjectiveNoun,
@@ -601,7 +601,7 @@ class ShadowGraph {
 
       if (report.string
               .contains(ComplementType.OBJECT2_OWNER.genericPossessive) &&
-          report.object2.firstOwnerId != null) {
+          report.object2!.firstOwnerId != null) {
         reports[i]._reportIdentifiers._object2Range.retainAll([
           IdentifierLevel.ownerNoun,
           IdentifierLevel.ownerAdjectiveNoun,
@@ -674,8 +674,8 @@ class ShadowGraph {
   ///
   /// For example, [Pronoun.HE] will not identify anything at first, until
   /// a report mentions an entity that uses the pronoun as [Entity.pronoun].
-  List<Map<Identifier, Entity>> _getIdentifiersThroughoutStory() {
-    final result = List<Map<Identifier, Entity>>.filled(reports.length, null,
+  List<Map<Identifier, Entity> > _getIdentifiersThroughoutStory() {
+    final result = List<Map<Identifier, Entity>?>.filled(reports.length, null,
         growable: false);
     var previous = <Identifier, Entity>{};
 
@@ -699,12 +699,12 @@ class ShadowGraph {
       // Mark [entity] as identifiable with [id], or mark the [id]
       // unusable ([noEntity]) if it's already assigned to some other entity.
       void assign(Identifier id, Entity entity) {
-        if (previous.containsKey(id) && previous[id].id != entity.id) {
+        if (previous.containsKey(id) && previous[id]!.id != entity.id) {
           // A new entity assignable to an id that was assignable to someone
           // else in the preceding report.
           return;
         }
-        if (current.containsKey(id) && current[id].id != entity.id) {
+        if (current.containsKey(id) && current[id]!.id != entity.id) {
           // The identifier already points to an entity. Also, that entity
           // isn't _this_ [entity] (which might happen when an entity is both
           // the subject and the object of a report).
@@ -773,7 +773,7 @@ class ShadowGraph {
         }
 
         if (entity.firstOwnerId != null) {
-          final owner = getEntityById(entity.firstOwnerId);
+          final owner = getEntityById(entity.firstOwnerId!);
 
           // We're assuming the owner will be mentioned by name here.
           // That might be problematic. What's actually happening is that
@@ -829,7 +829,9 @@ class ShadowGraph {
       previous = current;
     }
 
-    return result;
+    assert(!result.any((e) => e == null),
+        "We haven't filled the whole result list with values.");
+    return result as List<Map<Identifier, Entity>>;
   }
 
   void _limitJoinerToComma(int i) {
@@ -1086,22 +1088,22 @@ class ShadowReport implements Report {
 
   /// This maps from different concrete identifiers
   /// (such as "he" or "the goblin") to entities in the report.
-  Map<Identifier, Entity> _identifiers;
+  Map<Identifier, Entity>? _identifiers;
 
   ShadowReport(this.wrapped, this.getEntityById)
       : _reportIdentifiers = ReportIdentifiers(getEntityById);
 
   @override
-  int get actionThread => wrapped.actionThread;
+  int? get actionThread => wrapped.actionThread;
 
   @override
   Iterable<Entity> get allEntities sync* {
-    if (subject != null) yield subject;
-    if (object != null) yield object;
-    if (object2 != null) yield object2;
-    if (owner != null) yield owner;
-    if (objectOwner != null) yield objectOwner;
-    if (object2Owner != null) yield object2Owner;
+    if (subject != null) yield subject!;
+    if (object != null) yield object!;
+    if (object2 != null) yield object2!;
+    if (owner != null) yield owner!;
+    if (objectOwner != null) yield objectOwner!;
+    if (object2Owner != null) yield object2Owner!;
   }
 
   @override
@@ -1117,23 +1119,23 @@ class ShadowReport implements Report {
   bool get negative => wrapped.negative;
 
   @override
-  Entity get object =>
+  Entity? get object =>
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT);
 
   @override
-  Entity get object2 =>
+  Entity? get object2 =>
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT2);
 
   @override
-  Entity get object2Owner =>
+  Entity? get object2Owner =>
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT2_OWNER);
 
   @override
-  Entity get objectOwner =>
+  Entity? get objectOwner =>
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.OBJECT_OWNER);
 
   @override
-  Entity get owner =>
+  Entity? get owner =>
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.OWNER);
 
   @override
@@ -1154,20 +1156,20 @@ class ShadowReport implements Report {
   String get string => wrapped.string;
 
   @override
-  Entity get subject =>
+  Entity? get subject =>
       _reportIdentifiers.getEntityByType(wrapped, ComplementType.SUBJECT);
 
   @override
   bool get subjectAndObjectAreEnemies => wrapped.subjectAndObjectAreEnemies;
 
   @override
-  int get time => wrapped.time;
+  int? get time => wrapped.time;
 
   @override
   bool get wholeSentence => wrapped.wholeSentence;
 
   @override
-  Entity getEntityByType(ComplementType type) {
+  Entity? getEntityByType(ComplementType type) {
     return _reportIdentifiers.getEntityByType(wrapped, type);
   }
 

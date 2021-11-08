@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-// @dart=2.9
+
 
 part of storyline;
 
@@ -186,23 +186,23 @@ class ComplementType {
   final String theOtherNounPossessive;
 
   const ComplementType._({
-    @required this.adjectiveOne,
-    @required this.adjectiveOnePossessive,
-    @required this.generic,
-    @required this.genericPossessive,
-    @required this.noun,
-    @required this.nounPossessive,
-    @required this.nounWithAdjective,
-    @required this.nounWithAdjectivePossessive,
-    @required this.pronoun,
-    @required this.pronounAccusative,
-    @required this.pronounNominative,
-    @required this.pronounPossessive,
-    @required this.pronounSelf,
+    required this.adjectiveOne,
+    required this.adjectiveOnePossessive,
+    required this.generic,
+    required this.genericPossessive,
+    required this.noun,
+    required this.nounPossessive,
+    required this.nounWithAdjective,
+    required this.nounWithAdjectivePossessive,
+    required this.pronoun,
+    required this.pronounAccusative,
+    required this.pronounNominative,
+    required this.pronounPossessive,
+    required this.pronounSelf,
     // ignore: deprecated_consistency
-    @required this.theOtherNoun,
+    required this.theOtherNoun,
     // ignore: deprecated_consistency
-    @required this.theOtherNounPossessive,
+    required this.theOtherNounPossessive,
     this.isSubject = false,
   });
 

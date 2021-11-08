@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of storyline.pronoun;
 
@@ -16,9 +15,9 @@ class _$PronounSerializer implements StructuredSerializer<Pronoun> {
   final String wireName = 'Pronoun';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Pronoun object,
+  Iterable<Object?> serialize(Serializers serializers, Pronoun object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'accusative',
       serializers.serialize(object.accusative,
           specifiedType: const FullType(String)),
@@ -36,7 +35,7 @@ class _$PronounSerializer implements StructuredSerializer<Pronoun> {
   }
 
   @override
-  Pronoun deserialize(Serializers serializers, Iterable<Object> serialized,
+  Pronoun deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new PronounBuilder();
 
@@ -44,7 +43,7 @@ class _$PronounSerializer implements StructuredSerializer<Pronoun> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'accusative':
           result.accusative = serializers.deserialize(value,
@@ -79,10 +78,14 @@ class _$Pronoun extends Pronoun {
   @override
   final String self;
 
-  factory _$Pronoun([void Function(PronounBuilder) updates]) =>
+  factory _$Pronoun([void Function(PronounBuilder)? updates]) =>
       (new PronounBuilder()..update(updates)).build();
 
-  _$Pronoun._({this.accusative, this.genitive, this.nominative, this.self})
+  _$Pronoun._(
+      {required this.accusative,
+      required this.genitive,
+      required this.nominative,
+      required this.self})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(accusative, 'Pronoun', 'accusative');
     BuiltValueNullFieldError.checkNotNull(genitive, 'Pronoun', 'genitive');
@@ -117,23 +120,23 @@ class _$Pronoun extends Pronoun {
 }
 
 class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
-  _$Pronoun _$v;
+  _$Pronoun? _$v;
 
-  String _accusative;
-  String get accusative => _$this._accusative;
-  set accusative(String accusative) => _$this._accusative = accusative;
+  String? _accusative;
+  String? get accusative => _$this._accusative;
+  set accusative(String? accusative) => _$this._accusative = accusative;
 
-  String _genitive;
-  String get genitive => _$this._genitive;
-  set genitive(String genitive) => _$this._genitive = genitive;
+  String? _genitive;
+  String? get genitive => _$this._genitive;
+  set genitive(String? genitive) => _$this._genitive = genitive;
 
-  String _nominative;
-  String get nominative => _$this._nominative;
-  set nominative(String nominative) => _$this._nominative = nominative;
+  String? _nominative;
+  String? get nominative => _$this._nominative;
+  set nominative(String? nominative) => _$this._nominative = nominative;
 
-  String _self;
-  String get self => _$this._self;
-  set self(String self) => _$this._self = self;
+  String? _self;
+  String? get self => _$this._self;
+  set self(String? self) => _$this._self = self;
 
   PronounBuilder();
 
@@ -156,7 +159,7 @@ class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
   }
 
   @override
-  void update(void Function(PronounBuilder) updates) {
+  void update(void Function(PronounBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

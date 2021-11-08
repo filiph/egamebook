@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 part of storyline;
 
@@ -9,15 +9,15 @@ part of storyline;
 /// than not they are at a [location].
 abstract class Entity {
   factory Entity({
-    @required String name,
-    Pronoun pronoun,
-    String adjective,
-    Team team,
+    required String name,
+    Pronoun? pronoun,
+    String? adjective,
+    Team? team,
     bool nameIsProperNoun,
     bool isPlayer,
     bool isCommon,
-    int firstOwnerId,
-    int id,
+    int? firstOwnerId,
+    int? id,
   }) = _NonserializableEntity;
 
   /// A way to specify the entity more concretely than with just the [name].
@@ -27,7 +27,7 @@ abstract class Entity {
   /// Note that this is really just for specificity (when there are two entities
   /// of the same name). To add flavor ("I look into his dreamy eyes")
   /// or information ("I hit the already injured arm") is still on the writer.
-  String get adjective;
+  String? get adjective;
 
   /// The [Entity.id] of the entity that "owned" this entity the first
   /// time the player sees it. For example, a goblin's hand is
@@ -39,7 +39,7 @@ abstract class Entity {
   ///
   /// This field _can_ be `null`. Lots of things don't belong to anything
   /// or anyone.
-  int get firstOwnerId;
+  int? get firstOwnerId;
 
   /// An entity's [id] is the only constant thing. All other things, including
   /// [name] can change during play. ID cannot.
@@ -96,17 +96,17 @@ abstract class Entity {
   /// Convenience method that will use [storyline] to create a report
   /// about [this].
   void report(Storyline storyline, String text,
-      {Entity owner,
-      Entity object,
-      Entity object2,
-      Entity objectOwner,
+      {Entity? owner,
+      Entity? object,
+      Entity? object2,
+      Entity? objectOwner,
       bool positive = false,
       bool negative = false,
       bool but = false,
       bool endSentence = false,
       bool wholeSentence = false,
       bool subjectAndObjectAreEnemies = false,
-      int actionThread,
+      int? actionThread,
       bool startsThread = false,
       bool replacesThread = false});
 }
@@ -122,17 +122,17 @@ mixin EntityBehavior {
   Team get team;
 
   void report(Storyline storyline, String text,
-      {Entity owner,
-      Entity object,
-      Entity object2,
-      Entity objectOwner,
+      {Entity? owner,
+      Entity? object,
+      Entity? object2,
+      Entity? objectOwner,
       bool positive = false,
       bool negative = false,
       bool but = false,
       bool endSentence = false,
       bool wholeSentence = false,
       bool subjectAndObjectAreEnemies = false,
-      int actionThread,
+      int? actionThread,
       bool startsThread = false,
       bool replacesThread = false}) {
     storyline.add(text,
@@ -162,7 +162,7 @@ class _NonserializableEntity extends Object
   final String name;
 
   @override
-  final String adjective;
+  final String? adjective;
 
   @override
   final bool nameIsProperNoun;
@@ -180,20 +180,20 @@ class _NonserializableEntity extends Object
   final bool isPlayer;
 
   @override
-  final int firstOwnerId;
+  final int? firstOwnerId;
 
-  final int _id;
+  final int? _id;
 
   _NonserializableEntity({
-    @required this.name,
+    required this.name,
     this.adjective,
-    Pronoun pronoun,
-    Team team,
+    Pronoun? pronoun,
+    Team? team,
     this.nameIsProperNoun = false,
     this.isPlayer = false,
     this.isCommon = false,
     this.firstOwnerId,
-    int id,
+    int? id,
   })  : _id = id,
         team = team ?? neutralTeam,
         pronoun = pronoun ?? Pronoun.IT;

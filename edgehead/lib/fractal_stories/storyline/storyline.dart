@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library storyline;
 
 import 'dart:collection';
@@ -34,13 +32,13 @@ final Logger log = Logger('Storyline');
 class Report {
   final String string;
 
-  final Entity subject;
+  final Entity? subject;
 
-  final Entity object;
-  final Entity object2;
-  final Entity owner;
-  final Entity objectOwner;
-  final Entity object2Owner;
+  final Entity? object;
+  final Entity? object2;
+  final Entity? owner;
+  final Entity? objectOwner;
+  final Entity? object2Owner;
   final bool but;
   final bool positive;
   final bool negative;
@@ -73,7 +71,7 @@ class Report {
   /// If the thread is broken in any way (e.g. by a choice block or another
   /// report with a missing or different [actionThread] id), then
   /// the last report will be ignored and only the first three will be printed.
-  final int actionThread;
+  final int? actionThread;
 
   /// This report marks start of a continuous thread of actions which can
   /// be summarized with a single report (marked as [replacesThread]).
@@ -85,7 +83,7 @@ class Report {
   /// report will be replaced by this one.
   final bool replacesThread;
 
-  final int time;
+  final int? time;
 
   Report(this.string,
       {this.subject,
@@ -140,12 +138,12 @@ class Report {
   /// Returns all non-null entities (like [subject], [object] etc.)
   /// mentioned in the report.
   Iterable<Entity> get allEntities sync* {
-    if (subject != null) yield subject;
-    if (object != null) yield object;
-    if (object2 != null) yield object2;
-    if (owner != null) yield owner;
-    if (objectOwner != null) yield objectOwner;
-    if (object2Owner != null) yield object2Owner;
+    if (subject != null) yield subject!;
+    if (object != null) yield object!;
+    if (object2 != null) yield object2!;
+    if (owner != null) yield owner!;
+    if (objectOwner != null) yield objectOwner!;
+    if (object2Owner != null) yield object2Owner!;
   }
 
   /// Returns the [Entity] corresponding to [type].
@@ -154,7 +152,7 @@ class Report {
   /// [object2].
   ///
   /// The returned value can be `null`.
-  Entity getEntityByType(ComplementType type) {
+  Entity? getEntityByType(ComplementType type) {
     switch (type) {
       case ComplementType.SUBJECT:
         return subject;
@@ -181,14 +179,14 @@ class Report {
   /// This asserts that all entities in the report are able to be referred to
   /// in different ways. In other words, "An apple lies next to an apple." is
   /// forbidden.
-  static bool _checkDifferentiated(List<Entity> entities) {
+  static bool _checkDifferentiated(List<Entity?> entities) {
     final nonNulls =
         entities.where((entity) => entity != null).toList(growable: false);
     for (int i = 0; i < nonNulls.length; i++) {
       for (int j = 0; j < nonNulls.length; j++) {
         if (i == j) continue;
-        final a = nonNulls[i];
-        final b = nonNulls[j];
+        final a = nonNulls[i]!;
+        final b = nonNulls[j]!;
         if (a.id == b.id) continue;
         if (a.name == b.name &&
             a.adjective == b.adjective &&
@@ -249,10 +247,10 @@ class Storyline {
   static final _twoOrMoreSpaces = RegExp('[ ]{2,}');
 
   /// Internal list of reports. This is constructed by filtering [_records].
-  List<Report> _immutableReports;
+  late List<Report> _immutableReports;
 
   /// A list of [ShadowReport]s, provided by [ShadowGraph].
-  List<ShadowReport> _reports;
+  late List<ShadowReport> _reports;
 
   /// Internal queue of records, mixing [Report] instances with custom
   /// elements (such as images, maps, stat updates, what have you).
@@ -317,12 +315,12 @@ class Storyline {
   /// When [str] ends with [:.:] or [:!:] or [:?:] and starts with a capital
   /// letter, [wholeSentence] will automatically be [:true:] for convenience.
   void add(String str,
-      {Entity subject,
-      Entity object,
-      Entity object2,
-      Entity owner,
-      Entity objectOwner,
-      Entity object2Owner,
+      {Entity? subject,
+      Entity? object,
+      Entity? object2,
+      Entity? owner,
+      Entity? objectOwner,
+      Entity? object2Owner,
       bool but = false,
       bool positive = false,
       bool negative = false,
@@ -331,11 +329,11 @@ class Storyline {
       bool startSentence = false,
       bool wholeSentence = false,
       bool isRaw = false,
-      int actionThread,
+      int? actionThread,
       bool startsThread = false,
       bool replacesThread = false,
-      int time}) {
-    if (str == null || str == "") {
+      int? time}) {
+    if (str == "") {
       // Ignore empty records.
       return;
     }
@@ -384,14 +382,12 @@ class Storyline {
   /// Add a sentence (or more) enumerating several things ([articles]) at once.
   /// Example: "You can see a handkerchief, a brush and a mirror here."
   /// You can provide "<also>" for a more human-like enumeration.
-  void addEnumeration(String start, Iterable<Entity> articles, String end,
-      {Entity subject,
-      Entity object,
-      Entity object2,
+  void addEnumeration(String start, Iterable<Entity> articles, String? end,
+      {Entity? subject,
+      Entity? object,
+      Entity? object2,
       int maxPerSentence = 3,
       String conjunction = "and"}) {
-    assert(start != null);
-    assert(articles != null);
     assert(
         end == null || end.isNotEmpty,
         "If you don't want an end to the enumeration sentence, provide null "
@@ -488,7 +484,7 @@ class Storyline {
     _records.addAll(other._records);
     for (final key in other._allEntities.keys) {
       // It's okay to overwrite old entries with newer ones.
-      _allEntities[key] = other._allEntities[key];
+      _allEntities[key] = other._allEntities[key]!;
     }
   }
 
@@ -498,8 +494,8 @@ class Storyline {
       return false;
     }
     if (_reports[i].object == null || _reports[j].object == null) return false;
-    return _reports[i].subject.id == _reports[j].object.id &&
-        _reports[i].object.id == _reports[j].subject.id;
+    return _reports[i].subject!.id == _reports[j].object!.id &&
+        _reports[i].object!.id == _reports[j].subject!.id;
   }
 
   /// First report is like "A punches B", second is like
@@ -511,13 +507,13 @@ class Storyline {
       return false;
     }
     if (_reports[i].object == null) return false;
-    if (_reports[i].subject.pronoun == _reports[j].subject.pronoun) {
+    if (_reports[i].subject!.pronoun == _reports[j].subject!.pronoun) {
       return false;
     }
-    if (_reports[i].subject.pronoun == _reports[j]?.object?.pronoun) {
+    if (_reports[i].subject!.pronoun == _reports[j].object?.pronoun) {
       return false;
     }
-    return _reports[i].object.id == _reports[j].subject.id;
+    return _reports[i].object!.id == _reports[j].subject!.id;
   }
 
   /// If storyline already has something to show (at least one full
@@ -553,11 +549,11 @@ class Storyline {
   Iterable<Entity> getAllActiveEntities(int i) sync* {
     if (!valid(i)) return;
     var report = _reports[i];
-    if (report.subject != null) yield report.subject;
-    if (report.object != null) yield report.object;
-    if (report.owner != null) yield report.owner;
-    if (report.objectOwner != null) yield report.objectOwner;
-    if (report.object2Owner != null) yield report.object2Owner;
+    if (report.subject != null) yield report.subject!;
+    if (report.object != null) yield report.object!;
+    if (report.owner != null) yield report.owner!;
+    if (report.objectOwner != null) yield report.objectOwner!;
+    if (report.object2Owner != null) yield report.object2Owner!;
     // Does not include object2, since that is generally an item.
   }
 
@@ -580,7 +576,7 @@ class Storyline {
     _firstMentions[entity.id] = _endOfTime;
   }
 
-  Entity object(int i) {
+  Entity? object(int i) {
     if (i < 0 || i >= _reports.length) {
       return null;
     } else {
@@ -588,7 +584,7 @@ class Storyline {
     }
   }
 
-  Entity object2(int i) {
+  Entity? object2(int i) {
     if (i < 0 || i >= _reports.length) {
       return null;
     } else {
@@ -619,8 +615,10 @@ class Storyline {
 
     // Distill _records into a list of only storyline reports (without
     // custom elements.
-    _immutableReports =
-        _records.where((rec) => rec.isReport).map((rec) => rec.report).toList();
+    _immutableReports = _records
+        .where((rec) => rec.isReport)
+        .map((rec) => rec.report!)
+        .toList();
 
     final cleanedReports =
         _collapseThreads(_immutableReports).toList(growable: false);
@@ -635,7 +633,7 @@ class Storyline {
     int lengthInRecords = 0;
     for (final rec in _records) {
       lengthInRecords += 1;
-      if (rec.isReport && rec.report.string == PARAGRAPH_NEWLINES) break;
+      if (rec.isReport && rec.report!.string == PARAGRAPH_NEWLINES) break;
     }
     if (length < 1) return const [];
 
@@ -772,7 +770,7 @@ class Storyline {
     }
 
     // We have elements other than text.
-    final result = <ElementBase>[];
+    final result = <ElementBase?>[];
     result.add(text);
     int index = 0;
     for (final rec in _records) {
@@ -781,7 +779,7 @@ class Storyline {
       if (index >= lengthInRecords) break;
     }
 
-    return result;
+    return result as List<ElementBase>;
   }
 
   /// Old way of getting text out of [Storyline]. Use [realize]
@@ -839,7 +837,7 @@ class Storyline {
     return false;
   }
 
-  String string(int i) {
+  String? string(int i) {
     if (i < 0 || i >= _reports.length) {
       return null;
     } else {
@@ -847,7 +845,7 @@ class Storyline {
     }
   }
 
-  Entity subject(int i) {
+  Entity? subject(int i) {
     if (i < 0 || i >= _reports.length) {
       return null;
     } else {
@@ -861,7 +859,7 @@ class Storyline {
         _reports[i - 1].time == null) {
       return VERY_LONG_TIME;
     } else {
-      return _reports[i].time - _reports[i - 1].time;
+      return _reports[i].time! - _reports[i - 1].time!;
     }
   }
 
@@ -926,10 +924,10 @@ class Storyline {
           }
         }
 
-        if (_hasBeenMentioned(entity, report.time)) {
+        if (_hasBeenMentioned(entity, report.time!)) {
           return "the $stopword";
         } else {
-          _firstMentions[entity.id] = report.time;
+          _firstMentions[entity.id] = report.time!;
           if (entity.name.startsWith(_vowelsRegExp)) {
             return "an $stopword";
           } else {
@@ -1175,8 +1173,8 @@ class Storyline {
   /// the object's owner _is_ the subject.
   String _consolidateStopwords(String string, ShadowReport report) {
     var result = string;
-    void maybeReplace(ComplementType candidate, Entity candidateEntity,
-        ComplementType replacement, Entity replacementEntity) {
+    void maybeReplace(ComplementType candidate, Entity? candidateEntity,
+        ComplementType replacement, Entity? replacementEntity) {
       if (candidateEntity == null) return;
       if (replacementEntity == null) return;
       if (candidateEntity.id != replacementEntity.id) return;
@@ -1216,13 +1214,13 @@ class Storyline {
     // We're not replacing OWNER with SUBJECT or OBJECT_OWNER with OBJECT,
     // because that would lead to "<subject's> <subject>".
     if (report.subject != null && report.owner != null) {
-      assert(report.subject.id != report.owner.id);
+      assert(report.subject!.id != report.owner!.id);
     }
     if (report.object != null && report.objectOwner != null) {
-      assert(report.object.id != report.objectOwner.id);
+      assert(report.object!.id != report.objectOwner!.id);
     }
     if (report.object2 != null && report.object2Owner != null) {
-      assert(report.object2.id != report.object2Owner.id);
+      assert(report.object2!.id != report.object2Owner!.id);
     }
 
     return result;
@@ -1234,7 +1232,7 @@ class Storyline {
   ///
   /// Parses [str] with [Randomly.parse] to get all variants.
   bool _entityAndSubstringExistTogether(
-      String str, Entity entity, Pattern pattern) {
+      String str, Entity? entity, Pattern pattern) {
     final entityExists = entity != null;
 
     for (final variant in Randomly.parse(str)) {
@@ -1287,7 +1285,7 @@ class Storyline {
   String _preventPossessivesBeforeProperNouns(String string, Report report) {
     String result = string;
 
-    void maybeRemovePossessive(Entity entity, ComplementType complement) {
+    void maybeRemovePossessive(Entity? entity, ComplementType complement) {
       if (entity == null) return;
       if (!entity.nameIsProperNoun) return;
       for (final stopword in [
@@ -1315,9 +1313,9 @@ class Storyline {
   String _realizeStopwords(
     String str,
     Report report, {
-    @required Entity Function(int) getEntityFromId,
+    required Entity Function(int) getEntityFromId,
   }) {
-    Entity subject = report.subject;
+    Entity? subject = report.subject;
     String result = str;
 
     assert(!str.contains("<is>n't"), "Please use <isn't> instead.");
@@ -1454,7 +1452,7 @@ class Storyline {
     if (_reports[i].subject == null || _reports[j].subject == null) {
       return false;
     }
-    return _reports[i].subject.id == _reports[j].subject.id;
+    return _reports[i].subject!.id == _reports[j].subject!.id;
   }
 
   static String capitalize(String string) {
@@ -1505,14 +1503,14 @@ class Storyline {
   ///     - "<subject's>": "<subjectPronoun's>"
   static String _replaceFirstThenAll(
     String string, {
-    @required Map<Pattern, String> first,
-    @required Map<Pattern, String> following,
+    required Map<Pattern, String> first,
+    required Map<Pattern, String> following,
   }) {
     var result = string;
 
     // Find the pattern in [first] that has the earliest match.
-    Pattern winner;
-    int winnerIndex;
+    Pattern? winner;
+    late int winnerIndex;
     for (final key in first.keys) {
       final index = string.indexOf(key);
       if (index == -1) {
@@ -1525,11 +1523,11 @@ class Storyline {
     }
 
     if (winner != null) {
-      result = result.replaceFirst(winner, first[winner]);
+      result = result.replaceFirst(winner, first[winner]!);
     }
 
     for (final key in following.keys) {
-      result = result.replaceAll(key, following[key]);
+      result = result.replaceAll(key, following[key]!);
     }
     return result;
   }
@@ -1540,9 +1538,9 @@ class Storyline {
 /// for example).
 @immutable
 class _StorylineRecord {
-  final Report report;
+  final Report? report;
 
-  final ElementBase customElement;
+  final ElementBase? customElement;
 
   const _StorylineRecord({this.report, this.customElement})
       : assert(

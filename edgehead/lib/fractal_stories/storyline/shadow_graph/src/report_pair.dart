@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of storyline.shadow_graph;
 
 class _ReportPair {
@@ -7,10 +5,7 @@ class _ReportPair {
 
   final Report first;
   final Report second;
-  const _ReportPair(this.index, this.first, this.second)
-      : assert(index != null),
-        assert(first != null),
-        assert(second != null);
+  const _ReportPair(this.index, this.first, this.second);
 
   bool get bothHaveObjects => first.object != null && second.object != null;
 
@@ -23,13 +18,13 @@ class _ReportPair {
   bool get firstSubjectIsSecondObject =>
       first.subject != null &&
       second.object != null &&
-      first.subject.id == second.object.id;
+      first.subject!.id == second.object!.id;
 
   bool get hasSameObject =>
-      bothHaveObjects && first.object.id == second.object.id;
+      bothHaveObjects && first.object!.id == second.object!.id;
 
   bool get hasSameSubject =>
-      bothHaveSubjects && first.subject.id == second.subject.id;
+      bothHaveSubjects && first.subject!.id == second.subject!.id;
 
   /// Returns `true` if both [first] and [second] have either "is" verbs
   /// ("I am strong" and "I am powerful") or any other verb
@@ -58,13 +53,13 @@ class _ReportPair {
   bool get secondSubjectIsFirstObject =>
       second.subject != null &&
       first.object != null &&
-      second.subject.id == first.object.id;
+      second.subject!.id == first.object!.id;
 
   /// Returns `true` if both reports have a non-null subject, and they
   /// are enemies (via [Entity.team]).
   bool get subjectsAreEnemies {
     if (first.subject == null || second.subject == null) return false;
-    return first.subject.team.isEnemyWith(second.subject.team);
+    return first.subject!.team.isEnemyWith(second.subject!.team);
   }
 
   static Iterable<_ReportPair> getPairs(List<Report> reports) sync* {

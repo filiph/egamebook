@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 library randomly;
 
@@ -10,7 +10,6 @@ class Randomly {
 
   // Function gets a list of choices, picks one of them randomly.
   static T choose<T>(List<T> choices) {
-    if (choices == null) throw ArgumentError("Cannot choose from null.");
     int number = choices.length;
     if (number == 0) {
       throw ArgumentError("Cannot randomly choose from an empty set.");
@@ -24,7 +23,7 @@ class Randomly {
   /// `0` or `1` without bias. If the input is `[0.1, 0.1, 0.8]`, the output
   /// will be `2` (index of the last weight) 80% of the time.
   static int chooseWeighted(Iterable<num> weights,
-      {num total = 1, Random random}) {
+      {num total = 1, Random? random}) {
     num pick = (random ?? _random).nextDouble() * total;
     num sum = 0;
     int index = 0;
@@ -41,7 +40,7 @@ class Randomly {
   /// Same as [Randomly.chooseWeighted], but weights and total are [int] so that
   /// we avoid rounding errors.
   static int chooseWeightedPrecise(Iterable<int> weights,
-      {int max = 1000, Random random}) {
+      {int max = 1000, Random? random}) {
     int pick = (random ?? _random).nextInt(max);
     int sum = 0;
     int index = 0;
@@ -122,8 +121,8 @@ class Randomly {
     }
     final indexes = <int>[];
     indexes.add(startTagIndex);
-    int lastIndex;
-    int endTagIndex;
+    late int lastIndex;
+    late int endTagIndex;
     int depth = 1;
     for (int i = startTagIndex + 1; i < str.length; i++) {
       lastIndex = i;
@@ -174,7 +173,7 @@ class Randomly {
 
   /// Randomly runs one of the provided functions.
   static void run(void script1(), void script2(),
-      [void script3(), void script4()]) {
+      [void script3()?, void script4()?]) {
     int count = script4 != null
         ? 4
         : script3 != null
@@ -189,16 +188,16 @@ class Randomly {
         script2();
         break;
       case 2:
-        script3();
+        script3!();
         break;
       case 4:
-        script4();
+        script4!();
         break;
     }
   }
 
   /// Resolve a 'coin toss' of the given probability.
-  static bool saveAgainst(num probability, {Random random}) {
+  static bool saveAgainst(num probability, {Random? random}) {
     if (probability < 0 || probability > 1.0) {
       throw RangeError.range(
           probability, 0, 1, "Probability needs to be within <0,1>.");

@@ -219,11 +219,14 @@ class _$MoveEntitySerializer implements StructuredSerializer<MoveEntity> {
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
-      'firstOwnerId',
-      serializers.serialize(object.firstOwnerId,
-          specifiedType: const FullType(int)),
     ];
-
+    Object value;
+    value = object.firstOwnerId;
+    if (value != null) {
+      result
+        ..add('firstOwnerId')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -525,8 +528,6 @@ class _$MoveEntity extends MoveEntity {
   _$MoveEntity._({this.id, this.name, this.firstOwnerId}) : super._() {
     BuiltValueNullFieldError.checkNotNull(id, 'MoveEntity', 'id');
     BuiltValueNullFieldError.checkNotNull(name, 'MoveEntity', 'name');
-    BuiltValueNullFieldError.checkNotNull(
-        firstOwnerId, 'MoveEntity', 'firstOwnerId');
   }
 
   @override
@@ -607,8 +608,7 @@ class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
             id: BuiltValueNullFieldError.checkNotNull(id, 'MoveEntity', 'id'),
             name: BuiltValueNullFieldError.checkNotNull(
                 name, 'MoveEntity', 'name'),
-            firstOwnerId: BuiltValueNullFieldError.checkNotNull(
-                firstOwnerId, 'MoveEntity', 'firstOwnerId'));
+            firstOwnerId: firstOwnerId);
     replace(_$result);
     return _$result;
   }
