@@ -1,8 +1,5 @@
-// @dart=2.9
-
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:meta/meta.dart';
 
 part 'npc_capability.g.dart';
 
@@ -11,14 +8,13 @@ abstract class NpcCapability
   static Serializer<NpcCapability> get serializer => _$npcCapabilitySerializer;
 
   factory NpcCapability({
-    @required bool isHireable,
+    required bool isHireable,
     int followingActorId,
   }) = _$NpcCapability._;
 
   NpcCapability._();
 
-  @nullable
-  int get followingActorId;
+  int? get followingActorId;
 
   bool get isHireable;
 }

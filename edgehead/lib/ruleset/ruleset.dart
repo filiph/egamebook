@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 library edgehead.ruleset;
 
@@ -85,16 +85,16 @@ class Rule {
 
 @immutable
 class Ruleset {
-  final Rule rule1;
-  final Rule rule2;
-  final Rule rule3;
-  final Rule rule4;
-  final Rule rule5;
-  final Rule rule6;
-  final Rule rule7;
-  final Rule rule8;
-  final Rule rule9;
-  final Rule rule10;
+  final Rule? rule1;
+  final Rule? rule2;
+  final Rule? rule3;
+  final Rule? rule4;
+  final Rule? rule5;
+  final Rule? rule6;
+  final Rule? rule7;
+  final Rule? rule8;
+  final Rule? rule9;
+  final Rule? rule10;
 
   /// When using this constructor, you **MUST** provide the rules in order
   /// from highest [Prerequisite.priority] to lowest.
@@ -152,7 +152,7 @@ class Ruleset {
   }
 
   /// An inefficient way of getting all rules as a list.
-  List<Rule> get _all => List<Rule>.unmodifiable(<Rule>[
+  List<Rule> get _all => List<Rule>.unmodifiable(<Rule?>[
         rule1,
         rule2,
         rule3,
@@ -193,7 +193,7 @@ class Ruleset {
   /// The rules are baked into the class as separate fields
   /// ([rule1] .. [rule10]) for performance reasons. This method returns
   /// the appropriate rule by its index.
-  Rule _getByIndex(int index) {
+  Rule? _getByIndex(int index) {
     if (index == 0) return rule1;
     if (index == 1) return rule2;
     if (index == 2) return rule3;

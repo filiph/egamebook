@@ -1,8 +1,5 @@
-// @dart=2.9
-
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:meta/meta.dart';
 
 part 'director.g.dart';
 
@@ -11,7 +8,7 @@ abstract class DirectorCapability
   static Serializer<DirectorCapability> get serializer =>
       _$directorCapabilitySerializer;
 
-  factory DirectorCapability({@required bool isActive}) =
+  factory DirectorCapability({required bool isActive}) =
       _$DirectorCapability._;
 
   DirectorCapability._();

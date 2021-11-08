@@ -1,4 +1,4 @@
-// @dart=2.9
+
 
 library stateful_random;
 
@@ -14,7 +14,7 @@ typedef RandomIdGetter = int Function();
 /// Corresponds to the [StatefulRandom.nextInt()] function. This typedef is used
 /// for functions that wrap [StatefulRandom.nextInt()] with other logic, such
 /// as [WorldState.randomInt].
-typedef RandomIntGetter = int Function([int max]);
+typedef RandomIntGetter = int Function([int? max]);
 
 /// A pseudo-random number generator that can save its complete state.
 ///
@@ -33,7 +33,6 @@ class StatefulRandom implements Random {
   /// Creates a completely new instance. [seed] cannot be `null` or `0`.
   StatefulRandom(int seed)
       : _state = seed,
-        assert(seed != null),
         assert(seed != 0);
 
   /// Creates an instance from state that was previously created by [saveState].
@@ -43,7 +42,6 @@ class StatefulRandom implements Random {
   StatefulRandom.fromState(int state) : this(state);
 
   void loadState(int state) {
-    assert(state != null);
     assert(state != 0);
     _state = state;
   }

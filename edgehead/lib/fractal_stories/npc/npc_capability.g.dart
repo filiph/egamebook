@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of 'npc_capability.dart';
 
@@ -17,14 +16,14 @@ class _$NpcCapabilitySerializer implements StructuredSerializer<NpcCapability> {
   final String wireName = 'NpcCapability';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, NpcCapability object,
+  Iterable<Object?> serialize(Serializers serializers, NpcCapability object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'isHireable',
       serializers.serialize(object.isHireable,
           specifiedType: const FullType(bool)),
     ];
-    Object value;
+    Object? value;
     value = object.followingActorId;
     if (value != null) {
       result
@@ -36,7 +35,7 @@ class _$NpcCapabilitySerializer implements StructuredSerializer<NpcCapability> {
 
   @override
   NpcCapability deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new NpcCapabilityBuilder();
 
@@ -44,11 +43,11 @@ class _$NpcCapabilitySerializer implements StructuredSerializer<NpcCapability> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'followingActorId':
           result.followingActorId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'isHireable':
           result.isHireable = serializers.deserialize(value,
@@ -63,14 +62,15 @@ class _$NpcCapabilitySerializer implements StructuredSerializer<NpcCapability> {
 
 class _$NpcCapability extends NpcCapability {
   @override
-  final int followingActorId;
+  final int? followingActorId;
   @override
   final bool isHireable;
 
-  factory _$NpcCapability([void Function(NpcCapabilityBuilder) updates]) =>
+  factory _$NpcCapability([void Function(NpcCapabilityBuilder)? updates]) =>
       (new NpcCapabilityBuilder()..update(updates)).build();
 
-  _$NpcCapability._({this.followingActorId, this.isHireable}) : super._() {
+  _$NpcCapability._({this.followingActorId, required this.isHireable})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(
         isHireable, 'NpcCapability', 'isHireable');
   }
@@ -106,16 +106,16 @@ class _$NpcCapability extends NpcCapability {
 
 class NpcCapabilityBuilder
     implements Builder<NpcCapability, NpcCapabilityBuilder> {
-  _$NpcCapability _$v;
+  _$NpcCapability? _$v;
 
-  int _followingActorId;
-  int get followingActorId => _$this._followingActorId;
-  set followingActorId(int followingActorId) =>
+  int? _followingActorId;
+  int? get followingActorId => _$this._followingActorId;
+  set followingActorId(int? followingActorId) =>
       _$this._followingActorId = followingActorId;
 
-  bool _isHireable;
-  bool get isHireable => _$this._isHireable;
-  set isHireable(bool isHireable) => _$this._isHireable = isHireable;
+  bool? _isHireable;
+  bool? get isHireable => _$this._isHireable;
+  set isHireable(bool? isHireable) => _$this._isHireable = isHireable;
 
   NpcCapabilityBuilder();
 
@@ -136,7 +136,7 @@ class NpcCapabilityBuilder
   }
 
   @override
-  void update(void Function(NpcCapabilityBuilder) updates) {
+  void update(void Function(NpcCapabilityBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

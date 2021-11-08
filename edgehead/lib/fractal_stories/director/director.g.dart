@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of 'director.dart';
 
@@ -18,9 +17,10 @@ class _$DirectorCapabilitySerializer
   final String wireName = 'DirectorCapability';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, DirectorCapability object,
+  Iterable<Object?> serialize(
+      Serializers serializers, DirectorCapability object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'isActive',
       serializers.serialize(object.isActive,
           specifiedType: const FullType(bool)),
@@ -31,7 +31,7 @@ class _$DirectorCapabilitySerializer
 
   @override
   DirectorCapability deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new DirectorCapabilityBuilder();
 
@@ -39,7 +39,7 @@ class _$DirectorCapabilitySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'isActive':
           result.isActive = serializers.deserialize(value,
@@ -57,10 +57,10 @@ class _$DirectorCapability extends DirectorCapability {
   final bool isActive;
 
   factory _$DirectorCapability(
-          [void Function(DirectorCapabilityBuilder) updates]) =>
+          [void Function(DirectorCapabilityBuilder)? updates]) =>
       (new DirectorCapabilityBuilder()..update(updates)).build();
 
-  _$DirectorCapability._({this.isActive}) : super._() {
+  _$DirectorCapability._({required this.isActive}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         isActive, 'DirectorCapability', 'isActive');
   }
@@ -95,11 +95,11 @@ class _$DirectorCapability extends DirectorCapability {
 
 class DirectorCapabilityBuilder
     implements Builder<DirectorCapability, DirectorCapabilityBuilder> {
-  _$DirectorCapability _$v;
+  _$DirectorCapability? _$v;
 
-  bool _isActive;
-  bool get isActive => _$this._isActive;
-  set isActive(bool isActive) => _$this._isActive = isActive;
+  bool? _isActive;
+  bool? get isActive => _$this._isActive;
+  set isActive(bool? isActive) => _$this._isActive = isActive;
 
   DirectorCapabilityBuilder();
 
@@ -119,7 +119,7 @@ class DirectorCapabilityBuilder
   }
 
   @override
-  void update(void Function(DirectorCapabilityBuilder) updates) {
+  void update(void Function(DirectorCapabilityBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
