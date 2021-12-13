@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
@@ -15,7 +13,7 @@ const _separator = ';';
 ///
 /// Please keep in sync with `tool/ai/extract.sh`.
 String formatAiConsequence(
-    Actor actor,
+    Actor? actor,
     PlanConsequence initial,
     Performance<dynamic> firstPerformance,
     PlanConsequence consequence,
@@ -42,11 +40,11 @@ String formatAiConsequence(
   buf.write(consequence.order);
   buf.write(_separator);
   // Actor who made the last action.
-  buf.write('${consequence.performance.actor.name} '
-      '(${consequence.performance.actor.id})');
+  buf.write('${consequence.performance!.actor.name} '
+      '(${consequence.performance!.actor.id})');
   buf.write(_separator);
   // Action (the last action before getting to this state).
-  buf.write(consequence.performance.action.name);
+  buf.write(consequence.performance!.action.name);
   buf.write(_separator);
   // Probability of the action;
   buf.write(consequence.probability);

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library fractal_stories.items.edibility;
 
 import 'package:built_value/built_value.dart';
@@ -38,8 +36,7 @@ abstract class Edibility implements Built<Edibility, EdibilityBuilder> {
   Edibility._();
 
   /// A custom report describing the act of eating the item.
-  @nullable
-  String get eatingReport;
+  String? get eatingReport;
 
   /// Don't use this directly. Check [canBeEatenBy] instead.
   bool get isEdibleByHumanoids;

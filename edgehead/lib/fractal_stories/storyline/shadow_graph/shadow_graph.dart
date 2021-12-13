@@ -1,5 +1,3 @@
-
-
 library storyline.shadow_graph;
 
 import 'dart:collection';
@@ -99,7 +97,7 @@ class ShadowGraph {
 
   /// For each report, this maps from different concrete identifiers
   /// (such as "he" or "the goblin") to entities in that report.
-  late List<Map<Identifier, Entity> > _identifiers;
+  late List<Map<Identifier, Entity>> _identifiers;
 
   /// These are the reports. They "shadow" the storyline's original [Report]s.
   /// This provides a way to modify the nature of the reports (such as adding
@@ -674,7 +672,7 @@ class ShadowGraph {
   ///
   /// For example, [Pronoun.HE] will not identify anything at first, until
   /// a report mentions an entity that uses the pronoun as [Entity.pronoun].
-  List<Map<Identifier, Entity> > _getIdentifiersThroughoutStory() {
+  List<Map<Identifier, Entity>> _getIdentifiersThroughoutStory() {
     final result = List<Map<Identifier, Entity>?>.filled(reports.length, null,
         growable: false);
     var previous = <Identifier, Entity>{};

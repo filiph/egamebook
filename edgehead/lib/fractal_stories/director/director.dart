@@ -8,8 +8,7 @@ abstract class DirectorCapability
   static Serializer<DirectorCapability> get serializer =>
       _$directorCapabilitySerializer;
 
-  factory DirectorCapability({required bool isActive}) =
-      _$DirectorCapability._;
+  factory DirectorCapability({required bool isActive}) = _$DirectorCapability._;
 
   DirectorCapability._();
 

@@ -40,8 +40,8 @@ class SessionResult {
   @override
   bool operator ==(Object other) =>
       other is SessionResult &&
-          other.result == result &&
-          other.wasRerolled == wasRerolled;
+      other.result == result &&
+      other.wasRerolled == wasRerolled;
 
   @override
   int get hashCode => (wasRerolled ? 2 : 1) * 100 + result.index;

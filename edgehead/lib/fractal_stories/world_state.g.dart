@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.world_state;
 
@@ -16,9 +15,9 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
   final String wireName = 'WorldState';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, WorldState object,
+  Iterable<Object?> serialize(Serializers serializers, WorldState object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'actionHistory',
       serializers.serialize(object.actionHistory,
           specifiedType: const FullType(ActionHistory)),
@@ -49,7 +48,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
       serializers.serialize(object.visitHistory,
           specifiedType: const FullType(VisitHistory)),
     ];
-    Object value;
+    Object? value;
     value = object.director;
     if (value != null) {
       result
@@ -68,7 +67,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
   }
 
   @override
-  WorldState deserialize(Serializers serializers, Iterable<Object> serialized,
+  WorldState deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WorldStateBuilder();
 
@@ -76,45 +75,45 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'actionHistory':
           result.actionHistory.replace(serializers.deserialize(value,
-              specifiedType: const FullType(ActionHistory)) as ActionHistory);
+              specifiedType: const FullType(ActionHistory))! as ActionHistory);
           break;
         case 'actors':
           result.actors.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(Actor)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(Actor)]))!
+              as BuiltList<Object?>);
           break;
         case 'customHistory':
           result.customHistory.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(CustomEventHistory))
+                  specifiedType: const FullType(CustomEventHistory))!
               as CustomEventHistory);
           break;
         case 'director':
           result.director.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Actor)) as Actor);
+              specifiedType: const FullType(Actor))! as Actor);
           break;
         case 'global':
           result.global = serializers.deserialize(value,
                   specifiedType: const FullType(WorldStateFlags))
-              as WorldStateFlags;
+              as WorldStateFlags?;
           break;
         case 'ruleHistory':
           result.ruleHistory.replace(serializers.deserialize(value,
-              specifiedType: const FullType(RuleHistory)) as RuleHistory);
+              specifiedType: const FullType(RuleHistory))! as RuleHistory);
           break;
         case 'situations':
           result.situations.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
-                      BuiltList, const [const FullType(Situation)]))
-              as BuiltList<Object>);
+                      BuiltList, const [const FullType(Situation)]))!
+              as BuiltList<Object?>);
           break;
         case 'slayHistory':
           result.slayHistory.replace(serializers.deserialize(value,
-              specifiedType: const FullType(SlayHistory)) as SlayHistory);
+              specifiedType: const FullType(SlayHistory))! as SlayHistory);
           break;
         case 'statefulRandomState':
           result.statefulRandomState = serializers.deserialize(value,
@@ -126,7 +125,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           break;
         case 'visitHistory':
           result.visitHistory.replace(serializers.deserialize(value,
-              specifiedType: const FullType(VisitHistory)) as VisitHistory);
+              specifiedType: const FullType(VisitHistory))! as VisitHistory);
           break;
       }
     }
@@ -143,9 +142,9 @@ class _$WorldState extends WorldState {
   @override
   final CustomEventHistory customHistory;
   @override
-  final Actor director;
+  final Actor? director;
   @override
-  final WorldStateFlags global;
+  final WorldStateFlags? global;
   @override
   final RuleHistory ruleHistory;
   @override
@@ -159,21 +158,21 @@ class _$WorldState extends WorldState {
   @override
   final VisitHistory visitHistory;
 
-  factory _$WorldState([void Function(WorldStateBuilder) updates]) =>
+  factory _$WorldState([void Function(WorldStateBuilder)? updates]) =>
       (new WorldStateBuilder()..update(updates)).build() as _$WorldState;
 
   _$WorldState._(
-      {this.actionHistory,
-      this.actors,
-      this.customHistory,
+      {required this.actionHistory,
+      required this.actors,
+      required this.customHistory,
       this.director,
       this.global,
-      this.ruleHistory,
-      this.situations,
-      this.slayHistory,
-      this.statefulRandomState,
-      this.time,
-      this.visitHistory})
+      required this.ruleHistory,
+      required this.situations,
+      required this.slayHistory,
+      required this.statefulRandomState,
+      required this.time,
+      required this.visitHistory})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         actionHistory, 'WorldState', 'actionHistory');
@@ -243,12 +242,12 @@ class _$WorldState extends WorldState {
 }
 
 class _$WorldStateBuilder extends WorldStateBuilder {
-  _$WorldState _$v;
+  _$WorldState? _$v;
 
   @override
   ActionHistoryBuilder get actionHistory {
     _$this;
-    return super.actionHistory ??= new ActionHistoryBuilder();
+    return super.actionHistory;
   }
 
   @override
@@ -260,7 +259,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   @override
   ListBuilder<Actor> get actors {
     _$this;
-    return super.actors ??= new ListBuilder<Actor>();
+    return super.actors;
   }
 
   @override
@@ -272,7 +271,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   @override
   CustomEventHistoryBuilder get customHistory {
     _$this;
-    return super.customHistory ??= new CustomEventHistoryBuilder();
+    return super.customHistory;
   }
 
   @override
@@ -284,7 +283,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   @override
   ActorBuilder get director {
     _$this;
-    return super.director ??= new ActorBuilder();
+    return super.director;
   }
 
   @override
@@ -294,13 +293,13 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
-  WorldStateFlags get global {
+  WorldStateFlags? get global {
     _$this;
     return super.global;
   }
 
   @override
-  set global(WorldStateFlags global) {
+  set global(WorldStateFlags? global) {
     _$this;
     super.global = global;
   }
@@ -308,7 +307,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   @override
   RuleHistoryBuilder get ruleHistory {
     _$this;
-    return super.ruleHistory ??= new RuleHistoryBuilder();
+    return super.ruleHistory;
   }
 
   @override
@@ -320,7 +319,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   @override
   ListBuilder<Situation> get situations {
     _$this;
-    return super.situations ??= new ListBuilder<Situation>();
+    return super.situations;
   }
 
   @override
@@ -332,7 +331,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   @override
   SlayHistoryBuilder get slayHistory {
     _$this;
-    return super.slayHistory ??= new SlayHistoryBuilder();
+    return super.slayHistory;
   }
 
   @override
@@ -342,25 +341,25 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
-  int get statefulRandomState {
+  int? get statefulRandomState {
     _$this;
     return super.statefulRandomState;
   }
 
   @override
-  set statefulRandomState(int statefulRandomState) {
+  set statefulRandomState(int? statefulRandomState) {
     _$this;
     super.statefulRandomState = statefulRandomState;
   }
 
   @override
-  DateTime get time {
+  DateTime? get time {
     _$this;
     return super.time;
   }
 
   @override
-  set time(DateTime time) {
+  set time(DateTime? time) {
     _$this;
     super.time = time;
   }
@@ -368,7 +367,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   @override
   VisitHistoryBuilder get visitHistory {
     _$this;
-    return super.visitHistory ??= new VisitHistoryBuilder();
+    return super.visitHistory;
   }
 
   @override
@@ -385,7 +384,9 @@ class _$WorldStateBuilder extends WorldStateBuilder {
       super.actionHistory = $v.actionHistory.toBuilder();
       super.actors = $v.actors.toBuilder();
       super.customHistory = $v.customHistory.toBuilder();
-      super.director = $v.director?.toBuilder();
+      if ($v.director != null) {
+        super.director = $v.director!.toBuilder();
+      }
       super.global = $v.global;
       super.ruleHistory = $v.ruleHistory.toBuilder();
       super.situations = $v.situations.toBuilder();
@@ -405,7 +406,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
   }
 
   @override
-  void update(void Function(WorldStateBuilder) updates) {
+  void update(void Function(WorldStateBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -429,7 +430,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
                   time, 'WorldState', 'time'),
               visitHistory: visitHistory.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'actionHistory';
         actionHistory.build();

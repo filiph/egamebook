@@ -1,5 +1,3 @@
-
-
 library edgehead.ruleset;
 
 import 'package:edgehead/fractal_stories/context.dart';
@@ -179,14 +177,14 @@ class Ruleset {
       if (rule == null) break;
       if (rule.prerequisite.isSatisfiedBy(context)) {
         rule.applyCallback(context);
-        context.outputWorld?.recordRule(rule);
+        context.outputWorld.recordRule(rule);
         // TODO: when 2+ rules of same priority are applicable, use sim.random
         return;
       }
     }
 
     throw NoRuleApplicableException("No rule was applicable. "
-        "Action history: ${context.world?.actionHistory?.describe()}, "
+        "Action history: ${context.world.actionHistory.describe()}, "
         "Rules: $_all");
   }
 

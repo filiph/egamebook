@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.world;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -126,7 +124,7 @@ class Simulation {
     assert(() {
       for (final room in rooms) {
         if (room.parent != null) {
-          final parent = getRoomByName(room.parent);
+          final parent = getRoomByName(room.parent!);
           if (parent.parent != null) return false;
         }
       }
@@ -140,7 +138,7 @@ class Simulation {
   /// through all [Situation.actions] as well as [Situation.actionGenerators].
   Iterable<Performance<Object>> generateAllPerformances(
       ApplicabilityContext context) sync* {
-    assert(context.world.currentSituation.actions.isNotEmpty,
+    assert(context.world.currentSituation!.actions.isNotEmpty,
         "There are no actions defined for ${context.world.currentSituation}");
 
     bool correspondsToDirectorStatus(Action action) {
@@ -149,10 +147,10 @@ class Simulation {
       return false;
     }
 
-    for (final action in context.world.currentSituation.actions) {
+    for (final action in context.world.currentSituation!.actions) {
       if (!correspondsToDirectorStatus(action)) continue;
 
-      if (action is Action<Nothing>) {
+      if (action is Action<Nothing?>) {
         assert(action is! Action<Approach>);
         if (!action.isApplicable(
             context, context.actor, context.simulation, context.world, null)) {
@@ -163,8 +161,8 @@ class Simulation {
             context.actor, context.simulation, context.world, null);
         final additionalData = action.getAdditionalData(context, null);
         final additionalStrings = action.getAdditionalStrings(context, null);
-        yield Performance<Nothing>(action, context, null, successChance,
-            additionalData, additionalStrings);
+        yield Performance<Nothing?>(action, context, null, successChance,
+            additionalData, additionalStrings) as Performance<Object>;
         continue;
       }
 
@@ -180,8 +178,8 @@ class Simulation {
             context.actor, context.simulation, context.world, target);
         final additionalData = action.getAdditionalData(context, target);
         final additionalStrings = action.getAdditionalStrings(context, target);
-        yield Performance<Object>(action, context, target, successChance,
-            additionalData, additionalStrings);
+        yield Performance<Object>(action as Action<Object>, context,
+            target as Object, successChance, additionalData, additionalStrings);
       }
     }
   }
@@ -223,13 +221,13 @@ class Simulation {
     for (final approachRule in allExits) {
       paths.putIfAbsent(
           approachRule.sourceDestinationHash, () => <_ApproachRule>[]);
-      paths[approachRule.sourceDestinationHash].add(approachRule);
+      paths[approachRule.sourceDestinationHash]!.add(approachRule);
     }
 
     for (final hash in paths.keys) {
       // For each source -> destination path, pick only the most specific
       // exit.
-      final alternatives = paths[hash];
+      final alternatives = paths[hash]!;
       alternatives.sort();
       for (final rule in alternatives) {
         if (rule.prerequisite.isSatisfiedBy(context)) {
@@ -245,7 +243,7 @@ class Simulation {
     if (!allInks.containsKey(inkAstName)) {
       throw StateError('missing ink: $inkAstName');
     }
-    return allInks[inkAstName];
+    return allInks[inkAstName]!;
   }
 
   /// Fetches the [Room] with the [roomName].
@@ -269,7 +267,7 @@ class Simulation {
     // This method is ready for the possibility of a chain of variants
     // (i.e. a variant of a variant of a room).
     while (result.parent != null) {
-      result = getRoomByName(room.parent);
+      result = getRoomByName(room.parent!);
     }
     return result;
   }
@@ -278,9 +276,9 @@ class Simulation {
   /// returns [room].
   Room getVariantIfApplicable(Room room, ApplicabilityContext context) {
     final variants = _getVariants(room).toList(growable: false);
-    variants.sort((a, b) => a.prerequisite.compareTo(b.prerequisite));
+    variants.sort((a, b) => a.prerequisite!.compareTo(b.prerequisite!));
     for (final variant in variants) {
-      if (variant.prerequisite.isSatisfiedBy(context)) {
+      if (variant.prerequisite!.isSatisfiedBy(context)) {
         return variant;
       }
     }
@@ -292,7 +290,7 @@ class Simulation {
       return false;
     }
 
-    return actorDescribeOverrides[actor.id](context);
+    return actorDescribeOverrides[actor.id]!(context);
   }
 
   _ApproachRule _createApproachRule(Room room, Approach approach) {
@@ -305,11 +303,11 @@ class Simulation {
     // Only when both prerequisites are true will we allow the exit to be used.
     // This also gives advantage to more specific exits (those with higher
     // combined [Prerequisite.priority]).
-    Prerequisite prerequisite;
+    late Prerequisite prerequisite;
     if (firstPart == null && secondPart == null) {
       prerequisite = const Prerequisite.alwaysTrue();
     } else if (secondPart == null) {
-      prerequisite = firstPart;
+      prerequisite = firstPart!;
     } else if (firstPart == null) {
       prerequisite = secondPart;
     } else {

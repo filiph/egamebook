@@ -9,7 +9,7 @@ abstract class NpcCapability
 
   factory NpcCapability({
     required bool isHireable,
-    int followingActorId,
+    int? followingActorId,
   }) = _$NpcCapability._;
 
   NpcCapability._();

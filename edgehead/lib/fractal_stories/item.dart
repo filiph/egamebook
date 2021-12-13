@@ -1,5 +1,3 @@
-
-
 library stranded.item;
 
 import 'package:built_value/built_value.dart';

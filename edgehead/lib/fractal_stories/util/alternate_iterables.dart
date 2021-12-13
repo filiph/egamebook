@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library alternate_iterables;
 
 /// Alternates between two iterables. Once one iterable is depleted, the other

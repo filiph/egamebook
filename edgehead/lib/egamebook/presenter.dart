@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 
 abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
-   T? book;
+  T? book;
 
   final StreamController<void> _bookEndCompleter = StreamController<void>();
 

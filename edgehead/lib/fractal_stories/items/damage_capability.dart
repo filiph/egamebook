@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library fractal_stories.items.weapon;
 
 import 'package:built_value/built_value.dart';
@@ -28,11 +26,11 @@ abstract class DamageCapability
 
   factory DamageCapability(
     WeaponType type, {
-    int bluntDamage,
-    int slashingDamage,
-    int thrustingDamage,
-    int tearingDamage,
-    int length,
+    int? bluntDamage,
+    int? slashingDamage,
+    int? thrustingDamage,
+    int? tearingDamage,
+    int? length,
     bool isCleaving = false,
   }) {
     assert(type != null);

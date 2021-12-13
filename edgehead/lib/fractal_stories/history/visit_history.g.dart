@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.history.visit;
 
@@ -18,9 +17,9 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
   final String wireName = 'VisitHistory';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, VisitHistory object,
+  Iterable<Object?> serialize(Serializers serializers, VisitHistory object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'records',
       serializers.serialize(object.records,
           specifiedType: const FullType(BuiltListMultimap,
@@ -31,7 +30,8 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
   }
 
   @override
-  VisitHistory deserialize(Serializers serializers, Iterable<Object> serialized,
+  VisitHistory deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new VisitHistoryBuilder();
 
@@ -39,14 +39,14 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'records':
           result.records.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(VisitRecord)
-              ])));
+              ]))!);
           break;
       }
     }
@@ -62,9 +62,9 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
   final String wireName = 'VisitRecord';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, VisitRecord object,
+  Iterable<Object?> serialize(Serializers serializers, VisitRecord object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'actorId',
       serializers.serialize(object.actorId, specifiedType: const FullType(int)),
       'fromRoomName',
@@ -77,7 +77,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
     ];
-    Object value;
+    Object? value;
     value = object.parentRoomName;
     if (value != null) {
       result
@@ -89,7 +89,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
   }
 
   @override
-  VisitRecord deserialize(Serializers serializers, Iterable<Object> serialized,
+  VisitRecord deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new VisitRecordBuilder();
 
@@ -97,7 +97,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
@@ -109,7 +109,7 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
           break;
         case 'parentRoomName':
           result.parentRoomName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'roomName':
           result.roomName = serializers.deserialize(value,
@@ -130,10 +130,10 @@ class _$VisitHistory extends VisitHistory {
   @override
   final BuiltListMultimap<String, VisitRecord> records;
 
-  factory _$VisitHistory([void Function(VisitHistoryBuilder) updates]) =>
+  factory _$VisitHistory([void Function(VisitHistoryBuilder)? updates]) =>
       (new VisitHistoryBuilder()..update(updates)).build();
 
-  _$VisitHistory._({this.records}) : super._() {
+  _$VisitHistory._({required this.records}) : super._() {
     BuiltValueNullFieldError.checkNotNull(records, 'VisitHistory', 'records');
   }
 
@@ -165,12 +165,12 @@ class _$VisitHistory extends VisitHistory {
 
 class VisitHistoryBuilder
     implements Builder<VisitHistory, VisitHistoryBuilder> {
-  _$VisitHistory _$v;
+  _$VisitHistory? _$v;
 
-  ListMultimapBuilder<String, VisitRecord> _records;
+  ListMultimapBuilder<String, VisitRecord>? _records;
   ListMultimapBuilder<String, VisitRecord> get records =>
       _$this._records ??= new ListMultimapBuilder<String, VisitRecord>();
-  set records(ListMultimapBuilder<String, VisitRecord> records) =>
+  set records(ListMultimapBuilder<String, VisitRecord>? records) =>
       _$this._records = records;
 
   VisitHistoryBuilder();
@@ -191,7 +191,7 @@ class VisitHistoryBuilder
   }
 
   @override
-  void update(void Function(VisitHistoryBuilder) updates) {
+  void update(void Function(VisitHistoryBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -201,7 +201,7 @@ class VisitHistoryBuilder
     try {
       _$result = _$v ?? new _$VisitHistory._(records: records.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'records';
         records.build();
@@ -222,21 +222,21 @@ class _$VisitRecord extends VisitRecord {
   @override
   final String fromRoomName;
   @override
-  final String parentRoomName;
+  final String? parentRoomName;
   @override
   final String roomName;
   @override
   final DateTime time;
 
-  factory _$VisitRecord([void Function(VisitRecordBuilder) updates]) =>
+  factory _$VisitRecord([void Function(VisitRecordBuilder)? updates]) =>
       (new VisitRecordBuilder()..update(updates)).build();
 
   _$VisitRecord._(
-      {this.actorId,
-      this.fromRoomName,
+      {required this.actorId,
+      required this.fromRoomName,
       this.parentRoomName,
-      this.roomName,
-      this.time})
+      required this.roomName,
+      required this.time})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(actorId, 'VisitRecord', 'actorId');
     BuiltValueNullFieldError.checkNotNull(
@@ -286,28 +286,28 @@ class _$VisitRecord extends VisitRecord {
 }
 
 class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
-  _$VisitRecord _$v;
+  _$VisitRecord? _$v;
 
-  int _actorId;
-  int get actorId => _$this._actorId;
-  set actorId(int actorId) => _$this._actorId = actorId;
+  int? _actorId;
+  int? get actorId => _$this._actorId;
+  set actorId(int? actorId) => _$this._actorId = actorId;
 
-  String _fromRoomName;
-  String get fromRoomName => _$this._fromRoomName;
-  set fromRoomName(String fromRoomName) => _$this._fromRoomName = fromRoomName;
+  String? _fromRoomName;
+  String? get fromRoomName => _$this._fromRoomName;
+  set fromRoomName(String? fromRoomName) => _$this._fromRoomName = fromRoomName;
 
-  String _parentRoomName;
-  String get parentRoomName => _$this._parentRoomName;
-  set parentRoomName(String parentRoomName) =>
+  String? _parentRoomName;
+  String? get parentRoomName => _$this._parentRoomName;
+  set parentRoomName(String? parentRoomName) =>
       _$this._parentRoomName = parentRoomName;
 
-  String _roomName;
-  String get roomName => _$this._roomName;
-  set roomName(String roomName) => _$this._roomName = roomName;
+  String? _roomName;
+  String? get roomName => _$this._roomName;
+  set roomName(String? roomName) => _$this._roomName = roomName;
 
-  DateTime _time;
-  DateTime get time => _$this._time;
-  set time(DateTime time) => _$this._time = time;
+  DateTime? _time;
+  DateTime? get time => _$this._time;
+  set time(DateTime? time) => _$this._time = time;
 
   VisitRecordBuilder();
 
@@ -331,7 +331,7 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
   }
 
   @override
-  void update(void Function(VisitRecordBuilder) updates) {
+  void update(void Function(VisitRecordBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
@@ -10,6 +8,6 @@ Item createTeeth(BodyPart part) {
   return Item(StatefulRandom(part.id << 2).next(),
       name: "teeth",
       isCommon: true,
-      damageCapability: part.damageCapability.toBuilder(),
+      damageCapability: part.damageCapability!.toBuilder(),
       firstOwnerId: part.firstOwnerId);
 }

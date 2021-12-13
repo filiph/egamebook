@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.room;
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -66,21 +64,29 @@ class Room {
   /// has visited it at least once.
   ///
   /// Example: "The Tomb of the Raider"
-  final String mapName;
+  ///
+  /// Can be `null` if the [Room] doesn't appear on any map.
+  final String? mapName;
 
   /// This is the name of the room as seen on the map before the player
   /// visits it.
   ///
   /// Example: "a dark place"
-  final String firstMapName;
+  ///
+  /// Can be `null` if the [Room] doesn't appear on any map.
+  final String? firstMapName;
 
   /// The long-form description of this place. This can remind the player
   /// what this room is.
-  final String hint;
+  ///
+  /// Can be `null` if the [Room] doesn't appear on any map.
+  final String? hint;
 
   /// The long-form description of what to expect in this place. This is
   /// shown only _before_ the player visits the room.
-  final String firstHint;
+  ///
+  /// Can be `null` if the [Room] doesn't appear on any map.
+  final String? firstHint;
 
   /// Fully describes the room according to current state of the world when
   /// the actor first sees it.
@@ -100,7 +106,7 @@ class Room {
   /// (they got the [firstDescribe], either from the main room, or a variant
   /// of it) but this is the first time they are visiting _this particular_
   /// variant. They need an update on what's new here.
-  final RoomDescriber variantUpdateDescribe;
+  final RoomDescriber? variantUpdateDescribe;
 
   /// Optionally, a [Room] can have a parent room. In that case, this room
   /// is a specialized version (variant) of the parent.
@@ -111,13 +117,13 @@ class Room {
   ///
   /// [parent] is specified as a String. It must correspond to the parent's
   /// [Room.name].
-  final String parent;
+  final String? parent;
 
   /// If present, and if [Prerequisite.isSatisfiedBy] evaluates to
   /// `true`, then this room will override its [parent] room.
   ///
   /// For [Prerequisite.hash], use [Room.name.hashCode].
-  final Prerequisite prerequisite;
+  final Prerequisite? prerequisite;
 
   /// A function that builds the fight situation in the Room when player arrives
   /// for the first time.
@@ -126,7 +132,9 @@ class Room {
   /// initialize the fight situation and the monsters when we get to them
   /// (so that they don't take memory and CPU) and sometimes we might like
   /// varying fights according to current [Simulation].
-  final FightGenerator fightGenerator;
+  ///
+  /// When this is `null`, there is no fight here.
+  final FightGenerator? fightGenerator;
 
   /// A function that creates items that are in the Room when player arrives
   /// for the first time.
@@ -135,8 +143,15 @@ class Room {
   /// initialize items when we get to them (so that they don't take memory
   /// and CPU) and sometimes we might like varying items according to
   /// current [Simulation].
-  final ItemGenerator itemGenerator;
+  ///
+  /// When this is `null`, there are no items here.
+  final ItemGenerator? itemGenerator;
 
+  /// The ground material, used for procedural descriptions.
+  ///
+  /// Example: "muddy ground"
+  ///
+  /// This will render into "There is a dagger lying on the muddy ground."
   final String groundMaterial;
 
   /// The room is a place where the player can idle (they can read letters,
@@ -162,17 +177,24 @@ class Room {
   /// Called just after the first batch of monsters (defined
   /// in [fightGenerator]) have been killed. This is often the first time
   /// the player character has the peace to explore the room some more.
-  final RoomDescriber afterMonstersCleared;
+  ///
+  /// When this is `null`, no special description will follow after the room's
+  /// monsters have been killed.
+  final RoomDescriber? afterMonstersCleared;
 
   /// This is a short string to be used to form messages like "the orc still
   /// stands in the rubble" or "there is no one among the pillars".
-  final String whereDescription;
+  final String? whereDescription;
 
   /// The physical coordinate of the room on the X axis.
-  final int positionX;
+  ///
+  /// This can be `null` for rooms that aren't on any maps.
+  final int? positionX;
 
   /// The physical coordinate of the room on the Y axis.
-  final int positionY;
+  ///
+  /// This can be `null` for rooms that aren't on any maps.
+  final int? positionY;
 
   /// Creates a new room. [name], [describe] and [exits] cannot be `null`.
   const Room(

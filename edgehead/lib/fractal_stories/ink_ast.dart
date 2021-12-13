@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:meta/meta.dart';
 
@@ -52,13 +50,13 @@ class InkAst extends InkSequenceNode {
 }
 
 class InkChoiceNode extends InkSequenceNode {
-  final bool Function(ApplicabilityContext) isApplicable;
+  final bool Function(ApplicabilityContext)? isApplicable;
 
   final String command;
 
   const InkChoiceNode({
-    @required this.command,
-    @required List<InkNode> consequence,
+    required this.command,
+    required List<InkNode> consequence,
     this.isApplicable,
   }) : super(consequence);
 
@@ -70,7 +68,7 @@ class InkChoiceNode extends InkSequenceNode {
 
   List<InkNode> get consequence => children;
 
-  String get helpMessage {
+  String? get helpMessage {
     final helpMessageStart = command.indexOf('((');
     if (helpMessageStart == -1) return null;
     final helpMessageEnd = command.indexOf('))');

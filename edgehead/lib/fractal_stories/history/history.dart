@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.history;
 
 /// The result of querying a history.
@@ -8,7 +6,7 @@ abstract class QueryResult<T extends Record> {
   bool get hasHappened;
 
   /// The latest event matching the query.
-  T get latest;
+  T? get latest;
 }
 
 /// A base interface to all records.
@@ -57,7 +55,7 @@ class SerialQueryResult<T extends Record> implements QueryResult<T> {
   }
 
   @override
-  T get latest {
+  T? get latest {
     _checkUnwalked();
 
     for (final record in _records) {
@@ -68,14 +66,14 @@ class SerialQueryResult<T extends Record> implements QueryResult<T> {
   }
 
   /// The first time something happened.
-  T get oldest {
+  T? get oldest {
     _checkUnwalked();
 
     // We are dealing with an iterable, and getting a length of an iterable
     // could consume it, preventing us from getting the record. So instead,
     // we walk the iterable and return the last record in it (or null, if it
     // was empty).
-    T result;
+    T? result;
     for (final record in _records) {
       result = record;
     }
@@ -101,7 +99,7 @@ class SerialQueryResult<T extends Record> implements QueryResult<T> {
 ///
 /// The counterpart class is [SerialQueryResult].
 class SingleQueryResult<T extends Record> implements QueryResult<T> {
-  final T _record;
+  final T? _record;
 
   SingleQueryResult(this._record);
 
@@ -109,5 +107,5 @@ class SingleQueryResult<T extends Record> implements QueryResult<T> {
   bool get hasHappened => _record != null;
 
   @override
-  T get latest => _record;
+  T? get latest => _record;
 }

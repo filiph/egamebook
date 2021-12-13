@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.history.visit;
 
 import 'package:built_collection/built_collection.dart';
@@ -28,9 +26,9 @@ abstract class VisitHistory
   BuiltListMultimap<String, VisitRecord> get records;
 
   /// Returns the latest visit performed by [actor].
-  VisitRecord getLatestOnly(Actor actor) {
+  VisitRecord? getLatestOnly(Actor actor) {
     final visited = records.values.where((rec) => rec.actorId == actor.id);
-    VisitRecord latest;
+    VisitRecord? latest;
     for (final rec in visited) {
       if (latest == null) {
         latest = rec;
@@ -49,7 +47,7 @@ abstract class VisitHistory
   /// room. If you don't care what state the room was in when the actor
   /// visited it, set [includeVariants] to `true`.
   SerialQueryResult<VisitRecord> query(Actor actor, Room room,
-      {bool includeVariants = false, String fromRoomName}) {
+      {bool includeVariants = false, String? fromRoomName}) {
     assert(actor != null);
     assert(room != null);
     final key = getKey(room);
@@ -86,11 +84,11 @@ abstract class VisitRecord
   static Serializer<VisitRecord> get serializer => _$visitRecordSerializer;
 
   factory VisitRecord(
-      {@required DateTime time,
-      @required int actorId,
-      @required String roomName,
-      @required String fromRoomName,
-      String parentRoomName}) = _$VisitRecord._;
+      {required DateTime time,
+      required int actorId,
+      required String roomName,
+      required String fromRoomName,
+      String? parentRoomName}) = _$VisitRecord._;
 
   VisitRecord._();
 
@@ -100,8 +98,7 @@ abstract class VisitRecord
   String get fromRoomName;
 
   /// The name of the parent of the visited room, if any.
-  @nullable
-  String get parentRoomName;
+  String? get parentRoomName;
 
   /// The name of the visited room.
   String get roomName;

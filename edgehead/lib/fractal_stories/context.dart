@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.context;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -52,7 +50,7 @@ class ActionContext extends ApplicabilityContext {
   ActionContext.updatedFrom(ActionContext other)
       : this(
             other.currentAction,
-            other.outputWorld.getActorById(other.actor.id),
+            other.outputWorld.getActorById(other.actor.id)!,
             other.simulation,
             other.outputWorld.build(),
             other.outputWorld,
@@ -62,7 +60,7 @@ class ActionContext extends ApplicabilityContext {
   /// Same as [ApplicabilityContext.player], except this getter gets
   /// the most recent player (updates in [outputWorld] count).
   @override
-  Actor get player {
+  Actor? get player {
     return outputWorld.getActorById(Actor.playerId);
   }
 }
@@ -81,7 +79,7 @@ class ApplicabilityContext {
 
   const ApplicabilityContext(this.actor, this.simulation, this.world);
 
-  Actor get player {
+  Actor? get player {
     return world.getActorById(Actor.playerId);
   }
 }

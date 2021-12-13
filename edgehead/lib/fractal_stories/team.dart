@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.team;
 
 import 'package:built_value/built_value.dart';

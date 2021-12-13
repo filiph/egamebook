@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.actor;
 
 import 'package:built_value/built_value.dart';
@@ -57,23 +55,23 @@ abstract class Actor extends Object
     bool isInvincible = false,
     bool isSurvivor = false,
     bool nameIsProperNoun = false,
-    Pronoun pronoun,
-    String adjective,
-    Item currentWeapon,
-    Item currentShield,
-    int hitpoints,
-    int maxHitpoints,
+    Pronoun? pronoun,
+    String? adjective,
+    Item? currentWeapon,
+    Item? currentShield,
+    int? hitpoints,
+    int? maxHitpoints,
     int constitution = 1,
     int dexterity = 100,
     int stamina = 0,
     int sanity = 3,
     int initiative = 0,
-    Anatomy anatomy,
+    Anatomy? anatomy,
     int gold = 0,
-    String currentRoomName,
+    String? currentRoomName,
     bool isHireable = false,
-    int followingActorId,
-    Team team,
+    int? followingActorId,
+    Team? team,
     Pose poseMax = Pose.standing,
     bool isConfused = false,
     bool isUndead = false,
@@ -106,9 +104,9 @@ abstract class Actor extends Object
           if (currentShield != null) currentShield,
         ])
         ..weaponInPrimaryAppendage = true)
-      ..hitpoints = hitpoints ?? maxHitpoints ?? constitution ?? 1
-      ..maxHitpoints = maxHitpoints ?? constitution ?? 1
-      ..constitution = constitution ?? 1
+      ..hitpoints = hitpoints ?? maxHitpoints ?? constitution
+      ..maxHitpoints = maxHitpoints ?? constitution
+      ..constitution = constitution
       ..dexterity = dexterity
       ..stamina = stamina
       ..sanity = sanity
@@ -134,8 +132,7 @@ abstract class Actor extends Object
   Actor._();
 
   @override
-  @nullable
-  String get adjective;
+  String? get adjective;
 
   /// This is the root of the [Actor]'s anatomy.
   Anatomy get anatomy;
@@ -161,22 +158,21 @@ abstract class Actor extends Object
     return weapon.damageCapability;
   }
 
-  @nullable
-  String get currentRoomName;
+  String? get currentRoomName;
 
   /// The shield that the actor is currently wielding. This can be `null`
   /// if there is no shield.
-  Item get currentShield => inventory.currentShield;
+  Item? get currentShield => inventory.currentShield;
 
   /// The weapon this actor is wielding at the moment.
   ///
   /// This must be an item that the actor can wield, such as a dagger
   /// or a sword. Claws and other things are [Anatomy.bodyPartWeapon].
-  Item get currentWeapon => inventory.currentWeapon;
+  Item? get currentWeapon => inventory.currentWeapon;
 
   /// Returns either the [currentWeapon] (if held), or the best available
   /// [anatomy.bodyPartWeapon] (e.g. fist), or `null` if neither is available.
-  Item get currentWeaponOrBodyPart {
+  Item? get currentWeaponOrBodyPart {
     if (currentWeapon != null) return currentWeapon;
     if (anatomy.bodyPartWeapon != null) return anatomy.bodyPartWeapon;
     return null;
@@ -190,13 +186,12 @@ abstract class Actor extends Object
 
   /// Special data attached to the game's director. Normal actors (like
   /// the player, the monsters and the NPCs) don't have this.
-  @nullable
-  DirectorCapability get director;
+  DirectorCapability? get director;
 
   /// Actors don't have "owners".
   @override
   // ignore: avoid_returning_null
-  int get firstOwnerId => null;
+  int? get firstOwnerId => null;
 
   /// The string handle to the fold function that this actor should use.
   String get foldFunctionHandle;
@@ -260,7 +255,7 @@ abstract class Actor extends Object
           "doesn't make sense.");
     }
     return currentWeapon == null &&
-        anatomy.bodyPartWeapon?.damageCapability?.type == WeaponType.fist;
+        anatomy.bodyPartWeapon?.damageCapability.type == WeaponType.fist;
   }
 
   @override
@@ -403,7 +398,7 @@ abstract class Actor extends Object
         // By default, the actor does not attack the enemy team while
         // confused. But first, we need to check he has enough friends
         // and neutrals to attack.
-        final friends = w.currentSituation?.getActors(sim, w)?.where(
+        final friends = w.currentSituation?.getActors(sim, w).where(
                 (actor) => actor.id != id && !team.isEnemyWith(actor.team)) ??
             const [];
         if (friends.isNotEmpty) {
@@ -446,7 +441,7 @@ abstract class Actor extends Object
   /// dimension using [foldFunctionHandle] (which is used to get
   /// a globally provided [FoldFunction] in [Simulation.foldFunctions]).
   ActorScore scoreWorld(WorldState world, Simulation sim) {
-    var actor = world.getActorById(id);
+    var actor = world.getActorById(id)!;
     num selfPreservation = 2 * actor.hitpoints;
     selfPreservation += actor.pose.differenceFrom(Pose.onGround);
     // Extra painful if actor dies in this world.
@@ -549,11 +544,11 @@ abstract class Actor extends Object
   /// Returns true if this actor was attacked by [actor] in the past
   /// [maxTime] seconds.
   bool _hasBeenAttackedBy(Actor other, WorldState w, int maxTime) {
-    int recency =
+    int? recency =
         w.timeSinceLastAggressiveAction(protagonist: other, sufferer: this);
     if (recency == null) return false;
 
-    int deathRecency =
+    int? deathRecency =
         w.timeSinceLastCustomRecord(name: CustomEvent.actorDeath, actorId: id);
     if (deathRecency != null && deathRecency <= recency) {
       // Actor died between the last attack by [other] and now. (Then they
@@ -561,7 +556,7 @@ abstract class Actor extends Object
       return false;
     }
 
-    int turnUndeadRecency = w.timeSinceLastCustomRecord(
+    int? turnUndeadRecency = w.timeSinceLastCustomRecord(
         name: CustomEvent.actorRaisingUndead, actorId: other.id);
 
     if (turnUndeadRecency != null && turnUndeadRecency <= recency) {

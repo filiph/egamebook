@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of fractal_stories.items.weapon;
 
@@ -18,9 +17,9 @@ class _$DamageCapabilitySerializer
   final String wireName = 'DamageCapability';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, DamageCapability object,
+  Iterable<Object?> serialize(Serializers serializers, DamageCapability object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'bluntDamage',
       serializers.serialize(object.bluntDamage,
           specifiedType: const FullType(int)),
@@ -48,7 +47,7 @@ class _$DamageCapabilitySerializer
 
   @override
   DamageCapability deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new DamageCapabilityBuilder();
 
@@ -56,7 +55,7 @@ class _$DamageCapabilitySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'bluntDamage':
           result.bluntDamage = serializers.deserialize(value,
@@ -110,17 +109,17 @@ class _$DamageCapability extends DamageCapability {
   final WeaponType type;
 
   factory _$DamageCapability(
-          [void Function(DamageCapabilityBuilder) updates]) =>
+          [void Function(DamageCapabilityBuilder)? updates]) =>
       (new DamageCapabilityBuilder()..update(updates)).build();
 
   _$DamageCapability._(
-      {this.bluntDamage,
-      this.isCleaving,
-      this.length,
-      this.slashingDamage,
-      this.tearingDamage,
-      this.thrustingDamage,
-      this.type})
+      {required this.bluntDamage,
+      required this.isCleaving,
+      required this.length,
+      required this.slashingDamage,
+      required this.tearingDamage,
+      required this.thrustingDamage,
+      required this.type})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         bluntDamage, 'DamageCapability', 'bluntDamage');
@@ -174,37 +173,38 @@ class _$DamageCapability extends DamageCapability {
 
 class DamageCapabilityBuilder
     implements Builder<DamageCapability, DamageCapabilityBuilder> {
-  _$DamageCapability _$v;
+  _$DamageCapability? _$v;
 
-  int _bluntDamage;
-  int get bluntDamage => _$this._bluntDamage;
-  set bluntDamage(int bluntDamage) => _$this._bluntDamage = bluntDamage;
+  int? _bluntDamage;
+  int? get bluntDamage => _$this._bluntDamage;
+  set bluntDamage(int? bluntDamage) => _$this._bluntDamage = bluntDamage;
 
-  bool _isCleaving;
-  bool get isCleaving => _$this._isCleaving;
-  set isCleaving(bool isCleaving) => _$this._isCleaving = isCleaving;
+  bool? _isCleaving;
+  bool? get isCleaving => _$this._isCleaving;
+  set isCleaving(bool? isCleaving) => _$this._isCleaving = isCleaving;
 
-  int _length;
-  int get length => _$this._length;
-  set length(int length) => _$this._length = length;
+  int? _length;
+  int? get length => _$this._length;
+  set length(int? length) => _$this._length = length;
 
-  int _slashingDamage;
-  int get slashingDamage => _$this._slashingDamage;
-  set slashingDamage(int slashingDamage) =>
+  int? _slashingDamage;
+  int? get slashingDamage => _$this._slashingDamage;
+  set slashingDamage(int? slashingDamage) =>
       _$this._slashingDamage = slashingDamage;
 
-  int _tearingDamage;
-  int get tearingDamage => _$this._tearingDamage;
-  set tearingDamage(int tearingDamage) => _$this._tearingDamage = tearingDamage;
+  int? _tearingDamage;
+  int? get tearingDamage => _$this._tearingDamage;
+  set tearingDamage(int? tearingDamage) =>
+      _$this._tearingDamage = tearingDamage;
 
-  int _thrustingDamage;
-  int get thrustingDamage => _$this._thrustingDamage;
-  set thrustingDamage(int thrustingDamage) =>
+  int? _thrustingDamage;
+  int? get thrustingDamage => _$this._thrustingDamage;
+  set thrustingDamage(int? thrustingDamage) =>
       _$this._thrustingDamage = thrustingDamage;
 
-  WeaponType _type;
-  WeaponType get type => _$this._type;
-  set type(WeaponType type) => _$this._type = type;
+  WeaponType? _type;
+  WeaponType? get type => _$this._type;
+  set type(WeaponType? type) => _$this._type = type;
 
   DamageCapabilityBuilder();
 
@@ -230,7 +230,7 @@ class DamageCapabilityBuilder
   }
 
   @override
-  void update(void Function(DamageCapabilityBuilder) updates) {
+  void update(void Function(DamageCapabilityBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

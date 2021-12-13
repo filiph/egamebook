@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.history.action;
 
 import 'package:built_collection/built_collection.dart';
@@ -64,20 +62,20 @@ abstract class ActionHistory
   ActionRecord getLatest() => records.last;
 
   /// Returns the latest time when [actor] made any kind of proactive action.
-  DateTime getLatestProactiveTime(Actor actor) =>
+  DateTime? getLatestProactiveTime(Actor actor) =>
       latestProactiveByActorId[actor.id];
 
   /// Returns the latest time when [actor] made any kind of action.
-  DateTime getLatestTime(Actor actor) => latestByActorId[actor.id];
+  DateTime? getLatestTime(Actor actor) => latestByActorId[actor.id];
 
   /// Returns the record for the particular set of parameters, in **reverse**
   /// chronological order.
   SerialQueryResult<ActionRecord> query(
-      {String actionName,
-      Actor actor,
-      Actor sufferer,
-      bool wasSuccess,
-      bool wasAggressive}) {
+      {String? actionName,
+      Actor? actor,
+      Actor? sufferer,
+      bool? wasSuccess,
+      bool? wasAggressive}) {
     /// Filter the actions
     Iterable<ActionRecord> filtered = records.reversed.where((record) {
       if (actionName != null && record.actionName != actionName) return false;
@@ -97,11 +95,11 @@ abstract class ActionHistory
 
   /// Returns `true` if the action has ever happened.
   bool hasHappened(
-      {String actionName,
-      Actor actor,
-      Actor sufferer,
-      bool wasSuccess,
-      bool wasAggressive}) {
+      {String? actionName,
+      Actor? actor,
+      Actor? sufferer,
+      bool? wasSuccess,
+      bool? wasAggressive}) {
     return query(
             actionName: actionName,
             actor: actor,
@@ -130,8 +128,7 @@ abstract class ActionRecord
   /// For example, a "VisitArea" action could save the unique name of the area
   /// visited, so that later the game can check whether an area has been
   /// seen by the player.
-  @nullable
-  String get dataString;
+  String? get dataString;
 
   String get description;
 

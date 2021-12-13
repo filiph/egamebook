@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.planner;
 
 import 'dart:collection';
@@ -48,7 +46,7 @@ class ActorPlanner {
   final Map<Performance, ActorScoreChange> _firstActionScores = {};
 
   ActorPlanner(Actor actor, this.simulation, WorldState initialWorld)
-      : actorId = actor?.id,
+      : actorId = actor.id,
         _initial = PlanConsequence.initial(initialWorld) {
     if (actor == null) {
       throw ArgumentError("Called ActorPlanner with actor == null. "
@@ -111,10 +109,10 @@ class ActorPlanner {
     return PlannerRecommendation(_firstActionScores);
   }
 
-  void plan({@required int maxOrder, @required int maxConsequences}) {
+  void plan({required int maxOrder, required int maxConsequences}) {
     _firstActionScores.clear();
 
-    var currentActor = _initial.world.getActorById(actorId);
+    var currentActor = _initial.world.getActorById(actorId)!;
     var initialScore = currentActor.scoreWorld(_initial.world, simulation);
 
     log.fine(
@@ -174,7 +172,7 @@ class ActorPlanner {
       int maxOrder,
       int maxConsequences) sync* {
     // Actor object changes during planning, so we need to look up via id.
-    var initialActor = initial.world.getActorById(actorId);
+    var initialActor = initial.world.getActorById(actorId)!;
     var startTurn = ActorTurn(initialActor, initial.world.time);
     var context = ApplicabilityContext(initialActor, simulation, initial.world);
 
@@ -221,7 +219,7 @@ class ActorPlanner {
 
       log.finest("----");
       log.finest(() => "evaluating a PlanConsequence "
-          "of '${current.performance.commandPath}'");
+          "of '${current.performance!.commandPath}'");
       log.finest(() => "- situation: "
           "${current.world.currentSituation.runtimeType}");
 
@@ -255,16 +253,16 @@ class ActorPlanner {
         continue;
       }
 
-      var currentActorTurn =
-          current.world.currentSituation.getNextTurn(simulation, current.world);
+      var currentActorTurn = current.world.currentSituation!
+          .getNextTurn(simulation, current.world);
       assert(
           !currentActorTurn.isNever,
           "Situation ${current.world.currentSituation} "
           "returned never for getCurrentActor");
-      var currentActor = currentActorTurn.actor;
+      var currentActor = currentActorTurn.actor!;
 
       // This actor is the one we originally started planning for.
-      Actor mainActor;
+      Actor? mainActor;
       var mainActorDuplicates =
           current.world.actors.where((a) => a.id == actorId).length;
       if (mainActorDuplicates > 1) {

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
@@ -13,9 +11,9 @@ class ActorTurn {
   /// no surviving actors.
   static const ActorTurn never = ActorTurn._never();
 
-  final Actor actor;
+  final Actor? actor;
 
-  final DateTime time;
+  final DateTime? time;
 
   /// Returns a turn of [actor] at the time they stop recovering from
   /// the previous move.
@@ -34,11 +32,11 @@ class ActorTurn {
 
   /// Returns a turn of actor with [actorId].
   factory ActorTurn.byId(int actorId, WorldState world) {
-    final actor = world.getActorById(actorId);
+    final actor = world.getActorById(actorId)!;
     return ActorTurn(actor, world.time);
   }
 
-  const ActorTurn._(this.actor, this.time)
+  const ActorTurn._(Actor this.actor, DateTime this.time)
       : assert(actor != null),
         assert(time != null);
 

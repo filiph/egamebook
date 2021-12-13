@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.history.custom_event;
 
@@ -18,16 +17,16 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
   final String wireName = 'CustomEvent';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, CustomEvent object,
+  Iterable<Object?> serialize(Serializers serializers, CustomEvent object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'time',
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
     ];
-    Object value;
+    Object? value;
     value = object.actorId;
     if (value != null) {
       result
@@ -45,7 +44,7 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
   }
 
   @override
-  CustomEvent deserialize(Serializers serializers, Iterable<Object> serialized,
+  CustomEvent deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new CustomEventBuilder();
 
@@ -53,11 +52,11 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'data':
           result.data = serializers.deserialize(value,
@@ -86,9 +85,10 @@ class _$CustomEventHistorySerializer
   final String wireName = 'CustomEventHistory';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, CustomEventHistory object,
+  Iterable<Object?> serialize(
+      Serializers serializers, CustomEventHistory object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'records',
       serializers.serialize(object.records,
           specifiedType: const FullType(BuiltListMultimap,
@@ -100,7 +100,7 @@ class _$CustomEventHistorySerializer
 
   @override
   CustomEventHistory deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new CustomEventHistoryBuilder();
 
@@ -108,14 +108,14 @@ class _$CustomEventHistorySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'records':
           result.records.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltListMultimap, const [
                 const FullType(String),
                 const FullType(CustomEvent)
-              ])));
+              ]))!);
           break;
       }
     }
@@ -126,18 +126,20 @@ class _$CustomEventHistorySerializer
 
 class _$CustomEvent extends CustomEvent {
   @override
-  final int actorId;
+  final int? actorId;
   @override
-  final Object data;
+  final Object? data;
   @override
   final String name;
   @override
   final DateTime time;
 
-  factory _$CustomEvent([void Function(CustomEventBuilder) updates]) =>
+  factory _$CustomEvent([void Function(CustomEventBuilder)? updates]) =>
       (new CustomEventBuilder()..update(updates)).build();
 
-  _$CustomEvent._({this.actorId, this.data, this.name, this.time}) : super._() {
+  _$CustomEvent._(
+      {this.actorId, this.data, required this.name, required this.time})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(name, 'CustomEvent', 'name');
     BuiltValueNullFieldError.checkNotNull(time, 'CustomEvent', 'time');
   }
@@ -178,23 +180,23 @@ class _$CustomEvent extends CustomEvent {
 }
 
 class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
-  _$CustomEvent _$v;
+  _$CustomEvent? _$v;
 
-  int _actorId;
-  int get actorId => _$this._actorId;
-  set actorId(int actorId) => _$this._actorId = actorId;
+  int? _actorId;
+  int? get actorId => _$this._actorId;
+  set actorId(int? actorId) => _$this._actorId = actorId;
 
-  Object _data;
-  Object get data => _$this._data;
-  set data(Object data) => _$this._data = data;
+  Object? _data;
+  Object? get data => _$this._data;
+  set data(Object? data) => _$this._data = data;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  DateTime _time;
-  DateTime get time => _$this._time;
-  set time(DateTime time) => _$this._time = time;
+  DateTime? _time;
+  DateTime? get time => _$this._time;
+  set time(DateTime? time) => _$this._time = time;
 
   CustomEventBuilder();
 
@@ -217,7 +219,7 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
   }
 
   @override
-  void update(void Function(CustomEventBuilder) updates) {
+  void update(void Function(CustomEventBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -241,10 +243,10 @@ class _$CustomEventHistory extends CustomEventHistory {
   final BuiltListMultimap<String, CustomEvent> records;
 
   factory _$CustomEventHistory(
-          [void Function(CustomEventHistoryBuilder) updates]) =>
+          [void Function(CustomEventHistoryBuilder)? updates]) =>
       (new CustomEventHistoryBuilder()..update(updates)).build();
 
-  _$CustomEventHistory._({this.records}) : super._() {
+  _$CustomEventHistory._({required this.records}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         records, 'CustomEventHistory', 'records');
   }
@@ -279,12 +281,12 @@ class _$CustomEventHistory extends CustomEventHistory {
 
 class CustomEventHistoryBuilder
     implements Builder<CustomEventHistory, CustomEventHistoryBuilder> {
-  _$CustomEventHistory _$v;
+  _$CustomEventHistory? _$v;
 
-  ListMultimapBuilder<String, CustomEvent> _records;
+  ListMultimapBuilder<String, CustomEvent>? _records;
   ListMultimapBuilder<String, CustomEvent> get records =>
       _$this._records ??= new ListMultimapBuilder<String, CustomEvent>();
-  set records(ListMultimapBuilder<String, CustomEvent> records) =>
+  set records(ListMultimapBuilder<String, CustomEvent>? records) =>
       _$this._records = records;
 
   CustomEventHistoryBuilder();
@@ -305,7 +307,7 @@ class CustomEventHistoryBuilder
   }
 
   @override
-  void update(void Function(CustomEventHistoryBuilder) updates) {
+  void update(void Function(CustomEventHistoryBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -315,7 +317,7 @@ class CustomEventHistoryBuilder
     try {
       _$result = _$v ?? new _$CustomEventHistory._(records: records.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'records';
         records.build();

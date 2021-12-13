@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.world_state;
 
 import 'package:built_collection/built_collection.dart';
@@ -18,7 +16,8 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
-import 'package:meta/meta.dart';
+
+import 'dart:math' as math;
 
 part 'world_state.g.dart';
 
@@ -40,7 +39,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   BuiltList<Actor> get actors;
 
   /// The situation on the top of the stack.
-  Situation get currentSituation {
+  Situation? get currentSituation {
     if (situations.isEmpty) return null;
     return situations.last;
   }
@@ -50,8 +49,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
 
   /// The director of the book. She can change the state of the world
   /// at select points (for example, when the player is "not looking").
-  @nullable
-  Actor get director;
+  Actor? get director;
 
   /// The global flags and counters that make up the state of the world that
   /// doesn't fit into [actors], [actionRecords], etc.
@@ -62,8 +60,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   ///
   /// This object must have a hash code that is value-based so that globals
   /// with the same state have the same [Object.hashCode].
-  @nullable
-  WorldStateFlags get global;
+  WorldStateFlags? get global;
 
   /// The history of rules as they were triggered through different rulesets.
   RuleHistory get ruleHistory;
@@ -117,7 +114,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   ///
   /// Will throw when there is either no actor with the given [id], or there
   /// are several.
-  Actor getActorById(int id) {
+  Actor? getActorById(int id) {
     if (director?.id == id) {
       return director;
     }
@@ -132,8 +129,8 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
     return actors.singleWhere((actor) => actor.id == id);
   }
 
-  Situation getSituationById(int situationId) {
-    int index = _findSituationIndex(situationId);
+  Situation? getSituationById(int situationId) {
+    int? index = _findSituationIndex(situationId);
     if (index == null) return null;
     return situations[index];
   }
@@ -175,8 +172,8 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   /// performed by [protagonist] on [sufferer]. Otherwise, returns
   /// number of seconds since the last time this happened. In other words,
   /// the return is the same as with [timeSinceLastActionRecord].
-  int timeSinceLastAggressiveAction(
-      {@required Actor protagonist, @required Actor sufferer}) {
+  int? timeSinceLastAggressiveAction(
+      {required Actor protagonist, required Actor sufferer}) {
     assert(protagonist != null);
     assert(sufferer != null);
 
@@ -193,13 +190,13 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   /// the specified named parameters was performed.
   ///
   /// Returns `null` when such a record doesn't exist.
-  int timeSinceLastActionRecord(
-      {String actionName,
-      Actor protagonist,
-      Actor sufferer,
-      bool wasSuccess,
-      bool wasAggressive}) {
-    assert(!(protagonist != null && sufferer != null && wasAggressive),
+  int? timeSinceLastActionRecord(
+      {String? actionName,
+      Actor? protagonist,
+      Actor? sufferer,
+      bool? wasSuccess,
+      bool? wasAggressive}) {
+    assert(!(protagonist != null && sufferer != null && wasAggressive!),
         "Use timeSinceLastAggressiveAction for a major speedup.");
 
     final latest = actionHistory
@@ -221,7 +218,7 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   /// the specified named parameters occurred.
   ///
   /// Returns `null` when such a record doesn't exist.
-  int timeSinceLastCustomRecord({@required String name, int actorId}) {
+  int? timeSinceLastCustomRecord({required String name, int? actorId}) {
     final latest = customHistory.query(name: name, actorId: actorId).latest;
     if (latest == null) {
       // ignore: avoid_returning_null
@@ -267,8 +264,8 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
 
   /// Returns the index at which the [Situation] with [situationId] resides
   /// in the [situations] list.
-  int _findSituationIndex(int situationId) {
-    int index;
+  int? _findSituationIndex(int situationId) {
+    int? index;
     for (int i = 0; i < situations.length; i++) {
       if (situations[i].id == situationId) {
         index = i;
@@ -281,34 +278,38 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
 
 abstract class WorldStateBuilder
     implements Builder<WorldState, WorldStateBuilder> {
-  ActionHistoryBuilder actionHistory;
+  ActionHistoryBuilder actionHistory = ActionHistoryBuilder();
 
-  RuleHistoryBuilder ruleHistory;
+  RuleHistoryBuilder ruleHistory = RuleHistoryBuilder();
 
-  ListBuilder<Actor> actors;
+  ListBuilder<Actor> actors = ListBuilder<Actor>();
 
-  ActorBuilder director;
+  ActorBuilder director = Actor.initialized(
+    -1,
+    () => math.Random().nextInt(0xFFFFFF),
+    "MOCK DIRECTOR",
+  ).toBuilder();
 
-  int statefulRandomState;
+  int? statefulRandomState = 42;
 
-  WorldStateFlags global;
+  WorldStateFlags? global;
 
-  ListBuilder<Situation> situations;
+  ListBuilder<Situation> situations = ListBuilder<Situation>();
 
-  CustomEventHistoryBuilder customHistory;
+  CustomEventHistoryBuilder customHistory = CustomEventHistoryBuilder();
 
-  DateTime time;
+  DateTime? time;
 
-  VisitHistoryBuilder visitHistory;
+  VisitHistoryBuilder visitHistory = VisitHistoryBuilder();
 
-  SlayHistoryBuilder slayHistory;
+  SlayHistoryBuilder slayHistory = SlayHistoryBuilder();
 
   factory WorldStateBuilder() = _$WorldStateBuilder;
 
   WorldStateBuilder._();
 
   /// The situation on the top of the stack.
-  Situation get currentSituation => build().currentSituation;
+  Situation? get currentSituation => build().currentSituation;
 
   bool actionHasBeenPerformed(String actionName) =>
       build().actionHasBeenPerformed(actionName);
@@ -317,7 +318,7 @@ abstract class WorldStateBuilder
       build().actionHasBeenPerformedSuccessfully(actionName);
 
   void elapseSituationTimeIfExists(int situationId) {
-    int index = build()._findSituationIndex(situationId);
+    int? index = build()._findSituationIndex(situationId);
     if (index == null) {
       return;
     }
@@ -325,11 +326,11 @@ abstract class WorldStateBuilder
     situations[index] = situations[index].elapseTurn();
   }
 
-  Actor getActorById(int id) {
+  Actor? getActorById(int id) {
     return build().getActorById(id);
   }
 
-  Situation getSituationById(int situationId) =>
+  Situation? getSituationById(int situationId) =>
       build().getSituationById(situationId);
 
   S getSituationByName<S extends Situation>(String situationName) =>
@@ -337,7 +338,7 @@ abstract class WorldStateBuilder
 
   void insertSituationAbove(
       Situation newSituation, Situation existingSituation) {
-    int index;
+    int? index;
     for (var i = situations.length - 1; i >= 0; i -= 1) {
       if (situations[i].id == existingSituation.id) {
         index = i;
@@ -381,21 +382,21 @@ abstract class WorldStateBuilder
   }
 
   bool randomBool() {
-    _rnd.loadState(statefulRandomState);
+    _rnd.loadState(statefulRandomState!);
     final result = _rnd.nextBool();
     statefulRandomState = _rnd.saveState();
     return result;
   }
 
   T randomChoose<T>(List<T> options) {
-    _rnd.loadState(statefulRandomState);
+    _rnd.loadState(statefulRandomState!);
     final result = _rnd.nextInt(options.length);
     statefulRandomState = _rnd.saveState();
     return options[result];
   }
 
   double randomDouble() {
-    _rnd.loadState(statefulRandomState);
+    _rnd.loadState(statefulRandomState!);
     final result = _rnd.nextDouble();
     statefulRandomState = _rnd.saveState();
     return result;
@@ -404,8 +405,8 @@ abstract class WorldStateBuilder
   /// Returns a number from `0` (inclusive) to [max] (exclusive).
   ///
   /// If [max] is undefined, the maximum int will be used.
-  int randomInt([int max]) {
-    _rnd.loadState(statefulRandomState);
+  int randomInt([int? max]) {
+    _rnd.loadState(statefulRandomState!);
     final result = max == null ? _rnd.next() : _rnd.nextInt(max);
     statefulRandomState = _rnd.saveState();
     return result;
@@ -427,11 +428,11 @@ abstract class WorldStateBuilder
     }
   }
 
-  void recordCustom(String eventName, {Object data, Entity actor}) {
+  void recordCustom(String eventName, {Object? data, Entity? actor}) {
     customHistory.records.add(
         CustomEventHistory.getKey(eventName),
         CustomEvent(
-          time: time,
+          time: time!,
           name: eventName,
           data: data,
           actorId: actor?.id,
@@ -439,7 +440,7 @@ abstract class WorldStateBuilder
   }
 
   void recordRule(Rule rule) {
-    final record = RuleRecord(ruleId: rule.hash, time: time);
+    final record = RuleRecord(ruleId: rule.hash, time: time!);
     ruleHistory.records[rule.hash] = record;
     ruleHistory.latestRule = record.toBuilder();
   }
@@ -453,7 +454,7 @@ abstract class WorldStateBuilder
     slayHistory.records.add(
         key,
         SlayRecord(
-            time: time,
+            time: time!,
             actorId: actor.id,
             roomName: room.name,
             parentRoomName: room.parent));
@@ -464,7 +465,7 @@ abstract class WorldStateBuilder
     visitHistory.records.add(
         key,
         VisitRecord(
-            time: time,
+            time: time!,
             actorId: actor.id,
             roomName: room.name,
             parentRoomName: room.parent,
@@ -472,7 +473,7 @@ abstract class WorldStateBuilder
   }
 
   void replaceSituationById<T extends Situation>(int id, T updatedSituation) {
-    int index = build()._findSituationIndex(id);
+    int? index = build()._findSituationIndex(id);
     if (index == null) {
       throw ArgumentError("Situation with id $id does not "
           "exist in $situations");
@@ -481,7 +482,7 @@ abstract class WorldStateBuilder
   }
 
   void updateActorById(int id, void updates(ActorBuilder b)) {
-    var original = getActorById(id);
+    var original = getActorById(id)!;
     var updated = original.rebuild(updates);
     assert(original.id == updated.id);
     if (original.isDirector) {

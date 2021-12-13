@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.history.custom_event;
 
 import 'package:built_collection/built_collection.dart';
@@ -32,10 +30,10 @@ abstract class CustomEvent
   static Serializer<CustomEvent> get serializer => _$customEventSerializer;
 
   factory CustomEvent({
-    @required DateTime time,
-    @required String name,
-    int actorId,
-    Object data,
+    required DateTime time,
+    required String name,
+    int? actorId,
+    Object? data,
   }) = _$CustomEvent._;
 
   CustomEvent._();
@@ -49,14 +47,12 @@ abstract class CustomEvent
   /// to the actor who did the killing. On the other hand, a [name] such
   /// as `"kill"` is very unclear. You might not guess correctly whether the
   /// [actorId] refers to the attacker or the victim.
-  @nullable
-  int get actorId;
+  int? get actorId;
 
   /// Additional data for the event. Optional and untyped.
   ///
   /// You need to make sure this is serializable.
-  @nullable
-  Object get data;
+  Object? get data;
 
   /// A custom name of the event. There is no namespacing, so choose as unique
   /// a name as possible.
@@ -91,7 +87,7 @@ abstract class CustomEventHistory
   /// If you provide [actorId], only events with a corresponding
   /// [CustomEvent.actorId] will be returned.
   SerialQueryResult<CustomEvent> query(
-      {@required String name, int actorId, Object data}) {
+      {required String name, int? actorId, Object? data}) {
     final key = getKey(name);
     if (!records.containsKey(key)) return SerialQueryResult(const []);
     var results = records[key].reversed;

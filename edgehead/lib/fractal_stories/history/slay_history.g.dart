@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.history.slay;
 
@@ -17,9 +16,9 @@ class _$SlayHistorySerializer implements StructuredSerializer<SlayHistory> {
   final String wireName = 'SlayHistory';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, SlayHistory object,
+  Iterable<Object?> serialize(Serializers serializers, SlayHistory object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'records',
       serializers.serialize(object.records,
           specifiedType: const FullType(BuiltListMultimap,
@@ -30,7 +29,7 @@ class _$SlayHistorySerializer implements StructuredSerializer<SlayHistory> {
   }
 
   @override
-  SlayHistory deserialize(Serializers serializers, Iterable<Object> serialized,
+  SlayHistory deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new SlayHistoryBuilder();
 
@@ -38,12 +37,14 @@ class _$SlayHistorySerializer implements StructuredSerializer<SlayHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'records':
           result.records.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltListMultimap,
-                  const [const FullType(String), const FullType(SlayRecord)])));
+              specifiedType: const FullType(BuiltListMultimap, const [
+                const FullType(String),
+                const FullType(SlayRecord)
+              ]))!);
           break;
       }
     }
@@ -59,9 +60,9 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
   final String wireName = 'SlayRecord';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, SlayRecord object,
+  Iterable<Object?> serialize(Serializers serializers, SlayRecord object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'actorId',
       serializers.serialize(object.actorId, specifiedType: const FullType(int)),
       'roomName',
@@ -71,7 +72,7 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
       serializers.serialize(object.time,
           specifiedType: const FullType(DateTime)),
     ];
-    Object value;
+    Object? value;
     value = object.parentRoomName;
     if (value != null) {
       result
@@ -83,7 +84,7 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
   }
 
   @override
-  SlayRecord deserialize(Serializers serializers, Iterable<Object> serialized,
+  SlayRecord deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new SlayRecordBuilder();
 
@@ -91,7 +92,7 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
@@ -99,7 +100,7 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
           break;
         case 'parentRoomName':
           result.parentRoomName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'roomName':
           result.roomName = serializers.deserialize(value,
@@ -120,10 +121,10 @@ class _$SlayHistory extends SlayHistory {
   @override
   final BuiltListMultimap<String, SlayRecord> records;
 
-  factory _$SlayHistory([void Function(SlayHistoryBuilder) updates]) =>
+  factory _$SlayHistory([void Function(SlayHistoryBuilder)? updates]) =>
       (new SlayHistoryBuilder()..update(updates)).build();
 
-  _$SlayHistory._({this.records}) : super._() {
+  _$SlayHistory._({required this.records}) : super._() {
     BuiltValueNullFieldError.checkNotNull(records, 'SlayHistory', 'records');
   }
 
@@ -153,12 +154,12 @@ class _$SlayHistory extends SlayHistory {
 }
 
 class SlayHistoryBuilder implements Builder<SlayHistory, SlayHistoryBuilder> {
-  _$SlayHistory _$v;
+  _$SlayHistory? _$v;
 
-  ListMultimapBuilder<String, SlayRecord> _records;
+  ListMultimapBuilder<String, SlayRecord>? _records;
   ListMultimapBuilder<String, SlayRecord> get records =>
       _$this._records ??= new ListMultimapBuilder<String, SlayRecord>();
-  set records(ListMultimapBuilder<String, SlayRecord> records) =>
+  set records(ListMultimapBuilder<String, SlayRecord>? records) =>
       _$this._records = records;
 
   SlayHistoryBuilder();
@@ -179,7 +180,7 @@ class SlayHistoryBuilder implements Builder<SlayHistory, SlayHistoryBuilder> {
   }
 
   @override
-  void update(void Function(SlayHistoryBuilder) updates) {
+  void update(void Function(SlayHistoryBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -189,7 +190,7 @@ class SlayHistoryBuilder implements Builder<SlayHistory, SlayHistoryBuilder> {
     try {
       _$result = _$v ?? new _$SlayHistory._(records: records.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'records';
         records.build();
@@ -208,16 +209,20 @@ class _$SlayRecord extends SlayRecord {
   @override
   final int actorId;
   @override
-  final String parentRoomName;
+  final String? parentRoomName;
   @override
   final String roomName;
   @override
   final DateTime time;
 
-  factory _$SlayRecord([void Function(SlayRecordBuilder) updates]) =>
+  factory _$SlayRecord([void Function(SlayRecordBuilder)? updates]) =>
       (new SlayRecordBuilder()..update(updates)).build();
 
-  _$SlayRecord._({this.actorId, this.parentRoomName, this.roomName, this.time})
+  _$SlayRecord._(
+      {required this.actorId,
+      this.parentRoomName,
+      required this.roomName,
+      required this.time})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(actorId, 'SlayRecord', 'actorId');
     BuiltValueNullFieldError.checkNotNull(roomName, 'SlayRecord', 'roomName');
@@ -261,24 +266,24 @@ class _$SlayRecord extends SlayRecord {
 }
 
 class SlayRecordBuilder implements Builder<SlayRecord, SlayRecordBuilder> {
-  _$SlayRecord _$v;
+  _$SlayRecord? _$v;
 
-  int _actorId;
-  int get actorId => _$this._actorId;
-  set actorId(int actorId) => _$this._actorId = actorId;
+  int? _actorId;
+  int? get actorId => _$this._actorId;
+  set actorId(int? actorId) => _$this._actorId = actorId;
 
-  String _parentRoomName;
-  String get parentRoomName => _$this._parentRoomName;
-  set parentRoomName(String parentRoomName) =>
+  String? _parentRoomName;
+  String? get parentRoomName => _$this._parentRoomName;
+  set parentRoomName(String? parentRoomName) =>
       _$this._parentRoomName = parentRoomName;
 
-  String _roomName;
-  String get roomName => _$this._roomName;
-  set roomName(String roomName) => _$this._roomName = roomName;
+  String? _roomName;
+  String? get roomName => _$this._roomName;
+  set roomName(String? roomName) => _$this._roomName = roomName;
 
-  DateTime _time;
-  DateTime get time => _$this._time;
-  set time(DateTime time) => _$this._time = time;
+  DateTime? _time;
+  DateTime? get time => _$this._time;
+  set time(DateTime? time) => _$this._time = time;
 
   SlayRecordBuilder();
 
@@ -301,7 +306,7 @@ class SlayRecordBuilder implements Builder<SlayRecord, SlayRecordBuilder> {
   }
 
   @override
-  void update(void Function(SlayRecordBuilder) updates) {
+  void update(void Function(SlayRecordBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

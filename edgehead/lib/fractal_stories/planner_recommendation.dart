@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:collection/collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
@@ -57,9 +55,9 @@ class PlannerRecommendation {
       return;
     }
 
-    var bestSelfPreserving = _findBest((score) => score.selfPreservation);
+    var bestSelfPreserving = _findBest((score) => score.selfPreservation)!;
     var bestEnemyDamaging =
-        _findBest((score) => -score.enemy, skip: [bestSelfPreserving]);
+        _findBest((score) => -score.enemy, skip: [bestSelfPreserving])!;
     var bestTeamPreserving = _findBest((score) => score.teamPreservation,
         skip: [bestSelfPreserving, bestEnemyDamaging]);
 
@@ -83,7 +81,7 @@ class PlannerRecommendation {
     if (count == maximum) return;
 
     _performances.sort((a, b) =>
-        -foldFunction(_scores[a]).compareTo(foldFunction(_scores[b])));
+        -foldFunction(_scores[a]!).compareTo(foldFunction(_scores[b]!)));
 
     for (final performance in _performances) {
       if (performance == bestSelfPreserving) continue;
@@ -121,7 +119,7 @@ class PlannerRecommendation {
 
     // Fold the score and put each performance with its score in an iterable.
     var folded = _performances
-        .map((p) => _FoldedPerformance(p, foldFunction(_scores[p])));
+        .map((p) => _FoldedPerformance(p, foldFunction(_scores[p]!)));
 
     // Sort from best to worst.
     var sorted = folded.toList(growable: false)
@@ -149,7 +147,7 @@ class PlannerRecommendation {
     var lowestGap = (minGap + maxGap) / sorted.length;
 
     // Compute the placement of the worst element. This replaces the minimum.
-    var lowerBound = minimum - lowestGap;
+    num lowerBound = minimum - lowestGap;
     assert(lowerBound.isFinite);
 
     // Compute fractional weights.
@@ -190,15 +188,15 @@ class PlannerRecommendation {
     return sorted[index].performance;
   }
 
-  Performance _findBest(FoldFunction foldFunction,
+  Performance? _findBest(FoldFunction foldFunction,
       {List<Performance> skip = const []}) {
-    Performance best;
-    num bestScore;
+    Performance? best;
+    late num bestScore;
     for (final performance in _performances) {
       if (skip.contains(performance)) continue;
-      if (best == null || foldFunction(_scores[performance]) > bestScore) {
+      if (best == null || foldFunction(_scores[performance]!) > bestScore) {
         best = performance;
-        bestScore = foldFunction(_scores[performance]);
+        bestScore = foldFunction(_scores[performance]!);
         continue;
       }
     }

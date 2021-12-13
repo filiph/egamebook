@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of fractal_stories.items.edibility;
 
@@ -16,9 +15,9 @@ class _$EdibilitySerializer implements StructuredSerializer<Edibility> {
   final String wireName = 'Edibility';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Edibility object,
+  Iterable<Object?> serialize(Serializers serializers, Edibility object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'isEdibleByHumanoids',
       serializers.serialize(object.isEdibleByHumanoids,
           specifiedType: const FullType(bool)),
@@ -26,7 +25,7 @@ class _$EdibilitySerializer implements StructuredSerializer<Edibility> {
       serializers.serialize(object.staminaBonus,
           specifiedType: const FullType(int)),
     ];
-    Object value;
+    Object? value;
     value = object.eatingReport;
     if (value != null) {
       result
@@ -38,7 +37,7 @@ class _$EdibilitySerializer implements StructuredSerializer<Edibility> {
   }
 
   @override
-  Edibility deserialize(Serializers serializers, Iterable<Object> serialized,
+  Edibility deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new EdibilityBuilder();
 
@@ -46,11 +45,11 @@ class _$EdibilitySerializer implements StructuredSerializer<Edibility> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'eatingReport':
           result.eatingReport = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'isEdibleByHumanoids':
           result.isEdibleByHumanoids = serializers.deserialize(value,
@@ -69,17 +68,19 @@ class _$EdibilitySerializer implements StructuredSerializer<Edibility> {
 
 class _$Edibility extends Edibility {
   @override
-  final String eatingReport;
+  final String? eatingReport;
   @override
   final bool isEdibleByHumanoids;
   @override
   final int staminaBonus;
 
-  factory _$Edibility([void Function(EdibilityBuilder) updates]) =>
+  factory _$Edibility([void Function(EdibilityBuilder)? updates]) =>
       (new EdibilityBuilder()..update(updates)).build();
 
   _$Edibility._(
-      {this.eatingReport, this.isEdibleByHumanoids, this.staminaBonus})
+      {this.eatingReport,
+      required this.isEdibleByHumanoids,
+      required this.staminaBonus})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         isEdibleByHumanoids, 'Edibility', 'isEdibleByHumanoids');
@@ -121,20 +122,20 @@ class _$Edibility extends Edibility {
 }
 
 class EdibilityBuilder implements Builder<Edibility, EdibilityBuilder> {
-  _$Edibility _$v;
+  _$Edibility? _$v;
 
-  String _eatingReport;
-  String get eatingReport => _$this._eatingReport;
-  set eatingReport(String eatingReport) => _$this._eatingReport = eatingReport;
+  String? _eatingReport;
+  String? get eatingReport => _$this._eatingReport;
+  set eatingReport(String? eatingReport) => _$this._eatingReport = eatingReport;
 
-  bool _isEdibleByHumanoids;
-  bool get isEdibleByHumanoids => _$this._isEdibleByHumanoids;
-  set isEdibleByHumanoids(bool isEdibleByHumanoids) =>
+  bool? _isEdibleByHumanoids;
+  bool? get isEdibleByHumanoids => _$this._isEdibleByHumanoids;
+  set isEdibleByHumanoids(bool? isEdibleByHumanoids) =>
       _$this._isEdibleByHumanoids = isEdibleByHumanoids;
 
-  int _staminaBonus;
-  int get staminaBonus => _$this._staminaBonus;
-  set staminaBonus(int staminaBonus) => _$this._staminaBonus = staminaBonus;
+  int? _staminaBonus;
+  int? get staminaBonus => _$this._staminaBonus;
+  set staminaBonus(int? staminaBonus) => _$this._staminaBonus = staminaBonus;
 
   EdibilityBuilder();
 
@@ -156,7 +157,7 @@ class EdibilityBuilder implements Builder<Edibility, EdibilityBuilder> {
   }
 
   @override
-  void update(void Function(EdibilityBuilder) updates) {
+  void update(void Function(EdibilityBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

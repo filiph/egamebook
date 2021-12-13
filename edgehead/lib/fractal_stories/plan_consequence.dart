@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.plan_consequence;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -26,7 +24,7 @@ class ConsequenceStats {
 @immutable
 class PlanConsequence {
   final WorldState world;
-  final Performance performance;
+  final Performance? performance;
   final Storyline storyline;
 
   /// Probability of [performance] leading to this [world].
@@ -75,8 +73,8 @@ class PlanConsequence {
   /// the previous world turns into this world.
   PlanConsequence(
       WorldState world,
-      PlanConsequence previous,
-      Performance<dynamic> action,
+      PlanConsequence? previous,
+      Performance<dynamic>? action,
       Storyline storyline,
       double probability,
       int choiceCount,
@@ -146,7 +144,7 @@ class PlanConsequence {
   }
 
   @override
-  int get hashCode => hashObjects(<Object>[
+  int get hashCode => hashObjects(<Object?>[
         world,
         performance,
         probability,

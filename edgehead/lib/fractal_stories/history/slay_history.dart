@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.history.slay;
 
 import 'package:built_collection/built_collection.dart';
@@ -66,10 +64,10 @@ abstract class SlayRecord
   static Serializer<SlayRecord> get serializer => _$slayRecordSerializer;
 
   factory SlayRecord(
-      {@required DateTime time,
-      @required int actorId,
-      @required String roomName,
-      String parentRoomName}) = _$SlayRecord._;
+      {required DateTime time,
+      required int actorId,
+      required String roomName,
+      String? parentRoomName}) = _$SlayRecord._;
 
   SlayRecord._();
 
@@ -77,8 +75,7 @@ abstract class SlayRecord
   /// Not necessarily the player.
   int get actorId;
 
-  @nullable
-  String get parentRoomName;
+  String? get parentRoomName;
 
   String get roomName;
 

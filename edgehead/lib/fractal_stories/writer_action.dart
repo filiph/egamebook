@@ -1,7 +1,5 @@
 /// Use these classes in sources generated from writer's input.
 
-// @dart=2.9
-
 library stranded.writer_action;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -31,7 +29,7 @@ typedef SimpleActionApplyFunction = String Function(
 
 /// An action that takes place in the context of a [RoomRoamingSituation]
 /// (either directly or as an indirect descendant of such situation).
-abstract class RoamingAction extends Action<Nothing> {
+abstract class RoamingAction extends Action<Nothing?> {
   @override
   final bool isProactive = true;
 
@@ -48,7 +46,7 @@ abstract class RoamingAction extends Action<Nothing> {
 
   /// [RoamingAction] overrides this method to accommodate [isImmediate].
   @override
-  Duration getRecoveryDuration(ApplicabilityContext context, Nothing object) {
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing? object) {
     if (isImmediate) {
       return Duration.zero;
     }
@@ -67,7 +65,7 @@ class SimpleAction extends RoamingAction {
 
   final SimpleActionApplyFunction success;
 
-  final SimpleActionApplicableFunction isApplicableClosure;
+  final SimpleActionApplicableFunction? isApplicableClosure;
 
   final String simpleActionCommand;
 
@@ -107,12 +105,12 @@ class SimpleAction extends RoamingAction {
   }
 
   @override
-  Iterable<Nothing> generateObjects(ApplicabilityContext context) {
-    throw AssertionError('generateObjects was called on Action<Nothing>');
+  Iterable<Nothing?> generateObjects(ApplicabilityContext context) {
+    throw AssertionError('generateObjects was called on Action<Nothing?>');
   }
 
   @override
-  String getCommandSentence(ApplicabilityContext context, Nothing object) {
+  String getCommandSentence(ApplicabilityContext context, Nothing? object) {
     // Unlike most other actions, simple actions should generally be spelled out
     // in full.
     return getCommandPath(context, object)
@@ -135,6 +133,6 @@ class SimpleAction extends RoamingAction {
   bool isApplicable(ApplicabilityContext context, Actor a, Simulation sim,
       WorldState w, void object) {
     if (isApplicableClosure == null) return true;
-    return isApplicableClosure(context, a, sim, w, this);
+    return isApplicableClosure!(context, a, sim, w, this);
   }
 }

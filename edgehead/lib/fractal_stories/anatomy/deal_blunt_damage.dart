@@ -53,7 +53,7 @@ WeaponAssaultResult _addMajorBluntWound(
       designated.isVital &&
       designated.isAnimated &&
       !target.isInvincible) {
-    victim.hitpoints -= 1;
+    victim.hitpoints = victim.hitpoints! - 1;
   }
 
   // Add a major blunt hit to the body part that was hit.

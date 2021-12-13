@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:meta/meta.dart';
 
@@ -29,7 +27,7 @@ class Approach {
   ///
   /// This can (and often will) be `null`. That just means the approach
   /// is always applicable.
-  final bool Function(ApplicabilityContext) isApplicable;
+  final bool Function(ApplicabilityContext)? isApplicable;
 
   const Approach(this.from, this.to, this.command, this.description,
       {this.isApplicable})

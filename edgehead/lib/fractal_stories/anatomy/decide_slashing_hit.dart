@@ -98,7 +98,7 @@ WeaponAssaultResult _addMajorCut(
 
   // When a body part is vital, each major cut removes one actor's hit point.
   if (designated.isVital && designated.isAnimated && !victim.isInvincible!) {
-    victim.hitpoints -= 1;
+    victim.hitpoints = victim.hitpoints! - 1;
   }
 
   // Add a major cut to the body part that was hit.

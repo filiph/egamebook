@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.team;
 
@@ -16,9 +15,9 @@ class _$TeamSerializer implements StructuredSerializer<Team> {
   final String wireName = 'Team';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Team object,
+  Iterable<Object?> serialize(Serializers serializers, Team object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
     ];
@@ -27,7 +26,7 @@ class _$TeamSerializer implements StructuredSerializer<Team> {
   }
 
   @override
-  Team deserialize(Serializers serializers, Iterable<Object> serialized,
+  Team deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new TeamBuilder();
 
@@ -35,7 +34,7 @@ class _$TeamSerializer implements StructuredSerializer<Team> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -52,10 +51,10 @@ class _$Team extends Team {
   @override
   final int id;
 
-  factory _$Team([void Function(TeamBuilder) updates]) =>
+  factory _$Team([void Function(TeamBuilder)? updates]) =>
       (new TeamBuilder()..update(updates)).build();
 
-  _$Team._({this.id}) : super._() {
+  _$Team._({required this.id}) : super._() {
     BuiltValueNullFieldError.checkNotNull(id, 'Team', 'id');
   }
 
@@ -84,11 +83,11 @@ class _$Team extends Team {
 }
 
 class TeamBuilder implements Builder<Team, TeamBuilder> {
-  _$Team _$v;
+  _$Team? _$v;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
   TeamBuilder();
 
@@ -108,7 +107,7 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
   }
 
   @override
-  void update(void Function(TeamBuilder) updates) {
+  void update(void Function(TeamBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

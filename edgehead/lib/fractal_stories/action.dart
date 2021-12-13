@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.action;
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -113,7 +111,7 @@ abstract class Action<T> {
   /// The resource must be spent _outside_ [apply]. The game system – not
   /// the class – is responsible for taking the resource away and reporting
   /// on it.
-  Resource get rerollResource;
+  Resource? get rerollResource;
 
   /// Called to get the result of failure to do this action. Returns
   /// the mutated [Simulation].
@@ -128,10 +126,10 @@ abstract class Action<T> {
   ///
   /// If the action doesn't need an object (like "stand up") then this
   /// method will never be run. Such an action needs to be defined
-  /// as `Action<Nothing>`.
+  /// as `Action<Nothing?>`.
   Iterable<T> generateObjects(ApplicabilityContext context) {
     throw UnimplementedError('generateObjects not implemented for $this. '
-        'If this is an Action<Nothing>, then this method shouldn\'t have been '
+        'If this is an Action<Nothing?>, then this method shouldn\'t have been '
         'called in the first place.');
   }
 
@@ -276,7 +274,7 @@ abstract class Action<T> {
 abstract class EnemyTargetAction extends OtherActorActionBase {
   @override
   Iterable<Actor> generateObjects(ApplicabilityContext context) {
-    var actors = context.world.currentSituation
+    var actors = context.world.currentSituation!
         .getActors(context.simulation, context.world);
     return actors.where((other) {
       if (other == context.actor || !other.isAnimatedAndActive) return false;
@@ -292,10 +290,11 @@ abstract class EnemyTargetAction extends OtherActorActionBase {
 
 /// This is a class you can use as a type argument for [Action].
 ///
-/// An `Action<Nothing>` is an action that does not need an object to be
+/// An `Action<Nothing?>` is an action that does not need an object to be
 /// performed.
 ///
 /// TODO: annotate with @sealed once it's in flutter-compatible package:meta
+@sealed
 class Nothing {
   /// Removes the default constructor of [Nothing], making it impossible
   /// to ever instantiate. This is what we want, because [Nothing] is
@@ -364,7 +363,7 @@ abstract class OnGroundItemAction extends Action<Item> {
 abstract class OtherActorAction extends OtherActorActionBase {
   @override
   Iterable<Actor> generateObjects(ApplicabilityContext context) {
-    var actors = context.world.currentSituation
+    var actors = context.world.currentSituation!
         .getActors(context.simulation, context.world);
     return actors.where((other) {
       return other != context.actor && other.isAnimatedAndActive;
@@ -516,7 +515,7 @@ class Performance<T> {
           "should return it from your world-modifying function.");
     }
     builder.description = description;
-    builder.time = world.time;
+    builder.time = world.time!;
     world.recordAction(builder.build());
   }
 
@@ -531,17 +530,17 @@ class Performance<T> {
       bool isFailure = false}) {
     final initialWorld = output.build();
     final builder = _prepareWorldRecord(
-        turn.actor, sim, initialWorld, object, isSuccess, isFailure);
-    final situationActors = initialWorld.currentSituation
+        turn.actor!, sim, initialWorld, object, isSuccess, isFailure);
+    final situationActors = initialWorld.currentSituation!
         .getActors(sim, initialWorld)
         .where((actor) => !actor.isDirector);
     final outputStoryline = Storyline(referredEntities: situationActors);
     // Remember situation as it can be changed during applySuccess.
-    final situationId = initialWorld.currentSituation.id;
-    initialWorld.currentSituation
+    final situationId = initialWorld.currentSituation!.id;
+    initialWorld.currentSituation!
         .onBeforeAction(sim, initialWorld, outputStoryline);
-    final context = ActionContext(action, turn.actor, sim, initialWorld, output,
-        outputStoryline, successChance);
+    final context = ActionContext(action, turn.actor!, sim, initialWorld,
+        output, outputStoryline, successChance);
     final description = applyFunction(context, object);
 
     // The current situation could have been removed by [applyFunction].
@@ -562,9 +561,9 @@ class Performance<T> {
       if (recovery > Duration.zero) {
         // The action was proactive and did take some time. Update the actor's
         // [Actor.recoveringUntil].
-        final recoveringUntil = turn.time.add(recovery);
+        final recoveringUntil = turn.time!.add(recovery);
         output.updateActorById(
-            turn.actor.id, (b) => b.recoveringUntil = recoveringUntil);
+            turn.actor!.id, (b) => b.recoveringUntil = recoveringUntil);
       }
     }
 
@@ -618,7 +617,7 @@ class Performance<T> {
 /// * the target was paralyzed and couldn't move
 /// * the target was out of balance
 @immutable
-class Reason<T> {
+class Reason<T /*?*/ > {
   /// The data for the reason. It can be merely a number, or an [enum] instance,
   /// or it can be a full-blown object.
   final T payload;
@@ -638,12 +637,12 @@ class Reason<T> {
 @immutable
 class ReasonedSuccessChance<R> {
   /// Sure failure without any reason given.
-  static const ReasonedSuccessChance<Nothing> sureFailure =
-      ReasonedSuccessChance<Nothing>(0.0);
+  static const ReasonedSuccessChance<Nothing?> sureFailure =
+      ReasonedSuccessChance<Nothing?>(0.0);
 
   /// Sure success without any reason given.
-  static const ReasonedSuccessChance<Nothing> sureSuccess =
-      ReasonedSuccessChance<Nothing>(1.0);
+  static const ReasonedSuccessChance<Nothing?> sureSuccess =
+      ReasonedSuccessChance<Nothing?>(1.0);
 
   /// The probability of success, as a number between `0.0` and `1.0`.
   final double value;
@@ -655,11 +654,13 @@ class ReasonedSuccessChance<R> {
   final List<Reason<R>> failureReasons;
 
   const ReasonedSuccessChance(this.value,
-      {List<Reason<R>> successReasons, List<Reason<R>> failureReasons})
+      {List<Reason<R>>? successReasons, List<Reason<R>>? failureReasons})
       // ignore: prefer_void_to_null
-      : successReasons = successReasons ?? const <Reason<Null>>[],
+      : successReasons =
+            (successReasons ?? const <Reason<Null>>[]) as List<Reason<R>>,
         // ignore: prefer_void_to_null
-        failureReasons = failureReasons ?? const <Reason<Null>>[];
+        failureReasons =
+            (failureReasons ?? const <Reason<Null>>[]) as List<Reason<R>>;
 
   /// Creates an inversion of this [ReasonedSuccessChance].
   ///

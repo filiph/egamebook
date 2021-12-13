@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library fractal_stories.pose;
 
 import 'package:built_collection/built_collection.dart';

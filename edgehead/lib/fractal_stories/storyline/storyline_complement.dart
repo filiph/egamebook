@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-
-
 part of storyline;
 
 /// A data structure holding the stopwords associated with a type of complement

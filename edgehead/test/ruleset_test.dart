@@ -4,8 +4,11 @@ import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
+import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/fractal_stories/writer_action.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:test/test.dart';
 
@@ -14,15 +17,22 @@ import 'src/test_random.dart';
 void main() {
   final orc = Actor.initialized(1, testRandomIdGetter, "orc");
   final aren = Actor.initialized(2, testRandomIdGetter, "Aren", isPlayer: true);
+  final mockAction = SimpleAction('', '', (c, a) => 'mockAction applied', '');
+  final mockSimulation = Simulation(
+      const [], const [], const {}, const Ruleset.empty(), const {}, const {});
   const sureSuccess = ReasonedSuccessChance.sureSuccess;
+
+  final mockOutputWorldState = WorldStateBuilder()..time = DateTime(200);
+  final mockWorldState = mockOutputWorldState.build();
+  final mockStoryline = Storyline();
 
   test("ruleset with 1 rule applies that rule", () {
     var triggered = false;
     final ruleset = Ruleset(
       Rule(42, 1, false, (c) => c.actor.isPlayer, (_) => triggered = true),
     );
-    final context =
-        ActionContext(null, aren, null, null, null, null, sureSuccess);
+    final context = ActionContext(mockAction, aren, mockSimulation,
+        mockWorldState, mockOutputWorldState, mockStoryline, sureSuccess);
     ruleset.apply(context);
     expect(triggered, isTrue);
   });
@@ -31,8 +41,8 @@ void main() {
     final ruleset = Ruleset(
       Rule(42, 1, false, (c) => c.actor.isPlayer, (_) {}),
     );
-    final context =
-        ActionContext(null, orc, null, null, null, null, sureSuccess);
+    final context = ActionContext(mockAction, orc, mockSimulation,
+        mockWorldState, mockOutputWorldState, mockStoryline, sureSuccess);
     expect(() => ruleset.apply(context),
         throwsA(const TypeMatcher<NoRuleApplicableException>()));
   });
@@ -45,12 +55,12 @@ void main() {
           (_) => outcome = 43),
       Rule(44, 0, false, (_) => true, (_) => outcome = 44),
     ]);
-    final orcContext =
-        ActionContext(null, orc, null, null, null, null, sureSuccess);
+    final orcContext = ActionContext(mockAction, orc, mockSimulation,
+        mockWorldState, mockOutputWorldState, mockStoryline, sureSuccess);
     ruleset.apply(orcContext);
     expect(outcome, 44);
-    final arenContext =
-        ActionContext(null, aren, null, null, null, null, sureSuccess);
+    final arenContext = ActionContext(mockAction, aren, mockSimulation,
+        mockWorldState, mockOutputWorldState, mockStoryline, sureSuccess);
     ruleset.apply(arenContext);
     expect(outcome, 43);
   });
@@ -65,8 +75,8 @@ void main() {
       ..situations = ListBuilder<Situation>(<Situation>[])
       ..statefulRandomState = 1337
       ..time = DateTime.utc(1000);
-    final context = ActionContext(
-        null, aren, null, world.build(), world, null, sureSuccess);
+    final context = ActionContext(mockAction, aren, mockSimulation,
+        world.build(), world, mockStoryline, sureSuccess);
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isFalse);
     ruleset.apply(context);
     expect(world.build().ruleHistory.query(ruleId).hasHappened, isTrue);
@@ -83,13 +93,13 @@ void main() {
       ..situations = ListBuilder<Situation>(<Situation>[])
       ..statefulRandomState = 1337
       ..time = DateTime.utc(1000);
-    final context = ActionContext(
-        null, aren, null, world.build(), world, null, sureSuccess);
+    final context = ActionContext(mockAction, aren, mockSimulation,
+        world.build(), world, mockStoryline, sureSuccess);
     ruleset.apply(context);
     expect(state, 1);
     final nextWorld = context.outputWorld;
-    final nextContext = ActionContext(
-        null, aren, null, nextWorld.build(), nextWorld, null, sureSuccess);
+    final nextContext = ActionContext(mockAction, aren, mockSimulation,
+        nextWorld.build(), nextWorld, mockStoryline, sureSuccess);
     ruleset.apply(nextContext);
     expect(state, 2);
   });

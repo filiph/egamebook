@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.situation;
 
 import 'package:edgehead/fractal_stories/action.dart';

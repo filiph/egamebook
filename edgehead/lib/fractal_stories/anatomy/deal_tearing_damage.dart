@@ -34,7 +34,7 @@ WeaponAssaultResult _addMajorTearingWound(
 
   // When a body part is vital, each major thrust removes one actor's hitpoint.
   if (designated.isVital && designated.isAnimated && !target.isInvincible) {
-    victim.hitpoints -= 1;
+    victim.hitpoints = victim.hitpoints! - 1;
   }
 
   // Add a major cut to the body part that was hit.

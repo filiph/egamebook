@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.history.rule;
 
 import 'package:built_collection/built_collection.dart';
@@ -17,8 +15,7 @@ abstract class RuleHistory implements Built<RuleHistory, RuleHistoryBuilder> {
 
   RuleHistory._();
 
-  @nullable
-  RuleRecord get latestRule;
+  RuleRecord? get latestRule;
 
   BuiltMap<int, RuleRecord> get records;
 
@@ -31,7 +28,7 @@ abstract class RuleRecord
     implements Record, Built<RuleRecord, RuleRecordBuilder> {
   static Serializer<RuleRecord> get serializer => _$ruleRecordSerializer;
 
-  factory RuleRecord({@required int ruleId, @required DateTime time}) =
+  factory RuleRecord({required int ruleId, required DateTime time}) =
       _$RuleRecord._;
 
   RuleRecord._();

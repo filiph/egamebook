@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.actor;
 
@@ -16,9 +15,9 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
   final String wireName = 'Actor';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Actor object,
+  Iterable<Object?> serialize(Serializers serializers, Actor object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'anatomy',
       serializers.serialize(object.anatomy,
           specifiedType: const FullType(Anatomy)),
@@ -88,7 +87,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
       'team',
       serializers.serialize(object.team, specifiedType: const FullType(Team)),
     ];
-    Object value;
+    Object? value;
     value = object.adjective;
     if (value != null) {
       result
@@ -114,7 +113,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
   }
 
   @override
-  Actor deserialize(Serializers serializers, Iterable<Object> serialized,
+  Actor deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActorBuilder();
 
@@ -122,15 +121,15 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'adjective':
           result.adjective = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'anatomy':
           result.anatomy.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Anatomy)) as Anatomy);
+              specifiedType: const FullType(Anatomy))! as Anatomy);
           break;
         case 'constitution':
           result.constitution = serializers.deserialize(value,
@@ -138,7 +137,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'currentRoomName':
           result.currentRoomName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'dexterity':
           result.dexterity = serializers.deserialize(value,
@@ -146,7 +145,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'director':
           result.director.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(DirectorCapability))
+                  specifiedType: const FullType(DirectorCapability))!
               as DirectorCapability);
           break;
         case 'foldFunctionHandle':
@@ -171,7 +170,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'inventory':
           result.inventory.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Inventory)) as Inventory);
+              specifiedType: const FullType(Inventory))! as Inventory);
           break;
         case 'isActive':
           result.isActive = serializers.deserialize(value,
@@ -207,7 +206,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'npc':
           result.npc.replace(serializers.deserialize(value,
-              specifiedType: const FullType(NpcCapability)) as NpcCapability);
+              specifiedType: const FullType(NpcCapability))! as NpcCapability);
           break;
         case 'pose':
           result.pose = serializers.deserialize(value,
@@ -219,7 +218,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'pronoun':
           result.pronoun.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Pronoun)) as Pronoun);
+              specifiedType: const FullType(Pronoun))! as Pronoun);
           break;
         case 'recoveringUntil':
           result.recoveringUntil = serializers.deserialize(value,
@@ -235,7 +234,7 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
           break;
         case 'team':
           result.team.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Team)) as Team);
+              specifiedType: const FullType(Team))! as Team);
           break;
       }
     }
@@ -246,17 +245,17 @@ class _$ActorSerializer implements StructuredSerializer<Actor> {
 
 class _$Actor extends Actor {
   @override
-  final String adjective;
+  final String? adjective;
   @override
   final Anatomy anatomy;
   @override
   final int constitution;
   @override
-  final String currentRoomName;
+  final String? currentRoomName;
   @override
   final int dexterity;
   @override
-  final DirectorCapability director;
+  final DirectorCapability? director;
   @override
   final String foldFunctionHandle;
   @override
@@ -302,38 +301,38 @@ class _$Actor extends Actor {
   @override
   final Team team;
 
-  factory _$Actor([void Function(ActorBuilder) updates]) =>
+  factory _$Actor([void Function(ActorBuilder)? updates]) =>
       (new ActorBuilder()..update(updates)).build();
 
   _$Actor._(
       {this.adjective,
-      this.anatomy,
-      this.constitution,
+      required this.anatomy,
+      required this.constitution,
       this.currentRoomName,
-      this.dexterity,
+      required this.dexterity,
       this.director,
-      this.foldFunctionHandle,
-      this.gold,
-      this.hitpoints,
-      this.id,
-      this.initiative,
-      this.inventory,
-      this.isActive,
-      this.isConfused,
-      this.isInvincible,
-      this.isPlayer,
-      this.isSurvivor,
-      this.maxHitpoints,
-      this.name,
-      this.nameIsProperNoun,
-      this.npc,
-      this.pose,
-      this.poseMax,
-      this.pronoun,
-      this.recoveringUntil,
-      this.sanity,
-      this.stamina,
-      this.team})
+      required this.foldFunctionHandle,
+      required this.gold,
+      required this.hitpoints,
+      required this.id,
+      required this.initiative,
+      required this.inventory,
+      required this.isActive,
+      required this.isConfused,
+      required this.isInvincible,
+      required this.isPlayer,
+      required this.isSurvivor,
+      required this.maxHitpoints,
+      required this.name,
+      required this.nameIsProperNoun,
+      required this.npc,
+      required this.pose,
+      required this.poseMax,
+      required this.pronoun,
+      required this.recoveringUntil,
+      required this.sanity,
+      required this.stamina,
+      required this.team})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(anatomy, 'Actor', 'anatomy');
     BuiltValueNullFieldError.checkNotNull(
@@ -453,126 +452,126 @@ class _$Actor extends Actor {
 }
 
 class ActorBuilder implements Builder<Actor, ActorBuilder> {
-  _$Actor _$v;
+  _$Actor? _$v;
 
-  String _adjective;
-  String get adjective => _$this._adjective;
-  set adjective(String adjective) => _$this._adjective = adjective;
+  String? _adjective;
+  String? get adjective => _$this._adjective;
+  set adjective(String? adjective) => _$this._adjective = adjective;
 
-  AnatomyBuilder _anatomy;
+  AnatomyBuilder? _anatomy;
   AnatomyBuilder get anatomy => _$this._anatomy ??= new AnatomyBuilder();
-  set anatomy(AnatomyBuilder anatomy) => _$this._anatomy = anatomy;
+  set anatomy(AnatomyBuilder? anatomy) => _$this._anatomy = anatomy;
 
-  int _constitution;
-  int get constitution => _$this._constitution;
-  set constitution(int constitution) => _$this._constitution = constitution;
+  int? _constitution;
+  int? get constitution => _$this._constitution;
+  set constitution(int? constitution) => _$this._constitution = constitution;
 
-  String _currentRoomName;
-  String get currentRoomName => _$this._currentRoomName;
-  set currentRoomName(String currentRoomName) =>
+  String? _currentRoomName;
+  String? get currentRoomName => _$this._currentRoomName;
+  set currentRoomName(String? currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
 
-  int _dexterity;
-  int get dexterity => _$this._dexterity;
-  set dexterity(int dexterity) => _$this._dexterity = dexterity;
+  int? _dexterity;
+  int? get dexterity => _$this._dexterity;
+  set dexterity(int? dexterity) => _$this._dexterity = dexterity;
 
-  DirectorCapabilityBuilder _director;
+  DirectorCapabilityBuilder? _director;
   DirectorCapabilityBuilder get director =>
       _$this._director ??= new DirectorCapabilityBuilder();
-  set director(DirectorCapabilityBuilder director) =>
+  set director(DirectorCapabilityBuilder? director) =>
       _$this._director = director;
 
-  String _foldFunctionHandle;
-  String get foldFunctionHandle => _$this._foldFunctionHandle;
-  set foldFunctionHandle(String foldFunctionHandle) =>
+  String? _foldFunctionHandle;
+  String? get foldFunctionHandle => _$this._foldFunctionHandle;
+  set foldFunctionHandle(String? foldFunctionHandle) =>
       _$this._foldFunctionHandle = foldFunctionHandle;
 
-  int _gold;
-  int get gold => _$this._gold;
-  set gold(int gold) => _$this._gold = gold;
+  int? _gold;
+  int? get gold => _$this._gold;
+  set gold(int? gold) => _$this._gold = gold;
 
-  int _hitpoints;
-  int get hitpoints => _$this._hitpoints;
-  set hitpoints(int hitpoints) => _$this._hitpoints = hitpoints;
+  int? _hitpoints;
+  int? get hitpoints => _$this._hitpoints;
+  set hitpoints(int? hitpoints) => _$this._hitpoints = hitpoints;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  int _initiative;
-  int get initiative => _$this._initiative;
-  set initiative(int initiative) => _$this._initiative = initiative;
+  int? _initiative;
+  int? get initiative => _$this._initiative;
+  set initiative(int? initiative) => _$this._initiative = initiative;
 
-  InventoryBuilder _inventory;
+  InventoryBuilder? _inventory;
   InventoryBuilder get inventory =>
       _$this._inventory ??= new InventoryBuilder();
-  set inventory(InventoryBuilder inventory) => _$this._inventory = inventory;
+  set inventory(InventoryBuilder? inventory) => _$this._inventory = inventory;
 
-  bool _isActive;
-  bool get isActive => _$this._isActive;
-  set isActive(bool isActive) => _$this._isActive = isActive;
+  bool? _isActive;
+  bool? get isActive => _$this._isActive;
+  set isActive(bool? isActive) => _$this._isActive = isActive;
 
-  bool _isConfused;
-  bool get isConfused => _$this._isConfused;
-  set isConfused(bool isConfused) => _$this._isConfused = isConfused;
+  bool? _isConfused;
+  bool? get isConfused => _$this._isConfused;
+  set isConfused(bool? isConfused) => _$this._isConfused = isConfused;
 
-  bool _isInvincible;
-  bool get isInvincible => _$this._isInvincible;
-  set isInvincible(bool isInvincible) => _$this._isInvincible = isInvincible;
+  bool? _isInvincible;
+  bool? get isInvincible => _$this._isInvincible;
+  set isInvincible(bool? isInvincible) => _$this._isInvincible = isInvincible;
 
-  bool _isPlayer;
-  bool get isPlayer => _$this._isPlayer;
-  set isPlayer(bool isPlayer) => _$this._isPlayer = isPlayer;
+  bool? _isPlayer;
+  bool? get isPlayer => _$this._isPlayer;
+  set isPlayer(bool? isPlayer) => _$this._isPlayer = isPlayer;
 
-  bool _isSurvivor;
-  bool get isSurvivor => _$this._isSurvivor;
-  set isSurvivor(bool isSurvivor) => _$this._isSurvivor = isSurvivor;
+  bool? _isSurvivor;
+  bool? get isSurvivor => _$this._isSurvivor;
+  set isSurvivor(bool? isSurvivor) => _$this._isSurvivor = isSurvivor;
 
-  int _maxHitpoints;
-  int get maxHitpoints => _$this._maxHitpoints;
-  set maxHitpoints(int maxHitpoints) => _$this._maxHitpoints = maxHitpoints;
+  int? _maxHitpoints;
+  int? get maxHitpoints => _$this._maxHitpoints;
+  set maxHitpoints(int? maxHitpoints) => _$this._maxHitpoints = maxHitpoints;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  bool _nameIsProperNoun;
-  bool get nameIsProperNoun => _$this._nameIsProperNoun;
-  set nameIsProperNoun(bool nameIsProperNoun) =>
+  bool? _nameIsProperNoun;
+  bool? get nameIsProperNoun => _$this._nameIsProperNoun;
+  set nameIsProperNoun(bool? nameIsProperNoun) =>
       _$this._nameIsProperNoun = nameIsProperNoun;
 
-  NpcCapabilityBuilder _npc;
+  NpcCapabilityBuilder? _npc;
   NpcCapabilityBuilder get npc => _$this._npc ??= new NpcCapabilityBuilder();
-  set npc(NpcCapabilityBuilder npc) => _$this._npc = npc;
+  set npc(NpcCapabilityBuilder? npc) => _$this._npc = npc;
 
-  Pose _pose;
-  Pose get pose => _$this._pose;
-  set pose(Pose pose) => _$this._pose = pose;
+  Pose? _pose;
+  Pose? get pose => _$this._pose;
+  set pose(Pose? pose) => _$this._pose = pose;
 
-  Pose _poseMax;
-  Pose get poseMax => _$this._poseMax;
-  set poseMax(Pose poseMax) => _$this._poseMax = poseMax;
+  Pose? _poseMax;
+  Pose? get poseMax => _$this._poseMax;
+  set poseMax(Pose? poseMax) => _$this._poseMax = poseMax;
 
-  PronounBuilder _pronoun;
+  PronounBuilder? _pronoun;
   PronounBuilder get pronoun => _$this._pronoun ??= new PronounBuilder();
-  set pronoun(PronounBuilder pronoun) => _$this._pronoun = pronoun;
+  set pronoun(PronounBuilder? pronoun) => _$this._pronoun = pronoun;
 
-  DateTime _recoveringUntil;
-  DateTime get recoveringUntil => _$this._recoveringUntil;
-  set recoveringUntil(DateTime recoveringUntil) =>
+  DateTime? _recoveringUntil;
+  DateTime? get recoveringUntil => _$this._recoveringUntil;
+  set recoveringUntil(DateTime? recoveringUntil) =>
       _$this._recoveringUntil = recoveringUntil;
 
-  int _sanity;
-  int get sanity => _$this._sanity;
-  set sanity(int sanity) => _$this._sanity = sanity;
+  int? _sanity;
+  int? get sanity => _$this._sanity;
+  set sanity(int? sanity) => _$this._sanity = sanity;
 
-  int _stamina;
-  int get stamina => _$this._stamina;
-  set stamina(int stamina) => _$this._stamina = stamina;
+  int? _stamina;
+  int? get stamina => _$this._stamina;
+  set stamina(int? stamina) => _$this._stamina = stamina;
 
-  TeamBuilder _team;
+  TeamBuilder? _team;
   TeamBuilder get team => _$this._team ??= new TeamBuilder();
-  set team(TeamBuilder team) => _$this._team = team;
+  set team(TeamBuilder? team) => _$this._team = team;
 
   ActorBuilder();
 
@@ -619,7 +618,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
   }
 
   @override
-  void update(void Function(ActorBuilder) updates) {
+  void update(void Function(ActorBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -668,7 +667,7 @@ class ActorBuilder implements Builder<Actor, ActorBuilder> {
               stamina: BuiltValueNullFieldError.checkNotNull(stamina, 'Actor', 'stamina'),
               team: team.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'anatomy';
         anatomy.build();

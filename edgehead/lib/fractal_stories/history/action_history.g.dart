@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.history.action;
 
@@ -19,9 +18,9 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
   final String wireName = 'ActionHistory';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ActionHistory object,
+  Iterable<Object?> serialize(Serializers serializers, ActionHistory object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'latestAggression',
       serializers.serialize(object.latestAggression,
           specifiedType: const FullType(
@@ -45,7 +44,7 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
 
   @override
   ActionHistory deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActionHistoryBuilder();
 
@@ -53,28 +52,28 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'latestAggression':
           result.latestAggression.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap,
-                  const [const FullType(int), const FullType(DateTime)])));
+                  const [const FullType(int), const FullType(DateTime)]))!);
           break;
         case 'latestByActorId':
           result.latestByActorId.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap,
-                  const [const FullType(int), const FullType(DateTime)])));
+                  const [const FullType(int), const FullType(DateTime)]))!);
           break;
         case 'latestProactiveByActorId':
           result.latestProactiveByActorId.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap,
-                  const [const FullType(int), const FullType(DateTime)])));
+                  const [const FullType(int), const FullType(DateTime)]))!);
           break;
         case 'records':
           result.records.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
-                      BuiltList, const [const FullType(ActionRecord)]))
-              as BuiltList<Object>);
+                      BuiltList, const [const FullType(ActionRecord)]))!
+              as BuiltList<Object?>);
           break;
       }
     }
@@ -90,9 +89,9 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
   final String wireName = 'ActionRecord';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ActionRecord object,
+  Iterable<Object?> serialize(Serializers serializers, ActionRecord object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'actionName',
       serializers.serialize(object.actionName,
           specifiedType: const FullType(String)),
@@ -121,7 +120,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
       serializers.serialize(object.wasSuccess,
           specifiedType: const FullType(bool)),
     ];
-    Object value;
+    Object? value;
     value = object.dataString;
     if (value != null) {
       result
@@ -133,7 +132,8 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
   }
 
   @override
-  ActionRecord deserialize(Serializers serializers, Iterable<Object> serialized,
+  ActionRecord deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ActionRecordBuilder();
 
@@ -141,7 +141,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'actionName':
           result.actionName = serializers.deserialize(value,
@@ -149,7 +149,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           break;
         case 'dataString':
           result.dataString = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'description':
           result.description = serializers.deserialize(value,
@@ -162,8 +162,8 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
         case 'sufferers':
           result.sufferers.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<Object>);
+                      const FullType(BuiltSet, const [const FullType(int)]))!
+              as BuiltSet<Object?>);
           break;
         case 'time':
           result.time = serializers.deserialize(value,
@@ -202,14 +202,14 @@ class _$ActionHistory extends ActionHistory {
   @override
   final BuiltList<ActionRecord> records;
 
-  factory _$ActionHistory([void Function(ActionHistoryBuilder) updates]) =>
+  factory _$ActionHistory([void Function(ActionHistoryBuilder)? updates]) =>
       (new ActionHistoryBuilder()..update(updates)).build();
 
   _$ActionHistory._(
-      {this.latestAggression,
-      this.latestByActorId,
-      this.latestProactiveByActorId,
-      this.records})
+      {required this.latestAggression,
+      required this.latestByActorId,
+      required this.latestProactiveByActorId,
+      required this.records})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         latestAggression, 'ActionHistory', 'latestAggression');
@@ -258,31 +258,31 @@ class _$ActionHistory extends ActionHistory {
 
 class ActionHistoryBuilder
     implements Builder<ActionHistory, ActionHistoryBuilder> {
-  _$ActionHistory _$v;
+  _$ActionHistory? _$v;
 
-  MapBuilder<int, DateTime> _latestAggression;
+  MapBuilder<int, DateTime>? _latestAggression;
   MapBuilder<int, DateTime> get latestAggression =>
       _$this._latestAggression ??= new MapBuilder<int, DateTime>();
-  set latestAggression(MapBuilder<int, DateTime> latestAggression) =>
+  set latestAggression(MapBuilder<int, DateTime>? latestAggression) =>
       _$this._latestAggression = latestAggression;
 
-  MapBuilder<int, DateTime> _latestByActorId;
+  MapBuilder<int, DateTime>? _latestByActorId;
   MapBuilder<int, DateTime> get latestByActorId =>
       _$this._latestByActorId ??= new MapBuilder<int, DateTime>();
-  set latestByActorId(MapBuilder<int, DateTime> latestByActorId) =>
+  set latestByActorId(MapBuilder<int, DateTime>? latestByActorId) =>
       _$this._latestByActorId = latestByActorId;
 
-  MapBuilder<int, DateTime> _latestProactiveByActorId;
+  MapBuilder<int, DateTime>? _latestProactiveByActorId;
   MapBuilder<int, DateTime> get latestProactiveByActorId =>
       _$this._latestProactiveByActorId ??= new MapBuilder<int, DateTime>();
   set latestProactiveByActorId(
-          MapBuilder<int, DateTime> latestProactiveByActorId) =>
+          MapBuilder<int, DateTime>? latestProactiveByActorId) =>
       _$this._latestProactiveByActorId = latestProactiveByActorId;
 
-  ListBuilder<ActionRecord> _records;
+  ListBuilder<ActionRecord>? _records;
   ListBuilder<ActionRecord> get records =>
       _$this._records ??= new ListBuilder<ActionRecord>();
-  set records(ListBuilder<ActionRecord> records) => _$this._records = records;
+  set records(ListBuilder<ActionRecord>? records) => _$this._records = records;
 
   ActionHistoryBuilder();
 
@@ -305,7 +305,7 @@ class ActionHistoryBuilder
   }
 
   @override
-  void update(void Function(ActionHistoryBuilder) updates) {
+  void update(void Function(ActionHistoryBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -320,7 +320,7 @@ class ActionHistoryBuilder
               latestProactiveByActorId: latestProactiveByActorId.build(),
               records: records.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'latestAggression';
         latestAggression.build();
@@ -345,7 +345,7 @@ class _$ActionRecord extends ActionRecord {
   @override
   final String actionName;
   @override
-  final String dataString;
+  final String? dataString;
   @override
   final String description;
   @override
@@ -363,20 +363,20 @@ class _$ActionRecord extends ActionRecord {
   @override
   final bool wasSuccess;
 
-  factory _$ActionRecord([void Function(ActionRecordBuilder) updates]) =>
+  factory _$ActionRecord([void Function(ActionRecordBuilder)? updates]) =>
       (new ActionRecordBuilder()..update(updates)).build();
 
   _$ActionRecord._(
-      {this.actionName,
+      {required this.actionName,
       this.dataString,
-      this.description,
-      this.protagonist,
-      this.sufferers,
-      this.time,
-      this.wasAggressive,
-      this.wasFailure,
-      this.wasProactive,
-      this.wasSuccess})
+      required this.description,
+      required this.protagonist,
+      required this.sufferers,
+      required this.time,
+      required this.wasAggressive,
+      required this.wasFailure,
+      required this.wasProactive,
+      required this.wasSuccess})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         actionName, 'ActionRecord', 'actionName');
@@ -445,48 +445,48 @@ class _$ActionRecord extends ActionRecord {
 
 class ActionRecordBuilder
     implements Builder<ActionRecord, ActionRecordBuilder> {
-  _$ActionRecord _$v;
+  _$ActionRecord? _$v;
 
-  String _actionName;
-  String get actionName => _$this._actionName;
-  set actionName(String actionName) => _$this._actionName = actionName;
+  String? _actionName;
+  String? get actionName => _$this._actionName;
+  set actionName(String? actionName) => _$this._actionName = actionName;
 
-  String _dataString;
-  String get dataString => _$this._dataString;
-  set dataString(String dataString) => _$this._dataString = dataString;
+  String? _dataString;
+  String? get dataString => _$this._dataString;
+  set dataString(String? dataString) => _$this._dataString = dataString;
 
-  String _description;
-  String get description => _$this._description;
-  set description(String description) => _$this._description = description;
+  String? _description;
+  String? get description => _$this._description;
+  set description(String? description) => _$this._description = description;
 
-  int _protagonist;
-  int get protagonist => _$this._protagonist;
-  set protagonist(int protagonist) => _$this._protagonist = protagonist;
+  int? _protagonist;
+  int? get protagonist => _$this._protagonist;
+  set protagonist(int? protagonist) => _$this._protagonist = protagonist;
 
-  SetBuilder<int> _sufferers;
+  SetBuilder<int>? _sufferers;
   SetBuilder<int> get sufferers => _$this._sufferers ??= new SetBuilder<int>();
-  set sufferers(SetBuilder<int> sufferers) => _$this._sufferers = sufferers;
+  set sufferers(SetBuilder<int>? sufferers) => _$this._sufferers = sufferers;
 
-  DateTime _time;
-  DateTime get time => _$this._time;
-  set time(DateTime time) => _$this._time = time;
+  DateTime? _time;
+  DateTime? get time => _$this._time;
+  set time(DateTime? time) => _$this._time = time;
 
-  bool _wasAggressive;
-  bool get wasAggressive => _$this._wasAggressive;
-  set wasAggressive(bool wasAggressive) =>
+  bool? _wasAggressive;
+  bool? get wasAggressive => _$this._wasAggressive;
+  set wasAggressive(bool? wasAggressive) =>
       _$this._wasAggressive = wasAggressive;
 
-  bool _wasFailure;
-  bool get wasFailure => _$this._wasFailure;
-  set wasFailure(bool wasFailure) => _$this._wasFailure = wasFailure;
+  bool? _wasFailure;
+  bool? get wasFailure => _$this._wasFailure;
+  set wasFailure(bool? wasFailure) => _$this._wasFailure = wasFailure;
 
-  bool _wasProactive;
-  bool get wasProactive => _$this._wasProactive;
-  set wasProactive(bool wasProactive) => _$this._wasProactive = wasProactive;
+  bool? _wasProactive;
+  bool? get wasProactive => _$this._wasProactive;
+  set wasProactive(bool? wasProactive) => _$this._wasProactive = wasProactive;
 
-  bool _wasSuccess;
-  bool get wasSuccess => _$this._wasSuccess;
-  set wasSuccess(bool wasSuccess) => _$this._wasSuccess = wasSuccess;
+  bool? _wasSuccess;
+  bool? get wasSuccess => _$this._wasSuccess;
+  set wasSuccess(bool? wasSuccess) => _$this._wasSuccess = wasSuccess;
 
   ActionRecordBuilder();
 
@@ -515,7 +515,7 @@ class ActionRecordBuilder
   }
 
   @override
-  void update(void Function(ActionRecordBuilder) updates) {
+  void update(void Function(ActionRecordBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -544,7 +544,7 @@ class ActionRecordBuilder
               wasSuccess: BuiltValueNullFieldError.checkNotNull(
                   wasSuccess, 'ActionRecord', 'wasSuccess'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'sufferers';
         sufferers.build();

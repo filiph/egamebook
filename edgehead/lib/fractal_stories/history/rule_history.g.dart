@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.history.rule;
 
@@ -17,15 +16,15 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
   final String wireName = 'RuleHistory';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, RuleHistory object,
+  Iterable<Object?> serialize(Serializers serializers, RuleHistory object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'records',
       serializers.serialize(object.records,
           specifiedType: const FullType(BuiltMap,
               const [const FullType(int), const FullType(RuleRecord)])),
     ];
-    Object value;
+    Object? value;
     value = object.latestRule;
     if (value != null) {
       result
@@ -37,7 +36,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
   }
 
   @override
-  RuleHistory deserialize(Serializers serializers, Iterable<Object> serialized,
+  RuleHistory deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RuleHistoryBuilder();
 
@@ -45,16 +44,16 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'latestRule':
           result.latestRule.replace(serializers.deserialize(value,
-              specifiedType: const FullType(RuleRecord)) as RuleRecord);
+              specifiedType: const FullType(RuleRecord))! as RuleRecord);
           break;
         case 'records':
           result.records.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltMap,
-                  const [const FullType(int), const FullType(RuleRecord)])));
+                  const [const FullType(int), const FullType(RuleRecord)]))!);
           break;
       }
     }
@@ -70,9 +69,9 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
   final String wireName = 'RuleRecord';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, RuleRecord object,
+  Iterable<Object?> serialize(Serializers serializers, RuleRecord object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'ruleId',
       serializers.serialize(object.ruleId, specifiedType: const FullType(int)),
       'time',
@@ -84,7 +83,7 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
   }
 
   @override
-  RuleRecord deserialize(Serializers serializers, Iterable<Object> serialized,
+  RuleRecord deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RuleRecordBuilder();
 
@@ -92,7 +91,7 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'ruleId':
           result.ruleId = serializers.deserialize(value,
@@ -111,14 +110,14 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
 
 class _$RuleHistory extends RuleHistory {
   @override
-  final RuleRecord latestRule;
+  final RuleRecord? latestRule;
   @override
   final BuiltMap<int, RuleRecord> records;
 
-  factory _$RuleHistory([void Function(RuleHistoryBuilder) updates]) =>
+  factory _$RuleHistory([void Function(RuleHistoryBuilder)? updates]) =>
       (new RuleHistoryBuilder()..update(updates)).build();
 
-  _$RuleHistory._({this.latestRule, this.records}) : super._() {
+  _$RuleHistory._({this.latestRule, required this.records}) : super._() {
     BuiltValueNullFieldError.checkNotNull(records, 'RuleHistory', 'records');
   }
 
@@ -152,18 +151,19 @@ class _$RuleHistory extends RuleHistory {
 }
 
 class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
-  _$RuleHistory _$v;
+  _$RuleHistory? _$v;
 
-  RuleRecordBuilder _latestRule;
+  RuleRecordBuilder? _latestRule;
   RuleRecordBuilder get latestRule =>
       _$this._latestRule ??= new RuleRecordBuilder();
-  set latestRule(RuleRecordBuilder latestRule) =>
+  set latestRule(RuleRecordBuilder? latestRule) =>
       _$this._latestRule = latestRule;
 
-  MapBuilder<int, RuleRecord> _records;
+  MapBuilder<int, RuleRecord>? _records;
   MapBuilder<int, RuleRecord> get records =>
       _$this._records ??= new MapBuilder<int, RuleRecord>();
-  set records(MapBuilder<int, RuleRecord> records) => _$this._records = records;
+  set records(MapBuilder<int, RuleRecord>? records) =>
+      _$this._records = records;
 
   RuleHistoryBuilder();
 
@@ -184,7 +184,7 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
   }
 
   @override
-  void update(void Function(RuleHistoryBuilder) updates) {
+  void update(void Function(RuleHistoryBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -196,7 +196,7 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
           new _$RuleHistory._(
               latestRule: _latestRule?.build(), records: records.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'latestRule';
         _latestRule?.build();
@@ -219,10 +219,10 @@ class _$RuleRecord extends RuleRecord {
   @override
   final DateTime time;
 
-  factory _$RuleRecord([void Function(RuleRecordBuilder) updates]) =>
+  factory _$RuleRecord([void Function(RuleRecordBuilder)? updates]) =>
       (new RuleRecordBuilder()..update(updates)).build();
 
-  _$RuleRecord._({this.ruleId, this.time}) : super._() {
+  _$RuleRecord._({required this.ruleId, required this.time}) : super._() {
     BuiltValueNullFieldError.checkNotNull(ruleId, 'RuleRecord', 'ruleId');
     BuiltValueNullFieldError.checkNotNull(time, 'RuleRecord', 'time');
   }
@@ -255,15 +255,15 @@ class _$RuleRecord extends RuleRecord {
 }
 
 class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
-  _$RuleRecord _$v;
+  _$RuleRecord? _$v;
 
-  int _ruleId;
-  int get ruleId => _$this._ruleId;
-  set ruleId(int ruleId) => _$this._ruleId = ruleId;
+  int? _ruleId;
+  int? get ruleId => _$this._ruleId;
+  set ruleId(int? ruleId) => _$this._ruleId = ruleId;
 
-  DateTime _time;
-  DateTime get time => _$this._time;
-  set time(DateTime time) => _$this._time = time;
+  DateTime? _time;
+  DateTime? get time => _$this._time;
+  set time(DateTime? time) => _$this._time = time;
 
   RuleRecordBuilder();
 
@@ -284,7 +284,7 @@ class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
   }
 
   @override
-  void update(void Function(RuleRecordBuilder) updates) {
+  void update(void Function(RuleRecordBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
