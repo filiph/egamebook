@@ -829,7 +829,7 @@ class ShadowGraph {
 
     assert(!result.any((e) => e == null),
         "We haven't filled the whole result list with values.");
-    return result as List<Map<Identifier, Entity>>;
+    return result.cast<Map<Identifier, Entity>>();
   }
 
   void _limitJoinerToComma(int i) {

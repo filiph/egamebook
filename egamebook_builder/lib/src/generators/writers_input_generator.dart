@@ -85,6 +85,9 @@ class WritersInputGenerator extends Generator {
         .add(cb.Directive.import('package:built_value/built_value.dart'));
     lib.directives
         .add(cb.Directive.import('package:built_value/serializer.dart'));
+
+    lib.directives.add(cb.Directive.import(
+        'package:edgehead/fractal_stories/world_state.dart'));
     lib.directives
         .add(cb.Directive.import('package:edgehead/writers_helpers.dart'));
 

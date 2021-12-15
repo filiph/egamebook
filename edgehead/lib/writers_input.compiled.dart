@@ -56,6 +56,7 @@ import 'package:edgehead/fractal_stories/world_state.dart'
 import 'package:edgehead/fractal_stories/world_state.dart' show WorldState;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/writers_helpers.dart';
 part 'writers_input.compiled.g.dart';
 

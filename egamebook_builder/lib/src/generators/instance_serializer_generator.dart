@@ -124,9 +124,7 @@ class InstanceSerializerGenerator extends Generator {
             }
 
             final classEl = topLevelElement;
-            final staticElements = classEl.fields.where((el) =>
-                el.isStatic
-                );
+            final staticElements = classEl.fields.where((el) => el.isStatic);
             for (final element in staticElements) {
               log.finest('Found static element: ${element.name}');
               if (!typeSystem.isAssignableTo(element.type, instanceType)) {

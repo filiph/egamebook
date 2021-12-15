@@ -179,8 +179,8 @@ class GeneratedRoom extends GeneratedGameObject {
 
     final parentName =
         GeneratedGameObject.validateAndRemoveDollarSign(_map['VARIANT_OF']!);
-    final parent = rooms.singleWhereOrNull(
-        (candidate) => candidate.writersName == parentName);
+    final parent = rooms
+        .singleWhereOrNull((candidate) => candidate.writersName == parentName);
 
     if (parent == null) {
       log.severe('Room $name is defining a parent ($parentName) but '

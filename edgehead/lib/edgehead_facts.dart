@@ -3,6 +3,7 @@ library edgehead_facts;
 import 'package:edgehead/edgehead_facts_enums.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 
 /// Keep this map in sync with edgehead_facts_enums.dart.
 final Map<Type, List<String>> _chainEnums = {

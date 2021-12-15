@@ -638,12 +638,12 @@ class Reason<T /*?*/ > {
 @immutable
 class ReasonedSuccessChance<R> {
   /// Sure failure without any reason given.
-  static const ReasonedSuccessChance<Nothing?> sureFailure =
-      ReasonedSuccessChance<Nothing?>(0.0);
+  static const ReasonedSuccessChance<void> sureFailure =
+      ReasonedSuccessChance<void>(0.0);
 
   /// Sure success without any reason given.
-  static const ReasonedSuccessChance<Nothing?> sureSuccess =
-      ReasonedSuccessChance<Nothing?>(1.0);
+  static const ReasonedSuccessChance<void> sureSuccess =
+      ReasonedSuccessChance<void>(1.0);
 
   /// The probability of success, as a number between `0.0` and `1.0`.
   final double value;
@@ -658,10 +658,10 @@ class ReasonedSuccessChance<R> {
       {List<Reason<R>>? successReasons, List<Reason<R>>? failureReasons})
       // ignore: prefer_void_to_null
       : successReasons =
-            (successReasons ?? const <Reason<Null>>[]) as List<Reason<R>>,
+            (successReasons ?? const <Reason<void>>[]) as List<Reason<R>>,
         // ignore: prefer_void_to_null
         failureReasons =
-            (failureReasons ?? const <Reason<Null>>[]) as List<Reason<R>>;
+            (failureReasons ?? const <Reason<void>>[]) as List<Reason<R>>;
 
   /// Creates an inversion of this [ReasonedSuccessChance].
   ///

@@ -770,16 +770,16 @@ class Storyline {
     }
 
     // We have elements other than text.
-    final result = <ElementBase?>[];
+    final result = <ElementBase>[];
     result.add(text);
     int index = 0;
     for (final rec in _records) {
-      if (!rec.isReport) result.add(rec.customElement);
+      if (!rec.isReport) result.add(rec.customElement!);
       index += 1;
       if (index >= lengthInRecords) break;
     }
 
-    return result as List<ElementBase>;
+    return result;
   }
 
   /// Old way of getting text out of [Storyline]. Use [realize]

@@ -159,7 +159,7 @@ class _$WorldState extends WorldState {
   final VisitHistory visitHistory;
 
   factory _$WorldState([void Function(WorldStateBuilder)? updates]) =>
-      (new WorldStateBuilder()..update(updates)).build() as _$WorldState;
+      (new WorldStateBuilder()..update(updates)).build();
 
   _$WorldState._(
       {required this.actionHistory,
@@ -197,7 +197,7 @@ class _$WorldState extends WorldState {
       (toBuilder()..update(updates)).build();
 
   @override
-  _$WorldStateBuilder toBuilder() => new _$WorldStateBuilder()..replace(this);
+  WorldStateBuilder toBuilder() => new WorldStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -241,157 +241,84 @@ class _$WorldState extends WorldState {
   }
 }
 
-class _$WorldStateBuilder extends WorldStateBuilder {
+class WorldStateBuilder implements Builder<WorldState, WorldStateBuilder> {
   _$WorldState? _$v;
 
-  @override
-  ActionHistoryBuilder get actionHistory {
-    _$this;
-    return super.actionHistory;
-  }
+  ActionHistoryBuilder? _actionHistory;
+  ActionHistoryBuilder get actionHistory =>
+      _$this._actionHistory ??= new ActionHistoryBuilder();
+  set actionHistory(ActionHistoryBuilder? actionHistory) =>
+      _$this._actionHistory = actionHistory;
 
-  @override
-  set actionHistory(ActionHistoryBuilder actionHistory) {
-    _$this;
-    super.actionHistory = actionHistory;
-  }
+  ListBuilder<Actor>? _actors;
+  ListBuilder<Actor> get actors => _$this._actors ??= new ListBuilder<Actor>();
+  set actors(ListBuilder<Actor>? actors) => _$this._actors = actors;
 
-  @override
-  ListBuilder<Actor> get actors {
-    _$this;
-    return super.actors;
-  }
+  CustomEventHistoryBuilder? _customHistory;
+  CustomEventHistoryBuilder get customHistory =>
+      _$this._customHistory ??= new CustomEventHistoryBuilder();
+  set customHistory(CustomEventHistoryBuilder? customHistory) =>
+      _$this._customHistory = customHistory;
 
-  @override
-  set actors(ListBuilder<Actor> actors) {
-    _$this;
-    super.actors = actors;
-  }
+  ActorBuilder? _director;
+  ActorBuilder get director => _$this._director ??= new ActorBuilder();
+  set director(ActorBuilder? director) => _$this._director = director;
 
-  @override
-  CustomEventHistoryBuilder get customHistory {
-    _$this;
-    return super.customHistory;
-  }
+  WorldStateFlags? _global;
+  WorldStateFlags? get global => _$this._global;
+  set global(WorldStateFlags? global) => _$this._global = global;
 
-  @override
-  set customHistory(CustomEventHistoryBuilder customHistory) {
-    _$this;
-    super.customHistory = customHistory;
-  }
+  RuleHistoryBuilder? _ruleHistory;
+  RuleHistoryBuilder get ruleHistory =>
+      _$this._ruleHistory ??= new RuleHistoryBuilder();
+  set ruleHistory(RuleHistoryBuilder? ruleHistory) =>
+      _$this._ruleHistory = ruleHistory;
 
-  @override
-  ActorBuilder get director {
-    _$this;
-    return super.director;
-  }
+  ListBuilder<Situation>? _situations;
+  ListBuilder<Situation> get situations =>
+      _$this._situations ??= new ListBuilder<Situation>();
+  set situations(ListBuilder<Situation>? situations) =>
+      _$this._situations = situations;
 
-  @override
-  set director(ActorBuilder director) {
-    _$this;
-    super.director = director;
-  }
+  SlayHistoryBuilder? _slayHistory;
+  SlayHistoryBuilder get slayHistory =>
+      _$this._slayHistory ??= new SlayHistoryBuilder();
+  set slayHistory(SlayHistoryBuilder? slayHistory) =>
+      _$this._slayHistory = slayHistory;
 
-  @override
-  WorldStateFlags? get global {
-    _$this;
-    return super.global;
-  }
+  int? _statefulRandomState;
+  int? get statefulRandomState => _$this._statefulRandomState;
+  set statefulRandomState(int? statefulRandomState) =>
+      _$this._statefulRandomState = statefulRandomState;
 
-  @override
-  set global(WorldStateFlags? global) {
-    _$this;
-    super.global = global;
-  }
+  DateTime? _time;
+  DateTime? get time => _$this._time;
+  set time(DateTime? time) => _$this._time = time;
 
-  @override
-  RuleHistoryBuilder get ruleHistory {
-    _$this;
-    return super.ruleHistory;
-  }
+  VisitHistoryBuilder? _visitHistory;
+  VisitHistoryBuilder get visitHistory =>
+      _$this._visitHistory ??= new VisitHistoryBuilder();
+  set visitHistory(VisitHistoryBuilder? visitHistory) =>
+      _$this._visitHistory = visitHistory;
 
-  @override
-  set ruleHistory(RuleHistoryBuilder ruleHistory) {
-    _$this;
-    super.ruleHistory = ruleHistory;
+  WorldStateBuilder() {
+    WorldState._initializeValues(this);
   }
-
-  @override
-  ListBuilder<Situation> get situations {
-    _$this;
-    return super.situations;
-  }
-
-  @override
-  set situations(ListBuilder<Situation> situations) {
-    _$this;
-    super.situations = situations;
-  }
-
-  @override
-  SlayHistoryBuilder get slayHistory {
-    _$this;
-    return super.slayHistory;
-  }
-
-  @override
-  set slayHistory(SlayHistoryBuilder slayHistory) {
-    _$this;
-    super.slayHistory = slayHistory;
-  }
-
-  @override
-  int? get statefulRandomState {
-    _$this;
-    return super.statefulRandomState;
-  }
-
-  @override
-  set statefulRandomState(int? statefulRandomState) {
-    _$this;
-    super.statefulRandomState = statefulRandomState;
-  }
-
-  @override
-  DateTime? get time {
-    _$this;
-    return super.time;
-  }
-
-  @override
-  set time(DateTime? time) {
-    _$this;
-    super.time = time;
-  }
-
-  @override
-  VisitHistoryBuilder get visitHistory {
-    _$this;
-    return super.visitHistory;
-  }
-
-  @override
-  set visitHistory(VisitHistoryBuilder visitHistory) {
-    _$this;
-    super.visitHistory = visitHistory;
-  }
-
-  _$WorldStateBuilder() : super._();
 
   WorldStateBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      super.actionHistory = $v.actionHistory.toBuilder();
-      super.actors = $v.actors.toBuilder();
-      super.customHistory = $v.customHistory.toBuilder();
-      super.director = $v.director?.toBuilder();
-      super.global = $v.global;
-      super.ruleHistory = $v.ruleHistory.toBuilder();
-      super.situations = $v.situations.toBuilder();
-      super.slayHistory = $v.slayHistory.toBuilder();
-      super.statefulRandomState = $v.statefulRandomState;
-      super.time = $v.time;
-      super.visitHistory = $v.visitHistory.toBuilder();
+      _actionHistory = $v.actionHistory.toBuilder();
+      _actors = $v.actors.toBuilder();
+      _customHistory = $v.customHistory.toBuilder();
+      _director = $v.director?.toBuilder();
+      _global = $v.global;
+      _ruleHistory = $v.ruleHistory.toBuilder();
+      _situations = $v.situations.toBuilder();
+      _slayHistory = $v.slayHistory.toBuilder();
+      _statefulRandomState = $v.statefulRandomState;
+      _time = $v.time;
+      _visitHistory = $v.visitHistory.toBuilder();
       _$v = null;
     }
     return this;
@@ -417,7 +344,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
               actionHistory: actionHistory.build(),
               actors: actors.build(),
               customHistory: customHistory.build(),
-              director: super.director?.build(),
+              director: _director?.build(),
               global: global,
               ruleHistory: ruleHistory.build(),
               situations: situations.build(),
@@ -437,7 +364,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
         _$failedField = 'customHistory';
         customHistory.build();
         _$failedField = 'director';
-        super.director?.build();
+        _director?.build();
 
         _$failedField = 'ruleHistory';
         ruleHistory.build();

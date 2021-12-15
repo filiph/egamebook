@@ -1,5 +1,7 @@
 library stranded.world_state;
 
+import 'dart:math' as math;
+
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
@@ -16,8 +18,6 @@ import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
-
-import 'dart:math' as math;
 
 part 'world_state.g.dart';
 
@@ -158,34 +158,6 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   bool situationExists(int situationId) =>
       _findSituationIndex(situationId) != null;
 
-  /// This is a special case of [timeSinceLastActionRecord], for aggressive
-  /// actions by [protagonist] that were done to [sufferer].
-  ///
-  /// This is called many times by things like [Actor.hates]. When resolved
-  /// using the usual [ActionHistory.query], the search takes about 30% of all
-  /// CPU cycles in a combat situation. This is a performance optimization
-  /// that uses [ActionHistory.latestAggression] map, which keeps track
-  /// of the last time an aggression from any actor to any other actor
-  /// happened.
-  ///
-  /// This can return `null` if there never was any aggressive action
-  /// performed by [protagonist] on [sufferer]. Otherwise, returns
-  /// number of seconds since the last time this happened. In other words,
-  /// the return is the same as with [timeSinceLastActionRecord].
-  int? timeSinceLastAggressiveAction(
-      {required Actor protagonist, required Actor sufferer}) {
-    assert(protagonist != null);
-    assert(sufferer != null);
-
-    final hash = Actor.hashTwoActorIds(protagonist.id, sufferer.id);
-    final latest = actionHistory.latestAggression[hash];
-    if (latest == null) {
-      // ignore: avoid_returning_null
-      return null;
-    }
-    return time.difference(latest).inSeconds;
-  }
-
   /// Returns number of seconds since an [ActionRecord] that conforms to
   /// the specified named parameters was performed.
   ///
@@ -212,6 +184,34 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
       return null;
     }
     return time.difference(latest.time).inSeconds;
+  }
+
+  /// This is a special case of [timeSinceLastActionRecord], for aggressive
+  /// actions by [protagonist] that were done to [sufferer].
+  ///
+  /// This is called many times by things like [Actor.hates]. When resolved
+  /// using the usual [ActionHistory.query], the search takes about 30% of all
+  /// CPU cycles in a combat situation. This is a performance optimization
+  /// that uses [ActionHistory.latestAggression] map, which keeps track
+  /// of the last time an aggression from any actor to any other actor
+  /// happened.
+  ///
+  /// This can return `null` if there never was any aggressive action
+  /// performed by [protagonist] on [sufferer]. Otherwise, returns
+  /// number of seconds since the last time this happened. In other words,
+  /// the return is the same as with [timeSinceLastActionRecord].
+  int? timeSinceLastAggressiveAction(
+      {required Actor protagonist, required Actor sufferer}) {
+    assert(protagonist != null);
+    assert(sufferer != null);
+
+    final hash = Actor.hashTwoActorIds(protagonist.id, sufferer.id);
+    final latest = actionHistory.latestAggression[hash];
+    if (latest == null) {
+      // ignore: avoid_returning_null
+      return null;
+    }
+    return time.difference(latest).inSeconds;
   }
 
   /// Returns number of seconds since a [CustomEvent] that conforms to
@@ -274,40 +274,25 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
     }
     return index;
   }
+
+  /// Initialize [statefulRandomState] to a value so it's not null.
+  @BuiltValueHook(initializeBuilder: true)
+  static void _initializeValues(WorldStateBuilder b) =>
+      b..statefulRandomState = 42;
 }
 
-abstract class WorldStateBuilder
-    implements Builder<WorldState, WorldStateBuilder> {
-  ActionHistoryBuilder actionHistory = ActionHistoryBuilder();
+/// The object that contains custom state.
+///
+/// Often, these are flags like `visitedCastle` or `orcsKilled`. Most other
+/// things can be saved in action records (the history of the game)
+/// and in actors themselves.
+abstract class WorldStateFlags {
+  // Empty. Just for type checking for now.
+  // TODO: actually implement after following bug is fixed:
+  //       https://github.com/google/built_value.dart/issues/280
+}
 
-  RuleHistoryBuilder ruleHistory = RuleHistoryBuilder();
-
-  ListBuilder<Actor> actors = ListBuilder<Actor>();
-
-  ActorBuilder director = Actor.initialized(
-    -1,
-    () => math.Random().nextInt(0xFFFFFF),
-    "MOCK DIRECTOR",
-  ).toBuilder();
-
-  int? statefulRandomState = 42;
-
-  WorldStateFlags? global;
-
-  ListBuilder<Situation> situations = ListBuilder<Situation>();
-
-  CustomEventHistoryBuilder customHistory = CustomEventHistoryBuilder();
-
-  DateTime? time;
-
-  VisitHistoryBuilder visitHistory = VisitHistoryBuilder();
-
-  SlayHistoryBuilder slayHistory = SlayHistoryBuilder();
-
-  factory WorldStateBuilder() = _$WorldStateBuilder;
-
-  WorldStateBuilder._();
-
+extension WorldStateBuilderHelpers on WorldStateBuilder {
   /// The situation on the top of the stack.
   Situation? get currentSituation => build().currentSituation;
 
@@ -492,15 +477,4 @@ abstract class WorldStateBuilder
       actors.add(updated);
     }
   }
-}
-
-/// The object that contains custom state.
-///
-/// Often, these are flags like `visitedCastle` or `orcsKilled`. Most other
-/// things can be saved in action records (the history of the game)
-/// and in actors themselves.
-abstract class WorldStateFlags {
-  // Empty. Just for type checking for now.
-  // TODO: actually implement after following bug is fixed:
-  //       https://github.com/google/built_value.dart/issues/280
 }

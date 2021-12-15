@@ -5,6 +5,7 @@ library edgehead.event_callbacks;
 
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:egamebook_builder/instance_serializer.dart';
 
 part 'edgehead_event_callbacks_gather.gathered.dart';

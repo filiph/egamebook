@@ -1,6 +1,7 @@
 library edgehead.ruleset;
 
 import 'package:edgehead/fractal_stories/context.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:meta/meta.dart';
 
 bool _alwaysApplicableCallback(ApplicabilityContext _) => true;
@@ -161,7 +162,7 @@ class Ruleset {
         rule8,
         rule9,
         rule10
-      ]);
+      ].whereType<Rule>());
 
   /// Runs the ruleset, choosing the most specific rule and running its
   /// [Rule.applyCallback].

@@ -136,7 +136,7 @@ class Simulation {
 
   /// Generates all applicable actions for [actor] given a [world]. This goes
   /// through all [Situation.actions] as well as [Situation.actionGenerators].
-  Iterable<Performance<Object>> generateAllPerformances(
+  Iterable<Performance<Object?>> generateAllPerformances(
       ApplicabilityContext context) sync* {
     assert(context.world.currentSituation!.actions.isNotEmpty,
         "There are no actions defined for ${context.world.currentSituation}");
@@ -162,7 +162,7 @@ class Simulation {
         final additionalData = action.getAdditionalData(context, null);
         final additionalStrings = action.getAdditionalStrings(context, null);
         yield Performance<Nothing?>(action, context, null, successChance,
-            additionalData, additionalStrings) as Performance<Object>;
+            additionalData, additionalStrings);
         continue;
       }
 
