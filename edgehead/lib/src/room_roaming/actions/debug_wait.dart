@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class WaitWhileRoamingAction extends Action<Nothing> {
+class WaitWhileRoamingAction extends Action<Nothing /*?*/ > {
   static const String className = "WaitWhileRoamingAction";
 
   static final WaitWhileRoamingAction singleton = WaitWhileRoamingAction();

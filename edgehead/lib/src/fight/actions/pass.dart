@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
 /// Pass up on an opportunity.
-class Pass extends Action<Nothing> {
+class Pass extends Action<Nothing /*?*/ > {
   static final Pass singleton = Pass();
 
   static const String className = "Pass";

@@ -157,7 +157,7 @@ extension ActionContextHelpers on ActionContext {
   static const String _describedWorthinessEvent = "described_worthiness";
 
   void describeWorthiness(
-      {@required Entity who,
+      {@required Entity /*!*/ who,
       @required List<int> what,
       List<int> especially = const [],
       String how = 'approvingly'}) {
@@ -249,7 +249,7 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return query.hasHappened;
   }
 
-  String get playerHairColor {
+  String /*!*/ get playerHairColor {
     final query =
         world.customHistory.query(name: ActionContextHelpers._playerHairColor);
     return query.latest.data as String;

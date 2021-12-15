@@ -30,7 +30,7 @@ abstract class LootSituation extends Object
     int id,
     Iterable<int> playerTeamIds,
     String groundMaterial,
-    Iterable<Item> droppedItems,
+    Iterable<Item /*!*/ > droppedItems,
   ) =>
       LootSituation((b) => b
         ..id = id
@@ -63,7 +63,7 @@ abstract class LootSituation extends Object
   int get turn;
 
   @override
-  LootSituation elapseTurn() => rebuild((b) => b..turn += 1);
+  LootSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
 
   @override
   Iterable<Actor> getActors(Simulation sim, WorldState w) {

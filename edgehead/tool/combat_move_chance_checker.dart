@@ -7,6 +7,9 @@ import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
 import 'package:edgehead/fractal_stories/pose.dart';
+import 'package:edgehead/fractal_stories/simulation.dart';
+import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/actions/start_break_neck_on_ground.dart';
 import 'package:edgehead/src/fight/actions/start_leap.dart';
 import 'package:edgehead/src/fight/actions/start_punch.dart';
@@ -95,14 +98,19 @@ Actor _createActor({
 }
 
 void _runConfiguration(_Configuration config, SuccessChanceGetter getter) {
+  final mockSimulation = Simulation(
+      const [], const [], const {}, const Ruleset.empty(), const {}, const {});
+  final mockOutputWorldState = WorldStateBuilder()..time = DateTime(200);
+  final mockWorldState = mockOutputWorldState.build();
+
   final playerAttacking = getter(
     _createActor(
       name: "player",
       dexterity: 150,
       pose: config.actorPose,
     ),
-    null,
-    null,
+    mockSimulation,
+    mockWorldState,
     _createActor(
         name: "goblin",
         dexterity: 100,
@@ -116,8 +124,8 @@ void _runConfiguration(_Configuration config, SuccessChanceGetter getter) {
       dexterity: 100,
       pose: config.actorPose,
     ),
-    null,
-    null,
+    mockSimulation,
+    mockWorldState,
     _createActor(
         name: "player",
         dexterity: 150,

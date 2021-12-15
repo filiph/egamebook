@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
 
-class RaiseDead extends Action<Nothing> {
+class RaiseDead extends Action<Nothing /*?*/ > {
   static final RaiseDead singleton = RaiseDead();
 
   static const String className = "RaiseDead";

@@ -10,7 +10,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 
-class ThrowGrenade extends Action<Nothing> {
+class ThrowGrenade extends Action<Nothing /*?*/ > {
   static final ThrowGrenade singleton = ThrowGrenade();
 
   static const String className = "ThrowGrenade";

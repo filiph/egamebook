@@ -106,7 +106,7 @@ class EquipWeapon extends InventoryItemAction {
   String toString() => "EquipWeapon<$commandPathTemplate>";
 }
 
-abstract class InventoryItemAction extends Action<Item> {
+abstract class InventoryItemAction extends Action<Item /*!*/ > {
   /// See [getCommandPath].
   @override
   @nonVirtual

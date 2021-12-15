@@ -10,7 +10,7 @@ import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/thrash_around_blind.dart';
 
-class Wait extends Action<Nothing> {
+class Wait extends Action<Nothing /*?*/ > {
   static final Wait singleton = Wait();
 
   static const String className = "Wait";

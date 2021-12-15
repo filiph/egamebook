@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class Cower extends Action<Nothing> {
+class Cower extends Action<Nothing /*?*/ > {
   static final Cower singleton = Cower();
 
   static const String className = "Cower";

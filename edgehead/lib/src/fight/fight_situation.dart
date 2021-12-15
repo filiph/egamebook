@@ -213,7 +213,7 @@ abstract class FightSituation extends Object
       teamIds.any((id) => world.getActorById(id).isAnimatedAndActive);
 
   @override
-  FightSituation elapseTurn() => rebuild((b) => b..turn += 1);
+  FightSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
 
   @override
   Iterable<Actor> getActors(_, WorldState w) => w.actors.where((Actor actor) =>

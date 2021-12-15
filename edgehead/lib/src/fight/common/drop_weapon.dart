@@ -16,7 +16,9 @@ import 'package:meta/meta.dart';
 ///
 /// If [forced] is `true`, a [disarmedCustomEventName] event will be recorded.
 /// Otherwise, this is considered a voluntary disarmament.
-Item disarmActor(WorldStateBuilder w, Actor actor, {@required bool forced}) {
+Item /*!*/ disarmActor(WorldStateBuilder w, Actor actor,
+    {@required bool forced}) {
+  assert(actor.currentWeapon != null);
   final weapon = actor.currentWeapon;
   w.updateActorById(
       actor.id,

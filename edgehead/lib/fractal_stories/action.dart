@@ -57,7 +57,7 @@ abstract class Action<T> {
   /// Optional message to be shown when player presses a help button
   /// next to the action. The message should explain what the action does
   /// and, if appropriate, why and when it should be used.
-  String get helpMessage;
+  String? get helpMessage;
 
   /// Whether or not this action is aggressive towards its sufferer. Combat
   /// moves are aggressive, healing moves aren't.
@@ -217,7 +217,7 @@ abstract class Action<T> {
   /// help message (provided by [helpMessage]) is enough. But some actions
   /// might change the help message according to context or the nature
   /// of [object].
-  String getHelpMessage(ApplicabilityContext context, T object) {
+  String? getHelpMessage(ApplicabilityContext context, T object) {
     return helpMessage;
   }
 
@@ -390,18 +390,19 @@ abstract class OtherActorActionBase extends Action<Actor> {
   ///
   /// For example "will <subject> hit <objectPronoun>?" is a valid roll reason
   /// template that might realize into something like "Will you hit him?"
-  String get rollReasonTemplate;
+  String? get rollReasonTemplate;
 
   @override
   String getRollReason(Actor a, Simulation sim, WorldState w, Actor target) {
-    assert(
-        rollReasonTemplate != null,
-        "Action<$name> has null roll reason "
-        "template. $this");
+    if (rollReasonTemplate == null) {
+      throw UnimplementedError("Action<$name> has null roll reason "
+          "template. Either fill it with a String, or override"
+          "getRollReason here. $this");
+    }
     final hasObject =
-        rollReasonTemplate.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP);
+        rollReasonTemplate!.contains(Storyline.OBJECT_NOT_OBJECT2_REGEXP);
     return (Storyline()
-          ..add(rollReasonTemplate,
+          ..add(rollReasonTemplate!,
               subject: a,
               object: hasObject ? target : null,
               wholeSentence: true))

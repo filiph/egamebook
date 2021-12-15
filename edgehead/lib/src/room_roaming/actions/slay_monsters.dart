@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class AutoSlayMonstersAction extends Action<Nothing> {
+class AutoSlayMonstersAction extends Action<Nothing /*?*/ > {
   static final AutoSlayMonstersAction singleton = AutoSlayMonstersAction();
 
   static const String className = "SlayMonstersAction";

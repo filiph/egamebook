@@ -49,6 +49,7 @@ class InkAst extends InkSequenceNode {
   }
 }
 
+/// The individual choice defined in an [InkAst].
 class InkChoiceNode extends InkSequenceNode {
   final bool Function(ApplicabilityContext)? isApplicable;
 

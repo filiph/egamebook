@@ -62,7 +62,7 @@ class DropCurrentWeapon extends InventoryItemAction {
   }
 
   @override
-  Iterable<Item> generateObjects(ApplicabilityContext context) {
+  Iterable<Item /*!*/ > generateObjects(ApplicabilityContext context) {
     if (context.actor.currentWeapon == null) {
       return const [];
     }

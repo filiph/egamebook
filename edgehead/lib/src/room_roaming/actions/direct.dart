@@ -6,7 +6,7 @@ import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class DirectAction extends Action<Nothing> {
+class DirectAction extends Action<Nothing /*?*/ > {
   static const String className = "DirectAction";
 
   static final DirectAction singleton = DirectAction();

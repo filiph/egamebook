@@ -95,7 +95,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
   }
 }
 
-void _placeBodyPartOnGround(WorldStateBuilder w, Item bodyPart) {
+void _placeBodyPartOnGround(WorldStateBuilder w, Item /*!*/ bodyPart) {
   final fightSituation =
       w.getSituationByName<FightSituation>(FightSituation.className);
   w.replaceSituationById<FightSituation>(fightSituation.id,

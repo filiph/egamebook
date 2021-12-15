@@ -10,7 +10,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
-class AssumeStance extends Action<Nothing> {
+class AssumeStance extends Action<Nothing /*?*/ > {
   static final AssumeStance singleton = AssumeStance();
 
   static const String className = "AssumeStance";

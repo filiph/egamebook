@@ -7,7 +7,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class ThrashAroundBlind extends Action<Nothing> {
+class ThrashAroundBlind extends Action<Nothing /*?*/ > {
   static final ThrashAroundBlind singleton = ThrashAroundBlind();
 
   static const String className = "ThrashAroundBlind";

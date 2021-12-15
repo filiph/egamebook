@@ -23,8 +23,8 @@ const String startBiteHelpMessage = "Hmm, a body part. Delicious!";
 /// and will compute a predetermined result from that.
 ///
 /// This is almost identical to [computeStartSlashAtBodyPartGenerator].
-ReasonedSuccessChance computeStartBiteAtBodyPartGenerator(
-    BodyPart bodyPart, Actor a, Simulation sim, WorldState w, Actor enemy) {
+ReasonedSuccessChance computeStartBiteAtBodyPartGenerator(BodyPart bodyPart,
+    Actor a, Simulation /*!*/ sim, WorldState w, Actor enemy) {
   assert(a.isPlayer);
 
   const minBase = 0.2;

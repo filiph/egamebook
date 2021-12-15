@@ -85,7 +85,8 @@ abstract class RoomRoamingSituation extends Object
   int get turn;
 
   @override
-  RoomRoamingSituation elapseTurn() => rebuild((b) => b..turn += 1);
+  RoomRoamingSituation elapseTurn() =>
+      rebuild((b) => b.turn = b.turn /*!*/ + 1);
 
   /// Only player can roam at the moment. But there is also Director.
   @override

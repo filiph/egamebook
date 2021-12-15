@@ -46,10 +46,10 @@ class SmackWithHarmlessItem extends EnemyTargetAction with CombatCommandPath {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    assert(a.currentWeapon.damageCapability.isHarmless);
+    assert(a.currentDamageCapability.isHarmless);
 
     a.report(s, "<subject> swing at <object> with <object2>",
-        object: enemy, object2: a.currentWeapon);
+        object: enemy, object2: a.currentWeaponOrBodyPart);
     a.report(s, "<subject> miss<es> completely", but: true, negative: true);
 
     if (a.pose > Pose.offBalance) {
@@ -65,10 +65,10 @@ class SmackWithHarmlessItem extends EnemyTargetAction with CombatCommandPath {
     Actor a = context.actor;
     Storyline s = context.outputStoryline;
 
-    assert(a.currentWeapon.damageCapability.isHarmless);
+    assert(a.currentDamageCapability.isHarmless);
 
     a.report(s, "<subject> hit <object> with <object2>",
-        object: enemy, object2: a.currentWeapon, positive: true);
+        object: enemy, object2: a.currentWeaponOrBodyPart, positive: true);
     s.add('it has no effect');
 
     return "${a.name} hits ${enemy.name} with harmless weapon";

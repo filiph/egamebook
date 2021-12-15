@@ -64,7 +64,8 @@ abstract class OffBalanceOpportunitySituation extends Object
   int get turn;
 
   @override
-  OffBalanceOpportunitySituation elapseTurn() => rebuild((b) => b..turn += 1);
+  OffBalanceOpportunitySituation elapseTurn() =>
+      rebuild((b) => b.turn = b.turn /*!*/ + 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {

@@ -168,6 +168,9 @@ abstract class Actor extends Object
   ///
   /// This must be an item that the actor can wield, such as a dagger
   /// or a sword. Claws and other things are [Anatomy.bodyPartWeapon].
+  ///
+  /// Can be `null`, in which case the actor is wielding no weapon at
+  /// the moment.
   Item? get currentWeapon => inventory.currentWeapon;
 
   /// Returns either the [currentWeapon] (if held), or the best available

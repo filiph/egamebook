@@ -10,7 +10,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 
-class AutoLoot extends Action<Nothing> {
+class AutoLoot extends Action<Nothing /*?*/ > {
   static final AutoLoot singleton = AutoLoot();
 
   static const String className = "AutoLoot";

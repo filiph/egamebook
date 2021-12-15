@@ -90,7 +90,7 @@ abstract class InkSituation extends Object
   int get turn;
 
   @override
-  InkSituation elapseTurn() => rebuild((b) => b..turn += 1);
+  InkSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
 
   @override
   Iterable<Actor> getActors(Simulation sim, WorldState w) =>

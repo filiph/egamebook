@@ -12,10 +12,18 @@ import 'package:meta/meta.dart';
 /// A specification of an ink choice, including the "pointer" to it
 /// in a given [InkAst].
 class InkChoicePointer {
+  /// These is a list of choices to make in order to get to the choice which
+  /// this [InkChoicePointer] represents. For example, if you need to pick
+  /// the first choice in the first branch, and the second choice in the second
+  /// branch in order to see the choice being pointed at, then this list
+  /// will be `[0, 1]`.
   final List<int> pathToFork;
 
+  /// Once we are at the choice list defined by [pathToFork], this is the
+  /// ordinal number of the [choice].
   final int indexOfChoice;
 
+  /// The [InkChoiceNode] being pointed at.
   final InkChoiceNode choice;
 
   const InkChoicePointer({
@@ -146,7 +154,7 @@ class InkChoose extends Action<InkChoicePointer> {
   }
 
   @override
-  String getRollReason(
+  String /*?*/ getRollReason(
       Actor a, Simulation sim, WorldState w, InkChoicePointer pointer) {
     return null;
   }
@@ -200,7 +208,7 @@ class InkChoose extends Action<InkChoicePointer> {
   }
 }
 
-class InkImplicitWalk extends Action<Nothing> {
+class InkImplicitWalk extends Action<Nothing /*?*/ > {
   static const className = 'InkImplicitWalk';
 
   static const InkImplicitWalk singleton = InkImplicitWalk();
@@ -211,7 +219,7 @@ class InkImplicitWalk extends Action<Nothing> {
   List<String> get commandPathTemplate => ['Continue'];
 
   @override
-  String get helpMessage => null;
+  String /*?*/ get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -260,7 +268,7 @@ class InkImplicitWalk extends Action<Nothing> {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Nothing _) {
+  String /*?*/ getRollReason(Actor a, Simulation sim, WorldState w, Nothing _) {
     return null;
   }
 

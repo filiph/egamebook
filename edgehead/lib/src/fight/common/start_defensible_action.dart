@@ -27,10 +27,10 @@ typedef PartialApplyFunction = void Function(
     WorldStateBuilder world,
     Storyline storyline,
     Actor enemy,
-    Situation mainSituation);
+    Situation /*!*/ mainSituation);
 
 typedef SuccessChanceGetter = ReasonedSuccessChance Function(
-    Actor a, Simulation sim, WorldState w, Actor enemy);
+    Actor a, Simulation /*!*/ sim, WorldState /*!*/ w, Actor enemy);
 
 typedef _DefenseSituationBuilder = DefenseSituation Function(
     Actor actor,
@@ -163,7 +163,7 @@ class StartDefensibleAction extends StartDefensibleActionBase {
       _defenseSituationBuilder(actor, sim, world, enemy, predetermination);
 
   @override
-  String getCommandPathTail(ApplicabilityContext context, Actor object) {
+  String /*!*/ getCommandPathTail(ApplicabilityContext context, Actor object) {
     if (commandPathTailGenerator != null) {
       assert(
           commandPathTail == null,
@@ -172,7 +172,7 @@ class StartDefensibleAction extends StartDefensibleActionBase {
       return commandPathTailGenerator(context, context.actor, object);
     }
     assert(commandPathTail != null);
-    return commandPathTail;
+    return commandPathTail /*!*/;
   }
 
   @override
@@ -222,15 +222,16 @@ abstract class StartDefensibleActionBase extends EnemyTargetAction
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
 
+    final mainSituation = mainSituationBuilder(a, sim, w, enemy);
+
     if (shouldShortCircuitWhenFailed) {
       // Short-circuit the whole logic. Actor failed to even start to execute
       // the action.
-      applyShortCircuit(a, sim, w, s, enemy, null);
+      applyShortCircuit(a, sim, w, s, enemy, mainSituation);
       return "${a.name} fails to even start $name (DefensibleAction) "
           "directed at ${enemy.name}";
     }
 
-    final mainSituation = mainSituationBuilder(a, sim, w, enemy);
     // If this action is performed by the player and it failed, then
     // we need to make sure that the defense situation (performed by the enemy)
     // succeeds.

@@ -80,7 +80,7 @@ abstract class DefenseSituation extends Object
   int get turn;
 
   @override
-  DefenseSituation elapseTurn() => rebuild((b) => b..turn += 1);
+  DefenseSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {

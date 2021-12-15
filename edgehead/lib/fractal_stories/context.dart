@@ -60,8 +60,8 @@ class ActionContext extends ApplicabilityContext {
   /// Same as [ApplicabilityContext.player], except this getter gets
   /// the most recent player (updates in [outputWorld] count).
   @override
-  Actor? get player {
-    return outputWorld.getActorById(Actor.playerId);
+  Actor get player {
+    return outputWorld.getActorById(Actor.playerId)!;
   }
 }
 
@@ -79,7 +79,10 @@ class ApplicabilityContext {
 
   const ApplicabilityContext(this.actor, this.simulation, this.world);
 
-  Actor? get player {
-    return world.getActorById(Actor.playerId);
+  /// A convenience accessor of the actor with [Actor.playerId].
+  ///
+  /// This throws if there is no actor with that id.
+  Actor get player {
+    return world.getActorById(Actor.playerId)!;
   }
 }

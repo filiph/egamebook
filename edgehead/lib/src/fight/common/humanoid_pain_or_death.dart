@@ -24,7 +24,7 @@ final Random _random = Random();
 /// For actors that are [Actor.isUndead], the reporting and effects of pain
 /// are much diminished (since the undead don't feel pain).
 void inflictPain(
-    ActionContext context, int actorId, int damage, BodyPart bodyPart,
+    ActionContext context, int actorId, int damage, BodyPart /*!*/ bodyPart,
     {bool extremePain = false}) {
   final s = context.outputStoryline;
   final actor = context.outputWorld.getActorById(actorId);

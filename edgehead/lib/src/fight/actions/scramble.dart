@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class Scramble extends Action<Nothing> {
+class Scramble extends Action<Nothing /*?*/ > {
   static final Scramble singleton = Scramble();
 
   static const String className = "Scramble";

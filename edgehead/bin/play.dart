@@ -63,7 +63,7 @@ Future<void> main(List<String> args) async {
     return;
   }
 
-  final automated = results['automated'] as bool;
+  final automated = results['automated'] as bool /*!*/;
   final forever = results['forever'] as bool;
   final logged = results['log'] as bool;
   RegExp actionPattern;
@@ -110,7 +110,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   final Random _random;
 
-  final bool automated;
+  final bool /*!*/ automated;
 
   /// A counter of choices. When [automated] is `true` and when
   /// this counter reaches [maxAutomatedChoicesTaken], we bail out
@@ -135,7 +135,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
   StreamSubscription _loggerSubscription;
 
   /// Silent mode can be overridden when [actionPattern] is encountered.
-  bool _silent;
+  bool /*!*/ _silent;
 
   /// The latest savegame received from the [book].
   @visibleForTesting
@@ -162,18 +162,17 @@ class CliRunner extends Presenter<EdgeheadGame> {
   /// [random] makes sure we predictably choose the same options.)
   CliRunner(
     this.automated,
-    bool silent,
+    bool /*!*/ silent,
     File logFile, {
     Level logLevel = Level.FINE,
     this.actionPattern,
     Random random,
     this.maxAutomatedChoicesTaken = 0xFFFFFF,
     this.maxTimeAutomated = const Duration(days: 365),
-  })  : _logFile = logFile,
+  })  : _silent = silent,
+        _logFile = logFile,
         _random = random ?? Random(),
         _timeStarted = DateTime.now() {
-    _silent = silent;
-
     if (_logFile != null) {
       Logger.root.level = logLevel;
       _loggerSubscription = Logger.root.onRecord.listen((record) {

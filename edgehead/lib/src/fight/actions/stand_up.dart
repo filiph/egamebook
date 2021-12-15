@@ -10,7 +10,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class StandUp extends Action<Nothing> {
+class StandUp extends Action<Nothing /*?*/ > {
   static final StandUp singleton = StandUp();
 
   static const String className = "StandUp";

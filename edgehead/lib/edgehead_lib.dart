@@ -73,9 +73,9 @@ class EdgeheadGame extends Book {
   /// [_setup], but it also defines whether or not to end the game
   /// (if the character with [playerCharacter]'s [Actor.id] is dead, then
   /// that's game over).
-  Actor playerCharacter;
+  /*late*/ Actor playerCharacter;
 
-  WorldState world;
+  /*late*/ WorldState world;
   Simulation simulation;
   PlanConsequence consequence;
   Storyline storyline;
@@ -139,7 +139,7 @@ class EdgeheadGame extends Book {
 
     try {
       world = edgehead_serializer.serializers.deserializeWith(
-          WorldState.serializer, json.decode(saveGameSerialized));
+          WorldState.serializer, json.decode(saveGameSerialized)) /*!*/;
       // ignore: avoid_catching_errors
     } on ArgumentError catch (e, s) {
       log.severe(parseErrorMessage);

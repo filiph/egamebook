@@ -8,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 
-class Unconfuse extends Action<Nothing> {
+class Unconfuse extends Action<Nothing /*?*/ > {
   static final Unconfuse singleton = Unconfuse();
 
   static const String className = "Unconfuse";

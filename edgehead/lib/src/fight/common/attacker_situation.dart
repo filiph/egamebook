@@ -235,7 +235,7 @@ abstract class AttackerSituation extends Object
   int get turn;
 
   @override
-  AttackerSituation elapseTurn() => rebuild((b) => b..turn += 1);
+  AttackerSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
 
   @override
   Iterable<Actor> getActors(_, WorldState w) =>

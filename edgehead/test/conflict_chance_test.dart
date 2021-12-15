@@ -111,7 +111,7 @@ void main() {
         .followedBy(reasonsRequiringBonuses)
         .followedBy(reasonsRequiringPenalties)
         .toList()
-          ..sort(sorter);
+      ..sort(sorter);
 
     var all = CombatReason.values.toList()..sort(sorter);
 

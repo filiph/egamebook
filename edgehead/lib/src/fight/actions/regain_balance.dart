@@ -10,7 +10,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
-class RegainBalance extends Action<Nothing> {
+class RegainBalance extends Action<Nothing /*?*/ > {
   static final RegainBalance singleton = RegainBalance();
 
   static const String className = "RegainBalance";
