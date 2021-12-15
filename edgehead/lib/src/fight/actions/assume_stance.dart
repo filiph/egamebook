@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -10,7 +8,7 @@ import 'package:edgehead/fractal_stories/team.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_lost_stance.dart';
 
-class AssumeStance extends Action<Nothing /*?*/ > {
+class AssumeStance extends Action<Nothing?> {
   static final AssumeStance singleton = AssumeStance();
 
   static const String className = "AssumeStance";
@@ -32,7 +30,7 @@ class AssumeStance extends Action<Nothing /*?*/ > {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   List<String> get commandPathTemplate => const ["self", "improve stance"];
@@ -63,7 +61,7 @@ class AssumeStance extends Action<Nothing /*?*/ > {
   }
 
   @override
-  Duration getRecoveryDuration(ApplicabilityContext context, Nothing _) {
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing? _) {
     if (context.actor.isPlayer) {
       //  This move should be super fast for the player.
       return const Duration(milliseconds: 200);

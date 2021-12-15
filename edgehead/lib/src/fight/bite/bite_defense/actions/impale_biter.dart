@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -115,13 +113,13 @@ class ImpaleBiter extends OtherActorAction {
 
     const damage = 1;
     final result =
-        executeThrustingHit(enemy, a.currentWeaponOrBodyPart, designation);
+        executeThrustingHit(enemy, a.currentWeaponOrBodyPart!, designation);
 
     // The following is taken almost verbatim from finish_thrust.dart.
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
     bool killed = !result.victim.isAnimated && !result.victim.isInvincible;
     if (!killed) {
-      a.currentWeaponOrBodyPart.report(
+      a.currentWeaponOrBodyPart!.report(
           s,
           "<subject> {cut<s> into|pierce<s>|go<es> into} "
           "<objectOwner's> <object>",
@@ -172,7 +170,7 @@ class ImpaleBiter extends OtherActorAction {
       }
     } else {
       // Killed.
-      a.currentWeaponOrBodyPart.report(
+      a.currentWeaponOrBodyPart!.report(
           s,
           "<subject> {go<es> right through|completely impale<s>|"
           "bore<s> through} <objectOwner's> <object>",

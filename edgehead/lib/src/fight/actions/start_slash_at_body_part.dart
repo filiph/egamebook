@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math' as math;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -63,7 +61,7 @@ EnemyTargetAction startSlashAtBodyPartGenerator(
     defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
         createSlashDefenseSituation(w.randomInt(), a, enemy, predetermination),
     successChanceGetter: (Actor a, Simulation sim, WorldState w, Actor enemy) {
-      final bodyPart = enemy.anatomy.findByDesignation(designation);
+      final bodyPart = enemy.anatomy.findByDesignation(designation)!;
       return computeStartSlashAtBodyPartGenerator(bodyPart, a, sim, w, enemy);
     },
     rerollable: true,
@@ -125,12 +123,12 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     }
   }
   if (enemy.isInvincible &&
-      enemy.anatomy.findByDesignation(designation).isVital) {
+      enemy.anatomy.findByDesignation(designation)!.isVital) {
     // Don't allow fatal slashes for invincible actors.
     return false;
   }
   // Don't offer to hit body parts that are already crippled.
-  if (!enemy.anatomy.findByDesignation(designation).isAnimated) return false;
+  if (!enemy.anatomy.findByDesignation(designation)!.isAnimated) return false;
 
   return true;
 }

@@ -119,7 +119,7 @@ RESCUE_COMMAND: Try harder
 RESCUE_HINT: I still have some stamina left in me.
 RESCUE_PREREQUISITES: a.stamina > 0
 RESCUE_EFFECT:
-w.updateActorById(a.id, (b) => b..stamina -= 1);
+w.updateActorById(a.id, (b) => b.stamina = b.stamina! - 1);
 RESCUE_DESCRIPTION:
 After laboring over the wheel for some time, I get it to move, but only a bit. It moves maybe an inch and then stops. A faint thud escapes from below.
 
@@ -157,7 +157,7 @@ RESCUE_COMMAND: Try harder
 RESCUE_HINT: I still have some stamina left in me.
 RESCUE_PREREQUISITES: a.stamina > 0
 RESCUE_EFFECT:
-w.updateActorById(a.id, (b) => b..stamina -= 1);
+w.updateActorById(a.id, (b) => b.stamina = b.stamina! - 1);
 RESCUE_DESCRIPTION:
 After laboring over the wheel for some time, I get it to move. At first, it moves by only an inch and stops again. But something gives way then, and suddenly the wheel turns easily. The sound of rushing water fills the room.
 

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:edgehead/edgehead_facts.dart';
@@ -42,7 +40,8 @@ extension ActionContextHelpers on ActionContext {
 
     outputStoryline
         .addCustomElement(StatUpdate.stamina(player.stamina, staminaUpdate));
-    outputWorld.updateActorById(playerId, (b) => b..stamina += staminaUpdate);
+    outputWorld.updateActorById(
+        playerId, (b) => b.stamina = b.stamina! + staminaUpdate);
   }
 
   void giveSanityToPlayer(int amount) {
@@ -58,7 +57,8 @@ extension ActionContextHelpers on ActionContext {
 
     outputStoryline
         .addCustomElement(StatUpdate.sanity(player.sanity, sanityUpdate));
-    outputWorld.updateActorById(playerId, (b) => b..sanity += sanityUpdate);
+    outputWorld.updateActorById(
+        playerId, (b) => b.sanity = b.sanity! + sanityUpdate);
   }
 
   void giveNewItemToPlayer(Item item) {
@@ -116,7 +116,7 @@ extension ActionContextHelpers on ActionContext {
   static const String _playerHasAsthma = "player_has_asthma";
 
   void recordCharacterChoice(int gender, int hair, int debilitation) {
-    void set(String name, [String value]) {
+    void set(String name, [String? value]) {
       outputWorld.recordCustom(name, data: value);
     }
 
@@ -157,8 +157,8 @@ extension ActionContextHelpers on ActionContext {
   static const String _describedWorthinessEvent = "described_worthiness";
 
   void describeWorthiness(
-      {@required Entity /*!*/ who,
-      @required List<int> what,
+      {required Entity who,
+      required List<int> what,
       List<int> especially = const [],
       String how = 'approvingly'}) {
     // Player's items that...
@@ -249,10 +249,10 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
     return query.hasHappened;
   }
 
-  String /*!*/ get playerHairColor {
+  String get playerHairColor {
     final query =
         world.customHistory.query(name: ActionContextHelpers._playerHairColor);
-    return query.latest.data as String;
+    return query.latest!.data as String;
   }
 
   bool get playerHasBlondHair => playerHairColor == "blond";
@@ -312,7 +312,7 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   /// The room the player is currently in. If they are in a variant,
   /// then this reports the variant.
   Room get playerRoom {
-    return simulation.getRoomByName(player.currentRoomName);
+    return simulation.getRoomByName(player.currentRoomName!);
   }
 
   /// Checks if player knows this fact, or a higher fact.
@@ -336,7 +336,7 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
         RoomRoamingSituation.className);
   }
 
-  bool hasHappened(String eventId, {int actorId}) {
+  bool hasHappened(String eventId, {int? actorId}) {
     return world.customHistory
         .query(name: eventId, actorId: actorId)
         .hasHappened;
@@ -362,10 +362,10 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   /// Ignores variants, so it's safe even if one of the actors is in
   /// a different "variant".
   bool inRoomWith(int actorId) {
-    final playerRoom = simulation.getRoomByName(player.currentRoomName);
+    final playerRoom = simulation.getRoomByName(player.currentRoomName!);
     assert(playerRoom.parent == null, "Player is in a variant room.");
     final actor = world.getActorById(actorId);
-    final actorRoom = simulation.getRoomByName(actor.currentRoomName);
+    final actorRoom = simulation.getRoomByName(actor.currentRoomName!);
     assert(actorRoom.parent == null, "Actor is in a variant room.");
     return playerRoom == actorRoom;
   }
@@ -406,13 +406,13 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
       // Fail silently. The player is in a room with no position.
       return double.infinity;
     }
-    return sqrt(pow(otherRoom.positionX - room.positionX, 2) +
-        pow(otherRoom.positionY - room.positionY, 2));
+    return sqrt(pow(otherRoom.positionX! - room.positionX!, 2) +
+        pow(otherRoom.positionY! - room.positionY!, 2));
   }
 
   /// Returns `true` if player has ever visited [roomName].
   bool playerHasVisited(String roomName,
-      {bool includeVariants = false, String from}) {
+      {bool includeVariants = false, String? from}) {
     final room = simulation.getRoomByName(roomName);
     return world.visitHistory
         .query(player, room,

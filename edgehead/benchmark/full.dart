@@ -1,4 +1,3 @@
-// @dart=2.8
 // Copyright 2012 Google Inc. All Rights Reserved.
 
 // Import BenchmarkBase class.

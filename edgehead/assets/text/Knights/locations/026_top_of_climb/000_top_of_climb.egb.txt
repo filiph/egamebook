@@ -16,7 +16,7 @@ HINT: A dark pit extends hundreds of feet toward the bottom of the Pyramid.
 FIRST_DESCRIPTION:
 A huge, dark pit. The bottom is unseen, in complete darkness.
 
-[[IF c.world.visitHistory.getLatestOnly(a).parentRoomName == "keep_servants"]]Orc language can be heard from behind the walls.[[ENDIF]]
+[[IF c.world.visitHistory.getLatestOnly(a)!.parentRoomName == "keep_servants"]]Orc language can be heard from behind the walls.[[ENDIF]]
 
 [[CODE]]
 c.learn(OrcsFacts.inPyramid);

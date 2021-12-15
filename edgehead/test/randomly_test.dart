@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/storyline/randomly.dart';
 import 'package:test/test.dart';
 

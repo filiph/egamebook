@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -22,7 +20,7 @@ class TakeApproachAction extends Action<RoomPath> {
       throw UnimplementedError('This action overrides getCommandPath().');
 
   @override
-  String get helpMessage => null;
+  String? get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -40,7 +38,7 @@ class TakeApproachAction extends Action<RoomPath> {
   bool get rerollable => false;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
   String applyFailure(ActionContext context, RoomPath path) {
@@ -51,8 +49,8 @@ class TakeApproachAction extends Action<RoomPath> {
   String applySuccess(ActionContext context, RoomPath path) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
-    if (path.approach.description != null) {
-      path.approach.description(context);
+    if (path.approach!.description != null) {
+      path.approach!.description(context);
     }
 
     // The current situation might not be room roaming situation because
@@ -60,9 +58,9 @@ class TakeApproachAction extends Action<RoomPath> {
     // of the stack.
     final roomRoamingSituation = w.getSituationByName<RoomRoamingSituation>(
         RoomRoamingSituation.className);
-    roomRoamingSituation.moveActor(a, context, path.approach.to);
+    roomRoamingSituation.moveActor(a, context, path.approach!.to);
 
-    return "${a.name} went through approach to ${path.approach.to}";
+    return "${a.name} went through approach to ${path.approach!.to}";
   }
 
   @override
@@ -107,7 +105,7 @@ class TakeApproachAction extends Action<RoomPath> {
 
     // Either provide the first or the following hint, or an empty string
     // if both are missing.
-    String hint = path.destination.hint;
+    String? hint = path.destination.hint;
     if (!hasVisited && path.destination.firstHint != null) {
       hint = path.destination.firstHint;
     }
@@ -128,8 +126,8 @@ class TakeApproachAction extends Action<RoomPath> {
   /// will be used.
   @override
   List<String> getCommandPath(ApplicabilityContext context, RoomPath path) {
-    if (path.approach.command.isNotEmpty) {
-      return path.approach.command.split(' >> ');
+    if (path.approach!.command.isNotEmpty) {
+      return path.approach!.command.split(' >> ');
     }
 
     assert(
@@ -139,8 +137,8 @@ class TakeApproachAction extends Action<RoomPath> {
 
     final wasVisited = _alreadyVisited(context, path.destination);
     final name = wasVisited
-        ? path.destination.mapName
-        : (path.destination.firstMapName ?? path.destination.mapName);
+        ? path.destination.mapName!
+        : (path.destination.firstMapName ?? path.destination.mapName!);
     return ['Go', name];
   }
 
@@ -163,20 +161,20 @@ class TakeApproachAction extends Action<RoomPath> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, RoomPath path) {
-    if (path.approach.isImplicit) {
+    if (path.approach!.isImplicit) {
       // Implicit approaches are covered by TakeImplicitApproachAction.
       return false;
     }
 
     if ((w.currentSituation as RoomRoamingSituation).monstersAlive &&
-        !path.origin.fightIsOptional) {
+        !path.origin!.fightIsOptional) {
       // Don't allow exit taking when monsters in this room are still alive
       // and the fight isn't optional.
       return false;
     }
 
-    if (path.approach.isApplicable != null) {
-      return path.approach.isApplicable(c);
+    if (path.approach!.isApplicable != null) {
+      return path.approach!.isApplicable!(c);
     }
 
     return true;
@@ -233,7 +231,7 @@ class TakeApproachAction extends Action<RoomPath> {
           "You can have only one implicit approach: $approaches");
 
       for (final approach in approaches) {
-        if (approach.isApplicable != null && !approach.isApplicable(context)) {
+        if (approach.isApplicable != null && !approach.isApplicable!(context)) {
           // Do not follow paths that are not applicable given current
           // context. In other words, respect [Approach.isApplicable].
           continue;
@@ -287,21 +285,21 @@ class TakeApproachAction extends Action<RoomPath> {
 class RoomPath {
   static final Logger _log = Logger('RoomPath');
 
-  final Approach approach;
+  final Approach? approach;
 
   /// The origin of the path.
-  final Room origin;
+  final Room? origin;
 
   /// The last room on this path.
   final Room destination;
 
   /// The second to last room on this path.
-  final Room from;
+  final Room? from;
 
   final List<Room> intermediateRooms;
 
-  const RoomPath(this.origin, this.from, this.destination, this.approach,
-      this.intermediateRooms)
+  const RoomPath(Room this.origin, Room this.from, this.destination,
+      Approach this.approach, this.intermediateRooms)
       : assert(origin != null),
         assert(from != null),
         assert(destination != null),
@@ -324,7 +322,7 @@ class RoomPath {
         'This should not happen: the starting path is empty, and only used '
         'for the tree search.');
 
-    if (!origin.isOnMap) {
+    if (!origin!.isOnMap) {
       _log.info('$origin in $this has no position. Returning empty path.');
       return;
     }
@@ -335,20 +333,20 @@ class RoomPath {
       return;
     }
 
-    yield origin.positionX;
-    yield origin.positionY;
+    yield origin!.positionX!;
+    yield origin!.positionY!;
 
     for (final room in intermediateRooms) {
       if (!room.isOnMap) {
         continue;
       }
 
-      yield room.positionX;
-      yield room.positionY;
+      yield room.positionX!;
+      yield room.positionY!;
     }
 
-    yield destination.positionX;
-    yield destination.positionY;
+    yield destination.positionX!;
+    yield destination.positionY!;
   }
 
   @override

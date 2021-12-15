@@ -160,7 +160,7 @@ Spec generateRescueSituation(
       Method((c) => c
         ..requiredParameters.add(Parameter((p) => p..name = 'b'))
         // TODO: rewrite below
-        ..body = Code('return b..turn += 1;')).closure
+        ..body = Code('return b..turn = b.turn! + 1;')).closure
     ]).code);
   situationClass.methods.add(elapseTime);
 

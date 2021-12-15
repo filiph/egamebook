@@ -112,7 +112,7 @@ class ActorPlanner {
   void plan({required int maxOrder, required int maxConsequences}) {
     _firstActionScores.clear();
 
-    var currentActor = _initial.world.getActorById(actorId)!;
+    var currentActor = _initial.world.getActorById(actorId);
     var initialScore = currentActor.scoreWorld(_initial.world, simulation);
 
     log.fine(
@@ -172,7 +172,7 @@ class ActorPlanner {
       int maxOrder,
       int maxConsequences) sync* {
     // Actor object changes during planning, so we need to look up via id.
-    var initialActor = initial.world.getActorById(actorId)!;
+    var initialActor = initial.world.getActorById(actorId);
     var startTurn = ActorTurn(initialActor, initial.world.time);
     var context = ApplicabilityContext(initialActor, simulation, initial.world);
 

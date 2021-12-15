@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.slash_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -12,7 +10,7 @@ import 'package:edgehead/src/fight/slash/actions/finish_slash.dart';
 const String slashSituationName = "SlashSituation";
 
 Situation createSlashSituation(int id, Actor attacker, Actor target,
-    {SlashDirection direction, BodyPartDesignation designation}) {
+    {SlashDirection? direction, BodyPartDesignation? designation}) {
   assert(
       (direction != null && designation == null) ||
           (direction == null && designation != null),
@@ -32,7 +30,7 @@ Situation createSlashSituation(int id, Actor attacker, Actor target,
 /// Converts a slash direction from the simple [SlashDirection] enum
 /// to the serializable [AttackDirection] value-class.
 AttackDirection _convert(
-    SlashDirection direction, BodyPartDesignation designation) {
+    SlashDirection? direction, BodyPartDesignation? designation) {
   if (direction != null) {
     return AttackDirection.fromSlashDirection(direction);
   }

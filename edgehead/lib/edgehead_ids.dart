@@ -8,8 +8,6 @@
 /// Constants starting with `ev` are names of custom events. Use them with
 /// [WorldStateBuilder.recordCustom()].
 
-// @dart=2.9
-
 library edgehead.ids;
 
 import 'package:edgehead/fractal_stories/actor.dart';

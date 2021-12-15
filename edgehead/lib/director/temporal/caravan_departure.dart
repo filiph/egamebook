@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of edgehead_director;
 
 /// Caravan Departure
@@ -11,7 +9,7 @@ final _caravanDeparture = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evQuake2) &&
       c.playerDistanceTo('bleeds_main') > 20 &&
       // We must be above.
-      c.playerParentRoom.positionY < 90 &&
+      c.playerParentRoom.positionY! < 90 &&
       // Miguel newly available in the HQ area.
       !c.inRoomParent('knights_hq_main') &&
       // Not in a populated room, since caravan departure replaces Quake2.

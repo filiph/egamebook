@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.counter_attack_situation;
 
 import 'package:built_value/built_value.dart';
@@ -64,8 +62,7 @@ abstract class CounterAttackSituation extends Object
   int get turn;
 
   @override
-  CounterAttackSituation elapseTurn() =>
-      rebuild((b) => b.turn = b.turn /*!*/ + 1);
+  CounterAttackSituation elapseTurn() => rebuild((b) => b.turn = b.turn! + 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {

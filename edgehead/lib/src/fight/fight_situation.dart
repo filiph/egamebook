@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.fight_situation;
 
 import 'package:built_collection/built_collection.dart';
@@ -213,7 +211,7 @@ abstract class FightSituation extends Object
       teamIds.any((id) => world.getActorById(id).isAnimatedAndActive);
 
   @override
-  FightSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
+  FightSituation elapseTurn() => rebuild((b) => b.turn = b.turn! + 1);
 
   @override
   Iterable<Actor> getActors(_, WorldState w) => w.actors.where((Actor actor) =>
@@ -228,7 +226,7 @@ abstract class FightSituation extends Object
         .where((a) => a.isAnimatedAndActive)
         .toList(growable: false);
 
-    Actor readiest;
+    Actor? readiest;
     for (final actor in actors) {
       if (readiest == null) {
         readiest = actor;
@@ -253,7 +251,7 @@ abstract class FightSituation extends Object
     // timed events at a time when an action in FightSituation might have
     // created other (child) situations.
     if (events.containsKey(turn)) {
-      final callback = events[turn];
+      final callback = events[turn]!;
       callback.run(context, context.simulation, context.outputWorld,
           context.outputStoryline);
     }
@@ -288,7 +286,7 @@ abstract class FightSituation extends Object
       }
 
       if (room.afterMonstersCleared != null) {
-        room.afterMonstersCleared(context);
+        room.afterMonstersCleared!(context);
       }
 
       // Allow player to take and distribute loot.
@@ -326,7 +324,7 @@ abstract class FightSituation extends Object
   /// with lots of entities, it's especially important to check that duplicate
   /// ids can never happen.
   static bool _ensureUniqueIds(
-      Iterable<Actor> actors, Iterable<Item> locationItems) {
+      Iterable<Actor> actors, Iterable<Item?> locationItems) {
     final ids = <int>{};
     final duplicates = <int>{};
     final map = <int, Entity>{};
@@ -367,7 +365,7 @@ abstract class FightSituation extends Object
     }
 
     for (final e in locationItems) {
-      checkDuplicate(e, "location items");
+      checkDuplicate(e!, "location items");
     }
 
     if (duplicates.isNotEmpty) {

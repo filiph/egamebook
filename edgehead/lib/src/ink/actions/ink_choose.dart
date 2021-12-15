@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -27,9 +25,9 @@ class InkChoicePointer {
   final InkChoiceNode choice;
 
   const InkChoicePointer({
-    @required this.choice,
-    @required this.pathToFork,
-    @required this.indexOfChoice,
+    required this.choice,
+    required this.pathToFork,
+    required this.indexOfChoice,
   });
 }
 
@@ -66,7 +64,7 @@ class InkChoose extends Action<InkChoicePointer> {
   bool get rerollable => false;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
   String applyFailure(ActionContext context, InkChoicePointer pointer) {
@@ -122,7 +120,7 @@ class InkChoose extends Action<InkChoicePointer> {
       return;
     }
 
-    final choices = (currentNode as InkForkNode).inkChoices;
+    final choices = currentNode.inkChoices;
     for (int i = 0; i < choices.length; i++) {
       yield InkChoicePointer(
           choice: choices[i],
@@ -148,13 +146,13 @@ class InkChoose extends Action<InkChoicePointer> {
   }
 
   @override
-  String getHelpMessage(
+  String? getHelpMessage(
       ApplicabilityContext context, InkChoicePointer pointer) {
     return pointer.choice.helpMessage;
   }
 
   @override
-  String /*?*/ getRollReason(
+  String? getRollReason(
       Actor a, Simulation sim, WorldState w, InkChoicePointer pointer) {
     return null;
   }
@@ -169,7 +167,7 @@ class InkChoose extends Action<InkChoicePointer> {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, InkChoicePointer pointer) {
     if (pointer.choice.isApplicable == null) return true;
-    return pointer.choice.isApplicable(c);
+    return pointer.choice.isApplicable!(c);
   }
 
   /// Walks the [ast] until the next interactive point ([InkForkNode])
@@ -180,13 +178,13 @@ class InkChoose extends Action<InkChoicePointer> {
   ///
   /// Otherwise, returns the pointer to the fork at which the situation
   /// stopped for now, waiting for user input.
-  static List<int> _walkUntilFork(
+  static List<int>? _walkUntilFork(
       InkAst ast, List<int> startingPath, ActionContext context) {
-    var path = List<int>.from(startingPath);
+    List<int>? path = List<int>.from(startingPath);
 
     // ignore: literal_only_boolean_expressions
     while (true) {
-      final node = ast.getNodeAt(path);
+      final node = ast.getNodeAt(path!);
 
       if (node == ast) {
         // We're at the end of the AST.
@@ -208,7 +206,7 @@ class InkChoose extends Action<InkChoicePointer> {
   }
 }
 
-class InkImplicitWalk extends Action<Nothing /*?*/ > {
+class InkImplicitWalk extends Action<Nothing?> {
   static const className = 'InkImplicitWalk';
 
   static const InkImplicitWalk singleton = InkImplicitWalk();
@@ -219,7 +217,7 @@ class InkImplicitWalk extends Action<Nothing /*?*/ > {
   List<String> get commandPathTemplate => ['Continue'];
 
   @override
-  String /*?*/ get helpMessage => null;
+  String? get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -237,15 +235,15 @@ class InkImplicitWalk extends Action<Nothing /*?*/ > {
   bool get rerollable => false;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
-  String applyFailure(ActionContext context, Nothing _) {
+  String applyFailure(ActionContext context, Nothing? _) {
     throw StateError('InkImplicitWalk cannot fail');
   }
 
   @override
-  String applySuccess(ActionContext context, Nothing _) {
+  String applySuccess(ActionContext context, Nothing? _) {
     final inkSituation =
         context.world.getSituationByName<InkSituation>(InkSituation.className);
     final InkAst ast = context.simulation.getInkByName(inkSituation.inkAstName);
@@ -268,19 +266,19 @@ class InkImplicitWalk extends Action<Nothing /*?*/ > {
   }
 
   @override
-  String /*?*/ getRollReason(Actor a, Simulation sim, WorldState w, Nothing _) {
+  String? getRollReason(Actor a, Simulation sim, WorldState w, Nothing? _) {
     return null;
   }
 
   @override
   ReasonedSuccessChance getSuccessChance(
-      Actor a, Simulation sim, WorldState w, Nothing _) {
+      Actor a, Simulation sim, WorldState w, Nothing? _) {
     return ReasonedSuccessChance.sureSuccess;
   }
 
   @override
   bool isApplicable(ApplicabilityContext context, Actor a, Simulation sim,
-      WorldState w, Nothing _) {
+      WorldState w, Nothing? _) {
     final inkSituation =
         context.world.getSituationByName<InkSituation>(InkSituation.className);
     final InkAst ast = context.simulation.getInkByName(inkSituation.inkAstName);

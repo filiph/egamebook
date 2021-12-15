@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -10,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class StandUp extends Action<Nothing /*?*/ > {
+class StandUp extends Action<Nothing?> {
   static final StandUp singleton = StandUp();
 
   static const String className = "StandUp";
@@ -74,7 +72,7 @@ class StandUp extends Action<Nothing /*?*/ > {
       "Will ${a.pronoun.nominative} stand up?";
 
   @override
-  Duration getRecoveryDuration(ApplicabilityContext context, Nothing _) {
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing? _) {
     if (context.actor.isPlayer) {
       //  Standing up should be super fast for the player.
       return const Duration(milliseconds: 200);

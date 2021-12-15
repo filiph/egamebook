@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of 'writers_input.compiled.dart';
 
@@ -28,10 +27,10 @@ class _$ReservoirDamWheelLeftRescueSituationSerializer
   final String wireName = 'ReservoirDamWheelLeftRescueSituation';
 
   @override
-  Iterable<Object> serialize(
+  Iterable<Object?> serialize(
       Serializers serializers, ReservoirDamWheelLeftRescueSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'turn',
@@ -43,7 +42,7 @@ class _$ReservoirDamWheelLeftRescueSituationSerializer
 
   @override
   ReservoirDamWheelLeftRescueSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ReservoirDamWheelLeftRescueSituationBuilder();
 
@@ -51,7 +50,7 @@ class _$ReservoirDamWheelLeftRescueSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -79,10 +78,10 @@ class _$ReservoirDamWheelRightRescueSituationSerializer
   final String wireName = 'ReservoirDamWheelRightRescueSituation';
 
   @override
-  Iterable<Object> serialize(
+  Iterable<Object?> serialize(
       Serializers serializers, ReservoirDamWheelRightRescueSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'turn',
@@ -94,7 +93,7 @@ class _$ReservoirDamWheelRightRescueSituationSerializer
 
   @override
   ReservoirDamWheelRightRescueSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ReservoirDamWheelRightRescueSituationBuilder();
 
@@ -102,7 +101,7 @@ class _$ReservoirDamWheelRightRescueSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -131,10 +130,10 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
   final String wireName = 'GuardpostAboveChurchTakeShieldRescueSituation';
 
   @override
-  Iterable<Object> serialize(Serializers serializers,
+  Iterable<Object?> serialize(Serializers serializers,
       GuardpostAboveChurchTakeShieldRescueSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(int)),
       'turn',
@@ -146,7 +145,7 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
 
   @override
   GuardpostAboveChurchTakeShieldRescueSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new GuardpostAboveChurchTakeShieldRescueSituationBuilder();
 
@@ -154,7 +153,7 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -179,12 +178,14 @@ class _$ReservoirDamWheelLeftRescueSituation
   final int turn;
 
   factory _$ReservoirDamWheelLeftRescueSituation(
-          [void Function(ReservoirDamWheelLeftRescueSituationBuilder)
+          [void Function(ReservoirDamWheelLeftRescueSituationBuilder)?
               updates]) =>
       (new ReservoirDamWheelLeftRescueSituationBuilder()..update(updates))
           .build();
 
-  _$ReservoirDamWheelLeftRescueSituation._({this.id, this.turn}) : super._() {
+  _$ReservoirDamWheelLeftRescueSituation._(
+      {required this.id, required this.turn})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(
         id, 'ReservoirDamWheelLeftRescueSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
@@ -226,15 +227,15 @@ class ReservoirDamWheelLeftRescueSituationBuilder
     implements
         Builder<ReservoirDamWheelLeftRescueSituation,
             ReservoirDamWheelLeftRescueSituationBuilder> {
-  _$ReservoirDamWheelLeftRescueSituation _$v;
+  _$ReservoirDamWheelLeftRescueSituation? _$v;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   ReservoirDamWheelLeftRescueSituationBuilder();
 
@@ -256,7 +257,7 @@ class ReservoirDamWheelLeftRescueSituationBuilder
 
   @override
   void update(
-      void Function(ReservoirDamWheelLeftRescueSituationBuilder) updates) {
+      void Function(ReservoirDamWheelLeftRescueSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -281,12 +282,14 @@ class _$ReservoirDamWheelRightRescueSituation
   final int turn;
 
   factory _$ReservoirDamWheelRightRescueSituation(
-          [void Function(ReservoirDamWheelRightRescueSituationBuilder)
+          [void Function(ReservoirDamWheelRightRescueSituationBuilder)?
               updates]) =>
       (new ReservoirDamWheelRightRescueSituationBuilder()..update(updates))
           .build();
 
-  _$ReservoirDamWheelRightRescueSituation._({this.id, this.turn}) : super._() {
+  _$ReservoirDamWheelRightRescueSituation._(
+      {required this.id, required this.turn})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(
         id, 'ReservoirDamWheelRightRescueSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
@@ -329,15 +332,15 @@ class ReservoirDamWheelRightRescueSituationBuilder
     implements
         Builder<ReservoirDamWheelRightRescueSituation,
             ReservoirDamWheelRightRescueSituationBuilder> {
-  _$ReservoirDamWheelRightRescueSituation _$v;
+  _$ReservoirDamWheelRightRescueSituation? _$v;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   ReservoirDamWheelRightRescueSituationBuilder();
 
@@ -359,7 +362,7 @@ class ReservoirDamWheelRightRescueSituationBuilder
 
   @override
   void update(
-      void Function(ReservoirDamWheelRightRescueSituationBuilder) updates) {
+      void Function(ReservoirDamWheelRightRescueSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -384,13 +387,14 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
   final int turn;
 
   factory _$GuardpostAboveChurchTakeShieldRescueSituation(
-          [void Function(GuardpostAboveChurchTakeShieldRescueSituationBuilder)
+          [void Function(GuardpostAboveChurchTakeShieldRescueSituationBuilder)?
               updates]) =>
       (new GuardpostAboveChurchTakeShieldRescueSituationBuilder()
             ..update(updates))
           .build();
 
-  _$GuardpostAboveChurchTakeShieldRescueSituation._({this.id, this.turn})
+  _$GuardpostAboveChurchTakeShieldRescueSituation._(
+      {required this.id, required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         id, 'GuardpostAboveChurchTakeShieldRescueSituation', 'id');
@@ -435,15 +439,15 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
     implements
         Builder<GuardpostAboveChurchTakeShieldRescueSituation,
             GuardpostAboveChurchTakeShieldRescueSituationBuilder> {
-  _$GuardpostAboveChurchTakeShieldRescueSituation _$v;
+  _$GuardpostAboveChurchTakeShieldRescueSituation? _$v;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   GuardpostAboveChurchTakeShieldRescueSituationBuilder();
 
@@ -465,7 +469,7 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
 
   @override
   void update(
-      void Function(GuardpostAboveChurchTakeShieldRescueSituationBuilder)
+      void Function(GuardpostAboveChurchTakeShieldRescueSituationBuilder)?
           updates) {
     if (updates != null) updates(this);
   }

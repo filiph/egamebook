@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -15,7 +13,7 @@ class FinishThrowHarmless extends OtherActorAction {
   static const String className = "FinishThrowHarmless";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -51,7 +49,7 @@ class FinishThrowHarmless extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final projectile = a.currentWeapon;
+    final projectile = a.currentWeapon!;
     assert(projectile.damageCapability.isHarmless);
     final groundMaterial = getGroundMaterial(w);
 
@@ -82,5 +80,5 @@ class FinishThrowHarmless extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      a.currentWeapon.damageCapability.isHarmless;
+      a.currentWeapon!.damageCapability.isHarmless;
 }

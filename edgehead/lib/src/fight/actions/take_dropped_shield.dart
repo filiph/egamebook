@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -33,7 +31,7 @@ class TakeDroppedShield extends OnGroundItemAction {
   bool get rerollable => false;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
   String applyFailure(ActionContext context, _) {

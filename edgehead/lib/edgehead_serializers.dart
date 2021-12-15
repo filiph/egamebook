@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library edgehead.serializers;
 
 import 'package:built_collection/built_collection.dart';

@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.fight.loot_situation;
 
@@ -17,9 +16,9 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
   final String wireName = 'LootSituation';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, LootSituation object,
+  Iterable<Object?> serialize(Serializers serializers, LootSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'droppedItems',
       serializers.serialize(object.droppedItems,
           specifiedType:
@@ -42,7 +41,7 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
 
   @override
   LootSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LootSituationBuilder();
 
@@ -50,13 +49,13 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'droppedItems':
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(Item)]))!
+              as BuiltList<Object?>);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -69,8 +68,8 @@ class _$LootSituationSerializer implements StructuredSerializer<LootSituation> {
         case 'playerTeamIds':
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(int)]))!
+              as BuiltList<Object?>);
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
@@ -95,15 +94,15 @@ class _$LootSituation extends LootSituation {
   @override
   final int turn;
 
-  factory _$LootSituation([void Function(LootSituationBuilder) updates]) =>
+  factory _$LootSituation([void Function(LootSituationBuilder)? updates]) =>
       (new LootSituationBuilder()..update(updates)).build();
 
   _$LootSituation._(
-      {this.droppedItems,
-      this.groundMaterial,
-      this.id,
-      this.playerTeamIds,
-      this.turn})
+      {required this.droppedItems,
+      required this.groundMaterial,
+      required this.id,
+      required this.playerTeamIds,
+      required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         droppedItems, 'LootSituation', 'droppedItems');
@@ -157,32 +156,32 @@ class _$LootSituation extends LootSituation {
 
 class LootSituationBuilder
     implements Builder<LootSituation, LootSituationBuilder> {
-  _$LootSituation _$v;
+  _$LootSituation? _$v;
 
-  ListBuilder<Item> _droppedItems;
+  ListBuilder<Item>? _droppedItems;
   ListBuilder<Item> get droppedItems =>
       _$this._droppedItems ??= new ListBuilder<Item>();
-  set droppedItems(ListBuilder<Item> droppedItems) =>
+  set droppedItems(ListBuilder<Item>? droppedItems) =>
       _$this._droppedItems = droppedItems;
 
-  String _groundMaterial;
-  String get groundMaterial => _$this._groundMaterial;
-  set groundMaterial(String groundMaterial) =>
+  String? _groundMaterial;
+  String? get groundMaterial => _$this._groundMaterial;
+  set groundMaterial(String? groundMaterial) =>
       _$this._groundMaterial = groundMaterial;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  ListBuilder<int> _playerTeamIds;
+  ListBuilder<int>? _playerTeamIds;
   ListBuilder<int> get playerTeamIds =>
       _$this._playerTeamIds ??= new ListBuilder<int>();
-  set playerTeamIds(ListBuilder<int> playerTeamIds) =>
+  set playerTeamIds(ListBuilder<int>? playerTeamIds) =>
       _$this._playerTeamIds = playerTeamIds;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   LootSituationBuilder();
 
@@ -206,7 +205,7 @@ class LootSituationBuilder
   }
 
   @override
-  void update(void Function(LootSituationBuilder) updates) {
+  void update(void Function(LootSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -225,7 +224,7 @@ class LootSituationBuilder
               turn: BuiltValueNullFieldError.checkNotNull(
                   turn, 'LootSituation', 'turn'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'droppedItems';
         droppedItems.build();

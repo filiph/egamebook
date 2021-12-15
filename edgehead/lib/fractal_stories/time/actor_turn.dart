@@ -32,7 +32,7 @@ class ActorTurn {
 
   /// Returns a turn of actor with [actorId].
   factory ActorTurn.byId(int actorId, WorldState world) {
-    final actor = world.getActorById(actorId)!;
+    final actor = world.getActorById(actorId);
     return ActorTurn(actor, world.time);
   }
 

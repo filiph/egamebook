@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -16,7 +14,7 @@ class FinishCrackSkull extends OtherActorAction {
   static const String className = "FinishCrackSkull";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -52,9 +50,9 @@ class FinishCrackSkull extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    assert(a.currentWeaponOrBodyPart.damageCapability.isBlunt);
+    assert(a.currentWeaponOrBodyPart!.damageCapability.isBlunt);
 
-    a.currentWeaponOrBodyPart.report(
+    a.currentWeaponOrBodyPart!.report(
         s,
         "<owner's> <subject> land<s> on <object's> head "
         "{hard|with a {sickening|loud} crack}",
@@ -77,7 +75,7 @@ class FinishCrackSkull extends OtherActorAction {
       victim,
       (part) => part.designation == BodyPartDesignation.head,
       (b) {
-        b.bluntHitsCount += 1;
+        b.bluntHitsCount = b.bluntHitsCount! + 1;
         if (!enemy.isInvincible) {
           b.hitpoints = 0;
         }
@@ -91,7 +89,7 @@ class FinishCrackSkull extends OtherActorAction {
       killHumanoid(context, enemy.id);
     } else {
       inflictPain(context, enemy.id, 1,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.head));
+          enemy.anatomy.findByDesignation(BodyPartDesignation.head)!);
     }
 
     return "${a.name} cracks ${enemy.name}'s skull on ground";
@@ -105,5 +103,5 @@ class FinishCrackSkull extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      a.currentWeaponOrBodyPart?.damageCapability?.isBlunt ?? false;
+      a.currentWeaponOrBodyPart?.damageCapability.isBlunt ?? false;
 }

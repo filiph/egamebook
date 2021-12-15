@@ -114,9 +114,9 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   ///
   /// Will throw when there is either no actor with the given [id], or there
   /// are several.
-  Actor? getActorById(int id) {
+  Actor getActorById(int id) {
     if (director?.id == id) {
-      return director;
+      return director!;
     }
 
     // Using two asserts because the message is then much more concrete.
@@ -326,7 +326,7 @@ abstract class WorldStateBuilder
     situations[index] = situations[index].elapseTurn();
   }
 
-  Actor? getActorById(int id) {
+  Actor getActorById(int id) {
     return build().getActorById(id);
   }
 
@@ -482,7 +482,7 @@ abstract class WorldStateBuilder
   }
 
   void updateActorById(int id, void updates(ActorBuilder b)) {
-    var original = getActorById(id)!;
+    var original = getActorById(id);
     var updated = original.rebuild(updates);
     assert(original.id == updated.id);
     if (original.isDirector) {

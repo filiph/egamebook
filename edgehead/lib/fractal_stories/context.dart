@@ -50,7 +50,7 @@ class ActionContext extends ApplicabilityContext {
   ActionContext.updatedFrom(ActionContext other)
       : this(
             other.currentAction,
-            other.outputWorld.getActorById(other.actor.id)!,
+            other.outputWorld.getActorById(other.actor.id),
             other.simulation,
             other.outputWorld.build(),
             other.outputWorld,
@@ -61,7 +61,7 @@ class ActionContext extends ApplicabilityContext {
   /// the most recent player (updates in [outputWorld] count).
   @override
   Actor get player {
-    return outputWorld.getActorById(Actor.playerId)!;
+    return outputWorld.getActorById(Actor.playerId);
   }
 }
 
@@ -83,6 +83,6 @@ class ApplicabilityContext {
   ///
   /// This throws if there is no actor with that id.
   Actor get player {
-    return world.getActorById(Actor.playerId)!;
+    return world.getActorById(Actor.playerId);
   }
 }

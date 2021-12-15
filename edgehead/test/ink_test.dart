@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/ink_ast.dart';
 import 'package:test/test.dart';

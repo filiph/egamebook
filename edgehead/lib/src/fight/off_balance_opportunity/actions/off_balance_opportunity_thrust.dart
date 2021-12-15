@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -68,7 +66,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
     Storyline s = context.outputStoryline;
     final damage = a.currentDamageCapability.thrustingDamage;
     if (!enemy.isInvincible) {
-      w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
+      w.updateActorById(enemy.id, (b) => b.hitpoints = b.hitpoints! - damage);
     }
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAnimated && !enemy.isInvincible;
@@ -82,7 +80,7 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
           object2: a.currentWeaponOrBodyPart,
           positive: true);
       inflictPain(context, enemy.id, damage,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
+          enemy.anatomy.findByDesignation(BodyPartDesignation.torso)!);
     } else {
       a.report(s, "<subject> run<s> <object2> through <object>",
           object: updatedEnemy,
@@ -101,9 +99,9 @@ class OffBalanceOpportunityThrust extends EnemyTargetAction {
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
-          WorldState w, Actor enemy) =>
+          WorldState w, Actor? enemy) =>
       !a.anatomy.isBlind &&
       a.currentDamageCapability.isThrusting &&
       a.pose >= Pose.standing &&
-      enemy.pose <= Pose.extended;
+      enemy!.pose <= Pose.extended;
 }

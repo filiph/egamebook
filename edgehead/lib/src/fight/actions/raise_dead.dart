@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/egamebook/elements/stat_update_element.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -8,7 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/necromancy.dart';
 
-class RaiseDead extends Action<Nothing /*?*/ > {
+class RaiseDead extends Action<Nothing?> {
   static final RaiseDead singleton = RaiseDead();
 
   static const String className = "RaiseDead";
@@ -74,7 +72,7 @@ class RaiseDead extends Action<Nothing /*?*/ > {
   @override
   String applySuccess(ActionContext c, void _) {
     c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
-    c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
+    c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity = b.sanity! - 1);
     return raiseDead(c);
   }
 

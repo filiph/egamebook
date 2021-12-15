@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of edgehead_director;
 
 /// Caravan Arrival.
@@ -12,7 +10,7 @@ final _caravanArrival = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evQuake1) &&
       c.playerDistanceTo('bleeds_main') > 20 &&
       // We must be above.
-      c.playerParentRoom.positionY < 90 &&
+      c.playerParentRoom.positionY! < 90 &&
       // Not in a populated room, since caravan replaces Quake1.
       !c.inPopulatedRoom &&
       c.world.time

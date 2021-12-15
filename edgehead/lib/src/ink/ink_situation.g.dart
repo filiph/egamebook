@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of 'ink_situation.dart';
 
@@ -17,9 +16,9 @@ class _$InkSituationSerializer implements StructuredSerializer<InkSituation> {
   final String wireName = 'InkSituation';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, InkSituation object,
+  Iterable<Object?> serialize(Serializers serializers, InkSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'currentPath',
       serializers.serialize(object.currentPath,
           specifiedType:
@@ -37,7 +36,8 @@ class _$InkSituationSerializer implements StructuredSerializer<InkSituation> {
   }
 
   @override
-  InkSituation deserialize(Serializers serializers, Iterable<Object> serialized,
+  InkSituation deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new InkSituationBuilder();
 
@@ -45,13 +45,13 @@ class _$InkSituationSerializer implements StructuredSerializer<InkSituation> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'currentPath':
           result.currentPath.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(int)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(int)]))!
+              as BuiltList<Object?>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -82,10 +82,14 @@ class _$InkSituation extends InkSituation {
   @override
   final int turn;
 
-  factory _$InkSituation([void Function(InkSituationBuilder) updates]) =>
+  factory _$InkSituation([void Function(InkSituationBuilder)? updates]) =>
       (new InkSituationBuilder()..update(updates)).build();
 
-  _$InkSituation._({this.currentPath, this.id, this.inkAstName, this.turn})
+  _$InkSituation._(
+      {required this.currentPath,
+      required this.id,
+      required this.inkAstName,
+      required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         currentPath, 'InkSituation', 'currentPath');
@@ -133,25 +137,25 @@ class _$InkSituation extends InkSituation {
 
 class InkSituationBuilder
     implements Builder<InkSituation, InkSituationBuilder> {
-  _$InkSituation _$v;
+  _$InkSituation? _$v;
 
-  ListBuilder<int> _currentPath;
+  ListBuilder<int>? _currentPath;
   ListBuilder<int> get currentPath =>
       _$this._currentPath ??= new ListBuilder<int>();
-  set currentPath(ListBuilder<int> currentPath) =>
+  set currentPath(ListBuilder<int>? currentPath) =>
       _$this._currentPath = currentPath;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  String _inkAstName;
-  String get inkAstName => _$this._inkAstName;
-  set inkAstName(String inkAstName) => _$this._inkAstName = inkAstName;
+  String? _inkAstName;
+  String? get inkAstName => _$this._inkAstName;
+  set inkAstName(String? inkAstName) => _$this._inkAstName = inkAstName;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   InkSituationBuilder();
 
@@ -174,7 +178,7 @@ class InkSituationBuilder
   }
 
   @override
-  void update(void Function(InkSituationBuilder) updates) {
+  void update(void Function(InkSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -192,7 +196,7 @@ class InkSituationBuilder
               turn: BuiltValueNullFieldError.checkNotNull(
                   turn, 'InkSituation', 'turn'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'currentPath';
         currentPath.build();

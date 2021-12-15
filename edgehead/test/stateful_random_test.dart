@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:test/test.dart';

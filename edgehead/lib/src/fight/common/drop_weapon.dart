@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
@@ -16,10 +14,9 @@ import 'package:meta/meta.dart';
 ///
 /// If [forced] is `true`, a [disarmedCustomEventName] event will be recorded.
 /// Otherwise, this is considered a voluntary disarmament.
-Item /*!*/ disarmActor(WorldStateBuilder w, Actor actor,
-    {@required bool forced}) {
+Item disarmActor(WorldStateBuilder w, Actor actor, {required bool forced}) {
   assert(actor.currentWeapon != null);
-  final weapon = actor.currentWeapon;
+  final weapon = actor.currentWeapon!;
   w.updateActorById(
       actor.id,
       (b) => b.inventory
@@ -44,11 +41,11 @@ Item /*!*/ disarmActor(WorldStateBuilder w, Actor actor,
 ///
 /// Calls [disarmActor] under the hood.
 Item dropCurrentWeapon(WorldStateBuilder w, int actorId,
-    {@required bool forced}) {
+    {required bool forced}) {
   final situation =
       w.getSituationByName<FightSituation>(FightSituation.className);
   final actor = w.getActorById(actorId);
-  final weapon = actor.currentWeapon;
+  final weapon = actor.currentWeapon!;
   assert(weapon != null);
   w.replaceSituationById(
       situation.id,

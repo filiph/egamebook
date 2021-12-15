@@ -444,7 +444,7 @@ abstract class Actor extends Object
   /// dimension using [foldFunctionHandle] (which is used to get
   /// a globally provided [FoldFunction] in [Simulation.foldFunctions]).
   ActorScore scoreWorld(WorldState world, Simulation sim) {
-    var actor = world.getActorById(id)!;
+    var actor = world.getActorById(id);
     num selfPreservation = 2 * actor.hitpoints;
     selfPreservation += actor.pose.differenceFrom(Pose.onGround);
     // Extra painful if actor dies in this world.

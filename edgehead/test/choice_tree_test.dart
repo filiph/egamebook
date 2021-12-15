@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/egamebook/elements/choice_block_element.dart';
 import 'package:edgehead/egamebook/elements/choice_element.dart';

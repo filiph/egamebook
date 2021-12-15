@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -85,7 +83,7 @@ class HealAction extends Action<Actor> {
   }
 
   @override
-  String getRollReason(Actor a, Simulation sim, WorldState w, Actor object) =>
+  String? getRollReason(Actor a, Simulation sim, WorldState w, Actor object) =>
       null;
 
   @override

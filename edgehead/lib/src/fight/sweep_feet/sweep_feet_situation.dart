@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.sweep_feet_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';

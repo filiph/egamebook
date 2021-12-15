@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -33,7 +31,7 @@ class DropCurrentWeapon extends InventoryItemAction {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   final String verb = "drop";
@@ -62,11 +60,11 @@ class DropCurrentWeapon extends InventoryItemAction {
   }
 
   @override
-  Iterable<Item /*!*/ > generateObjects(ApplicabilityContext context) {
+  Iterable<Item> generateObjects(ApplicabilityContext context) {
     if (context.actor.currentWeapon == null) {
       return const [];
     }
-    return [context.actor.currentWeapon];
+    return [context.actor.currentWeapon!];
   }
 
   @override

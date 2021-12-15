@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -85,7 +83,7 @@ mixin CombatCommandPath on EnemyTargetAction {
   }
 
   String _getLimbsCommand(Actor target) {
-    String armStatus;
+    String? armStatus;
     if (!target.anatomy.primaryWeaponAppendageAvailable &&
         !target.anatomy.secondaryWeaponAppendageAvailable) {
       armStatus = "both arms";
@@ -93,12 +91,12 @@ mixin CombatCommandPath on EnemyTargetAction {
         !target.anatomy.secondaryWeaponAppendageAvailable) {
       armStatus = "arm";
     }
-    String legStatus;
+    String? legStatus;
     var leftLegAvailable = target.anatomy
-        .findByDesignation(BodyPartDesignation.leftLeg)
+        .findByDesignation(BodyPartDesignation.leftLeg)!
         .isAnimatedAndActive;
     var rightLegAvailable = target.anatomy
-        .findByDesignation(BodyPartDesignation.rightLeg)
+        .findByDesignation(BodyPartDesignation.rightLeg)!
         .isAnimatedAndActive;
     if (!leftLegAvailable && !rightLegAvailable) {
       legStatus = "both legs";

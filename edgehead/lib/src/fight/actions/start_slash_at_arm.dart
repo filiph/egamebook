@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -96,7 +94,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
   @override
   Situation mainSituationBuilder(
       Actor a, Simulation sim, WorldStateBuilder w, Actor enemy) {
-    final arm = _getTargetArm(enemy);
+    final arm = _getTargetArm(enemy)!;
 
     return createSlashSituation(w.randomInt(), a, enemy,
         designation: arm.designation);
@@ -105,7 +103,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
   @override
   ReasonedSuccessChance successChanceGetter(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final leg = _getTargetArm(enemy);
+    final leg = _getTargetArm(enemy)!;
     return computeStartSlashAtBodyPartGenerator(leg, a, sim, w, enemy);
   }
 
@@ -123,7 +121,7 @@ class StartSlashAtArm extends StartDefensibleActionBase {
         part.function == BodyPartFunction.wielding && part.isAnimatedAndActive);
   }
 
-  static BodyPart _getTargetArm(Actor enemy) {
+  static BodyPart? _getTargetArm(Actor enemy) {
     assert(enemy.anatomy.isHumanoid, "Assuming just two arms.");
     if (enemy.anatomy.primaryWeaponAppendageAvailable) {
       // The "appendage" is a hand. We are targeting the arm.

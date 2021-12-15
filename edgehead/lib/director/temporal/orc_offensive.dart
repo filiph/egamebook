@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of edgehead_director;
 
 /// Orc Offensive.
@@ -11,7 +9,7 @@ part of edgehead_director;
 final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
   return c.hasHappened(evCaravanDeparted) &&
       // Must be exploring above.
-      c.playerRoom.positionY < 53 &&
+      c.playerRoom.positionY! < 53 &&
       // Not in a populated room, since orc offensive replaces caravan
       // departure. This is likely redundant since we're above populated
       // areas, just being defensive.
@@ -22,7 +20,7 @@ final _orcOffensive = Rule(_id++, 2, true, (ApplicabilityContext c) {
   final Storyline s = c.outputStoryline;
 
   // True if the player is currently above the Knights HQ.
-  final isAbove = c.playerParentRoom.positionY < 70;
+  final isAbove = c.playerParentRoom.positionY! < 70;
 
   s.addParagraph();
   s.add(

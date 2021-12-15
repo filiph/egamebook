@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:edgehead/edgehead_ids.dart';
@@ -24,7 +22,7 @@ final Random _random = Random();
 /// For actors that are [Actor.isUndead], the reporting and effects of pain
 /// are much diminished (since the undead don't feel pain).
 void inflictPain(
-    ActionContext context, int actorId, int damage, BodyPart /*!*/ bodyPart,
+    ActionContext context, int actorId, int damage, BodyPart bodyPart,
     {bool extremePain = false}) {
   final s = context.outputStoryline;
   final actor = context.outputWorld.getActorById(actorId);
@@ -113,20 +111,20 @@ void killHumanoid(ActionContext context, int actorId) {
   w.replaceSituationById(fight.id, fight.rebuild((b) {
     if (actor.holdsSomeWeapon) {
       // Drop weapon.
-      b.droppedItems.add(actor.currentWeapon);
+      b.droppedItems.add(actor.currentWeapon!);
     }
     if (actor.currentShield != null) {
       // Drop shield.
-      b.droppedItems.add(actor.currentShield);
+      b.droppedItems.add(actor.currentShield!);
     }
     return b;
   }));
   w.updateActorById(actor.id, (a) {
     if (actor.holdsSomeWeapon) {
-      a.inventory.remove(actor.currentWeapon);
+      a.inventory.remove(actor.currentWeapon!);
     }
     if (actor.currentShield != null) {
-      a.inventory.remove(actor.currentShield);
+      a.inventory.remove(actor.currentShield!);
     }
   });
 

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -77,7 +75,7 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
           // Make the confused actor act immediately.
           // We need to go a long time into the past so that if one of the NPCs
           // (like Leroy) hasn't acted yet, they still go _after_ this actor.
-          ..recoveringUntil = w.time.subtract(const Duration(hours: 10)));
+          ..recoveringUntil = w.time!.subtract(const Duration(hours: 10)));
     return "${a.name} confuses ${enemy.name}";
   }
 
@@ -88,7 +86,7 @@ class Confuse extends EnemyTargetAction with CombatCommandPath {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState world, Actor enemy) {
-    return const ReasonedSuccessChance<Object>(0.45);
+    return ReasonedSuccessChance<Object>(0.45);
   }
 
   @override

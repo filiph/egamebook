@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -20,7 +18,7 @@ class FinishBite extends OtherActorAction {
   static const String className = "FinishBite";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -66,7 +64,7 @@ class FinishBite extends OtherActorAction {
     final designation = situation.attackDirection.toBodyPartDesignation();
     assert(a.currentWeaponOrBodyPart != null);
     final result =
-        executeTearingHit(enemy, a.currentWeaponOrBodyPart, designation);
+        executeTearingHit(enemy, a.currentWeaponOrBodyPart!, designation);
 
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
     final thread = getThreadId(sim, w, biteSituationName);

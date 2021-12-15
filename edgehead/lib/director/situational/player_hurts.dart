@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of edgehead_director;
 
 final _playerHurt = Rule(_id++, 1, false, (ApplicabilityContext c) {

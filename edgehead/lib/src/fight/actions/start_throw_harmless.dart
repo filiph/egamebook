@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
@@ -36,7 +34,7 @@ EnemyTargetAction startThrowHarmless() => StartDefensibleAction(
       applyStart: _startThrowHarmlessReportStart,
       isApplicable: (a, sim, w, enemy) =>
           a.isPlayer &&
-          (a.currentWeapon?.damageCapability?.isHarmless ?? false) &&
+          (a.currentWeapon?.damageCapability.isHarmless ?? false) &&
           !a.anatomy.isBlind &&
           !recentlyForcedToGround(a, w),
       mainSituationBuilder: (a, sim, w, enemy) =>

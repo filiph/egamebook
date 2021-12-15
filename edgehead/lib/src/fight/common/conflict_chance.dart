@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -88,7 +86,7 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(
   Actor performer,
   Actor target,
   double base,
-  int randomSeed,
+  int? randomSeed,
   List<Modifier<CombatReason>> modifiers,
 ) {
   assert(base > 0.0, "For sureFailures, use ReasonedSuccessChance.sureFailure");
@@ -217,7 +215,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
     case CombatReason.dexterity:
       return (performer.dexterity - target.dexterity).clamp(-100, 100) / 100;
     case CombatReason.balance:
-      final difference =
+      final num difference =
           performer.pose.differenceFrom(target.pose).clamp(-2, 2);
       return difference / 2;
     case CombatReason.height:
@@ -230,7 +228,7 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
     case CombatReason.weaponReach:
       final performerReach = performer.currentDamageCapability.length;
       final targetReach = target.currentDamageCapability.length;
-      final difference = (performerReach - targetReach).clamp(-2, 2);
+      final num difference = (performerReach - targetReach).clamp(-2, 2);
       return difference / 2;
     case CombatReason.performerIsPlayer:
       if (performer.isPlayer) {
@@ -321,7 +319,7 @@ double _lerp(double current, int bonus) {
 /// Returns `true` if the (single) part that's defined by [designation]
 /// is dead ([BodyPart.isAnimated] is `false`).
 bool _partDisabled(Actor actor, BodyPartDesignation designation) {
-  return !actor.anatomy.findByDesignation(designation).isAnimated;
+  return !actor.anatomy.findByDesignation(designation)!.isAnimated;
 }
 
 /// A [Modifier] that is always positive for the actor (and always negative

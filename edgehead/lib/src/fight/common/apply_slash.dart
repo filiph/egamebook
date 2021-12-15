@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
@@ -17,14 +15,14 @@ import 'package:edgehead/src/fight/fight_situation.dart';
 /// This actually changes the world state (through [context]) and reports
 /// what happened (through [ActionContext.outputStoryline]).
 void applySlash(WeaponAssaultResult result, ActionContext context, Actor enemy,
-    int thread) {
+    int? thread) {
   Actor a = context.actor;
   WorldStateBuilder w = context.outputWorld;
   Storyline s = context.outputStoryline;
 
   w.updateActorById(enemy.id, (b) => b.replace(result.victim));
 
-  final weapon = a.currentWeaponOrBodyPart;
+  final weapon = a.currentWeaponOrBodyPart!;
   final damage = weapon.damageCapability.slashingDamage;
   final groundMaterial = getGroundMaterial(w);
 
@@ -34,13 +32,13 @@ void applySlash(WeaponAssaultResult result, ActionContext context, Actor enemy,
       a.report(s, "<subject> {cleave<s>|slash<es>} through",
           positive: true, actionThread: thread);
       if (!enemy.isOnGround) {
-        result.severedPart
+        result.severedPart!
             .report(s, '<subject> fall<s> to the ground', actionThread: thread);
       } else {
-        result.severedPart.report(s, '<subject> roll<s> a short distance away',
+        result.severedPart!.report(s, '<subject> roll<s> a short distance away',
             actionThread: thread);
       }
-      _placeBodyPartOnGround(w, result.severedPart);
+      _placeBodyPartOnGround(w, result.severedPart!);
     } else {
       a.report(
           s,
@@ -92,7 +90,7 @@ void applySlash(WeaponAssaultResult result, ActionContext context, Actor enemy,
   }
 }
 
-void _placeBodyPartOnGround(WorldStateBuilder w, Item /*!*/ bodyPart) {
+void _placeBodyPartOnGround(WorldStateBuilder w, Item bodyPart) {
   final fightSituation =
       w.getSituationByName<FightSituation>(FightSituation.className);
   w.replaceSituationById<FightSituation>(fightSituation.id,

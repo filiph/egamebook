@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -8,13 +6,13 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/actions/confuse.dart';
 
-class Unconfuse extends Action<Nothing /*?*/ > {
+class Unconfuse extends Action<Nothing?> {
   static final Unconfuse singleton = Unconfuse();
 
   static const String className = "Unconfuse";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool rerollable = true;
@@ -72,7 +70,7 @@ class Unconfuse extends Action<Nothing /*?*/ > {
       WorldState world, void _) {
     if (!a.isConfused) return false;
     final timeSince = world.timeSinceLastActionRecord(
-        actionName: Confuse.className, sufferer: a, wasSuccess: true);
+        actionName: Confuse.className, sufferer: a, wasSuccess: true)!;
     return timeSince > Confuse.minimalEffectLength;
   }
 }

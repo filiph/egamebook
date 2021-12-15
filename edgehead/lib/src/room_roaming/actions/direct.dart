@@ -1,12 +1,10 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 
-class DirectAction extends Action<Nothing /*?*/ > {
+class DirectAction extends Action<Nothing?> {
   static const String className = "DirectAction";
 
   static final DirectAction singleton = DirectAction();
@@ -15,7 +13,7 @@ class DirectAction extends Action<Nothing /*?*/ > {
   List<String> get commandPathTemplate => [];
 
   @override
-  String get helpMessage => null;
+  String? get helpMessage => null;
 
   @override
   bool get isAggressive => false;

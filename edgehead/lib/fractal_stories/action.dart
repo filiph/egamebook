@@ -250,7 +250,7 @@ abstract class Action<T> {
   ///
   /// * "Will you hit him?"
   /// * "Will you dodge the swing?"
-  String getRollReason(Actor a, Simulation sim, WorldState w, T object);
+  String? getRollReason(Actor a, Simulation sim, WorldState w, T object);
 
   /// Success chance of the action given the actor and the state of the world.
   ReasonedSuccessChance getSuccessChance(

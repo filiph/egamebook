@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -25,7 +23,7 @@ ReasonedSuccessChance computeThrustAtBodyPartChance(
     WorldState w,
     Actor enemy) {
   assert(a.isPlayer);
-  final bodyPart = enemy.anatomy.findByDesignation(designation);
+  final bodyPart = enemy.anatomy.findByDesignation(designation)!;
 
   const minBase = 0.3;
   const maxBase = 0.5;
@@ -57,7 +55,7 @@ EnemyTargetAction startThrustAtBodyPartGenerator(
         enemy.pose < Pose.combat &&
         // Don't allow fatal slashes for invincible actors.
         !(enemy.isInvincible &&
-            enemy.anatomy.findByDesignation(designation).isVital),
+            enemy.anatomy.findByDesignation(designation)!.isVital),
     mainSituationBuilder: (a, sim, w, enemy) => createThrustSituation(
         w.randomInt(), a, enemy,
         designation: designation),

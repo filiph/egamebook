@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -29,7 +27,7 @@ void main() {
       final newOrc = orcBuilder.build();
 
       expect(
-        newOrc.anatomy.findByDesignation(BodyPartDesignation.head).hitpoints,
+        newOrc.anatomy.findByDesignation(BodyPartDesignation.head)!.hitpoints,
         0,
       );
     });
@@ -53,7 +51,7 @@ void main() {
       final newOrc = orcBuilder.build();
 
       expect(
-        newOrc.anatomy.findByDesignation(BodyPartDesignation.head).hitpoints,
+        newOrc.anatomy.findByDesignation(BodyPartDesignation.head)!.hitpoints,
         greaterThan(0),
       );
     });
@@ -119,7 +117,7 @@ void main() {
           .victim;
       expect(
           deadOrc.anatomy
-              .findByDesignation(BodyPartDesignation.neck)
+              .findByDesignation(BodyPartDesignation.neck)!
               .isAnimated,
           isFalse);
     });
@@ -129,10 +127,10 @@ void main() {
 
       final severed = decideSlashingHit(orc, katana, randomIntGetter,
               designation: BodyPartDesignation.neck)
-          .severedPart;
+          .severedPart!;
       expect(
           Anatomy.findByDesignationFromPart(
-              BodyPartDesignation.head, severed.bodyPart),
+              BodyPartDesignation.head, severed.bodyPart!),
           isNotNull);
     });
 
@@ -145,12 +143,12 @@ void main() {
           .victim;
       expect(
           deadOrc.anatomy
-              .findByDesignation(BodyPartDesignation.head)
+              .findByDesignation(BodyPartDesignation.head)!
               .isAnimated,
           isFalse);
       expect(
           deadOrc.anatomy
-              .findByDesignation(BodyPartDesignation.leftEye)
+              .findByDesignation(BodyPartDesignation.leftEye)!
               .isAnimated,
           isTrue);
     });
@@ -217,7 +215,7 @@ void main() {
           .victim;
       expect(
           doublyCutOrc.anatomy
-              .findByDesignation(BodyPartDesignation.rightLeg)
+              .findByDesignation(BodyPartDesignation.rightLeg)!
               .isAnimated,
           isFalse);
     });
@@ -343,4 +341,4 @@ void main() {
 }
 
 final _random = Random();
-int randomIntGetter([int max]) => _random.nextInt(max ?? 0xFFFFFF);
+int randomIntGetter([int? max]) => _random.nextInt(max ?? 0xFFFFFF);

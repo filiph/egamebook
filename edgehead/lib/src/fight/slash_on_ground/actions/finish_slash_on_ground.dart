@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/edgehead_save_serialize.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -17,7 +15,7 @@ class FinishSlashOnGround extends OtherActorAction {
   static const String className = "FinishSlashOnGround";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -57,7 +55,7 @@ class FinishSlashOnGround extends OtherActorAction {
 
     final result = decideSlashingHit(
       enemy,
-      a.currentWeaponOrBodyPart,
+      a.currentWeaponOrBodyPart!,
       w.randomInt,
       designation: w.randomChoose([
         BodyPartDesignation.torso,

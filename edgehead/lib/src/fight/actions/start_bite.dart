@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math' as math;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -23,8 +21,8 @@ const String startBiteHelpMessage = "Hmm, a body part. Delicious!";
 /// and will compute a predetermined result from that.
 ///
 /// This is almost identical to [computeStartSlashAtBodyPartGenerator].
-ReasonedSuccessChance computeStartBiteAtBodyPartGenerator(BodyPart bodyPart,
-    Actor a, Simulation /*!*/ sim, WorldState w, Actor enemy) {
+ReasonedSuccessChance computeStartBiteAtBodyPartGenerator(
+    BodyPart bodyPart, Actor a, Simulation sim, WorldState w, Actor enemy) {
   assert(a.isPlayer);
 
   const minBase = 0.2;
@@ -58,7 +56,7 @@ EnemyTargetAction startBiteAtBodyPartGenerator(
     defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>
         createBiteDefenseSituation(w.randomInt(), a, enemy, predetermination),
     successChanceGetter: (Actor a, Simulation sim, WorldState w, Actor enemy) {
-      final bodyPart = enemy.anatomy.findByDesignation(designation);
+      final bodyPart = enemy.anatomy.findByDesignation(designation)!;
       return computeStartBiteAtBodyPartGenerator(bodyPart, a, sim, w, enemy);
     },
     rerollable: true,
@@ -109,7 +107,7 @@ bool _resolveIsApplicable(Actor a, Simulation sim, WorldState w, Actor enemy,
     }
   }
   // Don't offer to hit body parts that are already crippled.
-  if (!enemy.anatomy.findByDesignation(designation).isAnimated) return false;
+  if (!enemy.anatomy.findByDesignation(designation)!.isAnimated) return false;
 
   return true;
 }

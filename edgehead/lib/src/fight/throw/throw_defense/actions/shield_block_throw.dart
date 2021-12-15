@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -59,7 +57,7 @@ class ShieldBlockThrow extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    Item projectile = enemy.currentWeapon;
+    Item? projectile = enemy.currentWeapon;
     a.report(
         s,
         "<subject> tr<ies> to {block|stop|deflect} the <object> "
@@ -88,7 +86,7 @@ class ShieldBlockThrow extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    Item projectile = enemy.currentWeapon;
+    Item projectile = enemy.currentWeapon!;
     a.report(
         s,
         "<subject> {block<s>|stop<s>|deflect<s>} <object> "

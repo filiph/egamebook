@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/edgehead_global.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -10,7 +8,7 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 
-class DebugKillEnemies extends Action<Nothing /*?*/ > {
+class DebugKillEnemies extends Action<Nothing?> {
   static final DebugKillEnemies singleton = DebugKillEnemies();
 
   static const String className = "DebugKillEnemies";
@@ -31,7 +29,7 @@ class DebugKillEnemies extends Action<Nothing /*?*/ > {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   String get name => className;
@@ -51,7 +49,7 @@ class DebugKillEnemies extends Action<Nothing /*?*/ > {
         'and brings instant death to any of my enemies in this place.)',
         isRaw: true);
 
-    final situation = context.world.currentSituation as FightSituation /*!*/;
+    final situation = context.world.currentSituation as FightSituation;
     final animatedEnemies = context.world.actors.where((e) =>
         e.isAnimatedAndActive &&
         !e.isInvincible &&

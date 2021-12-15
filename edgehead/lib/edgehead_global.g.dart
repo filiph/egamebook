@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of edgehead_global;
 
@@ -21,10 +20,10 @@ class _$EdgeheadGlobalStateSerializer
   final String wireName = 'EdgeheadGlobalState';
 
   @override
-  Iterable<Object> serialize(
+  Iterable<Object?> serialize(
       Serializers serializers, EdgeheadGlobalState object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'isInTesterMode',
       serializers.serialize(object.isInTesterMode,
           specifiedType: const FullType(bool)),
@@ -35,7 +34,7 @@ class _$EdgeheadGlobalStateSerializer
 
   @override
   EdgeheadGlobalState deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new EdgeheadGlobalStateBuilder();
 
@@ -43,7 +42,7 @@ class _$EdgeheadGlobalStateSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'isInTesterMode':
           result.isInTesterMode = serializers.deserialize(value,
@@ -61,10 +60,10 @@ class _$EdgeheadGlobalState extends EdgeheadGlobalState {
   final bool isInTesterMode;
 
   factory _$EdgeheadGlobalState(
-          [void Function(EdgeheadGlobalStateBuilder) updates]) =>
+          [void Function(EdgeheadGlobalStateBuilder)? updates]) =>
       (new EdgeheadGlobalStateBuilder()..update(updates)).build();
 
-  _$EdgeheadGlobalState._({this.isInTesterMode}) : super._() {
+  _$EdgeheadGlobalState._({required this.isInTesterMode}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         isInTesterMode, 'EdgeheadGlobalState', 'isInTesterMode');
   }
@@ -100,11 +99,11 @@ class _$EdgeheadGlobalState extends EdgeheadGlobalState {
 
 class EdgeheadGlobalStateBuilder
     implements Builder<EdgeheadGlobalState, EdgeheadGlobalStateBuilder> {
-  _$EdgeheadGlobalState _$v;
+  _$EdgeheadGlobalState? _$v;
 
-  bool _isInTesterMode;
-  bool get isInTesterMode => _$this._isInTesterMode;
-  set isInTesterMode(bool isInTesterMode) =>
+  bool? _isInTesterMode;
+  bool? get isInTesterMode => _$this._isInTesterMode;
+  set isInTesterMode(bool? isInTesterMode) =>
       _$this._isInTesterMode = isInTesterMode;
 
   EdgeheadGlobalStateBuilder();
@@ -125,7 +124,7 @@ class EdgeheadGlobalStateBuilder
   }
 
   @override
-  void update(void Function(EdgeheadGlobalStateBuilder) updates) {
+  void update(void Function(EdgeheadGlobalStateBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

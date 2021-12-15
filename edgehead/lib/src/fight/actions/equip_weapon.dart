@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -54,7 +52,7 @@ class EquipWeapon extends InventoryItemAction {
     Storyline s = context.outputStoryline;
 
     if (a.holdsSomeWeapon) {
-      var beltOrBack = a.currentWeapon.damageCapability.length > 1
+      var beltOrBack = a.currentWeapon!.damageCapability.length > 1
           // Spears and swords belong behind one's back.
           ? "behind <subject's> back"
           // The rest can go in the belt.
@@ -106,7 +104,7 @@ class EquipWeapon extends InventoryItemAction {
   String toString() => "EquipWeapon<$commandPathTemplate>";
 }
 
-abstract class InventoryItemAction extends Action<Item /*!*/ > {
+abstract class InventoryItemAction extends Action<Item> {
   /// See [getCommandPath].
   @override
   @nonVirtual

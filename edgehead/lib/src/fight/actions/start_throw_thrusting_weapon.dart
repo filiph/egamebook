@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -22,10 +20,8 @@ const String startThrowThrustingWeaponHelpMessage =
 
 ReasonedSuccessChance computeThrowThrustingWeaponPlayer(
     Actor a, Simulation sim, WorldState w, Actor enemy) {
-  final hasSpear =
-      a.currentWeapon?.damageCapability?.type == WeaponType.spear ?? false;
-  final hasDagger =
-      a.currentWeapon?.damageCapability?.type == WeaponType.dagger ?? false;
+  final hasSpear = a.currentWeapon?.damageCapability.type == WeaponType.spear;
+  final hasDagger = a.currentWeapon?.damageCapability.type == WeaponType.dagger;
   final hasThrowingWeapon = hasSpear || hasDagger;
   return getCombatMoveChance(
       a, enemy, hasThrowingWeapon ? 0.3 : 0.01, w.statefulRandomState, [
@@ -44,7 +40,7 @@ EnemyTargetAction startThrowThrustingWeapon() => StartDefensibleAction(
       helpMessage: startThrowThrustingWeaponHelpMessage,
       applyStart: _startThrowThrustingWeaponReportStart,
       isApplicable: (a, sim, w, enemy) =>
-          (a.currentWeapon?.damageCapability?.isThrusting ?? false) &&
+          (a.currentWeapon?.damageCapability.isThrusting ?? false) &&
           !a.anatomy.isBlind &&
           !recentlyForcedToGround(a, w),
       mainSituationBuilder: (a, sim, w, enemy) =>

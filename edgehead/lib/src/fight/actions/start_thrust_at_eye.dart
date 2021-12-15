@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -59,7 +57,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
           s,
           "<subject> thrust<s> at "
           "<objectOwner's> <object>",
-          object: _getTargetEye(enemy, world.time.millisecondsSinceEpoch),
+          object: _getTargetEye(enemy, world.time!.millisecondsSinceEpoch),
           objectOwner: enemy,
           positive: true,
           actionThread: mainSituation.id,
@@ -68,7 +66,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
           s,
           "<subject> thrust<s> <object2> at "
           "<objectOwner's> <object>",
-          object: _getTargetEye(enemy, world.time.millisecondsSinceEpoch),
+          object: _getTargetEye(enemy, world.time!.millisecondsSinceEpoch),
           objectOwner: enemy,
           object2: a.currentWeaponOrBodyPart,
           positive: true,
@@ -98,7 +96,7 @@ class StartThrustAtEye extends StartDefensibleActionBase {
   @override
   Situation mainSituationBuilder(
       Actor a, Simulation sim, WorldStateBuilder w, Actor enemy) {
-    final eye = _getTargetEye(enemy, w.time.millisecondsSinceEpoch);
+    final eye = _getTargetEye(enemy, w.time!.millisecondsSinceEpoch);
 
     return createThrustSituation(w.randomInt(), a, enemy,
         designation: eye.designation);

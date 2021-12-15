@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:built_collection/built_collection.dart';
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -14,6 +12,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
+import 'package:edgehead/fractal_stories/writer_action.dart';
 import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/src/fight/counter_attack/counter_attack_situation.dart';
 import 'package:edgehead/src/fight/fatality_on_ground/fatality_on_ground.dart';
@@ -51,8 +50,8 @@ void main() {
     });
 
     group("Situation", () {
-      Actor a;
-      Actor b;
+      late Actor a;
+      late Actor b;
       final sim = Simulation(const [], const [], const {},
           const Ruleset.empty(), const {}, const {});
       final world = WorldState((b) => b
@@ -109,11 +108,18 @@ void main() {
     });
 
     group("Exits", () {
-      bool forgeIsAfterFire;
+      late bool forgeIsAfterFire;
 
       setUp(() {
         forgeIsAfterFire = false;
       });
+
+      final aren =
+          Actor.initialized(1, testRandomIdGetter, "Aren", isPlayer: true);
+      final mockAction =
+          SimpleAction('', '', (c, a) => 'mockAction applied', '');
+      final mockOutputWorldState = WorldStateBuilder()..time = DateTime(200);
+      final mockWorldState = mockOutputWorldState.build();
 
       final afterFireCrevice = Room("after_fire_hidden_crevice",
           emptyRoomDescription, emptyRoomDescription, null, null);
@@ -156,7 +162,7 @@ void main() {
           const {},
           const {});
 
-      final context = ApplicabilityContext(null, simulation, null);
+      final context = ApplicabilityContext(aren, simulation, mockWorldState);
 
       test("the default is picked when no more specific apply", () {
         expect(simulation.getAvailableApproaches(outside, context),
@@ -189,8 +195,8 @@ void main() {
         const sureSuccess = ReasonedSuccessChance.sureSuccess;
 
         test("uses default if no variant is applicable", () {
-          final actionContext = ActionContext(null, aren, simulation, world,
-              world.toBuilder(), Storyline(), sureSuccess);
+          final actionContext = ActionContext(mockAction, aren, simulation,
+              world, world.toBuilder(), Storyline(), sureSuccess);
 
           initialSituation.moveActor(aren, actionContext, _forgeName);
           final result = actionContext.outputWorld.build();
@@ -199,8 +205,8 @@ void main() {
         });
 
         test("uses variant if applicable", () {
-          final actionContext = ActionContext(null, aren, simulation, world,
-              world.toBuilder(), Storyline(), sureSuccess);
+          final actionContext = ActionContext(mockAction, aren, simulation,
+              world, world.toBuilder(), Storyline(), sureSuccess);
           forgeIsAfterFire = true;
 
           expect(world.visitHistory.getLatestOnly(aren)?.roomName,
@@ -209,13 +215,13 @@ void main() {
           initialSituation.moveActor(aren, actionContext, _forgeName);
           final result = actionContext.outputWorld.build();
 
-          expect(result.visitHistory.getLatestOnly(aren).roomName,
+          expect(result.visitHistory.getLatestOnly(aren)!.roomName,
               _forgeAfterFireName);
         });
 
         test("actor's currentRoom is always the parent", () {
-          final actionContext = ActionContext(null, aren, simulation, world,
-              world.toBuilder(), Storyline(), sureSuccess);
+          final actionContext = ActionContext(mockAction, aren, simulation,
+              world, world.toBuilder(), Storyline(), sureSuccess);
           forgeIsAfterFire = true;
 
           initialSituation.moveActor(aren, actionContext, _forgeName);
@@ -235,7 +241,7 @@ void main() {
 /// Provide [build], a closure that generates a new situation every time it
 /// is called.
 void checkSituationBuild(Situation build()) {
-  Situation a;
+  late Situation a;
 
   // Building returns normally.
   expect(() {

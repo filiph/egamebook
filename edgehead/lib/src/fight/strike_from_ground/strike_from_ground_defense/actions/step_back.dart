@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -28,7 +26,7 @@ class StepBackFromStrikeFromGround extends OtherActorAction {
   static const String className = "StepBackFromStrikeFromGround";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = false;

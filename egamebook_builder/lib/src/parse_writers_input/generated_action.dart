@@ -34,8 +34,8 @@ class GeneratedAction extends GeneratedGameObject {
   GeneratedAction(Map<String, String> map, String path)
       : _map = map,
         ink = _constructInk(map['INK'], map['ACTION'], path),
-        super(
-            map['ACTION']!, reCase(map['ACTION']!).pascalCase, actionType, path);
+        super(map['ACTION']!, reCase(map['ACTION']!).pascalCase, actionType,
+            path);
 
   @override
   Iterable<Spec> finalizeAst() sync* {
@@ -48,8 +48,8 @@ class GeneratedAction extends GeneratedGameObject {
       ..name = className
       ..extend = actionType;
 
-    bool hasRescue =
-        _map.containsKey('RESCUE_COMMAND') && _map['RESCUE_COMMAND']!.isNotEmpty;
+    bool hasRescue = _map.containsKey('RESCUE_COMMAND') &&
+        _map['RESCUE_COMMAND']!.isNotEmpty;
     var rescueSituationClassName = '${className}RescueSituation';
 
     var classType = TypeReference((b) => b..symbol = className);
@@ -117,7 +117,7 @@ class GeneratedAction extends GeneratedGameObject {
       // This action is not rerollable.
       classBuilder.methods.add(_createGetter('rerollable', boolType, false));
       classBuilder.methods
-          .add(_createGetter('rerollResource', resourceType, null));
+          .add(_createGetter('rerollResource', resourceTypeNullable, null));
     }
 
     // Roll reason will just not be used it the action is non-rerollable.
@@ -135,7 +135,7 @@ class GeneratedAction extends GeneratedGameObject {
     }
 
     classBuilder.methods
-        .add(_createGetter('helpMessage', stringType, helpMessage));
+        .add(_createGetter('helpMessage', stringTypeNullable, helpMessage));
 
     classBuilder.methods.add(_createGetter('isAggressive', boolType, false));
 

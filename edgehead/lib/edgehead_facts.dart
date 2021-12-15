@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library edgehead_facts;
 
 import 'package:edgehead/edgehead_facts_enums.dart';
@@ -44,7 +42,7 @@ final Map<Type, List<String>> _chainEnums = {
 class ChainedFacts {
   static final ChainedFacts singleton = ChainedFacts._();
 
-  final Map<String, List<String> /*!*/ > _chains;
+  final Map<String, List<String>> _chains;
 
   ChainedFacts._() : _chains = _generateChains();
 
@@ -99,7 +97,7 @@ class ChainedFacts {
       return;
     }
 
-    final chain = _chains[chainName];
+    final chain = _chains[chainName]!;
     final factIndex = chain.indexOf(fact);
 
     for (var i = factIndex + 1; i < chain.length; i++) {
@@ -116,8 +114,9 @@ class ChainedFacts {
   }
 
   /// A copy of [_chainEnums], but the keys are strings instead of types.
-  static Map<String, List<String> /*!*/ > _generateChains() {
-    return Map<String, List<String> /*!*/ >.fromEntries(
-        _chainEnums.keys.map((e) => MapEntry(e.toString(), _chainEnums[e])));
+  static Map<String, List<String>> _generateChains() {
+    return Map<String, List<String>>.fromEntries(_chainEnums.keys.map(
+        ((Type e) => MapEntry(e.toString(), _chainEnums[e]!))
+            as MapEntry<String, List<String>> Function(Type)));
   }
 }

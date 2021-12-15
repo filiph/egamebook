@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.off_balance_situation;
 
 import 'package:built_value/built_value.dart';
@@ -31,7 +29,7 @@ abstract class OffBalanceOpportunitySituation extends Object
       _$OffBalanceOpportunitySituation;
 
   factory OffBalanceOpportunitySituation.initialized(int id, Actor actor,
-          {Actor culprit}) =>
+          {Actor? culprit}) =>
       OffBalanceOpportunitySituation((b) => b
         ..id = id
         ..turn = 0
@@ -51,8 +49,7 @@ abstract class OffBalanceOpportunitySituation extends Object
   int get actorId;
 
   /// The actor who caused [actorId] to be off balance.
-  @nullable
-  int get culpritId;
+  int? get culpritId;
 
   @override
   int get id;
@@ -65,7 +62,7 @@ abstract class OffBalanceOpportunitySituation extends Object
 
   @override
   OffBalanceOpportunitySituation elapseTurn() =>
-      rebuild((b) => b.turn = b.turn /*!*/ + 1);
+      rebuild((b) => b.turn = b.turn! + 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState world) {

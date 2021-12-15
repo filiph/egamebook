@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of edgehead_director;
 
 /// Quake 3.
@@ -39,9 +37,9 @@ void _quake3Apply(ActionContext c) {
       // Check that we haven't said this in quake2 already.
       c.world.customHistory
           .query(name: evConetDestroyed)
-          .latest
+          .latest!
           .time
-          .isAfter(c.world.customHistory.query(name: evQuake2).latest.time)) {
+          .isAfter(c.world.customHistory.query(name: evQuake2).latest!.time)) {
     s.add(
         "I thought I had destroyed the source of the quakes, "
         "but apparently not.",

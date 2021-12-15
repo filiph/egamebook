@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
@@ -25,7 +23,7 @@ Future<void> main() async {
   test("2 run-throughs with same seed end up with the same state", () async {
     final seed = Random().nextInt(0xffffff);
 
-    Future<String> runAndGetFinalWorld(int seed) async {
+    Future<String?> runAndGetFinalWorld(int seed) async {
       final runner = CliRunner(true, true, null,
           random: Random(seed), maxAutomatedChoicesTaken: 10);
       await runner.initialize(EdgeheadGame(
@@ -66,7 +64,7 @@ String createLogFilePath(Directory tempDir, int i, String description) =>
 
 void testWithStopWords(
     List<String> stopWords, Directory tempDir, Level logLevel, int iterations,
-    {String savegame}) {
+    {String? savegame}) {
   final identifier =
       stopWords.join("_").replaceAll("[", "").replaceAll("]", "").toLowerCase();
   for (int i = 0; i < iterations; i++) {

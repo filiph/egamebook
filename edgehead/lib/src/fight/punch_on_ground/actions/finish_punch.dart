@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -14,7 +12,7 @@ class FinishPunchOnGround extends OtherActorAction {
   static const String className = "FinishPunchOnGround";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -35,7 +33,7 @@ class FinishPunchOnGround extends OtherActorAction {
   String get name => className;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
   String get rollReasonTemplate => "(WARNING should not be user-visible)";
@@ -77,7 +75,7 @@ class FinishPunchOnGround extends OtherActorAction {
           enemy.id,
           (b) => b
             ..recoveringUntil =
-                w.time.add(Action.defaultRecoveryDuration * 1.5));
+                w.time!.add(Action.defaultRecoveryDuration * 1.5));
     }
 
     return "${a.name} punches ${enemy.name} on ground";

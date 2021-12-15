@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -96,7 +94,7 @@ class SwingBluntAtLeaper extends EnemyTargetAction {
     const damage = 0;
     final result = executeBluntHit(
         enemy,
-        a.currentWeaponOrBodyPart,
+        a.currentWeaponOrBodyPart!,
         enemy.isInvincible
             ? BodyPartDesignation.torso
             : BodyPartDesignation.head);

@@ -29,7 +29,7 @@ COMPLETE_SUCCESS_DESCRIPTION:
 [[CODE]]
 // Keep in sync with FightSituation's RaiseDead.applySuccess.
 c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
-c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
+c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity = b.sanity! - 1);
 raiseDead(c);
 [[ENDCODE]]
 

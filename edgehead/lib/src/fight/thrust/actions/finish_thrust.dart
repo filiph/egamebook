@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/deal_thrusting_damage.dart';
@@ -16,7 +14,7 @@ class FinishThrust extends OtherActorAction {
   static const String className = "FinishThrust";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -58,7 +56,7 @@ class FinishThrust extends OtherActorAction {
         situation.attackDirection != AttackDirection.fromRight);
     assert(a.currentWeaponOrBodyPart != null);
 
-    final result = executeThrustingHit(enemy, a.currentWeaponOrBodyPart,
+    final result = executeThrustingHit(enemy, a.currentWeaponOrBodyPart!,
         situation.attackDirection.toBodyPartDesignation());
 
     final thread = getThreadId(sim, w, thrustSituationName);

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -65,7 +63,7 @@ class EdgeheadGame extends Book {
   ///
   /// This field exist in order to allow skipping to an action, as a way of
   /// play-testing.
-  final Pattern actionPattern;
+  final Pattern? actionPattern;
 
   bool actionPatternWasHit = false;
 
@@ -73,12 +71,12 @@ class EdgeheadGame extends Book {
   /// [_setup], but it also defines whether or not to end the game
   /// (if the character with [playerCharacter]'s [Actor.id] is dead, then
   /// that's game over).
-  /*late*/ Actor playerCharacter;
+  late Actor? playerCharacter;
 
-  /*late*/ WorldState world;
-  Simulation simulation;
-  PlanConsequence consequence;
-  Storyline storyline;
+  late WorldState world;
+  late Simulation simulation;
+  late PlanConsequence consequence;
+  late Storyline storyline;
 
   final Stat<int> stamina = Stat<int>(staminaSetting, 1);
 
@@ -119,8 +117,8 @@ class EdgeheadGame extends Book {
   /// will result in a different experience.
   EdgeheadGame({
     this.actionPattern,
-    String saveGameSerialized,
-    int randomSeed,
+    String? saveGameSerialized,
+    int? randomSeed,
     this.randomizeAfterPlayerChoice = true,
   }) {
     if (randomSeed != null && saveGameSerialized != null) {
@@ -139,7 +137,7 @@ class EdgeheadGame extends Book {
 
     try {
       world = edgehead_serializer.serializers.deserializeWith(
-          WorldState.serializer, json.decode(saveGameSerialized)) /*!*/;
+          WorldState.serializer, json.decode(saveGameSerialized))!;
       // ignore: avoid_catching_errors
     } on ArgumentError catch (e, s) {
       log.severe(parseErrorMessage);
@@ -190,9 +188,9 @@ class EdgeheadGame extends Book {
       result = await showSlotMachine(
           chance.toDouble(),
           performance.action
-              .getRollReason(actor, simulation, world, performance.object),
+              .getRollReason(actor, simulation, world, performance.object)!,
           rerollable: performance.action.rerollable &&
-              actor.hasResource(performance.action.rerollResource),
+              actor.hasResource(performance.action.rerollResource!),
           rerollEffectDescription: "drain $resourceName");
 
       consequence =
@@ -208,18 +206,19 @@ class EdgeheadGame extends Book {
         // It would be better to do without modifying world outside planner,
         // but I can't think of any other way.
         final builder = consequence.world.toBuilder();
-        switch (performance.action.rerollResource) {
+        switch (performance.action.rerollResource!) {
           case Resource.sanity:
             assert(consequence.world.getActorById(actor.id).sanity > 0,
                 "Tried using sanity when ${actor.name} had none left.");
             storyline.addCustomElement(StatUpdate.sanity(actor.sanity, -1));
-            builder.updateActorById(actor.id, (b) => b..sanity -= 1);
+            builder.updateActorById(actor.id, (b) => b.sanity = b.sanity! - 1);
             break;
           case Resource.stamina:
             assert(consequence.world.getActorById(actor.id).stamina > 0,
                 "Tried using stamina when ${actor.name} had none left.");
             storyline.addCustomElement(StatUpdate.stamina(actor.stamina, -1));
-            builder.updateActorById(actor.id, (b) => b..stamina -= 1);
+            builder.updateActorById(
+                actor.id, (b) => b..stamina = b.stamina! - 1);
             break;
         }
         world = builder.build();
@@ -235,9 +234,9 @@ class EdgeheadGame extends Book {
             performance.object)
         .toList();
 
-    if (turn.actor.isPlayer) {
+    if (turn.actor!.isPlayer) {
       await _applyPlayerAction(
-          performance, turn.actor, consequences, storyline);
+          performance, turn.actor!, consequences, storyline);
     } else {
       // This initializes the random state based on current
       // [WorldState.statefulRandomState]. We don't save the state after use
@@ -252,7 +251,7 @@ class EdgeheadGame extends Book {
     storyline.concatenate(consequence.storyline);
     world = consequence.world;
 
-    var actor = world.getActorById(turn.actor.id);
+    var actor = world.getActorById(turn.actor!.id);
     log.fine(() => "${actor.name} selected ${performance.action.name}");
     log.fine(() => "- ${actor.name} is recovering "
         "until ${actor.recoveringUntil}");
@@ -269,7 +268,7 @@ class EdgeheadGame extends Book {
 
   /// Sets up the game, either as a load from [saveGameSerialized] or
   /// as a new game from scratch.
-  void _setup(String saveGameSerialized, int randomSeed) {
+  void _setup(String? saveGameSerialized, int? randomSeed) {
     if (saveGameSerialized != null) {
       // Updates [world] from savegame.
       load(saveGameSerialized);
@@ -339,7 +338,7 @@ class EdgeheadGame extends Book {
       storyline.addParagraph();
       storyline.generateOutput().forEach(elementsSink.add);
 
-      if (world.wasKilled(playerCharacter.id)) {
+      if (world.wasKilled(playerCharacter!.id)) {
         showLose("I die.");
       } else {
         // TODO: show a better message.
@@ -348,7 +347,7 @@ class EdgeheadGame extends Book {
       return;
     }
 
-    var situation = world.currentSituation;
+    var situation = world.currentSituation!;
     var actorTurn = situation.getNextTurn(simulation, world);
 
     assert(
@@ -370,7 +369,7 @@ class EdgeheadGame extends Book {
       return;
     }
 
-    var actor = actorTurn.actor;
+    var actor = actorTurn.actor!;
     var planner = ActorPlanner(actor, simulation, world);
     planner.plan(
       // Don't plan ahead for the player, we are showing
@@ -406,7 +405,7 @@ class EdgeheadGame extends Book {
 
     if (actionPattern != null && actor.isPlayer) {
       for (final performance in recs.performances) {
-        if (!performance.action.name.contains(actionPattern)) {
+        if (!performance.action.name.contains(actionPattern!)) {
           continue;
         }
         actionPatternWasHit = true;
@@ -435,7 +434,7 @@ class EdgeheadGame extends Book {
     log.fine("planner.generateTable for ${actor.name}");
     planner.generateTable().forEach(log.fine);
 
-    Performance<dynamic> selected;
+    Performance<dynamic>? selected;
     if (actor.isPlayer) {
       // Player
       if (recs.performances.length > 1) {
@@ -551,7 +550,7 @@ class EdgeheadGame extends Book {
     } else {
       // NPC
       // TODO - if more than one action, remove the one that was just made
-      final foldFunction = simulation.foldFunctions[actor.foldFunctionHandle];
+      final foldFunction = simulation.foldFunctions[actor.foldFunctionHandle]!;
       selected = recs.pickRandomly(foldFunction, world.statefulRandomState);
       await _applySelected(
           selected, actorTurn, recs.performances.length, storyline);

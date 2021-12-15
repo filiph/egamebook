@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.room_roaming.room_roaming_situation;
 
@@ -21,10 +20,10 @@ class _$RoomRoamingSituationSerializer
   final String wireName = 'RoomRoamingSituation';
 
   @override
-  Iterable<Object> serialize(
+  Iterable<Object?> serialize(
       Serializers serializers, RoomRoamingSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'currentRoomName',
       serializers.serialize(object.currentRoomName,
           specifiedType: const FullType(String)),
@@ -42,7 +41,7 @@ class _$RoomRoamingSituationSerializer
 
   @override
   RoomRoamingSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RoomRoamingSituationBuilder();
 
@@ -50,7 +49,7 @@ class _$RoomRoamingSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'currentRoomName':
           result.currentRoomName = serializers.deserialize(value,
@@ -86,11 +85,14 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
   final int turn;
 
   factory _$RoomRoamingSituation(
-          [void Function(RoomRoamingSituationBuilder) updates]) =>
+          [void Function(RoomRoamingSituationBuilder)? updates]) =>
       (new RoomRoamingSituationBuilder()..update(updates)).build();
 
   _$RoomRoamingSituation._(
-      {this.currentRoomName, this.id, this.monstersAlive, this.turn})
+      {required this.currentRoomName,
+      required this.id,
+      required this.monstersAlive,
+      required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         currentRoomName, 'RoomRoamingSituation', 'currentRoomName');
@@ -140,25 +142,25 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
 
 class RoomRoamingSituationBuilder
     implements Builder<RoomRoamingSituation, RoomRoamingSituationBuilder> {
-  _$RoomRoamingSituation _$v;
+  _$RoomRoamingSituation? _$v;
 
-  String _currentRoomName;
-  String get currentRoomName => _$this._currentRoomName;
-  set currentRoomName(String currentRoomName) =>
+  String? _currentRoomName;
+  String? get currentRoomName => _$this._currentRoomName;
+  set currentRoomName(String? currentRoomName) =>
       _$this._currentRoomName = currentRoomName;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  bool _monstersAlive;
-  bool get monstersAlive => _$this._monstersAlive;
-  set monstersAlive(bool monstersAlive) =>
+  bool? _monstersAlive;
+  bool? get monstersAlive => _$this._monstersAlive;
+  set monstersAlive(bool? monstersAlive) =>
       _$this._monstersAlive = monstersAlive;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   RoomRoamingSituationBuilder();
 
@@ -181,7 +183,7 @@ class RoomRoamingSituationBuilder
   }
 
   @override
-  void update(void Function(RoomRoamingSituationBuilder) updates) {
+  void update(void Function(RoomRoamingSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

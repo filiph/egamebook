@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -54,7 +52,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   @override
   void applyStart(Actor a, Simulation sim, WorldStateBuilder world, Storyline s,
       Actor enemy, Situation mainSituation) {
-    final leg = _getTargetLeg(enemy, world.time.millisecondsSinceEpoch);
+    final leg = _getTargetLeg(enemy, world.time!.millisecondsSinceEpoch);
     Randomly.run(
       () => a.report(
           s,
@@ -93,7 +91,7 @@ class StartSlashAtLeg extends StartDefensibleActionBase {
   @override
   Situation mainSituationBuilder(
       Actor a, Simulation sim, WorldStateBuilder w, Actor enemy) {
-    final leg = _getTargetLeg(enemy, w.time.millisecondsSinceEpoch);
+    final leg = _getTargetLeg(enemy, w.time!.millisecondsSinceEpoch);
 
     return createSlashSituation(w.randomInt(), a, enemy,
         designation: leg.designation);

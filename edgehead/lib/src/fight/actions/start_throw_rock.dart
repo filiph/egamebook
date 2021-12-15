@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -39,8 +37,7 @@ EnemyTargetAction startThrowRock() => StartDefensibleAction(
       applyStart: _startThrowRockReportStart,
       isApplicable: (a, sim, w, enemy) =>
           a.isPlayer &&
-          (a.currentWeapon?.damageCapability?.type == WeaponType.rock ??
-              false) &&
+          a.currentWeapon?.damageCapability.type == WeaponType.rock &&
           !a.anatomy.isBlind &&
           !recentlyForcedToGround(a, w) &&
           enemy.pose > Pose.onGround,

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -8,13 +6,13 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_forced_to_ground.dart';
 
-class Scramble extends Action<Nothing /*?*/ > {
+class Scramble extends Action<Nothing?> {
   static final Scramble singleton = Scramble();
 
   static const String className = "Scramble";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = false;
@@ -29,7 +27,7 @@ class Scramble extends Action<Nothing /*?*/ > {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   String get name => className;

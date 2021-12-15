@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.feint_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';

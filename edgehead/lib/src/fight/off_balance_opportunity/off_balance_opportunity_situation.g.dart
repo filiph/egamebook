@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.fight.off_balance_situation;
 
@@ -22,10 +21,10 @@ class _$OffBalanceOpportunitySituationSerializer
   final String wireName = 'OffBalanceOpportunitySituation';
 
   @override
-  Iterable<Object> serialize(
+  Iterable<Object?> serialize(
       Serializers serializers, OffBalanceOpportunitySituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'actorId',
       serializers.serialize(object.actorId, specifiedType: const FullType(int)),
       'id',
@@ -33,7 +32,7 @@ class _$OffBalanceOpportunitySituationSerializer
       'turn',
       serializers.serialize(object.turn, specifiedType: const FullType(int)),
     ];
-    Object value;
+    Object? value;
     value = object.culpritId;
     if (value != null) {
       result
@@ -45,7 +44,7 @@ class _$OffBalanceOpportunitySituationSerializer
 
   @override
   OffBalanceOpportunitySituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new OffBalanceOpportunitySituationBuilder();
 
@@ -53,7 +52,7 @@ class _$OffBalanceOpportunitySituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
@@ -61,7 +60,7 @@ class _$OffBalanceOpportunitySituationSerializer
           break;
         case 'culpritId':
           result.culpritId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -82,18 +81,21 @@ class _$OffBalanceOpportunitySituation extends OffBalanceOpportunitySituation {
   @override
   final int actorId;
   @override
-  final int culpritId;
+  final int? culpritId;
   @override
   final int id;
   @override
   final int turn;
 
   factory _$OffBalanceOpportunitySituation(
-          [void Function(OffBalanceOpportunitySituationBuilder) updates]) =>
+          [void Function(OffBalanceOpportunitySituationBuilder)? updates]) =>
       (new OffBalanceOpportunitySituationBuilder()..update(updates)).build();
 
   _$OffBalanceOpportunitySituation._(
-      {this.actorId, this.culpritId, this.id, this.turn})
+      {required this.actorId,
+      this.culpritId,
+      required this.id,
+      required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         actorId, 'OffBalanceOpportunitySituation', 'actorId');
@@ -144,23 +146,23 @@ class OffBalanceOpportunitySituationBuilder
     implements
         Builder<OffBalanceOpportunitySituation,
             OffBalanceOpportunitySituationBuilder> {
-  _$OffBalanceOpportunitySituation _$v;
+  _$OffBalanceOpportunitySituation? _$v;
 
-  int _actorId;
-  int get actorId => _$this._actorId;
-  set actorId(int actorId) => _$this._actorId = actorId;
+  int? _actorId;
+  int? get actorId => _$this._actorId;
+  set actorId(int? actorId) => _$this._actorId = actorId;
 
-  int _culpritId;
-  int get culpritId => _$this._culpritId;
-  set culpritId(int culpritId) => _$this._culpritId = culpritId;
+  int? _culpritId;
+  int? get culpritId => _$this._culpritId;
+  set culpritId(int? culpritId) => _$this._culpritId = culpritId;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   OffBalanceOpportunitySituationBuilder();
 
@@ -183,7 +185,7 @@ class OffBalanceOpportunitySituationBuilder
   }
 
   @override
-  void update(void Function(OffBalanceOpportunitySituationBuilder) updates) {
+  void update(void Function(OffBalanceOpportunitySituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/edgehead_ids.dart' show dragonEggId;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -10,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/humanoid_pain_or_death.dart';
 
-class ThrowGrenade extends Action<Nothing /*?*/ > {
+class ThrowGrenade extends Action<Nothing?> {
   static final ThrowGrenade singleton = ThrowGrenade();
 
   static const String className = "ThrowGrenade";
@@ -32,7 +30,7 @@ class ThrowGrenade extends Action<Nothing /*?*/ > {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   List<String> get commandPathTemplate => ["Inventory", "dragon egg", "throw"];
@@ -59,7 +57,7 @@ class ThrowGrenade extends Action<Nothing /*?*/ > {
     a.report(s, "<subject> remove<s> the pin from <object>", object: grenade);
     a.report(s, "<subject> {lob<s>|throw<s>} <object>", object: grenade);
 
-    final enemies = context.world.currentSituation
+    final enemies = context.world.currentSituation!
         .getActors(context.simulation, context.world)
         .where((actor) =>
             actor.team.isEnemyWith(a.team) && actor.isAnimatedAndActive)
@@ -67,7 +65,7 @@ class ThrowGrenade extends Action<Nothing /*?*/ > {
     assert(enemies.isNotEmpty);
     final multitude = enemies.length > 1;
 
-    final inTime = context.world.currentSituation.turn <= 3;
+    final inTime = context.world.currentSituation!.turn <= 3;
 
     if (inTime) {
       if (multitude) {

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/predetermined_result.dart';

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/actor.dart';
 
 /// The definition of "recently" differs between player and all other

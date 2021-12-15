@@ -38,7 +38,7 @@ RESCUE_COMMAND: Stay perfectly still
 RESCUE_HINT: If you stop moving, the guard will probably go back to sleep. But in this position, staying perfectly still even for a single minute will be quite a feat. (It will cost you 1 stamina.)
 RESCUE_PREREQUISITES: a.stamina > 0
 RESCUE_EFFECT: 
-w.updateActorById(a.id, (b) => b..stamina -= 1);
+w.updateActorById(a.id, (b) => b.stamina = b.stamina! - 1);
 RESCUE_DESCRIPTION:
 You stay completely still. After a while, the strain of holding the awkward position start to show. Your left leg  starts shaking. A bead of sweat is forming on your nose, threatening to fall on the goblin's leg.
 

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/edgehead_items.dart';
 import 'package:edgehead/edgehead_simulation.dart';

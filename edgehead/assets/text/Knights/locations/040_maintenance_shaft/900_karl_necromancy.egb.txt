@@ -34,7 +34,7 @@ I perform necromancy. I feel I have awakened something human-sized but not entir
 [[CODE]]
 // Keep in sync with FightSituation's RaiseDead.applySuccess.
 c.outputStoryline.addCustomElement(StatUpdate.sanity(c.actor.sanity, -1));
-c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity -= 1);
+c.outputWorld.updateActorById(c.actor.id, (b) => b.sanity = b.sanity! - 1);
 [[ENDCODE]]
 
 "What's going on?" the berserker asks, picking up his battle axe. "What's going on with Karl?"

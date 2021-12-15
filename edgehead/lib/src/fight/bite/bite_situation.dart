@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.bite_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -12,7 +10,7 @@ import 'package:meta/meta.dart';
 const String biteSituationName = "BiteSituation";
 
 Situation createBiteSituation(int id, Actor attacker, Actor target,
-    {@required BodyPartDesignation designation}) {
+    {required BodyPartDesignation designation}) {
   assert(designation != null);
   return AttackerSituation.initialized(
     id,

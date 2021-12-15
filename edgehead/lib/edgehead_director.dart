@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library edgehead_director;
 
 import 'package:edgehead/edgehead_global.dart';

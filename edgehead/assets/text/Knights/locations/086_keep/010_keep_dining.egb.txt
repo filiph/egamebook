@@ -53,7 +53,7 @@ if (c.hasItem(familyPortraitId)) {
         ladyHopeId,
         (b) => b
           ..initiative = 0
-          ..dexterity = b.dexterity ~/ 2);
+          ..dexterity = b.dexterity! ~/ 2);
 }
 [[ENDCODE]]
 

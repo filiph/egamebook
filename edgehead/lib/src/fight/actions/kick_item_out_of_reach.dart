@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -37,7 +35,7 @@ class KickItemOutOfReach extends OnGroundItemAction {
   bool get rerollable => false;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
   String applyFailure(ActionContext context, Item item) {
@@ -97,7 +95,7 @@ class KickItemOutOfReach extends OnGroundItemAction {
         return false;
       }
 
-      final actors = w.currentSituation.getActors(sim, w);
+      final actors = w.currentSituation!.getActors(sim, w);
       final enemies = actors.where((actor) => actor.team.isEnemyWith(a.team));
       final weapons = enemies.map((actor) => actor.currentWeapon?.value ?? 0);
       final worst = weapons.fold(0xffffffff, min);

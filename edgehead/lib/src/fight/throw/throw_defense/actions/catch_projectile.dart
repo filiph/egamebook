@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -53,7 +51,7 @@ class CatchProjectile extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    Item projectile = enemy.currentWeapon;
+    Item? projectile = enemy.currentWeapon;
     a.report(
         s,
         "<subject> {tr<ies>|attempt<s>} to catch <object> "
@@ -70,7 +68,7 @@ class CatchProjectile extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    Item projectile = enemy.currentWeapon;
+    Item? projectile = enemy.currentWeapon;
     a.report(
         s,
         "<subject> catch<es> <object> "
@@ -82,9 +80,9 @@ class CatchProjectile extends OtherActorAction {
     w.updateActorById(
         enemy.id,
         (b) => b
-          ..inventory.remove(projectile)
+          ..inventory.remove(projectile!)
           ..inventory.goBarehanded(enemy.anatomy));
-    w.updateActorById(a.id, (b) => b..inventory.equip(projectile, a.anatomy));
+    w.updateActorById(a.id, (b) => b..inventory.equip(projectile!, a.anatomy));
 
     w.popSituationsUntil("FightSituation", context);
     return "${a.name} catches ${enemy.name}'s projectile in air";

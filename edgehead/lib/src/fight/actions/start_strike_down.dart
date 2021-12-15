@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -31,7 +29,7 @@ ReasonedSuccessChance computeStartStrikeDownPlayer(
   assert(a.isPlayer);
   // Major bonus when the actor just rolled out of the way.
   final didRecentlyRoll = recentlyRolledOutOfWay(w, enemy);
-  final hasShortBlade = (a.currentWeapon?.damageCapability?.length ?? 0) ==
+  final hasShortBlade = (a.currentWeapon?.damageCapability.length ?? 0) ==
       WeaponType.dagger.defaultLength;
   final base = (didRecentlyRoll ? 0.8 : 0.4) - (hasShortBlade ? 0.1 : 0);
 

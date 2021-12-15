@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/decide_slashing_hit.dart';
@@ -18,7 +16,7 @@ class FinishSlash extends OtherActorAction {
   static const String className = "FinishSlash";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -97,7 +95,7 @@ class FinishSlash extends OtherActorAction {
     final designation = direction.toBodyPartDesignation();
     assert(attacker.currentWeaponOrBodyPart != null);
     return decideSlashingHit(
-        enemy, attacker.currentWeaponOrBodyPart, randomGetter,
+        enemy, attacker.currentWeaponOrBodyPart!, randomGetter,
         designation: designation);
   }
 
@@ -112,6 +110,6 @@ class FinishSlash extends OtherActorAction {
         : SlashDirection.right;
     assert(attacker.currentWeaponOrBodyPart != null);
     return decideSlashingHitFromDirection(
-        enemy, slashDirection, attacker.currentWeaponOrBodyPart, randomGetter);
+        enemy, slashDirection, attacker.currentWeaponOrBodyPart!, randomGetter);
   }
 }

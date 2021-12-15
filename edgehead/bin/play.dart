@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
@@ -63,10 +61,10 @@ Future<void> main(List<String> args) async {
     return;
   }
 
-  final automated = results['automated'] as bool /*!*/;
+  final automated = results['automated'] as bool;
   final forever = results['forever'] as bool;
   final logged = results['log'] as bool;
-  RegExp actionPattern;
+  RegExp? actionPattern;
   if (results.wasParsed('action')) {
     actionPattern = RegExp(results['action'] as String, caseSensitive: false);
   }
@@ -74,7 +72,7 @@ Future<void> main(List<String> args) async {
       ? savegames.defaultSavegames[results['load']]
       : null;
 
-  File file;
+  File? file;
   if (logged) {
     file = File("edgehead.log");
   }
@@ -110,7 +108,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   final Random _random;
 
-  final bool /*!*/ automated;
+  final bool automated;
 
   /// A counter of choices. When [automated] is `true` and when
   /// this counter reaches [maxAutomatedChoicesTaken], we bail out
@@ -128,18 +126,18 @@ class CliRunner extends Presenter<EdgeheadGame> {
   /// to determine whether [maxTimeAutomated] has been reached.
   final DateTime _timeStarted;
 
-  final File _logFile;
+  final File? _logFile;
 
-  final Pattern actionPattern;
+  final Pattern? actionPattern;
 
-  StreamSubscription _loggerSubscription;
+  StreamSubscription? _loggerSubscription;
 
   /// Silent mode can be overridden when [actionPattern] is encountered.
-  bool /*!*/ _silent;
+  bool _silent;
 
   /// The latest savegame received from the [book].
   @visibleForTesting
-  String latestSaveGame;
+  String? latestSaveGame;
 
   /// When user selects an option using `s` instead of enter, they will
   /// succeed on the next slot-machine roll.
@@ -162,11 +160,11 @@ class CliRunner extends Presenter<EdgeheadGame> {
   /// [random] makes sure we predictably choose the same options.)
   CliRunner(
     this.automated,
-    bool /*!*/ silent,
-    File logFile, {
+    bool silent,
+    File? logFile, {
     Level logLevel = Level.FINE,
     this.actionPattern,
-    Random random,
+    Random? random,
     this.maxAutomatedChoicesTaken = 0xFFFFFF,
     this.maxTimeAutomated = const Duration(days: 365),
   })  : _silent = silent,
@@ -176,7 +174,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
     if (_logFile != null) {
       Logger.root.level = logLevel;
       _loggerSubscription = Logger.root.onRecord.listen((record) {
-        _logFile.writeAsStringSync(
+        _logFile!.writeAsStringSync(
             '${record.time.toIso8601String()} - '
             '[${record.loggerName}] - '
             '[${record.level.name}] - '
@@ -196,7 +194,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
     if (element.choices.length == 1 && element.choices.single.isImplicit) {
       // Implicit choice.
       final selectedChoice = element.choices.single;
-      book.accept(PickChoice((b) => b..choice = selectedChoice.toBuilder()));
+      book!.accept(PickChoice((b) => b..choice = selectedChoice.toBuilder()));
       return;
     }
 
@@ -226,7 +224,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
     _log.fine("ChoiceTree root choices: ${tree.root.choices}");
     _log.fine("ChoiceTree root groups: ${tree.root.groups}");
 
-    if (automated && !book.actionPatternWasHit) {
+    if (automated && !book!.actionPatternWasHit) {
       option = _random.nextInt(element.choices.length);
       _automatedChoicesTaken += 1;
     } else {
@@ -248,11 +246,11 @@ class CliRunner extends Presenter<EdgeheadGame> {
     }
 
     final selectedChoice = element.choices[option];
-    if (!automated || book.actionPatternWasHit) {
+    if (!automated || book!.actionPatternWasHit) {
       print(selectedChoice.commandSentence);
       print("");
     }
-    book.accept(PickChoice((b) => b..choice = selectedChoice.toBuilder()));
+    book!.accept(PickChoice((b) => b..choice = selectedChoice.toBuilder()));
   }
 
   @override
@@ -302,7 +300,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
           ? slot.Result.success
           : slot.Result.failure;
 
-      book.accept(ResolveSlotMachine((b) => b
+      book!.accept(ResolveSlotMachine((b) => b
         ..result = SlotResult.from(result)
         ..wasRerolled = false));
       _forceSuccessOnNextSlotMachine = false;
@@ -313,7 +311,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
         rerollable: element.rerollable,
         rerollEffectDescription: element.rerollEffectDescription);
     result.then((sessionResult) {
-      book.accept(ResolveSlotMachine((b) => b
+      book!.accept(ResolveSlotMachine((b) => b
         ..result = SlotResult.from(sessionResult.result)
         ..wasRerolled = sessionResult.wasRerolled));
     });
@@ -332,13 +330,13 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   @override
   void beforeElement() {
-    if (book.actionPatternWasHit) _silent = false;
+    if (book!.actionPatternWasHit) _silent = false;
   }
 
   @override
   void close() {
     super.close();
-    book.close();
+    book!.close();
     _loggerSubscription?.cancel();
   }
 
@@ -349,7 +347,7 @@ class CliRunner extends Presenter<EdgeheadGame> {
 
   Future<slot.SessionResult> _showSlotMachine(
       double probability, String rollReason,
-      {bool rerollable, String rerollEffectDescription}) async {
+      {required bool rerollable, String? rerollEffectDescription}) async {
     var msg = "[[ SLOT MACHINE '$rollReason' "
         "${probability.toStringAsPrecision(2)} "
         "$rerollEffectDescription "

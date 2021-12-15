@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:math';
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -66,8 +64,8 @@ void main() {
     final func = getters[computationName];
     for (final configName in configs.keys) {
       print("  --- $configName ---");
-      final config = configs[configName];
-      _runConfiguration(config, func);
+      final config = configs[configName]!;
+      _runConfiguration(config, func!);
     }
   }
 }
@@ -75,9 +73,9 @@ void main() {
 final _random = Random();
 
 Actor _createActor({
-  String name,
+  required String name,
   bool hasShield = false,
-  int dexterity,
+  required int dexterity,
   Pose pose = Pose.standing,
 }) {
   final actorId = name.hashCode;

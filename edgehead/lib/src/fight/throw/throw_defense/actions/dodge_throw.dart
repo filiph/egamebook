@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -58,14 +56,14 @@ class DodgeThrow extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    Item projectile = enemy.currentWeapon;
+    Item? projectile = enemy.currentWeapon;
     final dodgeDescription =
         a.isOnGround ? '{dodge|roll out of the way}' : '{dodge|sidestep}';
     a.report(s, "<subject> tr<ies> to $dodgeDescription");
     if (a.pose == Pose.offBalance) {
       a.report(s, "<subject> <is> out of balance", but: true);
     } else {
-      projectile.report(s, "<subject> fl<ies> too fast", but: true);
+      projectile!.report(s, "<subject> fl<ies> too fast", but: true);
     }
     w.popSituation(context);
     return "${a.name} fails to dodge ${enemy.name}'s throw";
@@ -76,7 +74,7 @@ class DodgeThrow extends OtherActorAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    Item projectile = enemy.currentWeapon;
+    Item projectile = enemy.currentWeapon!;
     a.report(
         s,
         "<subject> "

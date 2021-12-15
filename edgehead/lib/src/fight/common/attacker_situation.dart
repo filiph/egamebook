@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.attacker_situation;
 
 import 'package:built_collection/built_collection.dart';
@@ -99,7 +97,7 @@ class AttackDirection extends EnumClass {
   }
 
   static AttackDirection fromBodyPartDesignation(
-      BodyPartDesignation designation) {
+      BodyPartDesignation? designation) {
     assert(
         designation != BodyPartDesignation.none &&
             designation != BodyPartDesignation.tail &&
@@ -183,7 +181,7 @@ abstract class AttackerSituation extends Object
     Actor target,
     String moveName, {
     AttackDirection attackDirection = AttackDirection.unspecified,
-    String additionalData,
+    String? additionalData,
   }) =>
       AttackerSituation((b) => b
         ..id = id
@@ -210,8 +208,7 @@ abstract class AttackerSituation extends Object
         ..addAll(builtEnemyTargetActionGenerators);
 
   /// Data or note that the situation can include.
-  @nullable
-  String get additionalData;
+  String? get additionalData;
 
   AttackDirection get attackDirection;
 
@@ -235,7 +232,7 @@ abstract class AttackerSituation extends Object
   int get turn;
 
   @override
-  AttackerSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
+  AttackerSituation elapseTurn() => rebuild((b) => b.turn = b.turn! + 1);
 
   @override
   Iterable<Actor> getActors(_, WorldState w) =>
@@ -259,7 +256,7 @@ abstract class MoveEntity extends Object
 
   /// Moves should not have adjectives.
   @override
-  String get adjective => null;
+  String? get adjective => null;
 
   @override
   int get id;

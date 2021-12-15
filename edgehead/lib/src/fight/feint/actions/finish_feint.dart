@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -18,7 +16,7 @@ class FinishFeint extends OtherActorAction {
   static const String className = "FinishFeint";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -39,7 +37,7 @@ class FinishFeint extends OtherActorAction {
   String get name => className;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
   String get rollReasonTemplate => "(WARNING should not be user-visible)";

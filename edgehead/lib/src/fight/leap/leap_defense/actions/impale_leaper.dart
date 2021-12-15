@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -96,21 +94,21 @@ class ImpaleLeaper extends EnemyTargetAction {
     enemy.report(s, "<subject> {leap<s>|run<s>|lunge<s>} right into it",
         negative: true);
     final damage = enemy.isInvincible ? 0 : 1;
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
+    w.updateActorById(enemy.id, (b) => b..hitpoints = b.hitpoints! - damage);
     final updatedEnemy = w.getActorById(enemy.id);
     bool killed = !updatedEnemy.isAnimated && !enemy.isInvincible;
     if (!killed) {
-      a.currentWeaponOrBodyPart.report(
+      a.currentWeaponOrBodyPart!.report(
           s,
           "<subject> {cut<s> into|pierce<s>|go<es> into} "
           "<object's> flesh",
           object: updatedEnemy);
       inflictPain(context, enemy.id, damage,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
+          enemy.anatomy.findByDesignation(BodyPartDesignation.torso)!);
       updatedEnemy.report(s, "<subject> fall<s> to the ground");
       makeActorFall(context.world, w, s, updatedEnemy);
     } else {
-      a.currentWeaponOrBodyPart.report(
+      a.currentWeaponOrBodyPart!.report(
           s,
           "<subject> {go<es> right through|completely impale<s>|"
           "bore<s> through} <object's> {body|chest|stomach|neck}",

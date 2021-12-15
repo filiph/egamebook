@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -15,7 +13,7 @@ class FinishBreakNeck extends OtherActorAction {
   static const String className = "FinishBreakNeck";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -61,7 +59,7 @@ class FinishBreakNeck extends OtherActorAction {
       a.report(s, "<subject> smash<es> <object's> head to the ground",
           object: updatedEnemy, positive: true);
       inflictPain(context, enemy.id, damage,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.head));
+          enemy.anatomy.findByDesignation(BodyPartDesignation.head)!);
     } else {
       a.report(
           s,

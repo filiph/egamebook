@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/item.dart';
@@ -234,8 +232,8 @@ void main() {
   });
 
   group("possessive pronoun", () {
-    Storyline storyline;
-    Entity player;
+    late Storyline storyline;
+    late Entity player;
     Entity dog;
     const String template = "<subject> unleash<es> <subject's> <object>";
 
@@ -258,9 +256,9 @@ void main() {
   });
 
   group('vs definitive article (no \'his the scimitar\')', () {
-    Storyline storyline;
-    Entity orc;
-    Entity sword;
+    late Storyline storyline;
+    late Entity orc;
+    late Entity sword;
 
     setUp(() {
       storyline = Storyline();
@@ -283,7 +281,7 @@ void main() {
     test("for grab <object> by <object's> <object2>", () {
       var goblin = Actor.initialized(4123, testRandomIdGetter, "goblin",
           pronoun: Pronoun.HE);
-      assert(goblin.anatomy.weaponAppendage.name == 'right hand');
+      assert(goblin.anatomy.weaponAppendage!.name == 'right hand');
 
       orc.report(
           storyline, "<subject> grab<s> <object> by <object's> <object2>",
@@ -427,7 +425,7 @@ void main() {
   });
 
   group("enumeration", () {
-    Storyline storyline;
+    late Storyline storyline;
     Entity handkerchief = Entity(name: "handkerchief");
     Entity brush = Entity(name: "brush");
     Entity mirror = Entity(name: "mirror");
@@ -516,7 +514,7 @@ void main() {
   });
 
   group("actionThread", () {
-    Storyline storyline;
+    late Storyline storyline;
     var threadA = 42;
 
     setUp(() {
@@ -638,10 +636,10 @@ void main() {
   });
 
   group('second object', () {
-    Storyline storyline;
-    Entity player;
-    Entity rock;
-    Entity goblin;
+    late Storyline storyline;
+    late Entity player;
+    late Entity rock;
+    late Entity goblin;
 
     setUp(() {
       storyline = Storyline();
@@ -828,12 +826,12 @@ void main() {
   });
 
   group('pronouns, nouns, adjectives', () {
-    Storyline storyline;
-    Entity a;
-    Entity aBodyPart;
-    Entity b;
-    Entity bItem;
-    Entity c;
+    late Storyline storyline;
+    late Entity a;
+    late Entity aBodyPart;
+    late Entity b;
+    late Entity bItem;
+    late Entity c;
 
     setUp(() {
       storyline = Storyline();
@@ -914,7 +912,7 @@ void main() {
   });
 
   group('two objects of same name', () {
-    Storyline storyline;
+    late Storyline storyline;
 
     setUp(() {
       storyline = Storyline();
@@ -1084,15 +1082,15 @@ void main() {
     });
 
     group('firstOwnerId', () {
-      Entity aren;
-      Actor orc;
-      Actor goblin;
-      Item mySword;
-      Item myAxe;
-      Item orcSword;
-      Item goblinRustySword;
-      Item orcShinySword;
-      Storyline storyline;
+      late Entity aren;
+      late Actor orc;
+      late Actor goblin;
+      late Item mySword;
+      late Item myAxe;
+      late Item orcSword;
+      late Item goblinRustySword;
+      late Item orcShinySword;
+      late Storyline storyline;
 
       setUp(() {
         aren = _createPlayer('Aren');

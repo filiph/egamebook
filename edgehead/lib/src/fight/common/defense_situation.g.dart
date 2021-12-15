@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.fight.defense_situation;
 
@@ -18,9 +17,9 @@ class _$DefenseSituationSerializer
   final String wireName = 'DefenseSituation';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, DefenseSituation object,
+  Iterable<Object?> serialize(Serializers serializers, DefenseSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'attacker',
       serializers.serialize(object.attacker,
           specifiedType: const FullType(int)),
@@ -50,7 +49,7 @@ class _$DefenseSituationSerializer
 
   @override
   DefenseSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new DefenseSituationBuilder();
 
@@ -58,7 +57,7 @@ class _$DefenseSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'attacker':
           result.attacker = serializers.deserialize(value,
@@ -67,16 +66,16 @@ class _$DefenseSituationSerializer
         case 'builtEnemyTargetActionGenerators':
           result.builtEnemyTargetActionGenerators.replace(
               serializers.deserialize(value,
-                      specifiedType: const FullType(
-                          BuiltList, const [const FullType(EnemyTargetAction)]))
-                  as BuiltList<Object>);
+                  specifiedType: const FullType(BuiltList, const [
+                    const FullType(EnemyTargetAction)
+                  ]))! as BuiltList<Object?>);
           break;
         case 'builtOtherActorActionGenerators':
           result.builtOtherActorActionGenerators.replace(
               serializers.deserialize(value,
                       specifiedType: const FullType(
-                          BuiltList, const [const FullType(OtherActorAction)]))
-                  as BuiltList<Object>);
+                          BuiltList, const [const FullType(OtherActorAction)]))!
+                  as BuiltList<Object?>);
           break;
         case 'id':
           result.id = serializers.deserialize(value,
@@ -125,18 +124,18 @@ class _$DefenseSituation extends DefenseSituation {
   final int turn;
 
   factory _$DefenseSituation(
-          [void Function(DefenseSituationBuilder) updates]) =>
+          [void Function(DefenseSituationBuilder)? updates]) =>
       (new DefenseSituationBuilder()..update(updates)).build();
 
   _$DefenseSituation._(
-      {this.attacker,
-      this.builtEnemyTargetActionGenerators,
-      this.builtOtherActorActionGenerators,
-      this.id,
-      this.name,
-      this.predeterminedResult,
-      this.target,
-      this.turn})
+      {required this.attacker,
+      required this.builtEnemyTargetActionGenerators,
+      required this.builtOtherActorActionGenerators,
+      required this.id,
+      required this.name,
+      required this.predeterminedResult,
+      required this.target,
+      required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         attacker, 'DefenseSituation', 'attacker');
@@ -213,49 +212,49 @@ class _$DefenseSituation extends DefenseSituation {
 
 class DefenseSituationBuilder
     implements Builder<DefenseSituation, DefenseSituationBuilder> {
-  _$DefenseSituation _$v;
+  _$DefenseSituation? _$v;
 
-  int _attacker;
-  int get attacker => _$this._attacker;
-  set attacker(int attacker) => _$this._attacker = attacker;
+  int? _attacker;
+  int? get attacker => _$this._attacker;
+  set attacker(int? attacker) => _$this._attacker = attacker;
 
-  ListBuilder<EnemyTargetAction> _builtEnemyTargetActionGenerators;
+  ListBuilder<EnemyTargetAction>? _builtEnemyTargetActionGenerators;
   ListBuilder<EnemyTargetAction> get builtEnemyTargetActionGenerators =>
       _$this._builtEnemyTargetActionGenerators ??=
           new ListBuilder<EnemyTargetAction>();
   set builtEnemyTargetActionGenerators(
-          ListBuilder<EnemyTargetAction> builtEnemyTargetActionGenerators) =>
+          ListBuilder<EnemyTargetAction>? builtEnemyTargetActionGenerators) =>
       _$this._builtEnemyTargetActionGenerators =
           builtEnemyTargetActionGenerators;
 
-  ListBuilder<OtherActorAction> _builtOtherActorActionGenerators;
+  ListBuilder<OtherActorAction>? _builtOtherActorActionGenerators;
   ListBuilder<OtherActorAction> get builtOtherActorActionGenerators =>
       _$this._builtOtherActorActionGenerators ??=
           new ListBuilder<OtherActorAction>();
   set builtOtherActorActionGenerators(
-          ListBuilder<OtherActorAction> builtOtherActorActionGenerators) =>
+          ListBuilder<OtherActorAction>? builtOtherActorActionGenerators) =>
       _$this._builtOtherActorActionGenerators = builtOtherActorActionGenerators;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
-  Predetermination _predeterminedResult;
-  Predetermination get predeterminedResult => _$this._predeterminedResult;
-  set predeterminedResult(Predetermination predeterminedResult) =>
+  Predetermination? _predeterminedResult;
+  Predetermination? get predeterminedResult => _$this._predeterminedResult;
+  set predeterminedResult(Predetermination? predeterminedResult) =>
       _$this._predeterminedResult = predeterminedResult;
 
-  int _target;
-  int get target => _$this._target;
-  set target(int target) => _$this._target = target;
+  int? _target;
+  int? get target => _$this._target;
+  set target(int? target) => _$this._target = target;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   DefenseSituationBuilder();
 
@@ -284,7 +283,7 @@ class DefenseSituationBuilder
   }
 
   @override
-  void update(void Function(DefenseSituationBuilder) updates) {
+  void update(void Function(DefenseSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -313,7 +312,7 @@ class DefenseSituationBuilder
               turn: BuiltValueNullFieldError.checkNotNull(
                   turn, 'DefenseSituation', 'turn'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'builtEnemyTargetActionGenerators';
         builtEnemyTargetActionGenerators.build();

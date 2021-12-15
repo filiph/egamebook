@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/edgehead_lib.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:edgehead/fractal_stories/action.dart';
@@ -21,7 +19,7 @@ class Eat extends InventoryItemAction {
   final String verb = "eat";
 
   @override
-  String get helpMessage => null;
+  String? get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -61,7 +59,7 @@ class Eat extends InventoryItemAction {
     }
 
     if (item.edibility.eatingReport != null) {
-      s.add(item.edibility.eatingReport, isRaw: true);
+      s.add(item.edibility.eatingReport!, isRaw: true);
     }
 
     if (item.edibility == Edibility.disgusting) {
@@ -86,7 +84,7 @@ class Eat extends InventoryItemAction {
 
     w.updateActorById(a.id, (b) {
       b.inventory.remove(item);
-      b.stamina += staminaUpdate;
+      b.stamina = b.stamina! + staminaUpdate;
     });
 
     return '${a.name} successfully eats ${item.name}';

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -8,7 +6,7 @@ import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 
-class AutoSlayMonstersAction extends Action<Nothing /*?*/ > {
+class AutoSlayMonstersAction extends Action<Nothing?> {
   static final AutoSlayMonstersAction singleton = AutoSlayMonstersAction();
 
   static const String className = "SlayMonstersAction";
@@ -32,13 +30,13 @@ class AutoSlayMonstersAction extends Action<Nothing /*?*/ > {
   final bool isImplicit = true;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   List<String> get commandPathTemplate => const [];
 
   @override
-  String get helpMessage => null;
+  String? get helpMessage => null;
 
   @override
   String get name => className;
@@ -99,7 +97,7 @@ class AutoSlayMonstersAction extends Action<Nothing /*?*/ > {
             other.currentRoomName == room.name)
         .toList(growable: false);
 
-    var fightSituation = room.fightGenerator(context, situation, friends);
+    var fightSituation = room.fightGenerator!(context, situation, friends);
     assert(() {
       WorldState rebuilt = w.build();
       return fightSituation.enemyTeamIds

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -21,7 +19,7 @@ class FinishThrowThrusting extends OtherActorAction {
   static const String className = "FinishThrowThrusting";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -58,7 +56,7 @@ class FinishThrowThrusting extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     Simulation sim = context.simulation;
-    final projectile = a.currentWeapon;
+    final projectile = a.currentWeapon!;
     assert(projectile.damageCapability.isThrusting);
 
     final targetPart = enemy.anatomy
@@ -133,5 +131,5 @@ class FinishThrowThrusting extends OtherActorAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState w, Actor enemy) =>
-      a.currentWeapon.damageCapability.isThrusting;
+      a.currentWeapon!.damageCapability.isThrusting;
 }

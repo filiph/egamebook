@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/edgehead_actors.dart';
 import 'package:edgehead/edgehead_event_callbacks_gather.dart';
 import 'package:edgehead/edgehead_facts_strings.dart';
@@ -80,8 +78,8 @@ void describeCompass(ActionContext c) {
   }
   assert(target.isOnMap);
 
-  final dx = target.positionX - room.positionX;
-  final dy = target.positionY - room.positionY;
+  final dx = target.positionX! - room.positionX!;
+  final dy = target.positionY! - room.positionY!;
 
   /// The direction computation is taken from package:piecemeal.
   /// https://github.com/munificent/piecemeal/blob/71aa6567b75aad358328ee8eab0f062c1ea3ed2d/lib/src/vec.dart#L64-L102
@@ -211,7 +209,7 @@ FightSituation generateConetFight(ActionContext c,
   if (weak) {
     c.outputStoryline.add('He seem famished.', isRaw: true);
     w.updateActorById(
-        conetKoboldId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
+        conetKoboldId, (b) => b.dexterity = (b.dexterity! * 0.7).floor());
   }
 
   return FightSituation.initialized(
@@ -266,7 +264,8 @@ FightSituation generateDargTentFight(ActionContext c,
   final weak = _orcsLackCockroaches(c);
   if (weak) {
     c.outputStoryline.add('He seems famished.', isRaw: true);
-    w.updateActorById(dargId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
+    w.updateActorById(
+        dargId, (b) => b.dexterity = (b.dexterity! * 0.7).floor());
   }
   final stripped = _orcsLackWeapons(c);
   if (stripped) {
@@ -315,9 +314,9 @@ FightSituation generateGodsLairFight(ActionContext c,
   if (weak) {
     c.outputStoryline.add('They seem famished.', isRaw: true);
     w.updateActorById(
-        orcBerserkerId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
+        orcBerserkerId, (b) => b.dexterity = (b.dexterity! * 0.7).floor());
     w.updateActorById(
-        orcCaptainId, (b) => b.dexterity = (b.dexterity * 0.7).floor());
+        orcCaptainId, (b) => b.dexterity = (b.dexterity! * 0.7).floor());
   }
   final stripped = _orcsLackWeapons(c);
   if (stripped) {
@@ -361,7 +360,7 @@ FightSituation generateJailerFight(ActionContext c,
   final weak = _orcsLackCockroaches(c);
   if (weak) {
     c.outputStoryline.add('He seems famished.', isRaw: true);
-    w.updateActorById(jailerId, (b) => b.dexterity = b.dexterity ~/ 1.5);
+    w.updateActorById(jailerId, (b) => b.dexterity = b.dexterity! ~/ 1.5);
   }
 
   return FightSituation.initialized(
@@ -589,7 +588,7 @@ FightSituation generateStartFight(ActionContext c,
 ///
 /// Calls [getPartyOf] in the background.
 String getWeOrI(Actor a, Simulation sim, WorldState originalWorld,
-    {@required bool capitalized}) {
+    {required bool capitalized}) {
   final party = getPartyOf(a, sim, originalWorld);
   if (party.length > 1) {
     return capitalized ? 'We' : 'we';
@@ -654,11 +653,11 @@ void takeInventory(ActionContext c) {
 }
 
 Actor _makeGoblin(WorldStateBuilder w,
-    {int id,
+    {int? id,
     bool spear = false,
     String spearAdjective = 'crude',
     String swordAdjective = 'rusty',
-    String currentRoomName}) {
+    String? currentRoomName}) {
   final goblinId = id ?? w.randomInt();
   return Actor.initialized(goblinId, w.randomInt, "goblin",
       adjective: w.randomChoose(['vicious', 'fierce', 'angry', 'evil']),
@@ -676,7 +675,7 @@ Actor _makeGoblin(WorldStateBuilder w,
 }
 
 Actor _makeOrc(WorldStateBuilder w,
-    {int id, int constitution = 2, String swordAdjective = 'orcish'}) {
+    {int? id, int constitution = 2, String swordAdjective = 'orcish'}) {
   final orcId = id ?? w.randomInt();
   return Actor.initialized(orcId, w.randomInt, "orc",
       adjective:

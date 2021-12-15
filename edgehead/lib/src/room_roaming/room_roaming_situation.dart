@@ -1,9 +1,8 @@
-// @dart=2.9
-
 library stranded.room_roaming.room_roaming_situation;
 
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -85,8 +84,7 @@ abstract class RoomRoamingSituation extends Object
   int get turn;
 
   @override
-  RoomRoamingSituation elapseTurn() =>
-      rebuild((b) => b.turn = b.turn /*!*/ + 1);
+  RoomRoamingSituation elapseTurn() => rebuild((b) => b.turn = b.turn! + 1);
 
   /// Only player can roam at the moment. But there is also Director.
   @override
@@ -95,7 +93,7 @@ abstract class RoomRoamingSituation extends Object
     if (_player == null) return [];
 
     if (w.director != null) {
-      return [_player, w.director];
+      return [_player, w.director!];
     }
 
     return [_player];
@@ -193,7 +191,7 @@ abstract class RoomRoamingSituation extends Object
       } else {
         // Otherwise, show long variant description.
         s.addParagraph();
-        room.variantUpdateDescribe(afterMoveContext);
+        room.variantUpdateDescribe!(afterMoveContext);
         s.addParagraph();
       }
     } else {
@@ -239,7 +237,7 @@ abstract class RoomRoamingSituation extends Object
     for (final member in getPartyOf(actor, sim, w.build())) {
       // The actors have already been moved at the start of method.
       // Here we just record their visit.
-      w.recordVisit(member, room, actor.currentRoomName);
+      w.recordVisit(member, room, actor.currentRoomName!);
     }
   }
 
@@ -260,7 +258,8 @@ abstract class RoomRoamingSituation extends Object
           "Corpse of ${corpse.name} has "
           "currentRoomName null.\n"
           "How we got here: ${world.actionHistory.describe()}");
-      var parent = sim.getRoomParent(sim.getRoomByName(corpse.currentRoomName));
+      var parent =
+          sim.getRoomParent(sim.getRoomByName(corpse.currentRoomName!));
       if (parent.name != corpse.currentRoomName) {
         context.outputWorld
             .updateActorById(corpse.id, (b) => b.currentRoomName = parent.name);
@@ -290,7 +289,7 @@ abstract class RoomRoamingSituation extends Object
   bool _assertNobodyInVariantRoom(WorldState world, Simulation sim) {
     for (final actor in world.actors) {
       if (actor.currentRoomName == null) continue;
-      final room = sim.getRoomByName(actor.currentRoomName);
+      final room = sim.getRoomByName(actor.currentRoomName!);
       if (room.parent != null) {
         assert(
             false,
@@ -309,9 +308,8 @@ abstract class RoomRoamingSituation extends Object
   Iterable<Actor> _getNpcs(WorldState world) =>
       world.actors.where((a) => a.isAnimatedAndActive && !a.isPlayer);
 
-  Actor _getPlayer(WorldState world) =>
-      world.actors.firstWhere((a) => a.isPlayer && a.isAnimatedAndActive,
-          orElse: () => null);
+  Actor? _getPlayer(WorldState world) =>
+      world.actors.firstWhereOrNull((a) => a.isPlayer && a.isAnimatedAndActive);
 
   /// Asserts that the room variant doesn't change "under" the player.
   /// This would be a bad idea, since there's no way to report this change
@@ -323,7 +321,7 @@ abstract class RoomRoamingSituation extends Object
           context.outputWorld.getActorById(context.actor.id),
           context.simulation,
           context.outputWorld.build());
-      final stillSatisfied = room.prerequisite.isSatisfiedBy(newContext);
+      final stillSatisfied = room.prerequisite!.isSatisfiedBy(newContext);
 
       if (!stillSatisfied) {
         _log.warning(

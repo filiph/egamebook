@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -16,7 +14,7 @@ class FinishThrustOnGround extends OtherActorAction {
   static const String className = "FinishThrustOnGround";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -62,7 +60,7 @@ class FinishThrustOnGround extends OtherActorAction {
             BodyPartDesignation.rightLeg,
           ]);
     final result =
-        executeThrustingHit(enemy, a.currentWeaponOrBodyPart, designation);
+        executeThrustingHit(enemy, a.currentWeaponOrBodyPart!, designation);
 
     w.updateActorById(enemy.id, (b) => b.replace(result.victim));
 

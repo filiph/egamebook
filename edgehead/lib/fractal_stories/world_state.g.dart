@@ -384,9 +384,7 @@ class _$WorldStateBuilder extends WorldStateBuilder {
       super.actionHistory = $v.actionHistory.toBuilder();
       super.actors = $v.actors.toBuilder();
       super.customHistory = $v.customHistory.toBuilder();
-      if ($v.director != null) {
-        super.director = $v.director!.toBuilder();
-      }
+      super.director = $v.director?.toBuilder();
       super.global = $v.global;
       super.ruleHistory = $v.ruleHistory.toBuilder();
       super.situations = $v.situations.toBuilder();

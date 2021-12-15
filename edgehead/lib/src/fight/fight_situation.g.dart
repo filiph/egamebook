@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.fight.fight_situation;
 
@@ -18,9 +17,9 @@ class _$FightSituationSerializer
   final String wireName = 'FightSituation';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, FightSituation object,
+  Iterable<Object?> serialize(Serializers serializers, FightSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'droppedItems',
       serializers.serialize(object.droppedItems,
           specifiedType:
@@ -56,7 +55,7 @@ class _$FightSituationSerializer
 
   @override
   FightSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new FightSituationBuilder();
 
@@ -64,30 +63,32 @@ class _$FightSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'droppedItems':
           result.droppedItems.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(Item)]))!
+              as BuiltList<Object?>);
           break;
         case 'droppedItemsOutOfReach':
           result.droppedItemsOutOfReach.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltList, const [const FullType(Item)]))
-              as BuiltList<Object>);
+                      const FullType(BuiltList, const [const FullType(Item)]))!
+              as BuiltList<Object?>);
           break;
         case 'enemyTeamIds':
           result.enemyTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<Object>);
+                      const FullType(BuiltSet, const [const FullType(int)]))!
+              as BuiltSet<Object?>);
           break;
         case 'events':
           result.events.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltMap,
-                  const [const FullType(int), const FullType(EventCallback)])));
+              specifiedType: const FullType(BuiltMap, const [
+                const FullType(int),
+                const FullType(EventCallback)
+              ]))!);
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
@@ -100,8 +101,8 @@ class _$FightSituationSerializer
         case 'playerTeamIds':
           result.playerTeamIds.replace(serializers.deserialize(value,
                   specifiedType:
-                      const FullType(BuiltSet, const [const FullType(int)]))
-              as BuiltSet<Object>);
+                      const FullType(BuiltSet, const [const FullType(int)]))!
+              as BuiltSet<Object?>);
           break;
         case 'roomRoamingSituationId':
           result.roomRoamingSituationId = serializers.deserialize(value,
@@ -138,19 +139,19 @@ class _$FightSituation extends FightSituation {
   @override
   final int turn;
 
-  factory _$FightSituation([void Function(FightSituationBuilder) updates]) =>
+  factory _$FightSituation([void Function(FightSituationBuilder)? updates]) =>
       (new FightSituationBuilder()..update(updates)).build();
 
   _$FightSituation._(
-      {this.droppedItems,
-      this.droppedItemsOutOfReach,
-      this.enemyTeamIds,
-      this.events,
-      this.groundMaterial,
-      this.id,
-      this.playerTeamIds,
-      this.roomRoamingSituationId,
-      this.turn})
+      {required this.droppedItems,
+      required this.droppedItemsOutOfReach,
+      required this.enemyTeamIds,
+      required this.events,
+      required this.groundMaterial,
+      required this.id,
+      required this.playerTeamIds,
+      required this.roomRoamingSituationId,
+      required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         droppedItems, 'FightSituation', 'droppedItems');
@@ -230,54 +231,54 @@ class _$FightSituation extends FightSituation {
 
 class FightSituationBuilder
     implements Builder<FightSituation, FightSituationBuilder> {
-  _$FightSituation _$v;
+  _$FightSituation? _$v;
 
-  ListBuilder<Item> _droppedItems;
+  ListBuilder<Item>? _droppedItems;
   ListBuilder<Item> get droppedItems =>
       _$this._droppedItems ??= new ListBuilder<Item>();
-  set droppedItems(ListBuilder<Item> droppedItems) =>
+  set droppedItems(ListBuilder<Item>? droppedItems) =>
       _$this._droppedItems = droppedItems;
 
-  ListBuilder<Item> _droppedItemsOutOfReach;
+  ListBuilder<Item>? _droppedItemsOutOfReach;
   ListBuilder<Item> get droppedItemsOutOfReach =>
       _$this._droppedItemsOutOfReach ??= new ListBuilder<Item>();
-  set droppedItemsOutOfReach(ListBuilder<Item> droppedItemsOutOfReach) =>
+  set droppedItemsOutOfReach(ListBuilder<Item>? droppedItemsOutOfReach) =>
       _$this._droppedItemsOutOfReach = droppedItemsOutOfReach;
 
-  SetBuilder<int> _enemyTeamIds;
+  SetBuilder<int>? _enemyTeamIds;
   SetBuilder<int> get enemyTeamIds =>
       _$this._enemyTeamIds ??= new SetBuilder<int>();
-  set enemyTeamIds(SetBuilder<int> enemyTeamIds) =>
+  set enemyTeamIds(SetBuilder<int>? enemyTeamIds) =>
       _$this._enemyTeamIds = enemyTeamIds;
 
-  MapBuilder<int, EventCallback> _events;
+  MapBuilder<int, EventCallback>? _events;
   MapBuilder<int, EventCallback> get events =>
       _$this._events ??= new MapBuilder<int, EventCallback>();
-  set events(MapBuilder<int, EventCallback> events) => _$this._events = events;
+  set events(MapBuilder<int, EventCallback>? events) => _$this._events = events;
 
-  String _groundMaterial;
-  String get groundMaterial => _$this._groundMaterial;
-  set groundMaterial(String groundMaterial) =>
+  String? _groundMaterial;
+  String? get groundMaterial => _$this._groundMaterial;
+  set groundMaterial(String? groundMaterial) =>
       _$this._groundMaterial = groundMaterial;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  SetBuilder<int> _playerTeamIds;
+  SetBuilder<int>? _playerTeamIds;
   SetBuilder<int> get playerTeamIds =>
       _$this._playerTeamIds ??= new SetBuilder<int>();
-  set playerTeamIds(SetBuilder<int> playerTeamIds) =>
+  set playerTeamIds(SetBuilder<int>? playerTeamIds) =>
       _$this._playerTeamIds = playerTeamIds;
 
-  int _roomRoamingSituationId;
-  int get roomRoamingSituationId => _$this._roomRoamingSituationId;
-  set roomRoamingSituationId(int roomRoamingSituationId) =>
+  int? _roomRoamingSituationId;
+  int? get roomRoamingSituationId => _$this._roomRoamingSituationId;
+  set roomRoamingSituationId(int? roomRoamingSituationId) =>
       _$this._roomRoamingSituationId = roomRoamingSituationId;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   FightSituationBuilder();
 
@@ -305,7 +306,7 @@ class FightSituationBuilder
   }
 
   @override
-  void update(void Function(FightSituationBuilder) updates) {
+  void update(void Function(FightSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -331,7 +332,7 @@ class FightSituationBuilder
               turn: BuiltValueNullFieldError.checkNotNull(
                   turn, 'FightSituation', 'turn'));
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'droppedItems';
         droppedItems.build();

@@ -127,8 +127,6 @@ class WritersInputGenerator extends Generator {
 
     // TODO: add at the top as static code
     final sourceWithAdditionalHeader =
-        "// @dart=2.9\n"
-        "\n"
         "// ignore_for_file: constant_identifier_names\n"
         "// ignore_for_file: non_constant_identifier_names\n"
         "// ignore_for_file: unused_local_variable\n"

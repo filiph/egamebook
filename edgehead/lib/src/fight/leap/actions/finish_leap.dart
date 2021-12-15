@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -18,7 +16,7 @@ class FinishLeap extends OtherActorAction {
   static final FinishLeap singleton = FinishLeap();
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -78,8 +76,8 @@ class FinishLeap extends OtherActorAction {
           actionThread: thread);
       const damage = 1;
       inflictPain(context, enemy.id, damage,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.torso));
-      w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
+          enemy.anatomy.findByDesignation(BodyPartDesignation.torso)!);
+      w.updateActorById(enemy.id, (b) => b..hitpoints = b.hitpoints! - damage);
     }
     return "${a.name} finishes leap at ${enemy.name}";
   }

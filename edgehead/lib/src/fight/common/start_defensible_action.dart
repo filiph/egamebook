@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -27,10 +25,10 @@ typedef PartialApplyFunction = void Function(
     WorldStateBuilder world,
     Storyline storyline,
     Actor enemy,
-    Situation /*!*/ mainSituation);
+    Situation mainSituation);
 
 typedef SuccessChanceGetter = ReasonedSuccessChance Function(
-    Actor a, Simulation /*!*/ sim, WorldState /*!*/ w, Actor enemy);
+    Actor a, Simulation sim, WorldState w, Actor enemy);
 
 typedef _DefenseSituationBuilder = DefenseSituation Function(
     Actor actor,
@@ -67,7 +65,7 @@ typedef _SituationBuilder = Situation Function(
 class StartDefensibleAction extends StartDefensibleActionBase {
   final PartialApplyFunction _applyStart;
 
-  final PartialApplyFunction _applyShortCircuit;
+  final PartialApplyFunction? _applyShortCircuit;
 
   final _SituationBuilder _mainSituationBuilder;
 
@@ -91,17 +89,17 @@ class StartDefensibleAction extends StartDefensibleActionBase {
   final bool rerollable;
 
   @override
-  final Resource rerollResource;
+  final Resource? rerollResource;
 
   @override
-  final String rollReasonTemplate;
+  final String? rollReasonTemplate;
 
   @override
   final String name;
 
-  final String commandPathTail;
+  final String? commandPathTail;
 
-  final CommandPathTailGenerator commandPathTailGenerator;
+  final CommandPathTailGenerator? commandPathTailGenerator;
 
   @override
   final CombatCommandType combatCommandType;
@@ -115,20 +113,20 @@ class StartDefensibleAction extends StartDefensibleActionBase {
   /// because we want the player-initiated action to create a "roll of dice"
   /// of some kind.
   StartDefensibleAction({
-    @required this.name,
-    @required this.combatCommandType,
-    @required this.helpMessage,
-    @required OtherActorApplicabilityFunction isApplicable,
-    @required PartialApplyFunction applyStart,
-    @required _SituationBuilder mainSituationBuilder,
-    @required _DefenseSituationBuilder defenseSituationBuilder,
-    @required SuccessChanceGetter successChanceGetter,
-    @required this.rerollable,
+    required this.name,
+    required this.combatCommandType,
+    required this.helpMessage,
+    required OtherActorApplicabilityFunction isApplicable,
+    required PartialApplyFunction applyStart,
+    required _SituationBuilder mainSituationBuilder,
+    required _DefenseSituationBuilder defenseSituationBuilder,
+    required SuccessChanceGetter successChanceGetter,
+    required this.rerollable,
     this.commandPathTail,
     this.commandPathTailGenerator,
     this.rerollResource,
     this.rollReasonTemplate,
-    PartialApplyFunction applyShortCircuit,
+    PartialApplyFunction? applyShortCircuit,
     this.isProactive = true,
   })  : _applyStart = applyStart,
         _mainSituationBuilder = mainSituationBuilder,
@@ -146,7 +144,7 @@ class StartDefensibleAction extends StartDefensibleActionBase {
   @override
   void applyShortCircuit(Actor actor, Simulation sim, WorldStateBuilder world,
           Storyline storyline, Actor enemy, Situation mainSituation) =>
-      _applyShortCircuit(actor, sim, world, storyline, enemy, mainSituation);
+      _applyShortCircuit!(actor, sim, world, storyline, enemy, mainSituation);
 
   @override
   void applyStart(Actor actor, Simulation sim, WorldStateBuilder world,
@@ -163,16 +161,16 @@ class StartDefensibleAction extends StartDefensibleActionBase {
       _defenseSituationBuilder(actor, sim, world, enemy, predetermination);
 
   @override
-  String /*!*/ getCommandPathTail(ApplicabilityContext context, Actor object) {
+  String getCommandPathTail(ApplicabilityContext context, Actor object) {
     if (commandPathTailGenerator != null) {
       assert(
           commandPathTail == null,
           "Supply either commandPathTailGenerator or commandPathTail, "
           "not both.");
-      return commandPathTailGenerator(context, context.actor, object);
+      return commandPathTailGenerator!(context, context.actor, object);
     }
     assert(commandPathTail != null);
-    return commandPathTail /*!*/;
+    return commandPathTail!;
   }
 
   @override

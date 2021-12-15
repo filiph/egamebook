@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -32,7 +30,7 @@ class PassWhileBlind extends OtherActorAction {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   List<String> get commandPathTemplate => ["Stand there"];
@@ -41,7 +39,7 @@ class PassWhileBlind extends OtherActorAction {
   String get name => className;
 
   @override
-  String get rollReasonTemplate => null;
+  String? get rollReasonTemplate => null;
 
   @override
   String applyFailure(ActionContext context, Actor enemy) {

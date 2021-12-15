@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/weapon_assault_result.dart';
@@ -24,7 +22,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
 
   w.updateActorById(enemy.id, (b) => b.replace(result.victim));
 
-  final weapon = a.currentWeaponOrBodyPart;
+  final weapon = a.currentWeaponOrBodyPart!;
   final damage = weapon.damageCapability.thrustingDamage;
   final groundMaterial = getGroundMaterial(w);
 
@@ -40,10 +38,10 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
           positive: true,
           actionThread: thread);
       if (!enemy.isOnGround) {
-        result.severedPart
+        result.severedPart!
             .report(s, '<subject> fall<s> to the ground', actionThread: thread);
       }
-      _placeBodyPartOnGround(w, result.severedPart);
+      _placeBodyPartOnGround(w, result.severedPart!);
     } else {
       weapon.report(
           s,
@@ -95,7 +93,7 @@ void applyThrust(WeaponAssaultResult result, ActionContext context, Actor enemy,
   }
 }
 
-void _placeBodyPartOnGround(WorldStateBuilder w, Item /*!*/ bodyPart) {
+void _placeBodyPartOnGround(WorldStateBuilder w, Item bodyPart) {
   final fightSituation =
       w.getSituationByName<FightSituation>(FightSituation.className);
   w.replaceSituationById<FightSituation>(fightSituation.id,

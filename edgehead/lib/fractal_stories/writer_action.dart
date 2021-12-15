@@ -70,7 +70,7 @@ class SimpleAction extends RoamingAction {
   final String simpleActionCommand;
 
   @override
-  final String helpMessage;
+  final String? helpMessage;
 
   @override
   final String name;

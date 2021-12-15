@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library edgehead.action_builders;
 
 import 'package:edgehead/fractal_stories/action.dart';
@@ -72,6 +70,8 @@ import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/act
 import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/jump_over_thrust_on_ground.dart';
 import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/shield_block_thrust_on_ground.dart';
 import 'package:egamebook_builder/instance_serializer.dart';
+
+import 'fractal_stories/actor.dart';
 
 part 'edgehead_action_builders_gather.gathered.dart';
 

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library edgehead.event_callbacks;
 
 // ignore_for_file: type_annotate_public_apis

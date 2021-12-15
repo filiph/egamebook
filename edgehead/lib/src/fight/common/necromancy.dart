@@ -1,5 +1,4 @@
-// @dart=2.9
-
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/anatomy/deep_replace_body_part.dart';
@@ -16,7 +15,7 @@ import 'package:meta/meta.dart';
 ActorBuilder buildCorpse(Actor necromancer, Actor corpse) {
   final corpseBuilder = corpse.toBuilder();
 
-  String adjective;
+  String? adjective;
   String name;
 
   if (corpse.name == 'undead') {
@@ -60,7 +59,7 @@ ActorBuilder buildCorpse(Actor necromancer, Actor corpse) {
 /// Necromancy in places with no dead humanoids will result in raising
 /// an insect. This returns that insect's name if it's still following the
 /// player, or `null` if there's no undead insect right now.
-String getUndeadInsectName(ApplicabilityContext context) {
+String? getUndeadInsectName(ApplicabilityContext context) {
   final latestRaising = context.world.customHistory
       .query(name: CustomEvent.actorRaisedInsect)
       .latest;
@@ -70,7 +69,7 @@ String getUndeadInsectName(ApplicabilityContext context) {
     return null;
   }
 
-  final name = latestRaising.data as String;
+  final name = latestRaising.data as String?;
 
   final latestPuttingToRest = context.world.customHistory
       .query(
@@ -117,8 +116,7 @@ String raiseDead(ActionContext context) {
       ? _getFightSituationCorpses(context)
       : _getRoomRoamingCorpses(context);
 
-  final decapitatedCorpse =
-      corpses.firstWhere(_isDecapitated, orElse: () => null);
+  final decapitatedCorpse = corpses.firstWhereOrNull(_isDecapitated);
   if (decapitatedCorpse != null) {
     decapitatedCorpse.report(s, "<subject> twitch<es>");
     decapitatedCorpse.report(
@@ -160,7 +158,7 @@ String raiseDead(ActionContext context) {
     raisedCorpse,
     (part) => part.isVital,
     (b) {
-      if (b.hitpoints > 0) return;
+      if (b.hitpoints! > 0) return;
       b.hitpoints = 1;
       healedParts.add(b.build());
     },
@@ -226,7 +224,7 @@ void reportRaiseDead(Actor a, Storyline s, Actor corpse) {
 }
 
 void reportRaiseInsect(Actor a, Storyline s, String insectName,
-    {@required bool firstTime}) {
+    {required bool firstTime}) {
   a.report(s, "<subject> perform<s> the necromantic incantation");
   a.report(s, "<subject> feel<s> it was successful");
   a.report(s, "<subject> look<s> around to see");
@@ -248,13 +246,13 @@ void reportRaiseInsect(Actor a, Storyline s, String insectName,
 }
 
 List<Actor> _getFightSituationCorpses(ApplicabilityContext context) {
-  final situation = context.world.currentSituation as FightSituation;
+  final situation = context.world.currentSituation as FightSituation?;
 
   return context.world.actors
       .where((Actor actor) =>
           actor.isActive &&
           !actor.isAnimated &&
-          (situation.playerTeamIds.contains(actor.id) ||
+          (situation!.playerTeamIds.contains(actor.id) ||
               situation.enemyTeamIds.contains(actor.id)))
       .toList();
 }
@@ -267,21 +265,21 @@ List<Actor> _getRoomRoamingCorpses(ApplicabilityContext context) {
   assert(context.world.currentSituation is RoomRoamingSituation);
 
   final currentRoom =
-      sim.getRoomParent(sim.getRoomByName(actor.currentRoomName));
+      sim.getRoomParent(sim.getRoomByName(actor.currentRoomName!));
 
   final corpses = w.actors.where((a) =>
       a.id != actor.id &&
       a.isActive &&
       !a.isAnimated &&
-      sim.getRoomParent(sim.getRoomByName(a.currentRoomName)) == currentRoom);
+      sim.getRoomParent(sim.getRoomByName(a.currentRoomName!)) == currentRoom);
 
   return corpses.toList();
 }
 
 bool _isDecapitated(Actor actor) {
-  final neck = actor.anatomy.findByDesignation(BodyPartDesignation.neck);
+  final neck = actor.anatomy.findByDesignation(BodyPartDesignation.neck)!;
   if (neck.isSevered) return true;
-  final head = actor.anatomy.findByDesignation(BodyPartDesignation.head);
+  final head = actor.anatomy.findByDesignation(BodyPartDesignation.head)!;
   if (head.isSevered) return true;
   return false;
 }

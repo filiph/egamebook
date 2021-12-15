@@ -142,6 +142,11 @@ final resourceType = TypeReference((b) => b
   ..symbol = 'Resource'
   ..url = 'package:edgehead/fractal_stories/action.dart');
 
+final resourceTypeNullable = (resourceType.toBuilder()
+      ..symbol = 'Resource?'
+      ..isNullable = true)
+    .build();
+
 final roomRoamingSituationType = TypeReference((b) => b
   ..symbol = 'RoomRoamingSituation'
   ..url = 'package:edgehead/src/room_roaming/room_roaming_situation.dart');
@@ -191,6 +196,11 @@ final storylineType = TypeReference((b) => b
   ..url = 'package:edgehead/fractal_stories/storyline/storyline.dart');
 
 final stringType = TypeReference((b) => b..symbol = 'String');
+
+final stringTypeNullable = (stringType.toBuilder()
+      ..symbol = 'String?'
+      ..isNullable = true)
+    .build();
 
 final voidType = TypeReference((b) => b..symbol = 'void');
 

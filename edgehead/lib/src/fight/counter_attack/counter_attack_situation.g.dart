@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.9
 
 part of stranded.fight.counter_attack_situation;
 
@@ -21,10 +20,10 @@ class _$CounterAttackSituationSerializer
   final String wireName = 'CounterAttackSituation';
 
   @override
-  Iterable<Object> serialize(
+  Iterable<Object?> serialize(
       Serializers serializers, CounterAttackSituation object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'counterAttacker',
       serializers.serialize(object.counterAttacker,
           specifiedType: const FullType(int)),
@@ -41,7 +40,7 @@ class _$CounterAttackSituationSerializer
 
   @override
   CounterAttackSituation deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new CounterAttackSituationBuilder();
 
@@ -49,7 +48,7 @@ class _$CounterAttackSituationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'counterAttacker':
           result.counterAttacker = serializers.deserialize(value,
@@ -85,11 +84,14 @@ class _$CounterAttackSituation extends CounterAttackSituation {
   final int turn;
 
   factory _$CounterAttackSituation(
-          [void Function(CounterAttackSituationBuilder) updates]) =>
+          [void Function(CounterAttackSituationBuilder)? updates]) =>
       (new CounterAttackSituationBuilder()..update(updates)).build();
 
   _$CounterAttackSituation._(
-      {this.counterAttacker, this.id, this.target, this.turn})
+      {required this.counterAttacker,
+      required this.id,
+      required this.target,
+      required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         counterAttacker, 'CounterAttackSituation', 'counterAttacker');
@@ -140,24 +142,24 @@ class _$CounterAttackSituation extends CounterAttackSituation {
 
 class CounterAttackSituationBuilder
     implements Builder<CounterAttackSituation, CounterAttackSituationBuilder> {
-  _$CounterAttackSituation _$v;
+  _$CounterAttackSituation? _$v;
 
-  int _counterAttacker;
-  int get counterAttacker => _$this._counterAttacker;
-  set counterAttacker(int counterAttacker) =>
+  int? _counterAttacker;
+  int? get counterAttacker => _$this._counterAttacker;
+  set counterAttacker(int? counterAttacker) =>
       _$this._counterAttacker = counterAttacker;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
 
-  int _target;
-  int get target => _$this._target;
-  set target(int target) => _$this._target = target;
+  int? _target;
+  int? get target => _$this._target;
+  set target(int? target) => _$this._target = target;
 
-  int _turn;
-  int get turn => _$this._turn;
-  set turn(int turn) => _$this._turn = turn;
+  int? _turn;
+  int? get turn => _$this._turn;
+  set turn(int? turn) => _$this._turn = turn;
 
   CounterAttackSituationBuilder();
 
@@ -180,7 +182,7 @@ class CounterAttackSituationBuilder
   }
 
   @override
-  void update(void Function(CounterAttackSituationBuilder) updates) {
+  void update(void Function(CounterAttackSituationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

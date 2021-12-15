@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -10,7 +8,7 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/loot/loot_situation.dart';
 
-class AutoLoot extends Action<Nothing /*?*/ > {
+class AutoLoot extends Action<Nothing?> {
   static final AutoLoot singleton = AutoLoot();
 
   static const String className = "AutoLoot";
@@ -28,13 +26,13 @@ class AutoLoot extends Action<Nothing /*?*/ > {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   List<String> get commandPathTemplate => const [];
 
   @override
-  String get helpMessage => null;
+  String? get helpMessage => null;
 
   @override
   String get name => className;
@@ -67,15 +65,15 @@ class AutoLoot extends Action<Nothing /*?*/ > {
       }
     }
 
-    Item takenWeapon;
-    Item takenShield;
+    Item? takenWeapon;
+    Item? takenShield;
     List<Item> takenItems = [];
     for (final item in situation.droppedItems) {
       final currentActor = world.getActorById(a.id);
       // If the player has a spear, they might be interested in wielding
       // a sword instead (because it adds slashing capability).
       final addsSlashingCapability =
-          currentActor.currentWeapon?.damageCapability?.isSlashing != true &&
+          currentActor.currentWeapon?.damageCapability.isSlashing != true &&
               item.damageCapability.isProperWeapon &&
               item.damageCapability.isSlashing;
       if (currentActor.anatomy.anyWeaponAppendageAvailable &&
@@ -243,7 +241,7 @@ class AutoLoot extends Action<Nothing /*?*/ > {
           !actor.inventory.items.contains(actor.currentWeapon)) {
         assert(
             false,
-            "Weapon ${actor.currentWeapon.name} held by ${actor.name} "
+            "Weapon ${actor.currentWeapon!.name} held by ${actor.name} "
             "isn't in their inventory.");
         return false;
       }
@@ -251,7 +249,7 @@ class AutoLoot extends Action<Nothing /*?*/ > {
           !actor.inventory.items.contains(actor.currentShield)) {
         assert(
             false,
-            "Shield ${actor.currentShield.name} held by ${actor.name} "
+            "Shield ${actor.currentShield!.name} held by ${actor.name} "
             "isn't in their inventory.");
         return false;
       }

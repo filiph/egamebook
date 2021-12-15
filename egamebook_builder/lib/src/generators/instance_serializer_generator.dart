@@ -117,13 +117,23 @@ class InstanceSerializerGenerator extends Generator {
               continue;
             }
 
-            if (topLevelElement is! ClassElement) continue;
+            if (topLevelElement is! ClassElement) {
+              log.finest('Skipping ${topLevelElement.name} '
+                  'because it is not a class');
+              continue;
+            }
 
             final classEl = topLevelElement;
-            final elements = classEl.fields.where((el) =>
-                el.isStatic &&
-                typeSystem.isAssignableTo(instanceType, el.type));
-            for (final element in elements) {
+            final staticElements = classEl.fields.where((el) =>
+                el.isStatic
+                );
+            for (final element in staticElements) {
+              log.finest('Found static element: ${element.name}');
+              if (!typeSystem.isAssignableTo(element.type, instanceType)) {
+                log.finest('Skipping element ${element.name} because its type '
+                    '${element.type} is not assignable to ${instanceType}');
+                continue;
+              }
               _writeElement(id, result, element, gatherLibrary,
                   '${classEl.name}.${element.name}');
               count++;

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -16,7 +14,7 @@ class FinishThrustAtGroundedEnemy extends OtherActorAction {
   static const String className = "FinishThrustSpearAtGroundedEnemy";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -53,7 +51,7 @@ class FinishThrustAtGroundedEnemy extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final damage = enemy.isInvincible ? enemy.hitpoints - 1 : enemy.hitpoints;
-    w.updateActorById(enemy.id, (b) => b..hitpoints -= damage);
+    w.updateActorById(enemy.id, (b) => b.hitpoints = b.hitpoints! - damage);
     final updatedEnemy = w.getActorById(enemy.id);
     // TODO: actually decide which body part to hit
     var bodyPart = enemy.isInvincible ? 'side' : '{throat|neck|heart}';
@@ -64,7 +62,7 @@ class FinishThrustAtGroundedEnemy extends OtherActorAction {
         object: updatedEnemy);
     if (enemy.isInvincible) {
       inflictPain(context, enemy.id, damage,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.neck));
+          enemy.anatomy.findByDesignation(BodyPartDesignation.neck)!);
     } else {
       killHumanoid(context, enemy.id);
     }
@@ -81,5 +79,5 @@ class FinishThrustAtGroundedEnemy extends OtherActorAction {
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, Actor enemy) =>
       enemy.isOnGround &&
-      (a.currentWeapon?.damageCapability?.isThrusting ?? false);
+      (a.currentWeapon?.damageCapability.isThrusting ?? false);
 }

@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/items/weapon_type.dart';
@@ -28,9 +26,9 @@ EnemyTargetAction startThrustDownBuilder() => StartDefensibleAction(
           !a.isOnGround &&
           !a.anatomy.isBlind &&
           // For weapons that are as long as a dagger or longer.
-          (a.currentWeapon?.damageCapability?.length ?? 0) >=
+          (a.currentWeapon?.damageCapability.length ?? 0) >=
               WeaponType.dagger.defaultLength &&
-          (a.currentWeapon?.damageCapability?.isThrusting ?? false),
+          (a.currentWeapon?.damageCapability.isThrusting ?? false),
       mainSituationBuilder: (a, sim, w, enemy) =>
           createStrikeThrustDownSituation(w.randomInt(), a, enemy),
       defenseSituationBuilder: (a, sim, w, enemy, predetermination) =>

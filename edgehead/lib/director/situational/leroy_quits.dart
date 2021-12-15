@@ -1,5 +1,3 @@
-// @dart=2.9
-
 part of edgehead_director;
 
 final _leroyQuitsAfterGoblinCamp =
@@ -44,7 +42,7 @@ final _leroyQuitsUpside = Rule(_id++, 2, true, (ApplicabilityContext c) {
   if (leroy.npc.followingActorId != playerId) return false;
   assert(c.inRoomWith(leroyId));
   // Anywhere above Battlefield floor?
-  return c.playerParentRoom.positionY <= 54;
+  return c.playerParentRoom.positionY! <= 54;
 }, (ActionContext c) {
   final WorldStateBuilder w = c.outputWorld;
   final Storyline s = c.outputStoryline;

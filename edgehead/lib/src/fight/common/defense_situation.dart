@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.defense_situation;
 
 import 'package:built_collection/built_collection.dart';
@@ -80,7 +78,7 @@ abstract class DefenseSituation extends Object
   int get turn;
 
   @override
-  DefenseSituation elapseTurn() => rebuild((b) => b.turn = b.turn /*!*/ + 1);
+  DefenseSituation elapseTurn() => rebuild((b) => b.turn = b.turn! + 1);
 
   @override
   ActorTurn getNextTurn(Simulation sim, WorldState w) {

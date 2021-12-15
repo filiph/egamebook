@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -16,7 +14,7 @@ class HireNpcAction extends OtherActorActionBase {
   List<String> get commandPathTemplate => ["<object>", "hire"];
 
   @override
-  String get helpMessage => null;
+  String? get helpMessage => null;
 
   @override
   bool get isAggressive => false;
@@ -34,10 +32,10 @@ class HireNpcAction extends OtherActorActionBase {
   bool get rerollable => false;
 
   @override
-  Resource get rerollResource => null;
+  Resource? get rerollResource => null;
 
   @override
-  String get rollReasonTemplate => null;
+  String? get rollReasonTemplate => null;
 
   @override
   String applyFailure(ActionContext context, Actor npc) {

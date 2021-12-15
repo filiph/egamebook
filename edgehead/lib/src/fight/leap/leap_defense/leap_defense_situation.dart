@@ -1,5 +1,3 @@
-// @dart=2.9
-
 library stranded.fight.leap_defense_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';

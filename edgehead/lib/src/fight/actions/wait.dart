@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
@@ -10,7 +8,7 @@ import 'package:edgehead/src/fight/actions/cower.dart';
 import 'package:edgehead/src/fight/actions/scramble.dart';
 import 'package:edgehead/src/fight/actions/thrash_around_blind.dart';
 
-class Wait extends Action<Nothing /*?*/ > {
+class Wait extends Action<Nothing?> {
   static final Wait singleton = Wait();
 
   static const String className = "Wait";
@@ -32,7 +30,7 @@ class Wait extends Action<Nothing /*?*/ > {
   final bool rerollable = false;
 
   @override
-  final Resource rerollResource = null;
+  final Resource? rerollResource = null;
 
   @override
   String get name => className;

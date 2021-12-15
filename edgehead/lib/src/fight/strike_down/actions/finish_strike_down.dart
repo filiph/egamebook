@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
@@ -15,7 +13,7 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
   static const String className = "FinishSlashGroundedEnemy";
 
   @override
-  final String helpMessage = null;
+  final String? helpMessage = null;
 
   @override
   final bool isAggressive = true;
@@ -62,7 +60,7 @@ class FinishSlashGroundedEnemy extends OtherActorAction {
         subject: a.currentWeaponOrBodyPart, object: updatedEnemy);
     if (enemy.isInvincible) {
       inflictPain(context, enemy.id, damage,
-          enemy.anatomy.findByDesignation(BodyPartDesignation.neck));
+          enemy.anatomy.findByDesignation(BodyPartDesignation.neck)!);
     } else {
       killHumanoid(context, enemy.id);
     }
