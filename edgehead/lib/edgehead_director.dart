@@ -9,8 +9,6 @@ import 'package:edgehead/ruleset/ruleset.dart';
 import 'package:edgehead/stateful_random/stateful_random.dart';
 import 'package:edgehead/writers_helpers.dart';
 
-import 'edgehead_ids.dart';
-
 part 'director/environmental/karl_heard.dart';
 part 'director/situational/darg_leaves_crowdsource.dart';
 part 'director/situational/leroy_quits.dart';
@@ -42,7 +40,7 @@ final _default = Rule(_id++, 0, false, (ApplicabilityContext c) {
   // Nothing here. Let's at least "log" this.
   c.outputWorld.recordCustom(evDirectorNoRuleApplicable);
 
-  if ((c.world.global as EdgeheadGlobalState).isInTesterMode) {
+  if ((c.world.global! as EdgeheadGlobalState).isInTesterMode) {
     // For now, also write out the time.
     final debugTime = c.world.time.difference(edgeheadStartingTime);
     c.outputStoryline.addParagraph();

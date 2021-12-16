@@ -5,7 +5,6 @@ import 'package:edgehead/fractal_stories/ink_ast.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/ink/ink_situation.dart';
-import 'package:meta/meta.dart';
 
 /// A specification of an ink choice, including the "pointer" to it
 /// in a given [InkAst].

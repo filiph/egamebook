@@ -12,7 +12,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/room_roaming/actions/slay_monsters.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
-import 'package:meta/meta.dart';
 
 extension ActionContextHelpers on ActionContext {
   void movePlayer(String locationName) {
@@ -228,14 +227,14 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   /// room (i.e. can do things like chatting or reading).
   bool get isInIdleRoom {
     if (world.currentSituation is! RoomRoamingSituation) return false;
-    final situation = world.currentSituation as RoomRoamingSituation;
+    final situation = world.currentSituation! as RoomRoamingSituation;
     if (situation.monstersAlive) return false;
     return simulation.getRoomByName(situation.currentRoomName).isIdle;
   }
 
   bool get monstersAlive {
     if (world.currentSituation is! RoomRoamingSituation) return false;
-    final situation = world.currentSituation as RoomRoamingSituation;
+    final situation = world.currentSituation! as RoomRoamingSituation;
     if (situation.monstersAlive) return false;
     return simulation.getRoomByName(situation.currentRoomName).isIdle;
   }
@@ -253,7 +252,7 @@ extension ApplicabilityContextHelpers on ApplicabilityContext {
   String get playerHairColor {
     final query =
         world.customHistory.query(name: ActionContextHelpers._playerHairColor);
-    return query.latest!.data as String;
+    return query.latest!.data! as String;
   }
 
   bool get playerHasBlondHair => playerHairColor == "blond";

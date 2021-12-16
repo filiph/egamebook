@@ -13,7 +13,7 @@ final Map<int, bool Function(ActionContext)> edgeheadActorDescribeOverrides = {
 
 bool _isFirstVisitToPyramidEntrance(ActionContext c) {
   final roomName =
-      (c.world.currentSituation as RoomRoamingSituation).currentRoomName;
+      (c.world.currentSituation! as RoomRoamingSituation).currentRoomName;
   if (roomName != 'pyramid_entrance') return false;
   final room = c.simulation.getRoomByName(roomName);
   final hasVisitedAnyVariant = c.world.visitHistory

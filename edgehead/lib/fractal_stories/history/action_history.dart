@@ -139,7 +139,7 @@ abstract class ActionRecord
   ///
   /// The actor is represented by his/her [Actor.id] since we only care about
   /// his/her identity, not his/her state at the time of action.
-  int get protagonist;
+  int? get protagonist;
 
   /// The actors that have been subjected to this action as targets.
   ///

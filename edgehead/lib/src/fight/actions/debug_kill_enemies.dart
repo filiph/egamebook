@@ -49,7 +49,7 @@ class DebugKillEnemies extends Action<Nothing?> {
         'and brings instant death to any of my enemies in this place.)',
         isRaw: true);
 
-    final situation = context.world.currentSituation as FightSituation;
+    final situation = context.world.currentSituation! as FightSituation;
     final animatedEnemies = context.world.actors.where((e) =>
         e.isAnimatedAndActive &&
         !e.isInvincible &&
@@ -88,5 +88,5 @@ class DebugKillEnemies extends Action<Nothing?> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
           WorldState world, void _) =>
-      a.isPlayer && (world.global as EdgeheadGlobalState).isInTesterMode;
+      a.isPlayer && (world.global! as EdgeheadGlobalState).isInTesterMode;
 }

@@ -55,7 +55,7 @@ class FinishSlash extends OtherActorAction {
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
 
-    final situation = context.world.currentSituation as AttackerSituation;
+    final situation = context.world.currentSituation! as AttackerSituation;
     assert(situation.name == slashSituationName);
 
     WeaponAssaultResult result;

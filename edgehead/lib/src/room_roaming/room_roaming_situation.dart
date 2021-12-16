@@ -172,11 +172,17 @@ abstract class RoomRoamingSituation extends Object
             room.describe != null,
             "$room visited for the second time but "
             "no regular description available.");
-        room.describe(afterMoveContext);
+        if (room.describe != null) {
+          // ignore: prefer_null_aware_method_calls
+          room.describe!(afterMoveContext);
+        } else {
+          _log.warning("Room ${room.name} has no firstDescribe or describe. "
+              "We're here for the first time.");
+        }
       } else {
         // Otherwise, show long description.
         s.addParagraph();
-        room.firstDescribe(afterMoveContext);
+        room.firstDescribe!(afterMoveContext);
         s.addParagraph();
       }
     } else if (!hasVisitedThisVariant) {
@@ -187,7 +193,13 @@ abstract class RoomRoamingSituation extends Object
             room.describe != null,
             "$room (variant) visited for the second time but "
             "no regular description available.");
-        room.describe(afterMoveContext);
+        if (room.describe != null) {
+          // ignore: prefer_null_aware_method_calls
+          room.describe!(afterMoveContext);
+        } else {
+          _log.warning("Room ${room.name} has no firstDescribe or describe. "
+              "We've been here, but not this variant of the room.");
+        }
       } else {
         // Otherwise, show long variant description.
         s.addParagraph();
@@ -200,7 +212,13 @@ abstract class RoomRoamingSituation extends Object
           room.describe != null,
           "$room visited for the second time but "
           "no regular description available.");
-      room.describe(afterMoveContext);
+      if (room.describe != null) {
+        // ignore: prefer_null_aware_method_calls
+        room.describe!(afterMoveContext);
+      } else {
+        _log.warning("Room ${room.name} has no firstDescribe or describe. "
+            "We've been in this variant before.");
+      }
     }
 
     // Only talk about NPCs and corpses _after_ the initial fight.

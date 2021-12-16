@@ -116,8 +116,7 @@ class ChainedFacts {
 
   /// A copy of [_chainEnums], but the keys are strings instead of types.
   static Map<String, List<String>> _generateChains() {
-    return Map<String, List<String>>.fromEntries(_chainEnums.keys.map(
-        ((Type e) => MapEntry(e.toString(), _chainEnums[e]!))
-            as MapEntry<String, List<String>> Function(Type)));
+    return Map<String, List<String>>.fromEntries(_chainEnums.keys
+        .map((Type e) => MapEntry(e.toString(), _chainEnums[e]!)));
   }
 }

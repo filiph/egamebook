@@ -113,7 +113,7 @@ class Eat extends InventoryItemAction {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, Item item) {
-    final situation = w.currentSituation as RoomRoamingSituation;
+    final situation = w.currentSituation! as RoomRoamingSituation;
     final room = sim.getRoomByName(situation.currentRoomName);
 
     if (room.isSynthetic) return false;

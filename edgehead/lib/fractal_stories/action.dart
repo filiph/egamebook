@@ -167,7 +167,7 @@ abstract class Action<T> {
     }
 
     assert(
-        commandPathTemplate != null && commandPathTemplate.isNotEmpty,
+        commandPathTemplate.isNotEmpty,
         "Actions with empty commandPathTemplate must override getCommandPath "
         "or must be isImplicit. Culprit: $this.");
 
@@ -317,7 +317,7 @@ abstract class OnGroundItemAction extends Action<Item> {
 
   @override
   Iterable<Item> generateObjects(ApplicabilityContext context) {
-    final situation = context.world.currentSituation as FightSituation;
+    final situation = context.world.currentSituation! as FightSituation;
     return situation.droppedItems;
   }
 
@@ -511,12 +511,8 @@ class Performance<T> {
 
   void _addWorldRecord(ActionRecordBuilder builder, WorldStateBuilder world,
       String description) {
-    if (description == null) {
-      throw StateError("No description given when executing $action. You "
-          "should return it from your world-modifying function.");
-    }
     builder.description = description;
-    builder.time = world.time!;
+    builder.time = world.time;
     world.recordAction(builder.build());
   }
 

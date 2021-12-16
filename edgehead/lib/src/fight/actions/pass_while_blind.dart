@@ -80,7 +80,7 @@ class PassWhileBlind extends OtherActorAction {
     if (w.currentSituation is! DefenseSituation) {
       return ReasonedSuccessChance.sureFailure;
     }
-    final situation = w.currentSituation as DefenseSituation;
+    final situation = w.currentSituation! as DefenseSituation;
     return situation.predeterminedChance.or(ReasonedSuccessChance.sureFailure);
   }
 

@@ -6,7 +6,6 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/history/history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
-import 'package:meta/meta.dart';
 
 part 'slay_history.g.dart';
 
@@ -33,7 +32,6 @@ abstract class SlayHistory implements Built<SlayHistory, SlayHistoryBuilder> {
   /// This doesn't care which actor finished the fight ([SlayRecord.actorId]).
   SerialQueryResult<SlayRecord> query(Room room,
       {bool includeVariants = false}) {
-    assert(room != null);
     final key = getKey(room);
     return SerialQueryResult(records[key].where((rec) {
       if (rec.roomName == room.name) return true;

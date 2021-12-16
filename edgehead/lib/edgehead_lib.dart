@@ -13,7 +13,6 @@ import 'package:edgehead/edgehead_serializers.dart' as edgehead_serializer;
 import 'package:edgehead/edgehead_simulation.dart';
 import 'package:edgehead/egamebook/book.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
-import 'package:edgehead/egamebook/elements/stat_initialization_element.dart';
 import 'package:edgehead/egamebook/slot_machine_result.dart' as slot;
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
@@ -369,7 +368,19 @@ class EdgeheadGame extends Book {
       return;
     }
 
+    if (actorTurn.actor == null) {
+      throw ArgumentError("actorTurn.actor is null. "
+          "That may mean that a Situation returns getCurrentActor as null. "
+          "Some action that you added should make sure it removes the "
+          "Situation "
+          "(maybe ${world.actionHistory.getLatest().description}?). "
+          "World: $world. "
+          "Situation: ${world.currentSituation}. "
+          "Action Records: "
+          "${world.actionHistory.describe()}");
+    }
     var actor = actorTurn.actor!;
+
     var planner = ActorPlanner(actor, simulation, world);
     planner.plan(
       // Don't plan ahead for the player, we are showing

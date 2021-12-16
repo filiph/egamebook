@@ -15,7 +15,6 @@ import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
 import 'package:edgehead/writers_context_extensions.dart';
-import 'package:meta/meta.dart';
 
 export 'package:edgehead/edgehead_facts_enums.dart';
 export 'package:edgehead/edgehead_facts_strings.dart';

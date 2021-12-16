@@ -9,7 +9,6 @@ import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
 import 'package:edgehead/src/room_roaming/room_roaming_situation.dart';
-import 'package:meta/meta.dart';
 
 /// Takes a dead [corpse] and transforms it into an undead [Actor], assigned
 /// to the [necromancer]'s team.
@@ -41,7 +40,6 @@ ActorBuilder buildCorpse(Actor necromancer, Actor corpse) {
     }
   }
 
-  assert(name != null);
   assert(adjective != null);
 
   corpseBuilder
@@ -174,7 +172,7 @@ String raiseDead(ActionContext context) {
   w.updateActorById(corpse.id, (b) => b.replace(healedCorpse));
 
   if (duringCombat) {
-    final situation = context.world.currentSituation as FightSituation;
+    final situation = context.world.currentSituation! as FightSituation;
     // Place undead in the correct team.
     w.replaceSituationById<FightSituation>(situation.id, situation.rebuild((b) {
       if (a.isPlayer) {

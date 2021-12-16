@@ -1,7 +1,5 @@
 library stranded.world_state;
 
-import 'dart:math' as math;
-
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
@@ -202,9 +200,6 @@ abstract class WorldState implements Built<WorldState, WorldStateBuilder> {
   /// the return is the same as with [timeSinceLastActionRecord].
   int? timeSinceLastAggressiveAction(
       {required Actor protagonist, required Actor sufferer}) {
-    assert(protagonist != null);
-    assert(sufferer != null);
-
     final hash = Actor.hashTwoActorIds(protagonist.id, sufferer.id);
     final latest = actionHistory.latestAggression[hash];
     if (latest == null) {
@@ -399,16 +394,19 @@ extension WorldStateBuilderHelpers on WorldStateBuilder {
 
   void recordAction(ActionRecord record) {
     actionHistory.records.add(record);
-    actionHistory.latestByActorId[record.protagonist] = record.time;
-    if (record.wasProactive) {
-      actionHistory.latestProactiveByActorId[record.protagonist] = record.time;
-    }
-    // Record aggressive action to [ActionHistory.latestAggression] for faster
-    // access.
-    if (record.wasAggressive && record.protagonist != null) {
-      for (final sufferer in record.sufferers) {
-        final hash = Actor.hashTwoActorIds(record.protagonist, sufferer);
-        actionHistory.latestAggression[hash] = record.time;
+    if (record.protagonist != null) {
+      var protagonist = record.protagonist!;
+      actionHistory.latestByActorId[protagonist] = record.time;
+      if (record.wasProactive) {
+        actionHistory.latestProactiveByActorId[protagonist] = record.time;
+      }
+      // Record aggressive action to [ActionHistory.latestAggression] for faster
+      // access.
+      if (record.wasAggressive) {
+        for (final sufferer in record.sufferers) {
+          final hash = Actor.hashTwoActorIds(protagonist, sufferer);
+          actionHistory.latestAggression[hash] = record.time;
+        }
       }
     }
   }

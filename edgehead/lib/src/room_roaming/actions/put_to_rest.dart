@@ -82,7 +82,7 @@ class PutToRest extends OtherActorActionBase {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, Actor object) {
-    final situation = w.currentSituation as RoomRoamingSituation;
+    final situation = w.currentSituation! as RoomRoamingSituation;
     final room = sim.getRoomByName(situation.currentRoomName);
 
     if (room.isSynthetic) return false;

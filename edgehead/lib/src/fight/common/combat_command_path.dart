@@ -135,7 +135,6 @@ mixin CombatCommandPath on EnemyTargetAction {
       case CombatCommandType.reaction:
         throw StateError('_getSecondCommand called with $combatCommandType');
     }
-    throw UnimplementedError('$combatCommandType not implemented');
   }
 
   String _getStanceCommand(Actor target) {

@@ -52,7 +52,7 @@ class FinishFeint extends OtherActorAction {
     assert(context.world.currentSituation is AttackerSituation);
 
     var type = feintTypeFromSituation(
-        context.world.currentSituation as AttackerSituation);
+        context.world.currentSituation! as AttackerSituation);
 
     String stringType;
     switch (type) {

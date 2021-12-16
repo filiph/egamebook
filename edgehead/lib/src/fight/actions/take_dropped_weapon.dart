@@ -49,7 +49,7 @@ class TakeDroppedWeapon extends OnGroundItemAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final situation = w.currentSituation as FightSituation;
+    final situation = w.currentSituation! as FightSituation;
     final previousWeapon = a.currentWeapon;
     w.replaceSituationById(
         situation.id,

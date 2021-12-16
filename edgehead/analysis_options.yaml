@@ -2,6 +2,7 @@ include: package:lint/analysis_options_package.yaml
 
 analyzer:
   exclude:
+    - lib/*.g.dart
     - lib/**/*.g.dart
   strong-mode:
     implicit-casts: false
@@ -15,6 +16,7 @@ linter:
     avoid_redundant_argument_values: false  # Building body parts is nicer
     lines_longer_than_80_chars: true
     missing_whitespace_between_adjacent_strings: false  # Storyline has this
+    prefer_null_aware_method_calls: false  # Forces you to use `.call()`
     prefer_if_elements_to_conditional_expressions: false  # I like ternary more
     prefer_final_locals: false  # Verbose
     require_trailing_commas: false  # Agree in theory, should fix

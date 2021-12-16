@@ -71,8 +71,6 @@ import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/act
 import 'package:edgehead/src/fight/thrust_on_ground/thrust_on_ground_defense/actions/shield_block_thrust_on_ground.dart';
 import 'package:egamebook_builder/instance_serializer.dart';
 
-import 'fractal_stories/actor.dart';
-
 part 'edgehead_action_builders_gather.gathered.dart';
 
 /// Some [Situation]s aren't defined as separate classes, but as instances.

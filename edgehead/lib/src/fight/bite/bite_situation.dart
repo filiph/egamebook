@@ -5,13 +5,11 @@ import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/bite/actions/finish_bite.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';
-import 'package:meta/meta.dart';
 
 const String biteSituationName = "BiteSituation";
 
 Situation createBiteSituation(int id, Actor attacker, Actor target,
     {required BodyPartDesignation designation}) {
-  assert(designation != null);
   return AttackerSituation.initialized(
     id,
     biteSituationName,

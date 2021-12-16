@@ -221,7 +221,7 @@ class ImpaleBiter extends OtherActorAction {
       const Bonus(50, CombatReason.targetHasAllLegsDisabled),
       const Bonus(50, CombatReason.targetHasAllEyesDisabled),
     ]);
-    final situation = w.currentSituation as DefenseSituation;
+    final situation = w.currentSituation! as DefenseSituation;
     return situation.predeterminedChance.or(chance);
   }
 

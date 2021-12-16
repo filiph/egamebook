@@ -79,7 +79,7 @@ class RollAwayFromBluntSwing extends OtherActorAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final situation = w.currentSituation as DefenseSituation;
+    final situation = w.currentSituation! as DefenseSituation;
     return situation.predeterminedChance
         .or(computeRollAwayFromBluntSwing(a, sim, w, enemy));
   }

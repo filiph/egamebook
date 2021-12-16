@@ -73,7 +73,7 @@ class AvoidSweepFeet extends OtherActorAction {
   @override
   ReasonedSuccessChance getSuccessChance(
       Actor a, Simulation sim, WorldState w, Actor enemy) {
-    final situation = w.currentSituation as DefenseSituation;
+    final situation = w.currentSituation! as DefenseSituation;
     return situation.predeterminedChance
         .or(computeAvoidSweep(a, sim, w, enemy));
   }

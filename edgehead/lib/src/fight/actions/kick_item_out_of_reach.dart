@@ -47,7 +47,7 @@ class KickItemOutOfReach extends OnGroundItemAction {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
-    final situation = w.currentSituation as FightSituation;
+    final situation = w.currentSituation! as FightSituation;
     w.replaceSituationById(
         situation.id,
         situation.rebuild((FightSituationBuilder b) => b

@@ -55,11 +55,11 @@ class PlannerRecommendation {
       return;
     }
 
-    var bestSelfPreserving = _findBest((score) => score.selfPreservation)!;
-    var bestEnemyDamaging =
-        _findBest((score) => -score.enemy, skip: [bestSelfPreserving])!;
+    var bestSelfPreserving = _findBest((score) => score.selfPreservation);
+    var bestEnemyDamaging = _findBest((score) => -score.enemy,
+        skip: [bestSelfPreserving].whereNotNull().toList());
     var bestTeamPreserving = _findBest((score) => score.teamPreservation,
-        skip: [bestSelfPreserving, bestEnemyDamaging]);
+        skip: [bestSelfPreserving, bestEnemyDamaging].whereNotNull().toList());
 
     int count = 0;
 
@@ -214,7 +214,5 @@ class _FoldedPerformance {
   final Performance performance;
   final num score;
 
-  const _FoldedPerformance(this.performance, this.score)
-      : assert(performance != null),
-        assert(score != null);
+  const _FoldedPerformance(this.performance, this.score);
 }

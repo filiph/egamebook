@@ -60,7 +60,7 @@ class FinishBluntSwing extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final damage = a.currentDamageCapability.slashingDamage;
-    final situation = context.world.currentSituation as AttackerSituation;
+    final situation = context.world.currentSituation! as AttackerSituation;
     assert(situation.name == bluntSwingSituationName);
 
     final result = _executeAtDesignation(

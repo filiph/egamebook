@@ -93,14 +93,14 @@ class Room {
   ///
   /// When this is `null`, then [describe] is used for the first
   /// visit as well for all other visits.
-  final RoomDescriber firstDescribe;
+  final RoomDescriber? firstDescribe;
 
   /// Describes the room with a short blurb, after player has already visited
   /// it at least once.
   ///
   /// When this is `null` and the player visits the room more than once,
   /// an [AssertionError] is thrown.
-  final RoomDescriber describe;
+  final RoomDescriber? describe;
 
   /// The description for when the player has visited this place before
   /// (they got the [firstDescribe], either from the main room, or a variant
@@ -218,8 +218,7 @@ class Room {
     this.hint,
     this.firstHint,
     this.fightIsOptional = false,
-  })  : assert(name != null),
-        assert(
+  })  : assert(
             describe != null || firstDescribe != null,
             "You must provide at least one description of the room. "
             "Ideally, you also provide both the first description and "

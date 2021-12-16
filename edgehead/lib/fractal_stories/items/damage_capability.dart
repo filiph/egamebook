@@ -33,7 +33,6 @@ abstract class DamageCapability
     int? length,
     bool isCleaving = false,
   }) {
-    assert(type != null);
     assert(
         type != WeaponType.invalid ||
             (bluntDamage == null &&

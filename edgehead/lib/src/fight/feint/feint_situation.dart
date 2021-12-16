@@ -27,7 +27,6 @@ String _feintTypeToString(FeintType type) {
     case FeintType.jab:
       return "jab";
   }
-  throw UnimplementedError('$type not covered');
 }
 
 enum FeintType {

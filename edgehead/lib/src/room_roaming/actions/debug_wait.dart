@@ -66,12 +66,12 @@ class WaitWhileRoamingAction extends Action<Nothing?> {
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
       WorldState w, Nothing? _) {
-    if (!(w.global as EdgeheadGlobalState).isInTesterMode) {
+    if (!(w.global! as EdgeheadGlobalState).isInTesterMode) {
       // Not available in normal gameplay.
       return false;
     }
 
-    final situation = w.currentSituation as RoomRoamingSituation;
+    final situation = w.currentSituation! as RoomRoamingSituation;
     final room = sim.getRoomByName(situation.currentRoomName);
 
     if (room.isSynthetic || !room.isOnMap) return false;

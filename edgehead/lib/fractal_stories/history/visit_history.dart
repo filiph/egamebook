@@ -6,7 +6,6 @@ import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/history/history.dart';
 import 'package:edgehead/fractal_stories/room.dart';
-import 'package:meta/meta.dart';
 
 part 'visit_history.g.dart';
 
@@ -48,8 +47,6 @@ abstract class VisitHistory
   /// visited it, set [includeVariants] to `true`.
   SerialQueryResult<VisitRecord> query(Actor actor, Room room,
       {bool includeVariants = false, String? fromRoomName}) {
-    assert(actor != null);
-    assert(room != null);
     final key = getKey(room);
     return SerialQueryResult(records[key].where((rec) {
       if (rec.actorId != actor.id) return false;

@@ -264,12 +264,11 @@ abstract class FightSituation extends Object
   void onPop(ActionContext context) {
     final sim = context.simulation;
     final world = context.outputWorld;
-    if (roomRoamingSituationId != null &&
-        !canFight(sim, world, enemyTeamIds) &&
+    if (!canFight(sim, world, enemyTeamIds) &&
         canFight(sim, world, playerTeamIds)) {
       // We should update the underlying roomRoamingSituation with the fact
       // that all monsters have been slain.
-      final situation = world.getSituationById(roomRoamingSituationId)
+      final situation = world.getSituationById(roomRoamingSituationId)!
           as RoomRoamingSituation;
       world.replaceSituationById(
           situation.id, situation.rebuild((b) => b..monstersAlive = false));

@@ -50,7 +50,7 @@ class FinishThrust extends OtherActorAction {
     Actor a = context.actor;
     Simulation sim = context.simulation;
     WorldStateBuilder w = context.outputWorld;
-    final situation = context.world.currentSituation as AttackerSituation;
+    final situation = context.world.currentSituation! as AttackerSituation;
     assert(situation.name == thrustSituationName);
     assert(situation.attackDirection != AttackDirection.fromLeft &&
         situation.attackDirection != AttackDirection.fromRight);

@@ -5,7 +5,6 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/history/history.dart';
-import 'package:meta/meta.dart';
 
 part 'custom_event_history.g.dart';
 

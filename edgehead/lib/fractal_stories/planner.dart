@@ -13,7 +13,6 @@ import 'package:edgehead/fractal_stories/time/actor_turn.dart';
 import 'package:edgehead/fractal_stories/util/ai_logger.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 
 class ActorPlanner {
   /// We will stop processing a plan path once its leaf node has lower
@@ -47,20 +46,8 @@ class ActorPlanner {
 
   ActorPlanner(Actor actor, this.simulation, WorldState initialWorld)
       : actorId = actor.id,
-        _initial = PlanConsequence.initial(initialWorld) {
-    if (actor == null) {
-      throw ArgumentError("Called ActorPlanner with actor == null. "
-          "That may mean that a Situation returns getCurrentActor as null. "
-          "Some action that you added should make sure it removes the "
-          "Situation "
-          "(maybe ${initialWorld.actionHistory.getLatest().description}?). "
-          "World: $initialWorld. "
-          "Situation: ${initialWorld.currentSituation}. "
-          "Action Records: "
-          "${initialWorld.actionHistory.describe()}");
-    }
-    assert(actor.isAnimated);
-  }
+        _initial = PlanConsequence.initial(initialWorld),
+        assert(actor.isAnimated);
 
   /// Computes the combined score for a bunch of consequences.
   ///

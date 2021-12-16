@@ -145,8 +145,6 @@ class AttackDirection extends EnumClass {
       case SlashDirection.right:
         return AttackDirection.fromRight;
     }
-    throw StateError(
-        "Direction $direction wasn't covered by the switch statement above.");
   }
 
   static AttackDirection valueOf(String name) => _$valueOfAttackDirection(name);

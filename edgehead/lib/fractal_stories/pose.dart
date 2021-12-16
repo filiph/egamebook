@@ -65,8 +65,6 @@ class Pose extends EnumClass implements Comparable<Pose> {
   ///     // or from extended to onGround).
   ///     actor.pose = actor.pose.changeBy(-2);
   Pose changeBy(int levels, {Pose max = Pose.combat}) {
-    assert(levels != null);
-    assert(max != null);
     final index = _sequence.indexOf(this);
     final maxIndex = _sequence.lastIndexOf(max);
     var newIndex = index + levels;

@@ -100,7 +100,7 @@ class PutInsectToRest extends Action<String> {
     // Much of the applicability happens in [generateObjects]. If we're here,
     // it means there's an insect we can put to rest.
 
-    final situation = w.currentSituation as RoomRoamingSituation;
+    final situation = w.currentSituation! as RoomRoamingSituation;
     final room = sim.getRoomByName(situation.currentRoomName);
 
     if (room.isSynthetic) return false;

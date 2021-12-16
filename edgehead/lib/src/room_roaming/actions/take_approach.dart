@@ -49,9 +49,7 @@ class TakeApproachAction extends Action<RoomPath> {
   String applySuccess(ActionContext context, RoomPath path) {
     Actor a = context.actor;
     WorldStateBuilder w = context.outputWorld;
-    if (path.approach!.description != null) {
-      path.approach!.description(context);
-    }
+    path.approach!.description(context);
 
     // The current situation might not be room roaming situation because
     // `path.approach.description` might have added another situation on top
@@ -65,7 +63,7 @@ class TakeApproachAction extends Action<RoomPath> {
 
   @override
   Iterable<RoomPath> generateObjects(ApplicabilityContext context) {
-    final situation = context.world.currentSituation as RoomRoamingSituation;
+    final situation = context.world.currentSituation! as RoomRoamingSituation;
     var room = context.simulation.getRoomByName(situation.currentRoomName);
     _log.finest(() => 'Generating approaches for ${context.actor} from $room');
 
@@ -166,7 +164,7 @@ class TakeApproachAction extends Action<RoomPath> {
       return false;
     }
 
-    if ((w.currentSituation as RoomRoamingSituation).monstersAlive &&
+    if ((w.currentSituation! as RoomRoamingSituation).monstersAlive &&
         !path.origin!.fightIsOptional) {
       // Don't allow exit taking when monsters in this room are still alive
       // and the fight isn't optional.
@@ -299,12 +297,7 @@ class RoomPath {
   final List<Room> intermediateRooms;
 
   const RoomPath(Room this.origin, Room this.from, this.destination,
-      Approach this.approach, this.intermediateRooms)
-      : assert(origin != null),
-        assert(from != null),
-        assert(destination != null),
-        assert(approach != null),
-        assert(intermediateRooms != null);
+      Approach this.approach, this.intermediateRooms);
 
   const RoomPath.start(this.destination)
       : origin = null,

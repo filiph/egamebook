@@ -58,7 +58,7 @@ class FinishBite extends OtherActorAction {
     WorldStateBuilder w = context.outputWorld;
     Storyline s = context.outputStoryline;
     final damage = a.currentDamageCapability.tearingDamage;
-    final situation = context.world.currentSituation as AttackerSituation;
+    final situation = context.world.currentSituation! as AttackerSituation;
     assert(situation.name == biteSituationName);
 
     final designation = situation.attackDirection.toBodyPartDesignation();

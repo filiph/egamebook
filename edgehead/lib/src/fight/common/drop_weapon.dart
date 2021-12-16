@@ -3,7 +3,6 @@ import 'package:edgehead/fractal_stories/item.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';
 import 'package:edgehead/src/fight/common/recently_disarmed.dart';
 import 'package:edgehead/src/fight/fight_situation.dart';
-import 'package:meta/meta.dart';
 
 /// Removes the current weapon from [actor] _without_ placing it on the floor.
 /// (Use [dropCurrentWeapon] for that.)
@@ -36,6 +35,9 @@ Item disarmActor(WorldStateBuilder w, Actor actor, {required bool forced}) {
 /// If this method is called when there is no [FightSituation]
 /// in the current [WorldState.situations] stack, it will throw.
 ///
+/// If this method is called when actor has no [Actor.currentWeapon],
+/// it will throw.
+///
 /// If [forced] is `true`, a [disarmedCustomEventName] event will be recorded.
 /// Otherwise, this is considered a voluntary dropping.
 ///
@@ -46,7 +48,6 @@ Item dropCurrentWeapon(WorldStateBuilder w, int actorId,
       w.getSituationByName<FightSituation>(FightSituation.className);
   final actor = w.getActorById(actorId);
   final weapon = actor.currentWeapon!;
-  assert(weapon != null);
   w.replaceSituationById(
       situation.id,
       situation

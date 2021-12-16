@@ -31,10 +31,7 @@ class Approach {
 
   const Approach(this.from, this.to, this.command, this.description,
       {this.isApplicable})
-      : isImplicit = command == r'$IMPLICIT',
-        assert(from != null),
-        assert(to != null),
-        assert(command != null);
+      : isImplicit = command == r'$IMPLICIT';
 
   @override
   String toString() => "Approach<$from->$to,$command>";

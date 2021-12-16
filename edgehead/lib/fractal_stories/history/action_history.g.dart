@@ -98,9 +98,6 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
       'description',
       serializers.serialize(object.description,
           specifiedType: const FullType(String)),
-      'protagonist',
-      serializers.serialize(object.protagonist,
-          specifiedType: const FullType(int)),
       'sufferers',
       serializers.serialize(object.sufferers,
           specifiedType: const FullType(BuiltSet, const [const FullType(int)])),
@@ -127,6 +124,12 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
         ..add('dataString')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
+    }
+    value = object.protagonist;
+    if (value != null) {
+      result
+        ..add('protagonist')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -157,7 +160,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           break;
         case 'protagonist':
           result.protagonist = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'sufferers':
           result.sufferers.replace(serializers.deserialize(value,
@@ -349,7 +352,7 @@ class _$ActionRecord extends ActionRecord {
   @override
   final String description;
   @override
-  final int protagonist;
+  final int? protagonist;
   @override
   final BuiltSet<int> sufferers;
   @override
@@ -370,7 +373,7 @@ class _$ActionRecord extends ActionRecord {
       {required this.actionName,
       this.dataString,
       required this.description,
-      required this.protagonist,
+      this.protagonist,
       required this.sufferers,
       required this.time,
       required this.wasAggressive,
@@ -382,8 +385,6 @@ class _$ActionRecord extends ActionRecord {
         actionName, 'ActionRecord', 'actionName');
     BuiltValueNullFieldError.checkNotNull(
         description, 'ActionRecord', 'description');
-    BuiltValueNullFieldError.checkNotNull(
-        protagonist, 'ActionRecord', 'protagonist');
     BuiltValueNullFieldError.checkNotNull(
         sufferers, 'ActionRecord', 'sufferers');
     BuiltValueNullFieldError.checkNotNull(time, 'ActionRecord', 'time');
@@ -530,8 +531,7 @@ class ActionRecordBuilder
               dataString: dataString,
               description: BuiltValueNullFieldError.checkNotNull(
                   description, 'ActionRecord', 'description'),
-              protagonist: BuiltValueNullFieldError.checkNotNull(
-                  protagonist, 'ActionRecord', 'protagonist'),
+              protagonist: protagonist,
               sufferers: sufferers.build(),
               time: BuiltValueNullFieldError.checkNotNull(
                   time, 'ActionRecord', 'time'),

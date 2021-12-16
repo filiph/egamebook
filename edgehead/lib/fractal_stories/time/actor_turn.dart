@@ -22,7 +22,6 @@ class ActorTurn {
   /// useful at the beginning of the game, when many actors have their
   /// [Actor.recoveringUntil] set in a distant past.
   factory ActorTurn(Actor actor, DateTime notBefore) {
-    assert(notBefore != null);
     var time = actor.recoveringUntil;
     if (time.isBefore(notBefore)) {
       time = notBefore;
@@ -36,9 +35,7 @@ class ActorTurn {
     return ActorTurn(actor, world.time);
   }
 
-  const ActorTurn._(Actor this.actor, DateTime this.time)
-      : assert(actor != null),
-        assert(time != null);
+  const ActorTurn._(Actor this.actor, DateTime this.time);
 
   const ActorTurn._never()
       : actor = null,

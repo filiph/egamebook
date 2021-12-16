@@ -104,7 +104,7 @@ ReasonedSuccessChance<CombatReason> getCombatMoveChance(
         "of 0 or below.");
     assert(
         !reasonsRequiringModifiers.contains(modifier.reason) ||
-            modifier is Modifier,
+            (modifier is! Bonus && modifier is! Penalty),
         "$modifier should be a Modifier");
     assert(
         !reasonsRequiringBonuses.contains(modifier.reason) || modifier is Bonus,
@@ -303,8 +303,6 @@ double _getAdjustmentScale(Actor performer, Actor target, CombatReason reason) {
       }
       throw StateError("Forgotten logic branch"); // ignore: dead_code
   }
-
-  throw ArgumentError("no rule for $reason");
 }
 
 double _lerp(double current, int bonus) {

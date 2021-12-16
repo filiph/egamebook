@@ -366,7 +366,6 @@ abstract class Actor extends Object
       case Resource.sanity:
         return sanity >= 1;
     }
-    throw StateError('unsupported resource: $resource');
   }
 
   /// When an [Actor] hates another actor, they will be willing and eager to
@@ -572,8 +571,6 @@ abstract class Actor extends Object
   }
 
   static int hashTwoActorIds(int a, int b) {
-    if (a == null) throw StateError('Hash cannot be computed');
-    if (b == null) throw StateError('Hash cannot be computed');
     return $jf($jc($jc(0, a), b));
   }
 }

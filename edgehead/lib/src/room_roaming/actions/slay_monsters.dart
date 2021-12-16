@@ -66,7 +66,7 @@ class AutoSlayMonstersAction extends Action<Nothing?> {
   @override
   bool isApplicable(
       ApplicabilityContext c, Actor a, Simulation sim, WorldState w, void _) {
-    final situation = w.currentSituation as RoomRoamingSituation;
+    final situation = w.currentSituation! as RoomRoamingSituation;
     Room room = sim.getRoomParent(sim.getRoomByName(situation.currentRoomName));
     return !room.fightIsOptional && situation.monstersAlive;
   }
