@@ -35,6 +35,6 @@ But for CI, you'll need to use the Dart `mono_repo` package:
 This installs the `mono_repo` command line tool.
 
 To run all tests in the whole mono_repo (the tests that will be run
-by Travis), use this command:
+by Github Actions), use this command:
 
     mono_repo presubmit
