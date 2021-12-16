@@ -340,4 +340,5 @@ dart2native benchmark/full.dart && ./benchmark/full.exe; tput bel
 | d2b01ea5 Speed up hateTowards | 3.64 | 0.02 | 83 | |
 | 2c36cb7e Avoid hateTowards bug | 2.17 | 0.01 | 139 | |
 | 1a6d84ef Avoid logging removed actors | 2.14 | 0.01 | 140 | |
-| latest: Upgrade to latest ... | 1.69 | 0.00 | 178 | Still non-null-safe, running on a new M1 computer, on battery power |
+| 18b62ec0 Upgrade to latest dependencies | 1.69 | 0.00 | 178 | Still non-null-safe, running on a new M1 computer, on battery power |
+| d427248f Finish migration | 1.22 | 0.00 | 247 | First commit after null safety, M1 on battery power |
