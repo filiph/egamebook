@@ -1,0 +1,193 @@
+# Created with package:mono_repo v6.0.0
+name: Dart CI
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+defaults:
+  run:
+    shell: bash
+env:
+  PUB_ENVIRONMENT: bot.github
+
+jobs:
+  job_001:
+    name: "analyze; PKG: edgehead; `dart analyze`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2.1.7
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead;commands:analyze"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2.4.0
+      - id: edgehead_pub_upgrade
+        name: edgehead; dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: edgehead
+        run: dart pub upgrade
+      - name: edgehead; dart analyze
+        if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
+        working-directory: edgehead
+        run: dart analyze
+  job_002:
+    name: "analyze; PKG: egamebook_builder; `dart analyze`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2.1.7
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder;commands:analyze"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2.4.0
+      - id: egamebook_builder_pub_upgrade
+        name: egamebook_builder; dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: egamebook_builder
+        run: dart pub upgrade
+      - name: egamebook_builder; dart analyze
+        if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: egamebook_builder
+        run: dart analyze
+  job_003:
+    name: "analyze; PKG: edgehead; `dart format --output=none --set-exit-if-changed .`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2.1.7
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead;commands:format"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2.4.0
+      - id: edgehead_pub_upgrade
+        name: edgehead; dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: edgehead
+        run: dart pub upgrade
+      - name: "edgehead; dart format --output=none --set-exit-if-changed ."
+        if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
+        working-directory: edgehead
+        run: "dart format --output=none --set-exit-if-changed ."
+  job_004:
+    name: "analyze; PKG: egamebook_builder; `dart format --output=none --set-exit-if-changed .`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2.1.7
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder;commands:format"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2.4.0
+      - id: egamebook_builder_pub_upgrade
+        name: egamebook_builder; dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: egamebook_builder
+        run: dart pub upgrade
+      - name: "egamebook_builder; dart format --output=none --set-exit-if-changed ."
+        if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: egamebook_builder
+        run: "dart format --output=none --set-exit-if-changed ."
+  job_005:
+    name: "unit_test; PKG: edgehead; `dart test`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2.1.7
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead;commands:test"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2.4.0
+      - id: edgehead_pub_upgrade
+        name: edgehead; dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: edgehead
+        run: dart pub upgrade
+      - name: edgehead; dart test
+        if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
+        working-directory: edgehead
+        run: dart test
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
+  job_006:
+    name: "unit_test; PKG: egamebook_builder; `dart test`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2.1.7
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder;commands:test"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v1.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2.4.0
+      - id: egamebook_builder_pub_upgrade
+        name: egamebook_builder; dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: egamebook_builder
+        run: dart pub upgrade
+      - name: egamebook_builder; dart test
+        if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: egamebook_builder
+        run: dart test
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
