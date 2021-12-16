@@ -658,10 +658,10 @@ class ReasonedSuccessChance<R> {
       {List<Reason<R>>? successReasons, List<Reason<R>>? failureReasons})
       // ignore: prefer_void_to_null
       : successReasons =
-            (successReasons ?? const <Reason<void>>[]) as List<Reason<R>>,
+            (successReasons ?? const <Reason<Object>>[]) as List<Reason<R>>,
         // ignore: prefer_void_to_null
         failureReasons =
-            (failureReasons ?? const <Reason<void>>[]) as List<Reason<R>>;
+            (failureReasons ?? const <Reason<Object>>[]) as List<Reason<R>>;
 
   /// Creates an inversion of this [ReasonedSuccessChance].
   ///
