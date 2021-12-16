@@ -1,16 +1,9 @@
-dart:
-  - stable
+sdk:
+ - stable
 
 stages:
-  - smoke_test:
-    - description: "dartfmt && dartanalyzer"
-      group:
-        - dartfmt
-        - dartanalyzer: --fatal-infos --fatal-warnings .
+  - analyze:
+    - analyze
+    - format
   - unit_test:
-    - group:
-      - command: pub run test
-
-cache:
-  directories:
-    - .dart_tool/build
+    - test
