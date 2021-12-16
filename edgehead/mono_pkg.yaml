@@ -2,15 +2,12 @@ sdk:
  - stable
 
 stages:
-  - build:
-    - command: pub run build_runner build --delete-conflicting-outputs
   - analyze:
     - analyze: --fatal-infos --fatal-warnings .
     - format
   - unit_test:
-    - test
+    - command: pub run build_runner build --delete-conflicting-outputs && dart test
 
-#        - dartanalyzer: --fatal-infos --fatal-warnings .
 #  - build:
 #    - command: pub run build_runner build --delete-conflicting-outputs
 #      - command: pub run test -t long-running --run-skipped

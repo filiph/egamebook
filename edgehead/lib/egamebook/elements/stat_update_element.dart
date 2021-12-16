@@ -2,9 +2,8 @@ library egamebook.element.stat_update;
 
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:edgehead/egamebook/elements/element_base.dart';
 import 'package:edgehead/stat.dart';
-
-import 'element_base.dart';
 
 part 'stat_update_element.g.dart';
 

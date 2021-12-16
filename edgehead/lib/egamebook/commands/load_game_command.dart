@@ -3,7 +3,7 @@ library egamebook.command.load_game;
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-import 'command_base.dart';
+import 'package:edgehead/egamebook/commands/command_base.dart';
 
 part 'load_game_command.g.dart';
 

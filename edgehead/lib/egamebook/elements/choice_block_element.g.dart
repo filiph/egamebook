@@ -18,13 +18,13 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
   Iterable<Object?> serialize(Serializers serializers, ChoiceBlock object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[
-      'saveGame',
-      serializers.serialize(object.saveGame,
-          specifiedType: const FullType(SaveGame)),
       'choices',
       serializers.serialize(object.choices,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Choice)])),
+      'saveGame',
+      serializers.serialize(object.saveGame,
+          specifiedType: const FullType(SaveGame)),
     ];
 
     return result;
@@ -41,15 +41,15 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
-        case 'saveGame':
-          result.saveGame.replace(serializers.deserialize(value,
-              specifiedType: const FullType(SaveGame))! as SaveGame);
-          break;
         case 'choices':
           result.choices.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(Choice)]))!
               as BuiltList<Object?>);
+          break;
+        case 'saveGame':
+          result.saveGame.replace(serializers.deserialize(value,
+              specifiedType: const FullType(SaveGame))! as SaveGame);
           break;
       }
     }
@@ -60,16 +60,16 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
 
 class _$ChoiceBlock extends ChoiceBlock {
   @override
-  final SaveGame saveGame;
-  @override
   final BuiltList<Choice> choices;
+  @override
+  final SaveGame saveGame;
 
   factory _$ChoiceBlock([void Function(ChoiceBlockBuilder)? updates]) =>
       (new ChoiceBlockBuilder()..update(updates)).build();
 
-  _$ChoiceBlock._({required this.saveGame, required this.choices}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(saveGame, 'ChoiceBlock', 'saveGame');
+  _$ChoiceBlock._({required this.choices, required this.saveGame}) : super._() {
     BuiltValueNullFieldError.checkNotNull(choices, 'ChoiceBlock', 'choices');
+    BuiltValueNullFieldError.checkNotNull(saveGame, 'ChoiceBlock', 'saveGame');
   }
 
   @override
@@ -83,20 +83,20 @@ class _$ChoiceBlock extends ChoiceBlock {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ChoiceBlock &&
-        saveGame == other.saveGame &&
-        choices == other.choices;
+        choices == other.choices &&
+        saveGame == other.saveGame;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, saveGame.hashCode), choices.hashCode));
+    return $jf($jc($jc(0, choices.hashCode), saveGame.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ChoiceBlock')
-          ..add('saveGame', saveGame)
-          ..add('choices', choices))
+          ..add('choices', choices)
+          ..add('saveGame', saveGame))
         .toString();
   }
 }
@@ -104,22 +104,22 @@ class _$ChoiceBlock extends ChoiceBlock {
 class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
   _$ChoiceBlock? _$v;
 
-  SaveGameBuilder? _saveGame;
-  SaveGameBuilder get saveGame => _$this._saveGame ??= new SaveGameBuilder();
-  set saveGame(SaveGameBuilder? saveGame) => _$this._saveGame = saveGame;
-
   ListBuilder<Choice>? _choices;
   ListBuilder<Choice> get choices =>
       _$this._choices ??= new ListBuilder<Choice>();
   set choices(ListBuilder<Choice>? choices) => _$this._choices = choices;
+
+  SaveGameBuilder? _saveGame;
+  SaveGameBuilder get saveGame => _$this._saveGame ??= new SaveGameBuilder();
+  set saveGame(SaveGameBuilder? saveGame) => _$this._saveGame = saveGame;
 
   ChoiceBlockBuilder();
 
   ChoiceBlockBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _saveGame = $v.saveGame.toBuilder();
       _choices = $v.choices.toBuilder();
+      _saveGame = $v.saveGame.toBuilder();
       _$v = null;
     }
     return this;
@@ -142,14 +142,14 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
     try {
       _$result = _$v ??
           new _$ChoiceBlock._(
-              saveGame: saveGame.build(), choices: choices.build());
+              choices: choices.build(), saveGame: saveGame.build());
     } catch (_) {
       late String _$failedField;
       try {
-        _$failedField = 'saveGame';
-        saveGame.build();
         _$failedField = 'choices';
         choices.build();
+        _$failedField = 'saveGame';
+        saveGame.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'ChoiceBlock', _$failedField, e.toString());

@@ -3,8 +3,7 @@ library egamebook.element.choice;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-
-import 'element_base.dart';
+import 'package:edgehead/egamebook/elements/element_base.dart';
 
 part 'choice_element.g.dart';
 

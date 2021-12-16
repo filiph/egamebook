@@ -2,8 +2,7 @@ library egamebook.element.slot_machine;
 
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-
-import 'element_base.dart';
+import 'package:edgehead/egamebook/elements/element_base.dart';
 
 part 'slot_machine_element.g.dart';
 

@@ -30,14 +30,14 @@ typedef PartialApplyFunction = void Function(
 typedef SuccessChanceGetter = ReasonedSuccessChance Function(
     Actor a, Simulation sim, WorldState w, Actor enemy);
 
-typedef _DefenseSituationBuilder = DefenseSituation Function(
+typedef DefenseSituationBuilder = DefenseSituation Function(
     Actor actor,
     Simulation sim,
     WorldStateBuilder world,
     Actor enemy,
     Predetermination predetermination);
 
-typedef _SituationBuilder = Situation Function(
+typedef MainSituationBuilder = Situation Function(
     Actor actor, Simulation sim, WorldStateBuilder world, Actor enemy);
 
 /// This is a utility class that makes it easier to build actions that put
@@ -67,9 +67,9 @@ class StartDefensibleAction extends StartDefensibleActionBase {
 
   final PartialApplyFunction? _applyShortCircuit;
 
-  final _SituationBuilder _mainSituationBuilder;
+  final MainSituationBuilder _mainSituationBuilder;
 
-  final _DefenseSituationBuilder _defenseSituationBuilder;
+  final DefenseSituationBuilder _defenseSituationBuilder;
 
   final SuccessChanceGetter _successChanceGetter;
 
@@ -118,8 +118,8 @@ class StartDefensibleAction extends StartDefensibleActionBase {
     required this.helpMessage,
     required OtherActorApplicabilityFunction isApplicable,
     required PartialApplyFunction applyStart,
-    required _SituationBuilder mainSituationBuilder,
-    required _DefenseSituationBuilder defenseSituationBuilder,
+    required MainSituationBuilder mainSituationBuilder,
+    required DefenseSituationBuilder defenseSituationBuilder,
     required SuccessChanceGetter successChanceGetter,
     required this.rerollable,
     this.commandPathTail,
