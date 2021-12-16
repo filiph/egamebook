@@ -71,6 +71,10 @@ for PKG in ${PKGS}; do
         echo 'dart analyze --fatal-infos --fatal-warnings .'
         dart analyze --fatal-infos --fatal-warnings . || EXIT_CODE=$?
         ;;
+      command)
+        echo 'pub run build_runner build --delete-conflicting-outputs'
+        pub run build_runner build --delete-conflicting-outputs || EXIT_CODE=$?
+        ;;
       format)
         echo 'dart format --output=none --set-exit-if-changed .'
         dart format --output=none --set-exit-if-changed . || EXIT_CODE=$?
