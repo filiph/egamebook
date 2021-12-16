@@ -1,4 +1,4 @@
-# Edgehead [![Build Status](https://travis-ci.com/filiph/egamebook.svg?branch=master)](https://travis-ci.com/filiph/egamebook)
+# Edgehead [![Build status](https://github.com/filiph/egamebook/actions/workflows/dart.yml/badge.svg)](https://github.com/filiph/egamebook/actions/workflows/dart.yml)
 
 > "Skyrim, if it was Choose-Your-Own-Adventure, but still allowed the same
 > freedom."

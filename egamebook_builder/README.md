@@ -1,4 +1,4 @@
-# egamebook_builder
+# egamebook_builder [![Build status](https://github.com/filiph/egamebook/actions/workflows/dart.yml/badge.svg)](https://github.com/filiph/egamebook/actions/workflows/dart.yml)
 
 A library of builders intended for [egamebook.com][] projects.
 

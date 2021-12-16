@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/filiph/egamebook.svg?branch=master)](https://travis-ci.com/filiph/egamebook)
+[![Build status](https://github.com/filiph/egamebook/actions/workflows/dart.yml/badge.svg)](https://github.com/filiph/egamebook/actions/workflows/dart.yml)
 
 Welcome to the code repository for the egamebook project.
 
