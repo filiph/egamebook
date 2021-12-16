@@ -1,5 +1,4 @@
 import 'package:code_builder/code_builder.dart';
-import 'package:code_builder/src/base.dart';
 import 'package:egamebook_builder/src/parse_writers_input/add_writers_statements.dart';
 import 'package:egamebook_builder/src/parse_writers_input/generated_game_object.dart';
 import 'package:egamebook_builder/src/parse_writers_input/parse_ink.dart';

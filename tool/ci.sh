@@ -68,8 +68,8 @@ for PKG in ${PKGS}; do
       echo -e "\033[1mPKG: ${PKG}; TASK: ${TASK}\033[22m"
       case ${TASK} in
       analyze)
-        echo 'dart analyze'
-        dart analyze || EXIT_CODE=$?
+        echo 'dart analyze --fatal-infos --fatal-warnings .'
+        dart analyze --fatal-infos --fatal-warnings . || EXIT_CODE=$?
         ;;
       format)
         echo 'dart format --output=none --set-exit-if-changed .'

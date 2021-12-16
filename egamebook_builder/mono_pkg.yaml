@@ -3,7 +3,7 @@ sdk:
 
 stages:
   - analyze:
-    - analyze
+    - analyze: --fatal-infos --fatal-warnings .
     - format
   - unit_test:
     - test
