@@ -14,7 +14,7 @@ env:
 
 jobs:
   job_001:
-    name: "analyze; PKG: edgehead; `dart analyze`"
+    name: "analyze; PKG: edgehead; `dart analyze --fatal-infos --fatal-warnings .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -37,12 +37,12 @@ jobs:
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: edgehead
         run: dart pub upgrade
-      - name: edgehead; dart analyze
+      - name: "edgehead; dart analyze --fatal-infos --fatal-warnings ."
         if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
         working-directory: edgehead
-        run: dart analyze
+        run: dart analyze --fatal-infos --fatal-warnings .
   job_002:
-    name: "analyze; PKG: egamebook_builder; `dart analyze`"
+    name: "analyze; PKG: egamebook_builder; `dart analyze --fatal-infos --fatal-warnings .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -65,10 +65,10 @@ jobs:
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: egamebook_builder
         run: dart pub upgrade
-      - name: egamebook_builder; dart analyze
+      - name: "egamebook_builder; dart analyze --fatal-infos --fatal-warnings ."
         if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
         working-directory: egamebook_builder
-        run: dart analyze
+        run: dart analyze --fatal-infos --fatal-warnings .
   job_003:
     name: "analyze; PKG: edgehead; `dart format --output=none --set-exit-if-changed .`"
     runs-on: ubuntu-latest
