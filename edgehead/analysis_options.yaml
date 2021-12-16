@@ -19,6 +19,7 @@ linter:
     prefer_null_aware_method_calls: false  # Forces you to use `.call()`
     prefer_if_elements_to_conditional_expressions: false  # I like ternary more
     prefer_final_locals: false  # Verbose
+    prefer_single_quotes: false  # Way too painful when using normal English.
     require_trailing_commas: false  # Agree in theory, should fix
     unnecessary_raw_strings: false  # It seem safer to raw some strings
     use_function_type_syntax_for_parameters: false  # Agree in theory
