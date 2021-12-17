@@ -585,7 +585,7 @@ class EdgeheadGame extends Book {
 /// An exception to be thrown when [new EdgeheadGame] is called with
 /// an outdated or corrupt savegame.
 class EdgeheadSaveGameParseException implements Exception {
-  final Error underlyingError;
+  final Error? underlyingError;
 
   final String stackTrace;
 
