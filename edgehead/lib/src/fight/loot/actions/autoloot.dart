@@ -166,6 +166,9 @@ class AutoLoot extends Action<Nothing?> {
             a.id != player.id);
     for (final friend in unshielded) {
       if (shields.isEmpty) break;
+      if (!friend.anatomy.secondaryWeaponAppendageAvailable) {
+        continue;
+      }
       var shield = shields.removeLast();
       world.updateActorById(
           friend.id, (b) => b.inventory.equipShield(shield, friend.anatomy));
