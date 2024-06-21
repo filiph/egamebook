@@ -1,4 +1,4 @@
-part of storyline.shadow_graph;
+part of '../shadow_graph.dart';
 
 /// A list of [IdentifierLevel]s, going from most verbose to least.
 ///

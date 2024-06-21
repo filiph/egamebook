@@ -1,11 +1,11 @@
-/// UI of the book. Egamebook UIs, be they CLI-based, web-based or Flutter-based
-/// all need to subclass [Presenter].
 import 'dart:async';
 
 import 'package:edgehead/egamebook/book.dart';
 import 'package:edgehead/egamebook/elements/elements.dart';
 import 'package:meta/meta.dart';
 
+/// UI of the book. Egamebook UIs, be they CLI-based, web-based or Flutter-based
+/// all need to subclass [Presenter].
 abstract class Presenter<T extends Book> implements Sink<ElementBase> {
   @protected
   T? book;

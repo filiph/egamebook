@@ -329,7 +329,7 @@ bool _partDisabled(Actor actor, BodyPartDesignation designation) {
 /// A [Bonus] can evaluate to `0` adjustment.
 @immutable
 class Bonus<R> extends Modifier<R> {
-  const Bonus(int maxAdjustment, R reason) : super(maxAdjustment, reason);
+  const Bonus(super.maxAdjustment, super.reason);
 }
 
 /// Reasons for the performer of a move (e.g. attacker) to be successful
@@ -439,5 +439,5 @@ class Modifier<R> {
 /// A [Penalty] can evaluate to `0` adjustment.
 @immutable
 class Penalty<R> extends Modifier<R> {
-  const Penalty(int maxAdjustment, R reason) : super(maxAdjustment, reason);
+  const Penalty(super.maxAdjustment, super.reason);
 }

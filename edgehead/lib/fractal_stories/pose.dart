@@ -44,7 +44,7 @@ class Pose extends EnumClass implements Comparable<Pose> {
         combat,
       ];
 
-  const Pose._(String name) : super(name);
+  const Pose._(super.name);
 
   bool operator <(Pose other) => compareTo(other) < 0;
 

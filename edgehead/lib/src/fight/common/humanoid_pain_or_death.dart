@@ -141,17 +141,14 @@ void killHumanoid(ActionContext context, int actorId) {
           : '';
       actor.report(s, "<subject> collapse<s>, dead$again",
           negative: true, endSentence: true);
-      break;
     case 1:
       actor.report(s, "<subject> fall<s> backward", negative: true);
       actor.report(s, "<subject> twist<s>", negative: true);
       actor.report(s, "<subject> hit<s> the $groundMaterial face down",
           negative: true, endSentence: true);
-      break;
     case 2:
       actor.report(s, "<subject> drop<s> to <subject's> knees", negative: true);
       actor.report(s, "<subject> keel<s> over", negative: true);
-      break;
   }
   s.addParagraph();
 }

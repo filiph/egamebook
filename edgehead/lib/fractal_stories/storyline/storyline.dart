@@ -652,42 +652,30 @@ class Storyline {
           switch (conjunction) {
             case SentenceConjunction.nothing:
               needsCapitalization = true;
-              break;
             case SentenceConjunction.and:
               strBuf.write('And ');
-              break;
             case SentenceConjunction.but:
               strBuf.write('But ');
-              break;
           }
-          break;
         case SentenceJoinType.period:
           strBuf.write('. ');
           switch (conjunction) {
             case SentenceConjunction.nothing:
               needsCapitalization = true;
-              break;
             case SentenceConjunction.and:
               strBuf.write('And ');
-              break;
             case SentenceConjunction.but:
               strBuf.write('But ');
-              break;
           }
-          break;
         case SentenceJoinType.comma:
           switch (conjunction) {
             case SentenceConjunction.nothing:
               strBuf.write(', ');
-              break;
             case SentenceConjunction.and:
               strBuf.write(' and ');
-              break;
             case SentenceConjunction.but:
               strBuf.write(' but ');
-              break;
           }
-          break;
       }
 
       String randomReport = _reports[i].string;
@@ -1071,7 +1059,6 @@ class Storyline {
             throw UnimplementedError('Only subjects can be omitted in $result, '
                 'but $qualifications show it for $complement');
           }
-          break;
 
         case IdentifierLevel.pronoun:
           result = _replaceFirstThenAll(
@@ -1085,7 +1072,6 @@ class Storyline {
               complement.genericPossessive: complement.pronounPossessive,
             },
           );
-          break;
         case IdentifierLevel.adjectiveOne:
           result = _replaceFirstThenAll(
             result,
@@ -1098,7 +1084,6 @@ class Storyline {
               complement.genericPossessive: complement.pronounPossessive,
             },
           );
-          break;
         // IdentifierLevel.ownerNoun renders the same as IdentifierLevel.noun.
         // That level only forces owners to appear before the noun.
         case IdentifierLevel.ownerNoun:
@@ -1114,7 +1099,6 @@ class Storyline {
               complement.genericPossessive: complement.pronounPossessive,
             },
           );
-          break;
         // IdentifierLevel.ownerAdjectiveNoun renders the same as
         // IdentifierLevel.adjectiveNoun. That level only forces owners
         // to appear before the adjective & noun.
@@ -1132,7 +1116,6 @@ class Storyline {
               complement.genericPossessive: complement.pronounPossessive,
             },
           );
-          break;
         case IdentifierLevel.properNoun:
           result = _replaceFirstThenAll(
             result,
@@ -1145,7 +1128,6 @@ class Storyline {
               complement.genericPossessive: complement.pronounPossessive,
             },
           );
-          break;
       }
 
       assert(!result.contains(complement.generic),

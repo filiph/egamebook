@@ -449,11 +449,9 @@ FightSituation generateRandomEncounter(ActionContext c,
           "A goblin stands in front of me, "
           "wielding a ${hasSpear ? 'black spear' : 'rusty sword'}.",
           isRaw: true);
-      break;
     case 1:
       enemies.add(_makeOrc(w));
       s.add("An orc stands in front of me, wielding a sword.", isRaw: true);
-      break;
     case 2:
       final orc = Actor.initialized(6000, w.randomInt, "orc",
           adjective:
@@ -474,7 +472,6 @@ FightSituation generateRandomEncounter(ActionContext c,
           "An orc and a goblin stand in front of me. "
           "The orc is wielding a crude sword, the goblin is holding a spear.",
           isRaw: true);
-      break;
     default:
       throw UnimplementedError();
   }
@@ -530,7 +527,6 @@ FightSituation generateRandomEncounter(ActionContext c,
   switch (w.randomInt(4)) {
     case 0:
       initialPlayer.report(s, "<subject> <is> barehanded");
-      break;
     case 1:
     case 2:
       final name = w.randomBool() ? "sword" : "scimitar";
@@ -540,7 +536,6 @@ FightSituation generateRandomEncounter(ActionContext c,
       w.updateActorById(
           playerId, (b) => b.inventory.equip(sword, initialPlayer.anatomy));
       initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
-      break;
     case 3:
       final name = w.randomBool() ? "spear" : "pike";
       final spear = Item.weapon(w.randomInt(), WeaponType.spear,
@@ -548,7 +543,6 @@ FightSituation generateRandomEncounter(ActionContext c,
       w.updateActorById(
           playerId, (b) => b.inventory.equip(spear, initialPlayer.anatomy));
       initialPlayer.report(s, "<subject> <is> {holding|wielding} a $name");
-      break;
     default:
       throw UnimplementedError();
   }

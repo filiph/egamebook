@@ -95,6 +95,7 @@ class WritersInputGenerator extends Generator {
     lib.body.add(cb.Code("part '$fileName.compiled.g.dart';"));
 
     final devMode = false;
+    // ignore: dead_code
     if (devMode) {
       log.warning("Building in dev mode (less runtime asserts).");
     }

@@ -1,4 +1,4 @@
-part of edgehead_director;
+part of '../../edgehead_director.dart';
 
 final _playerHurt = Rule(_id++, 1, false, (ApplicabilityContext c) {
   return c.isHurt(playerId);

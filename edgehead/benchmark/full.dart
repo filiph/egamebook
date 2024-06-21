@@ -58,7 +58,7 @@ class FullRunBenchmark extends _BenchmarkBase {
 /// of the speed of the game (especially the AI).
 class _BenchmarkBase {
   final String name;
-  final _ScoreEmitter emitter;
+  _ScoreEmitter get emitter => const _PrintEmitter();
 
   // Empty constructor.
   const _BenchmarkBase(this.name);

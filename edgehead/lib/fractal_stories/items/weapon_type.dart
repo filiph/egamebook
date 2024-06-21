@@ -63,7 +63,7 @@ class WeaponType extends EnumClass {
 
   static BuiltSet<WeaponType> get values => _$values;
 
-  const WeaponType._(String name) : super(name);
+  const WeaponType._(super.name);
 
   /// The weapon can block thrusts. Typical examples are shields.
   bool get canBlockThrust {

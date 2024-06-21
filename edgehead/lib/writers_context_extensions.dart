@@ -126,31 +126,24 @@ extension ActionContextHelpers on ActionContext {
         break;
       case 1:
         set(_playerIsMale);
-        break;
     }
 
     switch (hair) {
       case 0:
         set(_playerHairColor, "black");
-        break;
       case 1:
         set(_playerHairColor, "brown");
-        break;
       case 2:
         set(_playerHairColor, "blond");
-        break;
     }
 
     switch (debilitation) {
       case 0:
         set(_playerHasBurntFace);
-        break;
       case 1:
         set(_playerHasWoodenFoot);
-        break;
       case 2:
         set(_playerHasAsthma);
-        break;
     }
   }
 

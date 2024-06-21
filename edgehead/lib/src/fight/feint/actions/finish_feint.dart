@@ -58,10 +58,8 @@ class FinishFeint extends OtherActorAction {
     switch (type) {
       case FeintType.jab:
         stringType = "jab";
-        break;
       case FeintType.slash:
         stringType = "slash";
-        break;
       default:
         throw UnimplementedError('No string for $type');
     }

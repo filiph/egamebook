@@ -1,4 +1,4 @@
-part of storyline.shadow_graph;
+part of '../shadow_graph.dart';
 
 class _ReportPair {
   final int index;

@@ -318,7 +318,7 @@ class BodyPartDesignation extends EnumClass {
 
   static BuiltSet<BodyPartDesignation> get values => _$specificBodyPartValues;
 
-  const BodyPartDesignation._(String name) : super(name);
+  const BodyPartDesignation._(super.name);
 
   /// This is `false` for [primaryHand] and [secondaryHand]. Just the arm
   /// counts.
@@ -402,7 +402,7 @@ class BodyPartFunction extends EnumClass {
 
   static BuiltSet<BodyPartFunction> get values => _$bodyPartFunctionValues;
 
-  const BodyPartFunction._(String name) : super(name);
+  const BodyPartFunction._(super.name);
 
   static BodyPartFunction valueOf(String name) =>
       _$valueOfBodyPartFunction(name);

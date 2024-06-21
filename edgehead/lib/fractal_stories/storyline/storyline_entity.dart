@@ -1,4 +1,4 @@
-part of storyline;
+part of 'storyline.dart';
 
 /// Entity is a thing, a creature, a robot, or a person that is an interactive
 /// part of the gamebook environment.
