@@ -1,4 +1,3 @@
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/strike_from_ground/strike_from_ground_defense/actions/jump_to_side_and_counter.dart';

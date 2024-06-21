@@ -1,4 +1,3 @@
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/slash/slash_defense/actions/defensive_parry_slash.dart';

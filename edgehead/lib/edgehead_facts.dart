@@ -1,4 +1,3 @@
-
 import 'package:edgehead/edgehead_facts_enums.dart';
 import 'package:edgehead/edgehead_ids.dart';
 import 'package:edgehead/fractal_stories/context.dart';

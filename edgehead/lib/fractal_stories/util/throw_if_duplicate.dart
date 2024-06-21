@@ -1,4 +1,3 @@
-
 /// Throws when [set] has duplicate entries.
 bool hasDuplicities<T extends Object>(Iterable<T> set) {
   var control = <int>{};

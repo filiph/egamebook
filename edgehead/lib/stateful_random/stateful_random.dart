@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 /// A function that returns a random id. Similar to [RandomIntGetter]

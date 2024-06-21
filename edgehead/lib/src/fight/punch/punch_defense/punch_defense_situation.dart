@@ -1,4 +1,3 @@
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/punch/punch_defense/actions/dodge_punch.dart';

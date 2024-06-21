@@ -1,4 +1,3 @@
-
 /// Alternates between two iterables. Once one iterable is depleted, the other
 /// one runs through to the end.
 Iterable<T> alternate<T>(Iterable<T> first, Iterable<T> second) sync* {

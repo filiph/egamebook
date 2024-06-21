@@ -1,4 +1,3 @@
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/clash/clash_defense/actions/counter_clash.dart';
 import 'package:edgehead/src/fight/clash/clash_defense/actions/withstand_clash.dart';

@@ -1,4 +1,3 @@
-
 /// The result of querying a history.
 abstract class QueryResult<T extends Record> {
   /// Whether or not this query found at least one event.
