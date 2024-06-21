@@ -135,7 +135,7 @@ jobs:
         if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
         working-directory: egamebook_builder
   job_005:
-    name: "unit_test; PKG: edgehead; `pub run build_runner build --delete-conflicting-outputs && dart test`"
+    name: "unit_test; PKG: edgehead; `dart run build_runner build --delete-conflicting-outputs && dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -160,8 +160,8 @@ jobs:
         run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: edgehead
-      - name: "edgehead; pub run build_runner build --delete-conflicting-outputs && dart test"
-        run: "pub run build_runner build --delete-conflicting-outputs && dart test"
+      - name: "edgehead; dart run build_runner build --delete-conflicting-outputs && dart test"
+        run: "dart run build_runner build --delete-conflicting-outputs && dart test"
         if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
         working-directory: edgehead
     needs:
