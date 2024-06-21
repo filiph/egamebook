@@ -9,7 +9,7 @@ A library of builders intended for [egamebook.com][] projects.
 Add `egamebook_builder` to your dependencies and run `pub get`.
 
 Then, just use the annotations mentioned below and run 
-`pub run build_runner build` (or `pub run build_runner watch` for continuous
+`dart run build_runner build` (or `dart run build_runner watch` for continuous
 rebuilding).
 
 ## Writer's builder
