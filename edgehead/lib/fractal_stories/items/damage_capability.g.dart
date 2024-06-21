@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of fractal_stories.items.weapon;
+part of 'damage_capability.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -53,37 +53,37 @@ class _$DamageCapabilitySerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'bluntDamage':
           result.bluntDamage = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'isCleaving':
           result.isCleaving = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'length':
           result.length = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'slashingDamage':
           result.slashingDamage = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'tearingDamage':
           result.tearingDamage = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'thrustingDamage':
           result.thrustingDamage = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'type':
           result.type = serializers.deserialize(value,
-              specifiedType: const FullType(WeaponType)) as WeaponType;
+              specifiedType: const FullType(WeaponType))! as WeaponType;
           break;
       }
     }
@@ -110,7 +110,7 @@ class _$DamageCapability extends DamageCapability {
 
   factory _$DamageCapability(
           [void Function(DamageCapabilityBuilder)? updates]) =>
-      (new DamageCapabilityBuilder()..update(updates)).build();
+      (new DamageCapabilityBuilder()..update(updates))._build();
 
   _$DamageCapability._(
       {required this.bluntDamage,
@@ -122,17 +122,18 @@ class _$DamageCapability extends DamageCapability {
       required this.type})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        bluntDamage, 'DamageCapability', 'bluntDamage');
+        bluntDamage, r'DamageCapability', 'bluntDamage');
     BuiltValueNullFieldError.checkNotNull(
-        isCleaving, 'DamageCapability', 'isCleaving');
-    BuiltValueNullFieldError.checkNotNull(length, 'DamageCapability', 'length');
+        isCleaving, r'DamageCapability', 'isCleaving');
     BuiltValueNullFieldError.checkNotNull(
-        slashingDamage, 'DamageCapability', 'slashingDamage');
+        length, r'DamageCapability', 'length');
     BuiltValueNullFieldError.checkNotNull(
-        tearingDamage, 'DamageCapability', 'tearingDamage');
+        slashingDamage, r'DamageCapability', 'slashingDamage');
     BuiltValueNullFieldError.checkNotNull(
-        thrustingDamage, 'DamageCapability', 'thrustingDamage');
-    BuiltValueNullFieldError.checkNotNull(type, 'DamageCapability', 'type');
+        tearingDamage, r'DamageCapability', 'tearingDamage');
+    BuiltValueNullFieldError.checkNotNull(
+        thrustingDamage, r'DamageCapability', 'thrustingDamage');
+    BuiltValueNullFieldError.checkNotNull(type, r'DamageCapability', 'type');
   }
 
   @override
@@ -158,16 +159,16 @@ class _$DamageCapability extends DamageCapability {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc($jc($jc(0, bluntDamage.hashCode), isCleaving.hashCode),
-                        length.hashCode),
-                    slashingDamage.hashCode),
-                tearingDamage.hashCode),
-            thrustingDamage.hashCode),
-        type.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, bluntDamage.hashCode);
+    _$hash = $jc(_$hash, isCleaving.hashCode);
+    _$hash = $jc(_$hash, length.hashCode);
+    _$hash = $jc(_$hash, slashingDamage.hashCode);
+    _$hash = $jc(_$hash, tearingDamage.hashCode);
+    _$hash = $jc(_$hash, thrustingDamage.hashCode);
+    _$hash = $jc(_$hash, type.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 }
 
@@ -235,26 +236,28 @@ class DamageCapabilityBuilder
   }
 
   @override
-  _$DamageCapability build() {
+  DamageCapability build() => _build();
+
+  _$DamageCapability _build() {
     final _$result = _$v ??
         new _$DamageCapability._(
             bluntDamage: BuiltValueNullFieldError.checkNotNull(
-                bluntDamage, 'DamageCapability', 'bluntDamage'),
+                bluntDamage, r'DamageCapability', 'bluntDamage'),
             isCleaving: BuiltValueNullFieldError.checkNotNull(
-                isCleaving, 'DamageCapability', 'isCleaving'),
+                isCleaving, r'DamageCapability', 'isCleaving'),
             length: BuiltValueNullFieldError.checkNotNull(
-                length, 'DamageCapability', 'length'),
+                length, r'DamageCapability', 'length'),
             slashingDamage: BuiltValueNullFieldError.checkNotNull(
-                slashingDamage, 'DamageCapability', 'slashingDamage'),
+                slashingDamage, r'DamageCapability', 'slashingDamage'),
             tearingDamage: BuiltValueNullFieldError.checkNotNull(
-                tearingDamage, 'DamageCapability', 'tearingDamage'),
+                tearingDamage, r'DamageCapability', 'tearingDamage'),
             thrustingDamage: BuiltValueNullFieldError.checkNotNull(
-                thrustingDamage, 'DamageCapability', 'thrustingDamage'),
+                thrustingDamage, r'DamageCapability', 'thrustingDamage'),
             type: BuiltValueNullFieldError.checkNotNull(
-                type, 'DamageCapability', 'type'));
+                type, r'DamageCapability', 'type'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

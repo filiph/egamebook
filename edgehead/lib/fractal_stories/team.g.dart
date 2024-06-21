@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.team;
+part of 'team.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -32,13 +32,13 @@ class _$TeamSerializer implements StructuredSerializer<Team> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -52,10 +52,10 @@ class _$Team extends Team {
   final int id;
 
   factory _$Team([void Function(TeamBuilder)? updates]) =>
-      (new TeamBuilder()..update(updates)).build();
+      (new TeamBuilder()..update(updates))._build();
 
   _$Team._({required this.id}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(id, 'Team', 'id');
+    BuiltValueNullFieldError.checkNotNull(id, r'Team', 'id');
   }
 
   @override
@@ -73,12 +73,15 @@ class _$Team extends Team {
 
   @override
   int get hashCode {
-    return $jf($jc(0, id.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Team')..add('id', id)).toString();
+    return (newBuiltValueToStringHelper(r'Team')..add('id', id)).toString();
   }
 }
 
@@ -112,13 +115,15 @@ class TeamBuilder implements Builder<Team, TeamBuilder> {
   }
 
   @override
-  _$Team build() {
+  Team build() => _build();
+
+  _$Team _build() {
     final _$result = _$v ??
         new _$Team._(
-            id: BuiltValueNullFieldError.checkNotNull(id, 'Team', 'id'));
+            id: BuiltValueNullFieldError.checkNotNull(id, r'Team', 'id'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of egamebook.element.slot_machine;
+part of 'slot_machine_element.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -93,11 +93,11 @@ class _$SlotMachine extends SlotMachine {
       required this.rollReason})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        probability, 'SlotMachine', 'probability');
+        probability, r'SlotMachine', 'probability');
     BuiltValueNullFieldError.checkNotNull(
-        rerollable, 'SlotMachine', 'rerollable');
+        rerollable, r'SlotMachine', 'rerollable');
     BuiltValueNullFieldError.checkNotNull(
-        rollReason, 'SlotMachine', 'rollReason');
+        rollReason, r'SlotMachine', 'rollReason');
   }
 
   @override
@@ -119,15 +119,18 @@ class _$SlotMachine extends SlotMachine {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, probability.hashCode), rerollable.hashCode),
-            rerollEffectDescription.hashCode),
-        rollReason.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, probability.hashCode);
+    _$hash = $jc(_$hash, rerollable.hashCode);
+    _$hash = $jc(_$hash, rerollEffectDescription.hashCode);
+    _$hash = $jc(_$hash, rollReason.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('SlotMachine')
+    return (newBuiltValueToStringHelper(r'SlotMachine')
           ..add('probability', probability)
           ..add('rerollable', rerollable)
           ..add('rerollEffectDescription', rerollEffectDescription)
@@ -188,15 +191,15 @@ class SlotMachineBuilder implements Builder<SlotMachine, SlotMachineBuilder> {
     final _$result = _$v ??
         new _$SlotMachine._(
             probability: BuiltValueNullFieldError.checkNotNull(
-                probability, 'SlotMachine', 'probability'),
+                probability, r'SlotMachine', 'probability'),
             rerollable: BuiltValueNullFieldError.checkNotNull(
-                rerollable, 'SlotMachine', 'rerollable'),
+                rerollable, r'SlotMachine', 'rerollable'),
             rerollEffectDescription: rerollEffectDescription,
             rollReason: BuiltValueNullFieldError.checkNotNull(
-                rollReason, 'SlotMachine', 'rollReason'));
+                rollReason, r'SlotMachine', 'rollReason'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

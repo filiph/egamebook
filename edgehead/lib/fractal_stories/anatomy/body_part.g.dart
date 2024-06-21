@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of fractal_stories.anatomy.body_part;
+part of 'body_part.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -203,13 +203,13 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'bluntHitsCount':
           result.bluntHitsCount = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'children':
           result.children.replace(serializers.deserialize(value,
@@ -224,73 +224,73 @@ class _$BodyPartSerializer implements StructuredSerializer<BodyPart> {
           break;
         case 'designation':
           result.designation = serializers.deserialize(value,
-                  specifiedType: const FullType(BodyPartDesignation))
+                  specifiedType: const FullType(BodyPartDesignation))!
               as BodyPartDesignation;
           break;
         case 'firstOwnerId':
           result.firstOwnerId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'function':
           result.function = serializers.deserialize(value,
-                  specifiedType: const FullType(BodyPartFunction))
+                  specifiedType: const FullType(BodyPartFunction))!
               as BodyPartFunction;
           break;
         case 'hitpoints':
           result.hitpoints = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'isActive':
           result.isActive = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'isSeverable':
           result.isSeverable = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'isSevered':
           result.isSevered = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'isVital':
           result.isVital = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'majorCutsCount':
           result.majorCutsCount = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'maxHitpoints':
           result.maxHitpoints = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'minorCutsCount':
           result.minorCutsCount = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'randomDesignation':
           result.randomDesignation = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'swingSurfaceLeft':
           result.swingSurfaceLeft = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'swingSurfaceRight':
           result.swingSurfaceRight = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'thrustSurface':
           result.thrustSurface = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -378,7 +378,7 @@ class _$BodyPart extends BodyPart {
   final int thrustSurface;
 
   factory _$BodyPart([void Function(BodyPartBuilder)? updates]) =>
-      (new BodyPartBuilder()..update(updates)).build();
+      (new BodyPartBuilder()..update(updates))._build();
 
   _$BodyPart._(
       {required this.bluntHitsCount,
@@ -403,35 +403,35 @@ class _$BodyPart extends BodyPart {
       required this.thrustSurface})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        bluntHitsCount, 'BodyPart', 'bluntHitsCount');
-    BuiltValueNullFieldError.checkNotNull(children, 'BodyPart', 'children');
+        bluntHitsCount, r'BodyPart', 'bluntHitsCount');
+    BuiltValueNullFieldError.checkNotNull(children, r'BodyPart', 'children');
     BuiltValueNullFieldError.checkNotNull(
-        designation, 'BodyPart', 'designation');
+        designation, r'BodyPart', 'designation');
     BuiltValueNullFieldError.checkNotNull(
-        firstOwnerId, 'BodyPart', 'firstOwnerId');
-    BuiltValueNullFieldError.checkNotNull(function, 'BodyPart', 'function');
-    BuiltValueNullFieldError.checkNotNull(hitpoints, 'BodyPart', 'hitpoints');
-    BuiltValueNullFieldError.checkNotNull(id, 'BodyPart', 'id');
-    BuiltValueNullFieldError.checkNotNull(isActive, 'BodyPart', 'isActive');
+        firstOwnerId, r'BodyPart', 'firstOwnerId');
+    BuiltValueNullFieldError.checkNotNull(function, r'BodyPart', 'function');
+    BuiltValueNullFieldError.checkNotNull(hitpoints, r'BodyPart', 'hitpoints');
+    BuiltValueNullFieldError.checkNotNull(id, r'BodyPart', 'id');
+    BuiltValueNullFieldError.checkNotNull(isActive, r'BodyPart', 'isActive');
     BuiltValueNullFieldError.checkNotNull(
-        isSeverable, 'BodyPart', 'isSeverable');
-    BuiltValueNullFieldError.checkNotNull(isSevered, 'BodyPart', 'isSevered');
-    BuiltValueNullFieldError.checkNotNull(isVital, 'BodyPart', 'isVital');
+        isSeverable, r'BodyPart', 'isSeverable');
+    BuiltValueNullFieldError.checkNotNull(isSevered, r'BodyPart', 'isSevered');
+    BuiltValueNullFieldError.checkNotNull(isVital, r'BodyPart', 'isVital');
     BuiltValueNullFieldError.checkNotNull(
-        majorCutsCount, 'BodyPart', 'majorCutsCount');
+        majorCutsCount, r'BodyPart', 'majorCutsCount');
     BuiltValueNullFieldError.checkNotNull(
-        maxHitpoints, 'BodyPart', 'maxHitpoints');
+        maxHitpoints, r'BodyPart', 'maxHitpoints');
     BuiltValueNullFieldError.checkNotNull(
-        minorCutsCount, 'BodyPart', 'minorCutsCount');
-    BuiltValueNullFieldError.checkNotNull(name, 'BodyPart', 'name');
+        minorCutsCount, r'BodyPart', 'minorCutsCount');
+    BuiltValueNullFieldError.checkNotNull(name, r'BodyPart', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        randomDesignation, 'BodyPart', 'randomDesignation');
+        randomDesignation, r'BodyPart', 'randomDesignation');
     BuiltValueNullFieldError.checkNotNull(
-        swingSurfaceLeft, 'BodyPart', 'swingSurfaceLeft');
+        swingSurfaceLeft, r'BodyPart', 'swingSurfaceLeft');
     BuiltValueNullFieldError.checkNotNull(
-        swingSurfaceRight, 'BodyPart', 'swingSurfaceRight');
+        swingSurfaceRight, r'BodyPart', 'swingSurfaceRight');
     BuiltValueNullFieldError.checkNotNull(
-        thrustSurface, 'BodyPart', 'thrustSurface');
+        thrustSurface, r'BodyPart', 'thrustSurface');
   }
 
   @override
@@ -469,44 +469,29 @@ class _$BodyPart extends BodyPart {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc(0, bluntHitsCount.hashCode),
-                                                                                children.hashCode),
-                                                                            damageCapability.hashCode),
-                                                                        designation.hashCode),
-                                                                    firstOwnerId.hashCode),
-                                                                function.hashCode),
-                                                            hitpoints.hashCode),
-                                                        id.hashCode),
-                                                    isActive.hashCode),
-                                                isSeverable.hashCode),
-                                            isSevered.hashCode),
-                                        isVital.hashCode),
-                                    majorCutsCount.hashCode),
-                                maxHitpoints.hashCode),
-                            minorCutsCount.hashCode),
-                        name.hashCode),
-                    randomDesignation.hashCode),
-                swingSurfaceLeft.hashCode),
-            swingSurfaceRight.hashCode),
-        thrustSurface.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, bluntHitsCount.hashCode);
+    _$hash = $jc(_$hash, children.hashCode);
+    _$hash = $jc(_$hash, damageCapability.hashCode);
+    _$hash = $jc(_$hash, designation.hashCode);
+    _$hash = $jc(_$hash, firstOwnerId.hashCode);
+    _$hash = $jc(_$hash, function.hashCode);
+    _$hash = $jc(_$hash, hitpoints.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, isActive.hashCode);
+    _$hash = $jc(_$hash, isSeverable.hashCode);
+    _$hash = $jc(_$hash, isSevered.hashCode);
+    _$hash = $jc(_$hash, isVital.hashCode);
+    _$hash = $jc(_$hash, majorCutsCount.hashCode);
+    _$hash = $jc(_$hash, maxHitpoints.hashCode);
+    _$hash = $jc(_$hash, minorCutsCount.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, randomDesignation.hashCode);
+    _$hash = $jc(_$hash, swingSurfaceLeft.hashCode);
+    _$hash = $jc(_$hash, swingSurfaceRight.hashCode);
+    _$hash = $jc(_$hash, thrustSurface.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 }
 
@@ -646,39 +631,41 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   }
 
   @override
-  _$BodyPart build() {
+  BodyPart build() => _build();
+
+  _$BodyPart _build() {
     _$BodyPart _$result;
     try {
       _$result = _$v ??
           new _$BodyPart._(
               bluntHitsCount: BuiltValueNullFieldError.checkNotNull(
-                  bluntHitsCount, 'BodyPart', 'bluntHitsCount'),
+                  bluntHitsCount, r'BodyPart', 'bluntHitsCount'),
               children: children.build(),
               damageCapability: _damageCapability?.build(),
               designation: BuiltValueNullFieldError.checkNotNull(
-                  designation, 'BodyPart', 'designation'),
+                  designation, r'BodyPart', 'designation'),
               firstOwnerId: BuiltValueNullFieldError.checkNotNull(
-                  firstOwnerId, 'BodyPart', 'firstOwnerId'),
+                  firstOwnerId, r'BodyPart', 'firstOwnerId'),
               function: BuiltValueNullFieldError.checkNotNull(
-                  function, 'BodyPart', 'function'),
+                  function, r'BodyPart', 'function'),
               hitpoints: BuiltValueNullFieldError.checkNotNull(
-                  hitpoints, 'BodyPart', 'hitpoints'),
-              id: BuiltValueNullFieldError.checkNotNull(id, 'BodyPart', 'id'),
+                  hitpoints, r'BodyPart', 'hitpoints'),
+              id: BuiltValueNullFieldError.checkNotNull(id, r'BodyPart', 'id'),
               isActive: BuiltValueNullFieldError.checkNotNull(
-                  isActive, 'BodyPart', 'isActive'),
+                  isActive, r'BodyPart', 'isActive'),
               isSeverable: BuiltValueNullFieldError.checkNotNull(
-                  isSeverable, 'BodyPart', 'isSeverable'),
+                  isSeverable, r'BodyPart', 'isSeverable'),
               isSevered: BuiltValueNullFieldError.checkNotNull(
-                  isSevered, 'BodyPart', 'isSevered'),
-              isVital: BuiltValueNullFieldError.checkNotNull(isVital, 'BodyPart', 'isVital'),
-              majorCutsCount: BuiltValueNullFieldError.checkNotNull(majorCutsCount, 'BodyPart', 'majorCutsCount'),
-              maxHitpoints: BuiltValueNullFieldError.checkNotNull(maxHitpoints, 'BodyPart', 'maxHitpoints'),
-              minorCutsCount: BuiltValueNullFieldError.checkNotNull(minorCutsCount, 'BodyPart', 'minorCutsCount'),
-              name: BuiltValueNullFieldError.checkNotNull(name, 'BodyPart', 'name'),
-              randomDesignation: BuiltValueNullFieldError.checkNotNull(randomDesignation, 'BodyPart', 'randomDesignation'),
-              swingSurfaceLeft: BuiltValueNullFieldError.checkNotNull(swingSurfaceLeft, 'BodyPart', 'swingSurfaceLeft'),
-              swingSurfaceRight: BuiltValueNullFieldError.checkNotNull(swingSurfaceRight, 'BodyPart', 'swingSurfaceRight'),
-              thrustSurface: BuiltValueNullFieldError.checkNotNull(thrustSurface, 'BodyPart', 'thrustSurface'));
+                  isSevered, r'BodyPart', 'isSevered'),
+              isVital: BuiltValueNullFieldError.checkNotNull(isVital, r'BodyPart', 'isVital'),
+              majorCutsCount: BuiltValueNullFieldError.checkNotNull(majorCutsCount, r'BodyPart', 'majorCutsCount'),
+              maxHitpoints: BuiltValueNullFieldError.checkNotNull(maxHitpoints, r'BodyPart', 'maxHitpoints'),
+              minorCutsCount: BuiltValueNullFieldError.checkNotNull(minorCutsCount, r'BodyPart', 'minorCutsCount'),
+              name: BuiltValueNullFieldError.checkNotNull(name, r'BodyPart', 'name'),
+              randomDesignation: BuiltValueNullFieldError.checkNotNull(randomDesignation, r'BodyPart', 'randomDesignation'),
+              swingSurfaceLeft: BuiltValueNullFieldError.checkNotNull(swingSurfaceLeft, r'BodyPart', 'swingSurfaceLeft'),
+              swingSurfaceRight: BuiltValueNullFieldError.checkNotNull(swingSurfaceRight, r'BodyPart', 'swingSurfaceRight'),
+              thrustSurface: BuiltValueNullFieldError.checkNotNull(thrustSurface, r'BodyPart', 'thrustSurface'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -688,7 +675,7 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
         _damageCapability?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'BodyPart', _$failedField, e.toString());
+            r'BodyPart', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -697,4 +684,4 @@ class BodyPartBuilder implements Builder<BodyPart, BodyPartBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

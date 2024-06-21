@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.history.action;
+part of 'action_history.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -50,7 +50,7 @@ class _$ActionHistorySerializer implements StructuredSerializer<ActionHistory> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -142,13 +142,13 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'actionName':
           result.actionName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'dataString':
           result.dataString = serializers.deserialize(value,
@@ -156,7 +156,7 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           break;
         case 'description':
           result.description = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'protagonist':
           result.protagonist = serializers.deserialize(value,
@@ -170,23 +170,23 @@ class _$ActionRecordSerializer implements StructuredSerializer<ActionRecord> {
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime))! as DateTime;
           break;
         case 'wasAggressive':
           result.wasAggressive = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'wasFailure':
           result.wasFailure = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'wasProactive':
           result.wasProactive = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'wasSuccess':
           result.wasSuccess = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -206,7 +206,7 @@ class _$ActionHistory extends ActionHistory {
   final BuiltList<ActionRecord> records;
 
   factory _$ActionHistory([void Function(ActionHistoryBuilder)? updates]) =>
-      (new ActionHistoryBuilder()..update(updates)).build();
+      (new ActionHistoryBuilder()..update(updates))._build();
 
   _$ActionHistory._(
       {required this.latestAggression,
@@ -215,12 +215,12 @@ class _$ActionHistory extends ActionHistory {
       required this.records})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        latestAggression, 'ActionHistory', 'latestAggression');
+        latestAggression, r'ActionHistory', 'latestAggression');
     BuiltValueNullFieldError.checkNotNull(
-        latestByActorId, 'ActionHistory', 'latestByActorId');
+        latestByActorId, r'ActionHistory', 'latestByActorId');
     BuiltValueNullFieldError.checkNotNull(
-        latestProactiveByActorId, 'ActionHistory', 'latestProactiveByActorId');
-    BuiltValueNullFieldError.checkNotNull(records, 'ActionHistory', 'records');
+        latestProactiveByActorId, r'ActionHistory', 'latestProactiveByActorId');
+    BuiltValueNullFieldError.checkNotNull(records, r'ActionHistory', 'records');
   }
 
   @override
@@ -242,15 +242,18 @@ class _$ActionHistory extends ActionHistory {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, latestAggression.hashCode), latestByActorId.hashCode),
-            latestProactiveByActorId.hashCode),
-        records.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, latestAggression.hashCode);
+    _$hash = $jc(_$hash, latestByActorId.hashCode);
+    _$hash = $jc(_$hash, latestProactiveByActorId.hashCode);
+    _$hash = $jc(_$hash, records.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ActionHistory')
+    return (newBuiltValueToStringHelper(r'ActionHistory')
           ..add('latestAggression', latestAggression)
           ..add('latestByActorId', latestByActorId)
           ..add('latestProactiveByActorId', latestProactiveByActorId)
@@ -313,7 +316,9 @@ class ActionHistoryBuilder
   }
 
   @override
-  _$ActionHistory build() {
+  ActionHistory build() => _build();
+
+  _$ActionHistory _build() {
     _$ActionHistory _$result;
     try {
       _$result = _$v ??
@@ -335,7 +340,7 @@ class ActionHistoryBuilder
         records.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ActionHistory', _$failedField, e.toString());
+            r'ActionHistory', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -367,7 +372,7 @@ class _$ActionRecord extends ActionRecord {
   final bool wasSuccess;
 
   factory _$ActionRecord([void Function(ActionRecordBuilder)? updates]) =>
-      (new ActionRecordBuilder()..update(updates)).build();
+      (new ActionRecordBuilder()..update(updates))._build();
 
   _$ActionRecord._(
       {required this.actionName,
@@ -382,20 +387,20 @@ class _$ActionRecord extends ActionRecord {
       required this.wasSuccess})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        actionName, 'ActionRecord', 'actionName');
+        actionName, r'ActionRecord', 'actionName');
     BuiltValueNullFieldError.checkNotNull(
-        description, 'ActionRecord', 'description');
+        description, r'ActionRecord', 'description');
     BuiltValueNullFieldError.checkNotNull(
-        sufferers, 'ActionRecord', 'sufferers');
-    BuiltValueNullFieldError.checkNotNull(time, 'ActionRecord', 'time');
+        sufferers, r'ActionRecord', 'sufferers');
+    BuiltValueNullFieldError.checkNotNull(time, r'ActionRecord', 'time');
     BuiltValueNullFieldError.checkNotNull(
-        wasAggressive, 'ActionRecord', 'wasAggressive');
+        wasAggressive, r'ActionRecord', 'wasAggressive');
     BuiltValueNullFieldError.checkNotNull(
-        wasFailure, 'ActionRecord', 'wasFailure');
+        wasFailure, r'ActionRecord', 'wasFailure');
     BuiltValueNullFieldError.checkNotNull(
-        wasProactive, 'ActionRecord', 'wasProactive');
+        wasProactive, r'ActionRecord', 'wasProactive');
     BuiltValueNullFieldError.checkNotNull(
-        wasSuccess, 'ActionRecord', 'wasSuccess');
+        wasSuccess, r'ActionRecord', 'wasSuccess');
   }
 
   @override
@@ -423,24 +428,19 @@ class _$ActionRecord extends ActionRecord {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc($jc(0, actionName.hashCode),
-                                        dataString.hashCode),
-                                    description.hashCode),
-                                protagonist.hashCode),
-                            sufferers.hashCode),
-                        time.hashCode),
-                    wasAggressive.hashCode),
-                wasFailure.hashCode),
-            wasProactive.hashCode),
-        wasSuccess.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, actionName.hashCode);
+    _$hash = $jc(_$hash, dataString.hashCode);
+    _$hash = $jc(_$hash, description.hashCode);
+    _$hash = $jc(_$hash, protagonist.hashCode);
+    _$hash = $jc(_$hash, sufferers.hashCode);
+    _$hash = $jc(_$hash, time.hashCode);
+    _$hash = $jc(_$hash, wasAggressive.hashCode);
+    _$hash = $jc(_$hash, wasFailure.hashCode);
+    _$hash = $jc(_$hash, wasProactive.hashCode);
+    _$hash = $jc(_$hash, wasSuccess.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 }
 
@@ -521,28 +521,30 @@ class ActionRecordBuilder
   }
 
   @override
-  _$ActionRecord build() {
+  ActionRecord build() => _build();
+
+  _$ActionRecord _build() {
     _$ActionRecord _$result;
     try {
       _$result = _$v ??
           new _$ActionRecord._(
               actionName: BuiltValueNullFieldError.checkNotNull(
-                  actionName, 'ActionRecord', 'actionName'),
+                  actionName, r'ActionRecord', 'actionName'),
               dataString: dataString,
               description: BuiltValueNullFieldError.checkNotNull(
-                  description, 'ActionRecord', 'description'),
+                  description, r'ActionRecord', 'description'),
               protagonist: protagonist,
               sufferers: sufferers.build(),
               time: BuiltValueNullFieldError.checkNotNull(
-                  time, 'ActionRecord', 'time'),
+                  time, r'ActionRecord', 'time'),
               wasAggressive: BuiltValueNullFieldError.checkNotNull(
-                  wasAggressive, 'ActionRecord', 'wasAggressive'),
+                  wasAggressive, r'ActionRecord', 'wasAggressive'),
               wasFailure: BuiltValueNullFieldError.checkNotNull(
-                  wasFailure, 'ActionRecord', 'wasFailure'),
+                  wasFailure, r'ActionRecord', 'wasFailure'),
               wasProactive: BuiltValueNullFieldError.checkNotNull(
-                  wasProactive, 'ActionRecord', 'wasProactive'),
+                  wasProactive, r'ActionRecord', 'wasProactive'),
               wasSuccess: BuiltValueNullFieldError.checkNotNull(
-                  wasSuccess, 'ActionRecord', 'wasSuccess'));
+                  wasSuccess, r'ActionRecord', 'wasSuccess'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -550,7 +552,7 @@ class ActionRecordBuilder
         sufferers.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ActionRecord', _$failedField, e.toString());
+            r'ActionRecord', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -559,4 +561,4 @@ class ActionRecordBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

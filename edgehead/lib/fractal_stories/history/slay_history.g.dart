@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.history.slay;
+part of 'slay_history.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -35,7 +35,7 @@ class _$SlayHistorySerializer implements StructuredSerializer<SlayHistory> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -90,13 +90,13 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'parentRoomName':
           result.parentRoomName = serializers.deserialize(value,
@@ -104,11 +104,11 @@ class _$SlayRecordSerializer implements StructuredSerializer<SlayRecord> {
           break;
         case 'roomName':
           result.roomName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime))! as DateTime;
           break;
       }
     }
@@ -122,10 +122,10 @@ class _$SlayHistory extends SlayHistory {
   final BuiltListMultimap<String, SlayRecord> records;
 
   factory _$SlayHistory([void Function(SlayHistoryBuilder)? updates]) =>
-      (new SlayHistoryBuilder()..update(updates)).build();
+      (new SlayHistoryBuilder()..update(updates))._build();
 
   _$SlayHistory._({required this.records}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(records, 'SlayHistory', 'records');
+    BuiltValueNullFieldError.checkNotNull(records, r'SlayHistory', 'records');
   }
 
   @override
@@ -143,12 +143,16 @@ class _$SlayHistory extends SlayHistory {
 
   @override
   int get hashCode {
-    return $jf($jc(0, records.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, records.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('SlayHistory')..add('records', records))
+    return (newBuiltValueToStringHelper(r'SlayHistory')
+          ..add('records', records))
         .toString();
   }
 }
@@ -185,7 +189,9 @@ class SlayHistoryBuilder implements Builder<SlayHistory, SlayHistoryBuilder> {
   }
 
   @override
-  _$SlayHistory build() {
+  SlayHistory build() => _build();
+
+  _$SlayHistory _build() {
     _$SlayHistory _$result;
     try {
       _$result = _$v ?? new _$SlayHistory._(records: records.build());
@@ -196,7 +202,7 @@ class SlayHistoryBuilder implements Builder<SlayHistory, SlayHistoryBuilder> {
         records.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'SlayHistory', _$failedField, e.toString());
+            r'SlayHistory', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -216,7 +222,7 @@ class _$SlayRecord extends SlayRecord {
   final DateTime time;
 
   factory _$SlayRecord([void Function(SlayRecordBuilder)? updates]) =>
-      (new SlayRecordBuilder()..update(updates)).build();
+      (new SlayRecordBuilder()..update(updates))._build();
 
   _$SlayRecord._(
       {required this.actorId,
@@ -224,9 +230,9 @@ class _$SlayRecord extends SlayRecord {
       required this.roomName,
       required this.time})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(actorId, 'SlayRecord', 'actorId');
-    BuiltValueNullFieldError.checkNotNull(roomName, 'SlayRecord', 'roomName');
-    BuiltValueNullFieldError.checkNotNull(time, 'SlayRecord', 'time');
+    BuiltValueNullFieldError.checkNotNull(actorId, r'SlayRecord', 'actorId');
+    BuiltValueNullFieldError.checkNotNull(roomName, r'SlayRecord', 'roomName');
+    BuiltValueNullFieldError.checkNotNull(time, r'SlayRecord', 'time');
   }
 
   @override
@@ -248,15 +254,18 @@ class _$SlayRecord extends SlayRecord {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, actorId.hashCode), parentRoomName.hashCode),
-            roomName.hashCode),
-        time.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, actorId.hashCode);
+    _$hash = $jc(_$hash, parentRoomName.hashCode);
+    _$hash = $jc(_$hash, roomName.hashCode);
+    _$hash = $jc(_$hash, time.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('SlayRecord')
+    return (newBuiltValueToStringHelper(r'SlayRecord')
           ..add('actorId', actorId)
           ..add('parentRoomName', parentRoomName)
           ..add('roomName', roomName)
@@ -311,19 +320,21 @@ class SlayRecordBuilder implements Builder<SlayRecord, SlayRecordBuilder> {
   }
 
   @override
-  _$SlayRecord build() {
+  SlayRecord build() => _build();
+
+  _$SlayRecord _build() {
     final _$result = _$v ??
         new _$SlayRecord._(
             actorId: BuiltValueNullFieldError.checkNotNull(
-                actorId, 'SlayRecord', 'actorId'),
+                actorId, r'SlayRecord', 'actorId'),
             parentRoomName: parentRoomName,
             roomName: BuiltValueNullFieldError.checkNotNull(
-                roomName, 'SlayRecord', 'roomName'),
+                roomName, r'SlayRecord', 'roomName'),
             time: BuiltValueNullFieldError.checkNotNull(
-                time, 'SlayRecord', 'time'));
+                time, r'SlayRecord', 'time'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

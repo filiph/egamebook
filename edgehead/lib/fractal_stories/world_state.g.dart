@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.world_state;
+part of 'world_state.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -73,7 +73,7 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -117,11 +117,11 @@ class _$WorldStateSerializer implements StructuredSerializer<WorldState> {
           break;
         case 'statefulRandomState':
           result.statefulRandomState = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime))! as DateTime;
           break;
         case 'visitHistory':
           result.visitHistory.replace(serializers.deserialize(value,
@@ -159,7 +159,7 @@ class _$WorldState extends WorldState {
   final VisitHistory visitHistory;
 
   factory _$WorldState([void Function(WorldStateBuilder)? updates]) =>
-      (new WorldStateBuilder()..update(updates)).build();
+      (new WorldStateBuilder()..update(updates))._build();
 
   _$WorldState._(
       {required this.actionHistory,
@@ -175,21 +175,21 @@ class _$WorldState extends WorldState {
       required this.visitHistory})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        actionHistory, 'WorldState', 'actionHistory');
-    BuiltValueNullFieldError.checkNotNull(actors, 'WorldState', 'actors');
+        actionHistory, r'WorldState', 'actionHistory');
+    BuiltValueNullFieldError.checkNotNull(actors, r'WorldState', 'actors');
     BuiltValueNullFieldError.checkNotNull(
-        customHistory, 'WorldState', 'customHistory');
+        customHistory, r'WorldState', 'customHistory');
     BuiltValueNullFieldError.checkNotNull(
-        ruleHistory, 'WorldState', 'ruleHistory');
+        ruleHistory, r'WorldState', 'ruleHistory');
     BuiltValueNullFieldError.checkNotNull(
-        situations, 'WorldState', 'situations');
+        situations, r'WorldState', 'situations');
     BuiltValueNullFieldError.checkNotNull(
-        slayHistory, 'WorldState', 'slayHistory');
+        slayHistory, r'WorldState', 'slayHistory');
     BuiltValueNullFieldError.checkNotNull(
-        statefulRandomState, 'WorldState', 'statefulRandomState');
-    BuiltValueNullFieldError.checkNotNull(time, 'WorldState', 'time');
+        statefulRandomState, r'WorldState', 'statefulRandomState');
+    BuiltValueNullFieldError.checkNotNull(time, r'WorldState', 'time');
     BuiltValueNullFieldError.checkNotNull(
-        visitHistory, 'WorldState', 'visitHistory');
+        visitHistory, r'WorldState', 'visitHistory');
   }
 
   @override
@@ -218,26 +218,20 @@ class _$WorldState extends WorldState {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc($jc(0, actionHistory.hashCode),
-                                            actors.hashCode),
-                                        customHistory.hashCode),
-                                    director.hashCode),
-                                global.hashCode),
-                            ruleHistory.hashCode),
-                        situations.hashCode),
-                    slayHistory.hashCode),
-                statefulRandomState.hashCode),
-            time.hashCode),
-        visitHistory.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, actionHistory.hashCode);
+    _$hash = $jc(_$hash, actors.hashCode);
+    _$hash = $jc(_$hash, customHistory.hashCode);
+    _$hash = $jc(_$hash, director.hashCode);
+    _$hash = $jc(_$hash, global.hashCode);
+    _$hash = $jc(_$hash, ruleHistory.hashCode);
+    _$hash = $jc(_$hash, situations.hashCode);
+    _$hash = $jc(_$hash, slayHistory.hashCode);
+    _$hash = $jc(_$hash, statefulRandomState.hashCode);
+    _$hash = $jc(_$hash, time.hashCode);
+    _$hash = $jc(_$hash, visitHistory.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 }
 
@@ -336,7 +330,9 @@ class WorldStateBuilder implements Builder<WorldState, WorldStateBuilder> {
   }
 
   @override
-  _$WorldState build() {
+  WorldState build() => _build();
+
+  _$WorldState _build() {
     _$WorldState _$result;
     try {
       _$result = _$v ??
@@ -350,9 +346,9 @@ class WorldStateBuilder implements Builder<WorldState, WorldStateBuilder> {
               situations: situations.build(),
               slayHistory: slayHistory.build(),
               statefulRandomState: BuiltValueNullFieldError.checkNotNull(
-                  statefulRandomState, 'WorldState', 'statefulRandomState'),
+                  statefulRandomState, r'WorldState', 'statefulRandomState'),
               time: BuiltValueNullFieldError.checkNotNull(
-                  time, 'WorldState', 'time'),
+                  time, r'WorldState', 'time'),
               visitHistory: visitHistory.build());
     } catch (_) {
       late String _$failedField;
@@ -377,7 +373,7 @@ class WorldStateBuilder implements Builder<WorldState, WorldStateBuilder> {
         visitHistory.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'WorldState', _$failedField, e.toString());
+            r'WorldState', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -386,4 +382,4 @@ class WorldStateBuilder implements Builder<WorldState, WorldStateBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

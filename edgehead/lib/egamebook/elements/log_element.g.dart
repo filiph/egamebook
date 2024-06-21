@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of egamebook.element.log;
+part of 'log_element.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -65,8 +65,8 @@ class _$LogElement extends LogElement {
       (new LogElementBuilder()..update(updates))._build();
 
   _$LogElement._({required this.level, required this.message}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(level, 'LogElement', 'level');
-    BuiltValueNullFieldError.checkNotNull(message, 'LogElement', 'message');
+    BuiltValueNullFieldError.checkNotNull(level, r'LogElement', 'level');
+    BuiltValueNullFieldError.checkNotNull(message, r'LogElement', 'message');
   }
 
   @override
@@ -86,12 +86,16 @@ class _$LogElement extends LogElement {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, level.hashCode), message.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, level.hashCode);
+    _$hash = $jc(_$hash, message.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LogElement')
+    return (newBuiltValueToStringHelper(r'LogElement')
           ..add('level', level)
           ..add('message', message))
         .toString();
@@ -139,12 +143,12 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
     final _$result = _$v ??
         new _$LogElement._(
             level: BuiltValueNullFieldError.checkNotNull(
-                level, 'LogElement', 'level'),
+                level, r'LogElement', 'level'),
             message: BuiltValueNullFieldError.checkNotNull(
-                message, 'LogElement', 'message'));
+                message, r'LogElement', 'message'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

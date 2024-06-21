@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.fight.fight_situation;
+part of 'fight_situation.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -61,7 +61,7 @@ class _$FightSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -92,11 +92,11 @@ class _$FightSituationSerializer
           break;
         case 'groundMaterial':
           result.groundMaterial = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'playerTeamIds':
           result.playerTeamIds.replace(serializers.deserialize(value,
@@ -106,11 +106,11 @@ class _$FightSituationSerializer
           break;
         case 'roomRoamingSituationId':
           result.roomRoamingSituationId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -140,7 +140,7 @@ class _$FightSituation extends FightSituation {
   final int turn;
 
   factory _$FightSituation([void Function(FightSituationBuilder)? updates]) =>
-      (new FightSituationBuilder()..update(updates)).build();
+      (new FightSituationBuilder()..update(updates))._build();
 
   _$FightSituation._(
       {required this.droppedItems,
@@ -154,20 +154,20 @@ class _$FightSituation extends FightSituation {
       required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        droppedItems, 'FightSituation', 'droppedItems');
+        droppedItems, r'FightSituation', 'droppedItems');
     BuiltValueNullFieldError.checkNotNull(
-        droppedItemsOutOfReach, 'FightSituation', 'droppedItemsOutOfReach');
+        droppedItemsOutOfReach, r'FightSituation', 'droppedItemsOutOfReach');
     BuiltValueNullFieldError.checkNotNull(
-        enemyTeamIds, 'FightSituation', 'enemyTeamIds');
-    BuiltValueNullFieldError.checkNotNull(events, 'FightSituation', 'events');
+        enemyTeamIds, r'FightSituation', 'enemyTeamIds');
+    BuiltValueNullFieldError.checkNotNull(events, r'FightSituation', 'events');
     BuiltValueNullFieldError.checkNotNull(
-        groundMaterial, 'FightSituation', 'groundMaterial');
-    BuiltValueNullFieldError.checkNotNull(id, 'FightSituation', 'id');
+        groundMaterial, r'FightSituation', 'groundMaterial');
+    BuiltValueNullFieldError.checkNotNull(id, r'FightSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        playerTeamIds, 'FightSituation', 'playerTeamIds');
+        playerTeamIds, r'FightSituation', 'playerTeamIds');
     BuiltValueNullFieldError.checkNotNull(
-        roomRoamingSituationId, 'FightSituation', 'roomRoamingSituationId');
-    BuiltValueNullFieldError.checkNotNull(turn, 'FightSituation', 'turn');
+        roomRoamingSituationId, r'FightSituation', 'roomRoamingSituationId');
+    BuiltValueNullFieldError.checkNotNull(turn, r'FightSituation', 'turn');
   }
 
   @override
@@ -195,27 +195,23 @@ class _$FightSituation extends FightSituation {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc($jc(0, droppedItems.hashCode),
-                                    droppedItemsOutOfReach.hashCode),
-                                enemyTeamIds.hashCode),
-                            events.hashCode),
-                        groundMaterial.hashCode),
-                    id.hashCode),
-                playerTeamIds.hashCode),
-            roomRoamingSituationId.hashCode),
-        turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, droppedItems.hashCode);
+    _$hash = $jc(_$hash, droppedItemsOutOfReach.hashCode);
+    _$hash = $jc(_$hash, enemyTeamIds.hashCode);
+    _$hash = $jc(_$hash, events.hashCode);
+    _$hash = $jc(_$hash, groundMaterial.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, playerTeamIds.hashCode);
+    _$hash = $jc(_$hash, roomRoamingSituationId.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('FightSituation')
+    return (newBuiltValueToStringHelper(r'FightSituation')
           ..add('droppedItems', droppedItems)
           ..add('droppedItemsOutOfReach', droppedItemsOutOfReach)
           ..add('enemyTeamIds', enemyTeamIds)
@@ -311,7 +307,9 @@ class FightSituationBuilder
   }
 
   @override
-  _$FightSituation build() {
+  FightSituation build() => _build();
+
+  _$FightSituation _build() {
     _$FightSituation _$result;
     try {
       _$result = _$v ??
@@ -321,16 +319,16 @@ class FightSituationBuilder
               enemyTeamIds: enemyTeamIds.build(),
               events: events.build(),
               groundMaterial: BuiltValueNullFieldError.checkNotNull(
-                  groundMaterial, 'FightSituation', 'groundMaterial'),
+                  groundMaterial, r'FightSituation', 'groundMaterial'),
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'FightSituation', 'id'),
+                  id, r'FightSituation', 'id'),
               playerTeamIds: playerTeamIds.build(),
               roomRoamingSituationId: BuiltValueNullFieldError.checkNotNull(
                   roomRoamingSituationId,
-                  'FightSituation',
+                  r'FightSituation',
                   'roomRoamingSituationId'),
               turn: BuiltValueNullFieldError.checkNotNull(
-                  turn, 'FightSituation', 'turn'));
+                  turn, r'FightSituation', 'turn'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -347,7 +345,7 @@ class FightSituationBuilder
         playerTeamIds.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'FightSituation', _$failedField, e.toString());
+            r'FightSituation', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -356,4 +354,4 @@ class FightSituationBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

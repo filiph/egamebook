@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.history.rule;
+part of 'rule_history.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -42,7 +42,7 @@ class _$RuleHistorySerializer implements StructuredSerializer<RuleHistory> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -89,17 +89,17 @@ class _$RuleRecordSerializer implements StructuredSerializer<RuleRecord> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'ruleId':
           result.ruleId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime))! as DateTime;
           break;
       }
     }
@@ -115,10 +115,10 @@ class _$RuleHistory extends RuleHistory {
   final BuiltMap<int, RuleRecord> records;
 
   factory _$RuleHistory([void Function(RuleHistoryBuilder)? updates]) =>
-      (new RuleHistoryBuilder()..update(updates)).build();
+      (new RuleHistoryBuilder()..update(updates))._build();
 
   _$RuleHistory._({this.latestRule, required this.records}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(records, 'RuleHistory', 'records');
+    BuiltValueNullFieldError.checkNotNull(records, r'RuleHistory', 'records');
   }
 
   @override
@@ -138,12 +138,16 @@ class _$RuleHistory extends RuleHistory {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, latestRule.hashCode), records.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, latestRule.hashCode);
+    _$hash = $jc(_$hash, records.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('RuleHistory')
+    return (newBuiltValueToStringHelper(r'RuleHistory')
           ..add('latestRule', latestRule)
           ..add('records', records))
         .toString();
@@ -189,7 +193,9 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
   }
 
   @override
-  _$RuleHistory build() {
+  RuleHistory build() => _build();
+
+  _$RuleHistory _build() {
     _$RuleHistory _$result;
     try {
       _$result = _$v ??
@@ -204,7 +210,7 @@ class RuleHistoryBuilder implements Builder<RuleHistory, RuleHistoryBuilder> {
         records.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'RuleHistory', _$failedField, e.toString());
+            r'RuleHistory', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -220,11 +226,11 @@ class _$RuleRecord extends RuleRecord {
   final DateTime time;
 
   factory _$RuleRecord([void Function(RuleRecordBuilder)? updates]) =>
-      (new RuleRecordBuilder()..update(updates)).build();
+      (new RuleRecordBuilder()..update(updates))._build();
 
   _$RuleRecord._({required this.ruleId, required this.time}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(ruleId, 'RuleRecord', 'ruleId');
-    BuiltValueNullFieldError.checkNotNull(time, 'RuleRecord', 'time');
+    BuiltValueNullFieldError.checkNotNull(ruleId, r'RuleRecord', 'ruleId');
+    BuiltValueNullFieldError.checkNotNull(time, r'RuleRecord', 'time');
   }
 
   @override
@@ -242,12 +248,16 @@ class _$RuleRecord extends RuleRecord {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, ruleId.hashCode), time.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, ruleId.hashCode);
+    _$hash = $jc(_$hash, time.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('RuleRecord')
+    return (newBuiltValueToStringHelper(r'RuleRecord')
           ..add('ruleId', ruleId)
           ..add('time', time))
         .toString();
@@ -289,16 +299,18 @@ class RuleRecordBuilder implements Builder<RuleRecord, RuleRecordBuilder> {
   }
 
   @override
-  _$RuleRecord build() {
+  RuleRecord build() => _build();
+
+  _$RuleRecord _build() {
     final _$result = _$v ??
         new _$RuleRecord._(
             ruleId: BuiltValueNullFieldError.checkNotNull(
-                ruleId, 'RuleRecord', 'ruleId'),
+                ruleId, r'RuleRecord', 'ruleId'),
             time: BuiltValueNullFieldError.checkNotNull(
-                time, 'RuleRecord', 'time'));
+                time, r'RuleRecord', 'time'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

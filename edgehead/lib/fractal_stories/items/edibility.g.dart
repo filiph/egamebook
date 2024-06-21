@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of fractal_stories.items.edibility;
+part of 'edibility.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -43,7 +43,7 @@ class _$EdibilitySerializer implements StructuredSerializer<Edibility> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -53,11 +53,11 @@ class _$EdibilitySerializer implements StructuredSerializer<Edibility> {
           break;
         case 'isEdibleByHumanoids':
           result.isEdibleByHumanoids = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'staminaBonus':
           result.staminaBonus = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -75,7 +75,7 @@ class _$Edibility extends Edibility {
   final int staminaBonus;
 
   factory _$Edibility([void Function(EdibilityBuilder)? updates]) =>
-      (new EdibilityBuilder()..update(updates)).build();
+      (new EdibilityBuilder()..update(updates))._build();
 
   _$Edibility._(
       {this.eatingReport,
@@ -83,9 +83,9 @@ class _$Edibility extends Edibility {
       required this.staminaBonus})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        isEdibleByHumanoids, 'Edibility', 'isEdibleByHumanoids');
+        isEdibleByHumanoids, r'Edibility', 'isEdibleByHumanoids');
     BuiltValueNullFieldError.checkNotNull(
-        staminaBonus, 'Edibility', 'staminaBonus');
+        staminaBonus, r'Edibility', 'staminaBonus');
   }
 
   @override
@@ -106,14 +106,17 @@ class _$Edibility extends Edibility {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc(0, eatingReport.hashCode), isEdibleByHumanoids.hashCode),
-        staminaBonus.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, eatingReport.hashCode);
+    _$hash = $jc(_$hash, isEdibleByHumanoids.hashCode);
+    _$hash = $jc(_$hash, staminaBonus.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Edibility')
+    return (newBuiltValueToStringHelper(r'Edibility')
           ..add('eatingReport', eatingReport)
           ..add('isEdibleByHumanoids', isEdibleByHumanoids)
           ..add('staminaBonus', staminaBonus))
@@ -162,17 +165,19 @@ class EdibilityBuilder implements Builder<Edibility, EdibilityBuilder> {
   }
 
   @override
-  _$Edibility build() {
+  Edibility build() => _build();
+
+  _$Edibility _build() {
     final _$result = _$v ??
         new _$Edibility._(
             eatingReport: eatingReport,
             isEdibleByHumanoids: BuiltValueNullFieldError.checkNotNull(
-                isEdibleByHumanoids, 'Edibility', 'isEdibleByHumanoids'),
+                isEdibleByHumanoids, r'Edibility', 'isEdibleByHumanoids'),
             staminaBonus: BuiltValueNullFieldError.checkNotNull(
-                staminaBonus, 'Edibility', 'staminaBonus'));
+                staminaBonus, r'Edibility', 'staminaBonus'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

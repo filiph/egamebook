@@ -48,17 +48,17 @@ class _$ReservoirDamWheelLeftRescueSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -99,17 +99,17 @@ class _$ReservoirDamWheelRightRescueSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -151,17 +151,17 @@ class _$GuardpostAboveChurchTakeShieldRescueSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -181,15 +181,15 @@ class _$ReservoirDamWheelLeftRescueSituation
           [void Function(ReservoirDamWheelLeftRescueSituationBuilder)?
               updates]) =>
       (new ReservoirDamWheelLeftRescueSituationBuilder()..update(updates))
-          .build();
+          ._build();
 
   _$ReservoirDamWheelLeftRescueSituation._(
       {required this.id, required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        id, 'ReservoirDamWheelLeftRescueSituation', 'id');
+        id, r'ReservoirDamWheelLeftRescueSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        turn, 'ReservoirDamWheelLeftRescueSituation', 'turn');
+        turn, r'ReservoirDamWheelLeftRescueSituation', 'turn');
   }
 
   @override
@@ -211,12 +211,16 @@ class _$ReservoirDamWheelLeftRescueSituation
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, id.hashCode), turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ReservoirDamWheelLeftRescueSituation')
+    return (newBuiltValueToStringHelper(r'ReservoirDamWheelLeftRescueSituation')
           ..add('id', id)
           ..add('turn', turn))
         .toString();
@@ -262,13 +266,15 @@ class ReservoirDamWheelLeftRescueSituationBuilder
   }
 
   @override
-  _$ReservoirDamWheelLeftRescueSituation build() {
+  ReservoirDamWheelLeftRescueSituation build() => _build();
+
+  _$ReservoirDamWheelLeftRescueSituation _build() {
     final _$result = _$v ??
         new _$ReservoirDamWheelLeftRescueSituation._(
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'ReservoirDamWheelLeftRescueSituation', 'id'),
+                id, r'ReservoirDamWheelLeftRescueSituation', 'id'),
             turn: BuiltValueNullFieldError.checkNotNull(
-                turn, 'ReservoirDamWheelLeftRescueSituation', 'turn'));
+                turn, r'ReservoirDamWheelLeftRescueSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
@@ -285,15 +291,15 @@ class _$ReservoirDamWheelRightRescueSituation
           [void Function(ReservoirDamWheelRightRescueSituationBuilder)?
               updates]) =>
       (new ReservoirDamWheelRightRescueSituationBuilder()..update(updates))
-          .build();
+          ._build();
 
   _$ReservoirDamWheelRightRescueSituation._(
       {required this.id, required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        id, 'ReservoirDamWheelRightRescueSituation', 'id');
+        id, r'ReservoirDamWheelRightRescueSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        turn, 'ReservoirDamWheelRightRescueSituation', 'turn');
+        turn, r'ReservoirDamWheelRightRescueSituation', 'turn');
   }
 
   @override
@@ -316,12 +322,17 @@ class _$ReservoirDamWheelRightRescueSituation
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, id.hashCode), turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ReservoirDamWheelRightRescueSituation')
+    return (newBuiltValueToStringHelper(
+            r'ReservoirDamWheelRightRescueSituation')
           ..add('id', id)
           ..add('turn', turn))
         .toString();
@@ -367,13 +378,15 @@ class ReservoirDamWheelRightRescueSituationBuilder
   }
 
   @override
-  _$ReservoirDamWheelRightRescueSituation build() {
+  ReservoirDamWheelRightRescueSituation build() => _build();
+
+  _$ReservoirDamWheelRightRescueSituation _build() {
     final _$result = _$v ??
         new _$ReservoirDamWheelRightRescueSituation._(
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'ReservoirDamWheelRightRescueSituation', 'id'),
+                id, r'ReservoirDamWheelRightRescueSituation', 'id'),
             turn: BuiltValueNullFieldError.checkNotNull(
-                turn, 'ReservoirDamWheelRightRescueSituation', 'turn'));
+                turn, r'ReservoirDamWheelRightRescueSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
@@ -391,15 +404,15 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
               updates]) =>
       (new GuardpostAboveChurchTakeShieldRescueSituationBuilder()
             ..update(updates))
-          .build();
+          ._build();
 
   _$GuardpostAboveChurchTakeShieldRescueSituation._(
       {required this.id, required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        id, 'GuardpostAboveChurchTakeShieldRescueSituation', 'id');
+        id, r'GuardpostAboveChurchTakeShieldRescueSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        turn, 'GuardpostAboveChurchTakeShieldRescueSituation', 'turn');
+        turn, r'GuardpostAboveChurchTakeShieldRescueSituation', 'turn');
   }
 
   @override
@@ -422,13 +435,17 @@ class _$GuardpostAboveChurchTakeShieldRescueSituation
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, id.hashCode), turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(
-            'GuardpostAboveChurchTakeShieldRescueSituation')
+            r'GuardpostAboveChurchTakeShieldRescueSituation')
           ..add('id', id)
           ..add('turn', turn))
         .toString();
@@ -475,16 +492,18 @@ class GuardpostAboveChurchTakeShieldRescueSituationBuilder
   }
 
   @override
-  _$GuardpostAboveChurchTakeShieldRescueSituation build() {
+  GuardpostAboveChurchTakeShieldRescueSituation build() => _build();
+
+  _$GuardpostAboveChurchTakeShieldRescueSituation _build() {
     final _$result = _$v ??
         new _$GuardpostAboveChurchTakeShieldRescueSituation._(
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'GuardpostAboveChurchTakeShieldRescueSituation', 'id'),
-            turn: BuiltValueNullFieldError.checkNotNull(
-                turn, 'GuardpostAboveChurchTakeShieldRescueSituation', 'turn'));
+                id, r'GuardpostAboveChurchTakeShieldRescueSituation', 'id'),
+            turn: BuiltValueNullFieldError.checkNotNull(turn,
+                r'GuardpostAboveChurchTakeShieldRescueSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

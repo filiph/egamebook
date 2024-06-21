@@ -51,7 +51,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -71,7 +71,7 @@ class _$InventorySerializer implements StructuredSerializer<Inventory> {
           break;
         case 'weaponInPrimaryAppendage':
           result.weaponInPrimaryAppendage = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -99,9 +99,9 @@ class _$Inventory extends Inventory {
       required this.items,
       required this.weaponInPrimaryAppendage})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(items, 'Inventory', 'items');
+    BuiltValueNullFieldError.checkNotNull(items, r'Inventory', 'items');
     BuiltValueNullFieldError.checkNotNull(
-        weaponInPrimaryAppendage, 'Inventory', 'weaponInPrimaryAppendage');
+        weaponInPrimaryAppendage, r'Inventory', 'weaponInPrimaryAppendage');
   }
 
   @override
@@ -123,15 +123,18 @@ class _$Inventory extends Inventory {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, currentShield.hashCode), currentWeapon.hashCode),
-            items.hashCode),
-        weaponInPrimaryAppendage.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, currentShield.hashCode);
+    _$hash = $jc(_$hash, currentWeapon.hashCode);
+    _$hash = $jc(_$hash, items.hashCode);
+    _$hash = $jc(_$hash, weaponInPrimaryAppendage.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Inventory')
+    return (newBuiltValueToStringHelper(r'Inventory')
           ..add('currentShield', currentShield)
           ..add('currentWeapon', currentWeapon)
           ..add('items', items)
@@ -217,7 +220,9 @@ class _$InventoryBuilder extends InventoryBuilder {
   }
 
   @override
-  _$Inventory build() {
+  Inventory build() => _build();
+
+  _$Inventory _build() {
     _$Inventory _$result;
     try {
       _$result = _$v ??
@@ -227,7 +232,7 @@ class _$InventoryBuilder extends InventoryBuilder {
               items: items.build(),
               weaponInPrimaryAppendage: BuiltValueNullFieldError.checkNotNull(
                   weaponInPrimaryAppendage,
-                  'Inventory',
+                  r'Inventory',
                   'weaponInPrimaryAppendage'));
     } catch (_) {
       late String _$failedField;
@@ -236,7 +241,7 @@ class _$InventoryBuilder extends InventoryBuilder {
         items.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Inventory', _$failedField, e.toString());
+            r'Inventory', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -245,4 +250,4 @@ class _$InventoryBuilder extends InventoryBuilder {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

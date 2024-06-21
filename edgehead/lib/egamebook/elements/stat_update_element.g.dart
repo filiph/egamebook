@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of egamebook.element.stat_update;
+part of 'stat_update_element.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -74,9 +74,9 @@ class _$StatUpdate extends StatUpdate {
   _$StatUpdate._(
       {required this.change, required this.name, required this.newValue})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(change, 'StatUpdate', 'change');
-    BuiltValueNullFieldError.checkNotNull(name, 'StatUpdate', 'name');
-    BuiltValueNullFieldError.checkNotNull(newValue, 'StatUpdate', 'newValue');
+    BuiltValueNullFieldError.checkNotNull(change, r'StatUpdate', 'change');
+    BuiltValueNullFieldError.checkNotNull(name, r'StatUpdate', 'name');
+    BuiltValueNullFieldError.checkNotNull(newValue, r'StatUpdate', 'newValue');
   }
 
   @override
@@ -97,13 +97,17 @@ class _$StatUpdate extends StatUpdate {
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, change.hashCode), name.hashCode), newValue.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, change.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, newValue.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('StatUpdate')
+    return (newBuiltValueToStringHelper(r'StatUpdate')
           ..add('change', change)
           ..add('name', name)
           ..add('newValue', newValue))
@@ -157,14 +161,14 @@ class StatUpdateBuilder implements Builder<StatUpdate, StatUpdateBuilder> {
     final _$result = _$v ??
         new _$StatUpdate._(
             change: BuiltValueNullFieldError.checkNotNull(
-                change, 'StatUpdate', 'change'),
+                change, r'StatUpdate', 'change'),
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'StatUpdate', 'name'),
+                name, r'StatUpdate', 'name'),
             newValue: BuiltValueNullFieldError.checkNotNull(
-                newValue, 'StatUpdate', 'newValue'));
+                newValue, r'StatUpdate', 'newValue'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

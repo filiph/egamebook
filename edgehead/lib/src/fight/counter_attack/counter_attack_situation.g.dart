@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.fight.counter_attack_situation;
+part of 'counter_attack_situation.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -46,25 +46,25 @@ class _$CounterAttackSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'counterAttacker':
           result.counterAttacker = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'target':
           result.target = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -85,7 +85,7 @@ class _$CounterAttackSituation extends CounterAttackSituation {
 
   factory _$CounterAttackSituation(
           [void Function(CounterAttackSituationBuilder)? updates]) =>
-      (new CounterAttackSituationBuilder()..update(updates)).build();
+      (new CounterAttackSituationBuilder()..update(updates))._build();
 
   _$CounterAttackSituation._(
       {required this.counterAttacker,
@@ -94,12 +94,12 @@ class _$CounterAttackSituation extends CounterAttackSituation {
       required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        counterAttacker, 'CounterAttackSituation', 'counterAttacker');
-    BuiltValueNullFieldError.checkNotNull(id, 'CounterAttackSituation', 'id');
+        counterAttacker, r'CounterAttackSituation', 'counterAttacker');
+    BuiltValueNullFieldError.checkNotNull(id, r'CounterAttackSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        target, 'CounterAttackSituation', 'target');
+        target, r'CounterAttackSituation', 'target');
     BuiltValueNullFieldError.checkNotNull(
-        turn, 'CounterAttackSituation', 'turn');
+        turn, r'CounterAttackSituation', 'turn');
   }
 
   @override
@@ -123,15 +123,18 @@ class _$CounterAttackSituation extends CounterAttackSituation {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, counterAttacker.hashCode), id.hashCode),
-            target.hashCode),
-        turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, counterAttacker.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, target.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CounterAttackSituation')
+    return (newBuiltValueToStringHelper(r'CounterAttackSituation')
           ..add('counterAttacker', counterAttacker)
           ..add('id', id)
           ..add('target', target)
@@ -187,20 +190,22 @@ class CounterAttackSituationBuilder
   }
 
   @override
-  _$CounterAttackSituation build() {
+  CounterAttackSituation build() => _build();
+
+  _$CounterAttackSituation _build() {
     final _$result = _$v ??
         new _$CounterAttackSituation._(
             counterAttacker: BuiltValueNullFieldError.checkNotNull(
-                counterAttacker, 'CounterAttackSituation', 'counterAttacker'),
+                counterAttacker, r'CounterAttackSituation', 'counterAttacker'),
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'CounterAttackSituation', 'id'),
+                id, r'CounterAttackSituation', 'id'),
             target: BuiltValueNullFieldError.checkNotNull(
-                target, 'CounterAttackSituation', 'target'),
+                target, r'CounterAttackSituation', 'target'),
             turn: BuiltValueNullFieldError.checkNotNull(
-                turn, 'CounterAttackSituation', 'turn'));
+                turn, r'CounterAttackSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

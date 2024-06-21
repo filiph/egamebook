@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of edgehead_global;
+part of 'edgehead_global.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -40,13 +40,13 @@ class _$EdgeheadGlobalStateSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'isInTesterMode':
           result.isInTesterMode = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -61,11 +61,11 @@ class _$EdgeheadGlobalState extends EdgeheadGlobalState {
 
   factory _$EdgeheadGlobalState(
           [void Function(EdgeheadGlobalStateBuilder)? updates]) =>
-      (new EdgeheadGlobalStateBuilder()..update(updates)).build();
+      (new EdgeheadGlobalStateBuilder()..update(updates))._build();
 
   _$EdgeheadGlobalState._({required this.isInTesterMode}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        isInTesterMode, 'EdgeheadGlobalState', 'isInTesterMode');
+        isInTesterMode, r'EdgeheadGlobalState', 'isInTesterMode');
   }
 
   @override
@@ -86,12 +86,15 @@ class _$EdgeheadGlobalState extends EdgeheadGlobalState {
 
   @override
   int get hashCode {
-    return $jf($jc(0, isInTesterMode.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, isInTesterMode.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('EdgeheadGlobalState')
+    return (newBuiltValueToStringHelper(r'EdgeheadGlobalState')
           ..add('isInTesterMode', isInTesterMode))
         .toString();
   }
@@ -129,14 +132,16 @@ class EdgeheadGlobalStateBuilder
   }
 
   @override
-  _$EdgeheadGlobalState build() {
+  EdgeheadGlobalState build() => _build();
+
+  _$EdgeheadGlobalState _build() {
     final _$result = _$v ??
         new _$EdgeheadGlobalState._(
             isInTesterMode: BuiltValueNullFieldError.checkNotNull(
-                isInTesterMode, 'EdgeheadGlobalState', 'isInTesterMode'));
+                isInTesterMode, r'EdgeheadGlobalState', 'isInTesterMode'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

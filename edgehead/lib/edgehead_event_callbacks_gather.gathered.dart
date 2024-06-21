@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of edgehead.event_callbacks;
+part of 'edgehead_event_callbacks_gather.dart';
 
 // **************************************************************************
 // InstanceSerializerGenerator

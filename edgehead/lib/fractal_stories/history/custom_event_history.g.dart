@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.history.custom_event;
+part of 'custom_event_history.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -50,7 +50,7 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -64,11 +64,11 @@ class _$CustomEventSerializer implements StructuredSerializer<CustomEvent> {
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime))! as DateTime;
           break;
       }
     }
@@ -106,7 +106,7 @@ class _$CustomEventHistorySerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -135,13 +135,13 @@ class _$CustomEvent extends CustomEvent {
   final DateTime time;
 
   factory _$CustomEvent([void Function(CustomEventBuilder)? updates]) =>
-      (new CustomEventBuilder()..update(updates)).build();
+      (new CustomEventBuilder()..update(updates))._build();
 
   _$CustomEvent._(
       {this.actorId, this.data, required this.name, required this.time})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(name, 'CustomEvent', 'name');
-    BuiltValueNullFieldError.checkNotNull(time, 'CustomEvent', 'time');
+    BuiltValueNullFieldError.checkNotNull(name, r'CustomEvent', 'name');
+    BuiltValueNullFieldError.checkNotNull(time, r'CustomEvent', 'time');
   }
 
   @override
@@ -163,14 +163,18 @@ class _$CustomEvent extends CustomEvent {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, actorId.hashCode), data.hashCode), name.hashCode),
-        time.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, actorId.hashCode);
+    _$hash = $jc(_$hash, data.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, time.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CustomEvent')
+    return (newBuiltValueToStringHelper(r'CustomEvent')
           ..add('actorId', actorId)
           ..add('data', data)
           ..add('name', name)
@@ -224,15 +228,17 @@ class CustomEventBuilder implements Builder<CustomEvent, CustomEventBuilder> {
   }
 
   @override
-  _$CustomEvent build() {
+  CustomEvent build() => _build();
+
+  _$CustomEvent _build() {
     final _$result = _$v ??
         new _$CustomEvent._(
             actorId: actorId,
             data: data,
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'CustomEvent', 'name'),
+                name, r'CustomEvent', 'name'),
             time: BuiltValueNullFieldError.checkNotNull(
-                time, 'CustomEvent', 'time'));
+                time, r'CustomEvent', 'time'));
     replace(_$result);
     return _$result;
   }
@@ -244,11 +250,11 @@ class _$CustomEventHistory extends CustomEventHistory {
 
   factory _$CustomEventHistory(
           [void Function(CustomEventHistoryBuilder)? updates]) =>
-      (new CustomEventHistoryBuilder()..update(updates)).build();
+      (new CustomEventHistoryBuilder()..update(updates))._build();
 
   _$CustomEventHistory._({required this.records}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        records, 'CustomEventHistory', 'records');
+        records, r'CustomEventHistory', 'records');
   }
 
   @override
@@ -268,12 +274,15 @@ class _$CustomEventHistory extends CustomEventHistory {
 
   @override
   int get hashCode {
-    return $jf($jc(0, records.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, records.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CustomEventHistory')
+    return (newBuiltValueToStringHelper(r'CustomEventHistory')
           ..add('records', records))
         .toString();
   }
@@ -312,7 +321,9 @@ class CustomEventHistoryBuilder
   }
 
   @override
-  _$CustomEventHistory build() {
+  CustomEventHistory build() => _build();
+
+  _$CustomEventHistory _build() {
     _$CustomEventHistory _$result;
     try {
       _$result = _$v ?? new _$CustomEventHistory._(records: records.build());
@@ -323,7 +334,7 @@ class CustomEventHistoryBuilder
         records.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CustomEventHistory', _$failedField, e.toString());
+            r'CustomEventHistory', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -332,4 +343,4 @@ class CustomEventHistoryBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint
