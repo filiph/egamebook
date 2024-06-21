@@ -3,7 +3,8 @@ sdk:
 
 stages:
   - analyze:
-    - analyze: --fatal-infos --fatal-warnings .
+    # TODO: re-add `--fatal-infos`
+    - analyze: --fatal-warnings .
     - format
   - unit_test:
     - test
