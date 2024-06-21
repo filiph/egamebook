@@ -43,7 +43,7 @@ class _$InkSituationSerializer implements StructuredSerializer<InkSituation> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -55,15 +55,15 @@ class _$InkSituationSerializer implements StructuredSerializer<InkSituation> {
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'inkAstName':
           result.inkAstName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -83,7 +83,7 @@ class _$InkSituation extends InkSituation {
   final int turn;
 
   factory _$InkSituation([void Function(InkSituationBuilder)? updates]) =>
-      (new InkSituationBuilder()..update(updates)).build();
+      (new InkSituationBuilder()..update(updates))._build();
 
   _$InkSituation._(
       {required this.currentPath,
@@ -92,11 +92,11 @@ class _$InkSituation extends InkSituation {
       required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        currentPath, 'InkSituation', 'currentPath');
-    BuiltValueNullFieldError.checkNotNull(id, 'InkSituation', 'id');
+        currentPath, r'InkSituation', 'currentPath');
+    BuiltValueNullFieldError.checkNotNull(id, r'InkSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        inkAstName, 'InkSituation', 'inkAstName');
-    BuiltValueNullFieldError.checkNotNull(turn, 'InkSituation', 'turn');
+        inkAstName, r'InkSituation', 'inkAstName');
+    BuiltValueNullFieldError.checkNotNull(turn, r'InkSituation', 'turn');
   }
 
   @override
@@ -118,15 +118,18 @@ class _$InkSituation extends InkSituation {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, currentPath.hashCode), id.hashCode),
-            inkAstName.hashCode),
-        turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, currentPath.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, inkAstName.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('InkSituation')
+    return (newBuiltValueToStringHelper(r'InkSituation')
           ..add('currentPath', currentPath)
           ..add('id', id)
           ..add('inkAstName', inkAstName)
@@ -183,18 +186,20 @@ class InkSituationBuilder
   }
 
   @override
-  _$InkSituation build() {
+  InkSituation build() => _build();
+
+  _$InkSituation _build() {
     _$InkSituation _$result;
     try {
       _$result = _$v ??
           new _$InkSituation._(
               currentPath: currentPath.build(),
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'InkSituation', 'id'),
+                  id, r'InkSituation', 'id'),
               inkAstName: BuiltValueNullFieldError.checkNotNull(
-                  inkAstName, 'InkSituation', 'inkAstName'),
+                  inkAstName, r'InkSituation', 'inkAstName'),
               turn: BuiltValueNullFieldError.checkNotNull(
-                  turn, 'InkSituation', 'turn'));
+                  turn, r'InkSituation', 'turn'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -202,7 +207,7 @@ class InkSituationBuilder
         currentPath.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'InkSituation', _$failedField, e.toString());
+            r'InkSituation', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -211,4 +216,4 @@ class InkSituationBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

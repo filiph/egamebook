@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.room_roaming.room_roaming_situation;
+part of 'room_roaming_situation.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -47,25 +47,25 @@ class _$RoomRoamingSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'currentRoomName':
           result.currentRoomName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'monstersAlive':
           result.monstersAlive = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -86,7 +86,7 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
 
   factory _$RoomRoamingSituation(
           [void Function(RoomRoamingSituationBuilder)? updates]) =>
-      (new RoomRoamingSituationBuilder()..update(updates)).build();
+      (new RoomRoamingSituationBuilder()..update(updates))._build();
 
   _$RoomRoamingSituation._(
       {required this.currentRoomName,
@@ -95,11 +95,12 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
       required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        currentRoomName, 'RoomRoamingSituation', 'currentRoomName');
-    BuiltValueNullFieldError.checkNotNull(id, 'RoomRoamingSituation', 'id');
+        currentRoomName, r'RoomRoamingSituation', 'currentRoomName');
+    BuiltValueNullFieldError.checkNotNull(id, r'RoomRoamingSituation', 'id');
     BuiltValueNullFieldError.checkNotNull(
-        monstersAlive, 'RoomRoamingSituation', 'monstersAlive');
-    BuiltValueNullFieldError.checkNotNull(turn, 'RoomRoamingSituation', 'turn');
+        monstersAlive, r'RoomRoamingSituation', 'monstersAlive');
+    BuiltValueNullFieldError.checkNotNull(
+        turn, r'RoomRoamingSituation', 'turn');
   }
 
   @override
@@ -123,15 +124,18 @@ class _$RoomRoamingSituation extends RoomRoamingSituation {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, currentRoomName.hashCode), id.hashCode),
-            monstersAlive.hashCode),
-        turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, currentRoomName.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, monstersAlive.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('RoomRoamingSituation')
+    return (newBuiltValueToStringHelper(r'RoomRoamingSituation')
           ..add('currentRoomName', currentRoomName)
           ..add('id', id)
           ..add('monstersAlive', monstersAlive)
@@ -188,20 +192,22 @@ class RoomRoamingSituationBuilder
   }
 
   @override
-  _$RoomRoamingSituation build() {
+  RoomRoamingSituation build() => _build();
+
+  _$RoomRoamingSituation _build() {
     final _$result = _$v ??
         new _$RoomRoamingSituation._(
             currentRoomName: BuiltValueNullFieldError.checkNotNull(
-                currentRoomName, 'RoomRoamingSituation', 'currentRoomName'),
+                currentRoomName, r'RoomRoamingSituation', 'currentRoomName'),
             id: BuiltValueNullFieldError.checkNotNull(
-                id, 'RoomRoamingSituation', 'id'),
+                id, r'RoomRoamingSituation', 'id'),
             monstersAlive: BuiltValueNullFieldError.checkNotNull(
-                monstersAlive, 'RoomRoamingSituation', 'monstersAlive'),
+                monstersAlive, r'RoomRoamingSituation', 'monstersAlive'),
             turn: BuiltValueNullFieldError.checkNotNull(
-                turn, 'RoomRoamingSituation', 'turn'));
+                turn, r'RoomRoamingSituation', 'turn'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

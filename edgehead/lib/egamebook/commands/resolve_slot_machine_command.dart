@@ -41,7 +41,7 @@ class SlotResult extends EnumClass {
 
   static BuiltSet<SlotResult> get values => _$values;
 
-  const SlotResult._(String name) : super(name);
+  const SlotResult._(super.name);
   slot.Result get asResult {
     switch (this) {
       case success:

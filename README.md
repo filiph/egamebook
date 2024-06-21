@@ -30,7 +30,7 @@ To play the IFCOMP 2017 entry called _Insignificant Little Vermin_,
 Most development happens inside the subfolders of this monorepo. 
 But for CI, you'll need to use the Dart `mono_repo` package:
 
-    pub global activate mono_repo
+    dart pub global activate mono_repo
 
 This installs the `mono_repo` command line tool.
 

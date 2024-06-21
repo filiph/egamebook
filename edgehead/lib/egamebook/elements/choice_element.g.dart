@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of egamebook.element.choice;
+part of 'choice_element.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -61,13 +61,13 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'actionName':
           result.actionName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'additionalData':
           result.additionalData.replace(serializers.deserialize(value,
@@ -88,7 +88,7 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           break;
         case 'commandSentence':
           result.commandSentence = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'helpMessage':
           result.helpMessage = serializers.deserialize(value,
@@ -96,11 +96,11 @@ class _$ChoiceSerializer implements StructuredSerializer<Choice> {
           break;
         case 'isImplicit':
           result.isImplicit = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'successChance':
           result.successChance = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double;
+              specifiedType: const FullType(double))! as double;
           break;
       }
     }
@@ -128,7 +128,7 @@ class _$Choice extends Choice {
   final double successChance;
 
   factory _$Choice([void Function(ChoiceBuilder)? updates]) =>
-      (new ChoiceBuilder()..update(updates)).build();
+      (new ChoiceBuilder()..update(updates))._build();
 
   _$Choice._(
       {required this.actionName,
@@ -140,17 +140,18 @@ class _$Choice extends Choice {
       required this.isImplicit,
       required this.successChance})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(actionName, 'Choice', 'actionName');
+    BuiltValueNullFieldError.checkNotNull(actionName, r'Choice', 'actionName');
     BuiltValueNullFieldError.checkNotNull(
-        additionalData, 'Choice', 'additionalData');
+        additionalData, r'Choice', 'additionalData');
     BuiltValueNullFieldError.checkNotNull(
-        additionalStrings, 'Choice', 'additionalStrings');
-    BuiltValueNullFieldError.checkNotNull(commandPath, 'Choice', 'commandPath');
+        additionalStrings, r'Choice', 'additionalStrings');
     BuiltValueNullFieldError.checkNotNull(
-        commandSentence, 'Choice', 'commandSentence');
-    BuiltValueNullFieldError.checkNotNull(isImplicit, 'Choice', 'isImplicit');
+        commandPath, r'Choice', 'commandPath');
     BuiltValueNullFieldError.checkNotNull(
-        successChance, 'Choice', 'successChance');
+        commandSentence, r'Choice', 'commandSentence');
+    BuiltValueNullFieldError.checkNotNull(isImplicit, r'Choice', 'isImplicit');
+    BuiltValueNullFieldError.checkNotNull(
+        successChance, r'Choice', 'successChance');
   }
 
   @override
@@ -176,25 +177,22 @@ class _$Choice extends Choice {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc($jc(0, actionName.hashCode),
-                                additionalData.hashCode),
-                            additionalStrings.hashCode),
-                        commandPath.hashCode),
-                    commandSentence.hashCode),
-                helpMessage.hashCode),
-            isImplicit.hashCode),
-        successChance.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, actionName.hashCode);
+    _$hash = $jc(_$hash, additionalData.hashCode);
+    _$hash = $jc(_$hash, additionalStrings.hashCode);
+    _$hash = $jc(_$hash, commandPath.hashCode);
+    _$hash = $jc(_$hash, commandSentence.hashCode);
+    _$hash = $jc(_$hash, helpMessage.hashCode);
+    _$hash = $jc(_$hash, isImplicit.hashCode);
+    _$hash = $jc(_$hash, successChance.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Choice')
+    return (newBuiltValueToStringHelper(r'Choice')
           ..add('actionName', actionName)
           ..add('additionalData', additionalData)
           ..add('additionalStrings', additionalStrings)
@@ -280,23 +278,25 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   }
 
   @override
-  _$Choice build() {
+  Choice build() => _build();
+
+  _$Choice _build() {
     _$Choice _$result;
     try {
       _$result = _$v ??
           new _$Choice._(
               actionName: BuiltValueNullFieldError.checkNotNull(
-                  actionName, 'Choice', 'actionName'),
+                  actionName, r'Choice', 'actionName'),
               additionalData: additionalData.build(),
               additionalStrings: additionalStrings.build(),
               commandPath: commandPath.build(),
               commandSentence: BuiltValueNullFieldError.checkNotNull(
-                  commandSentence, 'Choice', 'commandSentence'),
+                  commandSentence, r'Choice', 'commandSentence'),
               helpMessage: helpMessage,
               isImplicit: BuiltValueNullFieldError.checkNotNull(
-                  isImplicit, 'Choice', 'isImplicit'),
+                  isImplicit, r'Choice', 'isImplicit'),
               successChance: BuiltValueNullFieldError.checkNotNull(
-                  successChance, 'Choice', 'successChance'));
+                  successChance, r'Choice', 'successChance'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -308,7 +308,7 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
         commandPath.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Choice', _$failedField, e.toString());
+            r'Choice', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -317,4 +317,4 @@ class ChoiceBuilder implements Builder<Choice, ChoiceBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

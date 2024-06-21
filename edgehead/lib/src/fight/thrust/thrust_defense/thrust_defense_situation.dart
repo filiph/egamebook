@@ -1,5 +1,3 @@
-library stranded.fight.thrust_defense_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/thrust/thrust_defense/actions/dodge_thrust.dart';

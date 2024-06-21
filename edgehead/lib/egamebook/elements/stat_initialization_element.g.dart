@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of egamebook.element.stat_initialization;
+part of 'stat_initialization_element.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -39,17 +39,17 @@ class _$StatInitializationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'initialValue':
           result.initialValue = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
       }
     }
@@ -66,13 +66,13 @@ class _$StatInitialization extends StatInitialization {
 
   factory _$StatInitialization(
           [void Function(StatInitializationBuilder)? updates]) =>
-      (new StatInitializationBuilder()..update(updates)).build();
+      (new StatInitializationBuilder()..update(updates))._build();
 
   _$StatInitialization._({required this.initialValue, required this.name})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        initialValue, 'StatInitialization', 'initialValue');
-    BuiltValueNullFieldError.checkNotNull(name, 'StatInitialization', 'name');
+        initialValue, r'StatInitialization', 'initialValue');
+    BuiltValueNullFieldError.checkNotNull(name, r'StatInitialization', 'name');
   }
 
   @override
@@ -94,12 +94,16 @@ class _$StatInitialization extends StatInitialization {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, initialValue.hashCode), name.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, initialValue.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('StatInitialization')
+    return (newBuiltValueToStringHelper(r'StatInitialization')
           ..add('initialValue', initialValue)
           ..add('name', name))
         .toString();
@@ -142,16 +146,18 @@ class StatInitializationBuilder
   }
 
   @override
-  _$StatInitialization build() {
+  StatInitialization build() => _build();
+
+  _$StatInitialization _build() {
     final _$result = _$v ??
         new _$StatInitialization._(
             initialValue: BuiltValueNullFieldError.checkNotNull(
-                initialValue, 'StatInitialization', 'initialValue'),
+                initialValue, r'StatInitialization', 'initialValue'),
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'StatInitialization', 'name'));
+                name, r'StatInitialization', 'name'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

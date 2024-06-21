@@ -1,5 +1,3 @@
-library stranded.fight.leap_defense_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';
 import 'package:edgehead/src/fight/leap/leap_defense/actions/dodge_leap.dart';

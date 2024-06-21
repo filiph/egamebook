@@ -133,6 +133,7 @@ abstract class InventoryItemAction extends Action<Item> {
             referredEntities:
                 context.world.actors.where((actor) => !actor.isDirector))
           ..add(commandPathTemplate.join(' >> '),
+              // ignore: dead_code
               object: templateContainsObject ? object : null))
         .realizeAsString()
         // Then split again into a list.

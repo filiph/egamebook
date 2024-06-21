@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.fight.attacker_situation;
+part of 'attacker_situation.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -146,7 +146,7 @@ class _$AttackerSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -156,12 +156,12 @@ class _$AttackerSituationSerializer
           break;
         case 'attackDirection':
           result.attackDirection = serializers.deserialize(value,
-                  specifiedType: const FullType(AttackDirection))
+                  specifiedType: const FullType(AttackDirection))!
               as AttackDirection;
           break;
         case 'attacker':
           result.attacker = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'builtEnemyTargetActionGenerators':
           result.builtEnemyTargetActionGenerators.replace(
@@ -179,7 +179,7 @@ class _$AttackerSituationSerializer
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'move':
           result.move.replace(serializers.deserialize(value,
@@ -187,15 +187,15 @@ class _$AttackerSituationSerializer
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'target':
           result.target = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -236,17 +236,17 @@ class _$MoveEntitySerializer implements StructuredSerializer<MoveEntity> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'firstOwnerId':
           result.firstOwnerId = serializers.deserialize(value,
@@ -283,7 +283,7 @@ class _$AttackerSituation extends AttackerSituation {
 
   factory _$AttackerSituation(
           [void Function(AttackerSituationBuilder)? updates]) =>
-      (new AttackerSituationBuilder()..update(updates)).build();
+      (new AttackerSituationBuilder()..update(updates))._build();
 
   _$AttackerSituation._(
       {this.additionalData,
@@ -298,19 +298,19 @@ class _$AttackerSituation extends AttackerSituation {
       required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        attackDirection, 'AttackerSituation', 'attackDirection');
+        attackDirection, r'AttackerSituation', 'attackDirection');
     BuiltValueNullFieldError.checkNotNull(
-        attacker, 'AttackerSituation', 'attacker');
+        attacker, r'AttackerSituation', 'attacker');
     BuiltValueNullFieldError.checkNotNull(builtEnemyTargetActionGenerators,
-        'AttackerSituation', 'builtEnemyTargetActionGenerators');
+        r'AttackerSituation', 'builtEnemyTargetActionGenerators');
     BuiltValueNullFieldError.checkNotNull(builtOtherActorActionGenerators,
-        'AttackerSituation', 'builtOtherActorActionGenerators');
-    BuiltValueNullFieldError.checkNotNull(id, 'AttackerSituation', 'id');
-    BuiltValueNullFieldError.checkNotNull(move, 'AttackerSituation', 'move');
-    BuiltValueNullFieldError.checkNotNull(name, 'AttackerSituation', 'name');
+        r'AttackerSituation', 'builtOtherActorActionGenerators');
+    BuiltValueNullFieldError.checkNotNull(id, r'AttackerSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(move, r'AttackerSituation', 'move');
+    BuiltValueNullFieldError.checkNotNull(name, r'AttackerSituation', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        target, 'AttackerSituation', 'target');
-    BuiltValueNullFieldError.checkNotNull(turn, 'AttackerSituation', 'turn');
+        target, r'AttackerSituation', 'target');
+    BuiltValueNullFieldError.checkNotNull(turn, r'AttackerSituation', 'turn');
   }
 
   @override
@@ -341,29 +341,24 @@ class _$AttackerSituation extends AttackerSituation {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc($jc(0, additionalData.hashCode),
-                                        attackDirection.hashCode),
-                                    attacker.hashCode),
-                                builtEnemyTargetActionGenerators.hashCode),
-                            builtOtherActorActionGenerators.hashCode),
-                        id.hashCode),
-                    move.hashCode),
-                name.hashCode),
-            target.hashCode),
-        turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, additionalData.hashCode);
+    _$hash = $jc(_$hash, attackDirection.hashCode);
+    _$hash = $jc(_$hash, attacker.hashCode);
+    _$hash = $jc(_$hash, builtEnemyTargetActionGenerators.hashCode);
+    _$hash = $jc(_$hash, builtOtherActorActionGenerators.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, move.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, target.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('AttackerSituation')
+    return (newBuiltValueToStringHelper(r'AttackerSituation')
           ..add('additionalData', additionalData)
           ..add('attackDirection', attackDirection)
           ..add('attacker', attacker)
@@ -469,29 +464,31 @@ class AttackerSituationBuilder
   }
 
   @override
-  _$AttackerSituation build() {
+  AttackerSituation build() => _build();
+
+  _$AttackerSituation _build() {
     _$AttackerSituation _$result;
     try {
       _$result = _$v ??
           new _$AttackerSituation._(
               additionalData: additionalData,
               attackDirection: BuiltValueNullFieldError.checkNotNull(
-                  attackDirection, 'AttackerSituation', 'attackDirection'),
+                  attackDirection, r'AttackerSituation', 'attackDirection'),
               attacker: BuiltValueNullFieldError.checkNotNull(
-                  attacker, 'AttackerSituation', 'attacker'),
+                  attacker, r'AttackerSituation', 'attacker'),
               builtEnemyTargetActionGenerators:
                   builtEnemyTargetActionGenerators.build(),
               builtOtherActorActionGenerators:
                   builtOtherActorActionGenerators.build(),
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'AttackerSituation', 'id'),
+                  id, r'AttackerSituation', 'id'),
               move: move.build(),
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'AttackerSituation', 'name'),
+                  name, r'AttackerSituation', 'name'),
               target: BuiltValueNullFieldError.checkNotNull(
-                  target, 'AttackerSituation', 'target'),
+                  target, r'AttackerSituation', 'target'),
               turn: BuiltValueNullFieldError.checkNotNull(
-                  turn, 'AttackerSituation', 'turn'));
+                  turn, r'AttackerSituation', 'turn'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -504,7 +501,7 @@ class AttackerSituationBuilder
         move.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'AttackerSituation', _$failedField, e.toString());
+            r'AttackerSituation', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -522,12 +519,12 @@ class _$MoveEntity extends MoveEntity {
   final int? firstOwnerId;
 
   factory _$MoveEntity([void Function(MoveEntityBuilder)? updates]) =>
-      (new MoveEntityBuilder()..update(updates)).build();
+      (new MoveEntityBuilder()..update(updates))._build();
 
   _$MoveEntity._({required this.id, required this.name, this.firstOwnerId})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(id, 'MoveEntity', 'id');
-    BuiltValueNullFieldError.checkNotNull(name, 'MoveEntity', 'name');
+    BuiltValueNullFieldError.checkNotNull(id, r'MoveEntity', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, r'MoveEntity', 'name');
   }
 
   @override
@@ -548,13 +545,17 @@ class _$MoveEntity extends MoveEntity {
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, id.hashCode), name.hashCode), firstOwnerId.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, firstOwnerId.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('MoveEntity')
+    return (newBuiltValueToStringHelper(r'MoveEntity')
           ..add('id', id)
           ..add('name', name)
           ..add('firstOwnerId', firstOwnerId))
@@ -602,16 +603,18 @@ class MoveEntityBuilder implements Builder<MoveEntity, MoveEntityBuilder> {
   }
 
   @override
-  _$MoveEntity build() {
+  MoveEntity build() => _build();
+
+  _$MoveEntity _build() {
     final _$result = _$v ??
         new _$MoveEntity._(
-            id: BuiltValueNullFieldError.checkNotNull(id, 'MoveEntity', 'id'),
+            id: BuiltValueNullFieldError.checkNotNull(id, r'MoveEntity', 'id'),
             name: BuiltValueNullFieldError.checkNotNull(
-                name, 'MoveEntity', 'name'),
+                name, r'MoveEntity', 'name'),
             firstOwnerId: firstOwnerId);
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

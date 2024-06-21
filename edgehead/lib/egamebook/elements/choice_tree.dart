@@ -48,7 +48,7 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
   // A closure that gets the current prefix of a choice. For example, in
   // order 0, the prefix will be always "", for level 1 it could be "Attack",
   // and for level 2 it could be "goblin".
-  String _getPrefix(_Choice choice) {
+  String getPrefix(_Choice choice) {
     if (order == 0) return '';
     assert(
         order - 1 < choice.commandPath.length,
@@ -60,7 +60,7 @@ ChoiceTreeNode _makeNode(int order, String prefix, Iterable<_Choice> choices) {
 
   // Group all non-single choices by current prefix.
   final nonSingles = list.where((choice) => !singles.contains(choice));
-  final groups = _groupBy(nonSingles, _getPrefix);
+  final groups = _groupBy(nonSingles, getPrefix);
 
   return ChoiceTreeNode(
       order,

@@ -1,5 +1,3 @@
-library stranded.fight.slash_defense_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/bite/bite_defense/actions/dodge_bite.dart';
 import 'package:edgehead/src/fight/bite/bite_defense/actions/impale_biter.dart';

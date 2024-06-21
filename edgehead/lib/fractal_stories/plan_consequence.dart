@@ -1,5 +1,3 @@
-library stranded.plan_consequence;
-
 import 'package:edgehead/fractal_stories/action.dart';
 import 'package:edgehead/fractal_stories/actor_score.dart';
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';

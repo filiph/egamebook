@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.fight.defense_situation;
+part of 'defense_situation.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -55,13 +55,13 @@ class _$DefenseSituationSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'attacker':
           result.attacker = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'builtEnemyTargetActionGenerators':
           result.builtEnemyTargetActionGenerators.replace(
@@ -79,24 +79,24 @@ class _$DefenseSituationSerializer
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'predeterminedResult':
           result.predeterminedResult = serializers.deserialize(value,
-                  specifiedType: const FullType(Predetermination))
+                  specifiedType: const FullType(Predetermination))!
               as Predetermination;
           break;
         case 'target':
           result.target = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'turn':
           result.turn = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
       }
     }
@@ -125,7 +125,7 @@ class _$DefenseSituation extends DefenseSituation {
 
   factory _$DefenseSituation(
           [void Function(DefenseSituationBuilder)? updates]) =>
-      (new DefenseSituationBuilder()..update(updates)).build();
+      (new DefenseSituationBuilder()..update(updates))._build();
 
   _$DefenseSituation._(
       {required this.attacker,
@@ -138,17 +138,18 @@ class _$DefenseSituation extends DefenseSituation {
       required this.turn})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        attacker, 'DefenseSituation', 'attacker');
+        attacker, r'DefenseSituation', 'attacker');
     BuiltValueNullFieldError.checkNotNull(builtEnemyTargetActionGenerators,
-        'DefenseSituation', 'builtEnemyTargetActionGenerators');
+        r'DefenseSituation', 'builtEnemyTargetActionGenerators');
     BuiltValueNullFieldError.checkNotNull(builtOtherActorActionGenerators,
-        'DefenseSituation', 'builtOtherActorActionGenerators');
-    BuiltValueNullFieldError.checkNotNull(id, 'DefenseSituation', 'id');
-    BuiltValueNullFieldError.checkNotNull(name, 'DefenseSituation', 'name');
+        r'DefenseSituation', 'builtOtherActorActionGenerators');
+    BuiltValueNullFieldError.checkNotNull(id, r'DefenseSituation', 'id');
+    BuiltValueNullFieldError.checkNotNull(name, r'DefenseSituation', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        predeterminedResult, 'DefenseSituation', 'predeterminedResult');
-    BuiltValueNullFieldError.checkNotNull(target, 'DefenseSituation', 'target');
-    BuiltValueNullFieldError.checkNotNull(turn, 'DefenseSituation', 'turn');
+        predeterminedResult, r'DefenseSituation', 'predeterminedResult');
+    BuiltValueNullFieldError.checkNotNull(
+        target, r'DefenseSituation', 'target');
+    BuiltValueNullFieldError.checkNotNull(turn, r'DefenseSituation', 'turn');
   }
 
   @override
@@ -177,25 +178,22 @@ class _$DefenseSituation extends DefenseSituation {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc($jc(0, attacker.hashCode),
-                                builtEnemyTargetActionGenerators.hashCode),
-                            builtOtherActorActionGenerators.hashCode),
-                        id.hashCode),
-                    name.hashCode),
-                predeterminedResult.hashCode),
-            target.hashCode),
-        turn.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, attacker.hashCode);
+    _$hash = $jc(_$hash, builtEnemyTargetActionGenerators.hashCode);
+    _$hash = $jc(_$hash, builtOtherActorActionGenerators.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, predeterminedResult.hashCode);
+    _$hash = $jc(_$hash, target.hashCode);
+    _$hash = $jc(_$hash, turn.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('DefenseSituation')
+    return (newBuiltValueToStringHelper(r'DefenseSituation')
           ..add('attacker', attacker)
           ..add('builtEnemyTargetActionGenerators',
               builtEnemyTargetActionGenerators)
@@ -288,29 +286,31 @@ class DefenseSituationBuilder
   }
 
   @override
-  _$DefenseSituation build() {
+  DefenseSituation build() => _build();
+
+  _$DefenseSituation _build() {
     _$DefenseSituation _$result;
     try {
       _$result = _$v ??
           new _$DefenseSituation._(
               attacker: BuiltValueNullFieldError.checkNotNull(
-                  attacker, 'DefenseSituation', 'attacker'),
+                  attacker, r'DefenseSituation', 'attacker'),
               builtEnemyTargetActionGenerators:
                   builtEnemyTargetActionGenerators.build(),
               builtOtherActorActionGenerators:
                   builtOtherActorActionGenerators.build(),
               id: BuiltValueNullFieldError.checkNotNull(
-                  id, 'DefenseSituation', 'id'),
+                  id, r'DefenseSituation', 'id'),
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'DefenseSituation', 'name'),
+                  name, r'DefenseSituation', 'name'),
               predeterminedResult: BuiltValueNullFieldError.checkNotNull(
                   predeterminedResult,
-                  'DefenseSituation',
+                  r'DefenseSituation',
                   'predeterminedResult'),
               target: BuiltValueNullFieldError.checkNotNull(
-                  target, 'DefenseSituation', 'target'),
+                  target, r'DefenseSituation', 'target'),
               turn: BuiltValueNullFieldError.checkNotNull(
-                  turn, 'DefenseSituation', 'turn'));
+                  turn, r'DefenseSituation', 'turn'));
     } catch (_) {
       late String _$failedField;
       try {
@@ -320,7 +320,7 @@ class DefenseSituationBuilder
         builtOtherActorActionGenerators.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'DefenseSituation', _$failedField, e.toString());
+            r'DefenseSituation', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -329,4 +329,4 @@ class DefenseSituationBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

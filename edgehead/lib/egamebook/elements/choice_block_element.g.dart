@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of egamebook.element.choice_block;
+part of 'choice_block_element.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -37,7 +37,7 @@ class _$ChoiceBlockSerializer implements StructuredSerializer<ChoiceBlock> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -65,11 +65,11 @@ class _$ChoiceBlock extends ChoiceBlock {
   final SaveGame saveGame;
 
   factory _$ChoiceBlock([void Function(ChoiceBlockBuilder)? updates]) =>
-      (new ChoiceBlockBuilder()..update(updates)).build();
+      (new ChoiceBlockBuilder()..update(updates))._build();
 
   _$ChoiceBlock._({required this.choices, required this.saveGame}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(choices, 'ChoiceBlock', 'choices');
-    BuiltValueNullFieldError.checkNotNull(saveGame, 'ChoiceBlock', 'saveGame');
+    BuiltValueNullFieldError.checkNotNull(choices, r'ChoiceBlock', 'choices');
+    BuiltValueNullFieldError.checkNotNull(saveGame, r'ChoiceBlock', 'saveGame');
   }
 
   @override
@@ -89,12 +89,16 @@ class _$ChoiceBlock extends ChoiceBlock {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, choices.hashCode), saveGame.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, choices.hashCode);
+    _$hash = $jc(_$hash, saveGame.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ChoiceBlock')
+    return (newBuiltValueToStringHelper(r'ChoiceBlock')
           ..add('choices', choices)
           ..add('saveGame', saveGame))
         .toString();
@@ -137,7 +141,9 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
   }
 
   @override
-  _$ChoiceBlock build() {
+  ChoiceBlock build() => _build();
+
+  _$ChoiceBlock _build() {
     _$ChoiceBlock _$result;
     try {
       _$result = _$v ??
@@ -152,7 +158,7 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
         saveGame.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'ChoiceBlock', _$failedField, e.toString());
+            r'ChoiceBlock', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -161,4 +167,4 @@ class ChoiceBlockBuilder implements Builder<ChoiceBlock, ChoiceBlockBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

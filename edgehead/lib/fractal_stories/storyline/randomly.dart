@@ -1,5 +1,3 @@
-library randomly;
-
 import 'dart:math';
 
 // ignore: avoid_classes_with_only_static_members
@@ -181,16 +179,12 @@ class Randomly {
     switch (index) {
       case 0:
         script1();
-        break;
       case 1:
         script2();
-        break;
       case 2:
         script3!();
-        break;
       case 4:
         script4!();
-        break;
     }
   }
 

@@ -1,5 +1,3 @@
-library stranded.fight.wrestle_defense_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';

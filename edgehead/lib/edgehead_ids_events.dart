@@ -1,4 +1,4 @@
-part of edgehead.ids;
+part of 'edgehead_ids.dart';
 
 const evCaravanArrived = "evCaravanArrived";
 

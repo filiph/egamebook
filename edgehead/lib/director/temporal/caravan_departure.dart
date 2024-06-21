@@ -1,4 +1,4 @@
-part of edgehead_director;
+part of '../../edgehead_director.dart';
 
 /// Caravan Departure
 ///

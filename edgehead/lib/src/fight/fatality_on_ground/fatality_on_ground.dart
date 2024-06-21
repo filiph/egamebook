@@ -1,5 +1,3 @@
-library stranded.fight.fatality_on_ground_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/simulation.dart';
 import 'package:edgehead/fractal_stories/situation.dart';

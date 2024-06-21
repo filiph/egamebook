@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of fractal_stories.anatomy;
+part of 'anatomy.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -36,13 +36,13 @@ class _$AnatomySerializer implements StructuredSerializer<Anatomy> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'isUndead':
           result.isUndead = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'torso':
           result.torso.replace(serializers.deserialize(value,
@@ -72,11 +72,11 @@ class _$Anatomy extends Anatomy {
   bool ___secondaryWeaponAppendage = false;
 
   factory _$Anatomy([void Function(AnatomyBuilder)? updates]) =>
-      (new AnatomyBuilder()..update(updates)).build();
+      (new AnatomyBuilder()..update(updates))._build();
 
   _$Anatomy._({required this.isUndead, required this.torso}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(isUndead, 'Anatomy', 'isUndead');
-    BuiltValueNullFieldError.checkNotNull(torso, 'Anatomy', 'torso');
+    BuiltValueNullFieldError.checkNotNull(isUndead, r'Anatomy', 'isUndead');
+    BuiltValueNullFieldError.checkNotNull(torso, r'Anatomy', 'torso');
   }
 
   @override
@@ -135,12 +135,16 @@ class _$Anatomy extends Anatomy {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, isUndead.hashCode), torso.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, isUndead.hashCode);
+    _$hash = $jc(_$hash, torso.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Anatomy')
+    return (newBuiltValueToStringHelper(r'Anatomy')
           ..add('isUndead', isUndead)
           ..add('torso', torso))
         .toString();
@@ -182,13 +186,15 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   }
 
   @override
-  _$Anatomy build() {
+  Anatomy build() => _build();
+
+  _$Anatomy _build() {
     _$Anatomy _$result;
     try {
       _$result = _$v ??
           new _$Anatomy._(
               isUndead: BuiltValueNullFieldError.checkNotNull(
-                  isUndead, 'Anatomy', 'isUndead'),
+                  isUndead, r'Anatomy', 'isUndead'),
               torso: torso.build());
     } catch (_) {
       late String _$failedField;
@@ -197,7 +203,7 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
         torso.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Anatomy', _$failedField, e.toString());
+            r'Anatomy', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -206,4 +212,4 @@ class AnatomyBuilder implements Builder<Anatomy, AnatomyBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -83,7 +83,6 @@ class FinishPunch extends OtherActorAction {
             positive: true);
         enemy.report(s, "<subject> {stagger<s>|stumble<s>} off balance",
             actionThread: thread, replacesThread: true, negative: true);
-        break;
       case Pose.onGround:
         s.add(
             "<subject> send<s> <object> to the $groundMaterial with "
@@ -96,7 +95,6 @@ class FinishPunch extends OtherActorAction {
         // adds standard falling functionality, like reminding player
         // about lying down being bad.
         makeActorFall(context.world, w, s, enemy);
-        break;
     }
     return "${a.name} punches ${enemy.name} to $updatedPose";
   }

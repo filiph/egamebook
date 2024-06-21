@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of storyline.pronoun;
+part of 'storyline_pronoun.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -41,25 +41,25 @@ class _$PronounSerializer implements StructuredSerializer<Pronoun> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'accusative':
           result.accusative = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'genitive':
           result.genitive = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'nominative':
           result.nominative = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'self':
           result.self = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
       }
     }
@@ -79,7 +79,7 @@ class _$Pronoun extends Pronoun {
   final String self;
 
   factory _$Pronoun([void Function(PronounBuilder)? updates]) =>
-      (new PronounBuilder()..update(updates)).build();
+      (new PronounBuilder()..update(updates))._build();
 
   _$Pronoun._(
       {required this.accusative,
@@ -87,10 +87,10 @@ class _$Pronoun extends Pronoun {
       required this.nominative,
       required this.self})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(accusative, 'Pronoun', 'accusative');
-    BuiltValueNullFieldError.checkNotNull(genitive, 'Pronoun', 'genitive');
-    BuiltValueNullFieldError.checkNotNull(nominative, 'Pronoun', 'nominative');
-    BuiltValueNullFieldError.checkNotNull(self, 'Pronoun', 'self');
+    BuiltValueNullFieldError.checkNotNull(accusative, r'Pronoun', 'accusative');
+    BuiltValueNullFieldError.checkNotNull(genitive, r'Pronoun', 'genitive');
+    BuiltValueNullFieldError.checkNotNull(nominative, r'Pronoun', 'nominative');
+    BuiltValueNullFieldError.checkNotNull(self, r'Pronoun', 'self');
   }
 
   @override
@@ -112,10 +112,13 @@ class _$Pronoun extends Pronoun {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, accusative.hashCode), genitive.hashCode),
-            nominative.hashCode),
-        self.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, accusative.hashCode);
+    _$hash = $jc(_$hash, genitive.hashCode);
+    _$hash = $jc(_$hash, nominative.hashCode);
+    _$hash = $jc(_$hash, self.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 }
 
@@ -164,20 +167,22 @@ class PronounBuilder implements Builder<Pronoun, PronounBuilder> {
   }
 
   @override
-  _$Pronoun build() {
+  Pronoun build() => _build();
+
+  _$Pronoun _build() {
     final _$result = _$v ??
         new _$Pronoun._(
             accusative: BuiltValueNullFieldError.checkNotNull(
-                accusative, 'Pronoun', 'accusative'),
+                accusative, r'Pronoun', 'accusative'),
             genitive: BuiltValueNullFieldError.checkNotNull(
-                genitive, 'Pronoun', 'genitive'),
+                genitive, r'Pronoun', 'genitive'),
             nominative: BuiltValueNullFieldError.checkNotNull(
-                nominative, 'Pronoun', 'nominative'),
-            self:
-                BuiltValueNullFieldError.checkNotNull(self, 'Pronoun', 'self'));
+                nominative, r'Pronoun', 'nominative'),
+            self: BuiltValueNullFieldError.checkNotNull(
+                self, r'Pronoun', 'self'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

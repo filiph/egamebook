@@ -6,7 +6,7 @@ stages:
     - analyze: --fatal-infos --fatal-warnings .
     - format
   - unit_test:
-    - command: pub run build_runner build --delete-conflicting-outputs && dart test
+    - command: dart run build_runner build --delete-conflicting-outputs && dart test
 
 #  - build:
 #    - command: pub run build_runner build --delete-conflicting-outputs

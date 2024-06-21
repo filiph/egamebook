@@ -1,4 +1,4 @@
-part of edgehead_director;
+part of '../../edgehead_director.dart';
 
 final _leroyQuitsAfterGoblinCamp =
     Rule(_id++, 2, true, (ApplicabilityContext c) {

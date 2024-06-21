@@ -1,5 +1,3 @@
-library stranded.fight.strike_down_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/common/attacker_situation.dart';

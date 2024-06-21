@@ -1,7 +1,7 @@
 import 'package:edgehead/fractal_stories/context.dart';
 
 class InkAst extends InkSequenceNode {
-  const InkAst(List<InkNode> children) : super(children);
+  const InkAst(super.children);
 
   List<int> getNextPosition(List<int> path) {
     final node = getNodeAt(path);
@@ -79,7 +79,7 @@ class InkChoiceNode extends InkSequenceNode {
 }
 
 class InkForkNode extends InkSequenceNode {
-  const InkForkNode(List<InkChoiceNode> inkChoices) : super(inkChoices);
+  const InkForkNode(List<InkChoiceNode> super.inkChoices);
 
   List<InkChoiceNode> get inkChoices => children as List<InkChoiceNode>;
 }

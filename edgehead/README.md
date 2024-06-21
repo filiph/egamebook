@@ -60,7 +60,7 @@ Here are some additional "philosophical" pillars:
 4. Go to the `edgehead` sub-project (`cd edgehead`)
 5. Install Dart packages (`pub get`)
 
-Now you can try running tests (`pub run test`) or play the game on the command
+Now you can try running tests (`dart run test`) or play the game on the command
 line (`dart --enable-asserts bin/play.dart --log`).
 
 ### Playtesting
@@ -153,13 +153,13 @@ to Trello cards by dragging and dropping them.
 
 Run the following when developing:
 
-    pub run build_runner watch --delete-conflicting-outputs
+    dart run build_runner watch --delete-conflicting-outputs
     
 This will make sure that generated files (`*.g.dart`) are regenerated when
 needed.
 
 Most writing is in text files in the `assets/text/` directory. 
-When the `pub run build_runner watch` watcher is running, it will, among other
+When the `dart run build_runner watch` watcher is running, it will, among other
 things, watch for changes of the text files. It will compile the texts into the 
 `lib/writers_input.compiled.dart` file, which is then used by the game itself.
 
@@ -173,16 +173,16 @@ This is often caused by an earlier problem (for example, hitting save while
 your `egb.txt` files are in some in-between state), which makes the source
 generator build the files in the wrong order. The remedy is to run:
 
-    pub run build_runner clean
+    dart run build_runner clean
 
-After this, run the `pub run build_runner watch` command again and all should
+After this, run the `dart run build_runner watch` command again and all should
 be good. 
 
 Most behavior and game-related code is in the other files in `lib/`. You
 might want to start with `lib/edgehead_lib.dart`.  
 
-To test, run `pub run test`, and to include long-running fuzzy tests,
-run `pub run --enable-asserts test --run-skipped`.
+To test, run `dart run test`, and to include long-running fuzzy tests,
+run `dart run --enable-asserts test --run-skipped`.
 
 #### Debug play-testing
 
@@ -206,7 +206,7 @@ variables in the IDE.
 
 ### Testing
 
-Run `pub run test` or setup your IDE for continuous unit testing.
+Run `dart run test` or setup your IDE for continuous unit testing.
 
 Also included are long-running tests that are skipped by default. These
 tests are "fuzzy" -- meaning that they will try to play the game randomly until
@@ -214,7 +214,7 @@ completion or error.
 
 Run all the tests, including the long-running ones, using this command:
 
-    pub run --enable-asserts test --run-skipped
+    dart run --enable-asserts test --run-skipped
     
 The `--enable-asserts` flag tells Dart to run assertions and generally be more 
 fail-fast. It also makes the code run a few percent slower.
@@ -225,7 +225,7 @@ If you're feeling especially paranoid (e.g. before a production release),
 you can run the fuzzy test in an infinite loop with the following Unix command:
 
 ```bash
-while pub run --enable-asserts test -t long-running --run-skipped; do :; done
+while dart run --enable-asserts test -t long-running --run-skipped; do :; done
 ```
 
 The command will run forever unless a test fails or until you press `Ctrl-C`.
@@ -235,7 +235,7 @@ test suite several times in a row. Like this:
 
 ```bash
 for n in {1..10}; do echo "=== Run number ${n} ==="; \
-  pub run --enable-asserts test --run-skipped; done
+  dart run --enable-asserts test --run-skipped; done
 ```
 
 #### Sharded testing
@@ -243,9 +243,9 @@ for n in {1..10}; do echo "=== Run number ${n} ==="; \
 To run tests in parallel, you can use sharding:
 
 ```bash
-$ pub run --enable-asserts test --total-shards 3 --shard-index 0 --run-skipped
-$ pub run --enable-asserts test --total-shards 3 --shard-index 1 --run-skipped
-$ pub run --enable-asserts test --total-shards 3 --shard-index 2 --run-skipped
+$ dart run --enable-asserts test --total-shards 3 --shard-index 0 --run-skipped
+$ dart run --enable-asserts test --total-shards 3 --shard-index 1 --run-skipped
+$ dart run --enable-asserts test --total-shards 3 --shard-index 2 --run-skipped
 ```
 
 ### Playing on the command line

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of stranded.history.visit;
+part of 'visit_history.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -37,7 +37,7 @@ class _$VisitHistorySerializer implements StructuredSerializer<VisitHistory> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -95,17 +95,17 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'actorId':
           result.actorId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'fromRoomName':
           result.fromRoomName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'parentRoomName':
           result.parentRoomName = serializers.deserialize(value,
@@ -113,11 +113,11 @@ class _$VisitRecordSerializer implements StructuredSerializer<VisitRecord> {
           break;
         case 'roomName':
           result.roomName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'time':
           result.time = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime))! as DateTime;
           break;
       }
     }
@@ -131,10 +131,10 @@ class _$VisitHistory extends VisitHistory {
   final BuiltListMultimap<String, VisitRecord> records;
 
   factory _$VisitHistory([void Function(VisitHistoryBuilder)? updates]) =>
-      (new VisitHistoryBuilder()..update(updates)).build();
+      (new VisitHistoryBuilder()..update(updates))._build();
 
   _$VisitHistory._({required this.records}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(records, 'VisitHistory', 'records');
+    BuiltValueNullFieldError.checkNotNull(records, r'VisitHistory', 'records');
   }
 
   @override
@@ -152,12 +152,15 @@ class _$VisitHistory extends VisitHistory {
 
   @override
   int get hashCode {
-    return $jf($jc(0, records.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, records.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('VisitHistory')
+    return (newBuiltValueToStringHelper(r'VisitHistory')
           ..add('records', records))
         .toString();
   }
@@ -196,7 +199,9 @@ class VisitHistoryBuilder
   }
 
   @override
-  _$VisitHistory build() {
+  VisitHistory build() => _build();
+
+  _$VisitHistory _build() {
     _$VisitHistory _$result;
     try {
       _$result = _$v ?? new _$VisitHistory._(records: records.build());
@@ -207,7 +212,7 @@ class VisitHistoryBuilder
         records.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'VisitHistory', _$failedField, e.toString());
+            r'VisitHistory', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -229,7 +234,7 @@ class _$VisitRecord extends VisitRecord {
   final DateTime time;
 
   factory _$VisitRecord([void Function(VisitRecordBuilder)? updates]) =>
-      (new VisitRecordBuilder()..update(updates)).build();
+      (new VisitRecordBuilder()..update(updates))._build();
 
   _$VisitRecord._(
       {required this.actorId,
@@ -238,11 +243,11 @@ class _$VisitRecord extends VisitRecord {
       required this.roomName,
       required this.time})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(actorId, 'VisitRecord', 'actorId');
+    BuiltValueNullFieldError.checkNotNull(actorId, r'VisitRecord', 'actorId');
     BuiltValueNullFieldError.checkNotNull(
-        fromRoomName, 'VisitRecord', 'fromRoomName');
-    BuiltValueNullFieldError.checkNotNull(roomName, 'VisitRecord', 'roomName');
-    BuiltValueNullFieldError.checkNotNull(time, 'VisitRecord', 'time');
+        fromRoomName, r'VisitRecord', 'fromRoomName');
+    BuiltValueNullFieldError.checkNotNull(roomName, r'VisitRecord', 'roomName');
+    BuiltValueNullFieldError.checkNotNull(time, r'VisitRecord', 'time');
   }
 
   @override
@@ -265,17 +270,19 @@ class _$VisitRecord extends VisitRecord {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc($jc($jc(0, actorId.hashCode), fromRoomName.hashCode),
-                parentRoomName.hashCode),
-            roomName.hashCode),
-        time.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, actorId.hashCode);
+    _$hash = $jc(_$hash, fromRoomName.hashCode);
+    _$hash = $jc(_$hash, parentRoomName.hashCode);
+    _$hash = $jc(_$hash, roomName.hashCode);
+    _$hash = $jc(_$hash, time.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('VisitRecord')
+    return (newBuiltValueToStringHelper(r'VisitRecord')
           ..add('actorId', actorId)
           ..add('fromRoomName', fromRoomName)
           ..add('parentRoomName', parentRoomName)
@@ -336,21 +343,23 @@ class VisitRecordBuilder implements Builder<VisitRecord, VisitRecordBuilder> {
   }
 
   @override
-  _$VisitRecord build() {
+  VisitRecord build() => _build();
+
+  _$VisitRecord _build() {
     final _$result = _$v ??
         new _$VisitRecord._(
             actorId: BuiltValueNullFieldError.checkNotNull(
-                actorId, 'VisitRecord', 'actorId'),
+                actorId, r'VisitRecord', 'actorId'),
             fromRoomName: BuiltValueNullFieldError.checkNotNull(
-                fromRoomName, 'VisitRecord', 'fromRoomName'),
+                fromRoomName, r'VisitRecord', 'fromRoomName'),
             parentRoomName: parentRoomName,
             roomName: BuiltValueNullFieldError.checkNotNull(
-                roomName, 'VisitRecord', 'roomName'),
+                roomName, r'VisitRecord', 'roomName'),
             time: BuiltValueNullFieldError.checkNotNull(
-                time, 'VisitRecord', 'time'));
+                time, r'VisitRecord', 'time'));
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

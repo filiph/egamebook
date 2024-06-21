@@ -57,9 +57,9 @@ class PlannerRecommendation {
 
     var bestSelfPreserving = _findBest((score) => score.selfPreservation);
     var bestEnemyDamaging = _findBest((score) => -score.enemy,
-        skip: [bestSelfPreserving].whereNotNull().toList());
+        skip: [bestSelfPreserving].nonNulls.toList());
     var bestTeamPreserving = _findBest((score) => score.teamPreservation,
-        skip: [bestSelfPreserving, bestEnemyDamaging].whereNotNull().toList());
+        skip: [bestSelfPreserving, bestEnemyDamaging].nonNulls.toList());
 
     int count = 0;
 

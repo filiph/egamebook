@@ -1,5 +1,3 @@
-library stranded.planner;
-
 import 'dart:collection';
 
 import 'package:edgehead/fractal_stories/action.dart';

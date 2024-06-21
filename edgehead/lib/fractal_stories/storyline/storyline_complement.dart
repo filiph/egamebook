@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-part of storyline;
+part of 'storyline.dart';
 
 /// A data structure holding the stopwords associated with a type of complement
 /// (a.k.a. grammatical object, or object argument).
@@ -13,6 +13,7 @@ part of storyline;
 /// sentence, or either of the two objects in a ditransitive sentence).
 /// See https://en.wikipedia.org/wiki/Object_(grammar) and
 /// https://en.wikipedia.org/wiki/Complement_(linguistics).
+// ignore: use_enums
 class ComplementType {
   /// Lists all the complement types.
   static const all = [

@@ -1,9 +1,10 @@
 #!/bin/bash
-# Created with package:mono_repo v6.0.0
+# Created with package:mono_repo v6.6.1
 
 # Support built in commands on windows out of the box.
+
 # When it is a flutter repo (check the pubspec.yaml for "sdk: flutter")
-# then "flutter" is called instead of "pub".
+# then "flutter pub" is called instead of "dart pub".
 # This assumes that the Flutter SDK has been installed in a previous step.
 function pub() {
   if grep -Fq "sdk: flutter" "${PWD}/pubspec.yaml"; then
@@ -12,18 +13,13 @@ function pub() {
     command dart pub "$@"
   fi
 }
-# When it is a flutter repo (check the pubspec.yaml for "sdk: flutter")
-# then "flutter" is called instead of "pub".
-# This assumes that the Flutter SDK has been installed in a previous step.
+
 function format() {
-  if grep -Fq "sdk: flutter" "${PWD}/pubspec.yaml"; then
-    command flutter format "$@"
-  else
-    command dart format "$@"
-  fi
+  command dart format "$@"
 }
+
 # When it is a flutter repo (check the pubspec.yaml for "sdk: flutter")
-# then "flutter" is called instead of "pub".
+# then "flutter analyze" is called instead of "dart analyze".
 # This assumes that the Flutter SDK has been installed in a previous step.
 function analyze() {
   if grep -Fq "sdk: flutter" "${PWD}/pubspec.yaml"; then
@@ -67,13 +63,17 @@ for PKG in ${PKGS}; do
       echo
       echo -e "\033[1mPKG: ${PKG}; TASK: ${TASK}\033[22m"
       case ${TASK} in
-      analyze)
+      analyze_0)
         echo 'dart analyze --fatal-infos --fatal-warnings .'
         dart analyze --fatal-infos --fatal-warnings . || EXIT_CODE=$?
         ;;
+      analyze_1)
+        echo 'dart analyze --fatal-warnings .'
+        dart analyze --fatal-warnings . || EXIT_CODE=$?
+        ;;
       command)
-        echo 'pub run build_runner build --delete-conflicting-outputs && dart test'
-        pub run build_runner build --delete-conflicting-outputs && dart test || EXIT_CODE=$?
+        echo 'dart run build_runner build --delete-conflicting-outputs && dart test'
+        dart run build_runner build --delete-conflicting-outputs && dart test || EXIT_CODE=$?
         ;;
       format)
         echo 'dart format --output=none --set-exit-if-changed .'

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of edgehead.action_builders;
+part of 'edgehead_action_builders_gather.dart';
 
 // **************************************************************************
 // InstanceSerializerGenerator

@@ -1,5 +1,3 @@
-library stranded.history;
-
 /// The result of querying a history.
 abstract class QueryResult<T extends Record> {
   /// Whether or not this query found at least one event.
@@ -23,7 +21,7 @@ abstract class Record {
 /// The counterpart class is [SingleQueryResult].
 class SerialQueryResult<T extends Record> implements QueryResult<T> {
   /// Records are in reverse chronological order, so the first result is
-  /// the latest. See [new SerialQueryResult].
+  /// the latest. See [SerialQueryResult.new].
   final Iterable<T> _records;
 
   bool _walked = false;

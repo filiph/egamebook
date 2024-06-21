@@ -22,7 +22,7 @@ class Predetermination extends EnumClass {
 
   static BuiltSet<Predetermination> get values => _$values;
 
-  const Predetermination._(String name) : super(name);
+  const Predetermination._(super.name);
 
   static Predetermination valueOf(String name) => _$valueOf(name);
 }

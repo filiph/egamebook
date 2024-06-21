@@ -1,5 +1,3 @@
-library stranded.fight.blunt_swing_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';
 import 'package:edgehead/fractal_stories/situation.dart';

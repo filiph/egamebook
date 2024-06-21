@@ -1,4 +1,4 @@
-part of edgehead_director;
+part of '../../edgehead_director.dart';
 
 final _dargLeavesCrowdsource = Rule(_id++, 3, true, (ApplicabilityContext c) {
   return !c.hasHappened(evKilledDarg) &&

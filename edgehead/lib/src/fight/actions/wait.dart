@@ -65,13 +65,13 @@ class Wait extends Action<Nothing?> {
 
   @override
   bool isApplicable(ApplicabilityContext c, Actor a, Simulation sim,
-          WorldState world, void _) =>
+          WorldState world, void o) =>
       a.isPlayer &&
       // Don't allow waiting when there are no friendlies.
       getPartyOf(a, sim, world).length > 1 &&
       // Don't allow waiting if cowering, scrambling, or thrashing
       // around is an option.
-      !Cower.singleton.isApplicable(c, a, sim, world, _) &&
-      !Scramble.singleton.isApplicable(c, a, sim, world, _) &&
-      !ThrashAroundBlind.singleton.isApplicable(c, a, sim, world, _);
+      !Cower.singleton.isApplicable(c, a, sim, world, o) &&
+      !Scramble.singleton.isApplicable(c, a, sim, world, o) &&
+      !ThrashAroundBlind.singleton.isApplicable(c, a, sim, world, o);
 }

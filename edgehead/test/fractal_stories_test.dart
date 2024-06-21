@@ -124,35 +124,35 @@ void main() {
       final afterFireCrevice = Room("after_fire_hidden_crevice",
           emptyRoomDescription, emptyRoomDescription, null, null);
 
-      const _forgeName = "forge";
+      const forgeName = "forge";
 
-      const _forgeAfterFireName = "forge_after_fire";
+      const forgeAfterFireName = "forge_after_fire";
 
-      final creviceExit = Approach(_forgeAfterFireName, afterFireCrevice.name,
+      final creviceExit = Approach(forgeAfterFireName, afterFireCrevice.name,
           "explore to hidden crevice", (_) {});
 
-      const _outsideName = "outside";
+      const outsideName = "outside";
 
       final forgeEntryAfterFire = Approach(
-          _outsideName, _forgeAfterFireName, "enter the charred forge", (_) {});
+          outsideName, forgeAfterFireName, "enter the charred forge", (_) {});
 
       final forgeEntry =
-          Approach(_outsideName, _forgeName, "enter the forge", (_) {});
+          Approach(outsideName, forgeName, "enter the forge", (_) {});
 
       final outside = Room(
-          _outsideName, emptyRoomDescription, emptyRoomDescription, null, null);
+          outsideName, emptyRoomDescription, emptyRoomDescription, null, null);
 
       final outsideExit =
-          Approach(_forgeName, outside.name, "go outside", (_) {});
+          Approach(forgeName, outside.name, "go outside", (_) {});
 
       final forge = Room(
-          _forgeName, emptyRoomDescription, emptyRoomDescription, null, null);
+          forgeName, emptyRoomDescription, emptyRoomDescription, null, null);
 
-      final forgeAfterFire = Room(_forgeAfterFireName, emptyRoomDescription,
+      final forgeAfterFire = Room(forgeAfterFireName, emptyRoomDescription,
           emptyRoomDescription, null, null,
-          parent: _forgeName,
+          parent: forgeName,
           prerequisite: Prerequisite(
-              _forgeAfterFireName.hashCode, 1, false, (_) => forgeIsAfterFire));
+              forgeAfterFireName.hashCode, 1, false, (_) => forgeIsAfterFire));
 
       final simulation = Simulation(
           [forge, forgeAfterFire, afterFireCrevice, outside],
@@ -183,7 +183,7 @@ void main() {
 
       group("RoomRoamingSituation.moveActor", () {
         final aren = Actor.initialized(42, testRandomIdGetter, "Aren",
-            currentRoomName: _outsideName, isPlayer: true);
+            currentRoomName: outsideName, isPlayer: true);
         final initialSituation =
             RoomRoamingSituation.initialized(1, outside, false);
         final world = WorldState((b) => b
@@ -198,10 +198,10 @@ void main() {
           final actionContext = ActionContext(mockAction, aren, simulation,
               world, world.toBuilder(), Storyline(), sureSuccess);
 
-          initialSituation.moveActor(aren, actionContext, _forgeName);
+          initialSituation.moveActor(aren, actionContext, forgeName);
           final result = actionContext.outputWorld.build();
 
-          expect(result.getActorById(aren.id).currentRoomName, _forgeName);
+          expect(result.getActorById(aren.id).currentRoomName, forgeName);
         });
 
         test("uses variant if applicable", () {
@@ -210,13 +210,13 @@ void main() {
           forgeIsAfterFire = true;
 
           expect(world.visitHistory.getLatestOnly(aren)?.roomName,
-              isNot(_forgeAfterFireName));
+              isNot(forgeAfterFireName));
 
-          initialSituation.moveActor(aren, actionContext, _forgeName);
+          initialSituation.moveActor(aren, actionContext, forgeName);
           final result = actionContext.outputWorld.build();
 
           expect(result.visitHistory.getLatestOnly(aren)!.roomName,
-              _forgeAfterFireName);
+              forgeAfterFireName);
         });
 
         test("actor's currentRoom is always the parent", () {
@@ -224,10 +224,10 @@ void main() {
               world, world.toBuilder(), Storyline(), sureSuccess);
           forgeIsAfterFire = true;
 
-          initialSituation.moveActor(aren, actionContext, _forgeName);
+          initialSituation.moveActor(aren, actionContext, forgeName);
           final result = actionContext.outputWorld.build();
 
-          expect(result.getActorById(aren.id).currentRoomName, _forgeName);
+          expect(result.getActorById(aren.id).currentRoomName, forgeName);
         });
       });
     });

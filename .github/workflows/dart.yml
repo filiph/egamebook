@@ -1,4 +1,4 @@
-# Created with package:mono_repo v6.0.0
+# Created with package:mono_repo v6.6.1
 name: Dart CI
 on:
   push:
@@ -11,6 +11,7 @@ defaults:
     shell: bash
 env:
   PUB_ENVIRONMENT: bot.github
+permissions: read-all
 
 jobs:
   job_001:
@@ -18,63 +19,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead;commands:analyze"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead;commands:analyze_0"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead
             os:ubuntu-latest;pub-cache-hosted;sdk:stable
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
         with:
           sdk: stable
       - id: checkout
-        uses: actions/checkout@v2.4.0
+        name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - id: edgehead_pub_upgrade
         name: edgehead; dart pub upgrade
+        run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: edgehead
-        run: dart pub upgrade
       - name: "edgehead; dart analyze --fatal-infos --fatal-warnings ."
+        run: dart analyze --fatal-infos --fatal-warnings .
         if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
         working-directory: edgehead
-        run: dart analyze --fatal-infos --fatal-warnings .
   job_002:
-    name: "analyze; PKG: egamebook_builder; `dart analyze --fatal-infos --fatal-warnings .`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.7
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder;commands:analyze"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder
-            os:ubuntu-latest;pub-cache-hosted;sdk:stable
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.3
-        with:
-          sdk: stable
-      - id: checkout
-        uses: actions/checkout@v2.4.0
-      - id: egamebook_builder_pub_upgrade
-        name: egamebook_builder; dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: egamebook_builder
-        run: dart pub upgrade
-      - name: "egamebook_builder; dart analyze --fatal-infos --fatal-warnings ."
-        if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
-        working-directory: egamebook_builder
-        run: dart analyze --fatal-infos --fatal-warnings .
-  job_003:
     name: "analyze; PKG: edgehead; `dart format --output=none --set-exit-if-changed .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead;commands:format"
@@ -83,26 +58,28 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;sdk:stable
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
         with:
           sdk: stable
       - id: checkout
-        uses: actions/checkout@v2.4.0
+        name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - id: edgehead_pub_upgrade
         name: edgehead; dart pub upgrade
+        run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: edgehead
-        run: dart pub upgrade
       - name: "edgehead; dart format --output=none --set-exit-if-changed ."
+        run: "dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
         working-directory: edgehead
-        run: "dart format --output=none --set-exit-if-changed ."
-  job_004:
+  job_003:
     name: "analyze; PKG: egamebook_builder; `dart format --output=none --set-exit-if-changed .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder;commands:format"
@@ -111,26 +88,58 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;sdk:stable
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
         with:
           sdk: stable
       - id: checkout
-        uses: actions/checkout@v2.4.0
+        name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - id: egamebook_builder_pub_upgrade
         name: egamebook_builder; dart pub upgrade
+        run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: egamebook_builder
-        run: dart pub upgrade
       - name: "egamebook_builder; dart format --output=none --set-exit-if-changed ."
+        run: "dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
         working-directory: egamebook_builder
-        run: "dart format --output=none --set-exit-if-changed ."
-  job_005:
-    name: "unit_test; PKG: edgehead; `pub run build_runner build --delete-conflicting-outputs && dart test`"
+  job_004:
+    name: "analyze; PKG: egamebook_builder; `dart analyze --fatal-warnings .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder;commands:analyze_1"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder
+            os:ubuntu-latest;pub-cache-hosted;sdk:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
+        with:
+          sdk: stable
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - id: egamebook_builder_pub_upgrade
+        name: egamebook_builder; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: egamebook_builder
+      - name: "egamebook_builder; dart analyze --fatal-warnings ."
+        run: dart analyze --fatal-warnings .
+        if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: egamebook_builder
+  job_005:
+    name: "unit_test; PKG: edgehead; `dart run build_runner build --delete-conflicting-outputs && dart test`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:edgehead;commands:command"
@@ -139,20 +148,22 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;sdk:stable
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
         with:
           sdk: stable
       - id: checkout
-        uses: actions/checkout@v2.4.0
+        name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - id: edgehead_pub_upgrade
         name: edgehead; dart pub upgrade
+        run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: edgehead
-        run: dart pub upgrade
-      - name: "edgehead; pub run build_runner build --delete-conflicting-outputs && dart test"
+      - name: "edgehead; dart run build_runner build --delete-conflicting-outputs && dart test"
+        run: "dart run build_runner build --delete-conflicting-outputs && dart test"
         if: "always() && steps.edgehead_pub_upgrade.conclusion == 'success'"
         working-directory: edgehead
-        run: "pub run build_runner build --delete-conflicting-outputs && dart test"
     needs:
       - job_001
       - job_002
@@ -163,7 +174,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:egamebook_builder;commands:test"
@@ -172,20 +183,22 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;sdk:stable
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.3
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
         with:
           sdk: stable
       - id: checkout
-        uses: actions/checkout@v2.4.0
+        name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - id: egamebook_builder_pub_upgrade
         name: egamebook_builder; dart pub upgrade
+        run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: egamebook_builder
-        run: dart pub upgrade
       - name: egamebook_builder; dart test
+        run: dart test
         if: "always() && steps.egamebook_builder_pub_upgrade.conclusion == 'success'"
         working-directory: egamebook_builder
-        run: dart test
     needs:
       - job_001
       - job_002

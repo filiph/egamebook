@@ -1,4 +1,4 @@
-part of edgehead_director;
+part of '../../edgehead_director.dart';
 
 final _karlHeardFirstTime = Rule(_id++, 1, true, (ApplicabilityContext c) {
   // Only heard from within the Pyramid.

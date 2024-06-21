@@ -58,10 +58,10 @@ class FullRunBenchmark extends _BenchmarkBase {
 /// of the speed of the game (especially the AI).
 class _BenchmarkBase {
   final String name;
-  final _ScoreEmitter emitter;
+  _ScoreEmitter get emitter => const _PrintEmitter();
 
   // Empty constructor.
-  const _BenchmarkBase(this.name, {this.emitter = const _PrintEmitter()});
+  const _BenchmarkBase(this.name);
 
   // The benchmark code.
   // This function is not used, if both [warmup] and [exercise] are overwritten.

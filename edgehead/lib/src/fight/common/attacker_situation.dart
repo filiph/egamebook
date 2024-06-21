@@ -59,7 +59,7 @@ class AttackDirection extends EnumClass {
 
   static BuiltSet<AttackDirection> get values => _$attackDirectionValues;
 
-  const AttackDirection._(String name) : super(name);
+  const AttackDirection._(super.name);
 
   BodyPartDesignation toBodyPartDesignation() {
     assert(

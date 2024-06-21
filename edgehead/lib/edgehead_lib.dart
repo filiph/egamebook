@@ -211,14 +211,12 @@ class EdgeheadGame extends Book {
                 "Tried using sanity when ${actor.name} had none left.");
             storyline.addCustomElement(StatUpdate.sanity(actor.sanity, -1));
             builder.updateActorById(actor.id, (b) => b.sanity = b.sanity! - 1);
-            break;
           case Resource.stamina:
             assert(consequence.world.getActorById(actor.id).stamina > 0,
                 "Tried using stamina when ${actor.name} had none left.");
             storyline.addCustomElement(StatUpdate.stamina(actor.stamina, -1));
             builder.updateActorById(
                 actor.id, (b) => b..stamina = b.stamina! - 1);
-            break;
         }
         world = builder.build();
         consequence = PlanConsequence.withUpdatedWorld(consequence, world);
@@ -582,7 +580,7 @@ class EdgeheadGame extends Book {
   }
 }
 
-/// An exception to be thrown when [new EdgeheadGame] is called with
+/// An exception to be thrown when [EdgeheadGame.new] is called with
 /// an outdated or corrupt savegame.
 class EdgeheadSaveGameParseException implements Exception {
   final Error? underlyingError;

@@ -69,13 +69,13 @@ class RegainBalance extends Action<Nothing?> {
   }
 
   @override
-  Duration getRecoveryDuration(ApplicabilityContext context, Nothing? _) {
+  Duration getRecoveryDuration(ApplicabilityContext context, Nothing? object) {
     if (context.actor.isPlayer) {
       //  This move should be super fast for the player.
       return const Duration(milliseconds: 200);
     }
 
-    return super.getRecoveryDuration(context, _);
+    return super.getRecoveryDuration(context, object);
   }
 
   @override

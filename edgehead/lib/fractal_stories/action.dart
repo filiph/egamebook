@@ -1,5 +1,3 @@
-library stranded.action;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/history/action_history.dart';
@@ -340,6 +338,7 @@ abstract class OnGroundItemAction extends Action<Item> {
             referredEntities:
                 context.world.actors.where((actor) => !actor.isDirector))
           ..add(commandPathTemplate.join(' >> '),
+              // ignore: dead_code
               object: templateContainsObject ? object : null))
         .realizeAsString()
         // Then split again into a list.

@@ -1,5 +1,3 @@
-library stranded.fight.clash_situation;
-
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';
 import 'package:edgehead/src/fight/clash/actions/finish_clash.dart';
