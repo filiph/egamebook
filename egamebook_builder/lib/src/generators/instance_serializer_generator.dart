@@ -50,7 +50,10 @@ class InstanceSerializerGenerator extends Generator {
             "Type of variable must be InstanceSerializer<T>");
       }
       final interfaceType = variable.type as InterfaceType;
-      if (interfaceType.getDisplayString().split('<').first !=
+      if (interfaceType
+              .getDisplayString(withNullability: false)
+              .split('<')
+              .first !=
           'InstanceSerializer') {
         // TODO: find out how to create a DartType() and use it to check
         //       via interfaceType.isAssignableTo(functionSerializerType)
@@ -58,7 +61,7 @@ class InstanceSerializerGenerator extends Generator {
             "Top level declarations with the @GatherInstancesFrom "
             "annotation need to be of type InstanceSerializer, but we found "
             "one with type "
-            "${interfaceType.getDisplayString()}");
+            "${interfaceType.getDisplayString(withNullability: false)}");
       }
 
       final typeArguments = interfaceType.typeArguments;
@@ -72,7 +75,10 @@ class InstanceSerializerGenerator extends Generator {
 
       final instanceType = typeArguments.single;
       // TODO: get the name from instanceType more elegantly
-      final instanceTypeName = instanceType.getDisplayString().split('<').first;
+      final instanceTypeName = instanceType
+          .getDisplayString(withNullability: false)
+          .split('<')
+          .first;
       final variableName =
           "_\$" "${ReCase(instanceTypeName).camelCase}" "Serializer";
 
@@ -154,7 +160,7 @@ class InstanceSerializerGenerator extends Generator {
         // ]
         result.writeln(", additionalTypes: [");
         for (final type in additionalTypes) {
-          result.write(type!.getDisplayString());
+          result.write(type!.getDisplayString(withNullability: false));
           result.writeln(",");
         }
         result.write("]");
