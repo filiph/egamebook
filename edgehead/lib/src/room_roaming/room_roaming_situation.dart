@@ -89,14 +89,14 @@ abstract class RoomRoamingSituation extends Object
   /// Only player can roam at the moment. But there is also Director.
   @override
   Iterable<Actor> getActors(Simulation sim, WorldState w) {
-    var _player = _getPlayer(w);
-    if (_player == null) return [];
+    var player = _getPlayer(w);
+    if (player == null) return [];
 
     if (w.director != null) {
-      return [_player, w.director!];
+      return [player, w.director!];
     }
 
-    return [_player];
+    return [player];
   }
 
   @override

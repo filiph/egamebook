@@ -61,7 +61,7 @@ class _BenchmarkBase {
   final _ScoreEmitter emitter;
 
   // Empty constructor.
-  const _BenchmarkBase(this.name, {this.emitter = const _PrintEmitter()});
+  const _BenchmarkBase(this.name);
 
   // The benchmark code.
   // This function is not used, if both [warmup] and [exercise] are overwritten.

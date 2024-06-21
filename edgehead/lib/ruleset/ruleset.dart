@@ -1,4 +1,3 @@
-library edgehead.ruleset;
 
 import 'package:edgehead/fractal_stories/context.dart';
 import 'package:edgehead/fractal_stories/world_state.dart';

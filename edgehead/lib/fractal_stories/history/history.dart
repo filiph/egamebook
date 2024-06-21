@@ -1,4 +1,3 @@
-library stranded.history;
 
 /// The result of querying a history.
 abstract class QueryResult<T extends Record> {

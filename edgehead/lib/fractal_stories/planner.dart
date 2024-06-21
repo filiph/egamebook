@@ -1,4 +1,3 @@
-library stranded.planner;
 
 import 'dart:collection';
 

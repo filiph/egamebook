@@ -3,7 +3,7 @@ library storyline.shadow_graph;
 import 'dart:collection';
 import 'dart:math';
 
-import 'package:built_value/built_value.dart' show $jf, $jc;
+import 'package:built_value/built_value.dart' show $jc, $jf;
 import 'package:edgehead/fractal_stories/storyline/storyline.dart';
 import 'package:logging/logging.dart';
 

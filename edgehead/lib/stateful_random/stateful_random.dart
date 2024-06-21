@@ -1,4 +1,3 @@
-library stateful_random;
 
 import 'dart:math';
 

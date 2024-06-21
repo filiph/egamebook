@@ -1,4 +1,3 @@
-library stranded.fight.bite_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/anatomy/body_part.dart';

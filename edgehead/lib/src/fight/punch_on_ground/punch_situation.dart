@@ -1,4 +1,3 @@
-library stranded.fight.punch_on_ground_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/situation.dart';

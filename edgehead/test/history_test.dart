@@ -10,13 +10,13 @@ import 'src/test_random.dart';
 
 void main() {
   group("VisitHistory", () {
-    const _outsideName = "outside";
+    const outsideName = "outside";
     final outside = Room(
-        _outsideName, emptyRoomDescription, emptyRoomDescription, null, null);
+        outsideName, emptyRoomDescription, emptyRoomDescription, null, null);
     final inside =
         Room("inside", emptyRoomDescription, emptyRoomDescription, null, null);
     final aren = Actor.initialized(42, testRandomIdGetter, "Aren",
-        currentRoomName: _outsideName);
+        currentRoomName: outsideName);
 
     test("saves events in world state", () {
       final initialSituation =

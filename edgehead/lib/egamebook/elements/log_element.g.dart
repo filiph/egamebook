@@ -36,17 +36,17 @@ class _$LogElementSerializer implements StructuredSerializer<LogElement> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'level':
           result.level = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'message':
           result.message = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
       }
     }
@@ -62,7 +62,7 @@ class _$LogElement extends LogElement {
   final String message;
 
   factory _$LogElement([void Function(LogElementBuilder)? updates]) =>
-      (new LogElementBuilder()..update(updates)).build();
+      (new LogElementBuilder()..update(updates))._build();
 
   _$LogElement._({required this.level, required this.message}) : super._() {
     BuiltValueNullFieldError.checkNotNull(level, 'LogElement', 'level');
@@ -133,7 +133,9 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
   }
 
   @override
-  _$LogElement build() {
+  LogElement build() => _build();
+
+  _$LogElement _build() {
     final _$result = _$v ??
         new _$LogElement._(
             level: BuiltValueNullFieldError.checkNotNull(
@@ -145,4 +147,4 @@ class LogElementBuilder implements Builder<LogElement, LogElementBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new

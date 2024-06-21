@@ -1,4 +1,3 @@
-library stranded.fight.on_ground_defense_situation;
 
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/src/fight/common/defense_situation.dart';

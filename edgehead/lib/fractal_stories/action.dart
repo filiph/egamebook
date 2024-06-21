@@ -1,4 +1,3 @@
-library stranded.action;
 
 import 'package:edgehead/fractal_stories/actor.dart';
 import 'package:edgehead/fractal_stories/context.dart';
